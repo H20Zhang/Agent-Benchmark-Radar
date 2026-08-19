@@ -100,7 +100,7 @@ Read each arrow as: *the previous evaluation target became too easy, too narrow,
 | 🔭 | [SGR-Bench](https://arxiv.org/abs/2605.22219) | 2026 | Search when evidence is gated behind site-specific filters/views/scopes | Makes **environment state configuration** part of retrieval competence |
 | 🔭 | [VAKRA](https://arxiv.org/abs/2608.12282) | 2026 | Executable APIs + document retrieval + multi-hop reasoning + policy constraints | Pushes retrieval into **cross-source tool execution** with coherent grounding across access modes |
 
-**Current RAG signal:** “retrieval” is expanding from a model primitive into a **control problem over an information environment**. Meanwhile, BrowseComp → BrowseComp-Plus exposes a second trend: the field increasingly cares not only about realism, but about **experimental identifiability**—can we tell whether a gain came from the model, retriever, corpus, interface, or search budget? citeturn871211view4
+**Current RAG signal:** “retrieval” is expanding from a model primitive into a **control problem over an information environment**. Meanwhile, BrowseComp → BrowseComp-Plus exposes a second trend: the field increasingly cares not only about realism, but about **experimental identifiability**—can we tell whether a gain came from the model, retriever, corpus, interface, or search budget?
 
 ---
 
@@ -128,7 +128,7 @@ Read each arrow as: *the previous evaluation target became too easy, too narrow,
 | 🔭 | [DataSpace](https://arxiv.org/abs/2608.03451) | 2026 | Verifiable analytics over CSV/JSON/DB/docs/PDF/video workspaces | Unifies heterogeneous evidence discovery with deterministic complete-result checking |
 | 🔭 | [DSAgentBench](https://arxiv.org/abs/2608.10366) | 2026 | End-to-end data-science lifecycle inside notebooks, IDEs, terminals, browsers, and DBs | Puts agents in a **real computer** and evaluates multi-stage tool orchestration |
 
-**Current data-agent signal:** text-to-SQL is becoming a substrate, not the end task. The emerging target is an agent that can **discover data, understand semantics, engineer/transform sources, iteratively analyze intermediate results, execute heterogeneous tools, verify outputs, and communicate useful artifacts**. The new tension is realism vs attribution: more realistic environments expose the actual workflow, but also make results increasingly harness- and environment-sensitive. citeturn850939academia2turn850939academia3turn871211view7
+**Current data-agent signal:** text-to-SQL is becoming a substrate, not the end task. The emerging target is an agent that can **discover data, understand semantics, engineer/transform sources, iteratively analyze intermediate results, execute heterogeneous tools, verify outputs, and communicate useful artifacts**. The new tension is realism vs attribution: more realistic environments expose the actual workflow, but also make results increasingly harness- and environment-sensitive.
 
 ---
 
@@ -138,9 +138,9 @@ Read each arrow as: *the previous evaluation target became too easy, too narrow,
 
 **2. Lifecycle resource cost.** Memory writing/indexing, retrieval/search calls, tool retries, context tokens, judge calls, latency, and energy are charged inconsistently. A design can move cost between stages and look like progress.
 
-**3. Truly longitudinal closed-loop value.** MemoryArena and Mem2ActBench are important because they begin to couple memory with later action, but the field still lacks strong evaluation over **weeks/months of persistent state**, permissions, writes, irreversible mistakes, recovery, and shared resource budgets. citeturn488253view0turn871211view0
+**3. Truly longitudinal closed-loop value.** MemoryArena and Mem2ActBench are important because they begin to couple memory with later action, but the field still lacks strong evaluation over **weeks/months of persistent state**, permissions, writes, irreversible mistakes, recovery, and shared resource budgets.
 
-**4. Benchmark validity over time.** Web drift, contamination, saturation, synthetic-data shortcuts, grader dependence, and environment versioning are increasingly first-order problems. BrowseComp-Plus is a useful signal that **benchmark controllability itself** is becoming a research concern. citeturn871211view4
+**4. Benchmark validity over time.** Web drift, contamination, saturation, synthetic-data shortcuts, grader dependence, and environment versioning are increasingly first-order problems. BrowseComp-Plus is a useful signal that **benchmark controllability itself** is becoming a research concern.
 
 ## 📚 Recommended Reading Paths
 
