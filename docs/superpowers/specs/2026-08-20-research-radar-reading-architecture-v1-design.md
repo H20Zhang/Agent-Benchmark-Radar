@@ -8,9 +8,9 @@ Agent Benchmark Radar already has a strong conceptual spine: new benchmarks reve
 
 This design turns the repository into a layered benchmark reading system that supports fast frontier scanning, field learning, genealogy, protocol audit, and historical lookup without requiring a standalone website.
 
-Scope: root README, benchmark-note contract, benchmark genealogy/library navigation, compactions, editorial standard, validation, and the recurring workflow that derives public surfaces.
+Scope: root README, benchmark-note contract, benchmark genealogy/library navigation, compactions, editorial standard, validation, bilingual reader surfaces, and the recurring workflow that derives public surfaces.
 
-Non-goals: GitHub Pages/frontend work; maximizing benchmark count; replacing official benchmark documentation; treating leaderboard rank as component evidence; forcing every benchmark into an equally detailed note.
+Non-goals: GitHub Pages/frontend work; maximizing benchmark count; replacing official benchmark documentation; treating leaderboard rank as component evidence; forcing every benchmark into an equally detailed note; duplicating machine-readable or maintenance state solely for localization.
 
 ## Design principles
 
@@ -19,6 +19,7 @@ Non-goals: GitHub Pages/frontend work; maximizing benchmark count; replacing off
 3. **One record, several views.** README, benchmark notes, research library, and compactions provide different projections of the same canonical benchmark record.
 4. **Measurement claims need confounders.** Every important benchmark interpretation names what a score supports and what the harness/protocol prevents us from attributing.
 5. **Structure is stable; prose is not templated.** Use a consistent reasoning contract without repetitive AI sentence skeletons.
+6. **Chinese by default, one research judgment underneath.** Chinese is the default public reading surface; English mirrors the same research interpretation rather than becoming a separately curated fork.
 
 ## External writing basis
 
@@ -37,9 +38,73 @@ canonical benchmark registry
   └─ time view: weekly → monthly → yearly evaluation compaction
 ```
 
+Every reader-facing projection has a Chinese-default and English form, but both derive from the same benchmark identity, protocol facts, comparison judgment, confounder analysis, and genealogy assignment.
+
+## Bilingual reader contract
+
+The repository is bilingual for **reader-facing narrative surfaces**, not for canonical or operational state.
+
+### Default language and file layout
+
+- `README.md` — default **Simplified Chinese** landing page.
+- `README.en.md` — complete English counterpart.
+- Both pages expose a compact language switch at the top: `中文 | [English](README.en.md)` and `[中文](README.md) | English`.
+- Benchmark names, paper titles, dataset names, metric names, model names, protocol/tool names, repository names, and standard acronyms remain in their original form unless a Chinese gloss materially helps comprehension.
+- Chinese prose should use established technical terms where natural, but should not translate terminology so aggressively that literature search becomes harder.
+
+### Which surfaces are bilingual
+
+Maintain both languages for public narrative that readers may reasonably traverse from the root README:
+
+- root README;
+- Benchmark Library / genealogy navigation;
+- high-value benchmark notes / protocol audits;
+- weekly, monthly, and yearly research compactions when they are linked as reader-facing synthesis;
+- public explanatory pages that define the benchmark taxonomy or how to read the radar.
+
+Do **not** duplicate language variants for:
+
+- `data/benchmarks.json` and other canonical machine-readable records;
+- scheduler prompts, `runs/*`, validation output, schemas, and maintenance-only docs;
+- raw provenance or operational logs.
+
+### Source-of-truth and drift control
+
+Bilingual does not mean two independent editorial pipelines.
+
+For every accepted benchmark, first settle one semantic research record: measurement delta, predecessor, capability/environment/protocol, what the score supports, confounder, coverage gap, genealogy role, and primary evidence. Only after this judgment is stable should the workflow render Chinese and English reader prose.
+
+Chinese is the **default editorial surface**, but neither language may introduce a factual or causal claim absent from the shared semantic judgment. English should be rewritten naturally rather than translated word-for-word; Chinese should likewise avoid calques from English. The two versions must preserve the same:
+
+- importance / evolution role;
+- predecessor and implicit critique;
+- decisive protocol facts and quantitative evidence;
+- attribution boundary;
+- strongest confounder;
+- open measurement gap;
+- links to primary sources.
+
+If one language receives a material interpretation correction, the paired surface must be updated in the same maintenance transaction.
+
+### Translation/editorial quality
+
+Treat localization as technical editing, not literal translation.
+
+Chinese default prose should:
+
+- explain the benchmark purpose before protocol jargon;
+- prefer short, direct sentences and natural Chinese information order;
+- preserve English search terms where they are the field’s canonical vocabulary;
+- avoid unnecessary English-Chinese duplication such as `检索（retrieval）` on every occurrence after the term is established;
+- avoid machine-translation syntax, stacked nominal phrases, and generic transitions such as “值得注意的是”“此外”“总的来说” when they add no reasoning value.
+
+English prose follows the same Research Radar Editor standard: concrete language, comparison before praise, explicit attribution limits, and no recurring AI-house-style sentence templates.
+
+Validation should compare semantic invariants rather than expect sentence-level translation equivalence.
+
 ## README contract
 
-Use this top-level order:
+Use this top-level order in both languages:
 
 ```text
 New & Notable
@@ -52,9 +117,13 @@ Research Compactions
 About / Contributing
 ```
 
+The Chinese default uses natural Chinese section names rather than literal translations, while preserving one-to-one conceptual sections and stable anchors where practical.
+
 Expose depth navigation near the title:
 
-`30 sec: Frontier · 5 min: Field Evolution · 15 min: Reading Paths · Browse All`
+Chinese default: `30 秒：前沿 · 5 分钟：领域演化 · 15 分钟：阅读路径 · 浏览全部`
+
+English: `30 sec: Frontier · 5 min: Field Evolution · 15 min: Reading Paths · Browse All`
 
 Keep the current core idea: a useful new benchmark is often an implicit critique of what the previous generation failed to measure. Keep the comparison rule that higher leaderboard score is system-level evidence unless model, accessible state, tools, prompts/hints, retries, stopping rule, evaluator, and relevant budgets are sufficiently matched.
 
@@ -112,6 +181,8 @@ High-visibility benchmark notes follow this reasoning contract:
 
 Use a note only when it adds decision value. A large registry does not imply a large collection of prose files.
 
+For bilingual notes, keep identical semantic sections and evidence scope in Chinese and English, but allow paragraph order and sentence construction to differ when that improves natural readability.
+
 ## Editorial standard
 
 Create a repository-local Research Radar Editor contract shared in spirit with the paper radars.
@@ -135,6 +206,8 @@ Avoid:
 
 A deterministic editorial linter should warn on repeated sentence skeletons, generic judgments without nearby comparison/evidence, duplicated prose across surfaces, and structural drift. It should not ban words mechanically.
 
+For Chinese, add warnings for repeated empty discourse markers, machine-translated English syntax, excessive parenthetical English, and repeated evaluative templates such as `真正重要的是……` or `关键不在于……而在于……` across many entries.
+
 ## Benchmark Library
 
 Time-based digests are not the historical index. Maintain three discovery routes:
@@ -147,16 +220,19 @@ A compact **Browse by Year** view remains available for chronology and provenanc
 
 Every important historical benchmark must remain reachable through at least one non-temporal route. Weekly/monthly/yearly synthesis explains changes; it does not own discoverability.
 
+Both Chinese and English library entry surfaces must route to the same benchmark set and genealogy relationships. Translation must never create separate inclusion/exclusion decisions.
+
 ## Layer responsibilities
 
 - `data/benchmarks.json`: canonical benchmark identity, area, evolution role, capability/environment/protocol, measurement strength, coverage gap, confounders, artifacts, verification.
-- benchmark notes when present: protocol/evidence audit layer.
-- Benchmark Library/genealogy: historical retrieval and evolution layer.
-- `digests/*`: temporal synthesis of evaluation-object shifts.
-- root README: frontier judgment/router layer.
+- benchmark notes when present: protocol/evidence audit layer, bilingual for reader-facing notes.
+- Benchmark Library/genealogy: historical retrieval and evolution layer, bilingual navigation.
+- `digests/*`: temporal synthesis of evaluation-object shifts, bilingual when public-facing.
+- `README.md`: default Chinese frontier judgment/router layer.
+- `README.en.md`: English frontier judgment/router layer.
 - `runs/*`: maintenance provenance only.
 
-Do not duplicate the same paragraph across layers.
+Do not duplicate the same paragraph across layers or maintain separate research judgments by language.
 
 ## Maintenance workflow
 
@@ -164,44 +240,54 @@ Move detailed recurring behavior into a repository-owned `docs/DAILY_WORKFLOW.md
 
 Each transaction follows:
 
-`preflight → recent discovery + bounded historical backfill → independent benchmark judgment → protocol audit → canonical registry update → note/genealogy update when useful → derive README/library/compaction projections → editorial review → validate → log → notify only if material`
+`preflight → recent discovery + bounded historical backfill → independent benchmark judgment → protocol audit → canonical registry update → note/genealogy update when useful → derive Chinese + English reader projections → bilingual editorial review → validate semantic parity → log → notify only if material`
 
 A new benchmark does not automatically become a defining benchmark in the default area view. Default genealogy changes only when the new work shifts a durable evaluation coordinate.
+
+Chinese and English public updates for the same semantic change should land atomically in one transaction. Do not publish one language and leave the paired high-visibility surface stale unless an explicit blocker is logged.
 
 ## Validation
 
 Add deterministic checks for:
 
+- `README.md` exists as the Chinese default and `README.en.md` exists as the English counterpart;
+- both expose language-switch links and the same conceptual top-level sections;
+- both include the same New & Notable benchmark identities, importance values, evolution roles, and primary links;
+- material interpretation fields remain semantically aligned across languages;
 - README top-level section order and New & Notable bounds;
 - fold eligibility and required semantic coverage;
 - every README benchmark exists in the canonical registry;
 - every default genealogy entry has a valid evolution role and a meaningful predecessor/delta explanation;
-- every high-importance historical benchmark is reachable through the Benchmark Library;
+- every high-importance historical benchmark is reachable through the Benchmark Library in both languages;
 - no maintenance/scheduler/schema internals leak to public surfaces;
-- repeated house-style lead-in warnings and high-similarity paragraph warnings;
+- repeated house-style lead-in warnings and high-similarity paragraph warnings, with Chinese- and English-specific patterns;
 - registry/README synchronization, dates, links, role validity, measurement-strength versus coverage-gap separation, and component-attribution discipline continue to pass.
 
-Editorial lint is advisory unless a deterministic public/canonical contract is violated.
+Editorial lint is advisory unless a deterministic public/canonical contract is violated. Semantic bilingual drift for high-visibility facts is a correctness failure, not an editorial warning.
 
 ## Migration
 
-1. Rebuild README around progressive depth while retaining the current useful New & Notable and core comparison rule.
-2. Collapse long per-area history into defining benchmarks + current frontier + measurement gap; preserve full genealogy behind disclosure/library navigation.
-3. Add a Benchmark Library with area, genealogy, measurement-coordinate, and year routes.
-4. Add the local Research Radar Editor standard and editorial linter.
-5. Add `docs/DAILY_WORKFLOW.md` and move stable recurring behavior out of the scheduler prompt.
-6. Add/upgrade benchmark notes selectively for frontier works and foundations whose protocol/genealogy is otherwise easy to misunderstand.
-7. Preserve old benchmarks in canonical data; do not delete history merely to shorten README.
+1. Rebuild `README.md` as the Chinese-default progressive-depth surface while retaining the current useful New & Notable and core comparison rule.
+2. Create `README.en.md` from the same semantic judgment, rewritten as natural English rather than literal translation.
+3. Collapse long per-area history into defining benchmarks + current frontier + measurement gap; preserve full genealogy behind disclosure/library navigation in both languages.
+4. Add a bilingual Benchmark Library with area, genealogy, measurement-coordinate, and year routes.
+5. Add the local Research Radar Editor standard and bilingual editorial linter.
+6. Add `docs/DAILY_WORKFLOW.md` and move stable recurring behavior out of the scheduler prompt, including atomic Chinese/English projection updates.
+7. Add/upgrade benchmark notes selectively for frontier works and foundations whose protocol/genealogy is otherwise easy to misunderstand; high-value public notes receive both Chinese and English versions.
+8. Migrate public compactions to bilingual form as they are touched or regenerated; do not duplicate operational logs.
+9. Preserve old benchmarks in canonical data; do not delete history merely to shorten README.
 
 ## Success criteria
 
 A reader should be able to:
 
+- open the repository and land on a complete Chinese default experience;
+- switch to English from the first screen without losing information depth;
 - identify the newest meaningful evaluation shifts within 30 seconds;
 - understand why a high-value new benchmark exists in 60–90 seconds without leaving README;
 - trace a current frontier benchmark back to the predecessor limitation it addresses;
 - find historical benchmarks by area, genealogy, or measurement coordinate rather than publication week;
 - tell what a score supports and what the protocol confounds;
-- read repeated benchmark explanations without a templated AI house style.
+- read repeated benchmark explanations in either language without a templated AI house style.
 
-The maintainer should be able to change reader/editorial contracts in repository files while the recurring automation prompt stays short and stable.
+The maintainer should be able to change reader/editorial contracts in repository files while the recurring automation prompt stays short and stable, and should never need to curate separate Chinese and English benchmark judgments.
