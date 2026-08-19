@@ -1,121 +1,89 @@
 # 🧭 Agent Benchmark Radar
 
-**A living research map of benchmarks for Agent Memory, RAG, and Data Agents.**  
-Track new benchmarks, understand what they actually measure, and see where current evaluation still gives a misleading picture of agent capability.
+**A curated, continuously maintained collection of benchmarks for Agent Memory, RAG / Agentic Retrieval, and Data Agents.**
 
-⭐ **Star this repo to follow new benchmarks, protocol changes, and evaluation-level research synthesis.**
+The goal is not to maximize benchmark count. It is to make the **evaluation coordinate system** easy to inspect: what is measured, under which environment and protocol, and what a score does *not* establish.
 
-**Last updated:** 2026-08-19 · [Latest Benchmarks](#-latest-benchmarks) · [Benchmark Map](#-benchmark-map) · [What Is Actually Measured](#-what-is-actually-measured) · [Coverage Gaps](#-coverage-gaps)
+⭐ Star this repo to follow new benchmarks, material protocol changes, and benchmark-level research synthesis.
 
-> **Current thesis:** agent evaluation is bottlenecked less by the number of benchmarks than by **measurement validity**. Two benchmarks with similar labels can test very different things because the environment, accessible state, tool interface, judge, cost budget, and temporal horizon differ. This Radar treats those choices as first-class data.
+**Last updated:** 2026-08-20 · [New & Notable](#-new--notable) · [Agent Memory](#-agent-memory) · [RAG](#-rag--agentic-retrieval) · [Data Agents](#-data-agents) · [Coverage Gaps](#-coverage-gaps)
 
-## 🔥 Latest Benchmarks
+> **Evaluation rule:** a higher leaderboard score is system-level evidence unless model, accessible state, tool interface, prompts/hints, retries, stopping rule, evaluator, and relevant cost budgets are sufficiently matched.
 
-### [LongMemEval-V2](https://github.com/xiaowu0162/LongMemEval-V2)
-`Agent Memory` · `agentic experience` `multimodal trajectories` `long horizon` · **★★★★★** · 2026
+## 🔥 New & Notable
 
-**Why it matters:** moves long-term memory evaluation from conversational recall toward memory over accumulated agent experience in customized environments. It tests static state, dynamic state, workflows, environment-specific gotchas, and premise awareness over histories that can scale to very large trajectory collections.
+| Benchmark | Area | Released | What becomes measurable | Main caveat |
+|---|---|---:|---|---|
+| [LongMemEval-V2](https://github.com/xiaowu0162/LongMemEval-V2) | Agent Memory | 2026-05 | Memory over accumulated multimodal agent experience, including changing state and workflow knowledge | Still read out mainly through QA rather than future closed-loop task execution |
+| [SGR-Bench](https://arxiv.org/abs/2605.22219) | RAG | 2026-05 | Retrieval-state control: filters, hierarchy, scope, and site-specific views | Specialized public-data portals are not a universal proxy for open-web or document RAG |
+| [Data Agent Benchmark](https://github.com/ucbepic/DataAgentBench) | Data Agent | 2026-03 | Enterprise analysis across multiple DBMSes, awkward joins, unstructured transformation, and domain knowledge | Model, hints, trials, and harness can dominate leaderboard comparisons |
+| [FDABench](https://github.com/fdabench/FDAbench) | Data Agent | 2026 | Heterogeneous analytical workflows with quality, latency, and token-cost signals | Task breadth does not isolate which agent component caused success or failure |
+| [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) | RAG | 2026-02 | Hop-level diagnosis of multi-step retrieval/reasoning failures | Generated task structure may introduce synthetic-chain artifacts |
 
-**Do not over-read:** it still evaluates memory through downstream question answering rather than full closed-loop future task execution.
+## 🧠 Agent Memory
 
-### [SGR-Bench](https://arxiv.org/abs/2605.22219)
-`RAG / Search Agent` · `state-gated retrieval` `web tools` `structured answers` · **★★★★★** · 2026-05
+| Benchmark | Measures | Environment | Evaluation | Why it matters |
+|---|---|---|---|---|
+| [LongMemEval-V2](https://github.com/xiaowu0162/LongMemEval-V2) | Static/dynamic state, workflow knowledge, environment gotchas, premise awareness | Multimodal web + enterprise trajectories | QA quality + retrieval latency | Moves beyond chat-history recall toward memory over accumulated agent experience |
+| [MemoryAgentBench](https://arxiv.org/abs/2507.05257) | Retrieval, conflict resolution, memory update, test-time learning | Incremental multi-turn interactions | Task-specific accuracy | Broadens memory evaluation beyond retrieval from a frozen history |
 
-**Why it matters:** separates “finding the right source” from “establishing the right retrieval state.” Filters, hierarchy, scope, and site-specific views become part of retrieval competence rather than invisible interface details.
+**Read this section as:** *does the benchmark test storing/recovering past information, or whether experience actually changes future agent behavior?* Most current benchmarks are still stronger on the former.
 
-**Do not over-read:** it targets a specific but important retrieval regime; gains here do not automatically imply better open-web research or generic document RAG.
+## 🔎 RAG / Agentic Retrieval
 
-### [Data Agent Benchmark (DAB)](https://github.com/ucbepic/DataAgentBench)
-`Data Agent` · `multi-database` `heterogeneous data` `enterprise analysis` · **★★★★★** · 2026-03
+| Benchmark | Measures | Environment | Evaluation | Why it matters |
+|---|---|---|---|---|
+| [SGR-Bench](https://arxiv.org/abs/2605.22219) | Source discovery + retrieval-state control | Public websites / specialized data portals | Item/row-level answer quality | Separates finding a source from configuring the source into the right retrievable state |
+| [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) | Multi-hop retrieval + intermediate reasoning | Multi-domain corpora | Final answer + hop-level validation | Makes intermediate failure locations observable rather than collapsing everything into final accuracy |
+| [RAGCap-Bench](https://arxiv.org/abs/2510.13910) | Intermediate agentic-RAG capabilities | Capability-oriented RAG tasks | Capability-level scores | Tests whether prerequisite skills exist before asking whether the full RAG system succeeds |
 
-**Why it matters:** stresses realistic enterprise data work across multiple databases, awkward joins, unstructured transformations, and domain knowledge instead of reducing the data-agent problem to text-to-SQL.
+**Read this section as:** *is the benchmark testing retrieval quality, retrieval control, or the full agent loop?* Those are different objects and should not share a leaderboard interpretation by default.
 
-**Do not over-read:** leaderboard comparisons must account for model choice, hints, number of trials, and agent harness.
+## 🗃️ Data Agents
 
-### [FDABench](https://github.com/fdabench/FDAbench)
-`Data Agent` · `heterogeneous analytics` `reports` `cost/latency` · **★★★★☆** · 2026
+| Benchmark | Measures | Environment | Evaluation | Why it matters |
+|---|---|---|---|---|
+| [Data Agent Benchmark](https://github.com/ucbepic/DataAgentBench) | Multi-database integration, schema navigation, joins, transformations, domain reasoning | DuckDB, PostgreSQL, SQLite, MongoDB, Python | Executable validation / repeated trials | Pushes data-agent evaluation beyond text-to-SQL and single-database assumptions |
+| [FDABench](https://github.com/fdabench/FDAbench) | Planning, tool use, heterogeneous analysis, report generation | SQL engines + unstructured sources | Accuracy/rubric + latency + token cost | Treats analytical agents as end-to-end systems rather than SQL generators |
 
-**Why it matters:** expands evaluation across heterogeneous analytical workloads and multiple task forms, while exposing accuracy together with execution cost and latency.
+**Read this section as:** *does the benchmark require semantic data work across sources, or mostly query generation?* The former is closer to the data-agent systems problem.
 
-**Do not over-read:** a large task count does not by itself guarantee broad causal coverage of planning, tool selection, semantic interpretation, and error recovery.
+## 🧩 How This Radar Classifies Benchmarks
 
-### [AgenticRAGTracer](https://arxiv.org/abs/2602.19127)
-`RAG` · `multi-hop` `hop-level diagnosis` `reasoning trajectory` · **★★★★☆** · 2026-02
+| Axis | Question | Examples |
+|---|---|---|
+| **Capability** | What internal ability must succeed? | retrieval, state tracking, conflict resolution, planning, joins, verification |
+| **Environment** | What information substrate does the agent act over? | conversation history, multimodal trajectories, websites, multiple databases, mixed structured/unstructured data |
+| **Protocol** | What can the agent observe/do, and what is scored? | final answer, executable output, intermediate states, trajectory quality, latency, token/tool cost, repeated trials |
 
-**Why it matters:** adds intermediate hop-level validation, allowing failure localization beyond final-answer accuracy.
-
-**Do not over-read:** automatically generated benchmark structure can itself introduce artifacts; diagnostic resolution is only useful when hop annotations correspond to meaningful causal steps.
-
-### [RAGCap-Bench](https://arxiv.org/abs/2510.13910)
-`RAG` · `capability decomposition` `intermediate tasks` · **★★★★☆** · 2025-10
-
-**Why it matters:** asks whether an agent has the intermediate capabilities needed by agentic RAG workflows rather than only whether the final answer is correct.
-
-**Do not over-read:** capability scores are not equivalent to end-to-end system quality unless the mapping from intermediate skill to realized agent behavior is validated.
-
-### [MemoryAgentBench](https://arxiv.org/abs/2507.05257)
-`Agent Memory` · `incremental interaction` `retrieval` `conflict resolution` `test-time learning` · **★★★★☆** · 2025-07
-
-**Why it matters:** broadens memory beyond static retrieval by evaluating memory formation and use across incremental multi-turn interactions.
-
-**Do not over-read:** different memory systems can still look incomparable if the surrounding LLM, embeddings, answerer, or judge are not normalized.
-
-## 🗺️ Benchmark Map
-
-| Area | Benchmark | Primary object being tested | Environment / substrate | Evaluation signal | Main confounder to watch |
-|---|---|---|---|---|---|
-| Agent Memory | LongMemEval-V2 | memory over accumulated agent experience | multimodal web/enterprise trajectories | answer quality + retrieval latency | QA proxy vs future task execution |
-| Agent Memory | MemoryAgentBench | remembering, updating, resolving, adapting | incremental interactions | task-specific accuracy | harness/model normalization |
-| RAG | SGR-Bench | retrieval-state control | public data websites | item/row-level answer quality | site-interface specificity |
-| RAG | AgenticRAGTracer | multi-hop retrieval reasoning | constructed multi-domain corpora | final + hop-level correctness | synthetic-chain artifacts |
-| RAG | RAGCap-Bench | intermediate agentic-RAG capabilities | capability-oriented tasks | capability scores | mapping to end-to-end behavior |
-| Data Agent | DAB | enterprise data-question answering | multiple DBMSes + heterogeneous sources | pass@1 / executable validation | trials, hints, harness, model |
-| Data Agent | FDABench | heterogeneous analytical workflows | databases + unstructured sources | accuracy/rubric + cost/latency | task diversity ≠ causal coverage |
-
-## 🔬 What Is Actually Measured
-
-A benchmark is described along three independent axes rather than by a single topical label:
-
-**Capability** — retrieval, state tracking, temporal reasoning, conflict resolution, workflow learning, planning, cross-source joins, semantic interpretation, execution, verification, recovery, or adaptation.
-
-**Environment** — static corpus, evolving conversation, multimodal trajectory history, public website, multi-database enterprise environment, code execution sandbox, or mixed structured/unstructured workspace.
-
-**Protocol** — what the agent can observe and do; whether evaluation checks final answers, intermediate states, executable outputs, trajectories, latency, token/tool cost, robustness, or repeated trials; and whether an LLM judge is involved.
-
-This separation is intentional. “Agent memory benchmark” and “RAG benchmark” are often too coarse to support a scientific comparison.
+The topical label is deliberately secondary. Two “memory benchmarks” can be scientifically less comparable than a memory benchmark and a retrieval benchmark if their environment and protocol assumptions differ.
 
 ## 🕳️ Coverage Gaps
 
-**1. Closed-loop value of memory.** Many memory benchmarks still ask questions about past experience. The harder systems question is whether stored experience improves *future action* under matched context, latency, and cost budgets.
+- **Closed-loop value:** memory is commonly evaluated by asking about the past; fewer benchmarks test whether retained experience improves future actions under matched budgets.
+- **Lifecycle cost:** ingestion/indexing/memory writing, retrieval/tool calls, retries, generation, and evaluator cost are rarely accounted for together.
+- **Harness sensitivity:** model, prompt, tools, hints, retries, stopping rules, and judge often move with the method, making component attribution weak.
 
-**2. Lifecycle cost accounting.** Evaluation often measures answer accuracy while ignoring ingestion, indexing, memory writing, retrieval, tool calls, retries, and judge cost. A system can move cost between stages without becoming more efficient.
-
-**3. Harness sensitivity.** Agent benchmarks frequently entangle the model, prompt, tool interface, stopping rules, retries, hints, and memory/retrieval component. A leaderboard movement is not automatically evidence that the named component improved.
+These gaps are tracked because the most useful next benchmark is not necessarily a larger one; it is the one that removes a decision-relevant ambiguity.
 
 ## 🧠 Research Compactions
 
-This repository will maintain benchmark-level synthesis at multiple time scales:
+Benchmark changes are compacted over time rather than left as a growing flat list:
 
-- **Weekly:** newly released benchmarks, material protocol changes, and newly exposed measurement blind spots.
-- **Monthly:** which capabilities are becoming well measured, which benchmark families are converging, and which apparent progress is mostly harness/model drift.
-- **Yearly:** durable shifts in what the community considers a valid evaluation target.
+- **Weekly:** genuinely new evaluation targets, protocol changes, and newly exposed validity problems.
+- **Monthly:** capability coverage, benchmark convergence/divergence, saturation, and harness/model drift.
+- **Yearly:** durable changes in what the field treats as a valid evaluation target.
 
-See [`digests/`](digests/) as these reports accumulate.
+Browse [`digests/`](digests/) as reports accumulate.
 
-## 📐 Curation Principle
+## 📦 Machine-Readable Registry
 
-A benchmark belongs here when it provides a reusable evaluation coordinate system, not merely an experiment section. Priority goes to work with public task definitions, data or executable environments, reproducible metrics, clear baselines, and enough protocol detail to diagnose what a score means.
+The README is the public surface. [`data/benchmarks.json`](data/benchmarks.json) is the canonical machine-readable registry used to keep entries consistent and auditable.
 
-We track **relevance** separately from **importance**. A benchmark may be in scope yet low-impact if it mostly repackages an existing task under a new name.
-
-See [`CURATION.md`](CURATION.md), [`SCHEMA.md`](SCHEMA.md), and [`data/benchmarks.json`](data/benchmarks.json).
-
-## Scope
-
-**In scope:** agent memory, long-term memory, RAG and agentic retrieval, search agents when retrieval behavior is the evaluated object, data agents, semantic data analysis, database/data-science agents, and evaluation suites that directly expose important measurement assumptions in these areas.
-
-**Out of scope by default:** generic reasoning leaderboards, generic coding agents, benchmarks where retrieval/memory/data interaction is incidental, and papers that only evaluate a proposed method on existing datasets without contributing a reusable benchmark or materially changed protocol.
+For inclusion rules and field definitions, see [`CURATION.md`](CURATION.md) and [`SCHEMA.md`](SCHEMA.md).
 
 ## Contributing
 
-Corrections are especially welcome for benchmark scope, protocol details, judge configuration, public artifacts, contamination concerns, and apples-to-oranges leaderboard comparisons. The goal is not to maximize benchmark count; it is to make benchmark claims auditable.
+Corrections and additions are welcome when they improve **comparability**: benchmark scope, protocol details, evaluator/judge configuration, public artifacts, contamination concerns, version changes, or apples-to-oranges leaderboard comparisons.
+
+A paper is not added merely because it evaluates on Agent Memory, RAG, or Data Agent tasks. The benchmark/evaluation contribution itself must be reusable.
