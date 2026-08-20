@@ -2,7 +2,7 @@ name: Validate Benchmark Radar
 
 on:
   push:
-    branches: [main]
+    branches: [main, research-radar-reading-v1]
   pull_request:
   workflow_dispatch:
 
