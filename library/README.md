@@ -4,6 +4,13 @@
 
 这个 Library 用来回答长期问题：**某个 benchmark 为什么出现、它在批评谁、它把 measurement object 改成了什么。**
 
+## 当前最值得深读的 Protocol Audits
+
+- [DSAgentBench](../benchmarks/dsagentbench.md)：real-computer end-to-end data science；score 首先是 model × harness × tool/OS stack 的 system-level evidence。
+- [DataSpace](../benchmarks/dataspace.md)：heterogeneous workspace + deterministic tabular verification；固定 backbone 时 harness 仍可造成显著 score spread。
+- [VAKRA](../benchmarks/vakra.md)：API + RAG + policy 的 cross-source executable trajectory；重点是 compositional grounding，而不是单一 retrieval score。
+- [LoCoMo-Plus](../benchmarks/locomo-plus.md)：从 explicit factual recall 走向 latent user-constraint consistency。
+
 ## 按 Area 浏览
 
 ### Agent Memory
