@@ -2,24 +2,20 @@
 
 [中文](README.md) | **English**
 
-**The entry point to the Research Radar family — and its evaluation layer.**
+Benchmarks for Agent Memory, Agentic RAG, and Data Agents, organized by release date and research area. See the topic radars for methods and systems.
 
-Start here to see **what Agent Memory, Agentic RAG, and Data Agents are being asked to do, how those targets evolved, and what current scores actually support**. Then continue into the corresponding domain radar for methods and systems.
+[Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar) · [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar) · [Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar)
 
-**Research Radars:** [Agent Memory](https://github.com/H20Zhang/Agent-Memory-Radar) · [Agentic RAG](https://github.com/H20Zhang/Agentic-RAG-Radar) · [Data Agent](https://github.com/H20Zhang/Data-Agent-Radar)
-
-[30 sec: Six-month timeline](#frontier) · [5 min: Field Evolution](#evolution) · [15 min: Reading Paths](#reading-paths) · [Browse all](#library)
-
-> **Core idea.** A useful new benchmark is often an implicit critique of the previous generation: **what was too easy, narrow, static, synthetic, opaque, or weakly diagnosed?**
->
-> **Comparison rule.** A higher leaderboard score is system-level evidence unless model, accessible state, tool interface, prompts/hints, retries, stopping rule, evaluator, and relevant cost budgets are sufficiently matched.
+[Last six months](#frontier) · [Three areas](#evolution) · [All benchmarks by area](#area-timelines) · [Reading paths](#reading-paths) · [Benchmark Library](#library)
 
 Last updated: **2026-08-20**
+
+A note on scores: when models, tool interfaces, prompts, retries, stopping rules, or budgets differ, the score describes the whole system and cannot be attributed to one component.
 
 <a id="frontier"></a>
 ## Benchmark Timeline: Last Six Months
 
-This is not a curated shortlist. The window rolls six months back from the registry's latest `last_verified` date; because some releases have only month-level precision, the boundary month is retained in full. Every benchmark in that window appears below in reverse chronological order.
+The window rolls six months back from the registry's latest verification date. Since some releases have only month-level precision, the whole boundary month is retained. The table is complete for that window, not curated.
 
 <!-- RECENT-TIMELINE:START -->
 | Released | Area | Benchmark | What it evaluates | What changed |
@@ -43,9 +39,7 @@ This is not a curated shortlist. The window rolls six months back from the regis
 | 2026-02 | Agent Memory | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | Whether agents maintain task-appropriate structures such as ledgers, lists, and trees. | Makes memory organization itself an observable capability. |
 <!-- RECENT-TIMELINE:END -->
 
-### Deeper Reads
-
-The disclosures below add analysis without limiting the completeness of the timeline above.
+### Four Benchmarks in More Detail
 
 <details><summary><strong>Why DSAgentBench changes the evaluation target</strong></summary>
 
@@ -80,21 +74,20 @@ The benchmark supports trajectory-level system claims, not a clean attribution t
 </details>
 
 <a id="evolution"></a>
-## What Benchmark Evolution Says About the Field
+## Three Areas
 
-| Area | Evolution | What the field increasingly cares about | Continue |
+| Area | Broad shift | Current question | Topic radar |
 |---|---|---|---|
 | **Agent Memory** | multi-session recall → time/update/forget → structure/scale/multimodality → **implicit user state + memory-guided action** | What should be written, updated, inferred, forgotten, and applied to future behavior? | [Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar) |
 | **RAG / Agentic Retrieval** | retrieval quality → robustness/faithfulness → deep research → **stateful, controlled, cross-source execution** | Can the agent configure and navigate an information environment under changing state and budgets? | [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar) |
 | **Data Agents** | NL→SQL/code → experimentation/workflows → heterogeneous analytics → **real-computer end-to-end data work** | Can an agent discover, transform, analyze, verify, recover, and deliver useful artifacts? | [Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar) |
 
-## Complete Benchmark Timelines by Area
+<a id="area-timelines"></a>
+## All Benchmarks by Area
 
-Read each area from old to new: every row asks what the previous generation still failed to measure. Every benchmark in the current registry is included.
+All 48 benchmarks in the registry are listed below, from oldest to newest.
 
 ### Agent Memory
-
-**Evolution:** Multi-Session Chat → LoCoMo / LongMemEval → MemBench / MemoryAgentBench / BEAM → multimodal / agent-experience memory → MemoryArena / Mem2ActBench / LoCoMo-Plus / RealMem
 
 <!-- COMPLETE-MAP:agent-memory:START -->
 | Role | Benchmark | Released | What it evaluates | Why it changed the question |
@@ -118,15 +111,11 @@ Read each area from old to new: every row asks what the previous generation stil
 | 🔭 Frontier | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | 2026-07 | Evaluates whether long-term memory is proactively used for tool selection and parameter grounding during tool-based assistant actions. | Makes action-level memory utilization directly measurable instead of reading memory quality only through answers about past context. |
 <!-- COMPLETE-MAP:agent-memory:END -->
 
-**Frontier signal:** Write/update/forget, organization, multimodal fidelity, persistent user state, and memory-guided action are becoming distinct evaluation targets.
-
-**Biggest gap:** Longitudinal causality in persistent environments with matched cost/context budgets, permissions, irreversible actions, and weeks or months of state evolution.
+Recent work now tests writing, updating, forgetting, organization, multimodal fidelity, user state, and action separately. What remains missing is longitudinal causality in real persistent environments, with comparable budgets and permissions and enough time for state changes and irreversible actions to matter.
 
 [Continue into Agent Memory methods and systems →](https://github.com/H20Zhang/Agent-Memory-Radar)
 
 ### RAG / Agentic Retrieval
-
-**Evolution:** HotpotQA / KILT / BEIR → RGB / RAGTruth / CRAG / BRIGHT → BrowseComp / DeepResearch Bench → SGR-Bench / AgenticRAGTracer / VAKRA
 
 <!-- COMPLETE-MAP:rag:START -->
 | Role | Benchmark | Released | What it evaluates | Why it changed the question |
@@ -149,15 +138,11 @@ Read each area from old to new: every row asks what the previous generation stil
 | 🔭 Frontier | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | 2026-08 | Evaluates agents that must compose executable APIs, document retrieval, multi-hop reasoning, and natural-language tool-use policies. | Unifies structured API interaction and unstructured retrieval in one executable evaluation with policy constraints. |
 <!-- COMPLETE-MAP:rag:END -->
 
-**Frontier signal:** Retrieval is expanding from document ranking into information-environment control, including source state, tools, stopping, and cross-source execution.
-
-**Biggest gap:** Causal attribution under matched interface, harness, model, and budget, especially in live environments that keep drifting.
+Retrieval evaluation now extends beyond document ranking to source state, tool use, stopping, and cross-source execution. Attribution remains difficult: interfaces, harnesses, models, and budgets must be comparable, while live environments keep changing underneath the evaluation.
 
 [Continue into Agentic RAG methods and systems →](https://github.com/H20Zhang/Agentic-RAG-Radar)
 
 ### Data Agents
-
-**Evolution:** WikiSQL / Spider / DS-1000 → BIRD / MLAgentBench / InsightBench / Spider 2.0 → DataSciBench / DAComp / DAB → DataSpace / DSAgentBench
 
 <!-- COMPLETE-MAP:data-agent:START -->
 | Role | Benchmark | Released | What it evaluates | Why it changed the question |
@@ -179,15 +164,13 @@ Read each area from old to new: every row asks what the previous generation stil
 | 🔭 Frontier | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | 2026-08 | Evaluates agents on complete data-science workflows inside real computer environments using notebooks, IDEs, terminals, browsers, and databases. | Moves data-agent evaluation into real computer environments where success requires multi-stage, multi-tool execution grounded in intermediate outputs. |
 <!-- COMPLETE-MAP:data-agent:END -->
 
-**Frontier signal:** The target is moving from query/code generation to full data work: heterogeneous discovery, tool orchestration, verification, and artifact delivery.
-
-**Biggest gap:** Real enterprise semantics, ambiguous business definitions, long-running workflow state, governance, and reliable clarification or abstention.
+Data-agent benchmarks are moving from SQL or code generation toward complete data work: finding heterogeneous evidence, coordinating tools, checking results, and delivering artifacts. They still cover little of real enterprise semantics, ambiguous business definitions, long-running state, governance, or when an agent should clarify or abstain.
 
 [Continue into Data Agent methods and systems →](https://github.com/H20Zhang/Data-Agent-Radar)
 
 ## What Is Still Poorly Measured
 
-Benchmark coverage is **not** the field. Important research questions can matter before a clean benchmark exists.
+Some important questions still lack a clean benchmark.
 
 | Missing coordinate | Why it changes research conclusions |
 |---|---|
@@ -213,8 +196,8 @@ Benchmark coverage is **not** the field. Important research questions can matter
 - [Canonical registry](data/benchmarks.json)
 - [Research compactions](digests/README.md)
 
-## About
+## This Repository and the Topic Radars
 
-This Radar is the default entry to the family because benchmark genealogy gives a compact first answer to **what capability matters, why the older target became insufficient, and what current evidence counts as progress**. It should route to domain radars rather than duplicate their method surveys.
+This repository tracks what is measured and why. Methods and systems belong in the three topic radars, so the same survey does not need to be maintained twice.
 
 [中文](README.md) · [Curation](CURATION.md) · [Schema](SCHEMA.md)

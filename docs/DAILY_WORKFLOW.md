@@ -63,18 +63,19 @@ Then update benchmark notes/genealogy only when they add decision value.
 - Chinese and English derive from one semantic benchmark judgment; never curate separate inclusion or genealogy decisions by language.
 - Material corrections update both languages in the same transaction.
 - Keep benchmark/paper/model/metric/protocol/tool names in canonical English when useful for precision/search.
+- In Chinese prose, keep verbs, connectives, and descriptive phrases in Chinese. English noun phrases should not carry the sentence grammar.
 
 ## 7. README projection
 
-The first screen should make the family structure obvious and expose: the complete rolling six-month benchmark timeline, area evolution, domain-radar continuations, and the fact that benchmark coverage is not the whole field.
+Keep the entry table-first: one-sentence scope, direct navigation, the complete rolling six-month timeline, area evolution, full area tables, open measurement gaps, and domain-radar continuations. Do not add reading-time labels or method-manifesto blockquotes.
 
 Default reader flow:
 
 `Rolling six-month timeline → Field Evolution → Area Maps → Poorly Measured → Reading Paths → Benchmark Library`
 
-The rolling timeline is not a shortlist: include every accepted registry record released within six months of the latest `last_verified` date, in reverse chronological order, in both languages. Because some release values have only `YYYY-MM` precision, retain the entire boundary month. High-value changes may additionally receive 60–90 second folds, but folds do not control timeline inclusion.
+The rolling timeline is not a shortlist: include every accepted registry record released within six months of the latest `last_verified` date, in reverse chronological order, in both languages. Because some release values have only `YYYY-MM` precision, retain the entire boundary month. High-value changes may additionally receive short explanatory folds, but folds do not control timeline inclusion.
 
-Each area map keeps the full accepted registry visible in a permanently expanded chronological table, followed by one frontier signal and one biggest measurement gap. Do not compress it back to representative entries.
+Each area map keeps the full accepted registry visible in a permanently expanded chronological table. Preserve substantive interpretation, but do not force every area into identical `frontier signal / biggest gap` labels. Do not compress tables or remove useful folds merely to shorten README.
 
 ## 8. Cross-Radar contract
 
