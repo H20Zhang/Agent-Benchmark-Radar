@@ -19,6 +19,22 @@ Adopted principles:
 
 Radar consequence: README supports `scan → expand → deep note → topic library → temporal synthesis` rather than forcing one depth on every reader.
 
+## Microsoft technical style
+
+References:
+
+- https://learn.microsoft.com/en-us/style-guide/welcome/
+- https://learn.microsoft.com/en-us/style-guide/word-choice/use-simple-words-concise-sentences
+
+Adopted principles:
+
+- optimize technical content for scanning before close reading;
+- lead with the user/researcher task rather than background prose;
+- prefer simple, direct sentences and remove words that do not change meaning;
+- use predictable navigation without forcing every page into the same paragraph template.
+
+Radar consequence: reader surfaces use short first-sentence claims, compact tables where comparison matters, and stable depth navigation.
+
 ## Clear and concise technical prose
 
 Reference implementation studied:
@@ -37,7 +53,11 @@ Radar consequence: the local `EDITORIAL_STANDARD.md` checks specificity and repe
 
 ## Research claim discipline
 
-The Radar family also follows the general research-review norm that claims should stay within the evidence actually provided: comparison baselines, experimental assumptions, limitations, and negative results should be visible near the interpretation they constrain.
+References:
+
+- NeurIPS paper checklist and reviewer guidance, which require authors/reviewers to keep claims aligned with assumptions, experimental evidence, limitations, reproducibility details, and comparison with prior work. Conference-specific checklist URLs are versioned; use the current NeurIPS submission guidance when revisiting this contract.
+
+Adopted principle: a persuasive summary is not enough. The interpretation must expose the closest comparison, the evidence that should update belief, and the condition under which the claim becomes weaker.
 
 Radar consequence:
 
