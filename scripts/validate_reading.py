@@ -14,6 +14,52 @@ LIB_ZH = ROOT / "library" / "README.md"
 LIB_EN = ROOT / "library" / "README.en.md"
 REGISTRY = ROOT / "data" / "benchmarks.json"
 LINK_RE = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
+BENCHMARK_ID_RE = re.compile(r"<!-- benchmark-id:([a-z0-9-]+) -->")
+AREAS = ("agent-memory", "rag", "data-agent")
+
+
+def complete_block_ids(text: str, label: str, path: Path, errors: list[str]) -> list[str]:
+    start = f"<!-- {label}:START -->"
+    end = f"<!-- {label}:END -->"
+    if text.count(start) != 1 or text.count(end) != 1 or text.index(start) >= text.index(end):
+        errors.append(f"{path.relative_to(ROOT)}: expected one {label} block")
+        return []
+    block = text.split(start, 1)[1].split(end, 1)[0]
+    return BENCHMARK_ID_RE.findall(block)
+
+
+def check_complete_views(records: list[dict], errors: list[str]) -> None:
+    expected_by_area = {
+        area: [
+            row["id"]
+            for row in sorted(
+                (item for item in records if item["area"] == area),
+                key=lambda item: (item["released"], item["name"].casefold(), item["id"]),
+            )
+        ]
+        for area in AREAS
+    }
+    by_name = sorted(records, key=lambda item: (item["name"].casefold(), item["id"]))
+    expected_timeline = [
+        row["id"] for row in sorted(by_name, key=lambda item: item["released"], reverse=True)
+    ]
+
+    for path in (ZH, EN):
+        text = path.read_text(encoding="utf-8")
+        for area in AREAS:
+            actual = complete_block_ids(text, f"COMPLETE-MAP:{area}", path, errors)
+            if actual != expected_by_area[area]:
+                errors.append(f"{path.relative_to(ROOT)}: incomplete or misordered {area} map")
+
+    for path in (LIB_ZH, LIB_EN):
+        text = path.read_text(encoding="utf-8")
+        actual_timeline = complete_block_ids(text, "COMPLETE-TIMELINE", path, errors)
+        if actual_timeline != expected_timeline:
+            errors.append(f"{path.relative_to(ROOT)}: incomplete or misordered global timeline")
+        for area in AREAS:
+            actual = complete_block_ids(text, f"COMPLETE-MAP:{area}", path, errors)
+            if actual != expected_by_area[area]:
+                errors.append(f"{path.relative_to(ROOT)}: incomplete or misordered {area} map")
 
 
 def check_links(path: Path, errors: list[str]) -> None:
@@ -46,7 +92,8 @@ def main() -> int:
         for e in errors: print("ERROR", e)
         return 1
 
-    json.loads(REGISTRY.read_text(encoding="utf-8"))
+    records = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    check_complete_views(records, errors)
     zh = ZH.read_text(encoding="utf-8")
     en = EN.read_text(encoding="utf-8")
     if "README.en.md" not in zh or "README.md" not in en:

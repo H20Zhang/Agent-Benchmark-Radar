@@ -74,7 +74,7 @@ Default reader flow:
 
 New & Notable includes only changes that materially alter the evaluation object. High-value changes may receive 60–90 second folds.
 
-Each area map defaults to 4–6 defining benchmarks plus frontier signal and biggest measurement gap; full genealogy belongs in disclosure/library rather than a permanently expanded table.
+Each area map keeps the full accepted registry visible in a permanently expanded chronological table, followed by one frontier signal and one biggest measurement gap. Do not compress it back to representative entries.
 
 ## 8. Cross-Radar contract
 

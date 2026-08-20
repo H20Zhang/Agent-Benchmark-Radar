@@ -73,7 +73,7 @@ README is the public reading surface and should support two reading directions:
 - **Latest → field signal:** the newest important benchmarks and what new concern they reveal.
 - **Foundation → frontier:** per-area evolution chains showing how the problem definition changed.
 
-Do not let recency push durable foundations out of the repository. Conversely, do not make the README an exhaustive graveyard of every historical dataset. If removing an old benchmark would make a later shift harder to understand, keep it; otherwise the machine-readable registry or a digest may be enough.
+Do not let recency push durable foundations out of the repository. Once a benchmark is accepted into the canonical registry, keep it visible in the complete chronological and area tables; table length is not a reason to hide it. Curation still controls what enters the registry, so completeness does not mean adding every historical dataset.
 
 ## Research synthesis
 
