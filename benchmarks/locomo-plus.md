@@ -1,43 +1,43 @@
-# LoCoMo-Plus：从 Factual Recall 到 Latent Constraint Consistency
+# LoCoMo-Plus：从事实召回到隐式约束一致性
 
 **中文** | [English](locomo-plus.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
-[ACL Paper](https://aclanthology.org/2026.acl-long.1150/) · **Area: Agent Memory**
+[ACL 论文](https://aclanthology.org/2026.acl-long.1150/) · **领域：Agent Memory**
 
-> **Measurement delta.** LoCoMo-Plus 不再要求后续问题直接“提示”旧事实，而是构造 **cue–trigger semantic disconnect**：用户过去的 state / goal / value 形成 latent constraint，之后 query 没有重述它，agent 仍应让 remembered constraint 正确约束当前回答。
+LoCoMo-Plus 不要求后续问题直接提示旧事实。用户过去的状态、目标和价值会形成隐式约束；即使新问题没有重述这些信息，智能体仍应让旧约束正确影响当前回答。
 
-## Predecessor / implicit critique
+## 它接在什么之后
 
-LoCoMo 等长期 memory benchmark 已经把 multi-session recall、temporal reasoning、long context 做成可重复 evaluation object。但很多 task 仍然可以被理解为“找到过去明确出现的事实”。
+LoCoMo 等长期记忆基准已经能重复评测跨会话召回、时间推理和长上下文理解。但其中很多任务仍可归结为“找到过去明确出现的事实”。
 
-LoCoMo-Plus 的批评是：真实 personalization 更常见的是**隐式约束被未来场景触发**，而不是用户直接问“你还记得我说过什么吗？”
+真实个性化更常见的情况，是过去的隐式约束在未来场景中被触发，而不是用户直接问“你还记得我说过什么吗？”
 
-## What it actually measures
+## 实际怎样评测
 
-Benchmark 面向 long conversational context，要求系统保持并应用 latent constraints。作者同时指出 conventional string-matching metric 与 explicit task-type prompting 与这种 cognitive-memory setting 不匹配，因此用 **constraint consistency** 作为统一 evaluation view。
+基准使用长对话上下文，要求系统保持并应用隐式约束。作者认为，传统字符串匹配指标以及直接告诉模型任务类型的提示，都不适合这种认知记忆场景，因此以**约束一致性**作为统一评价视角。
 
-## What a score supports
+## 分数能说明什么
 
-LoCoMo-Plus score 更接近“系统是否在当前回答中保持过去约束的一致性”，而不是纯 retrieval accuracy。
+LoCoMo-Plus 的分数更接近“系统当前回答是否与过去约束一致”，而不是纯粹的检索准确率。
 
-但它仍然是 conversational QA/response evaluation；一个系统得分更高，可能来自 retrieval、state reconstruction、stronger parametric reasoning 或 prompt/harness，而不自动证明 memory storage component 更好。
+但它仍然评测对话回答。高分可能来自检索、状态重建、更强的参数化推理、提示或运行框架，并不能自动证明记忆存储组件更好。
 
-## Strongest confounder
+## 最主要的混杂因素
 
-**Constraint consistency 的 evaluator 与 task construction** 是 load-bearing 部分。隐式约束如果本身存在歧义，judge 必须区分合理 adaptation 与 inconsistency。
+**约束一致性的评判器和任务构造方式决定了结论是否可靠。** 如果隐式约束本身有歧义，评判器必须区分合理适应与前后不一致。
 
-另一个 confounder 是 explicit task prompting：如果告诉模型“这是 memory test”，会改变行为，因此 benchmark protocol 本身会影响 measured capability。
+另一个混杂因素是显式任务提示：告诉模型“这是记忆测试”本身会改变行为，因此评测协议会影响最终测到的能力。
 
-## What remains unmeasured
+## 还没有覆盖什么
 
-- user preference 真正随时间 drift / conflict；
-- tool/action 级别的 constraint application；
-- permissions / authority / revocation；
-- 长期错误 constraint 的 downstream harm；
-- matched retrieval/state-reconstruction cost。
+- 用户偏好随时间变化或相互冲突；
+- 在工具调用和实际行动中应用约束；
+- 权限、授权与撤销；
+- 长期错误约束造成的后续伤害；
+- 可比条件下的检索与状态重建成本。
 
-## Genealogy consequence
+## 放进演化图怎么看
 
-`multi-session factual recall → temporal/update reasoning → latent user-state constraint → future memory-guided action`
+`跨会话事实召回 → 时间与更新推理 → 隐式用户状态约束 → 记忆指导未来行动`
 
-它是从“记住过去”走向“过去的 state 是否正确约束未来行为”的重要 transition/frontier signal。
+LoCoMo-Plus 连接了“记住过去”和“让过去的信息正确约束未来行为”，属于这条演化线上的前沿节点。

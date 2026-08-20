@@ -1,47 +1,47 @@
-# VAKRA：Cross-Source Executable Agent Evaluation
+# VAKRA：跨来源的可执行智能体评测
 
 **中文** | [English](vakra.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
-[Paper](https://arxiv.org/abs/2608.12282) · [Code](https://github.com/IBM/VAKRA) · **Area: RAG / Agentic Retrieval**
+[论文](https://arxiv.org/abs/2608.12282) · [代码](https://github.com/IBM/VAKRA) · **领域：RAG / Agentic Retrieval**
 
-> **Measurement delta.** VAKRA 把 API interaction、multi-hop reasoning、document retrieval 与 natural-language tool-use policy 组合进同一条**可执行 trajectory**，评估 agent 能否维持 cross-source identity、grounding 与 policy consistency。
+VAKRA 把 API 调用、多跳推理、文档检索和自然语言工具策略组合进同一条**可执行轨迹**，检查智能体能否在不同来源之间保持身份、依据和策略一致。
 
-## Predecessor / implicit critique
+## 它接在什么之后
 
-过去的 API benchmark、RAG benchmark 与 tool-policy benchmark 往往分开测 primitive skill。VAKRA 的批评是：这些 isolated score 不能告诉我们 agent 在真实 enterprise workflow 中能否把多个 access mode 串起来。
+过去的 API、RAG 和工具策略基准通常分别测试单项能力。孤立分数很难说明智能体能否在真实企业工作流中把多种访问信息的方式串起来，VAKRA 因此把它们放进同一条任务轨迹。
 
-## What it actually measures
+## 实际怎样评测
 
-VAKRA 提供 **8,000+ locally hosted executable APIs、62 个 domains**，覆盖：
+VAKRA 提供 **8,000 多个本地托管、可以实际执行的 API，覆盖 62 个领域**，任务包括：
 
-- diverse API interaction styles；
-- 1–3 API 的 multi-hop structured reasoning；
-- API + RAG + policy constraint 的 multi-turn multi-source reasoning。
+- 多种 API 交互形式；
+- 需要调用 1–3 个 API 的多跳结构化推理；
+- 结合 API、RAG 和策略约束的多轮跨来源推理。
 
-Predicted tool calls 会被重新执行，允许多条合法 tool path，而不是只 string-match final answer。
+系统生成的工具调用会被重新执行；评测允许多条合法工具路径，而不是只对最终答案做字符串匹配。
 
-## What a score supports
+## 分数能说明什么
 
-论文使用固定 ReAct harness，降低一部分 agent-architecture confounding。最佳 model 在 single-hop endpoint-style task 上为 **70.4%**，到 compositional APIs 降至约 **50–51%**；某些 policy-constrained unanswerable setting 低至 **2.4%**。
+论文使用固定的 ReAct 运行框架，减少了一部分智能体架构差异。最佳模型在单跳端点任务上达到 **70.4%**，到了组合 API 任务降至约 **50–51%**；某些带策略约束的不可回答任务只有 **2.4%**。
 
-Trace analysis 指向 entity disambiguation、cross-source grounding 等 language-mediated reasoning，而不只是 tool invocation mechanics。
+轨迹分析显示，实体消歧和跨来源依据等语言推理问题，比单纯的工具调用机制更容易成为瓶颈。
 
-但 score 仍然是 model + fixed harness 的 system-level evidence，不能直接推出“retrieval policy”或“planner”哪个 component 是瓶颈。
+这些分数仍是模型与固定运行框架共同作用的系统级证据，不能直接判断检索策略或规划器中的哪个组件是瓶颈。
 
-## Strongest confounder
+## 最主要的混杂因素
 
-固定 ReAct harness 有利于比较 model，但也把结论绑定到一个特定 interface/controller contract。API/tool schema、policy wording 与 document collection 也会影响 reasoning difficulty。
+固定 ReAct 框架有利于模型之间的比较，也让结论依赖特定的接口和控制器。API 与工具 schema、策略措辞和文档集合都会改变推理难度。
 
-## What remains unmeasured
+## 还没有覆盖什么
 
-- controller / retrieval / identity memory 的 component attribution；
-- long-running persistent state；
-- live enterprise API drift 与 permissions；
-- tool latency/cost；
-- irreversible external actions 与 recovery。
+- 控制器、检索和身份记忆之间的组件归因；
+- 长时间持续变化的状态；
+- 企业 API 的实时变化与权限；
+- 工具延迟和成本；
+- 不可逆的外部操作与恢复。
 
-## Genealogy consequence
+## 放进演化图怎么看
 
-`document retrieval / API use in isolation → multi-hop agent trajectories → cross-source executable coherence under policy`
+`单独的文档检索或 API 调用 → 多跳智能体轨迹 → 策略约束下的跨来源执行一致性`
 
-VAKRA 把 RAG evaluation 从“找对 evidence”推向“在异构 access mode 中维持可执行信息状态”。
+VAKRA 把 RAG 评测从“找对证据”推进到“在多种访问方式之间维持可执行的信息状态”。

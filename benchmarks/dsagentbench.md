@@ -1,43 +1,43 @@
-# DSAgentBench：Real-Computer End-to-End Data Science
+# DSAgentBench：真实计算机中的端到端数据科学
 
 **中文** | [English](dsagentbench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
-[Paper](https://arxiv.org/abs/2608.10366) · **Area: Data Agent**
+[论文](https://arxiv.org/abs/2608.10366) · **领域：Data Agent**
 
-> **Measurement delta.** DSAgentBench 把 data-agent evaluation 从 isolated SQL/code/analysis stage 推到**真实 computer environment 里的完整 data-science workflow**，要求 agent 在多工具之间执行并根据 intermediate outputs 持续决策。
+DSAgentBench 把数据智能体评测从孤立的 SQL、代码或分析步骤，推进到**真实计算机中的完整数据科学工作流**。智能体需要连续使用多种工具，并根据中间结果决定下一步。
 
-## Predecessor / implicit critique
+## 它接在什么之后
 
-此前 benchmark 常把 Text-to-SQL、code generation、单步分析或特定 tool use 分开测。DSAgentBench 的批评是：这些 setting 看不到 OS grounding、tool orchestration、long-horizon dependency 与 artifact-level verification。
+此前的基准通常分开测试 Text-to-SQL、代码生成、单步分析或某一种工具。这样很难观察操作系统交互、多工具协调、长程依赖和最终产物核验。DSAgentBench 把这些问题放进同一条工作流。
 
-## What it actually measures
+## 实际怎样评测
 
-Benchmark 包含 **275 个任务**，覆盖 data wrangling、exploration、modeling、visualization、validation 等生命周期阶段。Agent 在真实 computing environment 中使用 notebook、IDE、terminal、browser、database 等工具，并需要把 intermediate output 带入后续 decision。
+基准包含 **275 个任务**，覆盖数据整理、探索、建模、可视化和核验等阶段。智能体在真实计算环境中使用 notebook、IDE、终端、浏览器和数据库，并把每一步的结果带入后续决策。
 
-Evaluator 不是只跑代码，而是 deterministic 地检查 analytical correctness、visual output 与 model performance。
+评测器不只运行代码，还会确定性检查分析正确性、可视化结果和模型表现。
 
-## What a score supports
+## 分数能说明什么
 
-论文报告最强 evaluated agent 的 task success 为 **56.70%**，open-source agents 低于 1%。这个 gap 很大，但它首先是 **end-to-end system-level evidence**：base model、tool-use reliability、OS grounding、planning、recovery 与 harness 都共同影响结果。
+论文报告最强系统的任务成功率为 **56.70%**，所有开源智能体低于 1%。差距虽然很大，比较的仍是端到端系统：底座模型、工具可靠性、操作系统交互、规划、恢复策略和运行框架都会影响结果。
 
-它不能单独证明某个 planning 或 tool-routing component 的优势。
+因此，单靠这个总分不能证明某个规划或工具路由组件更好。
 
-## Strongest confounder
+## 最主要的混杂因素
 
-**Harness / computer-use stack 与 model capability 高度耦合。** 如果不同 agent 使用不同 scaffolding、tool policy 或 recovery strategy，leaderboard score 不能直接解释成 model reasoning ranking。
+**智能体运行框架、计算机操作栈和模型能力高度耦合。** 不同系统若使用不同的脚手架、工具策略或恢复机制，排行榜就不能直接解释成模型推理能力排名。
 
-另外，real-computer realism 会引入 environment reproducibility 与 tool-version drift。
+真实计算机环境提高了任务真实性，也引入环境复现和工具版本漂移问题。
 
-## What remains unmeasured
+## 还没有覆盖什么
 
-- 长时间、多 session 的 persistent project state；
-- enterprise business semantics 与 ambiguous requirements；
-- human clarification / approval；
-- deployment/monitoring 与 failure recovery cost；
-- real organization 中的权限、安全与不可逆 action。
+- 跨数周或数月持续变化的项目状态；
+- 企业业务语义和含糊需求；
+- 人工追问与审批；
+- 部署、监控和故障恢复成本；
+- 真实组织中的权限、安全和不可逆操作。
 
-## Genealogy consequence
+## 放进演化图怎么看
 
-`DS-1000 / executable code → workflow-oriented data-agent benchmarks → DSAgentBench real-computer end-to-end execution`
+`DS-1000 等可执行代码任务 → 工作流型数据智能体基准 → 真实计算机中的端到端执行`
 
-它目前更适合作为 **frontier environment/protocol benchmark**，而不是把 56.70% 当作某个 component 的 progress metric。
+它更适合作为前沿环境与协议基准，而不是把 56.70% 当作某个单独组件的进步指标。

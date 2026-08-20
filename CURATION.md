@@ -7,7 +7,7 @@ This repository has two jobs at once:
 1. **Frontier radar** — surface new benchmarks and material protocol changes quickly enough that a researcher can see what the field is starting to care about.
 2. **Benchmark genealogy** — preserve the precursor, foundation, and transition benchmarks needed to understand *why* the frontier now measures those things.
 
-The goal is therefore not maximum benchmark count. **Completeness means covering the meaningful changes in the evaluation object.** A benchmark can be old and still be essential if newer benchmarks are best understood as responses to its limitations.
+The public map is comprehensive within these three areas. Once a work provides a verifiable, reusable benchmark, it stays visible even when its contribution is incremental or overlaps an existing evaluation coordinate. Importance and evolution roles express how much it changed the field; they do not decide whether an in-scope benchmark disappears from the list. Papers that merely run experiments on existing benchmarks are still outside the repository.
 
 ## Inclusion test
 
@@ -15,10 +15,7 @@ Include a work when the benchmark/evaluation suite is itself a reusable research
 
 A paper is **not** included merely because it reports experiments on Agent Memory, RAG, or Data Agents.
 
-A candidate can enter through either gate:
-
-- **Landmark value:** it established or materially redirected an evaluation coordinate system, even if it predates today's agent framing.
-- **Frontier value:** it makes an important capability, environment, protocol, validity issue, or cost dimension newly observable.
+For recent releases, reusability and scope are the inclusion gate. Novelty affects the importance score, genealogy, and whether the work receives a deeper explanation, but not whether it appears in the rolling timeline. Historical backfill gives priority to landmarks and missing links while retaining every verified benchmark already accepted into the registry.
 
 ## Evolution role
 
@@ -28,7 +25,7 @@ When reviewing a benchmark, ask explicitly:
 
 1. **What previous benchmark is this implicitly criticizing?** What was too easy, narrow, static, synthetic, opaque, or weakly diagnosed?
 2. **What changed in capability × environment × protocol?** More examples alone are not a new evaluation object.
-3. **Did the field actually inherit the change?** A benchmark can be interesting without being a landmark.
+3. **Did the field actually inherit the change?** A benchmark can be useful without being a landmark; record that distinction through role and importance rather than omission.
 4. **What does the new benchmark still fail to measure?** Every generation should make the next missing coordinate visible.
 
 Roles are not prestige labels. `frontier` is time-relative: as an idea becomes durable it may later become a `foundation` or `transition` anchor.
@@ -73,7 +70,7 @@ README is the public reading surface and should support two reading directions:
 - **Latest → field signal:** every accepted benchmark in a rolling six-month window, in reverse chronological order, and what new concern it reveals.
 - **Foundation → frontier:** per-area evolution chains showing how the problem definition changed.
 
-The recent timeline is not editorially sampled: derive it from the registry's latest `last_verified` date, move six months back, and retain the full boundary month when release precision is only monthly. Do not let recency push durable foundations out of the repository. Once a benchmark is accepted into the canonical registry, keep it visible in the complete chronological and area tables; table length is not a reason to hide it. Curation still controls what enters the registry, so completeness does not mean adding every historical dataset.
+The recent timeline is not editorially sampled: derive it from the registry's latest `last_verified` date, move six months back, and retain the full boundary month when release precision is only monthly. A recent benchmark must not be deferred merely because a nearby benchmark measures something similar. Do not let recency push durable foundations out of the repository. Once a benchmark is accepted into the canonical registry, keep it visible in the complete chronological and area tables; table length is not a reason to hide it.
 
 ## Research synthesis
 

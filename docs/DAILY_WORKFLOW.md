@@ -34,15 +34,17 @@ Prefer primary sources.
 When supported, separate roles:
 
 - discovery optimizes recall;
-- benchmark judge decides whether the evaluation object itself is reusable/important;
+- benchmark judge decides whether the evaluation object itself is reusable and in scope, then assigns importance separately;
 - protocol auditor extracts capability, environment, accessible state, tools, harness assumptions, hints, retries, stopping rule, metrics/judge, executable validation, and cost;
 - genealogy analyst identifies the closest predecessor and what limitation is being criticized;
 - measurement skeptic names the strongest confounder and still-unmeasured dimension;
-- editor decides whether the change belongs on the public entry surface.
+- editor decides whether the change needs a deeper fold or synthesis; accepted recent benchmarks still enter the public timeline.
 
 ## 4. Inclusion and attribution
 
-A benchmark enters when it defines a reusable task/environment/dataset/protocol/diagnostic/evaluator target and has either durable landmark value or frontier measurement value.
+A benchmark enters when it defines a verifiable, reusable task, environment, dataset, protocol, diagnostic, challenge, or evaluator target in one of the three covered areas. It does not need to be a landmark. Novelty controls importance, evolution role, and depth of explanation, not recent-timeline inclusion.
+
+Do not defer an in-scope recent benchmark merely because its coordinate overlaps an existing entry. Exclude method papers that only report results on existing benchmarks, and record exact evidence blockers when reusability or first-party artifacts cannot be verified.
 
 For every accepted candidate ask:
 

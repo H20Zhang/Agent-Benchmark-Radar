@@ -1,43 +1,43 @@
-# DataSpace：Heterogeneous Workspace 上的 Verifiable Analytics
+# DataSpace：混合工作区中的可验证分析
 
 **中文** | [English](dataspace.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
-[Paper](https://arxiv.org/abs/2608.03451) · **Area: Data Agent**
+[论文](https://arxiv.org/abs/2608.03451) · **领域：Data Agent**
 
-> **Measurement delta.** DataSpace 把 data-agent target 从“给定一张表做分析”扩展成：只给 question + task-local workspace，agent 自己从 DB、structured files、long documents、video 中发现 evidence、做 cross-source computation，并返回可 deterministic 验证的完整 tabular result。
+DataSpace 不再只给一张表让智能体分析。它只提供问题和任务专属工作区，要求智能体自行从数据库、结构化文件、长文档和视频中寻找证据，跨来源计算，并返回可以确定性核验的完整表格结果。
 
-## Predecessor / implicit critique
+## 它接在什么之后
 
-Text-to-SQL、table QA、RAG 或 open-ended analysis benchmark 往往把 source discovery、structured computation、multimodal evidence 与 final verification 分开。DataSpace 的隐含批评是：真实 analytics 的难点恰恰在这些阶段的组合。
+Text-to-SQL、表格问答、RAG 和开放式分析基准通常分别考察来源发现、结构化计算、多模态证据或最终核验。DataSpace 把这些阶段连起来，因为真实分析工作往往难在组合，而不是其中某一个孤立步骤。
 
-## What it actually measures
+## 实际怎样评测
 
-DataSpace 包含 **410 个 cross-language tasks、7,439 个 artifacts、15.01 GB workspace data**，格式覆盖 CSV、JSON、SQLite、Markdown、PDF 与 video。
+DataSpace 包含 **410 个跨语言任务、7,439 个文件和 15.01 GB 工作区数据**，格式覆盖 CSV、JSON、SQLite、Markdown、PDF 和视频。
 
-每个 agent 只拿到问题与对应 workspace，最终输出完整 tabular result。Evaluator 做 header-invariant alignment、type/precision-aware normalization 与 order-aware row comparison，不依赖 LLM judge。
+每个智能体只能看到问题和对应工作区，最后必须输出完整表格。评测器会做不受表头表示影响的对齐、类型与精度感知的归一化，以及考虑行序的比对，不依赖 LLM 评判器。
 
-## What a score supports
+## 分数能说明什么
 
-论文报告最佳 accuracy **66.34%**；更重要的是，**固定 backbone 时更换 agent harness 可以产生 15.36 points 的差距**。
+论文报告的最高准确率为 **66.34%**。更值得留意的是，固定底座模型后，仅更换智能体运行框架就会产生 **15.36 分**的差距。
 
-因此 leaderboard score 首先反映 `backbone × harness × source discovery × multimodal handling × computation × verification` 的整套系统，而不能直接归因给某个 data-retrieval 或 planning component。
+因此，排行榜分数首先反映底座模型、运行框架、来源发现、多模态处理、计算和结果核验共同构成的系统，不能直接归因于某个数据检索或规划组件。
 
-## Strongest confounder
+## 最主要的混杂因素
 
-**Harness sensitivity 本身就是最大的 validity signal。** 如果同一个 backbone 因 harness 变化产生十几个点差距，那么跨论文/跨系统比较必须非常谨慎。
+**运行框架敏感性本身就是最强的有效性警告。** 同一个底座模型会因框架变化相差十几分，跨论文或跨系统比较因此必须谨慎。
 
-另外，task-local frozen workspace 提高 reproducibility，但与真实 enterprise live data、权限与持续 drift 仍有距离。
+任务专属的冻结工作区提高了可复现性，但与持续变化的企业数据、访问权限和环境漂移仍有距离。
 
-## What remains unmeasured
+## 还没有覆盖什么
 
-- business-definition ambiguity 与 clarification；
-- persistent workflow/project state；
-- write/update data 的不可逆 action；
-- production data governance / permissions；
-- total tool/latency/token cost 与 failure recovery。
+- 含糊的业务口径以及何时需要追问；
+- 持续变化的工作流和项目状态；
+- 写入或更新数据造成的不可逆操作；
+- 生产数据治理与权限；
+- 完整的工具、延迟、token 和故障恢复成本。
 
-## Genealogy consequence
+## 放进演化图怎么看
 
-`structured query/code → heterogeneous analytics → workspace-scale verifiable data work`
+`结构化查询与代码 → 异构分析 → 工作区规模的可验证数据工作`
 
-DataSpace 的主要贡献是把 **evidence discovery + cross-source computation + deterministic verification** 放进同一个 evaluation object。
+DataSpace 把**证据发现、跨来源计算和确定性核验**放进同一个评测对象，可看作从单项分析任务走向完整工作区任务的一步。
