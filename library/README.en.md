@@ -4,6 +4,13 @@
 
 Use this library for long-lived questions: **why did a benchmark appear, what predecessor limitation was it reacting to, and which measurement coordinate changed?**
 
+## Frontier Protocol Audits
+
+- [DSAgentBench](../benchmarks/dsagentbench.en.md): real-computer end-to-end data science; the score is system-level evidence over model × harness × tool/OS stack.
+- [DataSpace](../benchmarks/dataspace.en.md): heterogeneous workspace + deterministic tabular verification; harness changes materially move scores even with the backbone fixed.
+- [VAKRA](../benchmarks/vakra.en.md): API + RAG + policy inside cross-source executable trajectories; composition/grounding is the target, not one retrieval score.
+- [LoCoMo-Plus](../benchmarks/locomo-plus.en.md): moves memory evaluation from explicit factual recall toward latent user-constraint consistency.
+
 ## Browse by Area
 
 ### Agent Memory
