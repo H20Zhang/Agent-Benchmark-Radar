@@ -76,40 +76,6 @@ The window rolls six months back from the registry's latest verification date. S
 | 2026-02 | Agent Memory | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | Tests whether agents organize memory into task-appropriate structures such as ledgers, lists, and trees rather than only retrieving facts. | Makes memory structure itself observable as a capability. |
 <!-- RECENT-TIMELINE:END -->
 
-### Four Benchmarks in More Detail
-
-<details><summary><strong>Why DSAgentBench changes the evaluation target</strong></summary>
-
-Earlier data-agent benchmarks often isolate SQL, code generation, analytics answers, or selected workflow stages. DSAgentBench instead evaluates complete data-science work inside a real computer environment, where the agent must coordinate tools and ground later decisions in intermediate outputs.
-
-The benchmark contains **275 tasks** across the data-science lifecycle and uses deterministic checks for analytical correctness, visual outputs, and model performance. The paper reports **56.70% task success for the strongest evaluated agent**, while open-source agents remain below 1%. The result is system-level evidence: model, harness, tool-use reliability, OS grounding, and long-horizon reasoning all move together. Its importance is therefore the **environment/protocol shift**, not one model ranking.
-
-</details>
-
-<details><summary><strong>Why DataSpace is different from another analytics dataset</strong></summary>
-
-DataSpace gives the agent only a question and a task-local heterogeneous workspace containing combinations of CSV, JSON, SQLite, Markdown, PDF, and video, then requires the complete requested tabular result. That couples **evidence discovery, cross-source joins, multimodal access, and deterministic answer verification**.
-
-It contains **410 tasks and 7,439 artifacts**. The paper reports a **15.36-point spread from harness choice with the backbone fixed**, which is itself a warning: data-agent scores are highly harness-sensitive. DataSpace therefore measures a broader information environment, but it does not isolate which controller or retrieval component caused a system-level gain.
-
-</details>
-
-<details><summary><strong>Why LoCoMo-Plus matters beyond factual recall</strong></summary>
-
-Conventional long-term-memory QA often gives later questions cues that overlap directly with stored facts. LoCoMo-Plus targets **cue–trigger semantic disconnect**: the agent must preserve and apply a latent user constraint even when the later query does not restate it.
-
-That changes the evaluation object from “can I retrieve an old fact?” toward “does remembered user state constrain future behavior correctly?” The remaining validity question is whether constraint-consistency evaluation transfers to persistent acting agents with real preference drift, permissions, and irreversible decisions.
-
-</details>
-
-<details><summary><strong>Why VAKRA changes RAG evaluation</strong></summary>
-
-VAKRA combines executable API calls, document retrieval, multi-hop reasoning, and tool-use policies in the same trajectory. This exposes failures that disappear when API use and document QA are benchmarked separately: identity mismatch, cross-source grounding failure, and policy-inconsistent execution.
-
-The benchmark supports trajectory-level system claims, not a clean attribution to retrieval policy. Its value is making **cross-source executable coherence** observable.
-
-</details>
-
 <a id="evolution"></a>
 ## Three Areas
 
