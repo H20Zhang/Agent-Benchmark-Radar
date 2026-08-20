@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
@@ -26,6 +27,42 @@ def complete_block_ids(text: str, label: str, path: Path, errors: list[str]) -> 
         return []
     block = text.split(start, 1)[1].split(end, 1)[0]
     return BENCHMARK_ID_RE.findall(block)
+
+
+def release_date(value: str) -> date:
+    parts = [int(part) for part in value.split("-")]
+    if len(parts) == 2:
+        parts.append(1)
+    return date(*parts)
+
+
+def month_floor_six_months_before(as_of: date) -> date:
+    month_index = as_of.year * 12 + as_of.month - 1 - 6
+    return date(month_index // 12, month_index % 12 + 1, 1)
+
+
+def check_recent_timeline(records: list[dict], errors: list[str]) -> None:
+    as_of = max(date.fromisoformat(row["last_verified"]) for row in records)
+    cutoff = month_floor_six_months_before(as_of)
+    recent = [
+        row
+        for row in records
+        if cutoff <= release_date(row["released"]) <= as_of
+    ]
+    by_name = sorted(recent, key=lambda row: (row["name"].casefold(), row["id"]))
+    expected = [
+        row["id"]
+        for row in sorted(by_name, key=lambda row: row["released"], reverse=True)
+    ]
+
+    for path in (ZH, EN):
+        text = path.read_text(encoding="utf-8")
+        actual = complete_block_ids(text, "RECENT-TIMELINE", path, errors)
+        if actual != expected:
+            errors.append(
+                f"{path.relative_to(ROOT)}: dynamic six-month timeline must contain all "
+                f"benchmarks from {cutoff.isoformat()} through {as_of.isoformat()} in reverse order"
+            )
 
 
 def check_complete_views(records: list[dict], errors: list[str]) -> None:
@@ -93,6 +130,7 @@ def main() -> int:
         return 1
 
     records = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    check_recent_timeline(records, errors)
     check_complete_views(records, errors)
     zh = ZH.read_text(encoding="utf-8")
     en = EN.read_text(encoding="utf-8")

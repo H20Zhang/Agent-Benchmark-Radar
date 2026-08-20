@@ -66,13 +66,13 @@ Then update benchmark notes/genealogy only when they add decision value.
 
 ## 7. README projection
 
-The first screen should make the family structure obvious and expose: New & Notable, area evolution, domain-radar continuations, and the fact that benchmark coverage is not the whole field.
+The first screen should make the family structure obvious and expose: the complete rolling six-month benchmark timeline, area evolution, domain-radar continuations, and the fact that benchmark coverage is not the whole field.
 
 Default reader flow:
 
-`Frontier → Field Evolution → Area Maps → Poorly Measured → Reading Paths → Benchmark Library`
+`Rolling six-month timeline → Field Evolution → Area Maps → Poorly Measured → Reading Paths → Benchmark Library`
 
-New & Notable includes only changes that materially alter the evaluation object. High-value changes may receive 60–90 second folds.
+The rolling timeline is not a shortlist: include every accepted registry record released within six months of the latest `last_verified` date, in reverse chronological order, in both languages. Because some release values have only `YYYY-MM` precision, retain the entire boundary month. High-value changes may additionally receive 60–90 second folds, but folds do not control timeline inclusion.
 
 Each area map keeps the full accepted registry visible in a permanently expanded chronological table, followed by one frontier signal and one biggest measurement gap. Do not compress it back to representative entries.
 
@@ -96,6 +96,7 @@ Weekly/monthly/yearly compactions synthesize **changes in the evaluation object*
 Check:
 
 - registry syntax/required fields and README synchronization;
+- rolling six-month timeline completeness, reverse chronology, and Chinese/English identity parity;
 - Chinese default + English counterpart cross-link and preserve the same benchmark identities, roles, primary links, and load-bearing facts;
 - default genealogy entries have meaningful predecessor/delta logic;
 - high-importance historical benchmarks remain reachable through non-temporal library routes;

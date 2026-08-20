@@ -8,7 +8,7 @@
 
 **研究 Radar：** [Agent Memory](https://github.com/H20Zhang/Agent-Memory-Radar) · [Agentic RAG](https://github.com/H20Zhang/Agentic-RAG-Radar) · [Data Agent](https://github.com/H20Zhang/Data-Agent-Radar)
 
-[30 秒：前沿](#frontier) · [5 分钟：领域演化](#evolution) · [15 分钟：阅读路径](#reading-paths) · [浏览全部](#library)
+[30 秒：近半年时间线](#frontier) · [5 分钟：领域演化](#evolution) · [15 分钟：阅读路径](#reading-paths) · [浏览全部](#library)
 
 > **核心想法：** 一个真正有用的新 benchmark，往往是在隐含地批评上一代：**旧 benchmark 到底太简单、太窄、太静态、太 synthetic、太 opaque，还是诊断能力太弱？**
 >
@@ -17,18 +17,35 @@
 最后更新：**2026-08-20**
 
 <a id="frontier"></a>
-## 最新值得关注的 Benchmark
+## 最近半年 Benchmark 时间线
 
-| Benchmark | Area | 新测到了什么 | 它说明领域开始关心什么 |
-|---|---|---|---|
-| [DSAgentBench](https://arxiv.org/abs/2608.10366) | Data Agent | **真实 computer environment** 里的端到端 data-science workflow | 评价对象从 code/answer quality 转向 grounded multi-tool work |
-| [VAKRA](https://arxiv.org/abs/2608.12282) | RAG / Agents | API + retrieved documents + policy constraints 出现在同一 executable trajectory | Retrieval 正在变成 cross-source execution，而不只是 ranking |
-| [DataSpace](https://arxiv.org/abs/2608.03451) | Data Agent | DB、file、document、multimedia 上的 verifiable analytics | heterogeneous evidence discovery 与 deterministic verification 必须一起看 |
-| [LoCoMo-Plus](https://arxiv.org/abs/2602.10715) | Agent Memory | 后续 query 不重述条件时，仍要应用 latent user constraint | Memory 从 explicit recall 走向 persistent user state |
-| [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) | Agent Memory | memory 是否真正影响 tool selection 与 parameter grounding | Memory 开始按**是否改变 action**评价，而不仅是能否回答 |
-| [RealMem](https://aclanthology.org/2026.findings-acl.703/) | Agent Memory | 长时间、跨 session 的 project state 与 evolving goal | 长期 memory 从 casual dialogue 走向 persistent project work |
-| [AgenticDataBench](https://arxiv.org/abs/2607.01647) | Data Agent | 细粒度 **data-science skill coverage** | aggregate success 不够，benchmark coverage 本身开始可审计 |
-| [SGR-Bench](https://arxiv.org/abs/2605.22219) | RAG / Search | evidence 被 filter、hierarchy、scope、site state 挡住时如何 search | 找到 source 不等于正确配置 information environment |
+这不是精选列表。窗口以 registry 最新的 `last_verified` 日期为基准动态向前滚动六个月；由于部分 release 只有月份精度，边界月整月保留。半年内收录的 benchmark 全部按发布时间倒序列出。
+
+<!-- RECENT-TIMELINE:START -->
+| 发布 | Area | Benchmark | 主要测什么 | 相比之前改变了什么 |
+|---|---|---|---|---|
+| 2026-08 | Data Agent | [DataSpace](https://arxiv.org/abs/2608.03451) <!-- benchmark-id:dataspace --> | DB、file、document 与 multimedia 混合 workspace 上的 verifiable analytics。 | 把 heterogeneous evidence discovery 与 deterministic complete-result checking 统一起来。 |
+| 2026-08 | Data Agent | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | notebook、IDE、terminal、browser 与 DB 中的完整 data-science workflow。 | 把评价放进真实 computer environment，并要求 grounded multi-stage tool execution。 |
+| 2026-08 | RAG | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | executable API、document retrieval、multi-hop reasoning 与 tool-use policy 的组合执行。 | 把跨 source grounding、执行和 policy consistency 放进同一 trajectory。 |
+| 2026-07 | Data Agent | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | 真实 data-science workflow 中的细粒度 skill taxonomy 与组合覆盖。 | 使 benchmark 的 skill coverage 本身可以审计，而不只看 aggregate success。 |
+| 2026-07 | Agent Memory | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | 后续 cue 不重述条件时，仍能保留并应用 latent user constraints。 | 把目标从显式事实 recall 推进到对用户目标、价值和约束的一致应用。 |
+| 2026-07 | Agent Memory | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 多模态长期对话中的 memory extraction、适应、推理与知识管理。 | 使视觉保留、多模态推理和 memory organization 成为统一评价对象。 |
+| 2026-07 | Agent Memory | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | 长期 memory 是否主动决定 tool selection 并为参数提供 grounding。 | 使 action-level memory utilization 可以直接评分。 |
+| 2026-06 | Agent Memory | [LifeSide](https://arxiv.org/abs/2606.04660) <!-- benchmark-id:lifeside --> | 多 session memory、用户理解、隐私控制和情绪—环境动态。 | 把 memory 与 persistent user model、privacy boundary 和环境情境联结起来。 |
+| 2026-05-14 | Agent Memory | [MemEye](https://arxiv.org/abs/2605.15128) <!-- benchmark-id:memeye --> | 细粒度视觉证据记忆、视觉状态演化与 text-only shortcut 检查。 | 要求系统保留真正必要的视觉证据，而不能只依赖 caption 或文本线索。 |
+| 2026-05 | Agent Memory | [LongMemEval-V2](https://arxiv.org/abs/2605.12493) <!-- benchmark-id:longmemeval-v2 --> | 大规模 web-agent trajectory 中的环境状态、workflow knowledge 与 gotcha。 | 把累积环境经验而非仅用户历史设为 memory target。 |
+| 2026-05 | RAG | [SGR-Bench](https://arxiv.org/abs/2605.22219) <!-- benchmark-id:sgr-bench --> | evidence 受 site filter、hierarchy、scope 或 view state 控制时的 search。 | 区分找到正确 source 与配置正确 retrieval state。 |
+| 2026-03 | Data Agent | [Data Agent Benchmark (DAB)](https://arxiv.org/abs/2603.20576) <!-- benchmark-id:data-agent-benchmark --> | 多种 DBMS 间的数据 integration、transformation、analysis 与 executable validation。 | 把企业数据问题从单一 SQL workflow 扩展到跨数据库完整 pipeline。 |
+| 2026-03 | Agent Memory | [LifeBench](https://arxiv.org/abs/2603.03781) <!-- benchmark-id:lifebench --> | 跨多源长期轨迹的 episodic、semantic、habit 与 procedural memory。 | 把评价对象从显式事实扩展到习惯与程序性知识。 |
+| 2026-02-18 | Agent Memory | [MemoryArena](https://arxiv.org/abs/2602.16313) <!-- benchmark-id:memoryarena --> | 多 session Agent-Environment loop 中，早期行动与反馈是否指导后续行动。 | 直接把长期记忆与未来 task action 耦合起来。 |
+| 2026-02 | RAG | [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) <!-- benchmark-id:agenticragtracer --> | 多步 retrieval-reasoning chain 的 hop-level validation 与 step allocation。 | 使 failure location 在 trajectory 内可见。 |
+| 2026-02 | Agent Memory | [AMA-Bench](https://arxiv.org/abs/2602.22769) <!-- benchmark-id:ama-bench --> | 真实与可扩展合成 agent-environment trajectory 上的长程记忆。 | 把记忆来源从对话扩展到具有因果结构的 agent-environment experience。 |
+| 2026-02 | Agent Memory | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | Agent 是否维护 ledger、list、tree 等适合任务的 memory structure。 | 使 memory 的组织方式本身成为可观察能力。 |
+<!-- RECENT-TIMELINE:END -->
+
+### 延伸解读
+
+下列折叠提供额外分析，不影响上面时间线的完整性。
 
 <details><summary><strong>为什么 DSAgentBench 改变了 evaluation target</strong></summary>
 

@@ -70,10 +70,10 @@ Treat these as first-class updates, not only brand-new benchmark papers:
 
 README is the public reading surface and should support two reading directions:
 
-- **Latest → field signal:** the newest important benchmarks and what new concern they reveal.
+- **Latest → field signal:** every accepted benchmark in a rolling six-month window, in reverse chronological order, and what new concern it reveals.
 - **Foundation → frontier:** per-area evolution chains showing how the problem definition changed.
 
-Do not let recency push durable foundations out of the repository. Once a benchmark is accepted into the canonical registry, keep it visible in the complete chronological and area tables; table length is not a reason to hide it. Curation still controls what enters the registry, so completeness does not mean adding every historical dataset.
+The recent timeline is not editorially sampled: derive it from the registry's latest `last_verified` date, move six months back, and retain the full boundary month when release precision is only monthly. Do not let recency push durable foundations out of the repository. Once a benchmark is accepted into the canonical registry, keep it visible in the complete chronological and area tables; table length is not a reason to hide it. Curation still controls what enters the registry, so completeness does not mean adding every historical dataset.
 
 ## Research synthesis
 

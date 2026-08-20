@@ -8,7 +8,7 @@ Start here to see **what Agent Memory, Agentic RAG, and Data Agents are being as
 
 **Research Radars:** [Agent Memory](https://github.com/H20Zhang/Agent-Memory-Radar) · [Agentic RAG](https://github.com/H20Zhang/Agentic-RAG-Radar) · [Data Agent](https://github.com/H20Zhang/Data-Agent-Radar)
 
-[30 sec: Frontier](#frontier) · [5 min: Field Evolution](#evolution) · [15 min: Reading Paths](#reading-paths) · [Browse all](#library)
+[30 sec: Six-month timeline](#frontier) · [5 min: Field Evolution](#evolution) · [15 min: Reading Paths](#reading-paths) · [Browse all](#library)
 
 > **Core idea.** A useful new benchmark is often an implicit critique of the previous generation: **what was too easy, narrow, static, synthetic, opaque, or weakly diagnosed?**
 >
@@ -17,18 +17,35 @@ Start here to see **what Agent Memory, Agentic RAG, and Data Agents are being as
 Last updated: **2026-08-20**
 
 <a id="frontier"></a>
-## New & Notable
+## Benchmark Timeline: Last Six Months
 
-| Benchmark | Area | What becomes measurable | Field signal |
-|---|---|---|---|
-| [DSAgentBench](https://arxiv.org/abs/2608.10366) | Data Agent | End-to-end data-science workflows in a **real computer environment** | Evaluation is moving from code/answer quality to grounded multi-tool work |
-| [VAKRA](https://arxiv.org/abs/2608.12282) | RAG / Agents | Executable APIs + retrieved documents + policy constraints in one trajectory | Retrieval is becoming cross-source execution, not only ranking |
-| [DataSpace](https://arxiv.org/abs/2608.03451) | Data Agent | Verifiable analytics over DBs, files, documents, and multimedia | Heterogeneous evidence discovery + deterministic output verification matter jointly |
-| [LoCoMo-Plus](https://arxiv.org/abs/2602.10715) | Agent Memory | Applying latent user constraints when later cues do not restate them | Memory is moving beyond explicit recall toward persistent user state |
-| [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) | Agent Memory | Memory used for tool selection and parameter grounding | Memory is being judged by whether it changes **action**, not only answers |
-| [RealMem](https://aclanthology.org/2026.findings-acl.703/) | Agent Memory | Evolving project state across long-running cross-session work | Long-term memory is moving toward persistent project work |
-| [AgenticDataBench](https://arxiv.org/abs/2607.01647) | Data Agent | Fine-grained **data-science skill coverage** across realistic tasks | Aggregate success is no longer enough; capability coverage itself becomes auditable |
-| [SGR-Bench](https://arxiv.org/abs/2605.22219) | RAG / Search | Search when evidence is gated behind filters, hierarchy, scope, and site state | Reaching a source is not equivalent to configuring the information environment correctly |
+This is not a curated shortlist. The window rolls six months back from the registry's latest `last_verified` date; because some releases have only month-level precision, the boundary month is retained in full. Every benchmark in that window appears below in reverse chronological order.
+
+<!-- RECENT-TIMELINE:START -->
+| Released | Area | Benchmark | What it evaluates | What changed |
+|---|---|---|---|---|
+| 2026-08 | Data Agent | [DataSpace](https://arxiv.org/abs/2608.03451) <!-- benchmark-id:dataspace --> | Verifiable analytics over heterogeneous workspaces spanning databases, files, documents, and multimedia. | Unifies heterogeneous evidence discovery with deterministic complete-result evaluation. |
+| 2026-08 | Data Agent | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | Complete data-science workflows inside real computer environments using notebooks, IDEs, terminals, browsers, and databases. | Moves evaluation into grounded multi-stage, multi-tool execution. |
+| 2026-08 | RAG | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | Composition of executable APIs, document retrieval, multi-hop reasoning, and tool-use policies. | Places cross-source grounding, execution, and policy consistency in one trajectory. |
+| 2026-07 | Data Agent | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | Fine-grained skill coverage across realistic data-science workflows. | Makes benchmark capability coverage auditable beyond aggregate task success. |
+| 2026-07 | Agent Memory | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | Retaining and applying latent user constraints when later cues do not restate them. | Moves from explicit recall to consistent application of user state, goals, and values. |
+| 2026-07 | Agent Memory | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | Memory extraction, adaptation, reasoning, and knowledge management in multimodal long-term conversations. | Makes visual retention, multimodal reasoning, and memory organization a unified target. |
+| 2026-07 | Agent Memory | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | Whether long-term memory drives tool selection and parameter grounding. | Makes action-level memory utilization directly measurable. |
+| 2026-06 | Agent Memory | [LifeSide](https://arxiv.org/abs/2606.04660) <!-- benchmark-id:lifeside --> | Multi-session memory, user understanding, privacy control, and emotional-environment dynamics. | Connects memory to persistent user models, privacy boundaries, and environmental context. |
+| 2026-05-14 | Agent Memory | [MemEye](https://arxiv.org/abs/2605.15128) <!-- benchmark-id:memeye --> | Fine-grained visual evidence, temporal visual-state synthesis, and text-only shortcut checks. | Requires genuinely necessary visual evidence rather than coarse captions or textual cues. |
+| 2026-05 | Agent Memory | [LongMemEval-V2](https://arxiv.org/abs/2605.12493) <!-- benchmark-id:longmemeval-v2 --> | Environment state, workflow knowledge, and gotchas accumulated in web-agent trajectories. | Makes accumulated environment experience—not only user-history recall—a memory target. |
+| 2026-05 | RAG | [SGR-Bench](https://arxiv.org/abs/2605.22219) <!-- benchmark-id:sgr-bench --> | Search when evidence is gated by site filters, hierarchy, scope, or view state. | Separates finding the right source from configuring the right retrieval state. |
+| 2026-03 | Data Agent | [Data Agent Benchmark (DAB)](https://arxiv.org/abs/2603.20576) <!-- benchmark-id:data-agent-benchmark --> | Integration, transformation, analysis, and executable validation across multiple DBMSs. | Expands enterprise data questions from isolated SQL to a cross-database pipeline. |
+| 2026-03 | Agent Memory | [LifeBench](https://arxiv.org/abs/2603.03781) <!-- benchmark-id:lifebench --> | Episodic, semantic, habitual, and procedural memory across long multi-source trajectories. | Extends the target beyond explicit facts to habits and procedural knowledge. |
+| 2026-02-18 | Agent Memory | [MemoryArena](https://arxiv.org/abs/2602.16313) <!-- benchmark-id:memoryarena --> | Whether earlier actions and feedback guide later actions in multi-session Agent-Environment loops. | Directly couples long-term memory with future task action. |
+| 2026-02 | RAG | [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) <!-- benchmark-id:agenticragtracer --> | Hop-level validation and step allocation in multi-step retrieval-reasoning chains. | Makes the location of trajectory failures observable. |
+| 2026-02 | Agent Memory | [AMA-Bench](https://arxiv.org/abs/2602.22769) <!-- benchmark-id:ama-bench --> | Long-horizon memory over real and scalable synthetic agent-environment trajectories. | Expands memory from dialogue to causally structured agent-environment experience. |
+| 2026-02 | Agent Memory | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | Whether agents maintain task-appropriate structures such as ledgers, lists, and trees. | Makes memory organization itself an observable capability. |
+<!-- RECENT-TIMELINE:END -->
+
+### Deeper Reads
+
+The disclosures below add analysis without limiting the completeness of the timeline above.
 
 <details><summary><strong>Why DSAgentBench changes the evaluation target</strong></summary>
 
