@@ -11,6 +11,20 @@ Agent Benchmark Radar is the default entry point for a four-repository research 
         memory systems       information access   end-to-end data work
 ```
 
+## Family-wide language contract
+
+All four radars are **Chinese-first bilingual research surfaces**.
+
+- `README.md` is always the default **Simplified Chinese** landing page.
+- `README.en.md` is the complete English counterpart.
+- Reader-facing Research Library/category pages, high-value paper or benchmark notes, and public weekly/monthly/yearly synthesis are available in both languages.
+- Canonical machine-readable data, schemas, scheduler prompts, validation output, maintenance docs, and run logs remain single-source unless a reader genuinely needs them.
+- Chinese and English are two editorial projections of **one semantic research judgment**, not two independently curated corpora.
+- Benchmark/paper titles, model names, metrics, protocol names, tool names, dataset names, and standard acronyms remain in their canonical English form when that improves literature search and technical precision.
+- Chinese is the primary editorial surface: public navigation, examples, concise explanations, and default links should assume a Chinese reader first. English must preserve the same depth rather than becoming a shortened translation.
+
+A material factual or interpretive change must update both reader-facing language variants in the same maintenance transaction. Bilingual drift on benchmark identity, importance, research delta, decisive evidence, caveat/confounder, genealogy, or cross-radar relationships is a correctness failure.
+
 ## Why Benchmark Radar is the entry
 
 A benchmark genealogy gives a newcomer a compact answer to three questions before they read methods: **what capability the field is trying to improve, what older evaluation target became insufficient, and what evidence currently counts as progress**. From there, the reader can continue into the corresponding domain radar for methods, systems, and research tensions.
@@ -44,10 +58,10 @@ This is especially important for persistent agents, real-user longitudinal effec
 
 ## Cross-link contract
 
-- Benchmark Radar first screen contains one compact `Research Radars` line linking to all three vertical radars.
+- Benchmark Radar first screen contains one compact `研究 Radar / Research Radars` line linking to all three vertical radars.
 - Each Benchmark Radar area map ends with exactly one canonical continuation link to its domain radar.
 - Each domain radar exposes one evaluation continuation back to the corresponding Benchmark Radar section/genealogy.
 - Deep benchmark or paper notes cross-link only when the adjacent research line materially helps interpretation; do not add repeated promotional links.
-- Chinese and English Benchmark Radar surfaces must route to the same sibling repositories and research relationships.
+- Chinese and English surfaces must route to the same sibling repositories and research relationships.
 
 The family should feel like one research map with four projections, not four repositories advertising one another.
