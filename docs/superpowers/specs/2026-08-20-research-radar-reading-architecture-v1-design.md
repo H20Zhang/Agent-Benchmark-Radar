@@ -93,8 +93,12 @@ Maintain both languages for public narrative that readers may reasonably travers
 Do **not** duplicate language variants for:
 
 - `data/benchmarks.json` and other canonical machine-readable records;
-- scheduler prompts, `runs/*`, validation output, schemas, and maintenance-only docs;
-- raw provenance or operational logs.
+- scheduler prompts, validation output, schemas, and maintenance-only docs;
+- `runs/README.md`, which is static policy only.
+
+### No public operational run logs
+
+The Daily Agent never commits a file under `runs/daily/` or another public operational path. Private scout, candidate, lane, retry, and validation traces live only in ignored `.radar-private/` state or ephemeral Agent memory. Canonical data, the complete bilingual Timeline, any due digest, and one atomic Git commit are the public provenance.
 
 ### Source-of-truth and drift control
 
@@ -281,7 +285,7 @@ Both Chinese and English library entry surfaces must route to the same benchmark
 - `README.md`: default Chinese **Radar-family entry + benchmark judgment/router** layer.
 - `README.en.md`: English counterpart.
 - sibling domain radars: method/system argument and evidence layers; Benchmark Radar links into them rather than duplicating their coverage.
-- `runs/*`: maintenance provenance only.
+- `runs/README.md`: static no-public-run policy only; operational provenance stays in ignored `.radar-private/` state or ephemeral Agent memory.
 
 Do not duplicate the same paragraph across layers or maintain separate research judgments by language.
 
@@ -291,13 +295,13 @@ Move detailed recurring behavior into a repository-owned `docs/DAILY_WORKFLOW.md
 
 Each transaction follows:
 
-`preflight → recent discovery + bounded historical backfill → independent benchmark judgment → protocol audit → canonical registry update → note/genealogy update when useful → derive Chinese + English reader projections → verify sibling-radar routing → bilingual editorial review → validate semantic parity → log → notify only if material`
+`preflight → recent discovery + bounded historical backfill → independent benchmark judgment → protocol audit → canonical registry update → note/genealogy update when useful → derive Chinese + English reader projections → verify sibling-radar routing → bilingual editorial review → validate semantic parity → atomic commit → notify only if material`
 
 A new benchmark does not automatically become a defining benchmark in the default area view. Default genealogy changes only when the new work shifts a durable evaluation coordinate.
 
 A sibling-radar link should change only when a research continuation becomes materially better; do not rewrite cross-links because a new paper happened to arrive.
 
-Chinese and English public updates for the same semantic change should land atomically in one transaction. Do not publish one language and leave the paired high-visibility surface stale unless an explicit blocker is logged.
+Chinese and English public updates for the same semantic change should land atomically in one transaction. Do not publish one language and leave the paired high-visibility surface stale; any blocker remains private in ignored `.radar-private/` state or ephemeral Agent memory.
 
 ## Validation
 
@@ -329,7 +333,7 @@ Editorial lint is advisory unless a deterministic public/canonical contract is v
 6. Add the local Research Radar Editor standard and bilingual editorial linter.
 7. Add `docs/DAILY_WORKFLOW.md` and move stable recurring behavior out of the scheduler prompt, including atomic Chinese/English projection updates and sibling-routing validation.
 8. Add/upgrade benchmark notes selectively for frontier works and foundations whose protocol/genealogy is otherwise easy to misunderstand; high-value public notes receive both Chinese and English versions.
-9. Migrate public compactions to bilingual form as they are touched or regenerated; do not duplicate operational logs.
+9. Migrate public compactions to bilingual form as they are touched or regenerated; keep operational traces only in ignored `.radar-private/` state or ephemeral Agent memory.
 10. Preserve old benchmarks in canonical data; do not delete history merely to shorten README.
 
 ## Success criteria

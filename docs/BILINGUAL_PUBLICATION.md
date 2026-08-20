@@ -7,7 +7,7 @@ Agent Benchmark Radar is bilingual, with Simplified Chinese as the default reade
 - `README.md` — default Simplified Chinese landing page.
 - `README.en.md` — complete English counterpart.
 - Reader-facing Benchmark Library/genealogy pages, high-value benchmark notes, and public weekly/monthly/yearly synthesis should have both Chinese and English forms.
-- Canonical registry, schemas, maintenance docs, scheduler prompts, validation output, and `runs/*` remain single-source.
+- Canonical registry, schemas, maintenance docs, scheduler prompts, and validation output remain single-source. **No public operational run logs.** `runs/README.md` is static policy only; operational traces remain only in ignored `.radar-private/` state or ephemeral Agent memory.
 
 ## One judgment, two editorial projections
 
