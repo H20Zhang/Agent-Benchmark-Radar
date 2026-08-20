@@ -1,5 +1,7 @@
 # Curation Policy
 
+This policy is the Benchmark-specific acceptance layer for [Radar Agent Protocol v2](docs/RADAR_AGENT_PROTOCOL.md) and [the Daily Benchmark adapter](docs/DAILY_WORKFLOW.md). Candidates remain private until the protocol's evidence and skeptical-audit gates are complete; normal Daily Agent publication does not wait for a human approval step.
+
 ## What this Radar is for
 
 This repository has two jobs at once:
@@ -7,7 +9,7 @@ This repository has two jobs at once:
 1. **Frontier radar** — surface new benchmarks and material protocol changes quickly enough that a researcher can see what the field is starting to care about.
 2. **Benchmark genealogy** — preserve the precursor, foundation, and transition benchmarks needed to understand *why* the frontier now measures those things.
 
-The public map is comprehensive within these three areas. Once a work provides a verifiable, reusable benchmark, it stays visible even when its contribution is incremental or overlaps an existing evaluation coordinate. Importance and evolution roles express how much it changed the field; they do not decide whether an in-scope benchmark disappears from the list. Papers that merely run experiments on existing benchmarks are still outside the repository.
+The public registry is comprehensive within these three areas. Once a work defines a verifiable, reusable benchmark, it remains reachable even when its contribution is incremental or overlaps an existing coordinate. Importance and evolution role express how much it changed the field; they do not decide whether an accepted benchmark disappears. Papers that merely run experiments on existing benchmarks remain out of scope.
 
 ## Inclusion test
 
@@ -15,7 +17,7 @@ Include a work when the benchmark/evaluation suite is itself a reusable research
 
 A paper is **not** included merely because it reports experiments on Agent Memory, RAG, or Data Agents.
 
-For recent releases, reusability and scope are the inclusion gate. Novelty affects the importance score, genealogy, and whether the work receives a deeper explanation, but not whether it appears in the rolling timeline. Historical backfill gives priority to landmarks and missing links while retaining every verified benchmark already accepted into the registry.
+For recent releases, reusability and scope are the inclusion gate. Novelty controls importance, genealogy, and depth of explanation, not acceptance. Historical backfill prioritizes landmarks and missing links while retaining every verified benchmark already accepted into the canonical registry.
 
 ## Evolution role
 
@@ -25,7 +27,7 @@ When reviewing a benchmark, ask explicitly:
 
 1. **What previous benchmark is this implicitly criticizing?** What was too easy, narrow, static, synthetic, opaque, or weakly diagnosed?
 2. **What changed in capability × environment × protocol?** More examples alone are not a new evaluation object.
-3. **Did the field actually inherit the change?** A benchmark can be useful without being a landmark; record that distinction through role and importance rather than omission.
+3. **Did the field actually inherit the change?** A benchmark can be useful without being a landmark; record the distinction through role and importance rather than omission.
 4. **What does the new benchmark still fail to measure?** Every generation should make the next missing coordinate visible.
 
 Roles are not prestige labels. `frontier` is time-relative: as an idea becomes durable it may later become a `foundation` or `transition` anchor.
@@ -65,12 +67,14 @@ Treat these as first-class updates, not only brand-new benchmark papers:
 
 ## README contract
 
-README is the public reading surface and should support two reading directions:
+README is the public time-first reading surface and should support two reading directions:
 
-- **Latest → field signal:** every accepted benchmark in a rolling six-month window, in reverse chronological order, and what new concern it reveals.
+- **Latest Timeline → field signal:** every record with an auditable current-window Radar acceptance time, followed by the bounded compatibility projection, with no fixed item-count cap.
 - **Foundation → frontier:** per-area evolution chains showing how the problem definition changed.
 
-The recent timeline is not editorially sampled: derive it from the registry's latest `last_verified` date, move six months back, and retain the full boundary month when release precision is only monthly. A recent benchmark must not be deferred merely because a nearby benchmark measures something similar. Do not let recency push durable foundations out of the repository. Once a benchmark is accepted into the canonical registry, keep it visible in the complete chronological and area tables; table length is not a reason to hide it.
+Timeline is ordered by `radar_published_at`, not paper release date. Never infer that timestamp from `released`, `last_verified`, a scheduler run, or a later integration commit. Records whose acceptance time predates the v2 contract remain visible in the complete release chronology and area tables in the Benchmark Library; only the fixed compatibility set appears on Timeline with explicit `legacy_unknown` status. Do not let recency push durable foundations out of the repository or let table length erase an accepted record from the complete Library.
+
+Each accepted event also receives the `map_delta` status defined in `SCHEMA.md`. One work may be an `early_signal`; it cannot by itself establish a durable trend or silently rewrite a Field Map node.
 
 ## Research synthesis
 

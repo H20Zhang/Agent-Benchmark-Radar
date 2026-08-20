@@ -1,0 +1,265 @@
+import json
+from pathlib import Path
+import sys
+import unittest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from validate_reading import (
+    validate_benchmark_aliases,
+    validate_benchmark_library,
+    validate_family_routes,
+)
+
+
+ROUTES = """[Agent Memory](https://github.com/H20Zhang/Agent-Memory-Radar#field-map)
+[Agentic RAG](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map)
+[Data Agent](https://github.com/H20Zhang/Data-Agent-Radar#field-map)
+"""
+ALIASES = """<a id="frontier"></a>
+<a id="changes"></a>
+<a id="evolution"></a>
+<a id="benchmark-memory"></a>
+<a id="benchmark-rag"></a>
+<a id="benchmark-data"></a>
+"""
+
+ZH_ATTENTION_NAV = (
+    "[30 秒：最新时间线](#timeline) · [3 分钟：7/30 天变化](#periods) · "
+    "[5 分钟：领域地图](#field-map) · [15 分钟：阅读路径](#reading-paths) · "
+    "[浏览全部](#library)"
+)
+EN_ATTENTION_NAV = (
+    "[30 sec: Timeline](#timeline) · [3 min: 7/30-day changes](#periods) · "
+    "[5 min: Field Map](#field-map) · [15 min: Reading Paths](#reading-paths) · "
+    "[Browse all](#library)"
+)
+
+
+class AttentionNavigationTest(unittest.TestCase):
+    def test_repository_exposes_the_same_attention_layers_in_both_languages(self):
+        zh = (ROOT / "README.md").read_text(encoding="utf-8")
+        en = (ROOT / "README.en.md").read_text(encoding="utf-8")
+        self.assertIn(ZH_ATTENTION_NAV, zh[: zh.index('<a id="timeline"></a>')])
+        self.assertIn(EN_ATTENTION_NAV, en[: en.index('<a id="timeline"></a>')])
+
+    def test_editorial_contract_preserves_layer_navigation(self):
+        standard = (ROOT / "docs" / "EDITORIAL_STANDARD.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Layer-level attention navigation", standard)
+        self.assertNotIn("reading-time navigation (`30 秒`, `5 min`)", standard)
+
+
+class FamilyRouteTest(unittest.TestCase):
+    def test_repository_family_routes_satisfy_contract(self):
+        self.assertEqual(
+            [],
+            validate_family_routes(
+                (ROOT / "README.md").read_text(encoding="utf-8"),
+                (ROOT / "README.en.md").read_text(encoding="utf-8"),
+            ),
+        )
+
+    def test_missing_or_wrong_sibling_field_map_route_is_rejected(self):
+        mutations = (
+            (
+                "https://github.com/H20Zhang/Agent-Memory-Radar#field-map",
+                "",
+            ),
+            (
+                "https://github.com/H20Zhang/Agentic-RAG-Radar#field-map",
+                "https://github.com/H20Zhang/Agentic-RAG-Radar#wrong",
+            ),
+            (
+                "https://github.com/H20Zhang/Data-Agent-Radar#field-map",
+                "https://github.com/H20Zhang/Data-Agent-Radar",
+            ),
+        )
+        for expected_route, replacement in mutations:
+            with self.subTest(route=expected_route):
+                self.assertTrue(
+                    any(
+                        "route" in error.lower()
+                        for error in validate_family_routes(
+                            ROUTES,
+                            ROUTES.replace(expected_route, replacement),
+                        )
+                    )
+                )
+
+    def test_hidden_exact_routes_cannot_rescue_visible_routes_without_fragments(self):
+        visible_routes = ROUTES.replace("#field-map", "")
+        hidden_routes = f"<!--\n{ROUTES}-->\n"
+
+        errors = validate_family_routes(
+            visible_routes + hidden_routes,
+            visible_routes + hidden_routes,
+        )
+
+        self.assertEqual(6, len(errors), errors)
+        for label in ("Agent Memory", "Agentic RAG", "Data Agent"):
+            self.assertEqual(2, sum(label in error for error in errors), errors)
+
+
+class BenchmarkAliasTest(unittest.TestCase):
+    def test_repository_benchmark_aliases_satisfy_contract(self):
+        self.assertEqual(
+            [],
+            validate_benchmark_aliases(
+                (ROOT / "README.md").read_text(encoding="utf-8"),
+                (ROOT / "README.en.md").read_text(encoding="utf-8"),
+            ),
+        )
+
+    def test_missing_or_duplicate_benchmark_alias_is_rejected(self):
+        for alias in (
+            "frontier",
+            "changes",
+            "evolution",
+            "benchmark-memory",
+            "benchmark-rag",
+            "benchmark-data",
+        ):
+            anchor = f'<a id="{alias}"></a>'
+            with self.subTest(alias=alias, mutation="missing"):
+                self.assertTrue(
+                    any(
+                        "alias" in error.lower()
+                        for error in validate_benchmark_aliases(
+                            ALIASES.replace(anchor, "", 1), ALIASES
+                        )
+                    )
+                )
+            with self.subTest(alias=alias, mutation="duplicate"):
+                self.assertTrue(
+                    any(
+                        "alias" in error.lower()
+                        for error in validate_benchmark_aliases(
+                            ALIASES.replace(anchor, anchor + anchor, 1), ALIASES
+                        )
+                    )
+                )
+
+    def test_hidden_alias_cannot_satisfy_or_duplicate_a_visible_alias(self):
+        for alias in (
+            "frontier",
+            "changes",
+            "evolution",
+            "benchmark-memory",
+            "benchmark-rag",
+            "benchmark-data",
+        ):
+            anchor = f'<a id="{alias}"></a>'
+            with self.subTest(alias=alias, mutation="hidden-only"):
+                hidden_only = ALIASES.replace(anchor, f"<!-- {anchor} -->", 1)
+                self.assertTrue(
+                    any(
+                        f"missing benchmark compatibility alias {alias}" in error.lower()
+                        for error in validate_benchmark_aliases(hidden_only, ALIASES)
+                    )
+                )
+            with self.subTest(alias=alias, mutation="hidden-decoy"):
+                with_decoy = ALIASES.replace(
+                    anchor, f"<!-- {anchor} -->\n{anchor}", 1
+                )
+                self.assertEqual(
+                    [], validate_benchmark_aliases(with_decoy, ALIASES)
+                )
+
+
+class BenchmarkLibraryTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.records = json.loads(
+            (ROOT / "data" / "benchmarks.json").read_text(encoding="utf-8")
+        )
+        cls.zh = (ROOT / "library" / "README.md").read_text(encoding="utf-8")
+        cls.en = (ROOT / "library" / "README.en.md").read_text(encoding="utf-8")
+
+    def test_repository_library_is_complete_canonical_and_bilingual(self):
+        self.assertEqual(
+            [], validate_benchmark_library(self.zh, self.en, self.records)
+        )
+
+    def test_missing_or_duplicate_canonical_identity_is_rejected(self):
+        marker = "<!-- benchmark-id:data-exploration-benchmark -->"
+        missing = self.en.replace(marker, "", 1)
+        duplicate = self.en.replace(marker, marker + marker, 1)
+
+        self.assertTrue(
+            any(
+                "complete timeline" in error.lower()
+                for error in validate_benchmark_library(self.zh, missing, self.records)
+            )
+        )
+        self.assertTrue(
+            any(
+                "duplicate" in error.lower()
+                for error in validate_benchmark_library(self.zh, duplicate, self.records)
+            )
+        )
+
+    def test_comment_only_identity_cannot_replace_a_visible_canonical_row(self):
+        row = next(
+            line
+            for line in self.en.splitlines()
+            if "<!-- benchmark-id:data-exploration-benchmark -->" in line
+        )
+        hidden_only = self.en.replace(
+            row,
+            "<!-- benchmark-id:data-exploration-benchmark -->",
+            1,
+        )
+
+        self.assertTrue(
+            any(
+                "visible canonical row" in error.lower()
+                for error in validate_benchmark_library(self.zh, hidden_only, self.records)
+            )
+        )
+
+    def test_visible_title_primary_link_and_release_must_match_canonical_record(self):
+        mutations = (
+            ("[Data Exploration Benchmark]", "[Wrong title]"),
+            ("https://arxiv.org/abs/2608.16045", "https://example.com/wrong"),
+            ("| 2026-08-17 | [Data Exploration Benchmark]", "| 2026-08-18 | [Data Exploration Benchmark]"),
+        )
+        for old, new in mutations:
+            with self.subTest(mutation=old):
+                mutated = self.en.replace(old, new, 1)
+                self.assertTrue(
+                    any(
+                        "visible canonical row" in error.lower()
+                        for error in validate_benchmark_library(
+                            self.zh, mutated, self.records
+                        )
+                    )
+                )
+
+    def test_area_membership_and_order_are_canonical(self):
+        start = self.en.index("<!-- COMPLETE-MAP:agent-memory:START -->")
+        end = self.en.index("<!-- COMPLETE-MAP:agent-memory:END -->", start)
+        block = self.en[start:end]
+        rows = [
+            line
+            for line in block.splitlines()
+            if "<!-- benchmark-id:" in line
+        ]
+        swapped = block.replace(rows[0], "__ROW_ZERO__", 1)
+        swapped = swapped.replace(rows[1], rows[0], 1)
+        swapped = swapped.replace("__ROW_ZERO__", rows[1], 1)
+        mutated = self.en[:start] + swapped + self.en[end:]
+
+        self.assertTrue(
+            any(
+                "agent-memory map" in error.lower()
+                for error in validate_benchmark_library(self.zh, mutated, self.records)
+            )
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()

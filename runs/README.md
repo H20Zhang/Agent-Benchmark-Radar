@@ -1,5 +1,7 @@
-# Daily Provenance
+# Public Run-State Policy
 
-Daily maintenance logs live under `runs/daily/YYYY/MM/DD.md`.
+## No public operational run logs
 
-Keep them compact and operational: discovery window, accepted/deferred/rejected candidates, material metadata corrections, benchmark-version/protocol changes, synthesis actions, and exact blockers. Do not duplicate the public benchmark summaries here.
+This is a static policy page. The Daily Agent never commits operational or daily-run files under `runs/daily/` or another public path. Private scouting, candidate, lane, retry, and validation traces belong only under ignored `.radar-private/runs/<run_id>.json` or in ephemeral Agent memory.
+
+Public provenance is the canonical registry, its complete bilingual Timeline and rolling-period projection, any due closed digest, and one atomic Git commit. Validator-enforced absence keeps private workflow state out of the reader surface.

@@ -18,7 +18,7 @@ All four radars are **Chinese-first bilingual research surfaces**.
 - `README.md` is always the default **Simplified Chinese** landing page.
 - `README.en.md` is the complete English counterpart.
 - Reader-facing Research Library/category pages, high-value paper or benchmark notes, and public weekly/monthly/yearly synthesis are available in both languages.
-- Canonical machine-readable data, schemas, scheduler prompts, validation output, maintenance docs, and run logs remain single-source unless a reader genuinely needs them.
+- Canonical machine-readable data, schemas, scheduler prompts, validation output, and maintenance docs remain single-source unless a reader genuinely needs them. **No public operational run logs.** `runs/README.md` is static policy only; private workflow traces stay in ignored `.radar-private/` state or ephemeral Agent memory.
 - Chinese and English are two editorial projections of **one semantic research judgment**, not two independently curated corpora.
 - Benchmark/paper titles, model names, metrics, protocol names, tool names, dataset names, and standard acronyms remain in their canonical English form when that improves literature search and technical precision.
 - Chinese is the primary editorial surface: public navigation, examples, concise explanations, and default links should assume a Chinese reader first. English must preserve the same depth rather than becoming a shortened translation.
