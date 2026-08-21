@@ -1,16 +1,15 @@
-# trigger
 name: One-off front-page signal edit
 
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/oneoff-front-page-signals.yml']
+  issues:
+    types: [opened]
 
 permissions:
   contents: write
 
 jobs:
   edit:
+    if: github.event.issue.title == 'trigger-front-page-signals'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
