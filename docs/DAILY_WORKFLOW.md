@@ -6,6 +6,8 @@ This file adapts [Radar Agent Protocol v2](RADAR_AGENT_PROTOCOL.md) to Agent Ben
 
 Agent Benchmark Radar is the Research Radar family's default entry and horizontal evaluation layer. It explains how measurement targets change across Agent Memory, Agentic RAG, and Data Agents, then routes readers to each domain repository's `#field-map`. It does not duplicate their method and system surveys.
 
+The public README is intentionally **table-first**: researchers should be able to scan the recent release chronology and the complete per-area benchmark maps without opening one card at a time. Agent-maintenance provenance and deep audit metadata support that surface; they do not dictate its visual form.
+
 ## Source lanes
 
 Freeze and report each lane separately:
@@ -43,20 +45,21 @@ If any load-bearing condition differs, a leaderboard gap is system-level evidenc
 
 ## Canonical locations and update order
 
-1. Update `data/benchmarks.json` first, preserving canonical identity, aliases/version lineage, dates, area, role, capabilities, environment, protocol, scale, measurement strength, coverage gap, confounders, artifacts, and verification time.
-2. Add or update `benchmarks/<id>.md` and `benchmarks/<id>.en.md` when the Timeline fold is insufficient for controls, decisive evidence, caveats, or genealogy.
+1. Update `data/benchmarks.json` first, preserving canonical identity, aliases/version lineage, source release precision, area, role, capabilities, environment, protocol, scale, measurement strength, coverage gap, confounders, artifacts, verification time, and v2 provenance.
+2. Add or update `benchmarks/<id>.md` and `benchmarks/<id>.en.md` when a row is insufficient for controls, decisive evidence, caveats, or genealogy.
 3. Update `library/README.md` and `library/README.en.md` so every accepted identity remains in the complete release chronology and exactly one area table; then update genealogy and measurement-coordinate routes when they change.
-4. Derive `README.md` and `README.en.md` Timeline, rolling periods, and Field Map from accepted canonical state.
-5. Write an immutable closed-period digest when the shared protocol's boundary gate fires.
-6. Publish canonical data, Timeline, any due digest, and gated map together in one atomic Git commit; never create a public operational or daily-run file.
+4. Derive the **public table-first README pair** from canonical state: refresh the complete rolling six-month source-release table and all three complete area tables before changing any compact synthesis around them.
+5. Update any secondary acceptance/deep-read projection, rolling-period synthesis, and gated Field Map from the same canonical state. These layers may use `radar_published_at` where provenance matters, but they never replace the public release chronology.
+6. Write an immutable closed-period digest when the shared protocol's boundary gate fires.
+7. Publish canonical data, both README languages, any deep note / acceptance projection, due digest, and gated map together in one atomic Git commit; never create a public operational or daily-run file.
 
-Legacy records keep honest `released` precision. Untouched legacy records remain field-absent compatible and belong to the complete Library, not the acceptance-time Timeline. The fixed Timeline compatibility migration uses `published_at=released`, null discovery/Radar times, `time_provenance=legacy_unknown`, and `map_delta=early_signal`; it never infers an unknown day. New v2 records use strict UTC `published_at`, `first_seen_at`, and `radar_published_at` ordered by event time with `time_provenance=native_v2` and a valid map delta. A later merge, verification date, or scheduler run is not evidence of the original Radar acceptance timestamp.
+Legacy records keep honest `released` precision. New v2 records use strict UTC `published_at`, `first_seen_at`, and `radar_published_at` ordered by event time with `time_provenance=native_v2` and a valid map delta. A later merge, verification date, or scheduler run is not evidence of the original Radar acceptance timestamp. These provenance fields do not change the source release date shown to readers.
 
 ## Notes and genealogy
 
 A deep note adds decision value only when it records the predecessor/implicit critique, evaluated object, decisive result, score ceiling, strongest confounder, remaining gap, and genealogy consequence. Preserve quantitative facts only when they change interpretation and cite the primary source.
 
-Genealogy expresses changes in the evaluation coordinate system, not prestige. Use `precursor`, `foundation`, `transition`, and `frontier` as defined in `SCHEMA.md`. A historical backfill may change a chain without being framed as newly published research. Never remove a durable foundation merely because it is outside Timeline.
+Genealogy expresses changes in the evaluation coordinate system, not prestige. Use `precursor`, `foundation`, `transition`, and `frontier` as defined in `SCHEMA.md`. A historical backfill may change a chain without being framed as newly published research. Never remove a durable foundation merely because it is outside the recent-release window.
 
 ## Evaluation-specific `map_delta`
 
@@ -73,11 +76,19 @@ For `reinforces`, name at least two independent accepted identities. For `revise
 
 ## Reader projection
 
-The public order is `Latest Timeline → 7-day / 30-day synthesis → Field Map → Reading Paths → Library`. Preserve the paired top attention routes `30 秒 / 3 分钟 / 5 分钟 / 15 分钟 / 浏览全部` and `30 sec / 3 min / 5 min / 15 min / Browse all`; those budgets describe navigation depth, not paper importance. Timeline contains every native-v2 record whose `radar_published_at` is in the current 30-day window and no later than the exact shared public synthesis cutoff, sorted by full timestamp, followed by the fixed explicit-legacy compatibility projection; it has no fixed item cap. Each Timeline item keeps a scannable summary and same-level `<details>` expansion with Question, Evidence, Caveat, Map, and Links. The rolling periods synthesize changes in the evaluation object from in-window native records accepted no later than that same cutoff rather than counting releases. Legacy records may provide context but never Benchmark period support; the shared protocol's separately labeled legacy publication-date adapter is not active on this native Radar-acceptance surface.
+The public reader contract is **table-first, then synthesis**:
 
-Each visible direction list item owns exactly one `timefirst:direction` metadata comment and exactly one visible state, supports, confidence, timing-basis, exact UTC synthesis, implication, and prior-map field. A block includes natural continuation lines and attached prose until the next visible direction or period boundary; comments and URL destinations cannot supply visible claims. Chinese and English metadata must pair exactly. Every native-v2 record cited as support under direction key `K` must include that exact stable token in its non-empty unique `direction_keys` list. `reinforced` needs two distinct in-window native supports bound to the block's exact key plus visible prior Field Map evidence; `revised`, `splits`, and `retires` need bound canonical support plus prior Field Map evidence; `no_material_change` needs zero support and `prior=none`. Fewer than two native supports cannot carry a trend or durable-result claim. The three Benchmark areas route directly to the sibling repository's `#field-map` anchor. `What Is Still Poorly Measured` remains first-class.
+1. **Recent release timeline table** — the 30-second surface. Show every verified benchmark in the rolling six-month source-release window, reverse chronological by `released`, preserving day/month precision and the whole boundary month. No fixed item cap and no editorial sampling.
+2. **7-day / 30-day synthesis** — compactly state what materially changed, with support and uncertainty. Acceptance provenance may be used here when the claim is explicitly about what the Radar learned or accepted.
+3. **Field Map / evolution** — summarize durable changes in what the field measures. One paper is a signal, not a trend; respect `map_delta` gates.
+4. **Complete area tables in README** — every canonical Agent Memory, RAG / Agentic Retrieval, and Data Agent record remains directly scannable in the main page. Do not replace these tables with links to the Library.
+5. **Reading Paths and Library** — guide deeper study and provide the canonical alternate browse surface.
 
-Chinese is the default surface and English is its full counterpart. Identity, dates/order, decisive evidence, caveat, map status, period windows, and links are one judgment projected twice. Chinese prose keeps Chinese verbs, connectives, and descriptive phrases while retaining canonical English names and search terms where useful. Complete Library tables lead with direct links and a consistent row contract, without reading-time labels or repetitive manifesto prose.
+Same-level `<details>` blocks are optional secondary deep reads for selected/new items. When present, they may expose Question, Evidence, Caveat, Map, and Links, but they may not become the only representation of an accepted item in either the recent-release table or its area table. A details-heavy presentation is not a substitute for a benchmark radar's scan surface.
+
+`radar_published_at` is maintenance provenance. It can order an acceptance audit or support exact acceptance-window statements; it must **never** replace `released` as the ordering key of the public research timeline. Likewise, `last_verified`, scheduler execution time, and Git commit time must never be presented as paper release time.
+
+Chinese is the default surface and English is its full counterpart. Identity, source release time, decisive evidence, caveat, map status, and links are one judgment projected twice. Chinese prose keeps Chinese verbs, connectives, and descriptive phrases while retaining canonical English names and search terms where useful.
 
 ## Publication validation
 
@@ -88,10 +99,12 @@ python -m unittest discover -s tests -v
 python scripts/validate_reading.py
 ```
 
-Both commands must succeed without warnings or errors before publication. Also inspect the diff for canonical/README drift, predecessor logic, unpaired links, public candidate state, fixed Timeline caps, fabricated time precision, and component claims that outrun matched controls.
+Both commands must succeed without warnings or errors before publication. Also inspect the diff for canonical/README drift, predecessor logic, unpaired links, public candidate state, fabricated time precision, and component claims that outrun matched controls.
 
-Validation must also prove that both Library languages contain the exact canonical release chronology and each record exactly once in its canonical area table, with visible canonical title, release precision, and primary link. A hidden identity comment cannot substitute for a visible row.
+Validation must additionally guard the table-first contract: both README languages must contain the rolling release table before any per-item deep-read surface, all three complete area tables must remain in the README, and no change may move those tables exclusively into `library/`.
+
+The Library validation still proves that both Library languages contain the exact canonical release chronology and each record exactly once in its canonical area table, with visible canonical title, release precision, and primary link. A hidden identity comment cannot substitute for a visible row.
 
 ## No public operational run logs
 
-Do not write under `runs/daily/` or any other public operational path. `runs/README.md` is static policy only. Scout, candidate, lane, retry, and validation traces stay in ignored `.radar-private/runs/<run_id>.json` or ephemeral Agent memory. Canonical data, the complete bilingual Timeline, a due digest, and one atomic Git commit are the public provenance. If nothing material changes, validate and exit without a content commit or notification.
+Do not write under `runs/daily/` or any other public operational path. `runs/README.md` is static policy only. Scout, candidate, lane, retry, and validation traces stay in ignored `.radar-private/runs/<run_id>.json` or ephemeral Agent memory. Canonical data, the bilingual public projection, a due digest, and one atomic Git commit are the public provenance. If nothing material changes, validate and exit without a content commit or notification.
