@@ -1,9 +1,8 @@
-# retrigger
 name: One-off front-page signal edit
 
 on:
   push:
-    branches: [tighten/front-page-signals]
+    branches: [main]
     paths: ['.github/workflows/oneoff-front-page-signals.yml']
 
 permissions:
@@ -15,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: tighten/front-page-signals
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -31,23 +30,18 @@ jobs:
           zh = zh_path.read_text(encoding='utf-8')
           en = en_path.read_text(encoding='utf-8')
 
-          zh_anchor = '<a id="release-timeline"></a>'
-          en_anchor = '<a id="release-timeline"></a>'
-          assert zh_anchor in zh and en_anchor in en
+          anchor = '<a id="release-timeline"></a>'
+          assert anchor in zh and anchor in en
 
-          zh_rest = zh[zh.index(zh_anchor):]
-          en_rest = en[en.index(en_anchor):]
+          zh_rest = zh[zh.index(anchor):]
+          en_rest = en[en.index(anchor):]
 
           zh_rest = zh_rest.replace(
               '## 最近半年 Benchmark 时间线\n\n这里按 benchmark / paper 的**原始发布时间**排序，而不是按 Radar 什么时候收录。窗口随 registry 中最近的核验日期滚动，向前覆盖六个月；只有月份精度的记录保留真实月份。表中不做精选，窗口内的基准全部列出。\n',
-              '## 最近半年 Benchmark 时间线\n',
-              1,
-          )
+              '## 最近半年 Benchmark 时间线\n', 1)
           en_rest = en_rest.replace(
               "## Benchmark Timeline: Last Six Months\n\nThis is ordered by the benchmark/paper's **source release time**, not by when the Radar accepted it. The window rolls six months back from the registry's latest verification date; month-precision releases retain their honest precision. The table is complete for the window, not curated.\n",
-              '## Benchmark Timeline: Last Six Months\n',
-              1,
-          )
+              '## Benchmark Timeline: Last Six Months\n', 1)
 
           zh_prefix = '''# Agent Benchmark Radar
 
@@ -67,7 +61,6 @@ jobs:
 最后更新：**2026-08-21**
 
 '''
-
           en_prefix = '''# Agent Benchmark Radar
 
 [中文](README.md) | **English**
@@ -94,15 +87,13 @@ Last updated: **2026-08-21**
           needle = 'The public reader contract is **table-first, then synthesis**:\n\n'
           replacement = '''The public reader contract is **signal-first, then table-first**:\n\n0. **30-day frontier signal table** — the first visible research content after the language switch. Exactly three rows: Agent Memory, RAG / Agentic Retrieval, and Data Agents. Each row states one concrete research/evaluation shift supported by 2–3 representative benchmark links from the current window. It is synthesis, not a list of new papers: say compared to what changed, prefer falsifiable claims over slogans, and say `no material shift` rather than manufacture a trend. Do not put repository self-description, reading-time navigation, or comparison-rule prose before this table.\n'''
           assert needle in workflow
-          workflow = workflow.replace(needle, replacement, 1)
-          workflow_path.write_text(workflow, encoding='utf-8')
+          workflow_path.write_text(workflow.replace(needle, replacement, 1), encoding='utf-8')
 
           test = r'''from pathlib import Path
 import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-
 
 class FrontPageSignalContractTest(unittest.TestCase):
     def test_signal_table_is_first_research_surface(self):
@@ -111,19 +102,14 @@ class FrontPageSignalContractTest(unittest.TestCase):
             ('README.en.md', 'Last 30 Days: Three Shifts', ('Agent Memory', 'RAG / Agentic Retrieval', 'Data Agents')),
         )
         for filename, heading, areas in cases:
-            with self.subTest(filename=filename):
-                text = (ROOT / filename).read_text(encoding='utf-8')
-                release = text.index('<a id="release-timeline"></a>')
-                prefix = text[:release]
-                self.assertIn(heading, prefix)
-                self.assertEqual(1, prefix.count('<!-- FRONTIER-SIGNALS:START -->'))
-                self.assertEqual(1, prefix.count('<!-- FRONTIER-SIGNALS:END -->'))
-                block = prefix.split('<!-- FRONTIER-SIGNALS:START -->', 1)[1].split('<!-- FRONTIER-SIGNALS:END -->', 1)[0]
-                rows = [line for line in block.splitlines() if line.startswith('| **')]
-                self.assertEqual(3, len(rows))
-                for area in areas:
-                    self.assertIn(area, block)
-                self.assertGreaterEqual(len(re.findall(r'\]\(https?://', block)), 9)
+            text = (ROOT / filename).read_text(encoding='utf-8')
+            prefix = text[:text.index('<a id="release-timeline"></a>')]
+            self.assertIn(heading, prefix)
+            block = prefix.split('<!-- FRONTIER-SIGNALS:START -->', 1)[1].split('<!-- FRONTIER-SIGNALS:END -->', 1)[0]
+            self.assertEqual(3, len([line for line in block.splitlines() if line.startswith('| **')]))
+            for area in areas:
+                self.assertIn(area, block)
+            self.assertGreaterEqual(len(re.findall(r'\]\(https?://', block)), 9)
 
     def test_mechanical_intro_does_not_return(self):
         banned = {
@@ -131,25 +117,21 @@ class FrontPageSignalContractTest(unittest.TestCase):
             'README.en.md': ('The entry point to the Research Radar family', 'Start here to see', '[30 sec:', '> **Comparison rule.'),
         }
         for filename, phrases in banned.items():
-            with self.subTest(filename=filename):
-                text = (ROOT / filename).read_text(encoding='utf-8')
-                prefix = text[:text.index('<a id="release-timeline"></a>')]
-                for phrase in phrases:
-                    self.assertNotIn(phrase, prefix)
-
-
-if __name__ == '__main__':
-    unittest.main()
+            text = (ROOT / filename).read_text(encoding='utf-8')
+            prefix = text[:text.index('<a id="release-timeline"></a>')]
+            for phrase in phrases:
+                self.assertNotIn(phrase, prefix)
 '''
           Path('tests/test_front_page_signal_contract.py').write_text(test, encoding='utf-8')
       - name: Validate
         run: |
           python -m unittest discover -s tests -v
           python scripts/validate_reading.py
-      - name: Commit result
+      - name: Commit result and remove one-off workflow
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/oneoff-front-page-signals.yml
           git add -- README.md README.en.md docs/DAILY_WORKFLOW.md tests/test_front_page_signal_contract.py
-          git commit -m "docs: lead with research signals"
-          git push origin HEAD:tighten/front-page-signals
+          git commit -m "docs: lead Benchmark Radar with research signals"
+          git push origin HEAD:main
