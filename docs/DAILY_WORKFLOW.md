@@ -6,7 +6,7 @@ This file adapts [Radar Agent Protocol v2](RADAR_AGENT_PROTOCOL.md) to Agent Ben
 
 Agent Benchmark Radar is the Research Radar family's default entry and horizontal evaluation layer. It explains how measurement targets change across Agent Memory, Agentic RAG, and Data Agents, then routes readers to each domain repository's `#field-map`. It does not duplicate their method and system surveys.
 
-The public README is intentionally **table-first**: researchers should be able to scan the recent release chronology and the complete per-area benchmark maps without opening one card at a time. Agent-maintenance provenance and deep audit metadata support that surface; they do not dictate its visual form.
+The public README is intentionally **signal-first, then table-first**: lead with a compact 30-day evidence-backed shift table, then expose the recent release chronology and complete per-area benchmark maps without requiring card-by-card opening. Agent-maintenance provenance and deep audit metadata support that surface; they do not dictate its visual form.
 
 ## Source lanes
 
@@ -48,7 +48,7 @@ If any load-bearing condition differs, a leaderboard gap is system-level evidenc
 1. Update `data/benchmarks.json` first, preserving canonical identity, aliases/version lineage, source release precision, area, role, capabilities, environment, protocol, scale, measurement strength, coverage gap, confounders, artifacts, verification time, and v2 provenance.
 2. Add or update `benchmarks/<id>.md` and `benchmarks/<id>.en.md` when a row is insufficient for controls, decisive evidence, caveats, or genealogy.
 3. Update `library/README.md` and `library/README.en.md` so every accepted identity remains in the complete release chronology and exactly one area table; then update genealogy and measurement-coordinate routes when they change.
-4. Derive the **public table-first README pair** from canonical state: refresh the complete rolling six-month source-release table and all three complete area tables before changing any compact synthesis around them.
+4. Derive the **public signal-first, table-first README pair** from canonical state: refresh the 30-day frontier-signal table, complete rolling six-month source-release table, and all three complete area tables before changing any compact synthesis around them.
 5. Update any secondary acceptance/deep-read projection, rolling-period synthesis, and gated Field Map from the same canonical state. These layers may use `radar_published_at` where provenance matters, but they never replace the public release chronology.
 6. Write an immutable closed-period digest when the shared protocol's boundary gate fires.
 7. Publish canonical data, both README languages, any deep note / acceptance projection, due digest, and gated map together in one atomic Git commit; never create a public operational or daily-run file.
@@ -76,9 +76,10 @@ For `reinforces`, name at least two independent accepted identities. For `revise
 
 ## Reader projection
 
-The public reader contract is **table-first, then synthesis**:
+The public reader contract is **signal-first, then table-first**:
 
-1. **Recent release timeline table** — the 30-second surface. Show every verified benchmark in the rolling six-month source-release window, reverse chronological by `released`, preserving day/month precision and the whole boundary month. No fixed item cap and no editorial sampling.
+0. **30-day frontier signal table** — the first visible research content after the language switch. Exactly three rows: Agent Memory, RAG / Agentic Retrieval, and Data Agents. Each row states one concrete research/evaluation shift supported by 2–3 representative benchmark links from the current window. It is synthesis, not a list of new papers: say compared to what changed, prefer falsifiable claims over slogans, and say `no material shift` rather than manufacture a trend. Do not put repository self-description, reading-time navigation, comparison-rule prose, or other explanatory framing before this table.
+1. **Recent release timeline table** — show every verified benchmark in the rolling six-month source-release window, reverse chronological by `released`, preserving day/month precision and the whole boundary month. No fixed item cap and no editorial sampling.
 2. **7-day / 30-day synthesis** — compactly state what materially changed, with support and uncertainty. Acceptance provenance may be used here when the claim is explicitly about what the Radar learned or accepted.
 3. **Field Map / evolution** — summarize durable changes in what the field measures. One paper is a signal, not a trend; respect `map_delta` gates.
 4. **Complete area tables in README** — every canonical Agent Memory, RAG / Agentic Retrieval, and Data Agent record remains directly scannable in the main page. Do not replace these tables with links to the Library.
@@ -101,7 +102,7 @@ python scripts/validate_reading.py
 
 Both commands must succeed without warnings or errors before publication. Also inspect the diff for canonical/README drift, predecessor logic, unpaired links, public candidate state, fabricated time precision, and component claims that outrun matched controls.
 
-Validation must additionally guard the table-first contract: both README languages must contain the rolling release table before any per-item deep-read surface, all three complete area tables must remain in the README, and no change may move those tables exclusively into `library/`.
+Validation must additionally guard the signal-first and table-first contract: both README languages must begin their research content with the three-row 30-day frontier-signal table, put the rolling release table immediately after it and before any per-item deep-read surface, retain all three complete area tables in the README, and never move those tables exclusively into `library/`.
 
 The Library validation still proves that both Library languages contain the exact canonical release chronology and each record exactly once in its canonical area table, with visible canonical title, release precision, and primary link. A hidden identity comment cannot substitute for a visible row.
 
