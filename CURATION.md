@@ -67,12 +67,17 @@ Treat these as first-class updates, not only brand-new benchmark papers:
 
 ## README contract
 
-README is the public time-first reading surface and should support two reading directions:
+README is the **table-first public reading surface**. “Time-first” means that the newest research is easiest to scan; it does **not** mean that Radar-maintenance timestamps replace the research chronology or that one card is rendered per paper.
 
-- **Latest Timeline → field signal:** every record with an auditable current-window Radar acceptance time, followed by the bounded compatibility projection, with no fixed item-count cap.
-- **Foundation → frontier:** per-area evolution chains showing how the problem definition changed.
+The main README must preserve three high-bandwidth scan surfaces:
 
-Timeline is ordered by `radar_published_at`, not paper release date. Never infer that timestamp from `released`, `last_verified`, a scheduler run, or a later integration commit. Records whose acceptance time predates the v2 contract remain visible in the complete release chronology and area tables in the Benchmark Library; only the fixed compatibility set appears on Timeline with explicit `legacy_unknown` status. Do not let recency push durable foundations out of the repository or let table length erase an accepted record from the complete Library.
+- **Recent release timeline:** every verified in-scope benchmark in the rolling six-month release window, ordered by source `released` date/month in reverse chronology. Preserve honest month precision, retain the whole boundary month when necessary, impose no fixed item cap, and do not editorially sample the table.
+- **Complete area tables:** all accepted Agent Memory, RAG / Agentic Retrieval, and Data Agent benchmarks remain directly visible in README, with role, release time, measurement object, and research delta. Table length is never a reason to move these rows only to the Library.
+- **Evolution / reading routes:** compact synthesis may sit around the tables, but it must route through the same canonical records rather than replace them.
+
+`radar_published_at` remains first-class **publication provenance** for the autonomous maintainer: it records when the Radar accepted a native-v2 record and can support acceptance-window audits, period synthesis, and map-delta reasoning. It is not the reader-facing publication date and must never reorder the primary release timeline. Never infer it from `released`, `last_verified`, a scheduler run, or a later integration commit.
+
+Same-level `<details>` blocks may provide Question / Evidence / Caveat / Map deep reads for selected or newly accepted items, but they are a secondary layer. They must not replace, hide, truncate, or move the release table or complete area tables out of README. The Benchmark Library remains the canonical complete backstop and alternate browse surface, not a dumping ground used to thin the README.
 
 Each accepted event also receives the `map_delta` status defined in `SCHEMA.md`. One work may be an `early_signal`; it cannot by itself establish a durable trend or silently rewrite a Field Map node.
 
