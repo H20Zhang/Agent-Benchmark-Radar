@@ -26,24 +26,22 @@ ALIASES = """<a id="frontier"></a>
 <a id="benchmark-data"></a>
 """
 
-ZH_ATTENTION_NAV = (
-    "[30 秒：最新时间线](#timeline) · [3 分钟：7/30 天变化](#periods) · "
-    "[5 分钟：领域地图](#field-map) · [15 分钟：阅读路径](#reading-paths) · "
-    "[浏览全部](#library)"
-)
-EN_ATTENTION_NAV = (
-    "[30 sec: Timeline](#timeline) · [3 min: 7/30-day changes](#periods) · "
-    "[5 min: Field Map](#field-map) · [15 min: Reading Paths](#reading-paths) · "
-    "[Browse all](#library)"
-)
-
 
 class AttentionNavigationTest(unittest.TestCase):
     def test_repository_exposes_the_same_attention_layers_in_both_languages(self):
         zh = (ROOT / "README.md").read_text(encoding="utf-8")
         en = (ROOT / "README.en.md").read_text(encoding="utf-8")
-        self.assertIn(ZH_ATTENTION_NAV, zh[: zh.index('<a id="timeline"></a>')])
-        self.assertIn(EN_ATTENTION_NAV, en[: en.index('<a id="timeline"></a>')])
+        for text in (zh, en):
+            positions = [
+                text.index('<a id="frontier-signals"></a>'),
+                text.index('<a id="release-timeline"></a>'),
+                text.index('<a id="timeline"></a>'),
+                text.index('<a id="periods"></a>'),
+                text.index('<a id="field-map"></a>'),
+                text.index('<a id="reading-paths"></a>'),
+                text.index('<a id="library"></a>'),
+            ]
+            self.assertEqual(sorted(positions), positions)
 
     def test_editorial_contract_preserves_layer_navigation(self):
         standard = (ROOT / "docs" / "EDITORIAL_STANDARD.md").read_text(
