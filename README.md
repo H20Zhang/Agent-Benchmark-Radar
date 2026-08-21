@@ -2,24 +2,21 @@
 
 **中文** | [English](README.en.md)
 
-**整个 Research Radar family 的默认入口，也是横向 evaluation layer。**
+<a id="frontier-signals"></a>
+## 近 30 天：三个变化
 
-先从这里理解：**Agent Memory、Agentic RAG、Data Agent 分别正在被要求做什么，这些 evaluation target 为什么一路演化到今天，以及一个 benchmark score 到底能支持什么结论。** 然后再进入对应 domain radar 看方法与系统。
-
-**研究 Radar：** [Agent Memory](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) · [Agentic RAG](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) · [Data Agent](https://github.com/H20Zhang/Data-Agent-Radar#field-map)
-
-[30 秒：最近半年表格](#release-timeline) · [3 分钟：7/30 天变化](#periods) · [5 分钟：领域地图](#field-map) · [全部 Benchmark 表](#all-benchmarks) · [阅读路径](#reading-paths) · [Benchmark Library](#library)
-
-<!-- compatibility: [30 秒：最新时间线](#timeline) · [3 分钟：7/30 天变化](#periods) · [5 分钟：领域地图](#field-map) · [15 分钟：阅读路径](#reading-paths) · [浏览全部](#library) -->
-
-> **比较规则：** 如果 model、accessible state、tool interface、prompt/hints、retry、stopping rule、evaluator 与关键 resource budget 没有充分匹配，那么 leaderboard 上更高的 score 首先只是 **system-level evidence**，不能直接归因给某个 component。
+<!-- FRONTIER-SIGNALS:START -->
+| 方向 | 真正变化 | 代表 Benchmark |
+|---|---|---|
+| **Agent Memory** | 从“能不能召回”推进到**记忆是否因果改变后续行动，以及持久状态能否被安全治理**。PAST-Bench 用 persistence on/off 配对控制直接测 memory 的后续作用；SP-Mem 把 personalization、consent 与 leakage 放进同一协议；InMind 把 storage / knowledge / routing / use failure 拆开。 | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [SP-Mem](https://arxiv.org/abs/2608.16551) · [InMind](https://arxiv.org/abs/2607.24368) |
+| **RAG / Agentic Retrieval** | 重点从“recall 高不高”转向**retrieval metric 是否真的预测下游成功、搜索过程能否被审计、结果能否跨部署条件复现**。The Recall Trap 给出 recall 与 repair success 脱钩的直接反例；SearchAuditBench 测 failure localization / repair；The Commercial Tax 把 license、query format、index construction 与 cost 纳入可迁移性。 | [The Recall Trap](https://arxiv.org/abs/2608.14838) · [SearchAuditBench](https://arxiv.org/abs/2608.05212) · [The Commercial Tax](https://arxiv.org/abs/2608.16096) |
+| **Data Agents** | 评价对象继续从“SQL / code 能跑”推到**先理解数据、再完成可验证工作，并在业务语义不清时正确追问或拒答**。Data Exploration Benchmark 把 exploration 单独计分；WarehouseReliabilityBench 测 business truth / clarification / abstention；data-eng-bench 的 evaluator 修复说明评测器本身也会成为可靠性瓶颈。 | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) · [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
+<!-- FRONTIER-SIGNALS:END -->
 
 最后更新：**2026-08-21**
 
 <a id="release-timeline"></a>
 ## 最近半年 Benchmark 时间线
-
-这里按 benchmark / paper 的**原始发布时间**排序，而不是按 Radar 什么时候收录。窗口随 registry 中最近的核验日期滚动，向前覆盖六个月；只有月份精度的记录保留真实月份。表中不做精选，窗口内的基准全部列出。
 
 <!-- TABLE-FIRST:RECENT:START -->
 | 时间 | 方向 | Benchmark | 考察内容 | 相较以往 |
