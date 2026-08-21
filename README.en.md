@@ -2,24 +2,21 @@
 
 [中文](README.md) | **English**
 
-**The entry point to the Research Radar family — and its evaluation layer.**
+<a id="frontier-signals"></a>
+## Last 30 Days: Three Shifts
 
-Start here to see **what Agent Memory, Agentic RAG, and Data Agents are being asked to do, how those targets evolved, and what current scores actually support**. Then continue into the corresponding domain radar for methods and systems.
-
-**Research Radars:** [Agent Memory](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) · [Agentic RAG](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) · [Data Agent](https://github.com/H20Zhang/Data-Agent-Radar#field-map)
-
-[30 sec: six-month table](#release-timeline) · [3 min: 7/30-day changes](#periods) · [5 min: Field Map](#field-map) · [All benchmark tables](#all-benchmarks) · [Reading Paths](#reading-paths) · [Benchmark Library](#library)
-
-<!-- compatibility: [30 sec: Timeline](#timeline) · [3 min: 7/30-day changes](#periods) · [5 min: Field Map](#field-map) · [15 min: Reading Paths](#reading-paths) · [Browse all](#library) -->
-
-> **Comparison rule.** A higher leaderboard score is system-level evidence unless model, accessible state, tool interface, prompts/hints, retries, stopping rule, evaluator, and relevant cost budgets are sufficiently matched.
+<!-- FRONTIER-SIGNALS:START -->
+| Area | What actually changed | Representative benchmarks |
+|---|---|---|
+| **Agent Memory** | Evaluation is moving beyond “can it recall?” toward **whether retained memory causally changes later action and whether persistent state can be governed safely**. PAST-Bench uses persistence-on/off controls to measure downstream memory effects; SP-Mem puts personalization, consent, and leakage in one protocol; InMind separates storage, knowledge, routing, and use failures. | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [SP-Mem](https://arxiv.org/abs/2608.16551) · [InMind](https://arxiv.org/abs/2607.24368) |
+| **RAG / Agentic Retrieval** | The question is shifting from “is recall high?” to **whether a retrieval metric predicts downstream success, whether the search process is auditable, and whether results transfer across deployment conditions**. The Recall Trap gives a direct recall-vs-repair counterexample; SearchAuditBench measures failure localization and repair; The Commercial Tax brings license, query format, index construction, and cost into transferability. | [The Recall Trap](https://arxiv.org/abs/2608.14838) · [SearchAuditBench](https://arxiv.org/abs/2608.05212) · [The Commercial Tax](https://arxiv.org/abs/2608.16096) |
+| **Data Agents** | The target keeps moving beyond “does SQL/code run?” toward **understanding data first, completing verifiable work, and clarifying or abstaining when business semantics are underspecified**. Data Exploration Benchmark scores exploration directly; WarehouseReliabilityBench tests business truth, clarification, and abstention; data-eng-bench's evaluator fix shows that evaluator reliability itself can be the bottleneck. | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) · [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
+<!-- FRONTIER-SIGNALS:END -->
 
 Last updated: **2026-08-21**
 
 <a id="release-timeline"></a>
 ## Benchmark Timeline: Last Six Months
-
-This is ordered by the benchmark/paper's **source release time**, not by when the Radar accepted it. The window rolls six months back from the registry's latest verification date; month-precision releases retain their honest precision. The table is complete for the window, not curated.
 
 <!-- TABLE-FIRST:RECENT:START -->
 | Time | Area | Benchmark | What it tests | What changed |
