@@ -14,7 +14,7 @@
 
 > **比较规则：** 如果 model、accessible state、tool interface、prompt/hints、retry、stopping rule、evaluator 与关键 resource budget 没有充分匹配，那么 leaderboard 上更高的 score 首先只是 **system-level evidence**，不能直接归因给某个 component。
 
-最后更新：**2026-08-20**
+最后更新：**2026-08-21**
 
 <a id="release-timeline"></a>
 ## 最近半年 Benchmark 时间线
@@ -24,13 +24,23 @@
 <!-- TABLE-FIRST:RECENT:START -->
 | 时间 | 方向 | Benchmark | 考察内容 | 相较以往 |
 |---|---|---|---|---|
+| 2026-08-18 | RAG | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | 在统一页面排序协议下比较静态 ranker 与迭代视觉/OCR agent 的视觉文档检索基准。 | 在统一 top-10 输出下直接比较静态视觉检索与迭代式页面发现、检查。 |
 | 2026-08-17 | Data Agent | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | 在下游分析前，构建包含逻辑表、列语义、键关系和质量信号的结构化数据理解产物。 | 把通常隐含的数据探索阶段从最终答案的前置假设变成可独立评分、可验证下游价值的对象。 |
+| 2026-08-17 | Agent Memory | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | 联合测量回答质量、个性化、同意处理、精确值暴露与成本的隐私感知记忆基准。 | 把个性化收益、授权与泄露风险放进同一记忆生命周期协议。 |
+| 2026-08-17 | RAG | [The Commercial Tax](https://arxiv.org/abs/2608.16096) <!-- benchmark-id:commercial-tax --> | 把原始 embedder 分数绑定到许可、query format、索引构造与部署成本的检索复现性审计。 | 把 license、query format、index construction 与 cost 纳入 retrieval number 的可迁移性审计。 |
+| 2026-08-10 | RAG | [The Recall Trap](https://arxiv.org/abs/2608.14838) <!-- benchmark-id:recall-trap --> | 有效性审计：在固定槽位代码检索协议下，更高 file recall 可能降低下游修复成功率。 | 证明固定槽位下更高 file recall 可能对应更低 repair success，限制 recall 指标的解释。 |
 | 2026-08-10 | Data Agent | [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) <!-- benchmark-id:warehouse-reliability-bench --> | 面对语义歧义、不可回答、模式漂移和对抗输入时，返回业务真值或正确地澄清、弃答、拒答。 | 从“SQL 能运行且结果匹配”转向“业务含义正确，并在不该给数字时不虚假成功”。 |
+| 2026-08-07 | RAG | [DAS-Bench / DAS-Eval](https://arxiv.org/abs/2608.18034) <!-- benchmark-id:das-bench --> | 对文献覆盖、taxonomy、claim、citation、discourse 与渲染成品质量评分的学术综述基准及评测器。 | 把学术综述的覆盖、taxonomy、claim、citation、discourse 与成品质量变成 16 项协议。 |
 | 2026-08-05 | RAG | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | 考察审计模型能否在超长搜索轨迹中定位错误、归因根因并生成可执行修复。 | 从最终答案成败推进到专家标注的关键步骤、六类根因和修复后恢复评测。 |
+| 2026-08-04 | RAG | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | 测量同一论文能否在动机、方法与结果等多个 aspect 下持续被找回的科学检索基准。 | 不再只问一条 query 是否命中，而是测同一论文跨多个 aspect 的可检索一致性。 |
+| 2026-08-04 | Agent Memory | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | 通过配对持久状态控制，检验跨 episode 经验是否因果改善后续可执行工作的基准。 | 用 persistence on/off 配对控制识别跨 episode 记忆是否真的改善可执行任务。 |
 | 2026-08 | Data Agent | [DataSpace](https://arxiv.org/abs/2608.03451) <!-- benchmark-id:dataspace --> | 在混合数据库、文件、文档和多媒体的工作区中完成可验证分析。 | 寻找异构证据和核验完整结果成为一项统一任务。 |
-| 2026-08 | Data Agent | [DSAgentBench](https://arxiv.org/pdf/2608.10366) <!-- benchmark-id:dsagentbench --> | 使用笔记本、IDE、终端、浏览器和数据库完成完整数据科学工作流。 | 评测进入真实计算机环境，要求多阶段、多工具执行能够可靠衔接。 |
+| 2026-08 | Data Agent | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | 使用笔记本、IDE、终端、浏览器和数据库完成完整数据科学工作流。 | 评测进入真实计算机环境，要求多阶段、多工具执行能够可靠衔接。 |
 | 2026-08 | RAG | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | 组合调用 API、检索文档、完成多跳推理，并遵守工具策略。 | 跨来源依据、实际执行和策略一致性出现在同一条轨迹中。 |
+| 2026-07-29 | Data Agent | [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) <!-- benchmark-id:data-eng-bench --> | 面向仓库规模 dbt 转换的可执行数据工程基准，在 DuckDB 与 Snowflake 上做隐藏行级核验。 | 用可执行 dbt 任务和隐藏行级核验测数据工程；8 月修复暴露 evaluator reliability 也是测量对象。 |
 | 2026-07-27 | Agent Memory | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | 旧事实与新问题词义相远、只有借助常识才能建立联系时，记忆能否被正确调出并应用。 | 用成对对照把存储失败、知识缺失、检索路由失败和应用失败分开。 |
+| 2026-07-21 | Agent Memory | [MemFuseBench](https://arxiv.org/abs/2608.18704) <!-- benchmark-id:memfusebench --> | 跨异构事件流的来源连接、因果融合、冲突裁决与溯源记忆基准。 | 跨异构来源的 linking、causal fusion、conflict 与 provenance 被拆成诊断项。 |
+| 2026-07-14 | RAG | [WANDR](https://arxiv.org/abs/2608.14747) <!-- benchmark-id:wandr --> | 面向实时网页 wide-and-deep 记录收集的基准，包含分层任务和无需穷举金标的逐条核验。 | 把实时网页上的开放集合发现、记录扩充与逐条复核合成 wide-and-deep 任务。 |
 | 2026-07-09 | Data Agent | [CausalDS](https://arxiv.org/abs/2607.08093) <!-- benchmark-id:causalds --> | 在可执行数据科学环境中覆盖因果预测、识别、效应估计、反事实、不确定性与弃答。 | 把数据智能体评测从相关性和预测拓展到 Pearl 三阶因果推理及“无法作答”的识别。 |
 | 2026-07 | Data Agent | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | 用细粒度技能分类检查真实数据科学工作流的覆盖情况。 | 除了总成功率，还能审计这套基准覆盖了哪些技能。 |
 | 2026-07 | Agent Memory | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | 后续问题没有复述旧约束时，能否继续正确应用它。 | 目标从显式事实召回转向用户目标、价值和约束的一致应用。 |
@@ -84,6 +94,156 @@
 ## 最新条目深读
 
 这一层保留 v2 的 acceptance / provenance 审计语义；上面的表格才是研究者按 source release time 扫描的主时间线。
+
+<a id="entry-commercial-tax"></a>
+<details><summary>2026-08-21 · The Commercial Tax · RAG / deployment validity <!-- timefirst:area=rag-deployment-validity --> — 把 raw retrieval number 重新绑定到 license、query format、index construction 与 recurring cost。 <!-- timefirst:delta=retrieval-number-to-deployment-envelope --></summary>
+
+**问题。** 一个 benchmark embedding score 能否在许可、格式与成本约束下迁移到生产？ <!-- timefirst:question=is-retrieval-performance-portable-to-deployment -->
+
+**证据。** 13 embedders 使用 paired bootstrap、license provenance 与 separated construction/query cost，显示接近的 raw recall 不等于相同部署含义。 <!-- timefirst:evidence=13-embedders-paired-bootstrap-license-cost~13-embedders-paired-bootstrap -->
+
+**限制。** uneven format tuning、hosted drift 与 single corpus 限制了跨模型、跨系统和长期可迁移性。 <!-- timefirst:caveat=uneven-format-tuning-hosted-drift-single-corpus~uneven-format-tuning-hosted-drift -->
+
+**地图。** `reinforces`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [论文](https://arxiv.org/abs/2608.16096) · [代码](https://github.com/Toryx-AI/commercial-tax-multihop-retrieval) · [复现实验](https://doi.org/10.5281/zenodo.21972866) · [本地深度笔记](benchmarks/commercial-tax.md)
+
+</details>
+
+<a id="entry-das-bench"></a>
+<details><summary>2026-08-21 · DAS-Bench / DAS-Eval · RAG / 学术综述成品 <!-- timefirst:area=rag-academic-survey-artifact --> — 把 retrieval/drafting 扩展为可共享修订的 literature、taxonomy、claim、citation、discourse 与 PDF 成品协议。 <!-- timefirst:delta=answer-quality-to-publication-oriented-survey-protocol --></summary>
+
+**问题。** 系统能否把文献证据组装成可审计、可阅读的 publication-oriented survey？ <!-- timefirst:question=assemble-grounded-and-auditable-academic-surveys -->
+
+**证据。** 30 topics、16 criteria 加 deterministic citation checks 与 blinded expert comparison，覆盖 evidence、taxonomy、claim、discourse 和 artifact。 <!-- timefirst:evidence=30-topics-16-criteria-expert-comparison~30-topics-16-criteria -->
+
+**限制。** generation backbone 与 main judge coupling、closed-system native configs 意味着跨系统差距仍是 system-level。 <!-- timefirst:caveat=generation-backbone-and-main-judge-coupling~generation-backbone-main-judge -->
+
+**地图。** `early_signal`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [论文](https://arxiv.org/abs/2608.18034) · [基准与评测器](https://github.com/ZhikaiXu24/DAS) · [数据](https://huggingface.co/datasets/ZhikaiXu24/DAS-Bench) · [本地深度笔记](benchmarks/das-bench.md)
+
+</details>
+
+<a id="entry-data-eng-bench"></a>
+<details><summary>2026-08-21 · data-eng-bench · Data Agent / 可执行数据工程 <!-- timefirst:area=data-agent-executable-data-engineering --> — 把 code generation 推到 repository-scale dbt transformation 与 hidden row-level verification。 <!-- timefirst:delta=code-generation-to-repository-scale-verified-transformation --></summary>
+
+**问题。** Agent 能否在真实项目约束下实现、执行并修复数据转换？ <!-- timefirst:question=implement-and-verify-production-shaped-dbt-work -->
+
+**证据。** 103 dbt tasks hidden verifiers 覆盖 DuckDB/Snowflake；hidden row-level verifiers 检查产物，而 8 月修复揭示 evaluator reliability 本身也是测量条件。 <!-- timefirst:evidence=103-dbt-tasks-hidden-row-level-verifiers~103-dbt-tasks-hidden-verifiers -->
+
+**限制。** Snowflake verifier without rerun 意味着修复前 leaderboard 不能直接与修复后环境比较。 <!-- timefirst:caveat=snowflake-verifier-fix-without-rerun~snowflake-verifier-without-rerun -->
+
+**地图。** `early_signal`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [基准仓库](https://github.com/Snowflake-Labs/data-eng-bench) · [协议修复](https://github.com/Snowflake-Labs/data-eng-bench/commit/35b83370bd9ae06d9ac8a2beb95d2544c90d88a5) · [本地深度笔记](benchmarks/data-eng-bench.md)
+
+</details>
+
+<a id="entry-maple"></a>
+<details><summary>2026-08-21 · MAPLE · RAG / 多 aspect 科学检索 <!-- timefirst:area=rag-multi-aspect-scientific-retrieval --> — 把单 query 的局部相关性拆成同一论文跨 motivation、method、result 的一致可检索性。 <!-- timefirst:delta=single-query-relevance-to-cross-aspect-consistency --></summary>
+
+**问题。** 一个 retriever 能否在不同 aspect 的 query 下持续找回同一篇目标论文？ <!-- timefirst:question=retrieve-one-paper-across-multiple-aspects -->
+
+**证据。** 2095 queries 210 papers 上，matched single-query recall 与 AllAspect gap 显示 one-hit relevance 会掩盖 cross-aspect failure。 <!-- timefirst:evidence=2095-queries-210-papers-allaspect-gap~2095-queries-210-papers -->
+
+**限制。** generated queries、single domain 与 model-validated hard negatives 可能引入 style bias 和 label noise。 <!-- timefirst:caveat=generated-queries-single-domain-and-label-noise~generated-queries-single-domain -->
+
+**地图。** `reinforces`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [论文](https://arxiv.org/abs/2608.15624) · [代码](https://github.com/Ggballs/MAPLE) · [数据](https://huggingface.co/datasets/kai-02/MAPLE) · [本地深度笔记](benchmarks/maple.md)
+
+</details>
+
+<a id="entry-memfusebench"></a>
+<details><summary>2026-08-21 · MemFuseBench · Agent Memory / 跨来源融合 <!-- timefirst:area=memory-cross-source-fusion --> — 把评价对象从单历史召回推进到跨设备、用户与时间的 linking、causal fusion、conflict 和 provenance。 <!-- timefirst:delta=single-history-recall-to-multi-source-fusion --></summary>
+
+**问题。** 系统能否在来源互异且可能冲突的事件流中找对证据、融合因果并保留出处？ <!-- timefirst:question=link-fuse-and-arbitrate-source-tagged-memory -->
+
+**证据。** 357 questions 7823 events 与 six diagnostics 分别观察 linking、causal fusion、conflict 和 provenance。 <!-- timefirst:evidence=357-questions-7823-events-six-diagnostics~357-questions-7823-events -->
+
+**限制。** synthetic generation human ceiling evidence 尚缺；model-guided verification，不能证明真实用户历史上的外部效度。 <!-- timefirst:caveat=synthetic-generation-without-human-ceiling~synthetic-generation-human-ceiling -->
+
+**地图。** `early_signal`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [论文](https://arxiv.org/abs/2608.18704) · [数据](https://github.com/Darwin-Agent/Mi-Memory/tree/master/MemFuse/MemFuseBench) · [本地深度笔记](benchmarks/memfusebench.md)
+
+</details>
+
+<a id="entry-past-bench"></a>
+<details><summary>2026-08-21 · PAST-Bench · Agent Memory / 跨 episode 因果归因 <!-- timefirst:area=memory-cross-episode-causal-attribution --> — 从可见历史问答转向 persistence 是否因果改善后续 executable task。 <!-- timefirst:delta=visible-history-recall-to-persistent-state-attribution --></summary>
+
+**问题。** 清空上下文后，保留的 state 是否真正造成后续任务收益？ <!-- timefirst:question=does-retained-state-cause-later-executable-benefit -->
+
+**证据。** 26 families、204 episodes 使用 persistence on/off、matched seeds/prompts/graders 与 artifact/trace evidence。 <!-- timefirst:evidence=26-families-204-episodes-paired-persistence~26-families-204-episodes -->
+
+**限制。** generated tasks related graders 可能产生 model-family template familiarity；也未覆盖 months-long deployment。 <!-- timefirst:caveat=generated-task-and-grader-coupling~generated-tasks-related-graders -->
+
+**地图。** `early_signal`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [论文](https://arxiv.org/abs/2608.04003) · [代码](https://github.com/Gen-Verse/PAST-Bench) · [本地深度笔记](benchmarks/past-bench.md)
+
+</details>
+
+<a id="entry-recall-trap"></a>
+<details><summary>2026-08-21 · The Recall Trap · RAG / retrieval validity <!-- timefirst:area=rag-retrieval-validity --> — 用 downstream executable outcome 审计“更高 recall 就更好”的 proxy 假设。 <!-- timefirst:delta=recall-proxy-to-downstream-causal-audit --></summary>
+
+**问题。** 在固定 context slots 下，提高 file recall 是否真的提高 issue resolution？ <!-- timefirst:question=does-higher-recall-improve-executable-resolution -->
+
+**证据。** paired fixed pack Docker evaluation 显示 dense retrieval 的 higher recall 可对应 lower resolve rate，并有 open-weight replication。 <!-- timefirst:evidence=paired-fixed-pack-official-docker-grading~paired-fixed-pack-docker -->
+
+**限制。** compound dedup fixed slots treatment 同时改变 breadth、depth、rank、position、tokens 与 distractors；结论只适用于 fixed slots。 <!-- timefirst:caveat=compound-dedup-treatment-under-fixed-slots~compound-dedup-fixed-slots -->
+
+**地图。** `reinforces`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [论文](https://arxiv.org/abs/2608.14838) · [复现实验](https://doi.org/10.5281/zenodo.21879550) · [本地深度笔记](benchmarks/recall-trap.md)
+
+</details>
+
+<a id="entry-sp-mem"></a>
+<details><summary>2026-08-21 · SP-Mem Privacy-Aware Memory Benchmark · Agent Memory / 生命周期隐私 <!-- timefirst:area=memory-lifecycle-privacy --> — 把记忆有用性与 consent、authorization、exact-value exposure、cost 放进同一协议。 <!-- timefirst:delta=memory-utility-to-consent-aware-privacy-tradeoff --></summary>
+
+**问题。** 个性化记忆能否只在被授权且确有必要时被使用，同时避免暴露？ <!-- timefirst:question=balance-personalization-authorization-and-exposure -->
+
+**证据。** 1000 profiles 5400 queries、four domains 的匹配模式同时评分 response quality、authorization request 与 exact-value exposure。 <!-- timefirst:evidence=1000-profiles-5400-queries-four-domains~1000-profiles-5400-queries -->
+
+**限制。** explicit consent exact string proxy 没有覆盖 inference、re-identification 和 adversarial multi-turn disclosure。 <!-- timefirst:caveat=explicit-consent-and-exact-string-proxy~explicit-consent-exact-string -->
+
+**地图。** `early_signal`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [论文](https://arxiv.org/abs/2608.16551) · [代码与数据](https://github.com/Jensassss/SP-Mem) · [本地深度笔记](benchmarks/sp-mem.md)
+
+</details>
+
+<a id="entry-visdocagentbench"></a>
+<details><summary>2026-08-21 · VisDocAgentBench · RAG / Agentic visual-document retrieval <!-- timefirst:area=rag-agentic-visual-document-retrieval --> — 在同一 ranked-page 输出上比较 static ranker 与 search/inspection agent。 <!-- timefirst:delta=static-page-ranking-to-iterative-discovery-and-inspection --></summary>
+
+**问题。** Agent 能否通过搜索、视觉检查与 OCR，把分散证据页排入 top 10？ <!-- timefirst:question=rank-visual-pages-through-search-and-inspection -->
+
+**证据。** 2375 pages 120 queries 使用 shared top-10 contract；support intervention 与 ablations 使 discovery 和 inspection 可见。 <!-- timefirst:evidence=2375-pages-120-queries-shared-top10-contract~2375-pages-120-queries -->
+
+**限制。** 120 queries、six cross-document paths，且 agent routes 未 capacity-matched，限制 planner 或 vision 的因果归因。 <!-- timefirst:caveat=small-query-set-and-unmatched-agent-routes~120-queries-six-cross-document -->
+
+**地图。** `reinforces`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [论文](https://arxiv.org/abs/2608.17889) · [代码](https://github.com/hulx2002/VisDocAgentBench) · [数据](https://huggingface.co/datasets/hulx2002/VisDocAgentBench) · [本地深度笔记](benchmarks/visdocagentbench.md)
+
+</details>
+
+<a id="entry-wandr"></a>
+<details><summary>2026-08-21 · WANDR · RAG / 实时 wide-and-deep 搜索 <!-- timefirst:area=rag-wide-deep-live-web --> — 把答案搜索扩展为开放集合 discovery、分层 enrichment 与 record-level refetch verification。 <!-- timefirst:delta=answer-search-to-open-set-record-collection --></summary>
+
+**问题。** Agent 能否在不知道完整集合时发现、补全并逐条核验实时网页记录？ <!-- timefirst:question=discover-enrich-and-verify-live-web-records -->
+
+**证据。** 500 Harbor task packages 使用 required-volume denominator 与 URL/excerpt refetch，分别暴露 discovery、support 和 enrichment 的损失。 <!-- timefirst:evidence=500-harbor-packages-record-refetch-verification~500-harbor-task-packages -->
+
+**限制。** unmatched stacks、shared fetch backend、web drift 与 LLM judge 使结果只能按 system-level evidence 解读。 <!-- timefirst:caveat=unmatched-stacks-shared-fetch-and-web-drift~unmatched-stacks-shared-fetch -->
+
+**地图。** `reinforces`；这是可审计的评价变化；单篇只作 signal，只有绑定同一 direction 的独立支撑才更新持久地图。
+
+**链接。** [论文](https://arxiv.org/abs/2608.14747) · [基准](https://github.com/perplexityai/wandr) · [本地深度笔记](benchmarks/wandr.md)
+
+</details>
 
 <a id="entry-dsagentbench"></a>
 <details><summary>2026-08 · DSAgentBench · Data Agent / 真实计算机中的端到端 data-science workflow <!-- timefirst:area=data-agent-real-computer-workflow --> — 把评价对象从分离的 code/answer stage 推到由 intermediate outputs 支撑的多工具完整工作流。 <!-- timefirst:delta=isolated-stages-to-end-to-end-workflow --></summary>
@@ -209,16 +369,34 @@
 ## 7 天 / 30 天：评价对象发生了什么变化
 
 <a id="last-7-days"></a>
-### 过去 7 天：2026-08-14—2026-08-20
+### 过去 7 天：2026-08-15—2026-08-21
 
-- **`no_material_change` · Benchmark acceptance time：本窗口没有可归入 Radar 接受时间的新方向。** <!-- timefirst:direction key="benchmark-acceptance-time" state="no_material_change" supports="none" confidence="high" implication="require-native-v2-times-for-period-claims" timing="radar_published_at" synthesized="2026-08-20T00:00:00Z" prior="none" -->
-  支撑：**none**；置信度：**high**；时间依据：`radar_published_at`；先验地图证据：`none`。研究设计含义（require native v2 times for period claims）：旧 Timeline 记录只作历史语境，不计作支撑；只有带原生 v2 Radar 接受时间的记录才能支持窗口判断。精确合成时间：`2026-08-20T00:00:00Z`（UTC）。
+- **`reinforced` · structured evidence coverage：评价正从单命中相关性推进到跨 aspect、path 与 hierarchy 的结构化证据覆盖。** <!-- timefirst:direction key="structured-evidence-coverage" state="reinforced" supports="maple,visdocagentbench,wandr" confidence="high" implication="measure-coverage-not-only-single-hit-relevance" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="field-map" -->
+  支撑：[MAPLE](#entry-maple) · [VisDocAgentBench](#entry-visdocagentbench) · [WANDR](#entry-wandr)；置信度：**high**；时间依据：`radar_published_at`；先验地图证据：[RAG Field Map](#field-map)。研究设计含义（measure coverage not only single hit relevance）：应同时报告 aspect/set/path coverage 与 discovery loss，而不是让一次命中替代完整证据获取。精确合成时间：`2026-08-21T00:48:57Z`（UTC）。
+
+- **`reinforced` · retrieval harness validity：检索分数必须绑定 packing、format、license、cost 与 downstream execution envelope。** <!-- timefirst:direction key="retrieval-harness-validity" state="reinforced" supports="commercial-tax,recall-trap" confidence="high" implication="bind-retrieval-scores-to-harness-and-deployment" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="field-map" -->
+  支撑：[The Commercial Tax](#entry-commercial-tax) · [The Recall Trap](#entry-recall-trap)；置信度：**high**；时间依据：`radar_published_at`；先验地图证据：[RAG Field Map](#field-map)。研究设计含义（bind retrieval scores to harness and deployment）：匹配 model 仍不够；还要固定 packing、query format、index、许可与成本，且用 downstream outcome 检查 recall proxy。精确合成时间：`2026-08-21T00:48:57Z`（UTC）。
+
+- **`new_signal` · memory lifecycle privacy：记忆评价开始在同一生命周期内联合测 personalization、authorization 与 exposure。** <!-- timefirst:direction key="memory-lifecycle-privacy" state="new_signal" supports="sp-mem" confidence="medium" implication="score-memory-utility-with-authorization-and-exposure" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="none" -->
+  支撑：[SP-Mem Privacy-Aware Memory Benchmark](#entry-sp-mem)；置信度：**medium**；时间依据：`radar_published_at`；先验地图证据：`none`。研究设计含义（score memory utility with authorization and exposure）：有用性得分要与必要性、授权请求和泄露分开报告；一项 work 只构成早期信号。精确合成时间：`2026-08-21T00:48:57Z`（UTC）。
+
+- **`new_signal` · executable verifier reliability：可执行 Data Agent benchmark 的 evaluator 与 backend reliability 本身需要版本化。** <!-- timefirst:direction key="executable-verifier-reliability" state="new_signal" supports="data-eng-bench" confidence="high" implication="version-verifiers-and-rerun-after-protocol-fixes" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="none" -->
+  支撑：[data-eng-bench](#entry-data-eng-bench)；置信度：**high**；时间依据：`radar_published_at`；先验地图证据：`none`。研究设计含义（version verifiers and rerun after protocol fixes）：修复 evaluator/environment 后必须重跑，旧分数不能静默继承到新协议。精确合成时间：`2026-08-21T00:48:57Z`（UTC）。
 
 <a id="last-30-days"></a>
-### 过去 30 天：2026-07-22—2026-08-20
+### 过去 30 天：2026-07-23—2026-08-21
 
-- **`no_material_change` · Benchmark acceptance time：本窗口没有可归入 Radar 接受时间的新方向。** <!-- timefirst:direction key="benchmark-acceptance-time" state="no_material_change" supports="none" confidence="high" implication="require-native-v2-times-for-period-claims" timing="radar_published_at" synthesized="2026-08-20T00:00:00Z" prior="none" -->
-  支撑：**none**；置信度：**high**；时间依据：`radar_published_at`；先验地图证据：`none`。研究设计含义（require native v2 times for period claims）：DSAgentBench、VAKRA、DataSpace、LoCoMo-Plus、Mem2ActBench 与 AgenticDataBench 只作历史语境，不计作本窗口支撑；它们的月精度记录不能证明 Radar 接受时间落在该窗口。精确合成时间：`2026-08-20T00:00:00Z`（UTC）。
+- **`reinforced` · structured evidence coverage：评价正从单命中相关性推进到跨 aspect、path 与 hierarchy 的结构化证据覆盖。** <!-- timefirst:direction key="structured-evidence-coverage" state="reinforced" supports="maple,visdocagentbench,wandr" confidence="high" implication="measure-coverage-not-only-single-hit-relevance" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="field-map" -->
+  支撑：[MAPLE](#entry-maple) · [VisDocAgentBench](#entry-visdocagentbench) · [WANDR](#entry-wandr)；置信度：**high**；时间依据：`radar_published_at`；先验地图证据：[RAG Field Map](#field-map)。研究设计含义（measure coverage not only single hit relevance）：应同时报告 aspect/set/path coverage 与 discovery loss，而不是让一次命中替代完整证据获取。精确合成时间：`2026-08-21T00:48:57Z`（UTC）。
+
+- **`reinforced` · retrieval harness validity：检索分数必须绑定 packing、format、license、cost 与 downstream execution envelope。** <!-- timefirst:direction key="retrieval-harness-validity" state="reinforced" supports="commercial-tax,recall-trap" confidence="high" implication="bind-retrieval-scores-to-harness-and-deployment" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="field-map" -->
+  支撑：[The Commercial Tax](#entry-commercial-tax) · [The Recall Trap](#entry-recall-trap)；置信度：**high**；时间依据：`radar_published_at`；先验地图证据：[RAG Field Map](#field-map)。研究设计含义（bind retrieval scores to harness and deployment）：匹配 model 仍不够；还要固定 packing、query format、index、许可与成本，且用 downstream outcome 检查 recall proxy。精确合成时间：`2026-08-21T00:48:57Z`（UTC）。
+
+- **`new_signal` · memory lifecycle privacy：记忆评价开始在同一生命周期内联合测 personalization、authorization 与 exposure。** <!-- timefirst:direction key="memory-lifecycle-privacy" state="new_signal" supports="sp-mem" confidence="medium" implication="score-memory-utility-with-authorization-and-exposure" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="none" -->
+  支撑：[SP-Mem Privacy-Aware Memory Benchmark](#entry-sp-mem)；置信度：**medium**；时间依据：`radar_published_at`；先验地图证据：`none`。研究设计含义（score memory utility with authorization and exposure）：有用性得分要与必要性、授权请求和泄露分开报告；一项 work 只构成早期信号。精确合成时间：`2026-08-21T00:48:57Z`（UTC）。
+
+- **`new_signal` · executable verifier reliability：可执行 Data Agent benchmark 的 evaluator 与 backend reliability 本身需要版本化。** <!-- timefirst:direction key="executable-verifier-reliability" state="new_signal" supports="data-eng-bench" confidence="high" implication="version-verifiers-and-rerun-after-protocol-fixes" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="none" -->
+  支撑：[data-eng-bench](#entry-data-eng-bench)；置信度：**high**；时间依据：`radar_published_at`；先验地图证据：`none`。研究设计含义（version verifiers and rerun after protocol fixes）：修复 evaluator/environment 后必须重跑，旧分数不能静默继承到新协议。精确合成时间：`2026-08-21T00:48:57Z`（UTC）。
 
 <a id="evolution"></a>
 ## 三个方向的演化
@@ -240,6 +418,14 @@
 ### RAG / Agentic Retrieval
 从文档相关性，逐步走向多跳证据组合、实时搜索、停止判断、跨来源执行与轨迹审计。
 
+**主干：** [HotpotQA](https://aclanthology.org/D18-1259/) → [BEIR](https://arxiv.org/abs/2104.08663) / [BRIGHT](https://arxiv.org/abs/2407.12883) → [BrowseComp](https://arxiv.org/abs/2504.12516) → [AutoResearchBench](https://arxiv.org/abs/2604.25256) / [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) → [LiveBrowseComp](https://arxiv.org/abs/2605.28721) / [LoHoSearch](https://arxiv.org/abs/2606.12837) → [SearchAuditBench](https://arxiv.org/abs/2608.05212) / [VAKRA](https://arxiv.org/abs/2608.12282) → [MAPLE](https://arxiv.org/abs/2608.15624) / [VisDocAgentBench](https://arxiv.org/abs/2608.17889) / [WANDR](https://arxiv.org/abs/2608.14747)
+
+**前沿信号：** 评价已由相关性推进到跨 aspect/path/hierarchy 的结构化证据覆盖，并把 live-web discovery 与 visual-document inspection 拆开计量；新的 validity audit 还要求把 retrieval number 绑定 packing、query format、license、cost 与 downstream execution。
+
+**当前最大缺口：** 在 interface / harness / model / budget 匹配的情况下做 causal attribution，尤其是 live environment 会持续 drift 的 long-horizon setting。
+
+[查看完整的 RAG 基准表 →](library/README.md#rag--agentic-retrieval) · [进入 Agentic RAG 方法与系统 →](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map)
+
 <a id="benchmark-data"></a>
 ### Data Agents
 从 Text-to-SQL / code generation，逐步走向完整数据工作流、探索、统计/因果分析与业务语义可靠性。
@@ -247,7 +433,7 @@
 <a id="all-benchmarks"></a>
 ## 按领域查看全部 Benchmark
 
-以下是 registry 中的全部 95 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
+以下是 registry 中的全部 105 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
 
 ### Agent Memory
 
@@ -284,7 +470,10 @@
 | 🔭 前沿 | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 2026-07 | 多模态长期对话中的记忆抽取、适应、推理和知识管理。 | 视觉保留、多模态推理和记忆组织被放进同一套评测。 |
 | 🔭 前沿 | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | 2026-07 | 长期记忆是否会影响工具选择和参数填写。 | 记忆对行动的作用可以直接评分，而不再只通过问答间接判断。 |
 | 🔭 前沿 | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | 2026-07 | 能否从长期历史中识别隐含的个体风险，并在风险缓解后及时更新判断。 | 把用户状态记忆扩展到随时间变化的个性化安全与有用性权衡。 |
+| 🔭 前沿 | [MemFuseBench](https://arxiv.org/abs/2608.18704) <!-- benchmark-id:memfusebench --> | 2026-07-21 | 跨异构事件流的来源连接、因果融合、冲突裁决与溯源记忆基准。 | 跨异构来源的 linking、causal fusion、conflict 与 provenance 被拆成诊断项。 |
 | 🔭 前沿 | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | 2026-07-27 | 旧事实与新问题词义相远、只有借助常识才能建立联系时，记忆能否被正确调出并应用。 | 用成对对照把存储失败、知识缺失、检索路由失败和应用失败分开。 |
+| 🔭 前沿 | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | 2026-08-04 | 通过配对持久状态控制，检验跨 episode 经验是否因果改善后续可执行工作的基准。 | 用 persistence on/off 配对控制识别跨 episode 记忆是否真的改善可执行任务。 |
+| 🔭 前沿 | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | 2026-08-17 | 联合测量回答质量、个性化、同意处理、精确值暴露与成本的隐私感知记忆基准。 | 把个性化收益、授权与泄露风险放进同一记忆生命周期协议。 |
 <!-- TABLE-FIRST:AREA:agent-memory:END -->
 
 ### RAG / Agentic Retrieval
@@ -323,8 +512,14 @@
 | 🔭 前沿 | [LiveBrowseComp](https://arxiv.org/abs/2605.28721) <!-- benchmark-id:livebrowsecomp --> | 2026-05-27 | 考察智能体能否检索近期、低显著性的网络事实，而非只验证模型已有知识。 | 使用构建前 90 天内的事实，并以闭卷和移除答案来源实验区分发现与验证。 |
 | 🔭 前沿 | [EvoBrowseComp](https://arxiv.org/abs/2606.13120) <!-- benchmark-id:evobrowsecomp --> | 2026-06-11 | 考察英语和中文智能体对持续变化网络知识的广度搜索与多步推理。 | 引入可自动更新的双语实时网络问题生成流程，以降低静态测试集污染。 |
 | 🔭 前沿 | [LoHoSearch](https://arxiv.org/abs/2606.12837) <!-- benchmark-id:lohosearch --> | 2026-06-11 | 考察超大候选空间、复杂约束结构、长程搜索和上下文管理。 | 用知识图谱系统控制搜索空间与结构复杂度，而非仅依赖人工主观设难。 |
+| 🔭 前沿 | [WANDR](https://arxiv.org/abs/2608.14747) <!-- benchmark-id:wandr --> | 2026-07-14 | 面向实时网页 wide-and-deep 记录收集的基准，包含分层任务和无需穷举金标的逐条核验。 | 把实时网页上的开放集合发现、记录扩充与逐条复核合成 wide-and-deep 任务。 |
 | 🔭 前沿 | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | 2026-08 | 组合调用 API、检索文档、完成多跳推理，并遵守工具策略。 | 跨来源依据、实际执行和策略一致性出现在同一条轨迹中。 |
+| 🔭 前沿 | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | 2026-08-04 | 测量同一论文能否在动机、方法与结果等多个 aspect 下持续被找回的科学检索基准。 | 不再只问一条 query 是否命中，而是测同一论文跨多个 aspect 的可检索一致性。 |
 | 🔭 前沿 | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | 2026-08-05 | 考察审计模型能否在超长搜索轨迹中定位错误、归因根因并生成可执行修复。 | 从最终答案成败推进到专家标注的关键步骤、六类根因和修复后恢复评测。 |
+| 🔭 前沿 | [DAS-Bench / DAS-Eval](https://arxiv.org/abs/2608.18034) <!-- benchmark-id:das-bench --> | 2026-08-07 | 对文献覆盖、taxonomy、claim、citation、discourse 与渲染成品质量评分的学术综述基准及评测器。 | 把学术综述的覆盖、taxonomy、claim、citation、discourse 与成品质量变成 16 项协议。 |
+| 🔭 前沿 | [The Recall Trap](https://arxiv.org/abs/2608.14838) <!-- benchmark-id:recall-trap --> | 2026-08-10 | 有效性审计：在固定槽位代码检索协议下，更高 file recall 可能降低下游修复成功率。 | 证明固定槽位下更高 file recall 可能对应更低 repair success，限制 recall 指标的解释。 |
+| 🔭 前沿 | [The Commercial Tax](https://arxiv.org/abs/2608.16096) <!-- benchmark-id:commercial-tax --> | 2026-08-17 | 把原始 embedder 分数绑定到许可、query format、索引构造与部署成本的检索复现性审计。 | 把 license、query format、index construction 与 cost 纳入 retrieval number 的可迁移性审计。 |
+| 🔭 前沿 | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | 2026-08-18 | 在统一页面排序协议下比较静态 ranker 与迭代视觉/OCR agent 的视觉文档检索基准。 | 在统一 top-10 输出下直接比较静态视觉检索与迭代式页面发现、检查。 |
 <!-- TABLE-FIRST:AREA:rag:END -->
 
 ### Data Agents
@@ -359,6 +554,7 @@
 | 🔭 前沿 | [StatABench](https://arxiv.org/abs/2606.22977) <!-- benchmark-id:statabench --> | 2026-06-22 | 同时评估统计知识、工具选择与参数设置，以及开放式建模和报告。 | 把封闭式统计问答和工具调用与端到端开放建模纳入同一套能力坐标。 |
 | 🔭 前沿 | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | 2026-07 | 用细粒度技能分类检查真实数据科学工作流的覆盖情况。 | 除了总成功率，还能审计这套基准覆盖了哪些技能。 |
 | 🔭 前沿 | [CausalDS](https://arxiv.org/abs/2607.08093) <!-- benchmark-id:causalds --> | 2026-07-09 | 在可执行数据科学环境中覆盖因果预测、识别、效应估计、反事实、不确定性与弃答。 | 把数据智能体评测从相关性和预测拓展到 Pearl 三阶因果推理及“无法作答”的识别。 |
+| 🔭 前沿 | [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) <!-- benchmark-id:data-eng-bench --> | 2026-07-29 | 面向仓库规模 dbt 转换的可执行数据工程基准，在 DuckDB 与 Snowflake 上做隐藏行级核验。 | 用可执行 dbt 任务和隐藏行级核验测数据工程；8 月修复暴露 evaluator reliability 也是测量对象。 |
 | 🔭 前沿 | [DataSpace](https://arxiv.org/abs/2608.03451) <!-- benchmark-id:dataspace --> | 2026-08 | 在混合数据库、文件、文档和多媒体的工作区中完成可验证分析。 | 寻找异构证据和核验完整结果成为一项统一任务。 |
 | 🔭 前沿 | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | 2026-08 | 使用笔记本、IDE、终端、浏览器和数据库完成完整数据科学工作流。 | 评测进入真实计算机环境，要求多阶段、多工具执行能够可靠衔接。 |
 | 🔭 前沿 | [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) <!-- benchmark-id:warehouse-reliability-bench --> | 2026-08-10 | 面对语义歧义、不可回答、模式漂移和对抗输入时，返回业务真值或正确地澄清、弃答、拒答。 | 从“SQL 能运行且结果匹配”转向“业务含义正确，并在不该给数字时不虚假成功”。 |
@@ -381,7 +577,7 @@
 | 你想理解什么 | 从这里开始 | 然后进入 |
 |---|---|---|
 | **记忆评测如何从回忆走向行动与治理？** | Multi-Session Chat → LoCoMo / LongMemEval → MemoryArena / WorldMemArena → GateMem / PerMemSafe / InMind | [Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) |
-| **检索评测如何变成实时、可审计的搜索？** | BEIR / BRIGHT → BrowseComp / LiveBrowseComp → Bright-Pro / LoHoSearch / SearchAuditBench → VAKRA | [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) |
+| **检索评测如何变成实时、可审计的搜索？** | BEIR / BRIGHT → BrowseComp / LiveBrowseComp → Bright-Pro / LoHoSearch / SearchAuditBench / VAKRA → MAPLE / VisDocAgentBench / WANDR | [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) |
 | **数据智能体评测如何从 SQL/代码走到可靠的数据工作？** | Spider / DS-1000 → KramaBench / DABstep → DataClawBench / DSGym → DataSpace / DSAgentBench / WarehouseReliabilityBench | [Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar#field-map) |
 
 <a id="library"></a>

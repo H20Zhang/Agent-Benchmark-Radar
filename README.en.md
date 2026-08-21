@@ -14,7 +14,7 @@ Start here to see **what Agent Memory, Agentic RAG, and Data Agents are being as
 
 > **Comparison rule.** A higher leaderboard score is system-level evidence unless model, accessible state, tool interface, prompts/hints, retries, stopping rule, evaluator, and relevant cost budgets are sufficiently matched.
 
-Last updated: **2026-08-20**
+Last updated: **2026-08-21**
 
 <a id="release-timeline"></a>
 ## Benchmark Timeline: Last Six Months
@@ -22,15 +22,25 @@ Last updated: **2026-08-20**
 This is ordered by the benchmark/paper's **source release time**, not by when the Radar accepted it. The window rolls six months back from the registry's latest verification date; month-precision releases retain their honest precision. The table is complete for the window, not curated.
 
 <!-- TABLE-FIRST:RECENT:START -->
-| Released | Area | Benchmark | What it evaluates | What changed |
+| Time | Area | Benchmark | What it tests | What changed |
 |---|---|---|---|---|
+| 2026-08-18 | RAG | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | Visual-document retrieval benchmark that compares static rankers and iterative visual/OCR agents under one ranked-page contract. | Compares static visual retrieval with iterative page discovery and inspection under one top-10 contract. |
 | 2026-08-17 | Data Agent | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | Structured dataset understanding before analysis, including logical tables, semantics, keys, relationships, and profiling signals. | Turns implicit data exploration from a prerequisite hidden behind final-answer accuracy into a directly scored artifact with measured downstream value. |
+| 2026-08-17 | Agent Memory | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost. | Places personalization benefit, authorization, and leakage risk in one memory-lifecycle protocol. |
+| 2026-08-17 | RAG | [The Commercial Tax](https://arxiv.org/abs/2608.16096) <!-- benchmark-id:commercial-tax --> | Retrieval reproducibility audit that binds raw embedder scores to licensing, query formatting, index construction, and deployment cost. | Audits retrieval-number transferability against license, query format, index construction, and cost. |
+| 2026-08-10 | RAG | [The Recall Trap](https://arxiv.org/abs/2608.14838) <!-- benchmark-id:recall-trap --> | Validity audit showing that higher file recall can reduce downstream repair success under a fixed-slot code-retrieval protocol. | Shows that higher file recall can lower repair success under fixed slots, limiting recall's interpretation. |
 | 2026-08-10 | Data Agent | [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) <!-- benchmark-id:warehouse-reliability-bench --> | Business-correct analytics plus appropriate clarification, abstention, or refusal under ambiguity, unanswerability, drift, and attacks. | Moves beyond executable SQL to business truth and correct non-answer behavior when returning a number would be false success. |
+| 2026-08-07 | RAG | [DAS-Bench / DAS-Eval](https://arxiv.org/abs/2608.18034) <!-- benchmark-id:das-bench --> | Academic-survey benchmark and evaluator that score literature coverage, taxonomy, claims, citations, discourse, and rendered artifact quality. | Turns coverage, taxonomy, claims, citations, discourse, and artifact quality into a 16-criterion survey protocol. |
 | 2026-08-05 | RAG | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | Localization, root-cause attribution, and repair of failures in long deep-search trajectories. | Adds expert critical-step labels, a six-way cause taxonomy, and repair-based recovery evaluation. |
+| 2026-08-04 | RAG | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | Scientific retrieval benchmark that measures whether one paper remains retrievable across motivation, method, and result aspects. | Measures whether one paper stays retrievable across aspects instead of only one-query relevance. |
+| 2026-08-04 | Agent Memory | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | Paired persistent-state benchmark that tests whether retained cross-episode experience causally improves later executable work. | Uses persistence-on/off controls to attribute executable cross-episode benefit to retained state. |
 | 2026-08 | Data Agent | [DataSpace](https://arxiv.org/abs/2608.03451) <!-- benchmark-id:dataspace --> | Evaluates verifiable analytics over heterogeneous workspaces where evidence spans databases, files, documents, and multimedia. | Unifies heterogeneous evidence discovery with deterministic complete-result evaluation in a task-local workspace. |
 | 2026-08 | Data Agent | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | Evaluates agents on complete data-science workflows inside real computer environments using notebooks, IDEs, terminals, browsers, and databases. | Moves data-agent evaluation into real computer environments where success requires multi-stage, multi-tool execution grounded in intermediate outputs. |
 | 2026-08 | RAG | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | Evaluates agents that must compose executable APIs, document retrieval, multi-hop reasoning, and natural-language tool-use policies. | Unifies structured API interaction and unstructured retrieval in one executable evaluation with policy constraints. |
+| 2026-07-29 | Data Agent | [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) <!-- benchmark-id:data-eng-bench --> | Executable data-engineering benchmark for repository-scale dbt transformations with hidden row-level verification on DuckDB and Snowflake. | Uses executable dbt tasks and hidden row-level checks; an August fix makes evaluator reliability part of the measurement object. |
 | 2026-07-27 | Agent Memory | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | Retrieval and use of a personal fact whose relevance to the query depends on world knowledge. | Paired controls separate storage, knowledge, routing, and final-use failures. |
+| 2026-07-21 | Agent Memory | [MemFuseBench](https://arxiv.org/abs/2608.18704) <!-- benchmark-id:memfusebench --> | Cross-source memory benchmark for linking, causal fusion, conflict arbitration, and provenance over heterogeneous event streams. | Separates linking, causal fusion, conflict handling, and provenance across heterogeneous sources. |
+| 2026-07-14 | RAG | [WANDR](https://arxiv.org/abs/2608.14747) <!-- benchmark-id:wandr --> | Live-web benchmark for wide-and-deep record collection with hierarchical tasks and reference-free record verification. | Combines open-set discovery, enrichment, and record-level verification on the live web. |
 | 2026-07-09 | Data Agent | [CausalDS](https://arxiv.org/abs/2607.08093) <!-- benchmark-id:causalds --> | Executable causal data science across prediction, identification, effects, counterfactuals, uncertainty, and abstention. | Extends data-agent evaluation beyond association and prediction to all Pearl rungs and recognition of unwarranted answers. |
 | 2026-07 | Data Agent | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | Benchmarks data agents across realistic data-science workflows using a skill taxonomy to quantify fine-grained coverage. | Makes data-science skill coverage itself explicit, enabling diagnosis beyond aggregate task success. |
 | 2026-07 | Agent Memory | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | Evaluates cognitive memory where agents must retain and apply latent user constraints even when later cues are semantically disconnected. | Moves the target from remembering explicit facts to applying latent user state, goals, and values when the cue no longer restates them. |
@@ -84,6 +94,156 @@ This is ordered by the benchmark/paper's **source release time**, not by when th
 ## Accepted-item deep reads
 
 This secondary layer retains v2 acceptance/provenance semantics. The table above is the primary research chronology by source release time.
+
+<a id="entry-commercial-tax"></a>
+<details><summary>2026-08-21 · The Commercial Tax · RAG / deployment validity <!-- timefirst:area=rag-deployment-validity --> — Rebinds a raw retrieval number to license, query format, index construction, and recurring cost. <!-- timefirst:delta=retrieval-number-to-deployment-envelope --></summary>
+
+**Question.** Can a benchmark embedding score transfer to production under licensing, formatting, and cost constraints? <!-- timefirst:question=is-retrieval-performance-portable-to-deployment -->
+
+**Evidence.** 13 embedders paired bootstrap, license provenance, and separated construction/query cost show that similar raw recall does not imply the same deployment meaning. <!-- timefirst:evidence=13-embedders-paired-bootstrap-license-cost~13-embedders-paired-bootstrap -->
+
+**Caveat.** Uneven format tuning, hosted drift, and a single corpus limit portability across models, systems, and time. <!-- timefirst:caveat=uneven-format-tuning-hosted-drift-single-corpus~uneven-format-tuning-hosted-drift -->
+
+**Map.** `reinforces`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Paper](https://arxiv.org/abs/2608.16096) · [Code](https://github.com/Toryx-AI/commercial-tax-multihop-retrieval) · [Reproduction artifact](https://doi.org/10.5281/zenodo.21972866) · [Local deep note](benchmarks/commercial-tax.en.md)
+
+</details>
+
+<a id="entry-das-bench"></a>
+<details><summary>2026-08-21 · DAS-Bench / DAS-Eval · RAG / academic-survey artifact <!-- timefirst:area=rag-academic-survey-artifact --> — Extends retrieval/drafting into a revisable protocol for literature, taxonomy, claims, citations, discourse, and rendered artifacts. <!-- timefirst:delta=answer-quality-to-publication-oriented-survey-protocol --></summary>
+
+**Question.** Can a system assemble literature evidence into an auditable, readable, publication-oriented survey? <!-- timefirst:question=assemble-grounded-and-auditable-academic-surveys -->
+
+**Evidence.** 30 topics 16 criteria combine deterministic citation checks with blinded expert comparison across evidence, taxonomy, claims, discourse, and artifact quality. <!-- timefirst:evidence=30-topics-16-criteria-expert-comparison~30-topics-16-criteria -->
+
+**Caveat.** Generation backbone main judge coupling plus closed-system native configurations keep cross-system gaps at the system level. <!-- timefirst:caveat=generation-backbone-and-main-judge-coupling~generation-backbone-main-judge -->
+
+**Map.** `early_signal`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Paper](https://arxiv.org/abs/2608.18034) · [Benchmark and evaluator](https://github.com/ZhikaiXu24/DAS) · [Data](https://huggingface.co/datasets/ZhikaiXu24/DAS-Bench) · [Local deep note](benchmarks/das-bench.en.md)
+
+</details>
+
+<a id="entry-data-eng-bench"></a>
+<details><summary>2026-08-21 · data-eng-bench · Data Agent / executable data engineering <!-- timefirst:area=data-agent-executable-data-engineering --> — Moves code generation into repository-scale dbt transformation with hidden row-level verification. <!-- timefirst:delta=code-generation-to-repository-scale-verified-transformation --></summary>
+
+**Question.** Can an agent implement, execute, and repair data transformations under real project constraints? <!-- timefirst:question=implement-and-verify-production-shaped-dbt-work -->
+
+**Evidence.** Across 103 dbt tasks hidden verifiers on DuckDB and Snowflake, hidden row-level verifiers inspect outputs; the August repair exposes evaluator reliability as a measurement condition. <!-- timefirst:evidence=103-dbt-tasks-hidden-row-level-verifiers~103-dbt-tasks-hidden-verifiers -->
+
+**Caveat.** The Snowflake verifier without rerun means pre-fix leaderboard results are not directly comparable with the repaired environment. <!-- timefirst:caveat=snowflake-verifier-fix-without-rerun~snowflake-verifier-without-rerun -->
+
+**Map.** `early_signal`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Benchmark repository](https://github.com/Snowflake-Labs/data-eng-bench) · [Protocol fix](https://github.com/Snowflake-Labs/data-eng-bench/commit/35b83370bd9ae06d9ac8a2beb95d2544c90d88a5) · [Local deep note](benchmarks/data-eng-bench.en.md)
+
+</details>
+
+<a id="entry-maple"></a>
+<details><summary>2026-08-21 · MAPLE · RAG / multi-aspect scientific retrieval <!-- timefirst:area=rag-multi-aspect-scientific-retrieval --> — Splits single-query relevance from consistent retrieval of one paper across motivation, method, and result aspects. <!-- timefirst:delta=single-query-relevance-to-cross-aspect-consistency --></summary>
+
+**Question.** Can a retriever recover the same target paper across queries about different aspects? <!-- timefirst:question=retrieve-one-paper-across-multiple-aspects -->
+
+**Evidence.** Across 2095 queries 210 papers, the matched single-query recall versus AllAspect gap shows how one-hit relevance hides cross-aspect failure. <!-- timefirst:evidence=2095-queries-210-papers-allaspect-gap~2095-queries-210-papers -->
+
+**Caveat.** Generated queries single domain, and model-validated hard negatives can introduce style bias and label noise. <!-- timefirst:caveat=generated-queries-single-domain-and-label-noise~generated-queries-single-domain -->
+
+**Map.** `reinforces`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Paper](https://arxiv.org/abs/2608.15624) · [Code](https://github.com/Ggballs/MAPLE) · [Data](https://huggingface.co/datasets/kai-02/MAPLE) · [Local deep note](benchmarks/maple.en.md)
+
+</details>
+
+<a id="entry-memfusebench"></a>
+<details><summary>2026-08-21 · MemFuseBench · Agent Memory / cross-source fusion <!-- timefirst:area=memory-cross-source-fusion --> — Moves from single-history recall to linking, causal fusion, conflict handling, and provenance across devices, users, and time. <!-- timefirst:delta=single-history-recall-to-multi-source-fusion --></summary>
+
+**Question.** Can a system select, fuse, and arbitrate source-tagged memories without losing provenance? <!-- timefirst:question=link-fuse-and-arbitrate-source-tagged-memory -->
+
+**Evidence.** The 357 questions 7823 events, and six diagnostics isolate linking, causal fusion, conflict handling, and provenance. <!-- timefirst:evidence=357-questions-7823-events-six-diagnostics~357-questions-7823-events -->
+
+**Caveat.** Synthetic generation human ceiling evidence is absent; model-guided verification and do not establish external validity on real user histories. <!-- timefirst:caveat=synthetic-generation-without-human-ceiling~synthetic-generation-human-ceiling -->
+
+**Map.** `early_signal`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Paper](https://arxiv.org/abs/2608.18704) · [Data](https://github.com/Darwin-Agent/Mi-Memory/tree/master/MemFuse/MemFuseBench) · [Local deep note](benchmarks/memfusebench.en.md)
+
+</details>
+
+<a id="entry-past-bench"></a>
+<details><summary>2026-08-21 · PAST-Bench · Agent Memory / cross-episode causal attribution <!-- timefirst:area=memory-cross-episode-causal-attribution --> — Moves from visible-history recall to whether persistence causally improves later executable tasks. <!-- timefirst:delta=visible-history-recall-to-persistent-state-attribution --></summary>
+
+**Question.** After context clearing, does retained state actually cause better downstream task performance? <!-- timefirst:question=does-retained-state-cause-later-executable-benefit -->
+
+**Evidence.** Across 26 families 204 episodes, persistence-on/off runs match seeds, prompts, and graders and retain artifact/trace evidence. <!-- timefirst:evidence=26-families-204-episodes-paired-persistence~26-families-204-episodes -->
+
+**Caveat.** Generated tasks related graders can create model-family template familiarity, and the study does not cover months-long deployment. <!-- timefirst:caveat=generated-task-and-grader-coupling~generated-tasks-related-graders -->
+
+**Map.** `early_signal`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Paper](https://arxiv.org/abs/2608.04003) · [Code](https://github.com/Gen-Verse/PAST-Bench) · [Local deep note](benchmarks/past-bench.en.md)
+
+</details>
+
+<a id="entry-recall-trap"></a>
+<details><summary>2026-08-21 · The Recall Trap · RAG / retrieval validity <!-- timefirst:area=rag-retrieval-validity --> — Audits the proxy assumption that higher recall is better using downstream executable outcomes. <!-- timefirst:delta=recall-proxy-to-downstream-causal-audit --></summary>
+
+**Question.** Under fixed context slots, does higher file recall actually improve issue resolution? <!-- timefirst:question=does-higher-recall-improve-executable-resolution -->
+
+**Evidence.** Paired fixed pack Docker evaluation shows that higher recall can coincide with a lower resolve rate for dense retrieval, with an open-weight replication. <!-- timefirst:evidence=paired-fixed-pack-official-docker-grading~paired-fixed-pack-docker -->
+
+**Caveat.** The compound dedup fixed slots treatment changes breadth, depth, rank, position, tokens, and distractors together; the causal result is limited to fixed slots. <!-- timefirst:caveat=compound-dedup-treatment-under-fixed-slots~compound-dedup-fixed-slots -->
+
+**Map.** `reinforces`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Paper](https://arxiv.org/abs/2608.14838) · [Reproduction artifact](https://doi.org/10.5281/zenodo.21879550) · [Local deep note](benchmarks/recall-trap.en.md)
+
+</details>
+
+<a id="entry-sp-mem"></a>
+<details><summary>2026-08-21 · SP-Mem Privacy-Aware Memory Benchmark · Agent Memory / lifecycle privacy <!-- timefirst:area=memory-lifecycle-privacy --> — Places memory utility, consent, authorization, exact-value exposure, and cost in one protocol. <!-- timefirst:delta=memory-utility-to-consent-aware-privacy-tradeoff --></summary>
+
+**Question.** Can personalized memory be used only when necessary and authorized without exposing private values? <!-- timefirst:question=balance-personalization-authorization-and-exposure -->
+
+**Evidence.** Matched modes over 1000 profiles 5400 queries, and four domains score response quality, authorization requests, and exact-value exposure together. <!-- timefirst:evidence=1000-profiles-5400-queries-four-domains~1000-profiles-5400-queries -->
+
+**Caveat.** An explicit consent exact string proxy omits inference, re-identification, and adversarial multi-turn disclosure. <!-- timefirst:caveat=explicit-consent-and-exact-string-proxy~explicit-consent-exact-string -->
+
+**Map.** `early_signal`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Paper](https://arxiv.org/abs/2608.16551) · [Code and data](https://github.com/Jensassss/SP-Mem) · [Local deep note](benchmarks/sp-mem.en.md)
+
+</details>
+
+<a id="entry-visdocagentbench"></a>
+<details><summary>2026-08-21 · VisDocAgentBench · RAG / agentic visual-document retrieval <!-- timefirst:area=rag-agentic-visual-document-retrieval --> — Compares static rankers with search/inspection agents under the same ranked-page output. <!-- timefirst:delta=static-page-ranking-to-iterative-discovery-and-inspection --></summary>
+
+**Question.** Can an agent use search, visual inspection, and OCR to place distributed evidence pages in the top 10? <!-- timefirst:question=rank-visual-pages-through-search-and-inspection -->
+
+**Evidence.** Across 2375 pages 120 queries, a shared top-10 contract plus support interventions and ablations makes discovery and inspection visible. <!-- timefirst:evidence=2375-pages-120-queries-shared-top10-contract~2375-pages-120-queries -->
+
+**Caveat.** The 120 queries, six cross-document paths, and unmatched agent routes limit causal attribution to a planner or vision component. <!-- timefirst:caveat=small-query-set-and-unmatched-agent-routes~120-queries-six-cross-document -->
+
+**Map.** `reinforces`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Paper](https://arxiv.org/abs/2608.17889) · [Code](https://github.com/hulx2002/VisDocAgentBench) · [Data](https://huggingface.co/datasets/hulx2002/VisDocAgentBench) · [Local deep note](benchmarks/visdocagentbench.en.md)
+
+</details>
+
+<a id="entry-wandr"></a>
+<details><summary>2026-08-21 · WANDR · RAG / live wide-and-deep search <!-- timefirst:area=rag-wide-deep-live-web --> — Extends answer search to open-set discovery, hierarchical enrichment, and record-level refetch verification. <!-- timefirst:delta=answer-search-to-open-set-record-collection --></summary>
+
+**Question.** Can an agent discover, enrich, and verify live-web records without knowing the complete set? <!-- timefirst:question=discover-enrich-and-verify-live-web-records -->
+
+**Evidence.** 500 Harbor task packages use required-volume denominators and URL/excerpt refetch to expose losses in discovery, support, and enrichment. <!-- timefirst:evidence=500-harbor-packages-record-refetch-verification~500-harbor-task-packages -->
+
+**Caveat.** Unmatched stacks shared fetch, web drift, and an LLM judge make the results system-level evidence only. <!-- timefirst:caveat=unmatched-stacks-shared-fetch-and-web-drift~unmatched-stacks-shared-fetch -->
+
+**Map.** `reinforces`; this is an auditable evaluation change; one paper is only a signal, and durable map edits require independent support bound to one direction.
+
+**Links.** [Paper](https://arxiv.org/abs/2608.14747) · [Benchmark](https://github.com/perplexityai/wandr) · [Local deep note](benchmarks/wandr.en.md)
+
+</details>
 
 <a id="entry-dsagentbench"></a>
 <details><summary>2026-08 · DSAgentBench · Data Agent / end-to-end data science in real computers <!-- timefirst:area=data-agent-real-computer-workflow --> — Moves evaluation from isolated code/answer stages to complete multi-tool workflows grounded in intermediate outputs. <!-- timefirst:delta=isolated-stages-to-end-to-end-workflow --></summary>
@@ -209,16 +369,34 @@ This secondary layer retains v2 acceptance/provenance semantics. The table above
 ## 7 days / 30 days: What Changed in the Evaluation Object
 
 <a id="last-7-days"></a>
-### Last 7 days: 2026-08-14—2026-08-20
+### Last 7 days: 2026-08-15—2026-08-21
 
-- **`no_material_change` · Benchmark acceptance time: no new direction is attributable to Radar acceptance time in this window.** <!-- timefirst:direction key="benchmark-acceptance-time" state="no_material_change" supports="none" confidence="high" implication="require-native-v2-times-for-period-claims" timing="radar_published_at" synthesized="2026-08-20T00:00:00Z" prior="none" -->
-  Supports: **none**; confidence: **high**; timing basis: `radar_published_at`; prior map evidence: `none`. Research-design implication (require native v2 times for period claims): legacy Timeline records are historical context only, not support; only records with native v2 Radar acceptance times can support the window. Exact synthesis time: `2026-08-20T00:00:00Z` (UTC).
+- **`reinforced` · structured evidence coverage: evaluation is moving from single-hit relevance to structured coverage across aspects, paths, and hierarchies.** <!-- timefirst:direction key="structured-evidence-coverage" state="reinforced" supports="maple,visdocagentbench,wandr" confidence="high" implication="measure-coverage-not-only-single-hit-relevance" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="field-map" -->
+  Supports: [MAPLE](#entry-maple) · [VisDocAgentBench](#entry-visdocagentbench) · [WANDR](#entry-wandr); confidence: **high**; timing basis: `radar_published_at`; prior map evidence: [RAG Field Map](#field-map). Research-design implication (measure coverage not only single hit relevance): report aspect/set/path coverage and discovery loss instead of letting one hit stand in for complete evidence acquisition. Exact synthesis time: `2026-08-21T00:48:57Z` (UTC).
+
+- **`reinforced` · retrieval harness validity: retrieval scores must be bound to packing, format, license, cost, and downstream execution envelope.** <!-- timefirst:direction key="retrieval-harness-validity" state="reinforced" supports="commercial-tax,recall-trap" confidence="high" implication="bind-retrieval-scores-to-harness-and-deployment" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="field-map" -->
+  Supports: [The Commercial Tax](#entry-commercial-tax) · [The Recall Trap](#entry-recall-trap); confidence: **high**; timing basis: `radar_published_at`; prior map evidence: [RAG Field Map](#field-map). Research-design implication (bind retrieval scores to harness and deployment): matching the model is insufficient; packing, query format, index, licensing, and cost must be fixed, and recall proxies checked against downstream outcomes. Exact synthesis time: `2026-08-21T00:48:57Z` (UTC).
+
+- **`new_signal` · memory lifecycle privacy: memory evaluation is starting to measure personalization, authorization, and exposure in one lifecycle.** <!-- timefirst:direction key="memory-lifecycle-privacy" state="new_signal" supports="sp-mem" confidence="medium" implication="score-memory-utility-with-authorization-and-exposure" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="none" -->
+  Supports: [SP-Mem Privacy-Aware Memory Benchmark](#entry-sp-mem); confidence: **medium**; timing basis: `radar_published_at`; prior map evidence: `none`. Research-design implication (score memory utility with authorization and exposure): report usefulness separately from necessity, authorization requests, and leakage; one work is only an early signal. Exact synthesis time: `2026-08-21T00:48:57Z` (UTC).
+
+- **`new_signal` · executable verifier reliability: an executable Data Agent benchmark must version its evaluator and backend reliability.** <!-- timefirst:direction key="executable-verifier-reliability" state="new_signal" supports="data-eng-bench" confidence="high" implication="version-verifiers-and-rerun-after-protocol-fixes" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="none" -->
+  Supports: [data-eng-bench](#entry-data-eng-bench); confidence: **high**; timing basis: `radar_published_at`; prior map evidence: `none`. Research-design implication (version verifiers and rerun after protocol fixes): rerun after evaluator or environment repairs; old scores cannot silently carry into a new protocol. Exact synthesis time: `2026-08-21T00:48:57Z` (UTC).
 
 <a id="last-30-days"></a>
-### Last 30 days: 2026-07-22—2026-08-20
+### Last 30 days: 2026-07-23—2026-08-21
 
-- **`no_material_change` · Benchmark acceptance time: no new direction is attributable to Radar acceptance time in this window.** <!-- timefirst:direction key="benchmark-acceptance-time" state="no_material_change" supports="none" confidence="high" implication="require-native-v2-times-for-period-claims" timing="radar_published_at" synthesized="2026-08-20T00:00:00Z" prior="none" -->
-  Supports: **none**; confidence: **high**; timing basis: `radar_published_at`; prior map evidence: `none`. Research-design implication (require native v2 times for period claims): DSAgentBench, VAKRA, DataSpace, LoCoMo-Plus, Mem2ActBench, and AgenticDataBench are historical context only, not support for this window; their month-precision records cannot establish a Radar acceptance inside it. Exact synthesis time: `2026-08-20T00:00:00Z` (UTC).
+- **`reinforced` · structured evidence coverage: evaluation is moving from single-hit relevance to structured coverage across aspects, paths, and hierarchies.** <!-- timefirst:direction key="structured-evidence-coverage" state="reinforced" supports="maple,visdocagentbench,wandr" confidence="high" implication="measure-coverage-not-only-single-hit-relevance" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="field-map" -->
+  Supports: [MAPLE](#entry-maple) · [VisDocAgentBench](#entry-visdocagentbench) · [WANDR](#entry-wandr); confidence: **high**; timing basis: `radar_published_at`; prior map evidence: [RAG Field Map](#field-map). Research-design implication (measure coverage not only single hit relevance): report aspect/set/path coverage and discovery loss instead of letting one hit stand in for complete evidence acquisition. Exact synthesis time: `2026-08-21T00:48:57Z` (UTC).
+
+- **`reinforced` · retrieval harness validity: retrieval scores must be bound to packing, format, license, cost, and downstream execution envelope.** <!-- timefirst:direction key="retrieval-harness-validity" state="reinforced" supports="commercial-tax,recall-trap" confidence="high" implication="bind-retrieval-scores-to-harness-and-deployment" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="field-map" -->
+  Supports: [The Commercial Tax](#entry-commercial-tax) · [The Recall Trap](#entry-recall-trap); confidence: **high**; timing basis: `radar_published_at`; prior map evidence: [RAG Field Map](#field-map). Research-design implication (bind retrieval scores to harness and deployment): matching the model is insufficient; packing, query format, index, licensing, and cost must be fixed, and recall proxies checked against downstream outcomes. Exact synthesis time: `2026-08-21T00:48:57Z` (UTC).
+
+- **`new_signal` · memory lifecycle privacy: memory evaluation is starting to measure personalization, authorization, and exposure in one lifecycle.** <!-- timefirst:direction key="memory-lifecycle-privacy" state="new_signal" supports="sp-mem" confidence="medium" implication="score-memory-utility-with-authorization-and-exposure" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="none" -->
+  Supports: [SP-Mem Privacy-Aware Memory Benchmark](#entry-sp-mem); confidence: **medium**; timing basis: `radar_published_at`; prior map evidence: `none`. Research-design implication (score memory utility with authorization and exposure): report usefulness separately from necessity, authorization requests, and leakage; one work is only an early signal. Exact synthesis time: `2026-08-21T00:48:57Z` (UTC).
+
+- **`new_signal` · executable verifier reliability: an executable Data Agent benchmark must version its evaluator and backend reliability.** <!-- timefirst:direction key="executable-verifier-reliability" state="new_signal" supports="data-eng-bench" confidence="high" implication="version-verifiers-and-rerun-after-protocol-fixes" timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" prior="none" -->
+  Supports: [data-eng-bench](#entry-data-eng-bench); confidence: **high**; timing basis: `radar_published_at`; prior map evidence: `none`. Research-design implication (version verifiers and rerun after protocol fixes): rerun after evaluator or environment repairs; old scores cannot silently carry into a new protocol. Exact synthesis time: `2026-08-21T00:48:57Z` (UTC).
 
 <a id="evolution"></a>
 ## Three Areas
@@ -240,6 +418,14 @@ From cross-session factual recall toward online updating, structured memory, mul
 ### RAG / Agentic Retrieval
 From document relevance toward multi-hop evidence composition, live search, stopping, cross-source execution, and trace auditing.
 
+**Defining chain:** [HotpotQA](https://aclanthology.org/D18-1259/) → [BEIR](https://arxiv.org/abs/2104.08663) / [BRIGHT](https://arxiv.org/abs/2407.12883) → [BrowseComp](https://arxiv.org/abs/2504.12516) → [AutoResearchBench](https://arxiv.org/abs/2604.25256) / [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) → [LiveBrowseComp](https://arxiv.org/abs/2605.28721) / [LoHoSearch](https://arxiv.org/abs/2606.12837) → [SearchAuditBench](https://arxiv.org/abs/2608.05212) / [VAKRA](https://arxiv.org/abs/2608.12282) → [MAPLE](https://arxiv.org/abs/2608.15624) / [VisDocAgentBench](https://arxiv.org/abs/2608.17889) / [WANDR](https://arxiv.org/abs/2608.14747)
+
+**Frontier signal:** evaluation is splitting relevance from aspect coverage, target finding from exhaustive set collection, and final correctness from stopping, calibration, failure localization, repair, security, multimodal evidence, and live-web freshness.
+
+**Biggest gap:** causal attribution under matched interface/harness/model/budget, especially for long-horizon live environments where web state drifts.
+
+[Open the complete RAG benchmark table →](library/README.en.md#rag--agentic-retrieval) · [Continue into Agentic RAG methods/systems →](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map)
+
 <a id="benchmark-data"></a>
 ### Data Agents
 From text-to-SQL / code generation toward complete data workflows, exploration, statistical/causal analysis, and business-semantic reliability.
@@ -247,7 +433,7 @@ From text-to-SQL / code generation toward complete data workflows, exploration, 
 <a id="all-benchmarks"></a>
 ## All Benchmarks by Area
 
-All 95 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
+All 105 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
 
 ### Agent Memory
 
@@ -284,7 +470,10 @@ All 95 benchmarks in the registry remain directly scannable here. The Library is
 | 🔭 Frontier | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 2026-07 | Evaluates multimodal long-term conversational memory across extraction and test-time adaptation, reasoning, and memory knowledge management. | Makes visual retention, multimodal reasoning, and memory organization first-class long-term-memory evaluation targets. |
 | 🔭 Frontier | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | 2026-07 | Evaluates whether long-term memory is proactively used for tool selection and parameter grounding during tool-based assistant actions. | Makes action-level memory utilization directly measurable instead of reading memory quality only through answers about past context. |
 | 🔭 Frontier | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | 2026-07 | Recognition and updating of implicit personalized risk across long, noise-heavy histories. | Extends user-state memory to evolving personalized safety while retaining helpfulness. |
+| 🔭 Frontier | [MemFuseBench](https://arxiv.org/abs/2608.18704) <!-- benchmark-id:memfusebench --> | 2026-07-21 | Cross-source memory benchmark for linking, causal fusion, conflict arbitration, and provenance over heterogeneous event streams. | Separates linking, causal fusion, conflict handling, and provenance across heterogeneous sources. |
 | 🔭 Frontier | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | 2026-07-27 | Retrieval and use of a personal fact whose relevance to the query depends on world knowledge. | Paired controls separate storage, knowledge, routing, and final-use failures. |
+| 🔭 Frontier | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | 2026-08-04 | Paired persistent-state benchmark that tests whether retained cross-episode experience causally improves later executable work. | Uses persistence-on/off controls to attribute executable cross-episode benefit to retained state. |
+| 🔭 Frontier | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | 2026-08-17 | Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost. | Places personalization benefit, authorization, and leakage risk in one memory-lifecycle protocol. |
 <!-- TABLE-FIRST:AREA:agent-memory:END -->
 
 ### RAG / Agentic Retrieval
@@ -323,8 +512,14 @@ All 95 benchmarks in the registry remain directly scannable here. The Library is
 | 🔭 Frontier | [LiveBrowseComp](https://arxiv.org/abs/2605.28721) <!-- benchmark-id:livebrowsecomp --> | 2026-05-27 | Retrieval of recent low-salience web facts rather than verification of parametric knowledge. | Uses facts from the preceding 90 days plus closed-book and source-removal diagnostics. |
 | 🔭 Frontier | [EvoBrowseComp](https://arxiv.org/abs/2606.13120) <!-- benchmark-id:evobrowsecomp --> | 2026-06-11 | Broad English and Chinese web search over evolving knowledge. | Introduces an automatically refreshable bilingual live-web question-generation pipeline. |
 | 🔭 Frontier | [LoHoSearch](https://arxiv.org/abs/2606.12837) <!-- benchmark-id:lohosearch --> | 2026-06-11 | Long-horizon search under large candidate spaces, complex constraints, and context-management pressure. | Controls search-space size and structural complexity through a knowledge graph rather than annotator intuition alone. |
+| 🔭 Frontier | [WANDR](https://arxiv.org/abs/2608.14747) <!-- benchmark-id:wandr --> | 2026-07-14 | Live-web benchmark for wide-and-deep record collection with hierarchical tasks and reference-free record verification. | Combines open-set discovery, enrichment, and record-level verification on the live web. |
 | 🔭 Frontier | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | 2026-08 | Evaluates agents that must compose executable APIs, document retrieval, multi-hop reasoning, and natural-language tool-use policies. | Unifies structured API interaction and unstructured retrieval in one executable evaluation with policy constraints. |
+| 🔭 Frontier | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | 2026-08-04 | Scientific retrieval benchmark that measures whether one paper remains retrievable across motivation, method, and result aspects. | Measures whether one paper stays retrievable across aspects instead of only one-query relevance. |
 | 🔭 Frontier | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | 2026-08-05 | Localization, root-cause attribution, and repair of failures in long deep-search trajectories. | Adds expert critical-step labels, a six-way cause taxonomy, and repair-based recovery evaluation. |
+| 🔭 Frontier | [DAS-Bench / DAS-Eval](https://arxiv.org/abs/2608.18034) <!-- benchmark-id:das-bench --> | 2026-08-07 | Academic-survey benchmark and evaluator that score literature coverage, taxonomy, claims, citations, discourse, and rendered artifact quality. | Turns coverage, taxonomy, claims, citations, discourse, and artifact quality into a 16-criterion survey protocol. |
+| 🔭 Frontier | [The Recall Trap](https://arxiv.org/abs/2608.14838) <!-- benchmark-id:recall-trap --> | 2026-08-10 | Validity audit showing that higher file recall can reduce downstream repair success under a fixed-slot code-retrieval protocol. | Shows that higher file recall can lower repair success under fixed slots, limiting recall's interpretation. |
+| 🔭 Frontier | [The Commercial Tax](https://arxiv.org/abs/2608.16096) <!-- benchmark-id:commercial-tax --> | 2026-08-17 | Retrieval reproducibility audit that binds raw embedder scores to licensing, query formatting, index construction, and deployment cost. | Audits retrieval-number transferability against license, query format, index construction, and cost. |
+| 🔭 Frontier | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | 2026-08-18 | Visual-document retrieval benchmark that compares static rankers and iterative visual/OCR agents under one ranked-page contract. | Compares static visual retrieval with iterative page discovery and inspection under one top-10 contract. |
 <!-- TABLE-FIRST:AREA:rag:END -->
 
 ### Data Agents
@@ -359,6 +554,7 @@ All 95 benchmarks in the registry remain directly scannable here. The Library is
 | 🔭 Frontier | [StatABench](https://arxiv.org/abs/2606.22977) <!-- benchmark-id:statabench --> | 2026-06-22 | Statistical knowledge, tool selection and parameterization, plus open end-to-end modeling and reporting. | Connects closed statistical diagnostics and tool use with open-ended modeling projects in one coordinate system. |
 | 🔭 Frontier | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | 2026-07 | Benchmarks data agents across realistic data-science workflows using a skill taxonomy to quantify fine-grained coverage. | Makes data-science skill coverage itself explicit, enabling diagnosis beyond aggregate task success. |
 | 🔭 Frontier | [CausalDS](https://arxiv.org/abs/2607.08093) <!-- benchmark-id:causalds --> | 2026-07-09 | Executable causal data science across prediction, identification, effects, counterfactuals, uncertainty, and abstention. | Extends data-agent evaluation beyond association and prediction to all Pearl rungs and recognition of unwarranted answers. |
+| 🔭 Frontier | [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) <!-- benchmark-id:data-eng-bench --> | 2026-07-29 | Executable data-engineering benchmark for repository-scale dbt transformations with hidden row-level verification on DuckDB and Snowflake. | Uses executable dbt tasks and hidden row-level checks; an August fix makes evaluator reliability part of the measurement object. |
 | 🔭 Frontier | [DataSpace](https://arxiv.org/abs/2608.03451) <!-- benchmark-id:dataspace --> | 2026-08 | Evaluates verifiable analytics over heterogeneous workspaces where evidence spans databases, files, documents, and multimedia. | Unifies heterogeneous evidence discovery with deterministic complete-result evaluation in a task-local workspace. |
 | 🔭 Frontier | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | 2026-08 | Evaluates agents on complete data-science workflows inside real computer environments using notebooks, IDEs, terminals, browsers, and databases. | Moves data-agent evaluation into real computer environments where success requires multi-stage, multi-tool execution grounded in intermediate outputs. |
 | 🔭 Frontier | [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) <!-- benchmark-id:warehouse-reliability-bench --> | 2026-08-10 | Business-correct analytics plus appropriate clarification, abstention, or refusal under ambiguity, unanswerability, drift, and attacks. | Moves beyond executable SQL to business truth and correct non-answer behavior when returning a number would be false success. |
@@ -381,7 +577,7 @@ All 95 benchmarks in the registry remain directly scannable here. The Library is
 | Question | Start here | Then continue |
 |---|---|---|
 | **How did memory move from recall to action and governance?** | Multi-Session Chat → LoCoMo / LongMemEval → MemoryArena / WorldMemArena → GateMem / PerMemSafe / InMind | [Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) |
-| **How did retrieval become live, auditable search?** | BEIR / BRIGHT → BrowseComp / LiveBrowseComp → Bright-Pro / LoHoSearch / SearchAuditBench → VAKRA | [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) |
+| **How did retrieval become live, auditable search?** | BEIR / BRIGHT → BrowseComp / LiveBrowseComp → Bright-Pro / LoHoSearch / SearchAuditBench / VAKRA → MAPLE / VisDocAgentBench / WANDR | [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) |
 | **How did data-agent evaluation move from SQL/code to reliable data work?** | Spider / DS-1000 → KramaBench / DABstep → DataClawBench / DSGym → DataSpace / DSAgentBench / WarehouseReliabilityBench | [Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar#field-map) |
 
 <a id="library"></a>

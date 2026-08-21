@@ -174,11 +174,11 @@ DIRECTION_STATES = frozenset(
     )
 )
 CONFIDENCE_VALUES = frozenset(("low", "medium", "high"))
-SYNTHESIS_TIMESTAMP = "2026-08-20T00:00:00Z"
-SYNTHESIS_DATE = date(2026, 8, 20)
+SYNTHESIS_TIMESTAMP = "2026-08-21T00:48:57Z"
+SYNTHESIS_DATE = date(2026, 8, 21)
 EXPECTED_PERIOD_WINDOWS = {
-    "last-7-days": (date(2026, 8, 14), SYNTHESIS_DATE),
-    "last-30-days": (date(2026, 7, 22), SYNTHESIS_DATE),
+    "last-7-days": (date(2026, 8, 15), SYNTHESIS_DATE),
+    "last-30-days": (date(2026, 7, 23), SYNTHESIS_DATE),
 }
 
 

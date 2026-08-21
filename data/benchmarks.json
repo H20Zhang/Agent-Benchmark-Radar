@@ -3969,5 +3969,478 @@
       "code": "https://github.com/yeasen-z/LeakDojo"
     },
     "last_verified": "2026-08-20"
+  },
+  {
+    "id": "memfusebench",
+    "name": "MemFuseBench",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-07-21",
+    "importance": 4,
+    "status": "active",
+    "summary": "Cross-source memory benchmark for linking, causal fusion, conflict arbitration, and provenance over heterogeneous event streams.",
+    "capabilities": [
+      "cross-source-linking",
+      "causal-fusion",
+      "conflict-arbitration",
+      "provenance-reasoning"
+    ],
+    "environment": [
+      "multi-source-event-streams",
+      "synthetic-latent-scenes"
+    ],
+    "protocol": [
+      "evidence-checklists",
+      "adversarial-distractors",
+      "six-diagnostic-categories"
+    ],
+    "scale": "357 questions over 7,823 source-tagged events with six diagnostic categories.",
+    "measurement_strength": "Makes source linking, causal fusion, conflict handling, and provenance separately observable instead of collapsing them into long-context recall.",
+    "coverage_gap": "Synthetic construction and model-guided verification have no human ceiling or demonstrated real-world external validity.",
+    "confounders": [
+      "synthetic-generator-style",
+      "model-guided-verification",
+      "missing-human-ceiling"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.18704",
+      "data": "https://github.com/Darwin-Agent/Mi-Memory/tree/master/MemFuse/MemFuseBench"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-07-21T11:10:38Z",
+    "first_seen_at": "2026-08-21T00:29:37Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "version_events": [
+      {
+        "published_at": "2026-08-19T09:04:07Z",
+        "kind": "material-dataset-and-protocol-release",
+        "source": "https://arxiv.org/abs/2608.18704"
+      }
+    ]
+  },
+  {
+    "id": "sp-mem",
+    "name": "SP-Mem Privacy-Aware Memory Benchmark",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-08-17",
+    "importance": 4,
+    "status": "active",
+    "summary": "Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost.",
+    "capabilities": [
+      "consent-aware-memory",
+      "privacy-preserving-personalization",
+      "authorization-requesting"
+    ],
+    "environment": [
+      "synthetic-user-profiles",
+      "privacy-and-preference-scenarios"
+    ],
+    "protocol": [
+      "matched-privacy-preference-modes",
+      "pairwise-quality",
+      "exact-value-leakage",
+      "cost-accounting"
+    ],
+    "scale": "1,000 synthetic profiles, 5,400 queries, four domains, and 376 subtasks.",
+    "measurement_strength": "Places memory usefulness and privacy authorization in the same write-store-retrieve-use evaluation lifecycle.",
+    "coverage_gap": "Explicit consent labels and exact-string leakage miss inference, re-identification, and adversarial multi-turn disclosure.",
+    "confounders": [
+      "synthetic-consent-labels",
+      "benchmark-system-codesign",
+      "exact-string-leakage-proxy"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.16551",
+      "code": "https://github.com/Jensassss/SP-Mem"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-08-17T13:23:39Z",
+    "first_seen_at": "2026-08-21T00:29:37Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "direction_keys": [
+      "memory-lifecycle-privacy"
+    ]
+  },
+  {
+    "id": "past-bench",
+    "name": "PAST-Bench",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-08-04",
+    "importance": 4,
+    "status": "active",
+    "summary": "Paired persistent-state benchmark that tests whether retained cross-episode experience causally improves later executable work.",
+    "capabilities": [
+      "cross-episode-learning",
+      "persistent-state-use",
+      "mechanism-attribution"
+    ],
+    "environment": [
+      "fresh-agent-sessions",
+      "tool-using-executable-tasks"
+    ],
+    "protocol": [
+      "persistence-on-off-pairs",
+      "matched-seeds-prompts-graders",
+      "artifact-and-trace-evidence"
+    ],
+    "scale": "26 task families and 204 executable episodes with paired persistence controls.",
+    "measurement_strength": "Moves persistent memory from visible-history recall to controlled attribution of downstream executable benefit.",
+    "coverage_gap": "Generated tasks and graders may favor related frontier coding-model templates, and the study remains short of months-long deployment.",
+    "confounders": [
+      "task-generator-model-family",
+      "grader-coupling",
+      "tool-harness"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.04003",
+      "code": "https://github.com/Gen-Verse/PAST-Bench"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-08-04T17:58:05Z",
+    "first_seen_at": "2026-08-21T00:29:37Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal"
+  },
+  {
+    "id": "wandr",
+    "name": "WANDR",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-07-14",
+    "importance": 4,
+    "status": "active",
+    "summary": "Live-web benchmark for wide-and-deep record collection with hierarchical tasks and reference-free record verification.",
+    "capabilities": [
+      "open-set-discovery",
+      "record-enrichment",
+      "wide-and-deep-research"
+    ],
+    "environment": [
+      "live-public-web",
+      "hierarchical-record-collection"
+    ],
+    "protocol": [
+      "required-volume-denominators",
+      "record-level-url-excerpt-refetch",
+      "soft-and-hard-f1"
+    ],
+    "scale": "500 self-contained Harbor task packages for wide and deep live-web collection.",
+    "measurement_strength": "Separates discovery volume, record validity, and enrichment quality without requiring an exhaustive static gold set.",
+    "coverage_gap": "Live pages drift, the grader uses an LLM and fetch backend, and system providers, models, search tools, and harnesses are unmatched.",
+    "confounders": [
+      "unmatched-system-stacks",
+      "shared-fetch-backend",
+      "web-drift",
+      "llm-judge"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.14747",
+      "code": "https://github.com/perplexityai/wandr"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-07-14T18:15:38Z",
+    "first_seen_at": "2026-08-21T00:37:39Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "reinforces",
+    "direction_keys": [
+      "structured-evidence-coverage",
+      "retrieval-discovery-bottleneck"
+    ]
+  },
+  {
+    "id": "maple",
+    "name": "MAPLE",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-08-04",
+    "importance": 4,
+    "status": "active",
+    "summary": "Scientific retrieval benchmark that measures whether one paper remains retrievable across motivation, method, and result aspects.",
+    "capabilities": [
+      "multi-aspect-retrieval",
+      "cross-aspect-consistency",
+      "multimodal-scientific-retrieval"
+    ],
+    "environment": [
+      "closed-scientific-corpus",
+      "full-text-figures-tables"
+    ],
+    "protocol": [
+      "allaspect-at-k",
+      "anyaspect-at-k",
+      "aspect-coverage",
+      "matched-single-query-control"
+    ],
+    "scale": "2,095 queries over 210 positive papers, 73,973 corpus papers, and 23,739 hard negatives.",
+    "measurement_strength": "Reveals the gap between answering one aspect and consistently retrieving the same work across several aspects.",
+    "coverage_gap": "Generated questions, similarity selection, one ICLR-style domain, and model-validated negatives can create style bias and false negatives.",
+    "confounders": [
+      "llm-generated-queries",
+      "single-domain-corpus",
+      "hard-negative-label-noise"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.15624",
+      "code": "https://github.com/Ggballs/MAPLE",
+      "data": "https://huggingface.co/datasets/kai-02/MAPLE"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-08-04T15:10:31Z",
+    "first_seen_at": "2026-08-21T00:37:39Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "reinforces",
+    "direction_keys": [
+      "structured-evidence-coverage"
+    ]
+  },
+  {
+    "id": "visdocagentbench",
+    "name": "VisDocAgentBench",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-08-18",
+    "importance": 4,
+    "status": "active",
+    "summary": "Visual-document retrieval benchmark that compares static rankers and iterative visual/OCR agents under one ranked-page contract.",
+    "capabilities": [
+      "iterative-page-discovery",
+      "visual-evidence-inspection",
+      "evidence-conditioned-ranking"
+    ],
+    "environment": [
+      "scientific-document-pages",
+      "visual-and-ocr-tools"
+    ],
+    "protocol": [
+      "shared-top-10-contract",
+      "twelve-action-agent-budget",
+      "support-provided-intervention"
+    ],
+    "scale": "2,375 pages from 100 documents and 120 queries, with 1,469 redistributable page images.",
+    "measurement_strength": "Makes iterative page discovery and inspection comparable with static visual retrieval under the same ranking output.",
+    "coverage_gap": "Only 120 queries and six cross-document paths; planner, model, and tool routes are not capacity matched.",
+    "confounders": [
+      "small-query-set",
+      "planner-model-tool-mismatch",
+      "few-cross-document-paths"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.17889",
+      "code": "https://github.com/hulx2002/VisDocAgentBench",
+      "data": "https://huggingface.co/datasets/hulx2002/VisDocAgentBench"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-08-18T15:23:06Z",
+    "first_seen_at": "2026-08-21T00:37:39Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "reinforces",
+    "direction_keys": [
+      "structured-evidence-coverage",
+      "retrieval-discovery-bottleneck"
+    ]
+  },
+  {
+    "id": "das-bench",
+    "name": "DAS-Bench / DAS-Eval",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-08-07",
+    "importance": 4,
+    "status": "active",
+    "summary": "Academic-survey benchmark and evaluator that score literature coverage, taxonomy, claims, citations, discourse, and rendered artifact quality.",
+    "capabilities": [
+      "survey-generation",
+      "evidence-organization",
+      "citation-and-discourse-quality"
+    ],
+    "environment": [
+      "frozen-paper-pools",
+      "rendered-academic-surveys"
+    ],
+    "protocol": [
+      "sixteen-criterion-evaluator",
+      "semantic-and-deterministic-checks",
+      "blinded-expert-comparison"
+    ],
+    "scale": "30 topics across computer science and non-CS fields, with a matched 21-topic comparison subset.",
+    "measurement_strength": "Turns publication-oriented survey assembly into explicit, auditable evaluation coordinates beyond answer correctness.",
+    "coverage_gap": "The generation method is not yet public, and the shared generation backbone is also the main automatic judge.",
+    "confounders": [
+      "generator-judge-coupling",
+      "closed-system-native-configurations",
+      "judge-sensitivity"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.18034",
+      "code": "https://github.com/ZhikaiXu24/DAS",
+      "data": "https://huggingface.co/datasets/ZhikaiXu24/DAS-Bench"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-08-07T02:29:15Z",
+    "first_seen_at": "2026-08-21T00:37:39Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "version_events": [
+      {
+        "published_at": "2026-08-20T00:00:00Z",
+        "kind": "material-public-dataset-release",
+        "source": "https://huggingface.co/datasets/ZhikaiXu24/DAS-Bench"
+      }
+    ]
+  },
+  {
+    "id": "recall-trap",
+    "name": "The Recall Trap",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-08-10",
+    "importance": 4,
+    "status": "active",
+    "summary": "Validity audit showing that higher file recall can reduce downstream repair success under a fixed-slot code-retrieval protocol.",
+    "capabilities": [
+      "retrieval-validity-audit",
+      "downstream-execution-attribution"
+    ],
+    "environment": [
+      "swe-bench-verified",
+      "fixed-twelve-slot-code-context"
+    ],
+    "protocol": [
+      "paired-dedup-ablation",
+      "official-docker-grading",
+      "repository-clustered-inference"
+    ],
+    "scale": "Paired fixed-pack evaluations on SWE-bench Verified with an open-weight preregistered replication.",
+    "measurement_strength": "Demonstrates that retrieval recall is not monotone evidence for downstream task success when packing policy changes.",
+    "coverage_gap": "The dedup flag changes breadth, depth, rank, position, token count, and distractors together in a single-shot no-tools harness.",
+    "confounders": [
+      "compound-packing-treatment",
+      "fixed-slot-context",
+      "single-shot-no-tools-harness"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.14838",
+      "data": "https://doi.org/10.5281/zenodo.21879550"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-08-10T22:39:48Z",
+    "first_seen_at": "2026-08-21T00:37:39Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "reinforces",
+    "direction_keys": [
+      "retrieval-harness-validity"
+    ]
+  },
+  {
+    "id": "commercial-tax",
+    "name": "The Commercial Tax",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-08-17",
+    "importance": 4,
+    "status": "active",
+    "summary": "Retrieval reproducibility audit that binds raw embedder scores to licensing, query formatting, index construction, and deployment cost.",
+    "capabilities": [
+      "retrieval-reproducibility-audit",
+      "deployment-validity",
+      "cost-and-license-accounting"
+    ],
+    "environment": [
+      "frozen-musique-hipporag-corpus",
+      "hosted-and-open-embedders"
+    ],
+    "protocol": [
+      "exact-cosine-search",
+      "paired-bootstrap",
+      "license-provenance",
+      "separate-construction-query-cost"
+    ],
+    "scale": "Thirteen embedders on the same 11,656-passage, 1,000-question retrieval floor.",
+    "measurement_strength": "Shows how setup, license, and cost conditions limit the production meaning of a benchmark retrieval number.",
+    "coverage_gap": "Uneven query-format tuning, drifting hosted endpoints, and a single main corpus limit generality to raw exact-search retrieval.",
+    "confounders": [
+      "uneven-query-format-search",
+      "hosted-endpoint-drift",
+      "single-corpus"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.16096",
+      "code": "https://github.com/Toryx-AI/commercial-tax-multihop-retrieval",
+      "data": "https://doi.org/10.5281/zenodo.21972866"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-08-17T04:14:48Z",
+    "first_seen_at": "2026-08-21T00:37:39Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "reinforces",
+    "direction_keys": [
+      "retrieval-harness-validity"
+    ]
+  },
+  {
+    "id": "data-eng-bench",
+    "name": "data-eng-bench",
+    "area": "data-agent",
+    "evolution_role": "frontier",
+    "released": "2026-07-29",
+    "importance": 4,
+    "status": "active",
+    "summary": "Executable data-engineering benchmark for repository-scale dbt transformations with hidden row-level verification on DuckDB and Snowflake.",
+    "capabilities": [
+      "data-transformation-implementation",
+      "repository-navigation",
+      "execution-and-repair"
+    ],
+    "environment": [
+      "dbt-projects",
+      "duckdb",
+      "snowflake"
+    ],
+    "protocol": [
+      "hidden-pytest-verifiers",
+      "row-level-output-comparison",
+      "dual-backend-execution"
+    ],
+    "scale": "103 dbt tasks with hidden verifier coverage across DuckDB and Snowflake.",
+    "measurement_strength": "Makes production-shaped data transformation executable and exposes evaluator/environment reliability as part of score validity.",
+    "coverage_gap": "The August verifier repair has no published post-fix leaderboard rerun, so earlier Snowflake results require qualification.",
+    "confounders": [
+      "backend-environment-drift",
+      "verifier-defects",
+      "missing-post-fix-rerun"
+    ],
+    "artifacts": {
+      "paper": "https://github.com/Snowflake-Labs/data-eng-bench",
+      "code": "https://github.com/Snowflake-Labs/data-eng-bench"
+    },
+    "last_verified": "2026-08-21",
+    "published_at": "2026-07-29T20:29:19Z",
+    "first_seen_at": "2026-08-21T00:29:37Z",
+    "radar_published_at": "2026-08-21T00:48:57Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "direction_keys": [
+      "executable-verifier-reliability"
+    ],
+    "version_events": [
+      {
+        "published_at": "2026-08-14T09:37:47Z",
+        "kind": "material-snowflake-verifier-and-environment-fix",
+        "source": "https://github.com/Snowflake-Labs/data-eng-bench/commit/35b83370bd9ae06d9ac8a2beb95d2544c90d88a5"
+      }
+    ]
   }
 ]

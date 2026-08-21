@@ -1,4 +1,5 @@
 from copy import deepcopy
+from datetime import datetime
 import json
 from pathlib import Path
 import sys
@@ -30,9 +31,9 @@ def repository_inputs() -> tuple[str, str, list[dict[str, object]]]:
 
 def shift_period_windows_one_day_earlier(text: str) -> str:
     return text.replace(
-        "2026-08-14—2026-08-20", "2026-08-13—2026-08-19", 1
+        "2026-08-15—2026-08-21", "2026-08-14—2026-08-20", 1
     ).replace(
-        "2026-07-22—2026-08-20", "2026-07-21—2026-08-19", 1
+        "2026-07-23—2026-08-21", "2026-07-22—2026-08-20", 1
     )
 
 
@@ -77,7 +78,27 @@ def insert_timeline_entry(
 </details>
 
 '''
-    return text.replace('<a id="entry-dsagentbench"></a>', entry + '<a id="entry-dsagentbench"></a>', 1)
+    _, _, canonical = repository_inputs()
+    native = [
+        candidate
+        for candidate in canonical + [record]
+        if candidate.get("time_provenance") == "native_v2"
+    ]
+    native.sort(
+        key=lambda candidate: (
+            -datetime.fromisoformat(
+                str(candidate["radar_published_at"]).replace("Z", "+00:00")
+            ).timestamp(),
+            str(candidate["id"]),
+        )
+    )
+    position = next(index for index, candidate in enumerate(native) if candidate["id"] == identity)
+    marker = (
+        f'<a id="entry-{native[position + 1]["id"]}"></a>'
+        if position + 1 < len(native)
+        else '<a id="entry-dsagentbench"></a>'
+    )
+    return text.replace(marker, entry + marker, 1)
 
 
 def direction_line(
@@ -89,7 +110,7 @@ def direction_line(
     confidence: str = "high",
     implication: str = "require-native-v2-times-for-period-claims",
     timing: str = "radar_published_at",
-    synthesized: str = "2026-08-20T00:00:00Z",
+    synthesized: str = "2026-08-21T00:48:57Z",
     prior: str = "none",
     visible_supports: tuple[str, ...] | None = None,
 ) -> str:
@@ -205,7 +226,7 @@ class CanonicalBenchmarkTimeContractTest(unittest.TestCase):
         )
 
     def test_native_direction_keys_are_unique_stable_tokens_when_declared(self):
-        record = native_record("native", "2026-08-20T00:00:00Z")
+        record = native_record("native", "2026-08-21T00:48:57Z")
         mutations = (
             ("not-a-list", "benchmark-acceptance-time"),
             ("empty", []),
@@ -224,7 +245,7 @@ class CanonicalBenchmarkTimeContractTest(unittest.TestCase):
             "id": "legacy",
             "released": "2026-08",
             "published_at": "2026-08",
-            "first_seen_at": "2026-08-20T00:00:00Z",
+            "first_seen_at": "2026-08-21T00:48:57Z",
             "radar_published_at": None,
             "time_provenance": "legacy_unknown",
             "map_delta": "early_signal",
@@ -301,7 +322,7 @@ class TimelineProjectionContractTest(unittest.TestCase):
 
     def test_in_window_native_record_cannot_be_omitted(self):
         zh, en, records = repository_inputs()
-        records.append(native_record("native-missing", "2026-08-20T00:00:00Z"))
+        records.append(native_record("native-missing", "2026-08-21T00:48:57Z"))
         errors = validate_reading.validate_benchmark_projection(zh, en, records)
         self.assertTrue(any("native-missing" in error and "missing from Timeline" in error for error in errors), errors)
 
@@ -326,7 +347,7 @@ class TimelineProjectionContractTest(unittest.TestCase):
 
     def test_native_timeline_rejects_acceptance_after_public_synthesis_cutoff(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-after-cutoff", "2026-08-20T00:00:01Z")
+        record = native_record("native-after-cutoff", "2026-08-21T00:48:58Z")
         records.append(record)
         zh = insert_timeline_entry(zh, record)
         en = insert_timeline_entry(en, record)
@@ -353,10 +374,20 @@ class TimelineProjectionContractTest(unittest.TestCase):
         for old, new, expected in mutations:
             with self.subTest(expected=expected):
                 zh, en, records = repository_inputs()
-                zh = zh.replace(old, new, 1)
+                if expected == "primary":
+                    zh_head, zh_tail = zh.split('<a id="timeline"></a>', 1)
+                    en_head, en_tail = en.split('<a id="timeline"></a>', 1)
+                    zh = zh_head + '<a id="timeline"></a>' + zh_tail.replace(old, new, 1)
+                else:
+                    zh = zh.replace(old, new, 1)
                 english_old = old.replace("**地图。**", "**Map.**")
                 english_new = new.replace("**地图。**", "**Map.**")
-                en = en.replace(english_old, english_new, 1)
+                if expected == "primary":
+                    en = en_head + '<a id="timeline"></a>' + en_tail.replace(
+                        english_old, english_new, 1
+                    )
+                else:
+                    en = en.replace(english_old, english_new, 1)
                 errors = validate_reading.validate_benchmark_projection(zh, en, records)
                 self.assertTrue(any(expected in error for error in errors), errors)
 
@@ -405,25 +436,26 @@ class TimelineProjectionContractTest(unittest.TestCase):
         )
         errors = validate_reading.validate_benchmark_projection(zh, en, records)
         self.assertTrue(
-            any("dsagentbench" in error and "map_delta" in error for error in errors),
+            any("map_delta" in error for error in errors),
             errors,
         )
 
 
 class PeriodDirectionContractTest(unittest.TestCase):
-    def test_repository_periods_are_parseable_no_material_change_directions(self):
+    def test_repository_periods_are_parseable_bound_directions(self):
         zh, en, records = repository_inputs()
         errors = validate_reading.validate_benchmark_projection(zh, en, records)
         self.assertFalse(any("direction" in error.lower() for error in errors), errors)
         for text in (zh, en):
-            self.assertEqual(2, text.count('state="no_material_change"'))
-            self.assertEqual(2, text.count('supports="none"'))
-            self.assertEqual(2, text.count('timing="radar_published_at"'))
+            self.assertEqual(0, text.count('state="no_material_change"'))
+            self.assertEqual(0, text.count('supports="none"'))
+            self.assertEqual(8, text.count('timing="radar_published_at"'))
             self.assertEqual(
-                2, text.count('synthesized="2026-08-20T00:00:00Z"')
+                8, text.count('synthesized="2026-08-21T00:48:57Z"')
             )
-            self.assertEqual(2, text.count('prior="none"'))
-            self.assertEqual(4, text.count("2026-08-20T00:00:00Z"))
+            self.assertEqual(4, text.count('prior="none"'))
+            self.assertEqual(4, text.count('prior="field-map"'))
+            self.assertEqual(16, text.count("2026-08-21T00:48:57Z"))
 
     def test_direction_requires_complete_stable_metadata(self):
         zh, en, records = repository_inputs()
@@ -463,7 +495,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
             "confidence": " Aside: confidence: **high**;",
             "timing basis": " Aside: timing basis: `radar_published_at`;",
             "synthesis": (
-                " Aside: Exact synthesis time: `2026-08-20T00:00:00Z` (UTC)."
+                " Aside: Exact synthesis time: `2026-08-21T00:48:57Z` (UTC)."
             ),
             "implication": (
                 " Aside: Research-design implication "
@@ -500,10 +532,10 @@ class PeriodDirectionContractTest(unittest.TestCase):
             '<!-- timefirst:direction key="orphan-direction" '
             'state="no_material_change" supports="none" confidence="high" '
             'implication="require-native-v2-times-for-period-claims" '
-            'timing="radar_published_at" synthesized="2026-08-20T00:00:00Z" '
+            'timing="radar_published_at" synthesized="2026-08-21T00:48:57Z" '
             'prior="none" -->\n'
         )
-        marker = "### Last 7 days: 2026-08-14—2026-08-20\n\n"
+        marker = "### Last 7 days: 2026-08-15—2026-08-21\n\n"
         en = en.replace(marker, marker + orphan, 1)
 
         errors = validate_reading.validate_benchmark_projection(zh, en, records)
@@ -634,7 +666,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
 
     def test_entity_split_low_support_durable_claims_are_rejected(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-one", "2026-08-20T00:00:00Z")
+        record = native_record("native-one", "2026-08-21T00:48:57Z")
         records.append(record)
         base_zh = direction_line(
             "zh", state="new_signal", supports=("native-one",)
@@ -666,7 +698,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
 
     def test_link_destinations_and_titles_do_not_make_visible_durable_claims(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-one", "2026-08-20T00:00:00Z")
+        record = native_record("native-one", "2026-08-21T00:48:57Z")
         records.append(record)
         zh_line = direction_line(
             "zh", state="new_signal", supports=("native-one",)
@@ -683,7 +715,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
 
     def test_post_synthesis_native_record_cannot_support_a_direction(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-after-cutoff", "2026-08-20T00:00:01Z")
+        record = native_record("native-after-cutoff", "2026-08-21T00:48:58Z")
         records.append(record)
         zh = set_first_period_direction(
             insert_timeline_entry(zh, record),
@@ -726,10 +758,10 @@ class PeriodDirectionContractTest(unittest.TestCase):
     def test_direction_key_confidence_and_implication_are_stable_tokens(self):
         zh, en, records = repository_inputs()
         for old, new in (
-            ('key="benchmark-acceptance-time"', 'key="free form"'),
+            ('key="structured-evidence-coverage"', 'key="free form"'),
             ('confidence="high"', 'confidence="not stable"'),
             (
-                'implication="require-native-v2-times-for-period-claims"',
+                'implication="measure-coverage-not-only-single-hit-relevance"',
                 'implication="free form prose"',
             ),
         ):
@@ -750,7 +782,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
 
     def test_one_paper_cannot_be_reinforced(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-one", "2026-08-20T00:00:00Z")
+        record = native_record("native-one", "2026-08-21T00:48:57Z")
         records.append(record)
         zh = set_first_period_direction(insert_timeline_entry(zh, record), state="reinforced", supports=("native-one",))
         en = set_first_period_direction(insert_timeline_entry(en, record), state="reinforced", supports=("native-one",))
@@ -759,7 +791,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
 
     def test_new_signal_requires_one_early_signal_record(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-one", "2026-08-20T00:00:00Z", map_delta="none")
+        record = native_record("native-one", "2026-08-21T00:48:57Z", map_delta="none")
         records.append(record)
         zh = set_first_period_direction(insert_timeline_entry(zh, record), state="new_signal", supports=("native-one",))
         en = set_first_period_direction(insert_timeline_entry(en, record), state="new_signal", supports=("native-one",))
@@ -907,7 +939,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
                 zh, en, records = repository_inputs()
                 record = native_record(
                     f"native-{state}",
-                    "2026-08-20T00:00:00Z",
+                    "2026-08-21T00:48:57Z",
                     map_delta=map_delta,
                 )
                 records.append(record)
@@ -931,7 +963,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
 
     def test_no_material_change_requires_zero_support_and_prior_none(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-one", "2026-08-20T00:00:00Z")
+        record = native_record("native-one", "2026-08-21T00:48:57Z")
         records.append(record)
         zh = replace_period_direction(
             insert_timeline_entry(zh, record),
@@ -959,7 +991,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
 
     def test_low_support_durable_claim_in_continuation_is_rejected(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-one", "2026-08-20T00:00:00Z")
+        record = native_record("native-one", "2026-08-21T00:48:57Z")
         records.append(record)
         zh_line = direction_line(
             "zh", state="new_signal", supports=("native-one",)
@@ -976,7 +1008,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
 
     def test_url_only_durable_keyword_is_not_a_visible_claim(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-one", "2026-08-20T00:00:00Z")
+        record = native_record("native-one", "2026-08-21T00:48:57Z")
         records.append(record)
         zh_line = direction_line(
             "zh", state="new_signal", supports=("native-one",)
@@ -1017,12 +1049,12 @@ class PeriodDirectionContractTest(unittest.TestCase):
         fixtures = (
             (
                 "last-7-days",
-                "2026-08-14—2026-08-20",
+                "2026-08-15—2026-08-21",
                 "2026-08-13—2026-08-19",
             ),
             (
                 "last-30-days",
-                "2026-07-22—2026-08-20",
+                "2026-07-23—2026-08-21",
                 "2026-07-21—2026-08-19",
             ),
         )
@@ -1086,7 +1118,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
         self.assertTrue(
             any(
                 "native-poison-support" in error
-                and "outside 2026-08-14—2026-08-20" in error
+                and "outside 2026-08-15—2026-08-21" in error
                 for error in errors
             ),
             errors,
@@ -1094,7 +1126,7 @@ class PeriodDirectionContractTest(unittest.TestCase):
 
     def test_hidden_support_links_do_not_satisfy_visible_support_parity(self):
         zh, en, records = repository_inputs()
-        record = native_record("native-hidden-support", "2026-08-20T00:00:00Z")
+        record = native_record("native-hidden-support", "2026-08-21T00:48:57Z")
         records.append(record)
         for language in ("zh", "en"):
             text = zh if language == "zh" else en
