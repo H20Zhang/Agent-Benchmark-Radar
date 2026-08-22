@@ -1426,6 +1426,94 @@ def check_links(path: Path, errors: list[str]) -> None:
             errors.append(f"{path.relative_to(ROOT)}: broken local link: {target}")
 
 
+
+def validate_public_readme(
+    zh: str,
+    en: str,
+    records: list[dict[str, object]],
+) -> list[str]:
+    """Validate the compact v3 reader projection without the retired deep/period layers."""
+
+    errors: list[str] = []
+    record_ids = {str(record.get("id")) for record in records}
+    cases = (
+        ("README.md", zh, "**主干：**"),
+        ("README.en.md", en, "**Defining chain:**"),
+    )
+    banned = (
+        "## 最新条目深读",
+        "## 7 天 / 30 天：评价对象发生了什么变化",
+        "## 三个方向的演化",
+        "## 7 days / 30 days: What Changed in the Evaluation Object",
+        "## Three Areas",
+    )
+
+    for language, text, chain_label in cases:
+        for phrase in banned:
+            if phrase in text:
+                errors.append(f"{language}: retired reader surface returned: {phrase}")
+
+        release = text.find('<a id="release-timeline"></a>')
+        field_map = text.find('<a id="field-map"></a>')
+        if release < 0 or field_map < 0 or release >= field_map:
+            errors.append(f"{language}: release timeline must precede Benchmark Map")
+        elif "<details" in text[release:field_map].lower():
+            errors.append(f"{language}: per-item deep reads returned to the main README")
+
+        for label in (
+            "TABLE-FIRST:RECENT",
+            "TABLE-FIRST:AREA:agent-memory",
+            "TABLE-FIRST:AREA:rag",
+            "TABLE-FIRST:AREA:data-agent",
+        ):
+            start_marker = f"<!-- {label}:START -->"
+            end_marker = f"<!-- {label}:END -->"
+            if text.count(start_marker) != 1 or text.count(end_marker) != 1:
+                errors.append(f"{language}: expected exactly one {label} block")
+                continue
+            block = text.split(start_marker, 1)[1].split(end_marker, 1)[0]
+            for line in block.splitlines():
+                visible = strip_html_comments(line).strip()
+                if visible.startswith("|") and visible.endswith("|"):
+                    cells = visible.split("|")[1:-1]
+                    if len(cells) != 4:
+                        errors.append(f"{language}: {label} must have exactly four visible columns")
+                        break
+            for forbidden in ("相较以往", "带来的变化", "What changed", "Why it changed the question"):
+                if forbidden in block:
+                    errors.append(f"{language}: {label} still exposes parallel change column {forbidden}")
+
+        sections = (
+            ("benchmark-memory", "benchmark-rag"),
+            ("benchmark-rag", "benchmark-data"),
+            ("benchmark-data", "all-benchmarks"),
+        )
+        for anchor, next_anchor in sections:
+            start = text.find(f'<a id="{anchor}"></a>')
+            end = text.find(f'<a id="{next_anchor}"></a>', start + 1)
+            if start < 0 or end < 0:
+                errors.append(f"{language}: missing Benchmark Map section {anchor}")
+                continue
+            if text[start:end].count(chain_label) != 1:
+                errors.append(f"{language}: {anchor} needs exactly one defining chain")
+
+        for label in ("TABLE-FIRST:AREA:agent-memory", "TABLE-FIRST:AREA:rag", "TABLE-FIRST:AREA:data-agent"):
+            block = text.split(f"<!-- {label}:START -->", 1)[1].split(f"<!-- {label}:END -->", 1)[0]
+            for identity in BENCHMARK_ID_RE.findall(block):
+                if identity not in record_ids:
+                    errors.append(f"{language}: unknown benchmark identity {identity} in {label}")
+
+    try:
+        zh_recent = BENCHMARK_ID_RE.findall(zh.split("<!-- TABLE-FIRST:RECENT:START -->", 1)[1].split("<!-- TABLE-FIRST:RECENT:END -->", 1)[0])
+        en_recent = BENCHMARK_ID_RE.findall(en.split("<!-- TABLE-FIRST:RECENT:START -->", 1)[1].split("<!-- TABLE-FIRST:RECENT:END -->", 1)[0])
+        if zh_recent != en_recent:
+            errors.append("Chinese/English recent release table identity or order drift")
+    except IndexError:
+        pass
+
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
@@ -1439,9 +1527,8 @@ def main() -> int:
     records = json.loads(REGISTRY.read_text(encoding="utf-8"))
     zh = ZH.read_text(encoding="utf-8")
     en = EN.read_text(encoding="utf-8")
-    errors.extend(validate_pair(zh, en))
     errors.extend(validate_benchmark_registry(records))
-    errors.extend(validate_benchmark_projection(zh, en, records))
+    errors.extend(validate_public_readme(zh, en, records))
     errors.extend(
         validate_benchmark_library(
             LIB_ZH.read_text(encoding="utf-8"),

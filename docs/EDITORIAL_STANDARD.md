@@ -33,7 +33,7 @@ Chinese sentences should still have a Chinese grammatical spine: use Chinese ver
 - Use numbers only when they change interpretation.
 - Keep the strongest confounder visible near the claim it weakens.
 - Treat README as a data-rich awesome list: put complete tables and direct links ahead of framing prose.
-- Layer-level attention navigation (`30 sec → 3 min → 5 min → 15 min → browse all`) is a stable reader contract; it names the depth of a route, not the value of an individual item.
+- Layer-level attention navigation is `frontier signal → release timeline → Benchmark Map → complete area tables → Reading Paths → Library`; each layer answers a different reader question without repeating the previous one.
 - Keep the same information contract across table rows, but vary the syntax. Repeating `相比 X，把 A 推进到 B` in every row is not a style guide.
 - Emoji are allowed when they carry a stable meaning, such as evolution roles; do not use them as decoration.
 
@@ -54,9 +54,11 @@ Warn on repeated patterns across nearby entries:
 
 The target is pattern density and loss of specificity, not banned words.
 
-## README disclosure contract
+## README scan contract
 
-Every Timeline item keeps the five predictable same-level fields `Question / Evidence / Caveat / Map / Links` (and their Chinese counterparts) so a reader can expand one row and orient immediately. Write natural, concise sentences inside those fields; do not turn the labels themselves into five repetitive slogans or copy the full deep note into the README.
+The main README is a scanning surface, not a per-item audit log. Recent and per-area tables use one descriptive field: `考察内容 / What it tests`. That field may be slightly longer when needed, but it should compactly name the task/environment/capability being measured rather than restating novelty, importance, or “compared with before.”
+
+Keep comparison, predecessor critique, decisive evidence, caveats, and genealogy in canonical records, benchmark notes, the Library, and digests. Do not reintroduce per-item `<details>` deep reads, rolling 7-day/30-day synthesis, or a separate three-area evolution section into the main README.
 
 ## Epistemic language
 
