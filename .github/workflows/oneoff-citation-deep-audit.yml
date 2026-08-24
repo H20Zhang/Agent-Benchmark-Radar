@@ -1,0 +1,162 @@
+name: One-off citation deep audit
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  fix:
+    if: github.event.issue.title == 'trigger-citation-deep-audit'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Strengthen Semantic Scholar title resolution
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path('scripts/update_citations.py')
+          text = path.read_text(encoding='utf-8')
+          old = 'S2_SEARCH = "https://api.semanticscholar.org/graph/v1/paper/search"\n'
+          new = (
+              'S2_MATCH = "https://api.semanticscholar.org/graph/v1/paper/search/match"\n'
+              'S2_SEARCH = "https://api.semanticscholar.org/graph/v1/paper/search"\n'
+          )
+          if old in text and 'S2_MATCH =' not in text:
+              text = text.replace(old, new, 1)
+
+          replacement = r'''def _s2_title_fallback(record: dict[str, object]) -> dict[str, object] | None:
+              artifacts = record.get("artifacts")
+              if not isinstance(artifacts, dict):
+                  return None
+              paper_url = artifacts.get("paper")
+              if not isinstance(paper_url, str) or not urlsplit(paper_url).netloc.lower().endswith("aclanthology.org"):
+                  return None
+
+              try:
+                  parser = _CitationTitleParser()
+                  parser.feed(_request_text(paper_url))
+                  if not parser.title:
+                      return None
+                  target = _normalized_title(parser.title)
+                  fields = "title,citationCount,url,externalIds"
+
+                  # Semantic Scholar documents /paper/search/match as the endpoint
+                  # intended for retrieving one paper by closest title match. This
+                  # avoids the relevance-search failure mode for hyphenated titles.
+                  time.sleep(1.05)
+                  match_query = urlencode({"query": parser.title, "fields": fields})
+                  match_response = _request_json(f"{S2_MATCH}?{match_query}")
+                  match_candidates: list[dict[str, object]] = []
+                  if isinstance(match_response, dict):
+                      data = match_response.get("data")
+                      if isinstance(data, list):
+                          match_candidates = [item for item in data if isinstance(item, dict)]
+                      elif isinstance(match_response.get("paperId"), str):
+                          match_candidates = [match_response]
+                  exact_match = [
+                      candidate
+                      for candidate in match_candidates
+                      if isinstance(candidate.get("title"), str)
+                      and _normalized_title(candidate["title"]) == target
+                  ]
+                  if len(exact_match) == 1:
+                      return exact_match[0]
+
+                  # Conservative fallback to relevance search: replace hyphens,
+                  # then accept only a unique normalized exact-title match.
+                  time.sleep(1.05)
+                  search_title = re.sub(r"[-‐‑‒–—]", " ", parser.title)
+                  query = urlencode(
+                      {
+                          "query": search_title,
+                          "limit": 10,
+                          "fields": fields,
+                      }
+                  )
+                  response = _request_json(f"{S2_SEARCH}?{query}")
+              except (HTTPError, URLError, UnicodeError, ValueError):
+                  return None
+
+              if not isinstance(response, dict) or not isinstance(response.get("data"), list):
+                  return None
+              matches = [
+                  candidate
+                  for candidate in response["data"]
+                  if isinstance(candidate, dict)
+                  and isinstance(candidate.get("title"), str)
+                  and _normalized_title(candidate["title"]) == target
+              ]
+              if len(matches) == 1:
+                  return matches[0]
+
+              anthology_id = urlsplit(paper_url).path.strip("/").split("/")[0]
+              expected_doi = f"10.18653/v1/{anthology_id}".casefold()
+              doi_matches = [
+                  candidate
+                  for candidate in matches
+                  if isinstance(candidate.get("externalIds"), dict)
+                  and str(candidate["externalIds"].get("DOI", "")).casefold() == expected_doi
+              ]
+              return doi_matches[0] if len(doi_matches) == 1 else None
+
+
+          def _refresh_citations'''
+
+          pattern = re.compile(
+              r'def _s2_title_fallback\(record: dict\[str, object\]\) -> dict\[str, object\] \| None:\n.*?\n\n\ndef _refresh_citations',
+              re.S,
+          )
+          if not pattern.search(text):
+              raise SystemExit('citation fallback block changed unexpectedly')
+          text = pattern.sub(replacement, text, count=1)
+          path.write_text(text, encoding='utf-8')
+      - name: Refresh all citation counts
+        run: python scripts/update_citations.py
+        env:
+          S2_API_KEY: ${{ secrets.S2_API_KEY }}
+      - name: Report remaining unresolved paper links
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+          records = json.loads(Path('data/benchmarks.json').read_text(encoding='utf-8'))
+          unresolved = []
+          for record in records:
+              citation = record.get('citations') or {}
+              artifacts = record.get('artifacts') or {}
+              if artifacts.get('paper') and citation.get('status') != 'ok':
+                  unresolved.append((record.get('id'), record.get('name'), artifacts.get('paper'), citation.get('status')))
+          print(f'paper-linked unresolved: {len(unresolved)}')
+          for row in unresolved:
+              print('\t'.join(str(x) for x in row))
+      - name: Validate repository
+        run: |
+          python -m unittest discover -s tests -v
+          python scripts/validate_reading.py
+          git diff --check
+      - name: Commit deep audit and remove one-off workflow
+        shell: bash
+        run: |
+          rm .github/workflows/oneoff-citation-deep-audit.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "improve citation identity resolution"
+          git push origin HEAD:main
+      - name: Close trigger issue
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue close "${{ github.event.issue.number }}" --comment "Citation deep audit completed, refreshed, validated, and the one-off workflow removed."
