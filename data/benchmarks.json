@@ -4442,5 +4442,342 @@
         "source": "https://github.com/Snowflake-Labs/data-eng-bench/commit/35b83370bd9ae06d9ac8a2beb95d2544c90d88a5"
       }
     ]
+  },
+  {
+    "id": "browsecomp-plus-cm",
+    "name": "BrowseComp-Plus_CM",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-08-18",
+    "importance": 4,
+    "status": "active",
+    "summary": "Projects BrowseComp-Plus onto the independently assembled 553-million-document ClimbMix corpus so agentic-search retrieval can be tested at web-like scale with fixed questions and question-level relevance judgments.",
+    "capabilities": [
+      "web-scale-evidence-discovery",
+      "multi-hop-evidence-coverage",
+      "agentic-search"
+    ],
+    "environment": [
+      "climbmix-400b",
+      "fixed-553m-document-corpus",
+      "bm25-search-api"
+    ],
+    "protocol": [
+      "57-question-projected-suite",
+      "question-level-qrels",
+      "matched-corpus-swap",
+      "accuracy-recall-tool-calls",
+      "closed-book-memorization-audit"
+    ],
+    "scale": "57 human-verified projections retained from 830 BrowseComp-Plus questions over ClimbMix's 553 million documents and 400 billion tokens.",
+    "measurement_strength": "Holding questions, agent, search interface, and evaluator fixed while swapping only the corpus shows how corpus construction and scale change retrieval difficulty separately from final-answer reasoning.",
+    "coverage_gap": "Only 57 selected questions survive projection, the strongest model answers 70.2% of them closed-book, and the released comparison uses one BM25 interface.",
+    "confounders": [
+      "projection-survivorship",
+      "parametric-memorization",
+      "llm-assisted-qrels",
+      "qrel-release-card-drift",
+      "single-bm25-interface",
+      "small-test-set"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.20317",
+      "code": "https://github.com/castorini/cmass",
+      "data": "https://huggingface.co/datasets/castorini/cmass"
+    },
+    "last_verified": "2026-08-24",
+    "published_at": "2026-08-18T15:41:10Z",
+    "first_seen_at": "2026-08-24T00:36:31Z",
+    "radar_published_at": "2026-08-24T00:38:22Z",
+    "time_provenance": "native_v2",
+    "map_delta": "revises",
+    "direction_keys": [
+      "retrieval-harness-validity"
+    ],
+    "version_events": [
+      {
+        "published_at": "2026-08-20T17:54:48Z",
+        "kind": "arxiv-v1-paper-and-protocol-disclosure",
+        "source": "https://arxiv.org/abs/2608.20317"
+      }
+    ]
+  },
+  {
+    "id": "deltaml-bench",
+    "name": "DeltaML-Bench",
+    "area": "data-agent",
+    "evolution_role": "frontier",
+    "released": "2026-08-20",
+    "importance": 4,
+    "status": "active",
+    "summary": "Evaluates machine-learning agents that must improve published baselines inside imperfect research repositories under long compute budgets and explicit anti-gaming checks.",
+    "capabilities": [
+      "repository-scale-ml-experimentation",
+      "training-pipeline-repair",
+      "iterative-model-improvement",
+      "evaluation-integrity"
+    ],
+    "environment": [
+      "48-research-repositories",
+      "vivaria",
+      "single-h100",
+      "papers-code-and-datasets"
+    ],
+    "protocol": [
+      "normalized-baseline-improvement",
+      "single-attempt-lock",
+      "4x6h-and-2x12h-allocations",
+      "multi-layer-integrity-audit"
+    ],
+    "scale": "48 reproducible tasks across computer vision, graph and molecular learning, time series, tabular data, and NLP.",
+    "measurement_strength": "Makes authentic repository repair, iterative experimentation, metric improvement, and specification-gaming resistance observable in one executable ML-research workflow.",
+    "coverage_gap": "The study covers two model families and two scaffolds; it scores metric improvement rather than novelty or efficiency, and its longest run is 12 hours on one H100.",
+    "confounders": [
+      "model-and-scaffold-coupling",
+      "duration-restart-confound",
+      "task-domain-imbalance",
+      "llm-integrity-judge",
+      "per-task-compute-cost"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.19653",
+      "code": "https://github.com/AlgorithmicResearchGroup/deltaml-bench-vivaria"
+    },
+    "last_verified": "2026-08-24",
+    "published_at": "2026-08-20T05:42:39Z",
+    "first_seen_at": "2026-08-24T00:36:31Z",
+    "radar_published_at": "2026-08-24T00:38:22Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "direction_keys": [
+      "data-agent-research-integrity"
+    ]
+  },
+  {
+    "id": "ai4ai-bench",
+    "name": "AI4AI-Bench",
+    "area": "data-agent",
+    "evolution_role": "frontier",
+    "released": "2026-08-20",
+    "importance": 4,
+    "status": "active",
+    "summary": "Evaluates agents that diagnose and modify learning algorithms inside frozen research repositories, with proxy-only exploration and a clean-start formal run behind a source-patch boundary.",
+    "capabilities": [
+      "learning-algorithm-design",
+      "repository-scale-ml-experimentation",
+      "iterative-model-improvement",
+      "experimental-diagnosis"
+    ],
+    "environment": [
+      "10-frozen-research-repositories",
+      "single-b300",
+      "proxy-and-formal-training-environments"
+    ],
+    "protocol": [
+      "4h-proxy-exploration",
+      "source-patch-only-handoff",
+      "clean-start-12h-formal-run",
+      "matched-baseline-rerun",
+      "normalized-heterogeneous-metrics",
+      "patch-taxonomy"
+    ],
+    "scale": "Ten frozen research repositories across ten learning-algorithm families, evaluated in 290 system-configuration-task cells with all trajectories released.",
+    "measurement_strength": "Separates exploratory feedback from formal training and constrains the deliverable to source changes, making learning-algorithm modification more identifiable than an unrestricted end-to-end ML score.",
+    "coverage_gap": "The suite has ten costly B300 tasks, no human baseline or operated blind service, and maps heterogeneous utilities to a hand-designed common scale.",
+    "confounders": [
+      "model-harness-effort-bundles",
+      "observational-patch-taxonomy",
+      "uncalibrated-llm-patch-classifier",
+      "proxy-final-sample-overlap",
+      "self-hosted-hidden-boundary",
+      "small-expensive-task-set"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.20318",
+      "code": "https://github.com/Einsia/AI4AI-Bench",
+      "data": "https://lab.einsia.ai/ai4ai/trajectories/"
+    },
+    "last_verified": "2026-08-24",
+    "published_at": "2026-08-20T14:39:57Z",
+    "first_seen_at": "2026-08-24T00:36:31Z",
+    "radar_published_at": "2026-08-24T00:38:22Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "direction_keys": [
+      "data-agent-research-integrity"
+    ],
+    "version_events": [
+      {
+        "published_at": "2026-08-20T17:56:59Z",
+        "kind": "arxiv-v1-paper-and-protocol-disclosure",
+        "source": "https://arxiv.org/abs/2608.20318"
+      }
+    ]
+  },
+  {
+    "id": "agent-memory-bakeoff",
+    "name": "Agent Memory Bakeoff",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-08-21",
+    "importance": 3,
+    "status": "active",
+    "summary": "Component-level benchmark for cross-vocabulary retrieval from synthetic organizational memories, with a controlled write-time enrichment intervention.",
+    "capabilities": [
+      "cross-vocabulary-memory-retrieval",
+      "memory-write-enrichment",
+      "hybrid-retrieval"
+    ],
+    "environment": [
+      "synthetic-incident-and-runbook-memory",
+      "bm25-vector-and-hybrid-indexes"
+    ],
+    "protocol": [
+      "plain-versus-write-enriched-memory",
+      "blind-query-construction",
+      "sibling-aware-gold",
+      "mrr-and-recall"
+    ],
+    "scale": "497 memory documents from 225 scenarios with 390 independently generated identifier, conceptual, and symptom queries.",
+    "measurement_strength": "Crosses retrieval strategy with a write-time enrichment intervention, making cross-vocabulary accessibility separately observable from raw storage.",
+    "coverage_gap": "The synthetic corpus is constructed around enrichment and stops at retrieval, without a downstream answer or action trajectory.",
+    "confounders": [
+      "synthetic-mechanism-aligned-corpus",
+      "single-local-embedder",
+      "no-downstream-agent-task"
+    ],
+    "artifacts": {
+      "paper": "https://github.com/JaysonRawlins/agent-memory-bakeoff",
+      "code": "https://github.com/JaysonRawlins/agent-memory-bakeoff",
+      "data": "https://github.com/JaysonRawlins/agent-memory-bakeoff"
+    },
+    "last_verified": "2026-08-24",
+    "published_at": "2026-08-21T14:55:09Z",
+    "first_seen_at": "2026-08-24T00:36:31Z",
+    "radar_published_at": "2026-08-24T00:38:22Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "direction_keys": [
+      "memory-component-attribution"
+    ]
+  },
+  {
+    "id": "membench-staleness",
+    "name": "membench (staleness)",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-08-22",
+    "importance": 3,
+    "status": "active",
+    "summary": "Small executable diagnostic for whether a memory store ranks the current fact above a forbidden superseded fact while resisting abstention and label leakage.",
+    "capabilities": [
+      "stale-memory-resolution",
+      "contradiction-handling",
+      "memory-store-validity"
+    ],
+    "environment": [
+      "small-append-and-update-memory-stores",
+      "hand-written-conflict-probes"
+    ],
+    "protocol": [
+      "current-versus-forbidden-fact-ranking",
+      "deterministic-substring-grading",
+      "staleness-at-one",
+      "abstention-and-label-leakage-guards",
+      "wilson-intervals"
+    ],
+    "scale": "60 probes across supersession, negation, entity confusion, temporal scope, and distractor load.",
+    "measurement_strength": "Makes stale-fact ranking directly measurable and publishes a correction that closes invalid top-k staleness and abstention-gaming paths.",
+    "coverage_gap": "Sixty correlated hand-written probes, exact substring grading, and tiny stores do not establish long-horizon agent utility.",
+    "confounders": [
+      "small-correlated-probe-set",
+      "exact-substring-grading",
+      "single-author",
+      "tiny-memory-stores",
+      "k-sensitive-reranking"
+    ],
+    "artifacts": {
+      "paper": "https://github.com/Ps23102004/membench",
+      "code": "https://github.com/Ps23102004/membench",
+      "data": "https://github.com/Ps23102004/membench"
+    },
+    "last_verified": "2026-08-24",
+    "published_at": "2026-08-22T05:43:24Z",
+    "first_seen_at": "2026-08-24T00:36:31Z",
+    "radar_published_at": "2026-08-24T00:38:22Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "direction_keys": [
+      "memory-update-and-staleness"
+    ],
+    "version_events": [
+      {
+        "published_at": "2026-08-22",
+        "kind": "staleness-metric-and-abstention-correction",
+        "source": "https://github.com/Ps23102004/membench/commit/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b"
+      }
+    ]
+  },
+  {
+    "id": "agent-memory-bench-coding",
+    "name": "Agent Memory Bench (coding agents)",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-08-22",
+    "importance": 3,
+    "status": "active",
+    "summary": "Executable benchmark for whether a pluggable memory layer causally helps Claude Code reuse prior repository-task experience under neutral feeds and proof-of-treatment gates.",
+    "capabilities": [
+      "cross-task-procedural-memory",
+      "memory-guided-code-action",
+      "negative-transfer-detection"
+    ],
+    "environment": [
+      "real-software-repositories",
+      "claude-code",
+      "precursor-session-transcripts"
+    ],
+    "protocol": [
+      "common-baseline",
+      "verbatim-neutral-feed",
+      "proof-of-treatment-admission",
+      "hidden-executable-oracles",
+      "ingestion-and-session-cost"
+    ],
+    "scale": "24 repository tasks, 24 precursor transcripts, and 99 distractors, with a preregistered pilot over 13 surviving cases.",
+    "measurement_strength": "Controls the feed and verifies that the memory treatment was actually used before comparing executable coding outcomes and cost.",
+    "coverage_gap": "The current public result is a low-powered, single-model pilot whose confidence interval crosses zero.",
+    "confounders": [
+      "author-built-competing-memory-product",
+      "claude-specific-environment",
+      "underpowered-survivor-pilot",
+      "treatment-survivorship"
+    ],
+    "artifacts": {
+      "paper": "https://github.com/GiulioDER/agent-memory-bench",
+      "code": "https://github.com/GiulioDER/agent-memory-bench",
+      "data": "https://github.com/GiulioDER/agent-memory-bench"
+    },
+    "last_verified": "2026-08-24",
+    "published_at": "2026-08-22T20:49:55Z",
+    "first_seen_at": "2026-08-24T00:36:31Z",
+    "radar_published_at": "2026-08-24T00:38:22Z",
+    "time_provenance": "native_v2",
+    "map_delta": "reinforces",
+    "direction_keys": [
+      "memory-action-utility"
+    ],
+    "version_events": [
+      {
+        "published_at": "2026-08-23T20:21:33Z",
+        "kind": "complete-24-task-corpus-release",
+        "source": "https://github.com/GiulioDER/agent-memory-bench/commit/0ebeffc2"
+      },
+      {
+        "published_at": "2026-08-23T22:22:27Z",
+        "kind": "preregistered-pilot-results-release",
+        "source": "https://github.com/GiulioDER/agent-memory-bench/commit/a2aa8f56"
+      }
+    ]
   }
 ]

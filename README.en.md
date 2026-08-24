@@ -8,12 +8,12 @@
 <!-- FRONTIER-SIGNALS:START -->
 | Area | What actually changed | Representative benchmarks |
 |---|---|---|
-| **Agent Memory** | Evaluation is moving beyond “can it recall?” toward **whether retained memory causally changes later action and whether persistent state can be governed safely**. PAST-Bench uses persistence-on/off controls to measure downstream memory effects; SP-Mem puts personalization, consent, and leakage in one protocol; InMind separates storage, knowledge, routing, and use failures. | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [SP-Mem](https://arxiv.org/abs/2608.16551) · [InMind](https://arxiv.org/abs/2607.24368) |
-| **RAG / Agentic Retrieval** | The question is shifting from “is recall high?” to **whether a retrieval metric predicts downstream success, whether the search process is auditable, and whether results transfer across deployment conditions**. The Recall Trap gives a direct recall-vs-repair counterexample; SearchAuditBench measures failure localization and repair; The Commercial Tax brings license, query format, index construction, and cost into transferability. | [The Recall Trap](https://arxiv.org/abs/2608.14838) · [SearchAuditBench](https://arxiv.org/abs/2608.05212) · [The Commercial Tax](https://arxiv.org/abs/2608.16096) |
-| **Data Agents** | The target keeps moving beyond “does SQL/code run?” toward **understanding data first, completing verifiable work, and clarifying or abstaining when business semantics are underspecified**. Data Exploration Benchmark scores exploration directly; WarehouseReliabilityBench tests business truth, clarification, and abstention; data-eng-bench's evaluator fix shows that evaluator reliability itself can be the bottleneck. | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) · [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
+| **Agent Memory** | Evaluation is moving beyond “can it recall?” toward **whether retained memory causally changes later action and whether persistent state can be governed safely**. PAST-Bench uses persistence-on/off controls for downstream effects; Agent Memory Bench adds neutral feeds, proof-of-treatment, and executable coding outcomes; SP-Mem jointly measures personalization, consent, and leakage. | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [Agent Memory Bench](https://github.com/GiulioDER/agent-memory-bench) · [SP-Mem](https://arxiv.org/abs/2608.16551) |
+| **RAG / Agentic Retrieval** | The question is shifting from “is recall high?” to **whether a retrieval metric predicts downstream success and whether corpus construction makes search artificially easy**. BrowseComp-Plus_CM swaps only the corpus under matched questions, agent, and interface, yet evidence recall falls from 84.3% to 21.4%; The Recall Trap and The Commercial Tax expose downstream and deployment dependence. | [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) · [The Recall Trap](https://arxiv.org/abs/2608.14838) · [The Commercial Tax](https://arxiv.org/abs/2608.16096) |
+| **Data Agents** | The target keeps moving beyond “does SQL/code run?” toward **long-horizon ML improvement in real repositories with tighter score attribution**. AI4AI-Bench isolates algorithm changes through proxy exploration → source patch → clean-start final run; DeltaML-Bench joins published-baseline improvement with anti-gaming audits. | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
-Last updated: **2026-08-21**
+Last updated: **2026-08-24**
 
 <a id="release-timeline"></a>
 ## Benchmark Timeline: Last Six Months
@@ -21,6 +21,12 @@ Last updated: **2026-08-21**
 <!-- TABLE-FIRST:RECENT:START -->
 | Time | Area | Benchmark | What it tests |
 |---|---|---|---|
+| 2026-08-22 | Agent Memory | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | Cross-task memory effects on real-repository coding under a neutral feed, proof-of-treatment gates, and hidden executable oracles. |
+| 2026-08-22 | Agent Memory | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | Memory-store update and conflict handling through current-versus-stale ranking plus abstention and leakage guards. |
+| 2026-08-21 | Agent Memory | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | Cross-vocabulary retrieval in synthetic organizational memory, crossing retrieval strategy with write-time enrichment. |
+| 2026-08-20 | Data Agent | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | Diagnosing and modifying learning algorithms in frozen training repositories, with proxy exploration, source-only handoff, and clean-start formal runs. |
+| 2026-08-20 | Data Agent | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | Training-pipeline repair, iterative experimentation, published-baseline improvement, and anti-gaming checks in real research repositories. |
+| 2026-08-18 | RAG | [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) <!-- benchmark-id:browsecomp-plus-cm --> | Agentic evidence discovery over an independently built 553M-document corpus under matched questions, agent, BM25 interface, and answer judge. |
 | 2026-08-18 | RAG | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | Visual-document retrieval benchmark that compares static rankers and iterative visual/OCR agents under one ranked-page contract. |
 | 2026-08-17 | Data Agent | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | Structured dataset understanding before analysis, including logical tables, semantics, keys, relationships, and profiling signals. |
 | 2026-08-17 | Agent Memory | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost. |
@@ -99,15 +105,9 @@ From cross-session factual recall toward online updating, structured memory, mul
 
 <a id="benchmark-rag"></a>
 ### RAG / Agentic Retrieval
-From document relevance toward multi-hop evidence composition, live search, stopping, cross-source execution, and trace auditing.
+From document relevance toward multi-hop evidence composition, live search, corpus realism, cross-source execution, and trace auditing.
 
-**Defining chain:** [HotpotQA](https://aclanthology.org/D18-1259/) → [BEIR](https://arxiv.org/abs/2104.08663) / [BRIGHT](https://arxiv.org/abs/2407.12883) → [BrowseComp](https://arxiv.org/abs/2504.12516) → [AutoResearchBench](https://arxiv.org/abs/2604.25256) / [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) → [LiveBrowseComp](https://arxiv.org/abs/2605.28721) / [LoHoSearch](https://arxiv.org/abs/2606.12837) → [SearchAuditBench](https://arxiv.org/abs/2608.05212) / [VAKRA](https://arxiv.org/abs/2608.12282) → [MAPLE](https://arxiv.org/abs/2608.15624) / [VisDocAgentBench](https://arxiv.org/abs/2608.17889) / [WANDR](https://arxiv.org/abs/2608.14747)
-
-**Frontier signal:** evaluation is splitting relevance from aspect coverage, target finding from exhaustive set collection, and final correctness from stopping, calibration, failure localization, repair, security, multimodal evidence, and live-web freshness.
-
-**Biggest gap:** causal attribution under matched interface/harness/model/budget, especially for long-horizon live environments where web state drifts.
-
-[Open the complete RAG benchmark table →](library/README.en.md#rag--agentic-retrieval) · [Continue into Agentic RAG methods/systems →](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map)
+**Defining chain:** [HotpotQA](https://aclanthology.org/D18-1259/) → [BEIR](https://arxiv.org/abs/2104.08663) / [BRIGHT](https://arxiv.org/abs/2407.12883) → [BrowseComp](https://arxiv.org/abs/2504.12516) → [BrowseComp-Plus](https://arxiv.org/abs/2508.06600) / [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) → [AutoResearchBench](https://arxiv.org/abs/2604.25256) / [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) → [LiveBrowseComp](https://arxiv.org/abs/2605.28721) / [LoHoSearch](https://arxiv.org/abs/2606.12837) → [SearchAuditBench](https://arxiv.org/abs/2608.05212) / [VAKRA](https://arxiv.org/abs/2608.12282) → [MAPLE](https://arxiv.org/abs/2608.15624) / [VisDocAgentBench](https://arxiv.org/abs/2608.17889) / [WANDR](https://arxiv.org/abs/2608.14747)
 
 <a id="benchmark-data"></a>
 ### Data Agents
@@ -118,7 +118,7 @@ From text-to-SQL / code generation toward complete data workflows, exploration, 
 <a id="all-benchmarks"></a>
 ## All Benchmarks by Area
 
-All 105 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
+All 111 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
 
 ### Agent Memory
 
@@ -158,7 +158,10 @@ All 105 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [MemFuseBench](https://arxiv.org/abs/2608.18704) <!-- benchmark-id:memfusebench --> | 2026-07-21 | Cross-source memory benchmark for linking, causal fusion, conflict arbitration, and provenance over heterogeneous event streams. |
 | 🔭 Frontier | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | 2026-07-27 | Retrieval and use of a personal fact whose relevance to the query depends on world knowledge. |
 | 🔭 Frontier | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | 2026-08-04 | Paired persistent-state benchmark that tests whether retained cross-episode experience causally improves later executable work. |
-| 🔭 Frontier | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | 2026-08-17 | Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost. |<!-- TABLE-FIRST:AREA:agent-memory:END -->
+| 🔭 Frontier | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | 2026-08-17 | Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost. |
+| 🔭 Frontier | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | 2026-08-21 | Cross-vocabulary retrieval in synthetic organizational memory, crossing retrieval strategy with write-time enrichment. |
+| 🔭 Frontier | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | 2026-08-22 | Cross-task memory effects on real-repository coding under a neutral feed, proof-of-treatment gates, and hidden executable oracles. |
+| 🔭 Frontier | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | 2026-08-22 | Memory-store update and conflict handling through current-versus-stale ranking plus abstention and leakage guards. |<!-- TABLE-FIRST:AREA:agent-memory:END -->
 
 ### RAG / Agentic Retrieval
 
@@ -203,6 +206,7 @@ All 105 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [DAS-Bench / DAS-Eval](https://arxiv.org/abs/2608.18034) <!-- benchmark-id:das-bench --> | 2026-08-07 | Academic-survey benchmark and evaluator that score literature coverage, taxonomy, claims, citations, discourse, and rendered artifact quality. |
 | 🔭 Frontier | [The Recall Trap](https://arxiv.org/abs/2608.14838) <!-- benchmark-id:recall-trap --> | 2026-08-10 | Validity audit showing that higher file recall can reduce downstream repair success under a fixed-slot code-retrieval protocol. |
 | 🔭 Frontier | [The Commercial Tax](https://arxiv.org/abs/2608.16096) <!-- benchmark-id:commercial-tax --> | 2026-08-17 | Retrieval reproducibility audit that binds raw embedder scores to licensing, query formatting, index construction, and deployment cost. |
+| 🔭 Frontier | [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) <!-- benchmark-id:browsecomp-plus-cm --> | 2026-08-18 | Multi-hop evidence discovery, answer accuracy, evidence recall, and tool use over the independently built 553M-document ClimbMix corpus. |
 | 🔭 Frontier | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | 2026-08-18 | Visual-document retrieval benchmark that compares static rankers and iterative visual/OCR agents under one ranked-page contract. |<!-- TABLE-FIRST:AREA:rag:END -->
 
 ### Data Agents
@@ -241,7 +245,9 @@ All 105 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [DataSpace](https://arxiv.org/abs/2608.03451) <!-- benchmark-id:dataspace --> | 2026-08 | Evaluates verifiable analytics over heterogeneous workspaces where evidence spans databases, files, documents, and multimedia. |
 | 🔭 Frontier | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | 2026-08 | Evaluates agents on complete data-science workflows inside real computer environments using notebooks, IDEs, terminals, browsers, and databases. |
 | 🔭 Frontier | [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) <!-- benchmark-id:warehouse-reliability-bench --> | 2026-08-10 | Business-correct analytics plus appropriate clarification, abstention, or refusal under ambiguity, unanswerability, drift, and attacks. |
-| 🔭 Frontier | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | 2026-08-17 | Structured dataset understanding before analysis, including logical tables, semantics, keys, relationships, and profiling signals. |<!-- TABLE-FIRST:AREA:data-agent:END -->
+| 🔭 Frontier | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | 2026-08-17 | Structured dataset understanding before analysis, including logical tables, semantics, keys, relationships, and profiling signals. |
+| 🔭 Frontier | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | 2026-08-20 | Diagnosing and modifying learning algorithms in frozen training repositories, separated by proxy exploration, source-only handoff, and clean-start formal runs. |
+| 🔭 Frontier | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 2026-08-20 | Training-pipeline repair, iterative ML experimentation, published-baseline improvement, and specification-gaming resistance in real repositories. |<!-- TABLE-FIRST:AREA:data-agent:END -->
 
 ## What Is Still Poorly Measured
 

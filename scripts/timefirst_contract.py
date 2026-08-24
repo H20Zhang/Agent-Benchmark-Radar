@@ -15,6 +15,14 @@ ANCHORS = (
     "reading-paths",
     "library",
 )
+TABLE_FIRST_ANCHORS = (
+    "timeline",
+    "latest",
+    "periods",
+    "field-map",
+    "reading-paths",
+    "library",
+)
 ORDERED_ANCHORS = ("timeline", "periods", "field-map", "reading-paths", "library")
 MAP_TOKENS = ("none", "early_signal", "reinforces", "revises", "splits", "retires")
 # These comparison/contract-role words cannot make a visible witness distinctive;
@@ -122,10 +130,15 @@ def _anchor_re(anchor: str) -> re.Pattern[str]:
     return re.compile(rf'<a\s+id=["\']{re.escape(anchor)}["\']\s*></a>', re.I)
 
 
+def _is_table_first(text: str) -> bool:
+    return "<!-- TABLE-FIRST:RECENT:START -->" in text
+
+
 def _anchor_positions(text: str, language: str, errors: list[str]) -> dict[str, int]:
     positions: dict[str, int] = {}
     anchor_surface = _mask_html_comments(text)
-    for anchor in ANCHORS:
+    anchors = TABLE_FIRST_ANCHORS if _is_table_first(text) else ANCHORS
+    for anchor in anchors:
         matches = list(_anchor_re(anchor).finditer(anchor_surface))
         if not matches:
             errors.append(f"{language}: missing stable anchor {anchor}")
@@ -475,10 +488,22 @@ def validate_pair(zh: str, en: str) -> list[str]:
     """Return deterministic public-contract violations; an empty list is valid."""
 
     errors: list[str] = []
+    zh_table_first = _is_table_first(zh)
+    en_table_first = _is_table_first(en)
+    if zh_table_first != en_table_first:
+        errors.append("Chinese/English public projection profile drift")
     zh_positions = _anchor_positions(zh, "Chinese", errors)
     en_positions = _anchor_positions(en, "English", errors)
-    zh_entries = _timeline_entries(zh, zh_positions, "Chinese", errors)
-    en_entries = _timeline_entries(en, en_positions, "English", errors)
+    zh_entries = (
+        []
+        if zh_table_first
+        else _timeline_entries(zh, zh_positions, "Chinese", errors)
+    )
+    en_entries = (
+        []
+        if en_table_first
+        else _timeline_entries(en, en_positions, "English", errors)
+    )
 
     zh_identities = [entry.identity for entry in zh_entries]
     en_identities = [entry.identity for entry in en_entries]
@@ -510,8 +535,12 @@ def validate_pair(zh: str, en: str) -> list[str]:
     if zh_maps != en_maps:
         errors.append("Chinese/English Timeline map token or order drift")
 
-    zh_windows = _period_windows(zh, zh_positions, "Chinese", errors)
-    en_windows = _period_windows(en, en_positions, "English", errors)
+    zh_windows = (
+        {} if zh_table_first else _period_windows(zh, zh_positions, "Chinese", errors)
+    )
+    en_windows = (
+        {} if en_table_first else _period_windows(en, en_positions, "English", errors)
+    )
     for anchor in ("last-7-days", "last-30-days"):
         if (
             anchor in zh_windows
