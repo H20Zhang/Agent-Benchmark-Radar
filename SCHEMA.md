@@ -16,7 +16,7 @@ This schema follows [Radar Agent Protocol v2](docs/RADAR_AGENT_PROTOCOL.md). The
 - `measurement_strength`: the most important thing this benchmark makes observable
 - `coverage_gap`: the most important capability or validity gap it leaves open
 - `confounders`: variables that can invalidate naive leaderboard comparisons
-- `artifacts`: verified first-party paper/code/data/leaderboard links only
+- `artifacts`: verified first-party paper/code/data/leaderboard links only; `paper` keeps the preferred publication link while optional `preprint` may record the canonical arXiv version for identity resolution
 - `last_verified`: date on which load-bearing metadata was checked
 
 ## v2 time and map fields

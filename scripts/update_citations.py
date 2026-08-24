@@ -30,7 +30,7 @@ def _s2_external_id(record: dict[str, object]) -> str | None:
     artifacts = record.get("artifacts")
     if not isinstance(artifacts, dict):
         return None
-    paper = artifacts.get("paper")
+    paper = artifacts.get("preprint") or artifacts.get("paper")
     if not isinstance(paper, str) or not paper.strip():
         return None
     url = paper.strip()

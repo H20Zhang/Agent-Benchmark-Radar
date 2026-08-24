@@ -495,12 +495,12 @@
     "time_provenance": "legacy_unknown",
     "map_delta": "early_signal",
     "citations": {
-      "count": 6,
+      "count": null,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "ok",
-      "paper_id": "301809842a80f6231a8d00883f92290b62e65d97",
-      "url": "https://www.semanticscholar.org/paper/301809842a80f6231a8d00883f92290b62e65d97"
+      "status": "unmatched",
+      "paper_id": null,
+      "url": null
     }
   },
   {
@@ -538,7 +538,7 @@
     },
     "last_verified": "2026-08-20",
     "citations": {
-      "count": 5183,
+      "count": 5184,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
       "status": "ok",
@@ -627,7 +627,7 @@
     },
     "last_verified": "2026-08-20",
     "citations": {
-      "count": 1945,
+      "count": 1946,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
       "status": "ok",
@@ -1856,7 +1856,8 @@
     ],
     "artifacts": {
       "paper": "https://aclanthology.org/2026.acl-long.370/",
-      "code": "https://github.com/Cantaloupe-M/Mem2ActBench"
+      "code": "https://github.com/Cantaloupe-M/Mem2ActBench",
+      "preprint": "https://arxiv.org/abs/2601.19935"
     },
     "last_verified": "2026-08-20",
     "published_at": "2026-07",
@@ -1865,12 +1866,12 @@
     "time_provenance": "legacy_unknown",
     "map_delta": "early_signal",
     "citations": {
-      "count": null,
+      "count": 25,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "unmatched",
-      "paper_id": null,
-      "url": null
+      "status": "ok",
+      "paper_id": "c8e2417a59515b4f74dec06f631cc0a2280cbf60",
+      "url": "https://www.semanticscholar.org/paper/c8e2417a59515b4f74dec06f631cc0a2280cbf60"
     }
   },
   {
@@ -2175,16 +2176,17 @@
     ],
     "artifacts": {
       "paper": "https://aclanthology.org/2024.emnlp-main.748/",
-      "code": "https://github.com/yiyihum/dabench"
+      "code": "https://github.com/yiyihum/dabench",
+      "preprint": "https://arxiv.org/abs/2410.07331"
     },
     "last_verified": "2026-08-20",
     "citations": {
-      "count": null,
+      "count": 63,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "unmatched",
-      "paper_id": null,
-      "url": null
+      "status": "ok",
+      "paper_id": "0e28243cc36df0dfa857770e5a0a560275b225bf",
+      "url": "https://www.semanticscholar.org/paper/0e28243cc36df0dfa857770e5a0a560275b225bf"
     }
   },
   {
@@ -4255,16 +4257,17 @@
     "artifacts": {
       "paper": "https://aclanthology.org/2026.findings-acl.341/",
       "code": "https://github.com/Zhanli-Li/MuDABench",
-      "data": "https://huggingface.co/datasets/Zhanli-Li/MuDABench"
+      "data": "https://huggingface.co/datasets/Zhanli-Li/MuDABench",
+      "preprint": "https://arxiv.org/abs/2604.22239"
     },
     "last_verified": "2026-08-20",
     "citations": {
-      "count": null,
+      "count": 1,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "unmatched",
-      "paper_id": null,
-      "url": null
+      "status": "ok",
+      "paper_id": "3f1e7620f1c192a1c730660100634772e59cfa54",
+      "url": "https://www.semanticscholar.org/paper/3f1e7620f1c192a1c730660100634772e59cfa54"
     }
   },
   {
