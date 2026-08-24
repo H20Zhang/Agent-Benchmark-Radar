@@ -486,7 +486,8 @@
     ],
     "artifacts": {
       "paper": "https://aclanthology.org/2026.acl-long.1150/",
-      "code": "https://github.com/xjtuleeyf/Locomo-Plus"
+      "code": "https://github.com/xjtuleeyf/Locomo-Plus",
+      "preprint": "https://arxiv.org/abs/2602.10715"
     },
     "last_verified": "2026-08-20",
     "published_at": "2026-07",
@@ -495,12 +496,12 @@
     "time_provenance": "legacy_unknown",
     "map_delta": "early_signal",
     "citations": {
-      "count": null,
+      "count": 6,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "unmatched",
-      "paper_id": null,
-      "url": null
+      "status": "ok",
+      "paper_id": "301809842a80f6231a8d00883f92290b62e65d97",
+      "url": "https://www.semanticscholar.org/paper/301809842a80f6231a8d00883f92290b62e65d97"
     }
   },
   {

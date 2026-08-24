@@ -208,6 +208,19 @@ def _s2_title_fallback(record: dict[str, object]) -> dict[str, object] | None:
     return doi_matches[0] if len(doi_matches) == 1 else None
 
 
+def _valid_cached_citation(value: object) -> bool:
+    return (
+        isinstance(value, dict)
+        and value.get("status") == "ok"
+        and isinstance(value.get("count"), int)
+        and value.get("count") >= 0
+        and isinstance(value.get("paper_id"), str)
+        and bool(value.get("paper_id"))
+        and isinstance(value.get("url"), str)
+        and bool(value.get("url"))
+    )
+
+
 def _refresh_citations(records: list[dict[str, object]], today: str) -> bool:
     indexed: list[tuple[dict[str, object], str]] = []
     changed = False
@@ -216,6 +229,8 @@ def _refresh_citations(records: list[dict[str, object]], today: str) -> bool:
         if external_id is None:
             artifacts = record.get("artifacts")
             has_paper = isinstance(artifacts, dict) and bool(artifacts.get("paper"))
+            if has_paper and _valid_cached_citation(record.get("citations")):
+                continue
             desired = {
                 "count": None,
                 "source": "semantic-scholar",
@@ -241,6 +256,8 @@ def _refresh_citations(records: list[dict[str, object]], today: str) -> bool:
         if not isinstance(paper, dict):
             paper = _s2_title_fallback(record)
         if not isinstance(paper, dict):
+            if _valid_cached_citation(record.get("citations")):
+                continue
             desired = {
                 "count": None,
                 "source": "semantic-scholar",
@@ -254,6 +271,8 @@ def _refresh_citations(records: list[dict[str, object]], today: str) -> bool:
             paper_id = paper.get("paperId")
             paper_url = paper.get("url")
             if not isinstance(count, int) or count < 0 or not isinstance(paper_id, str):
+                if _valid_cached_citation(record.get("citations")):
+                    continue
                 desired = {
                     "count": None,
                     "source": "semantic-scholar",
