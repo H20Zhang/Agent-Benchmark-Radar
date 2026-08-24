@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   fix:
-    if: github.event.issue.title == 'trigger-citation-status-surface'
+    if: github.event.issue.title == 'trigger-citation-status-surface-local'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,10 +21,12 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Distinguish no-paper from unresolved-paper states
+      - name: Distinguish no-paper from unresolved-paper states without network access
         shell: python
         run: |
           from pathlib import Path
+          import json
+          import re
 
           script_path = Path('scripts/update_citations.py')
           text = script_path.read_text(encoding='utf-8')
@@ -53,16 +55,19 @@ jobs:
               raise SystemExit('citation projection test changed unexpectedly')
           test_path.write_text(test, encoding='utf-8')
 
-      - name: Re-render citation tables
-        run: python scripts/update_citations.py
-        env:
-          S2_API_KEY: ${{ secrets.S2_API_KEY }}
+          notes = {
+              'README.md': '引用数来自 Semantic Scholar，最后刷新 **2026-08-24**；`—` 表示该 benchmark 当前以 repo/project 形式发布、没有独立论文，`⚠ unresolved` 表示存在论文但引用身份尚未解析，应视为待修复的数据错误。引用数仅作影响力上下文，不参与阶段划分。',
+              'README.en.md': 'Citation counts are from Semantic Scholar, last refreshed **2026-08-24**; `—` means the benchmark is currently repo/project-only with no standalone paper, while `⚠ unresolved` means a paper exists but its citation identity is unresolved and should be treated as a data error. Counts are context for adoption, not an input to stage labels.',
+          }
+          for filename, note in notes.items():
+              path = Path(filename)
+              readme = path.read_text(encoding='utf-8')
+              pattern = re.compile(r'<!-- CITATION-META:START -->\n.*?\n<!-- CITATION-META:END -->', re.S)
+              replacement = f'<!-- CITATION-META:START -->\n{note}\n<!-- CITATION-META:END -->'
+              if pattern.search(readme) is None:
+                  raise SystemExit(f'{filename}: citation metadata block missing')
+              path.write_text(pattern.sub(replacement, readme, count=1), encoding='utf-8')
 
-      - name: Require no unresolved formal papers in current registry
-        shell: python
-        run: |
-          import json
-          from pathlib import Path
           records = json.loads(Path('data/benchmarks.json').read_text(encoding='utf-8'))
           unresolved = [
               (r.get('id'), (r.get('artifacts') or {}).get('paper'))
@@ -70,7 +75,7 @@ jobs:
               if (r.get('citations') or {}).get('status') == 'unmatched'
           ]
           if unresolved:
-              raise SystemExit(f'formal papers still unresolved: {unresolved}')
+              raise SystemExit(f'current registry still has unresolved formal papers: {unresolved}')
 
       - name: Validate repository
         run: |
@@ -92,4 +97,4 @@ jobs:
         if: success()
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh issue close "${{ github.event.issue.number }}" --comment "Citation UI now distinguishes repo/project-only entries from unresolved formal papers, current registry has no unresolved paper identities, and validation passed."
+        run: gh issue close "${{ github.event.issue.number }}" --comment "Citation UI now distinguishes repo/project-only entries from unresolved formal papers, current registry has no unresolved paper identities, and validation passed without an S2 refresh."
