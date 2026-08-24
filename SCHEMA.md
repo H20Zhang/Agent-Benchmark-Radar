@@ -35,6 +35,18 @@ Native-v2 records used as rolling-period supports also declare `direction_keys`,
 
 `map_delta` is an event-level editorial judgment, not a prestige label. `early_signal` does not mutate a durable map. `reinforces` requires independent evidence beyond one work. `revises`, `splits`, and `retires` require the prior map claim, new evidence, and the smallest reversible edit.
 
+## Citation metadata
+
+Every registry record carries a `citations` object so the complete area tables can expose a consistent, auditable influence signal without turning citation count into a quality ranking:
+
+- `count`: Semantic Scholar citation count, or `null` when no paper can be matched;
+- `source`: currently `semantic-scholar`;
+- `updated_at`: `YYYY-MM-DD` refresh date;
+- `status`: `ok`, `no-paper`, or `unmatched`;
+- `paper_id` and `url`: the resolved Semantic Scholar paper identity when `status=ok`.
+
+A real zero must remain `0`; unknown is `null`. Citation count is age- and source-dependent context only. It must not determine `importance`, `evolution_role`, genealogy, or frontier status.
+
 ## Evolution role
 
 The Radar is meant to show how a field's definition of progress changes over time.

@@ -1472,12 +1472,15 @@ def validate_public_readme(
                 errors.append(f"{language}: expected exactly one {label} block")
                 continue
             block = text.split(start_marker, 1)[1].split(end_marker, 1)[0]
+            expected_columns = 4 if label == "TABLE-FIRST:RECENT" else 5
             for line in block.splitlines():
                 visible = strip_html_comments(line).strip()
                 if visible.startswith("|") and visible.endswith("|"):
                     cells = visible.split("|")[1:-1]
-                    if len(cells) != 4:
-                        errors.append(f"{language}: {label} must have exactly four visible columns")
+                    if len(cells) != expected_columns:
+                        errors.append(
+                            f"{language}: {label} must have exactly {expected_columns} visible columns"
+                        )
                         break
             for forbidden in ("相较以往", "带来的变化", "What changed", "Why it changed the question"):
                 if forbidden in block:

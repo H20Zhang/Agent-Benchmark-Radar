@@ -41,10 +41,15 @@ class TableFirstReadmeContractTest(unittest.TestCase):
                     "TABLE-FIRST:AREA:data-agent",
                 ):
                     block = self._block(text, label)
+                    expected_columns = 4 if label == "TABLE-FIRST:RECENT" else 5
                     for line in block.splitlines():
                         visible = line.split("<!--", 1)[0].strip()
                         if visible.startswith("|") and visible.endswith("|"):
-                            self.assertEqual(4, len(visible.split("|")[1:-1]), (language, label, line))
+                            self.assertEqual(
+                                expected_columns,
+                                len(visible.split("|")[1:-1]),
+                                (language, label, line),
+                            )
                     self.assertNotIn("相较以往", block)
                     self.assertNotIn("带来的变化", block)
                     self.assertNotIn("What changed", block)
