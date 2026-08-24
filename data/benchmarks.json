@@ -2179,12 +2179,12 @@
     },
     "last_verified": "2026-08-20",
     "citations": {
-      "count": 63,
+      "count": null,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "ok",
-      "paper_id": "0e28243cc36df0dfa857770e5a0a560275b225bf",
-      "url": "https://www.semanticscholar.org/paper/0e28243cc36df0dfa857770e5a0a560275b225bf"
+      "status": "unmatched",
+      "paper_id": null,
+      "url": null
     }
   },
   {
@@ -2581,12 +2581,12 @@
     },
     "last_verified": "2026-08-20",
     "citations": {
-      "count": null,
+      "count": 0,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "unmatched",
-      "paper_id": null,
-      "url": null
+      "status": "ok",
+      "paper_id": "e9ceaad85060375e02926322f959a6285a891cac",
+      "url": "https://www.semanticscholar.org/paper/e9ceaad85060375e02926322f959a6285a891cac"
     }
   },
   {
@@ -3899,12 +3899,12 @@
     },
     "last_verified": "2026-08-20",
     "citations": {
-      "count": null,
+      "count": 0,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "unmatched",
-      "paper_id": null,
-      "url": null
+      "status": "ok",
+      "paper_id": "7da6291b9b411f15ea5a37ffea1dd21a7a44c08b",
+      "url": "https://www.semanticscholar.org/paper/7da6291b9b411f15ea5a37ffea1dd21a7a44c08b"
     }
   },
   {
@@ -4668,12 +4668,12 @@
     },
     "last_verified": "2026-08-20",
     "citations": {
-      "count": null,
+      "count": 0,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "unmatched",
-      "paper_id": null,
-      "url": null
+      "status": "ok",
+      "paper_id": "ddaa0ae18f1c2ae8f1e6633848ab883cb200f43e",
+      "url": "https://www.semanticscholar.org/paper/ddaa0ae18f1c2ae8f1e6633848ab883cb200f43e"
     }
   },
   {
@@ -4722,12 +4722,12 @@
     },
     "last_verified": "2026-08-20",
     "citations": {
-      "count": null,
+      "count": 0,
       "source": "semantic-scholar",
       "updated_at": "2026-08-24",
-      "status": "unmatched",
-      "paper_id": null,
-      "url": null
+      "status": "ok",
+      "paper_id": "824d4b562281ab3020e716cfff9db02f7f4e61a1",
+      "url": "https://www.semanticscholar.org/paper/824d4b562281ab3020e716cfff9db02f7f4e61a1"
     }
   },
   {

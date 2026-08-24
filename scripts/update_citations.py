@@ -41,7 +41,7 @@ def _s2_external_id(record: dict[str, object]) -> str | None:
             arxiv_id = re.sub(r"v\d+$", "", arxiv_id)
             return f"ARXIV:{arxiv_id}"
     if host.endswith("aclanthology.org") and path:
-        return f"ACL:{path.split('/')[0]}"
+        return f"DOI:10.18653/v1/{path.split('/')[0]}"
     if host.endswith("doi.org") and path:
         return f"DOI:{path}"
     if host.endswith("semanticscholar.org"):
