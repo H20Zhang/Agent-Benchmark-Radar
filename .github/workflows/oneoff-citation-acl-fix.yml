@@ -1,0 +1,61 @@
+name: One-off ACL citation identity fix
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  fix:
+    if: github.event.issue.title == 'trigger-benchmark-citation-acl-fix'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Resolve ACL Anthology papers through canonical DOI
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('scripts/update_citations.py')
+          text = path.read_text(encoding='utf-8')
+          old = '''    if host.endswith("aclanthology.org") and path:
+                  return f"ACL:{path.split('/')[0]}"
+          '''
+          new = '''    if host.endswith("aclanthology.org") and path:
+                  return f"DOI:10.18653/v1/{path.split('/')[0]}"
+          '''
+          if old not in text:
+              raise SystemExit('ACL identity resolver changed unexpectedly')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+      - name: Refresh citation counts
+        run: python scripts/update_citations.py
+        env:
+          S2_API_KEY: ${{ secrets.S2_API_KEY }}
+      - name: Validate repository
+        run: |
+          python -m unittest discover -s tests -v
+          python scripts/validate_reading.py
+          git diff --check
+      - name: Commit fix and remove one-off workflow
+        shell: bash
+        run: |
+          rm .github/workflows/oneoff-citation-acl-fix.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix ACL citation identity resolution"
+          git push origin HEAD:main
+      - name: Close trigger issue
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue close "${{ github.event.issue.number }}" --comment "ACL citation identity resolution fixed and validated."
