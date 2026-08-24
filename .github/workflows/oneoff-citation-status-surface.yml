@@ -1,0 +1,95 @@
+name: One-off citation status surface fix
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  fix:
+    if: github.event.issue.title == 'trigger-citation-status-surface'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Distinguish no-paper from unresolved-paper states
+        shell: python
+        run: |
+          from pathlib import Path
+
+          script_path = Path('scripts/update_citations.py')
+          text = script_path.read_text(encoding='utf-8')
+          old = '''def _citation_cell(record: dict[str, object]) -> str:\n    citation = record.get("citations")\n    if not isinstance(citation, dict) or citation.get("status") != "ok":\n        return "—"\n    count = citation.get("count")\n    if not isinstance(count, int):\n        return "—"\n    display = f"{count:,}"\n    target = citation.get("url")\n    return f"[{display}]({target})" if isinstance(target, str) and target else display\n'''
+          new = '''def _citation_cell(record: dict[str, object]) -> str:\n    citation = record.get("citations")\n    if not isinstance(citation, dict):\n        return "⚠ unresolved"\n    status = citation.get("status")\n    if status == "no-paper":\n        return "—"\n    if status != "ok":\n        return "⚠ unresolved"\n    count = citation.get("count")\n    if not isinstance(count, int):\n        return "⚠ unresolved"\n    display = f"{count:,}"\n    target = citation.get("url")\n    return f"[{display}]({target})" if isinstance(target, str) and target else display\n'''
+          if old in text:
+              text = text.replace(old, new, 1)
+          elif new not in text:
+              raise SystemExit('citation cell renderer changed unexpectedly')
+
+          old = '''    if language == "zh":\n        body = f"引用数来自 Semantic Scholar，最后刷新 **{today}**；`—` 表示暂无可匹配论文。引用数仅作影响力上下文，不参与阶段划分。"\n    else:\n        body = f"Citation counts are from Semantic Scholar, last refreshed **{today}**; `—` means no paper could be matched. Counts are context for adoption, not an input to stage labels."\n'''
+          new = '''    if language == "zh":\n        body = f"引用数来自 Semantic Scholar，最后刷新 **{today}**；`—` 表示该 benchmark 当前以 repo/project 形式发布、没有独立论文，`⚠ unresolved` 表示存在论文但引用身份尚未解析，应视为待修复的数据错误。引用数仅作影响力上下文，不参与阶段划分。"\n    else:\n        body = f"Citation counts are from Semantic Scholar, last refreshed **{today}**; `—` means the benchmark is currently repo/project-only with no standalone paper, while `⚠ unresolved` means a paper exists but its citation identity is unresolved and should be treated as a data error. Counts are context for adoption, not an input to stage labels."\n'''
+          if old in text:
+              text = text.replace(old, new, 1)
+          elif new not in text:
+              raise SystemExit('citation note changed unexpectedly')
+          script_path.write_text(text, encoding='utf-8')
+
+          test_path = Path('tests/test_citations.py')
+          test = test_path.read_text(encoding='utf-8')
+          old_test = '''                        if citation["status"] == "ok":\n                            self.assertIn(f"{citation['count']:,}", cells[2])\n                            self.assertIn(citation["url"], cells[2])\n                        else:\n                            self.assertEqual("—", cells[2])\n'''
+          new_test = '''                        if citation["status"] == "ok":\n                            self.assertIn(f"{citation['count']:,}", cells[2])\n                            self.assertIn(citation["url"], cells[2])\n                        elif citation["status"] == "no-paper":\n                            self.assertEqual("—", cells[2])\n                        else:\n                            self.assertEqual("⚠ unresolved", cells[2])\n'''
+          if old_test in test:
+              test = test.replace(old_test, new_test, 1)
+          elif new_test not in test:
+              raise SystemExit('citation projection test changed unexpectedly')
+          test_path.write_text(test, encoding='utf-8')
+
+      - name: Re-render citation tables
+        run: python scripts/update_citations.py
+        env:
+          S2_API_KEY: ${{ secrets.S2_API_KEY }}
+
+      - name: Require no unresolved formal papers in current registry
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+          records = json.loads(Path('data/benchmarks.json').read_text(encoding='utf-8'))
+          unresolved = [
+              (r.get('id'), (r.get('artifacts') or {}).get('paper'))
+              for r in records
+              if (r.get('citations') or {}).get('status') == 'unmatched'
+          ]
+          if unresolved:
+              raise SystemExit(f'formal papers still unresolved: {unresolved}')
+
+      - name: Validate repository
+        run: |
+          python -m unittest discover -s tests -v
+          python scripts/validate_reading.py
+          git diff --check
+
+      - name: Commit fix and remove one-off workflow
+        shell: bash
+        run: |
+          rm .github/workflows/oneoff-citation-status-surface.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "separate missing-paper and unresolved-citation states"
+          git push origin HEAD:main
+
+      - name: Close trigger issue
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue close "${{ github.event.issue.number }}" --comment "Citation UI now distinguishes repo/project-only entries from unresolved formal papers, current registry has no unresolved paper identities, and validation passed."
