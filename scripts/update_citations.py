@@ -20,6 +20,7 @@ REGISTRY = ROOT / "data" / "benchmarks.json"
 README_ZH = ROOT / "README.md"
 README_EN = ROOT / "README.en.md"
 S2_BATCH = "https://api.semanticscholar.org/graph/v1/paper/batch?fields=title,citationCount,url,externalIds"
+S2_MATCH = "https://api.semanticscholar.org/graph/v1/paper/search/match"
 S2_SEARCH = "https://api.semanticscholar.org/graph/v1/paper/search"
 AREA_LABELS = ("agent-memory", "rag", "data-agent")
 BENCHMARK_ID_RE = re.compile(r"<!--\s*benchmark-id:([a-z0-9-]+)\s*-->")
@@ -145,12 +146,39 @@ def _s2_title_fallback(record: dict[str, object]) -> dict[str, object] | None:
         if not parser.title:
             return None
         target = _normalized_title(parser.title)
+        fields = "title,citationCount,url,externalIds"
+
+        # Semantic Scholar documents /paper/search/match as the endpoint
+        # intended for retrieving one paper by closest title match. This
+        # avoids the relevance-search failure mode for hyphenated titles.
         time.sleep(1.05)
+        match_query = urlencode({"query": parser.title, "fields": fields})
+        match_response = _request_json(f"{S2_MATCH}?{match_query}")
+        match_candidates: list[dict[str, object]] = []
+        if isinstance(match_response, dict):
+            data = match_response.get("data")
+            if isinstance(data, list):
+                match_candidates = [item for item in data if isinstance(item, dict)]
+            elif isinstance(match_response.get("paperId"), str):
+                match_candidates = [match_response]
+        exact_match = [
+            candidate
+            for candidate in match_candidates
+            if isinstance(candidate.get("title"), str)
+            and _normalized_title(candidate["title"]) == target
+        ]
+        if len(exact_match) == 1:
+            return exact_match[0]
+
+        # Conservative fallback to relevance search: replace hyphens,
+        # then accept only a unique normalized exact-title match.
+        time.sleep(1.05)
+        search_title = re.sub(r"[-‐‑‒–—]", " ", parser.title)
         query = urlencode(
             {
-                "query": parser.title,
-                "limit": 5,
-                "fields": "title,citationCount,url,externalIds",
+                "query": search_title,
+                "limit": 10,
+                "fields": fields,
             }
         )
         response = _request_json(f"{S2_SEARCH}?{query}")
