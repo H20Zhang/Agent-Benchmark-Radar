@@ -2,15 +2,17 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
 import sys
 import time
 from datetime import date
+from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlsplit
+from urllib.parse import urlencode, urlsplit
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +20,7 @@ REGISTRY = ROOT / "data" / "benchmarks.json"
 README_ZH = ROOT / "README.md"
 README_EN = ROOT / "README.en.md"
 S2_BATCH = "https://api.semanticscholar.org/graph/v1/paper/batch?fields=title,citationCount,url,externalIds"
+S2_SEARCH = "https://api.semanticscholar.org/graph/v1/paper/search"
 AREA_LABELS = ("agent-memory", "rag", "data-agent")
 BENCHMARK_ID_RE = re.compile(r"<!--\s*benchmark-id:([a-z0-9-]+)\s*-->")
 
@@ -84,6 +87,99 @@ def _request_json(url: str, *, payload: dict[str, object] | None = None) -> obje
     raise last_error
 
 
+class _CitationTitleParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.title: str | None = None
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() != "meta" or self.title is not None:
+            return
+        values = {key.lower(): value for key, value in attrs if key and value}
+        if values.get("name", "").lower() == "citation_title":
+            title = html.unescape(values.get("content", "")).strip()
+            self.title = title or None
+
+
+def _request_text(url: str) -> str:
+    headers = {
+        "Accept": "text/html,application/xhtml+xml",
+        "User-Agent": "Agent-Benchmark-Radar/1.0 (+https://github.com/H20Zhang/Agent-Benchmark-Radar)",
+    }
+    request = Request(url, headers=headers, method="GET")
+    delay = 2.0
+    last_error: Exception | None = None
+    for attempt in range(4):
+        try:
+            with urlopen(request, timeout=45) as response:
+                return response.read().decode("utf-8", errors="replace")
+        except HTTPError as exc:
+            last_error = exc
+            if exc.code not in {429, 500, 502, 503, 504} or attempt == 3:
+                raise
+        except URLError as exc:
+            last_error = exc
+            if attempt == 3:
+                raise
+        time.sleep(delay)
+        delay *= 2
+    assert last_error is not None
+    raise last_error
+
+
+def _normalized_title(value: str) -> str:
+    return " ".join(re.sub(r"[\W_]+", " ", html.unescape(value).casefold()).split())
+
+
+def _s2_title_fallback(record: dict[str, object]) -> dict[str, object] | None:
+    artifacts = record.get("artifacts")
+    if not isinstance(artifacts, dict):
+        return None
+    paper_url = artifacts.get("paper")
+    if not isinstance(paper_url, str) or not urlsplit(paper_url).netloc.lower().endswith("aclanthology.org"):
+        return None
+
+    try:
+        parser = _CitationTitleParser()
+        parser.feed(_request_text(paper_url))
+        if not parser.title:
+            return None
+        target = _normalized_title(parser.title)
+        time.sleep(1.05)
+        query = urlencode(
+            {
+                "query": parser.title,
+                "limit": 5,
+                "fields": "title,citationCount,url,externalIds",
+            }
+        )
+        response = _request_json(f"{S2_SEARCH}?{query}")
+    except (HTTPError, URLError, UnicodeError, ValueError):
+        return None
+
+    if not isinstance(response, dict) or not isinstance(response.get("data"), list):
+        return None
+    matches = [
+        candidate
+        for candidate in response["data"]
+        if isinstance(candidate, dict)
+        and isinstance(candidate.get("title"), str)
+        and _normalized_title(candidate["title"]) == target
+    ]
+    if len(matches) == 1:
+        return matches[0]
+
+    anthology_id = urlsplit(paper_url).path.strip("/").split("/")[0]
+    expected_doi = f"10.18653/v1/{anthology_id}".casefold()
+    doi_matches = [
+        candidate
+        for candidate in matches
+        if isinstance(candidate.get("externalIds"), dict)
+        and str(candidate["externalIds"].get("DOI", "")).casefold() == expected_doi
+    ]
+    return doi_matches[0] if len(doi_matches) == 1 else None
+
+
 def _refresh_citations(records: list[dict[str, object]], today: str) -> bool:
     indexed: list[tuple[dict[str, object], str]] = []
     changed = False
@@ -114,6 +210,8 @@ def _refresh_citations(records: list[dict[str, object]], today: str) -> bool:
         raise RuntimeError("Semantic Scholar batch response shape drift")
 
     for (record, _external_id), paper in zip(indexed, response):
+        if not isinstance(paper, dict):
+            paper = _s2_title_fallback(record)
         if not isinstance(paper, dict):
             desired = {
                 "count": None,
