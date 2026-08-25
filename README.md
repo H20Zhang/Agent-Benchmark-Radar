@@ -8,17 +8,18 @@
 <!-- FRONTIER-SIGNALS:START -->
 | 方向 | 真正变化 | 代表 Benchmark |
 |---|---|---|
-| **Agent Memory** | 从“能不能召回”推进到**记忆是否因果改变后续行动，以及持久状态能否被安全治理**。PAST-Bench 用 persistence on/off 对照测下游效应；Agent Memory Bench 接上 neutral feed、proof-of-treatment 与 executable coding outcome；SP-Mem 同时测 personalization、consent 与 leakage。 | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [Agent Memory Bench](https://github.com/GiulioDER/agent-memory-bench) · [SP-Mem](https://arxiv.org/abs/2608.16551) |
+| **Agent Memory** | 从“能不能召回”进一步转向**记忆在使用前是否仍然有效，以及被正确检索出来后是否应该影响当前任务**。StateMemBench 把 current 与 superseded state 分开评分；MemTrapBench 用同题 memory/no-memory 对照测有害复用；membench (staleness) 则把 current-vs-stale 排序、弃答与泄露防护做成 memory-store 诊断。 | [StateMemBench](https://arxiv.org/abs/2608.19652) · [MemTrapBench](https://arxiv.org/abs/2608.20202) · [membench (staleness)](https://github.com/Ps23102004/membench) |
 | **RAG / Agentic Retrieval** | 重点从“recall 高不高”转向**retrieval metric 是否预测下游成功，以及 corpus construction 是否把搜索做得过于容易**。BrowseComp-Plus_CM 在同题、同 agent、同接口下只替换语料，证据 recall 即从 84.3% 降到 21.4%；The Recall Trap 与 The Commercial Tax 则分别暴露 downstream 与部署条件依赖。 | [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) · [The Recall Trap](https://arxiv.org/abs/2608.14838) · [The Commercial Tax](https://arxiv.org/abs/2608.16096) |
 | **Data Agents** | 评价对象继续从“SQL / code 能跑”推到**真实仓库中的长时程 ML 改进，同时收紧分数归因**。AI4AI-Bench 用 proxy exploration → source patch → clean-start final run 隔离学习算法修改；DeltaML-Bench 则把 published-baseline improvement 与 anti-gaming audit 放进同一执行协议。 | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
-最后更新：**2026-08-24**
+最后更新：**2026-08-25**
 
 <a id="release-timeline"></a>
 ## 最近半年 Benchmark 时间线
 
 <!-- TABLE-FIRST:RECENT:START -->
+
 | 时间 | 方向 | Benchmark | 考察内容 |
 |---|---|---|---|
 | 2026-08-22 | Agent Memory | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | 在真实仓库任务中用 neutral feed、proof-of-treatment 与隐藏执行 oracle 测跨任务记忆是否改善编码行动。 |
@@ -26,6 +27,8 @@
 | 2026-08-21 | Agent Memory | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | 交叉比较检索策略与写入时 enrichment，测合成组织记忆中的跨词汇检索。 |
 | 2026-08-20 | Data Agent | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | 在冻结训练仓库中诊断并修改学习算法，以 proxy 探索、源码交付和 clean-start 正式运行隔离最终成绩。 |
 | 2026-08-20 | Data Agent | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 在真实研究仓库中修复训练管线、迭代实验、超过论文基线，并通过多层 anti-gaming audit。 |
+| 2026-08-20 | Agent Memory | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | 用同题 memory/no-memory 对照检验正确检索到的历史记忆是否引发 reasoning fixation 或 belief distortion。 |
+| 2026-08-20 | Agent Memory | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | 在多会话修订中区分当前状态、已被替代状态与其他错误，并用可执行 replay 隔离 state drift。 |
 | 2026-08-18 | RAG | [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) <!-- benchmark-id:browsecomp-plus-cm --> | 在同题、同 agent 与同 BM25 接口下，把检索换到独立构建的 5.53 亿文档语料并测答案、证据 recall 和调用成本。 |
 | 2026-08-18 | RAG | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | 在统一页面排序协议下比较静态 ranker 与迭代视觉/OCR agent 的视觉文档检索基准。 |
 | 2026-08-17 | Data Agent | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | 在下游分析前，构建包含逻辑表、列语义、键关系和质量信号的结构化数据理解产物。 |
@@ -90,7 +93,8 @@
 | 2026-02-03 | Agent Memory | [MemGUI-Bench](https://arxiv.org/abs/2602.06075) <!-- benchmark-id:memgui-bench --> | 移动端操作中的跨步骤保持、跨应用迁移、跨会话学习和失败恢复。 |
 | 2026-02 | RAG | [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) <!-- benchmark-id:agenticragtracer --> | 对多步检索与推理逐跳核验，并检查步骤分配。 |
 | 2026-02 | Agent Memory | [AMA-Bench](https://arxiv.org/abs/2602.22769) <!-- benchmark-id:ama-bench --> | 真实和可扩展合成的智能体—环境轨迹上的长程记忆。 |
-| 2026-02 | Agent Memory | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | 智能体能否维护账本、列表、树等符合任务需要的记忆结构。 |<!-- TABLE-FIRST:RECENT:END -->
+| 2026-02 | Agent Memory | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | 智能体能否维护账本、列表、树等符合任务需要的记忆结构。 |
+<!-- TABLE-FIRST:RECENT:END -->
 
 <a id="timeline"></a><a id="latest"></a><a id="frontier"></a>
 <a id="periods"></a><a id="changes"></a><a id="evolution"></a>
@@ -122,11 +126,12 @@
 <a id="all-benchmarks"></a>
 ## 按领域查看全部 Benchmark
 
-以下是 registry 中的全部 111 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
+以下是 registry 中的全部 113 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
 
 ### Agent Memory
 
 <!-- TABLE-FIRST:AREA:agent-memory:START -->
+
 | 阶段 | Benchmark | 引用数 (S2) | 时间 | 考察内容 |
 |---|---|---:|---:|---|
 | 🌱 前身 | [Beyond Goldfish Memory](https://aclanthology.org/2022.acl-long.356/) <!-- benchmark-id:beyond-goldfish-memory --> | [377](https://www.semanticscholar.org/paper/88064de690af282dbdf222774f03ff070b9df22b) | 2022-05 | 多次真人聊天之间的开放域长期记忆与前后自洽。 |
@@ -163,9 +168,12 @@
 | 🔭 前沿 | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | [0](https://www.semanticscholar.org/paper/1654c6adad236d9cb98d8b2d76264a3c82962515) | 2026-07-27 | 旧事实与新问题词义相远、只有借助常识才能建立联系时，记忆能否被正确调出并应用。 |
 | 🔭 前沿 | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | [0](https://www.semanticscholar.org/paper/86174fa6cbc829c87d1dae781e1282a751e9f6b5) | 2026-08-04 | 通过配对持久状态控制，检验跨 episode 经验是否因果改善后续可执行工作的基准。 |
 | 🔭 前沿 | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | [0](https://www.semanticscholar.org/paper/5e223c2c94b112dda6df62c7a869d48cddd0e9f0) | 2026-08-17 | 联合测量回答质量、个性化、同意处理、精确值暴露与成本的隐私感知记忆基准。 |
+| 🔭 前沿 | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | — | 2026-08-20 | 同题 memory/no-memory 对照下，相关历史记忆是否会造成 reasoning fixation 或 belief distortion。 |
+| 🔭 前沿 | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | — | 2026-08-20 | 多会话状态修订中的 current-vs-superseded 跟踪、依赖更新与 stale-state 抵抗。 |
 | 🔭 前沿 | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | — | 2026-08-21 | 交叉比较检索策略与写入时 enrichment，测合成组织记忆中的跨词汇检索。 |
 | 🔭 前沿 | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | — | 2026-08-22 | 在真实仓库任务中用 neutral feed、proof-of-treatment 与隐藏执行 oracle 测跨任务记忆是否改善编码行动。 |
-| 🔭 前沿 | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | — | 2026-08-22 | 用 current-vs-stale 排序、弃答与泄露防护诊断 memory store 的更新和冲突处理。 |<!-- TABLE-FIRST:AREA:agent-memory:END -->
+| 🔭 前沿 | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | — | 2026-08-22 | 用 current-vs-stale 排序、弃答与泄露防护诊断 memory store 的更新和冲突处理。 |
+<!-- TABLE-FIRST:AREA:agent-memory:END -->
 
 ### RAG / Agentic Retrieval
 
