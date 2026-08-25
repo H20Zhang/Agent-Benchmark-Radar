@@ -8,17 +8,18 @@
 <!-- FRONTIER-SIGNALS:START -->
 | Area | What actually changed | Representative benchmarks |
 |---|---|---|
-| **Agent Memory** | Evaluation is moving beyond “can it recall?” toward **whether retained memory causally changes later action and whether persistent state can be governed safely**. PAST-Bench uses persistence-on/off controls for downstream effects; Agent Memory Bench adds neutral feeds, proof-of-treatment, and executable coding outcomes; SP-Mem jointly measures personalization, consent, and leakage. | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [Agent Memory Bench](https://github.com/GiulioDER/agent-memory-bench) · [SP-Mem](https://arxiv.org/abs/2608.16551) |
+| **Agent Memory** | Evaluation is moving beyond “can it recall?” to **whether a memory is still valid before use, and whether a faithfully retrieved memory should influence the current task at all**. StateMemBench scores current versus superseded state; MemTrapBench uses paired memory/no-memory controls for harmful reuse; membench (staleness) makes current-vs-stale ranking, abstention, and leakage executable. | [StateMemBench](https://arxiv.org/abs/2608.19652) · [MemTrapBench](https://arxiv.org/abs/2608.20202) · [membench (staleness)](https://github.com/Ps23102004/membench) |
 | **RAG / Agentic Retrieval** | The question is shifting from “is recall high?” to **whether a retrieval metric predicts downstream success and whether corpus construction makes search artificially easy**. BrowseComp-Plus_CM swaps only the corpus under matched questions, agent, and interface, yet evidence recall falls from 84.3% to 21.4%; The Recall Trap and The Commercial Tax expose downstream and deployment dependence. | [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) · [The Recall Trap](https://arxiv.org/abs/2608.14838) · [The Commercial Tax](https://arxiv.org/abs/2608.16096) |
 | **Data Agents** | The target keeps moving beyond “does SQL/code run?” toward **long-horizon ML improvement in real repositories with tighter score attribution**. AI4AI-Bench isolates algorithm changes through proxy exploration → source patch → clean-start final run; DeltaML-Bench joins published-baseline improvement with anti-gaming audits. | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
-Last updated: **2026-08-24**
+Last updated: **2026-08-25**
 
 <a id="release-timeline"></a>
 ## Benchmark Timeline: Last Six Months
 
 <!-- TABLE-FIRST:RECENT:START -->
+
 | Time | Area | Benchmark | What it tests |
 |---|---|---|---|
 | 2026-08-22 | Agent Memory | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | Cross-task memory effects on real-repository coding under a neutral feed, proof-of-treatment gates, and hidden executable oracles. |
@@ -26,6 +27,8 @@ Last updated: **2026-08-24**
 | 2026-08-21 | Agent Memory | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | Cross-vocabulary retrieval in synthetic organizational memory, crossing retrieval strategy with write-time enrichment. |
 | 2026-08-20 | Data Agent | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | Diagnosing and modifying learning algorithms in frozen training repositories, with proxy exploration, source-only handoff, and clean-start formal runs. |
 | 2026-08-20 | Data Agent | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | Training-pipeline repair, iterative experimentation, published-baseline improvement, and anti-gaming checks in real research repositories. |
+| 2026-08-20 | Agent Memory | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | Uses paired memory/no-memory conditions on the same current task to test whether relevant prior memory induces reasoning fixation or belief distortion. |
+| 2026-08-20 | Agent Memory | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | Separates current state, superseded state, and other errors under multi-session revision using executable replay to isolate state drift. |
 | 2026-08-18 | RAG | [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) <!-- benchmark-id:browsecomp-plus-cm --> | Agentic evidence discovery over an independently built 553M-document corpus under matched questions, agent, BM25 interface, and answer judge. |
 | 2026-08-18 | RAG | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | Visual-document retrieval benchmark that compares static rankers and iterative visual/OCR agents under one ranked-page contract. |
 | 2026-08-17 | Data Agent | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | Structured dataset understanding before analysis, including logical tables, semantics, keys, relationships, and profiling signals. |
@@ -90,7 +93,8 @@ Last updated: **2026-08-24**
 | 2026-02-03 | Agent Memory | [MemGUI-Bench](https://arxiv.org/abs/2602.06075) <!-- benchmark-id:memgui-bench --> | Cross-step retention, cross-app transfer, cross-session learning, and recovery in mobile GUI tasks. |
 | 2026-02 | RAG | [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) <!-- benchmark-id:agenticragtracer --> | Diagnoses multi-step agentic RAG by providing hop-aware intermediate validation rather than only final questions and answers. |
 | 2026-02 | Agent Memory | [AMA-Bench](https://arxiv.org/abs/2602.22769) <!-- benchmark-id:ama-bench --> | Evaluates long-horizon memory over real and synthetic agent-environment trajectories rather than dialogue-only histories. |
-| 2026-02 | Agent Memory | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | Tests whether agents organize memory into task-appropriate structures such as ledgers, lists, and trees rather than only retrieving facts. |<!-- TABLE-FIRST:RECENT:END -->
+| 2026-02 | Agent Memory | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | Tests whether agents organize memory into task-appropriate structures such as ledgers, lists, and trees rather than only retrieving facts. |
+<!-- TABLE-FIRST:RECENT:END -->
 
 <a id="timeline"></a><a id="latest"></a><a id="frontier"></a>
 <a id="periods"></a><a id="changes"></a><a id="evolution"></a>
@@ -122,11 +126,12 @@ From text-to-SQL / code generation toward complete data workflows, exploration, 
 <a id="all-benchmarks"></a>
 ## All Benchmarks by Area
 
-All 111 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
+all 113 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
 
 ### Agent Memory
 
 <!-- TABLE-FIRST:AREA:agent-memory:START -->
+
 | Role | Benchmark | Citations (S2) | Released | What it evaluates |
 |---|---|---:|---:|---|
 | 🌱 Precursor | [Beyond Goldfish Memory](https://aclanthology.org/2022.acl-long.356/) <!-- benchmark-id:beyond-goldfish-memory --> | [377](https://www.semanticscholar.org/paper/88064de690af282dbdf222774f03ff070b9df22b) | 2022-05 | Benchmarks long-term open-domain conversation across multiple human-human chat sessions where partners must remember and remain consistent with prior interactions. |
@@ -163,9 +168,12 @@ All 111 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | [0](https://www.semanticscholar.org/paper/1654c6adad236d9cb98d8b2d76264a3c82962515) | 2026-07-27 | Retrieval and use of a personal fact whose relevance to the query depends on world knowledge. |
 | 🔭 Frontier | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | [0](https://www.semanticscholar.org/paper/86174fa6cbc829c87d1dae781e1282a751e9f6b5) | 2026-08-04 | Paired persistent-state benchmark that tests whether retained cross-episode experience causally improves later executable work. |
 | 🔭 Frontier | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | [0](https://www.semanticscholar.org/paper/5e223c2c94b112dda6df62c7a869d48cddd0e9f0) | 2026-08-17 | Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost. |
+| 🔭 Frontier | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | — | 2026-08-20 | Whether relevant prior memory causes reasoning fixation or belief distortion under paired memory/no-memory conditions. |
+| 🔭 Frontier | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | — | 2026-08-20 | Current-versus-superseded state tracking, dependency updates, and stale-state resistance under multi-session revision. |
 | 🔭 Frontier | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | — | 2026-08-21 | Cross-vocabulary retrieval in synthetic organizational memory, crossing retrieval strategy with write-time enrichment. |
 | 🔭 Frontier | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | — | 2026-08-22 | Cross-task memory effects on real-repository coding under a neutral feed, proof-of-treatment gates, and hidden executable oracles. |
-| 🔭 Frontier | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | — | 2026-08-22 | Memory-store update and conflict handling through current-versus-stale ranking plus abstention and leakage guards. |<!-- TABLE-FIRST:AREA:agent-memory:END -->
+| 🔭 Frontier | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | — | 2026-08-22 | Memory-store update and conflict handling through current-versus-stale ranking plus abstention and leakage guards. |
+<!-- TABLE-FIRST:AREA:agent-memory:END -->
 
 ### RAG / Agentic Retrieval
 

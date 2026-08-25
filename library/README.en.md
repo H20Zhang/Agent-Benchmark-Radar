@@ -7,6 +7,7 @@ Start with time to see what recently became measurable, then use area timelines 
 ## Browse by Time — Complete Index
 
 <!-- COMPLETE-TIMELINE:START -->
+
 | Released | Benchmark | Area | Role | What changed |
 |---:|---|---|---|---|
 | 2026-08-22 | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | Agent Memory | 🔭 Frontier | Tightens causal attribution for cross-task memory effects through neutral feeds, proof-of-treatment, and executable oracles. |
@@ -14,6 +15,8 @@ Start with time to see what recently became measurable, then use area timelines 
 | 2026-08-21 | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | Agent Memory | 🔭 Frontier | Crosses retrieval strategy with write-time enrichment so cross-vocabulary memory access becomes separately measurable. |
 | 2026-08-20 | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | Data Agents | 🔭 Frontier | Isolates learning-algorithm design more tightly through proxy exploration, a source-patch boundary, and clean-start formal runs. |
 | 2026-08-20 | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | Data Agents | 🔭 Frontier | Binds ML improvement in real research repositories to long compute budgets and anti-gaming audits in one executable protocol. |
+| 2026-08-20 | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | Agent Memory | 🔭 Frontier | Separates “a relevant memory was retrieved” from “that memory should influence current reasoning,” using a paired no-memory control to expose harm. |
+| 2026-08-20 | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | Agent Memory | 🔭 Frontier | Isolates state drift from retrieval and generic reasoning failures through current-versus-superseded outcomes and anti-trap controls. |
 | 2026-08-18 | [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) <!-- benchmark-id:browsecomp-plus-cm --> | RAG / Agentic Retrieval | 🔭 Frontier | Shows that a fixed corpus can still understate evidence-discovery difficulty through query-conditioned construction and scale. |
 | 2026-08-18 | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | RAG / Agentic Retrieval | 🔭 Frontier | Compares static visual retrieval with iterative page discovery and inspection under one top-10 contract. |
 | 2026-08-17 | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | Data Agents | 🔭 Frontier | Turns implicit data exploration from a prerequisite hidden behind final-answer accuracy into a directly scored artifact with measured downstream value. |
@@ -127,6 +130,7 @@ Start with time to see what recently became measurable, then use area timelines 
 ### Agent Memory
 
 <!-- COMPLETE-MAP:agent-memory:START -->
+
 | Role | Benchmark | Released | What it evaluates | Why it changed the question |
 |---|---|---:|---|---|
 | 🌱 Precursor | [Beyond Goldfish Memory](https://aclanthology.org/2022.acl-long.356/) <!-- benchmark-id:beyond-goldfish-memory --> | 2022-05 | Benchmarks long-term open-domain conversation across multiple human-human chat sessions where partners must remember and remain consistent with prior interactions. | Established cross-session conversation as a distinct long-term-memory setting before modern memory-agent benchmarks. |
@@ -163,6 +167,8 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | 2026-07-27 | Retrieval and use of a personal fact whose relevance to the query depends on world knowledge. | Paired controls separate storage, knowledge, routing, and final-use failures. |
 | 🔭 Frontier | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | 2026-08-04 | Paired persistent-state benchmark that tests whether retained cross-episode experience causally improves later executable work. | Uses persistence-on/off controls to attribute executable cross-episode benefit to retained state. |
 | 🔭 Frontier | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | 2026-08-17 | Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost. | Places personalization benefit, authorization, and leakage risk in one memory-lifecycle protocol. |
+| 🔭 Frontier | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | 2026-08-20 | Whether relevant prior memory causes reasoning fixation or belief distortion under paired memory/no-memory conditions. | Moves beyond whether memory is recalled to whether recalled content should be used for the current task. |
+| 🔭 Frontier | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | 2026-08-20 | Current-versus-superseded state tracking, dependency updates, and stale-state resistance under multi-session revision. | Isolates stale-state failure from retrieval failure and generic reasoning failure. |
 | 🔭 Frontier | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | 2026-08-21 | Cross-vocabulary retrieval in synthetic organizational memory, crossing retrieval strategy with write-time enrichment. | Treats memory write enrichment as a controlled intervention crossed with three retrieval strategies. |
 | 🔭 Frontier | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | 2026-08-22 | Cross-task memory effects on real-repository coding under a neutral feed, proof-of-treatment gates, and hidden executable oracles. | Extends PAST-Bench-style persistent-state controls to pluggable coding memory with explicit treatment verification. |
 | 🔭 Frontier | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | 2026-08-22 | Memory-store update and conflict handling through current-versus-stale ranking plus abstention and leakage guards. | Corrects top-k staleness and closes abstention gaming so stale-fact rank is more interpretable. |

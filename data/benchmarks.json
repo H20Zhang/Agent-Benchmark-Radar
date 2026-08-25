@@ -5671,5 +5671,111 @@
       "paper_id": null,
       "url": null
     }
+  },
+  {
+    "id": "memtrapbench",
+    "name": "MemTrapBench",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-08-20",
+    "importance": 5,
+    "status": "active",
+    "summary": "Tests whether faithfully stored and semantically relevant memories harm current reasoning through reasoning fixation or belief distortion.",
+    "capabilities": [
+      "memory-use-gating",
+      "reasoning-robustness",
+      "belief-update",
+      "context-boundary-control"
+    ],
+    "environment": [
+      "multi-turn-dialogue",
+      "planted-prior-history",
+      "context-shift"
+    ],
+    "protocol": [
+      "memory-vs-no-memory-paired-control",
+      "reasoning-fixation",
+      "belief-distortion",
+      "expert-quality-control"
+    ],
+    "scale": "1,050 multi-turn instances across cognitive-bias, task-boundary, safety, and trauma subsets.",
+    "measurement_strength": "Makes negative causal effects of memory use observable by comparing the same current task with and without prior memory.",
+    "coverage_gap": "Adversarially planted priors and independently solvable final queries do not estimate how often harmful memory use occurs in natural agent workloads.",
+    "confounders": [
+      "synthetic-dialogue-generation",
+      "no-memory-baseline-design",
+      "judge-model",
+      "memory-framework-and-backbone"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.20202"
+    },
+    "last_verified": "2026-08-25",
+    "published_at": "2026-08-20T16:00:17Z",
+    "first_seen_at": "2026-08-25T02:23:51Z",
+    "radar_published_at": "2026-08-25T02:24:54Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-08-25",
+      "status": "unmatched",
+      "paper_id": null,
+      "url": null
+    }
+  },
+  {
+    "id": "statemembench",
+    "name": "StateMemBench",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-08-20",
+    "importance": 5,
+    "status": "active",
+    "summary": "Isolates state tracking under cross-session revisions by scoring whether an answer uses the currently operative state, a superseded state, or fails for another reason.",
+    "capabilities": [
+      "state-tracking",
+      "supersession-resolution",
+      "dependency-update",
+      "stale-state-resistance"
+    ],
+    "environment": [
+      "multi-session-conversation",
+      "controlled-state-revisions",
+      "research-shopping-finance"
+    ],
+    "protocol": [
+      "symbolic-event-replay",
+      "closed-pool-grading",
+      "anti-trap-controls",
+      "paired-length-regimes"
+    ],
+    "scale": "234 multi-session scenarios and 322 graded probes; 190 short scenarios plus 44 long fused scenarios across three domains.",
+    "measurement_strength": "Separates stale-state failures from retrieval and generic reasoning by construction, including perfect-retrieval and anti-update controls.",
+    "coverage_gap": "Explicitly stated dependencies and synthetic revisions leave latent relation discovery, real-world drift, and downstream closed-loop action largely unmeasured.",
+    "confounders": [
+      "synthetic-dialogue-rendering",
+      "llm-judge",
+      "benchmark-method-alignment",
+      "backbone-and-context-budget"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.19652"
+    },
+    "last_verified": "2026-08-25",
+    "published_at": "2026-08-20T05:41:23Z",
+    "first_seen_at": "2026-08-25T02:23:51Z",
+    "radar_published_at": "2026-08-25T02:24:54Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-08-25",
+      "status": "unmatched",
+      "paper_id": null,
+      "url": null
+    }
   }
 ]
