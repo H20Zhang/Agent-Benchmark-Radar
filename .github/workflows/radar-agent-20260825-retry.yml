@@ -1,0 +1,55 @@
+name: Radar Agent 2026-08-25 drift retry
+
+on:
+  push:
+    branches: [radar-agent-20260825]
+
+permissions:
+  contents: write
+
+jobs:
+  integrate-and-validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: radar-agent-20260825
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Integrate the previously validated material delta onto refreshed main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin research-radar-reading-v1
+          BASE=c21cb685e7e8294fc2e888c9975482f0f8c95a1f
+          VALIDATED=b706e11acf4a304eeb5ea56809aab23124462c96
+          for path in README.md README.en.md data/benchmarks.json library/README.md library/README.en.md; do
+            mkdir -p "$(dirname "$path")"
+            git show "$BASE:$path" > /tmp/base
+            git show "$VALIDATED:$path" > /tmp/theirs
+            git merge-file "$path" /tmp/base /tmp/theirs
+          done
+          for path in \
+            benchmarks/memtrapbench.md \
+            benchmarks/memtrapbench.en.md \
+            benchmarks/statemembench.md \
+            benchmarks/statemembench.en.md; do
+            git show "$VALIDATED:$path" > "$path"
+          done
+      - name: Remove staging-only workflow and validate exact publish tree
+        run: |
+          rm .github/workflows/radar-agent-20260825-retry.yml
+          python -m unittest discover -s tests -v
+          python scripts/validate_reading.py
+          git diff --check
+      - name: Commit validated retry tree
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "add memory validity benchmarks"
+          git push origin HEAD:radar-agent-20260825
