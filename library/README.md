@@ -19,6 +19,7 @@
 | 2026-08-22 | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | Agent Memory | 🔭 前沿 | 把 current-vs-stale 排序与弃答、泄露防护做成可执行 memory-store 诊断。 |
 | 2026-08-22 | [RAG Collapse](https://arxiv.org/abs/2608.22118) <!-- benchmark-id:rag-collapse --> | RAG / Agentic Retrieval | 🔭 前沿 | 把 recursive feedback 从模型权重训练迁移到 retrieval context。 |
 | 2026-08-21 | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | Agent Memory | 🔭 前沿 | 交叉比较检索策略与写入时 enrichment，使跨词汇记忆访问可单独测量。 |
+| 2026-08-21 | [DreamBench-SWE](https://arxiv.org/abs/2608.20664) <!-- benchmark-id:dreambench-swe --> | Agent Memory | 🔭 前沿 | 把“过去状态是否有用”拆成对过期、错作用域、冲突、组合或应忽略记忆的可执行 hygiene 测试。 |
 | 2026-08-21 | [Utility Under Attack](https://arxiv.org/abs/2608.21230) <!-- benchmark-id:utility-under-attack --> | Agent Memory | 🔭 前沿 | 用 retained benign utility 暴露 poisoning 与防御引发的 denial-of-service。 |
 | 2026-08-20 | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | Data Agents | 🔭 前沿 | 用 proxy exploration、source-patch 边界和 clean-start 正式运行更紧地隔离学习算法设计。 |
 | 2026-08-20 | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | Data Agents | 🔭 前沿 | 把真实研究仓库中的 ML 改进、长算力预算和 anti-gaming audit 绑定为一个可执行协议。 |
@@ -182,6 +183,7 @@
 | 🔭 前沿 | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | 2026-08-20 | 同题 memory/no-memory 对照下，相关历史记忆是否会造成 reasoning fixation 或 belief distortion。 | 把“能否回忆”推进到“回忆到的内容是否应该被当前任务采用”。 |
 | 🔭 前沿 | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | 2026-08-20 | 多会话状态修订中的 current-vs-superseded 跟踪、依赖更新与 stale-state 抵抗。 | 把 stale-state failure 从检索失败与一般推理失败中单独隔离并评分。 |
 | 🔭 前沿 | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | 2026-08-21 | 交叉比较检索策略与写入时 enrichment，测合成组织记忆中的跨词汇检索。 | 把 memory write enrichment 作为可控干预，与三类检索策略直接交叉。 |
+| 🔭 前沿 | [DreamBench-SWE](https://arxiv.org/abs/2608.20664) <!-- benchmark-id:dreambench-swe --> | 2026-08-21 | 用隐藏 oracle 执行式评测多会话软件 agent 的 memory hygiene。 | 把受控 repository continuation 与保持、过期、作用域、权威、组合、source-of-truth、错误经验拒绝和弃答放入同一协议。 |
 | 🔭 前沿 | [Utility Under Attack](https://arxiv.org/abs/2608.21230) <!-- benchmark-id:utility-under-attack --> | 2026-08-21 | 虚假记忆下的良性 utility 保留，以及筛查与 provenance ranking 的防御代价。 | 把 retained utility 与 defense-induced evidence loss 设为安全评价对象。 |
 | 🔭 前沿 | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | 2026-08-22 | 在真实仓库任务中用 neutral feed、proof-of-treatment 与隐藏执行 oracle 测跨任务记忆是否改善编码行动。 | 将 PAST-Bench 式持久状态对照推进到产品可插拔 coding memory，并显式核验 treatment。 |
 | 🔭 前沿 | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | 2026-08-22 | 用 current-vs-stale 排序、弃答与泄露防护诊断 memory store 的更新和冲突处理。 | 修正 top-k staleness 并关闭 abstention gaming，使 stale-fact 排名更可解释。 |

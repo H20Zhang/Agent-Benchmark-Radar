@@ -13,7 +13,7 @@
 | **Data Agents** | 评价对象继续从“SQL / code 能跑”推到**真实仓库中的长时程 ML 改进，同时收紧分数归因**。AI4AI-Bench 用 proxy exploration → source patch → clean-start final run 隔离学习算法修改；DeltaML-Bench 则把 published-baseline improvement 与 anti-gaming audit 放进同一执行协议。 | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
-最后更新：**2026-08-26**
+最后更新：**2026-08-27**
 
 <a id="release-timeline"></a>
 ## 最近半年 Benchmark 时间线
@@ -32,6 +32,7 @@
 | 2026-08-22 | Agent Memory | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | 在真实仓库任务中用 neutral feed、proof-of-treatment 与隐藏执行 oracle 测跨任务记忆是否改善编码行动。 |
 | 2026-08-21 | Agent Memory | [Utility Under Attack](https://arxiv.org/abs/2608.21230) <!-- benchmark-id:utility-under-attack --> | 测少量虚假记忆造成的良性 utility 损失，以及筛查和 provenance ranking 的防御代价。 |
 | 2026-08-21 | Agent Memory | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | 交叉比较检索策略与写入时 enrichment，测合成组织记忆中的跨词汇检索。 |
+| 2026-08-21 | Agent Memory | [DreamBench-SWE](https://arxiv.org/abs/2608.20664) <!-- benchmark-id:dreambench-swe --> | 用隐藏可执行 oracle 的多会话编码陷阱，测记忆保持、过期/覆盖、作用域、权威冲突、组合、source-of-truth、错误经验拒绝与弃答。 |
 | 2026-08-20 | Agent Memory | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | 在多会话修订中区分当前状态、已被替代状态与其他错误，并用可执行 replay 隔离 state drift。 |
 | 2026-08-20 | Agent Memory | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | 用同题 memory/no-memory 对照检验正确检索到的历史记忆是否引发 reasoning fixation 或 belief distortion。 |
 | 2026-08-20 | Data Agent | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 在真实研究仓库中修复训练管线、迭代实验、超过论文基线，并通过多层 anti-gaming audit。 |
@@ -134,7 +135,7 @@
 <a id="all-benchmarks"></a>
 ## 按领域查看全部 Benchmark
 
-以下是 registry 中的全部 123 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
+以下是 registry 中的全部 124 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
 
 ### Agent Memory
 
@@ -181,6 +182,7 @@
 | 🔭 前沿 | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | [0](https://www.semanticscholar.org/paper/736d61825a5afed4c85b227951a9880d01e2299f) | 2026-08-20 | 同题 memory/no-memory 对照下，相关历史记忆是否会造成 reasoning fixation 或 belief distortion。 |
 | 🔭 前沿 | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | [0](https://www.semanticscholar.org/paper/98c0706a65d781a3b7b726811151d0176e1cefb6) | 2026-08-20 | 多会话状态修订中的 current-vs-superseded 跟踪、依赖更新与 stale-state 抵抗。 |
 | 🔭 前沿 | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | — | 2026-08-21 | 交叉比较检索策略与写入时 enrichment，测合成组织记忆中的跨词汇检索。 |
+| 🔭 前沿 | [DreamBench-SWE](https://arxiv.org/abs/2608.20664) <!-- benchmark-id:dreambench-swe --> | — | 2026-08-21 | 用隐藏可执行 oracle 测多会话软件 agent 的记忆保持、状态覆盖、作用域、权威冲突、组合、source-of-truth、错误经验拒绝与弃答。 |
 | 🔭 前沿 | [Utility Under Attack](https://arxiv.org/abs/2608.21230) <!-- benchmark-id:utility-under-attack --> | [0](https://www.semanticscholar.org/paper/aff09b98f3ade8fd4296515e699e76b49c83406b) | 2026-08-21 | 虚假记忆下的良性 utility 保留，以及筛查与 provenance ranking 的防御代价。 |
 | 🔭 前沿 | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | — | 2026-08-22 | 在真实仓库任务中用 neutral feed、proof-of-treatment 与隐藏执行 oracle 测跨任务记忆是否改善编码行动。 |
 | 🔭 前沿 | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | — | 2026-08-22 | 用 current-vs-stale 排序、弃答与泄露防护诊断 memory store 的更新和冲突处理。 |

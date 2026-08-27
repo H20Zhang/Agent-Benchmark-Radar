@@ -5893,6 +5893,67 @@
     }
   },
   {
+    "id": "dreambench-swe",
+    "name": "DreamBench-SWE",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-08-21",
+    "importance": 4,
+    "status": "active",
+    "summary": "Multi-session software-agent benchmark where later coding tasks require non-inferable earlier-session evidence and hidden executable oracles test memory hygiene across retention, staleness, scope, authority, composition, source-of-truth, spurious-lesson rejection, and abstention.",
+    "capabilities": [
+      "cross-session-memory",
+      "stale-memory-suppression",
+      "scope-discipline",
+      "authority-resolution",
+      "memory-composition",
+      "source-of-truth",
+      "spurious-lesson-rejection",
+      "abstention"
+    ],
+    "environment": [
+      "multi-session-software-engineering",
+      "containerized-coding-agent",
+      "synthetic-fixture-repositories"
+    ],
+    "protocol": [
+      "three-session-memory-traps",
+      "hidden-executable-oracles",
+      "three-seed-clustered-evaluation",
+      "preregistered-successor-audit",
+      "contamination-scanner"
+    ],
+    "scale": "60 traps × 3 seeds = 180 S3 cells per complete condition; the preregistered v2.1 successor completed 720 S3 cells across four admitted conditions.",
+    "measurement_strength": "Non-inferable earlier-session evidence, hidden executable CSPRNG oracle contracts, no-memory and deterministic-verbatim controls, and preregistered clustered inference make treatment necessity and benchmark discrimination auditable.",
+    "coverage_gap": "Synthetic fixture repositories, one pinned wake/judge/model stack, no network isolation, and missing B0 headroom for C9/C10 limit transfer; the audit does not establish mechanism superiority, equivalence, or broad product generality.",
+    "confounders": [
+      "wake-model-alias",
+      "coding-agent-harness",
+      "memory-system-configuration",
+      "hosted-service-drift",
+      "container-network-access",
+      "construct-headroom",
+      "synthetic-fixture-repositories"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.20664",
+      "code": "https://github.com/iroiro147/dreambench-swe",
+      "data": "https://github.com/iroiro147/dreambench-swe/releases/tag/v2.1.0"
+    },
+    "last_verified": "2026-08-27",
+    "published_at": "2026-08-21T01:48:57Z",
+    "first_seen_at": "2026-08-27T00:32:21Z",
+    "radar_published_at": "2026-08-27T00:46:07Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-08-27",
+      "status": "unmatched"
+    }
+  },
+  {
     "id": "utility-under-attack",
     "name": "Utility Under Attack",
     "area": "agent-memory",

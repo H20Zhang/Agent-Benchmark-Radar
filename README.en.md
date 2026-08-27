@@ -13,7 +13,7 @@
 | **Data Agents** | The target keeps moving beyond “does SQL/code run?” toward **long-horizon ML improvement in real repositories with tighter score attribution**. AI4AI-Bench isolates algorithm changes through proxy exploration → source patch → clean-start final run; DeltaML-Bench joins published-baseline improvement with anti-gaming audits. | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
-Last updated: **2026-08-26**
+Last updated: **2026-08-27**
 
 <a id="release-timeline"></a>
 ## Benchmark Timeline: Last Six Months
@@ -32,6 +32,7 @@ Last updated: **2026-08-26**
 | 2026-08-22 | Agent Memory | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | Cross-task memory effects on real-repository coding under a neutral feed, proof-of-treatment gates, and hidden executable oracles. |
 | 2026-08-21 | Agent Memory | [Utility Under Attack](https://arxiv.org/abs/2608.21230) <!-- benchmark-id:utility-under-attack --> | Benign utility lost to a small false-memory poison set and to screening or provenance-ranking defenses. |
 | 2026-08-21 | Agent Memory | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | Cross-vocabulary retrieval in synthetic organizational memory, crossing retrieval strategy with write-time enrichment. |
+| 2026-08-21 | Agent Memory | [DreamBench-SWE](https://arxiv.org/abs/2608.20664) <!-- benchmark-id:dreambench-swe --> | Executable multi-session coding traps test retention, staleness/supersession, scope, authority, composition, source-of-truth, spurious-lesson rejection, and abstention under hidden oracles. |
 | 2026-08-20 | Agent Memory | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | Separates current state, superseded state, and other errors under multi-session revision using executable replay to isolate state drift. |
 | 2026-08-20 | Agent Memory | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | Uses paired memory/no-memory conditions on the same current task to test whether relevant prior memory induces reasoning fixation or belief distortion. |
 | 2026-08-20 | Data Agent | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | Training-pipeline repair, iterative experimentation, published-baseline improvement, and anti-gaming checks in real research repositories. |
@@ -134,7 +135,7 @@ From text-to-SQL / code generation into both complete analytics workflows and lo
 <a id="all-benchmarks"></a>
 ## All Benchmarks by Area
 
-all 123 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
+all 124 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
 
 ### Agent Memory
 
@@ -181,6 +182,7 @@ all 123 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | [0](https://www.semanticscholar.org/paper/736d61825a5afed4c85b227951a9880d01e2299f) | 2026-08-20 | Whether relevant prior memory causes reasoning fixation or belief distortion under paired memory/no-memory conditions. |
 | 🔭 Frontier | [StateMemBench](https://arxiv.org/abs/2608.19652) <!-- benchmark-id:statemembench --> | [0](https://www.semanticscholar.org/paper/98c0706a65d781a3b7b726811151d0176e1cefb6) | 2026-08-20 | Current-versus-superseded state tracking, dependency updates, and stale-state resistance under multi-session revision. |
 | 🔭 Frontier | [Agent Memory Bakeoff](https://github.com/JaysonRawlins/agent-memory-bakeoff) <!-- benchmark-id:agent-memory-bakeoff --> | — | 2026-08-21 | Cross-vocabulary retrieval in synthetic organizational memory, crossing retrieval strategy with write-time enrichment. |
+| 🔭 Frontier | [DreamBench-SWE](https://arxiv.org/abs/2608.20664) <!-- benchmark-id:dreambench-swe --> | — | 2026-08-21 | Multi-session software-agent memory hygiene across retention, supersession, scope, authority, composition, source-of-truth, rejecting disconfirmed lessons, and abstention with hidden executable oracles. |
 | 🔭 Frontier | [Utility Under Attack](https://arxiv.org/abs/2608.21230) <!-- benchmark-id:utility-under-attack --> | [0](https://www.semanticscholar.org/paper/aff09b98f3ade8fd4296515e699e76b49c83406b) | 2026-08-21 | Benign utility retained under false memories and the cost of screening or provenance-ranking defenses. |
 | 🔭 Frontier | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | — | 2026-08-22 | Cross-task memory effects on real-repository coding under a neutral feed, proof-of-treatment gates, and hidden executable oracles. |
 | 🔭 Frontier | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | — | 2026-08-22 | Memory-store update and conflict handling through current-versus-stale ranking plus abstention and leakage guards. |
