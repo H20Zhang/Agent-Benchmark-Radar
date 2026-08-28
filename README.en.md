@@ -13,7 +13,7 @@
 | **Data Agents** | The target keeps moving beyond “does SQL/code run?” toward **long-horizon ML improvement in real repositories with tighter score attribution**. AI4AI-Bench isolates algorithm changes through proxy exploration → source patch → clean-start final run; DeltaML-Bench joins published-baseline improvement with anti-gaming audits. | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
-Last updated: **2026-08-27**
+Last updated: **2026-08-28**
 
 <a id="release-timeline"></a>
 ## Benchmark Timeline: Last Six Months
@@ -23,6 +23,7 @@ Last updated: **2026-08-27**
 
 | Time | Area | Benchmark | What it tests |
 |---|---|---|---|
+| 2026-08-26 | Agent Memory | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | Reconstructing the earlier episode that actually constrains a later task in flat mixed-topic threads without session/topic boundaries, rather than merely exposing or retrieving relevant evidence. |
 | 2026-08-24 | Agent Memory | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | Exact safety-constraint survival, scope coverage, and downstream compliance across repeated compaction, decomposition, and retrieval. |
 | 2026-08-24 | RAG | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | Stable answer flips caused by corpus growth after subtracting within-snapshot stochastic disagreement. |
 | 2026-08-24 | Agent Memory | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | Whether a malicious memory planted through one ordinary interaction is retrieved after drift and steers later generation. |
@@ -135,7 +136,7 @@ From text-to-SQL / code generation into both complete analytics workflows and lo
 <a id="all-benchmarks"></a>
 ## All Benchmarks by Area
 
-all 124 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
+all 125 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
 
 ### Agent Memory
 
@@ -187,7 +188,9 @@ all 124 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | — | 2026-08-22 | Cross-task memory effects on real-repository coding under a neutral feed, proof-of-treatment gates, and hidden executable oracles. |
 | 🔭 Frontier | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | — | 2026-08-22 | Memory-store update and conflict handling through current-versus-stale ranking plus abstention and leakage guards. |
 | 🔭 Frontier | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | [0](https://www.semanticscholar.org/paper/09e4e85b7fadc40990563e1cf2847356d7c9fd23) | 2026-08-24 | Retrieval, conditional generation, and joint attack success after one unprivileged memory-writing interaction. |
-| 🔭 Frontier | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | [0](https://www.semanticscholar.org/paper/68cebfa9bff38539f6dbd114310629168e7d6960) | 2026-08-24 | Exact safety-constraint survival and downstream compliance across compaction, decomposition, and retrieval. |<!-- TABLE-FIRST:AREA:agent-memory:END -->
+| 🔭 Frontier | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | [0](https://www.semanticscholar.org/paper/68cebfa9bff38539f6dbd114310629168e7d6960) | 2026-08-24 | Exact safety-constraint survival and downstream compliance across compaction, decomposition, and retrieval. |
+| 🔭 Frontier | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | — | 2026-08-26 | Operative-episode reconstruction, state overwrite, long-range bridging, and local-constraint resolution in interleaved long conversations without explicit boundaries. |
+<!-- TABLE-FIRST:AREA:agent-memory:END -->
 
 ### RAG / Agentic Retrieval
 

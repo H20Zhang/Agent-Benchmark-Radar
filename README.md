@@ -13,7 +13,7 @@
 | **Data Agents** | 评价对象继续从“SQL / code 能跑”推到**真实仓库中的长时程 ML 改进，同时收紧分数归因**。AI4AI-Bench 用 proxy exploration → source patch → clean-start final run 隔离学习算法修改；DeltaML-Bench 则把 published-baseline improvement 与 anti-gaming audit 放进同一执行协议。 | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
-最后更新：**2026-08-27**
+最后更新：**2026-08-28**
 
 <a id="release-timeline"></a>
 ## 最近半年 Benchmark 时间线
@@ -23,6 +23,7 @@
 
 | 时间 | 方向 | Benchmark | 考察内容 |
 |---|---|---|---|
+| 2026-08-26 | Agent Memory | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | 在无 session/topic 边界的混合长对话中，测系统能否重建真正约束当前任务的早期 episode，而非只看到或检索到相关证据。 |
 | 2026-08-24 | Agent Memory | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | 在反复压缩、分解与检索中测安全约束的精确保留、作用域覆盖及下游行动遵从。 |
 | 2026-08-24 | RAG | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | 在减去同 snapshot 随机差异后，测 corpus 增长是否造成稳定答案翻转。 |
 | 2026-08-24 | Agent Memory | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | 测一次普通交互写入的恶意记忆，是否在漂移后被相关查询检索并定向操纵生成。 |
@@ -135,7 +136,7 @@
 <a id="all-benchmarks"></a>
 ## 按领域查看全部 Benchmark
 
-以下是 registry 中的全部 124 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
+以下是 registry 中的全部 125 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
 
 ### Agent Memory
 
@@ -187,7 +188,9 @@
 | 🔭 前沿 | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | — | 2026-08-22 | 在真实仓库任务中用 neutral feed、proof-of-treatment 与隐藏执行 oracle 测跨任务记忆是否改善编码行动。 |
 | 🔭 前沿 | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | — | 2026-08-22 | 用 current-vs-stale 排序、弃答与泄露防护诊断 memory store 的更新和冲突处理。 |
 | 🔭 前沿 | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | [0](https://www.semanticscholar.org/paper/09e4e85b7fadc40990563e1cf2847356d7c9fd23) | 2026-08-24 | 单次无特权交互写入后，恶意记忆的检索成功、条件生成与端到端攻击成功。 |
-| 🔭 前沿 | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | [0](https://www.semanticscholar.org/paper/68cebfa9bff38539f6dbd114310629168e7d6960) | 2026-08-24 | 反复压缩、分解与检索中的安全约束精确保留及下游行动遵从。 |<!-- TABLE-FIRST:AREA:agent-memory:END -->
+| 🔭 前沿 | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | [0](https://www.semanticscholar.org/paper/68cebfa9bff38539f6dbd114310629168e7d6960) | 2026-08-24 | 反复压缩、分解与检索中的安全约束精确保留及下游行动遵从。 |
+| 🔭 前沿 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | — | 2026-08-26 | 无显式边界的交错长对话中，对当前任务有效的 episode、状态覆盖、跨段桥接与局部约束能否被正确重建。 |
+<!-- TABLE-FIRST:AREA:agent-memory:END -->
 
 ### RAG / Agentic Retrieval
 

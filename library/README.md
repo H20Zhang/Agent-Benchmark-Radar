@@ -11,6 +11,7 @@
 
 | 时间 | Benchmark | 领域 | 角色 | 这次改变了什么 |
 |---:|---|---|---|---|
+| 2026-08-26 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | Agent Memory | 🔭 前沿 | 去掉 session/topic 边界，把“恢复真正约束当前任务的 episode”从隐含假设变成直接评测对象。 |
 | 2026-08-24 | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | Agent Memory | 🔭 前沿 | 把一次普通交互的恶意写入连到漂移后的检索与定向生成。 |
 | 2026-08-24 | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | RAG / Agentic Retrieval | 🔭 前沿 | 把 corpus snapshot 升级变成减去采样噪声的 compatibility regression。 |
 | 2026-08-24 | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | Agent Memory | 🔭 前沿 | 把 safety rule 的精确保留扩展到压缩、分解、检索和下游行为。 |
@@ -188,7 +189,9 @@
 | 🔭 前沿 | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | 2026-08-22 | 在真实仓库任务中用 neutral feed、proof-of-treatment 与隐藏执行 oracle 测跨任务记忆是否改善编码行动。 | 将 PAST-Bench 式持久状态对照推进到产品可插拔 coding memory，并显式核验 treatment。 |
 | 🔭 前沿 | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | 2026-08-22 | 用 current-vs-stale 排序、弃答与泄露防护诊断 memory store 的更新和冲突处理。 | 修正 top-k staleness 并关闭 abstention gaming，使 stale-fact 排名更可解释。 |
 | 🔭 前沿 | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | 2026-08-24 | 单次无特权交互写入后，恶意记忆的检索成功、条件生成与端到端攻击成功。 | 把 write→drift→retrieve→generate 做成端到端攻击轨迹。 |
-| 🔭 前沿 | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | 2026-08-24 | 反复压缩、分解与检索中的安全约束精确保留及下游行动遵从。 | 把安全规则的 exact preservation 绑定到三类 context operator 和行为。 |<!-- COMPLETE-MAP:agent-memory:END -->
+| 🔭 前沿 | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | 2026-08-24 | 反复压缩、分解与检索中的安全约束精确保留及下游行动遵从。 | 把安全规则的 exact preservation 绑定到三类 context operator 和行为。 |
+| 🔭 前沿 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | 2026-08-26 | 无显式边界的交错长对话中重建当前任务真正绑定的 episode 与局部约束。 | 从 LongMemEval 的结构化跨 session 记忆推进到 episode boundary 本身未知的混合线程，并用精确 evidence trace 区分可见性与 episode integrity。 |
+<!-- COMPLETE-MAP:agent-memory:END -->
 
 [进入 Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar)
 

@@ -6429,5 +6429,62 @@
       "paper_id": "13b3a820b0d8cf00d20ce647761e736db5c9876c",
       "url": "https://www.semanticscholar.org/paper/13b3a820b0d8cf00d20ce647761e736db5c9876c"
     }
+  },
+  {
+    "id": "scale-qa",
+    "name": "SCALE-QA",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-08-26",
+    "importance": 4,
+    "status": "active",
+    "summary": "Evaluates whether memory systems reconstruct the causally relevant earlier episode from flat, unsegmented, mixed-topic conversational threads when a later task decision depends on dormant local constraints.",
+    "capabilities": [
+      "episodic-reconstruction",
+      "constraint-recall",
+      "state-overwrite",
+      "long-range-bridge",
+      "constraint-resolution"
+    ],
+    "environment": [
+      "flat-unsegmented-conversation",
+      "mixed-topic-thread",
+      "counterfactual-local-constraints",
+      "length-configurable-runtime"
+    ],
+    "protocol": [
+      "four-way-mcq",
+      "exact-evidence-traces",
+      "deterministic-runtime-builder",
+      "length-scaling",
+      "contamination-controlled"
+    ],
+    "scale": "3,000 audited questions across 10 domains with 4,346 audited evidence snippets; full evaluation from 16K through 128K context and a stratified 400-question diagnostic at 1M.",
+    "measurement_strength": "Makes episode integrity failure measurable when relevant evidence is present somewhere in a long thread but the system must reconstruct which interleaved episode and dormant constraints actually govern the current task.",
+    "coverage_gap": "Counterfactually constructed forced-choice conversations do not establish transfer to natural long-running logs, open-ended responses, tool follow-up, or downstream agent action.",
+    "confounders": [
+      "synthetic-counterfactual-construction",
+      "answerer-model",
+      "retrieval-context-budget",
+      "forced-choice-protocol",
+      "runtime-noise-construction"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.25655",
+      "code": "https://github.com/LordTARN1SHED/SCALE-QA",
+      "data": "https://github.com/LordTARN1SHED/SCALE-QA"
+    },
+    "last_verified": "2026-08-28",
+    "published_at": "2026-08-26T11:37:03Z",
+    "first_seen_at": "2026-08-28T00:30:59Z",
+    "radar_published_at": "2026-08-28T00:37:30Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-08-28",
+      "status": "unmatched"
+    }
   }
 ]

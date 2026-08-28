@@ -11,6 +11,7 @@ Start with time to see what recently became measurable, then use area timelines 
 
 | Released | Benchmark | Area | Role | What changed |
 |---:|---|---|---|---|
+| 2026-08-26 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | Agent Memory | 🔭 Frontier | Removes session/topic boundaries so recovering the episode that actually governs the current task becomes an explicit evaluation object. |
 | 2026-08-24 | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | Agent Memory | 🔭 Frontier | Connects one ordinary malicious write to post-drift retrieval and targeted generation. |
 | 2026-08-24 | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | RAG / Agentic Retrieval | 🔭 Frontier | Turns corpus-snapshot upgrades into compatibility regressions after subtracting sampling noise. |
 | 2026-08-24 | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | Agent Memory | 🔭 Frontier | Extends exact safety-rule retention across compaction, decomposition, retrieval, and behavior. |
@@ -188,7 +189,9 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [Agent Memory Bench (coding agents)](https://github.com/GiulioDER/agent-memory-bench) <!-- benchmark-id:agent-memory-bench-coding --> | 2026-08-22 | Cross-task memory effects on real-repository coding under a neutral feed, proof-of-treatment gates, and hidden executable oracles. | Extends PAST-Bench-style persistent-state controls to pluggable coding memory with explicit treatment verification. |
 | 🔭 Frontier | [membench (staleness)](https://github.com/Ps23102004/membench) <!-- benchmark-id:membench-staleness --> | 2026-08-22 | Memory-store update and conflict handling through current-versus-stale ranking plus abstention and leakage guards. | Corrects top-k staleness and closes abstention gaming so stale-fact rank is more interpretable. |
 | 🔭 Frontier | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | 2026-08-24 | Retrieval, conditional generation, and joint attack success after one unprivileged memory-writing interaction. | Makes write→drift→retrieve→generate an end-to-end attack trajectory. |
-| 🔭 Frontier | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | 2026-08-24 | Exact safety-constraint survival and downstream compliance across compaction, decomposition, and retrieval. | Binds exact safety-rule preservation to three context operators and behavior. |<!-- COMPLETE-MAP:agent-memory:END -->
+| 🔭 Frontier | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | 2026-08-24 | Exact safety-constraint survival and downstream compliance across compaction, decomposition, and retrieval. | Binds exact safety-rule preservation to three context operators and behavior. |
+| 🔭 Frontier | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | 2026-08-26 | Reconstructing the operative episode and dormant local constraints in interleaved long conversations without explicit boundaries. | Moves beyond LongMemEval-style structured sessions to mixed threads where episode boundaries are latent, with exact evidence traces separating visibility from episode integrity. |
+<!-- COMPLETE-MAP:agent-memory:END -->
 
 [Continue to Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar)
 
