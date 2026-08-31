@@ -32,8 +32,8 @@ Chinese sentences should still have a Chinese grammatical spine: use Chinese ver
 - Treat scale as novelty only when scale fixes a known validity problem.
 - Use numbers only when they change interpretation.
 - Keep the strongest confounder visible near the claim it weakens.
-- Treat README as a data-rich awesome list: put complete tables and direct links ahead of framing prose.
-- Layer-level attention navigation is `frontier signal → release timeline → Benchmark Map → complete area tables → Reading Paths → Library`; each layer answers a different reader question without repeating the previous one.
+- Treat README as a data-rich awesome list: use one compact onboarding header, then put frontier signals, complete tables, and direct links ahead of long-form framing prose.
+- Layer-level attention navigation is `onboarding → frontier signal → release timeline → Benchmark Map → complete area tables → Reading Paths → Library`; onboarding only routes the reader, while each research layer answers a different question without repeating the previous one.
 - Keep the same information contract across table rows, but vary the syntax. Repeating `相比 X，把 A 推进到 B` in every row is not a style guide.
 - Emoji are allowed when they carry a stable meaning, such as evolution roles; do not use them as decoration.
 

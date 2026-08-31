@@ -1,6 +1,38 @@
-# Agent Benchmark Radar
+<!-- ONBOARDING:START -->
+<div align="center">
 
-**中文** | [English](README.en.md)
+<h1>Agent Benchmark Radar</h1>
+
+<p><strong>追踪 Agent 评测正在变成什么，而不只是收集有哪些 Benchmark。</strong></p>
+
+<p>
+覆盖 <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
+把最新 Benchmark 放回演化脉络：它多测了什么、相比什么、还漏了什么。
+</p>
+
+<p><strong>中文</strong> · <a href="README.en.md">English</a></p>
+
+<p>
+<a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml/badge.svg"></a>
+<a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/H20Zhang/Agent-Benchmark-Radar?style=flat"></a>
+<img alt="Last commit" src="https://img.shields.io/github/last-commit/H20Zhang/Agent-Benchmark-Radar?style=flat">
+</p>
+
+</div>
+
+## 从这里开始
+
+| 你现在想知道 | 直接看 |
+|---|---|
+| **最近评测范式发生了什么变化？** | [近 30 天：三个变化](#frontier-signals) |
+| **最近有哪些新 Benchmark？** | [最近半年 Benchmark 时间线](#release-timeline) |
+| **一个方向为什么演化成今天这样？** | [Benchmark 地图](#field-map) |
+| **给自己的研究找 Benchmark？** | [全部 Benchmark](#all-benchmarks) · [Library](library/README.md) |
+
+_收录标准：只纳入可复用的 benchmark / evaluation contribution；仅在已有 benchmark 上报告实验结果的论文不进入 registry。详见 [Curation](CURATION.md)。_
+
+---
+<!-- ONBOARDING:END -->
 
 <a id="frontier-signals"></a>
 ## 近 30 天：三个变化

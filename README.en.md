@@ -1,6 +1,38 @@
-# Agent Benchmark Radar
+<!-- ONBOARDING:START -->
+<div align="center">
 
-[中文](README.md) | **English**
+<h1>Agent Benchmark Radar</h1>
+
+<p><strong>Track how agent evaluation is evolving—not just which benchmarks exist.</strong></p>
+
+<p>
+Covers <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
+Maps new benchmarks back to their lineage: what became measurable, compared with what, and what is still missing.
+</p>
+
+<p><a href="README.md">中文</a> · <strong>English</strong></p>
+
+<p>
+<a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml/badge.svg"></a>
+<a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/H20Zhang/Agent-Benchmark-Radar?style=flat"></a>
+<img alt="Last commit" src="https://img.shields.io/github/last-commit/H20Zhang/Agent-Benchmark-Radar?style=flat">
+</p>
+
+</div>
+
+## Start Here
+
+| What do you want to know? | Go straight to |
+|---|---|
+| **What changed in agent evaluation recently?** | [Three shifts in the last 30 days](#frontier-signals) |
+| **Which new benchmarks were released?** | [Six-month benchmark timeline](#release-timeline) |
+| **How did an area evolve into its current form?** | [Benchmark Map](#field-map) |
+| **Which benchmark should I use for my research?** | [All benchmarks](#all-benchmarks) · [Library](library/README.en.md) |
+
+_Scope: the registry includes reusable benchmark / evaluation contributions. Papers that only report results on existing benchmarks are out of scope. See [Curation](CURATION.md)._
+
+---
+<!-- ONBOARDING:END -->
 
 <a id="frontier-signals"></a>
 ## Last 30 Days: Three Shifts

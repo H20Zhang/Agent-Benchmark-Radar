@@ -67,7 +67,7 @@ Treat these as first-class updates, not only brand-new benchmark papers:
 
 ## README contract
 
-README is the **table-first public reading surface**. “Time-first” means that the newest research is easiest to scan; it does **not** mean that Radar-maintenance timestamps replace the research chronology or that one card is rendered per paper.
+README starts with a compact **onboarding layer** for project identity and reader routing, followed by the **signal-first, table-first research surface**. The onboarding layer is navigation rather than research synthesis. “Time-first” means that the newest research is easiest to scan; it does **not** mean that Radar-maintenance timestamps replace the research chronology or that one card is rendered per paper. Keep onboarding stable and short: title, one-sentence value proposition, language switch, lightweight status badges, and a Start Here router to canonical anchors.
 
 The main README must preserve three high-bandwidth scan surfaces:
 
