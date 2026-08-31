@@ -1453,8 +1453,46 @@ def validate_public_readme(
             if phrase in text:
                 errors.append(f"{language}: retired reader surface returned: {phrase}")
 
+        onboarding_start = text.find("<!-- ONBOARDING:START -->")
+        onboarding_end = text.find("<!-- ONBOARDING:END -->")
+        recipe_start = text.find("<!-- EVALUATION-RECIPES:START -->")
+        recipe_end = text.find("<!-- EVALUATION-RECIPES:END -->")
+        recipe_anchor = text.find('<a id="evaluation-recipes"></a>')
+        frontier = text.find('<a id="frontier-signals"></a>')
         release = text.find('<a id="release-timeline"></a>')
         field_map = text.find('<a id="field-map"></a>')
+        if min(onboarding_start, onboarding_end, recipe_start, recipe_end, recipe_anchor, frontier) < 0:
+            errors.append(f"{language}: missing onboarding or Evaluation Recipes surface")
+        elif not (onboarding_start < onboarding_end < recipe_start <= recipe_anchor < recipe_end < frontier < release):
+            errors.append(f"{language}: intent routing / recipe / frontier ordering drift")
+        else:
+            onboarding = text[onboarding_start:onboarding_end]
+            required_routes = (
+                "#benchmark-memory", "#recipe-memory", "#registry-memory",
+                "#benchmark-rag", "#recipe-rag", "#registry-rag",
+                "#benchmark-data", "#recipe-data", "#registry-data",
+            )
+            for route in required_routes:
+                if route not in onboarding:
+                    errors.append(f"{language}: onboarding is missing area route {route}")
+            recipe_block = text[recipe_start:recipe_end]
+            recipe_sections = (("recipe-memory", "recipe-rag"), ("recipe-rag", "recipe-data"), ("recipe-data", None))
+            for anchor, next_anchor in recipe_sections:
+                start_at = recipe_block.find(f'<a id="{anchor}"></a>')
+                end_at = recipe_block.find(f'<a id="{next_anchor}"></a>', start_at + 1) if next_anchor else len(recipe_block)
+                if start_at < 0 or end_at <= start_at:
+                    errors.append(f"{language}: missing recipe section {anchor}")
+                    continue
+                section = recipe_block[start_at:end_at]
+                rows = [line for line in section.splitlines() if line.startswith("| **")]
+                if not 3 <= len(rows) <= 5:
+                    errors.append(f"{language}: {anchor} must contain 3–5 bounded recipes")
+                for row in rows:
+                    if len(re.findall(r"\]\((?:https?://)[^)]+\)", row)) < 2:
+                        errors.append(f"{language}: {anchor} recipe row needs Core and Complement links")
+        for registry_anchor in ("registry-memory", "registry-rag", "registry-data"):
+            if text.count(f'<a id="{registry_anchor}"></a>') != 1:
+                errors.append(f"{language}: expected exactly one stable {registry_anchor} anchor")
         if release < 0 or field_map < 0 or release >= field_map:
             errors.append(f"{language}: release timeline must precede Benchmark Map")
         elif "<details" in text[release:field_map].lower():
@@ -1505,6 +1543,18 @@ def validate_public_readme(
             for identity in BENCHMARK_ID_RE.findall(block):
                 if identity not in record_ids:
                     errors.append(f"{language}: unknown benchmark identity {identity} in {label}")
+
+    def _recipe_external_links(value: str) -> list[str]:
+        try:
+            block = value.split("<!-- EVALUATION-RECIPES:START -->", 1)[1].split(
+                "<!-- EVALUATION-RECIPES:END -->", 1
+            )[0]
+        except IndexError:
+            return []
+        return re.findall(r"\]\((https?://[^)]+)\)", block)
+
+    if _recipe_external_links(zh) != _recipe_external_links(en):
+        errors.append("Chinese/English Evaluation Recipes benchmark-link drift")
 
     try:
         zh_recent = BENCHMARK_ID_RE.findall(zh.split("<!-- TABLE-FIRST:RECENT:START -->", 1)[1].split("<!-- TABLE-FIRST:RECENT:END -->", 1)[0])

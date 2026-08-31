@@ -22,17 +22,64 @@ Maps new benchmarks back to their lineage: what became measurable, compared with
 
 ## Start Here
 
-| What do you want to know? | Go straight to |
-|---|---|
-| **What changed in agent evaluation recently?** | [Three shifts in the last 30 days](#frontier-signals) |
-| **Which new benchmarks were released?** | [Six-month benchmark timeline](#release-timeline) |
-| **How did an area evolve into its current form?** | [Benchmark Map](#field-map) |
-| **Which benchmark should I use for my research?** | [All benchmarks](#all-benchmarks) · [Library](library/README.en.md) |
+**Choose your research object first.** The three benchmark families no longer require entering through one mixed timeline; each area has its own evolution map, evaluation recipes, and complete registry.
+
+| Area | Questions you are usually asking | Understand the lineage | Build an evaluation | Browse all |
+|---|---|---|---|---|
+| **Agent Memory** | Can long-term memory be recalled, updated, and used for later action? How should multimodal memory, safety, and governance be evaluated? | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [All Memory Benchmarks](#registry-memory) |
+| **RAG / Agentic Retrieval** | Can the system find the right evidence, perform complex search, and remain reliable under dynamic corpora and long trajectories? | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [All Retrieval Benchmarks](#registry-rag) |
+| **Data Agents** | Can an agent complete SQL, analytics, data-science, and ML-engineering work with verifiable results? | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [All Data Agent Benchmarks](#registry-data) |
+
+**Cross-area / not sure where to start:** [build an Evaluation Recipe from your claim](#evaluation-recipes) · [see the last 30 days of change](#frontier-signals) · [scan new benchmarks from the last six months](#release-timeline)
 
 _Scope: the registry includes reusable benchmark / evaluation contributions. Papers that only report results on existing benchmarks are out of scope. See [Curation](CURATION.md)._
 
 ---
 <!-- ONBOARDING:END -->
+
+<!-- EVALUATION-RECIPES:START -->
+<a id="evaluation-recipes"></a>
+## Evaluation Recipes: Build the Suite from Your Claim
+
+More benchmarks are not automatically better. Start from the **claim** your paper or system needs to support: `Core` measures the primary object, `Complement` closes an adjacent validity gap, and the final column states what the suite **still does not establish**. These are research starting points, not fixed standards.
+
+<a id="recipe-memory"></a>
+### Agent Memory
+
+| Claim you want to support | Core | Complement | What this still does not establish |
+|---|---|---|---|
+| **Long-term conversational memory and temporal reasoning** | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) | [LongMemEval](https://arxiv.org/abs/2410.10813) | Remembering history does not establish that retained experience improves future action. |
+| **State update and stale-information handling** | [StateMemBench](https://arxiv.org/abs/2608.19652) | [LongMemEval](https://arxiv.org/abs/2410.10813) · [membench (staleness)](https://github.com/Ps23102004/membench) | The result still does not isolate which write, update, or retrieval component caused the outcome. |
+| **Memory improves later action** | [MemoryArena](https://arxiv.org/abs/2602.16313) | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) | Action gains do not establish general memory quality over broad personal histories. |
+| **Multimodal long-term memory** | [MemEye](https://arxiv.org/abs/2605.15128) | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) · [WorldMemArena](https://arxiv.org/abs/2605.29341) | Coverage of access control, poisoning, and compaction across the memory lifecycle remains limited. |
+| **Memory security and lifecycle governance** | [InjecMEM](https://arxiv.org/abs/2608.23471) | [Utility Under Attack](https://arxiv.org/abs/2608.21230) · [GateMem](https://arxiv.org/abs/2606.18829) · [The Compaction Cliff](https://arxiv.org/abs/2608.22752) | A security suite does not replace general utility, recall, and reasoning evaluation. |
+
+<a id="recipe-rag"></a>
+### RAG / Agentic Retrieval
+
+| Claim you want to support | Core | Complement | What this still does not establish |
+|---|---|---|---|
+| **Reasoning-intensive retrieval quality** | [BRIGHT](https://arxiv.org/abs/2407.12883) | [BEIR](https://arxiv.org/abs/2104.08663) · [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) | Static retrieval results do not establish live, iterative web-search capability. |
+| **Deep / long-horizon web search** | [BrowseComp](https://arxiv.org/abs/2504.12516) | [LiveBrowseComp](https://arxiv.org/abs/2605.28721) · [LoHoSearch](https://arxiv.org/abs/2606.12837) | End-to-end success alone does not localize where a search trajectory failed. |
+| **Search-trajectory diagnosis and tool policy** | [SearchAuditBench](https://arxiv.org/abs/2608.05212) | [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) · [VAKRA](https://arxiv.org/abs/2608.12282) | Trajectory diagnostics do not establish broad live-web retrieval or corpus robustness. |
+| **Dynamic, writable, feedback-forming corpora** | [KBGym](https://arxiv.org/abs/2608.21829) | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) · [RAG Collapse](https://arxiv.org/abs/2608.22118) | These results do not replace conventional retrieval-quality evaluation on a static corpus. |
+| **Multimodal search and visual-document retrieval** | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) | [MC-Search](https://arxiv.org/abs/2603.00873) · [MERRIN](https://arxiv.org/abs/2604.13418) | Modality and tool interfaces strongly affect outcomes, so headline scores are not directly comparable across benchmarks. |
+
+<a id="recipe-data"></a>
+### Data Agents
+
+| Claim you want to support | Core | Complement | What this still does not establish |
+|---|---|---|---|
+| **Text-to-SQL / warehouse task capability** | [Spider 2.0](https://arxiv.org/abs/2411.07763) | [Spider](https://aclanthology.org/D18-1425/) · [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) | SQL success does not cover the full data-understanding, analysis, and delivery workflow. |
+| **End-to-end data-science agent** | [DataSpace](https://arxiv.org/abs/2608.03451) | [DSAgentBench](https://arxiv.org/abs/2608.10366) · [DataClawBench](https://arxiv.org/abs/2605.02503) | Workflow completion alone does not isolate statistical or modeling validity. |
+| **Data understanding and autonomous exploration** | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) | [DataClawBench](https://arxiv.org/abs/2605.02503) · [AgenticDataBench](https://arxiv.org/abs/2607.01647) | Exploration quality is not equivalent to downstream model, causal, or business-decision quality. |
+| **Statistical and causal analysis** | [CausalDS](https://arxiv.org/abs/2607.08093) | [StatABench](https://arxiv.org/abs/2606.22977) | Controlled statistical/causal tasks do not cover real warehouse, repository, and data-engineering constraints. |
+| **Long-horizon ML engineering / research improvement** | [MLE-bench](https://arxiv.org/abs/2410.07095) | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [AI4AI-Bench](https://arxiv.org/abs/2608.20318) | ML improvement does not establish BI, warehouse-semantics, or general analytics capability. |
+
+> **Usage rule:** A recipe exists to align the experimental suite with the paper's claim, not to maximize benchmark count. Before running experiments, inspect each benchmark's protocol, confounders, and coverage gap.
+
+---
+<!-- EVALUATION-RECIPES:END -->
 
 <a id="frontier-signals"></a>
 ## Last 30 Days: Three Shifts
@@ -170,6 +217,7 @@ From text-to-SQL / code generation into both complete analytics workflows and lo
 
 all 125 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
 
+<a id="registry-memory"></a>
 ### Agent Memory
 
 <!-- TABLE-FIRST:AREA:agent-memory:START -->
@@ -224,6 +272,7 @@ all 125 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | [0](https://www.semanticscholar.org/paper/c73b59d446d064835acc4f499b12ae0b33c647de) | 2026-08-26 | Operative-episode reconstruction, state overwrite, long-range bridging, and local-constraint resolution in interleaved long conversations without explicit boundaries. |
 <!-- TABLE-FIRST:AREA:agent-memory:END -->
 
+<a id="registry-rag"></a>
 ### RAG / Agentic Retrieval
 
 <!-- TABLE-FIRST:AREA:rag:START -->
@@ -275,6 +324,7 @@ all 125 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [RAG Collapse](https://arxiv.org/abs/2608.22118) <!-- benchmark-id:rag-collapse --> | [0](https://www.semanticscholar.org/paper/eba9ce0d2a0c0accc93c7518ead27c857f6ee44a) | 2026-08-22 | Recursive feedback in which self-authored sources displace independent evidence. |
 | 🔭 Frontier | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | [0](https://www.semanticscholar.org/paper/b57acad4dcfb773ba69da1f92b72cdb595b36f03) | 2026-08-24 | Excess answer churn and stable flips induced by growing corpus snapshots. |<!-- TABLE-FIRST:AREA:rag:END -->
 
+<a id="registry-data"></a>
 ### Data Agents
 
 <!-- TABLE-FIRST:AREA:data-agent:START -->

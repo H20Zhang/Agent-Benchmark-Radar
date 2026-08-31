@@ -22,17 +22,64 @@
 
 ## 从这里开始
 
-| 你现在想知道 | 直接看 |
-|---|---|
-| **最近评测范式发生了什么变化？** | [近 30 天：三个变化](#frontier-signals) |
-| **最近有哪些新 Benchmark？** | [最近半年 Benchmark 时间线](#release-timeline) |
-| **一个方向为什么演化成今天这样？** | [Benchmark 地图](#field-map) |
-| **给自己的研究找 Benchmark？** | [全部 Benchmark](#all-benchmarks) · [Library](library/README.md) |
+**先选你的研究对象。** 三类 Benchmark 不再要求从同一条混合时间线进入；每个方向都有自己的演化脉络、Evaluation Recipes 和完整列表。
+
+| 方向 | 你通常想回答 | 先看脉络 | 配一套评测 | 看全部 |
+|---|---|---|---|---|
+| **Agent Memory** | 长期记忆能否被正确召回、更新并用于后续行动？多模态、安全和治理怎么测？ | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [全部 Memory Benchmark](#registry-memory) |
+| **RAG / Agentic Retrieval** | 系统能否找对证据、完成复杂搜索，并在动态语料和长轨迹下保持可靠？ | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [全部 Retrieval Benchmark](#registry-rag) |
+| **Data Agents** | Agent 能否完成 SQL、分析、数据科学与 ML engineering，并得到可核验结果？ | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [全部 Data Agent Benchmark](#registry-data) |
+
+**跨领域 / 还没确定从哪开始：** [按 claim 配一套 Evaluation Recipe](#evaluation-recipes) · [看近 30 天的变化](#frontier-signals) · [看最近半年新 Benchmark](#release-timeline)
 
 _收录标准：只纳入可复用的 benchmark / evaluation contribution；仅在已有 benchmark 上报告实验结果的论文不进入 registry。详见 [Curation](CURATION.md)。_
 
 ---
 <!-- ONBOARDING:END -->
+
+<!-- EVALUATION-RECIPES:START -->
+<a id="evaluation-recipes"></a>
+## Evaluation Recipes：按你的 claim 配 Benchmark
+
+Benchmark 不是越多越好。先写清论文或系统想支持的 **claim**：`Core` 测主对象，`Complement` 补相邻的 validity gap，最后一列提醒这套结果**还不能推出什么**。这些是研究起点，不是固定标准答案。
+
+<a id="recipe-memory"></a>
+### Agent Memory
+
+| 你想证明 | Core | Complement | 还不能直接证明 |
+|---|---|---|---|
+| **长期对话记忆与时间推理** | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) | [LongMemEval](https://arxiv.org/abs/2410.10813) | 记住历史不等于历史经验能改善后续行动。 |
+| **状态更新与过期信息处理** | [StateMemBench](https://arxiv.org/abs/2608.19652) | [LongMemEval](https://arxiv.org/abs/2410.10813) · [membench (staleness)](https://github.com/Ps23102004/membench) | 仍难隔离 write / update / retrieval 哪一层真正导致结果。 |
+| **记忆是否改善后续行动** | [MemoryArena](https://arxiv.org/abs/2602.16313) | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) | 行动收益不等价于大规模个人长期历史上的通用 memory quality。 |
+| **多模态长期记忆** | [MemEye](https://arxiv.org/abs/2605.15128) | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) · [WorldMemArena](https://arxiv.org/abs/2605.29341) | 对权限、污染、压缩等 memory lifecycle 完整性的覆盖仍有限。 |
+| **Memory 安全与生命周期治理** | [InjecMEM](https://arxiv.org/abs/2608.23471) | [Utility Under Attack](https://arxiv.org/abs/2608.21230) · [GateMem](https://arxiv.org/abs/2606.18829) · [The Compaction Cliff](https://arxiv.org/abs/2608.22752) | 安全套件不能替代一般 utility、recall 与 reasoning 评测。 |
+
+<a id="recipe-rag"></a>
+### RAG / Agentic Retrieval
+
+| 你想证明 | Core | Complement | 还不能直接证明 |
+|---|---|---|---|
+| **推理密集型 Retrieval 质量** | [BRIGHT](https://arxiv.org/abs/2407.12883) | [BEIR](https://arxiv.org/abs/2104.08663) · [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) | 静态检索结果不能说明 live、迭代式 web search 的能力。 |
+| **Deep / long-horizon web search** | [BrowseComp](https://arxiv.org/abs/2504.12516) | [LiveBrowseComp](https://arxiv.org/abs/2605.28721) · [LoHoSearch](https://arxiv.org/abs/2606.12837) | 端到端成功率本身不能定位搜索轨迹到底在哪里失败。 |
+| **搜索轨迹诊断与工具策略** | [SearchAuditBench](https://arxiv.org/abs/2608.05212) | [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) · [VAKRA](https://arxiv.org/abs/2608.12282) | 轨迹诊断不等价于广覆盖 live-web retrieval 或 corpus robustness。 |
+| **动态、可写、会反馈的语料** | [KBGym](https://arxiv.org/abs/2608.21829) | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) · [RAG Collapse](https://arxiv.org/abs/2608.22118) | 这类结果不能替代传统静态 corpus 上的 retrieval-quality 评测。 |
+| **多模态搜索与视觉文档 Retrieval** | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) | [MC-Search](https://arxiv.org/abs/2603.00873) · [MERRIN](https://arxiv.org/abs/2604.13418) | 不同 modality / tool interface 会强烈影响结果，不能直接横比 headline score。 |
+
+<a id="recipe-data"></a>
+### Data Agents
+
+| 你想证明 | Core | Complement | 还不能直接证明 |
+|---|---|---|---|
+| **Text-to-SQL / Warehouse 任务能力** | [Spider 2.0](https://arxiv.org/abs/2411.07763) | [Spider](https://aclanthology.org/D18-1425/) · [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) | SQL 成功不覆盖完整的数据理解、分析与交付工作流。 |
+| **端到端 Data Science Agent** | [DataSpace](https://arxiv.org/abs/2608.03451) | [DSAgentBench](https://arxiv.org/abs/2608.10366) · [DataClawBench](https://arxiv.org/abs/2605.02503) | 工作流完成率本身不能隔离统计建模是否正确。 |
+| **数据理解与自主探索** | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) | [DataClawBench](https://arxiv.org/abs/2605.02503) · [AgenticDataBench](https://arxiv.org/abs/2607.01647) | 探索质量不等价于下游模型、因果结论或业务决策质量。 |
+| **统计与因果分析** | [CausalDS](https://arxiv.org/abs/2607.08093) | [StatABench](https://arxiv.org/abs/2606.22977) | 受控统计/因果任务不覆盖真实 warehouse、repo 与数据工程约束。 |
+| **长时程 ML Engineering / Research Improvement** | [MLE-bench](https://arxiv.org/abs/2410.07095) | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [AI4AI-Bench](https://arxiv.org/abs/2608.20318) | ML improvement 不能说明 BI、warehouse semantics 或一般数据分析能力。 |
+
+> **使用原则：** Recipe 的目标是让实验组合与论文 claim 对齐，而不是追求 Benchmark 数量。真正做实验前，继续检查每个 Benchmark 的 protocol、confounders 和 coverage gap。
+
+---
+<!-- EVALUATION-RECIPES:END -->
 
 <a id="frontier-signals"></a>
 ## 近 30 天：三个变化
@@ -170,6 +217,7 @@ _收录标准：只纳入可复用的 benchmark / evaluation contribution；仅�
 
 以下是 registry 中的全部 125 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
 
+<a id="registry-memory"></a>
 ### Agent Memory
 
 <!-- TABLE-FIRST:AREA:agent-memory:START -->
@@ -224,6 +272,7 @@ _收录标准：只纳入可复用的 benchmark / evaluation contribution；仅�
 | 🔭 前沿 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | [0](https://www.semanticscholar.org/paper/c73b59d446d064835acc4f499b12ae0b33c647de) | 2026-08-26 | 无显式边界的交错长对话中，对当前任务有效的 episode、状态覆盖、跨段桥接与局部约束能否被正确重建。 |
 <!-- TABLE-FIRST:AREA:agent-memory:END -->
 
+<a id="registry-rag"></a>
 ### RAG / Agentic Retrieval
 
 <!-- TABLE-FIRST:AREA:rag:START -->
@@ -275,6 +324,7 @@ _收录标准：只纳入可复用的 benchmark / evaluation contribution；仅�
 | 🔭 前沿 | [RAG Collapse](https://arxiv.org/abs/2608.22118) <!-- benchmark-id:rag-collapse --> | [0](https://www.semanticscholar.org/paper/eba9ce0d2a0c0accc93c7518ead27c857f6ee44a) | 2026-08-22 | 递归检索中 self-authored sources 对独立来源的挤出与反馈崩塌。 |
 | 🔭 前沿 | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | [0](https://www.semanticscholar.org/paper/b57acad4dcfb773ba69da1f92b72cdb595b36f03) | 2026-08-24 | corpus snapshot 增长造成的超额答案 churn 与稳定翻转。 |<!-- TABLE-FIRST:AREA:rag:END -->
 
+<a id="registry-data"></a>
 ### Data Agents
 
 <!-- TABLE-FIRST:AREA:data-agent:START -->

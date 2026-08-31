@@ -32,8 +32,8 @@ Chinese sentences should still have a Chinese grammatical spine: use Chinese ver
 - Treat scale as novelty only when scale fixes a known validity problem.
 - Use numbers only when they change interpretation.
 - Keep the strongest confounder visible near the claim it weakens.
-- Treat README as a data-rich awesome list: use one compact onboarding header, then put frontier signals, complete tables, and direct links ahead of long-form framing prose.
-- Layer-level attention navigation is `onboarding → frontier signal → release timeline → Benchmark Map → complete area tables → Reading Paths → Library`; onboarding only routes the reader, while each research layer answers a different question without repeating the previous one.
+- Treat README as a data-rich research navigator: route by area first, provide a bounded claim-to-benchmark recipe layer, then put frontier signals, complete tables, and direct links ahead of long-form framing prose.
+- Layer-level attention navigation is `area router → Evaluation Recipes → frontier signal → release timeline → Benchmark Map → complete area tables → Reading Paths → Library`; routing and recipes help the reader choose, while each research layer answers a different question without repeating the previous one.
 - Keep the same information contract across table rows, but vary the syntax. Repeating `相比 X，把 A 推进到 B` in every row is not a style guide.
 - Emoji are allowed when they carry a stable meaning, such as evolution roles; do not use them as decoration.
 
@@ -55,6 +55,8 @@ Warn on repeated patterns across nearby entries:
 The target is pattern density and loss of specificity, not banned words.
 
 ## README scan contract
+
+Evaluation Recipes are decision aids, not leaderboard recommendations. Phrase each row around a **research claim**, then name a Core benchmark, complementary coverage, and one inference boundary. Prefer 2–4 benchmarks per recipe. Do not rank benchmarks by citation count or recency, and do not imply that combining several system-level scores isolates a component mechanism.
 
 The main README is a scanning surface, not a per-item audit log. Recent and per-area tables use one descriptive field: `考察内容 / What it tests`. That field may be slightly longer when needed, but it should compactly name the task/environment/capability being measured rather than restating novelty, importance, or “compared with before.”
 
