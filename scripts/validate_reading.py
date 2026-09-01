@@ -1595,8 +1595,9 @@ def main() -> int:
     errors.extend(validate_family_routes(zh, en))
     errors.extend(validate_benchmark_aliases(zh, en))
 
-    if "目前仍然测不好的重要问题" not in zh or "What Is Still Poorly Measured" not in en:
-        errors.append("poorly-measured guardrail is missing from the entry surface")
+    evaluation_frontier_anchor = '<a id="evaluation-frontiers"></a>'
+    if evaluation_frontier_anchor not in zh or evaluation_frontier_anchor not in en:
+        errors.append("evaluation-frontiers guardrail is missing from the entry surface")
 
     for pat in [r"真正重要的是", r"关键不在于.*而在于", r"值得注意的是", r"this matters because", r"the important thing is not"]:
         n = len(re.findall(pat, zh + "\n" + en, flags=re.IGNORECASE))
