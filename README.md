@@ -13,6 +13,11 @@
 <p><strong>中文</strong> · <a href="README.en.md">English</a></p>
 
 <p>
+<a href="https://h20zhang.github.io/Agent-Benchmark-Radar/zh/"><strong>打开在线 Benchmark Radar →</strong></a><br/>
+按能力、环境、协议与演进阶段筛选全部 Benchmark。
+</p>
+
+<p>
 <a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml/badge.svg"></a>
 <a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/H20Zhang/Agent-Benchmark-Radar?style=flat"></a>
 <img alt="Last commit" src="https://img.shields.io/github/last-commit/H20Zhang/Agent-Benchmark-Radar?style=flat">
@@ -191,31 +196,112 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 ## Benchmark 地图
 
 <a id="benchmark-memory"></a>
-<!-- CITATION-META:START -->
-引用数来自 Semantic Scholar，最后刷新 **2026-08-31**；`—` 表示暂无可匹配论文。引用数仅作影响力上下文，不参与阶段划分。
-<!-- CITATION-META:END -->
-
 ### Agent Memory
 从跨会话事实召回，逐步走向在线更新、结构化记忆、多模态证据、行动、隐式用户状态与覆盖写入—检索—压缩的生命周期完整性。
 
-**主干：** [Beyond Goldfish Memory](https://aclanthology.org/2022.acl-long.356/) → [LoCoMo](https://aclanthology.org/2024.acl-long.747/) / [LongMemEval](https://arxiv.org/abs/2410.10813) → [MemoryAgentBench](https://arxiv.org/abs/2507.05257) → [StructMemEval](https://arxiv.org/abs/2602.11243) / [MemoryArena](https://arxiv.org/abs/2602.16313) → [MemEye](https://arxiv.org/abs/2605.15128) / [WorldMemArena](https://arxiv.org/abs/2605.29341) → [MPBench](https://arxiv.org/abs/2606.04329) / [DynamicMem](https://arxiv.org/abs/2606.22877) / [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) → [GateMem](https://arxiv.org/abs/2606.18829) / [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) / [PAST-Bench](https://arxiv.org/abs/2608.04003) / [SP-Mem](https://arxiv.org/abs/2608.16551) → [InjecMEM](https://arxiv.org/abs/2608.23471) / [Utility Under Attack](https://arxiv.org/abs/2608.21230) / [The Compaction Cliff](https://arxiv.org/abs/2608.22752)
+<!-- CAPABILITY-MAP:agent-memory:START -->
+```mermaid
+flowchart TB
+    accTitle: Agent Memory 能力演进
+    accDescr: 评测从长程召回扩展到在线更新、行动效用、长期适应、治理与生命周期完整性。
+    F["Foundation · 长程召回与时间推理"]
+    T1["Transition · 在线写入、更新与选择性遗忘"]
+    T2["Transition · 结构化、多模态与环境记忆"]
+    X1["Frontier · 记忆驱动行动与因果效用"]
+    X2["Frontier · 隐式用户状态与长期适应"]
+    X3["Frontier · 隐私、权限与主动遗忘"]
+    X4["Frontier · 污染防御、溯源与压缩完整性"]
+    F --> T1
+    F --> T2
+    T1 --> X1
+    T1 --> X3
+    T2 --> X2
+    T2 --> X4
+    classDef foundation fill:#E9EEFF,stroke:#2457FF,color:#132738
+    classDef transition fill:#E9F7F1,stroke:#007F72,color:#132738
+    classDef frontier fill:#FFF0EA,stroke:#C64D2D,color:#132738
+    class F foundation
+    class T1,T2 transition
+    class X1,X2,X3,X4 frontier
+```
+<!-- CAPABILITY-MAP:agent-memory:END -->
+
+**在线筛选：** [打开 Agent Memory Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/?area=agent-memory#explorer)
 
 <a id="benchmark-rag"></a>
 ### RAG / Agentic Retrieval
 从文档相关性，逐步走向多跳证据、实时搜索、跨来源执行与轨迹审计；语料本身也成为可训练、可版本化、需审计反馈的状态。
 
-**主干：** [HotpotQA](https://aclanthology.org/D18-1259/) → [BEIR](https://arxiv.org/abs/2104.08663) / [BRIGHT](https://arxiv.org/abs/2407.12883) → [BrowseComp](https://arxiv.org/abs/2504.12516) → [BrowseComp-Plus](https://arxiv.org/abs/2508.06600) / [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) → [AutoResearchBench](https://arxiv.org/abs/2604.25256) / [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) → [LiveBrowseComp](https://arxiv.org/abs/2605.28721) / [LoHoSearch](https://arxiv.org/abs/2606.12837) → [SearchAuditBench](https://arxiv.org/abs/2608.05212) / [VAKRA](https://arxiv.org/abs/2608.12282) → [MAPLE](https://arxiv.org/abs/2608.15624) / [VisDocAgentBench](https://arxiv.org/abs/2608.17889) / [WANDR](https://arxiv.org/abs/2608.14747) → [KBGym](https://arxiv.org/abs/2608.21829) / [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) / [RAG Collapse](https://arxiv.org/abs/2608.22118)
+<!-- CAPABILITY-MAP:rag:START -->
+```mermaid
+flowchart TB
+    accTitle: RAG 与 Agentic Retrieval 能力演进
+    accDescr: 评测从相关性与跨域泛化扩展到推理密集检索、Agent 搜索、实时证据、轨迹审计与语料状态。
+    F["Foundation · 相关性、召回与跨域泛化"]
+    T1["Transition · 多跳证据与推理密集检索"]
+    T2["Transition · 迭代搜索、工具调用与跨来源执行"]
+    X1["Frontier · 实时证据与长时程搜索"]
+    X2["Frontier · 多模态检索与页面级理解"]
+    X3["Frontier · 轨迹审计、成本与工具策略"]
+    X4["Frontier · 可写、可版本化与反馈敏感语料"]
+    F --> T1
+    T1 --> T2
+    T2 --> X1
+    T2 --> X2
+    T2 --> X3
+    T1 --> X4
+    classDef foundation fill:#E9EEFF,stroke:#2457FF,color:#132738
+    classDef transition fill:#E9F7F1,stroke:#007F72,color:#132738
+    classDef frontier fill:#FFF0EA,stroke:#C64D2D,color:#132738
+    class F foundation
+    class T1,T2 transition
+    class X1,X2,X3,X4 frontier
+```
+<!-- CAPABILITY-MAP:rag:END -->
+
+**在线筛选：** [打开 RAG / Agentic Retrieval Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/?area=rag#explorer)
 
 <a id="benchmark-data"></a>
 ### Data Agents
 从 Text-to-SQL / code generation，分化为完整分析工作流与长时程 ML engineering，并继续走向探索、统计/因果分析、真实研究仓库与业务语义可靠性。
 
-**主干：** [WikiSQL](https://arxiv.org/abs/1709.00103) → [Spider](https://aclanthology.org/D18-1425/) / [DS-1000](https://arxiv.org/abs/2211.11501) → [MLAgentBench](https://arxiv.org/abs/2310.03302) / [InsightBench](https://arxiv.org/abs/2407.06423) → [Spider 2.0](https://arxiv.org/abs/2411.07763) / [KramaBench](https://arxiv.org/abs/2506.06541) → [DataClawBench](https://arxiv.org/abs/2605.02503) / [DSGym](https://arxiv.org/abs/2601.16344) → [StatABench](https://arxiv.org/abs/2606.22977) / [CausalDS](https://arxiv.org/abs/2607.08093) → [DataSpace](https://arxiv.org/abs/2608.03451) / [DSAgentBench](https://arxiv.org/abs/2608.10366) → [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) / [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) / [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench)；ML engineering 支线：[MLAgentBench](https://arxiv.org/abs/2310.03302) → [MLE-bench](https://arxiv.org/abs/2410.07095) → [MLE-Dojo](https://arxiv.org/abs/2505.07782) → [DeltaML-Bench](https://arxiv.org/abs/2608.19653) / [AI4AI-Bench](https://arxiv.org/abs/2608.20318)
+<!-- CAPABILITY-MAP:data-agent:START -->
+```mermaid
+flowchart TB
+    accTitle: Data Agents 能力演进
+    accDescr: 评测从 SQL 与代码生成扩展到端到端分析、长时程 ML 工程、自主研究与业务语义可靠性。
+    F["Foundation · Text-to-SQL 与代码生成"]
+    T1["Transition · 端到端分析与数据工作流"]
+    T2["Transition · 长时程 ML 工程与实验迭代"]
+    X1["Frontier · 自主探索、统计与因果分析"]
+    X2["Frontier · 真实仓库、Warehouse 与数据工程"]
+    X3["Frontier · 可审计研究改进与执行归因"]
+    X4["Frontier · 业务语义、澄清与可靠交付"]
+    F --> T1
+    F --> T2
+    T1 --> X1
+    T1 --> X4
+    T2 --> X2
+    T2 --> X3
+    classDef foundation fill:#E9EEFF,stroke:#2457FF,color:#132738
+    classDef transition fill:#E9F7F1,stroke:#007F72,color:#132738
+    classDef frontier fill:#FFF0EA,stroke:#C64D2D,color:#132738
+    class F foundation
+    class T1,T2 transition
+    class X1,X2,X3,X4 frontier
+```
+<!-- CAPABILITY-MAP:data-agent:END -->
+
+**在线筛选：** [打开 Data Agents Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/?area=data-agent#explorer)
 
 <a id="all-benchmarks"></a>
 ## 按领域查看全部 Benchmark
 
 以下是 registry 中的全部 125 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
+
+<!-- CITATION-META:START -->
+引用数来自 Semantic Scholar，最后刷新 **2026-08-31**；`—` 表示暂无可匹配论文。引用数仅作影响力上下文，不参与阶段划分。
+<!-- CITATION-META:END -->
 
 <a id="registry-memory"></a>
 ### Agent Memory

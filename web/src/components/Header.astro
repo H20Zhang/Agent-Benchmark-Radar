@@ -1,0 +1,32 @@
+---
+import { copyFor } from "../lib/i18n.mjs";
+import { localePath, REPOSITORY_URL, sitePath } from "../lib/site.mjs";
+
+interface Props {
+  lang: "zh" | "en";
+  alternatePath?: string;
+}
+
+const { lang, alternatePath = localePath(lang === "zh" ? "en" : "zh") } =
+  Astro.props;
+const copy = copyFor(lang);
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-brand" href={sitePath(localePath(lang))} aria-label={copy.siteName}>
+      <span class="site-brand__mark" aria-hidden="true">
+        <i></i><i></i><i></i>
+      </span>
+      <span class="site-brand__name">Agent<br />Benchmark Radar</span>
+    </a>
+    <nav class="site-nav" aria-label={lang === "zh" ? "主导航" : "Primary navigation"}>
+      <a href={sitePath(`${localePath(lang)}#explorer`)}>{copy.nav.explorer}</a>
+      <a href={sitePath(localePath(lang, "methodology/"))}>{copy.nav.methodology}</a>
+      <a href={REPOSITORY_URL} rel="noreferrer">{copy.nav.github}<span aria-hidden="true">↗</span></a>
+      <a class="site-nav__language" href={sitePath(alternatePath)} hreflang={lang === "zh" ? "en" : "zh-CN"}>
+        {copy.nav.language}
+      </a>
+    </nav>
+  </div>
+</header>

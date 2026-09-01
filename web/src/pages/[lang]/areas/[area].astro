@@ -1,0 +1,107 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import BenchmarkCard from "../../../components/BenchmarkCard.astro";
+import Header from "../../../components/Header.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+
+import { AREAS, copyFor, LOCALES } from "../../../lib/i18n.mjs";
+import { sortBenchmarks } from "../../../lib/filters.mjs";
+import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
+import { loadRegistry } from "../../../lib/registry.mjs";
+import { absoluteUrl, localePath, sitePath } from "../../../lib/site.mjs";
+
+export function getStaticPaths() {
+  return LOCALES.flatMap((lang) =>
+    AREAS.map((area) => ({ params: { lang, area }, props: { lang, area } })),
+  );
+}
+
+interface Props {
+  lang: "zh" | "en";
+  area: "agent-memory" | "rag" | "data-agent";
+}
+
+const { lang, area } = Astro.props;
+const copy = copyFor(lang);
+const allItems = [...loadRegistry()];
+const items = sortBenchmarks(allItems.filter((item) => item.area === area), "newest");
+const summaries = loadChineseSummaries();
+const canonicalPath = localePath(lang, `areas/${area}/`);
+const alternatePath = localePath(lang === "zh" ? "en" : "zh", `areas/${area}/`);
+const title = `${copy.areas[area].label} Benchmark Radar | Agent Benchmark Radar`;
+const description = copy.areas[area].intro;
+const roleCounts = Object.fromEntries(
+  Object.keys(copy.roles).map((role) => [
+    role,
+    items.filter((item) => item.evolution_role === role).length,
+  ]),
+);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: absoluteUrl(canonicalPath),
+  inLanguage: copy.langTag,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(localePath(lang, `benchmarks/${item.id}/`)),
+    })),
+  },
+};
+---
+
+<BaseLayout
+  {lang}
+  {title}
+  {description}
+  {canonicalPath}
+  zhPath={lang === "zh" ? canonicalPath : alternatePath}
+  enPath={lang === "en" ? canonicalPath : alternatePath}
+  {jsonLd}
+  bodyClass="area-page"
+>
+  <Header {lang} alternatePath={alternatePath} />
+  <main id="main-content">
+    <section class="area-hero shell" data-area={area}>
+      <div class="area-hero__index">{String(AREAS.indexOf(area) + 1).padStart(2, "0")}</div>
+      <div class="area-hero__copy">
+        <p class="eyebrow">{copy.areas[area].short}</p>
+        <h1>{copy.areas[area].label}</h1>
+        <p>{copy.areas[area].intro}</p>
+        <a class="button button--primary" href={sitePath(`${localePath(lang)}?area=${area}#explorer`)}>
+          {copy.hero.primaryAction} <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <dl class="area-hero__roles">
+        {Object.entries(copy.roles).map(([role, label]) => (
+          <div><dt>{label}</dt><dd>{roleCounts[role]}</dd></div>
+        ))}
+      </dl>
+    </section>
+
+    <section class="area-registry">
+      <div class="shell">
+        <div class="section-heading">
+          <div><p class="eyebrow">Complete area registry</p><h2>{items.length} Benchmarks</h2></div>
+          <p>{lang === "zh" ? "按最近发布时间排列，直接进入每个评测的测量设计。" : "Ordered by latest release, with a direct path into each measurement design."}</p>
+        </div>
+        <div class="benchmark-grid benchmark-grid--area">
+          {items.map((item) => (
+            <BenchmarkCard
+              {lang}
+              {item}
+              summary={lang === "zh" ? summaries.get(item.id) || item.summary : item.summary}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter {lang} />
+</BaseLayout>

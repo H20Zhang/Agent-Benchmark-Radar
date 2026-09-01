@@ -1,0 +1,137 @@
+---
+import { AREAS, copyFor } from "../lib/i18n.mjs";
+import { buildFacetOptions } from "../lib/filters.mjs";
+import { displayToken, localePath, sitePath } from "../lib/site.mjs";
+
+interface Props {
+  lang: "zh" | "en";
+  items: any[];
+}
+
+const { lang, items } = Astro.props;
+const copy = copyFor(lang);
+const years = [...new Set(items.map((item) => Number(item.released.slice(0, 4))))].sort(
+  (left, right) => right - left,
+);
+const capabilities = buildFacetOptions(items, "capabilities");
+const environments = buildFacetOptions(items, "environment");
+const protocols = buildFacetOptions(items, "protocol");
+const allLabel = lang === "zh" ? "全部" : "All";
+const applyLabel = lang === "zh" ? "应用条件" : "Apply filters";
+---
+
+<form
+  class="filter-panel"
+  action={sitePath(localePath(lang))}
+  method="get"
+  data-filter-form
+>
+  <div class="filter-panel__heading">
+    <div>
+      <p class="eyebrow">Research controls</p>
+      <h2>{copy.filters.title}</h2>
+    </div>
+    <button class="filter-reset" type="reset" data-reset-filters>{copy.filters.reset}</button>
+  </div>
+
+  <label class="search-control">
+    <span>{copy.filters.search}</span>
+    <span class="search-control__field">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
+      <input
+        type="search"
+        name="q"
+        autocomplete="off"
+        placeholder={copy.filters.searchPlaceholder}
+      />
+    </span>
+  </label>
+
+  <fieldset class="filter-group">
+    <legend>{copy.filters.area}</legend>
+    <div class="segmented-control segmented-control--areas">
+      {AREAS.map((area) => (
+        <label data-area={area}>
+          <input type="checkbox" name="area" value={area} />
+          <span>{copy.areas[area].label}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <fieldset class="filter-group">
+    <legend>{copy.filters.role}</legend>
+    <div class="chip-control">
+      {Object.entries(copy.roles).map(([role, label]) => (
+        <label>
+          <input type="checkbox" name="role" value={role} />
+          <span>{label}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <fieldset class="filter-group">
+    <legend>{copy.filters.artifact}</legend>
+    <div class="chip-control">
+      {Object.entries(copy.artifacts).map(([artifact, label]) => (
+        <label>
+          <input type="checkbox" name="artifact" value={artifact} />
+          <span>{label}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <label class="select-control">
+    <span>{copy.filters.year}</span>
+    <select name="year">
+      <option value="">{allLabel}</option>
+      {years.map((year) => <option value={year}>{year}</option>)}
+    </select>
+  </label>
+
+  <details class="advanced-filters">
+    <summary>{copy.filters.advanced}<span aria-hidden="true">＋</span></summary>
+    <div class="advanced-filters__grid">
+      <label class="select-control">
+        <span>{copy.filters.capability}</span>
+        <select name="capability">
+          <option value="">{allLabel}</option>
+          {capabilities.map(({ value, count }) => (
+            <option value={value}>{displayToken(value)} · {count}</option>
+          ))}
+        </select>
+      </label>
+      <label class="select-control">
+        <span>{copy.filters.environment}</span>
+        <select name="environment">
+          <option value="">{allLabel}</option>
+          {environments.map(({ value, count }) => (
+            <option value={value}>{displayToken(value)} · {count}</option>
+          ))}
+        </select>
+      </label>
+      <label class="select-control">
+        <span>{copy.filters.protocol}</span>
+        <select name="protocol">
+          <option value="">{allLabel}</option>
+          {protocols.map(({ value, count }) => (
+            <option value={value}>{displayToken(value)} · {count}</option>
+          ))}
+        </select>
+      </label>
+    </div>
+  </details>
+
+  <label class="select-control select-control--sort">
+    <span>{copy.filters.sort}</span>
+    <select name="sort">
+      {Object.entries(copy.filters.sortOptions).map(([value, label]) => (
+        <option value={value}>{label}</option>
+      ))}
+    </select>
+  </label>
+
+  <button class="button button--primary filter-submit" type="submit">{applyLabel}</button>
+</form>

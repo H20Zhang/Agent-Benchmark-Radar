@@ -13,6 +13,11 @@ Places each new benchmark in its lineage: what it makes measurable, which baseli
 <p><a href="README.md">中文</a> · <strong>English</strong></p>
 
 <p>
+<a href="https://h20zhang.github.io/Agent-Benchmark-Radar/en/"><strong>Open the interactive Benchmark Radar →</strong></a><br/>
+Filter every benchmark by capability, environment, protocol, and evolution stage.
+</p>
+
+<p>
 <a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml/badge.svg"></a>
 <a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/H20Zhang/Agent-Benchmark-Radar?style=flat"></a>
 <img alt="Last commit" src="https://img.shields.io/github/last-commit/H20Zhang/Agent-Benchmark-Radar?style=flat">
@@ -191,31 +196,112 @@ Last updated: **2026-08-28**
 ## Benchmark Map
 
 <a id="benchmark-memory"></a>
-<!-- CITATION-META:START -->
-Citation counts are from Semantic Scholar, last refreshed **2026-08-31**; `—` means no paper could be matched. Counts are context for adoption, not an input to stage labels.
-<!-- CITATION-META:END -->
-
 ### Agent Memory
 From cross-session factual recall toward online updating, structured and multimodal memory, action, implicit user state, and lifecycle integrity across writing, retrieval, and compaction.
 
-**Defining chain:** [Beyond Goldfish Memory](https://aclanthology.org/2022.acl-long.356/) → [LoCoMo](https://aclanthology.org/2024.acl-long.747/) / [LongMemEval](https://arxiv.org/abs/2410.10813) → [MemoryAgentBench](https://arxiv.org/abs/2507.05257) → [StructMemEval](https://arxiv.org/abs/2602.11243) / [MemoryArena](https://arxiv.org/abs/2602.16313) → [MemEye](https://arxiv.org/abs/2605.15128) / [WorldMemArena](https://arxiv.org/abs/2605.29341) → [MPBench](https://arxiv.org/abs/2606.04329) / [DynamicMem](https://arxiv.org/abs/2606.22877) / [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) → [GateMem](https://arxiv.org/abs/2606.18829) / [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) / [PAST-Bench](https://arxiv.org/abs/2608.04003) / [SP-Mem](https://arxiv.org/abs/2608.16551) → [InjecMEM](https://arxiv.org/abs/2608.23471) / [Utility Under Attack](https://arxiv.org/abs/2608.21230) / [The Compaction Cliff](https://arxiv.org/abs/2608.22752)
+<!-- CAPABILITY-MAP:agent-memory:START -->
+```mermaid
+flowchart TB
+    accTitle: Agent Memory capability evolution
+    accDescr: Evaluation expands from long-horizon recall to online updates, action utility, sustained adaptation, governance, and lifecycle integrity.
+    F["Foundation · Long-horizon recall and temporal reasoning"]
+    T1["Transition · Online writing, updating, and selective forgetting"]
+    T2["Transition · Structured, multimodal, and environment memory"]
+    X1["Frontier · Memory-driven action and causal utility"]
+    X2["Frontier · Implicit user state and sustained adaptation"]
+    X3["Frontier · Privacy, access control, and active forgetting"]
+    X4["Frontier · Poisoning defense, provenance, and compaction integrity"]
+    F --> T1
+    F --> T2
+    T1 --> X1
+    T1 --> X3
+    T2 --> X2
+    T2 --> X4
+    classDef foundation fill:#E9EEFF,stroke:#2457FF,color:#132738
+    classDef transition fill:#E9F7F1,stroke:#007F72,color:#132738
+    classDef frontier fill:#FFF0EA,stroke:#C64D2D,color:#132738
+    class F foundation
+    class T1,T2 transition
+    class X1,X2,X3,X4 frontier
+```
+<!-- CAPABILITY-MAP:agent-memory:END -->
+
+**Interactive filters:** [Open the Agent Memory Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/?area=agent-memory#explorer)
 
 <a id="benchmark-rag"></a>
 ### RAG / Agentic Retrieval
 From document relevance toward multi-hop evidence, live search, cross-source execution, and trajectory audit, while the corpus itself becomes trainable, versioned, feedback-sensitive state.
 
-**Defining chain:** [HotpotQA](https://aclanthology.org/D18-1259/) → [BEIR](https://arxiv.org/abs/2104.08663) / [BRIGHT](https://arxiv.org/abs/2407.12883) → [BrowseComp](https://arxiv.org/abs/2504.12516) → [BrowseComp-Plus](https://arxiv.org/abs/2508.06600) / [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) → [AutoResearchBench](https://arxiv.org/abs/2604.25256) / [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) → [LiveBrowseComp](https://arxiv.org/abs/2605.28721) / [LoHoSearch](https://arxiv.org/abs/2606.12837) → [SearchAuditBench](https://arxiv.org/abs/2608.05212) / [VAKRA](https://arxiv.org/abs/2608.12282) → [MAPLE](https://arxiv.org/abs/2608.15624) / [VisDocAgentBench](https://arxiv.org/abs/2608.17889) / [WANDR](https://arxiv.org/abs/2608.14747) → [KBGym](https://arxiv.org/abs/2608.21829) / [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) / [RAG Collapse](https://arxiv.org/abs/2608.22118)
+<!-- CAPABILITY-MAP:rag:START -->
+```mermaid
+flowchart TB
+    accTitle: RAG and Agentic Retrieval capability evolution
+    accDescr: Evaluation expands from relevance and cross-domain generalization to reasoning-intensive retrieval, agent search, live evidence, trajectory audit, and corpus state.
+    F["Foundation · Relevance, recall, and cross-domain generalization"]
+    T1["Transition · Multi-hop evidence and reasoning-intensive retrieval"]
+    T2["Transition · Iterative search, tool use, and cross-source execution"]
+    X1["Frontier · Live evidence and long-horizon search"]
+    X2["Frontier · Multimodal retrieval and page-level understanding"]
+    X3["Frontier · Trajectory audit, cost, and tool strategy"]
+    X4["Frontier · Writable, versioned, and feedback-sensitive corpora"]
+    F --> T1
+    T1 --> T2
+    T2 --> X1
+    T2 --> X2
+    T2 --> X3
+    T1 --> X4
+    classDef foundation fill:#E9EEFF,stroke:#2457FF,color:#132738
+    classDef transition fill:#E9F7F1,stroke:#007F72,color:#132738
+    classDef frontier fill:#FFF0EA,stroke:#C64D2D,color:#132738
+    class F foundation
+    class T1,T2 transition
+    class X1,X2,X3,X4 frontier
+```
+<!-- CAPABILITY-MAP:rag:END -->
+
+**Interactive filters:** [Open the RAG / Agentic Retrieval Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/?area=rag#explorer)
 
 <a id="benchmark-data"></a>
 ### Data Agents
 From text-to-SQL / code generation into both complete analytics workflows and long-horizon ML engineering, then toward exploration, statistical/causal analysis, real research repositories, and business-semantic reliability.
 
-**Defining chain:** [WikiSQL](https://arxiv.org/abs/1709.00103) → [Spider](https://aclanthology.org/D18-1425/) / [DS-1000](https://arxiv.org/abs/2211.11501) → [MLAgentBench](https://arxiv.org/abs/2310.03302) / [InsightBench](https://arxiv.org/abs/2407.06423) → [Spider 2.0](https://arxiv.org/abs/2411.07763) / [KramaBench](https://arxiv.org/abs/2506.06541) → [DataClawBench](https://arxiv.org/abs/2605.02503) / [DSGym](https://arxiv.org/abs/2601.16344) → [StatABench](https://arxiv.org/abs/2606.22977) / [CausalDS](https://arxiv.org/abs/2607.08093) → [DataSpace](https://arxiv.org/abs/2608.03451) / [DSAgentBench](https://arxiv.org/abs/2608.10366) → [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) / [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) / [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench); ML-engineering branch: [MLAgentBench](https://arxiv.org/abs/2310.03302) → [MLE-bench](https://arxiv.org/abs/2410.07095) → [MLE-Dojo](https://arxiv.org/abs/2505.07782) → [DeltaML-Bench](https://arxiv.org/abs/2608.19653) / [AI4AI-Bench](https://arxiv.org/abs/2608.20318)
+<!-- CAPABILITY-MAP:data-agent:START -->
+```mermaid
+flowchart TB
+    accTitle: Data Agent capability evolution
+    accDescr: Evaluation expands from SQL and code generation to end-to-end analytics, long-horizon ML engineering, autonomous research, and business-semantic reliability.
+    F["Foundation · Text-to-SQL and code generation"]
+    T1["Transition · End-to-end analytics and data workflows"]
+    T2["Transition · Long-horizon ML engineering and experiment iteration"]
+    X1["Frontier · Autonomous exploration, statistics, and causal analysis"]
+    X2["Frontier · Real repositories, warehouses, and data engineering"]
+    X3["Frontier · Auditable research improvement and execution attribution"]
+    X4["Frontier · Business semantics, clarification, and reliable delivery"]
+    F --> T1
+    F --> T2
+    T1 --> X1
+    T1 --> X4
+    T2 --> X2
+    T2 --> X3
+    classDef foundation fill:#E9EEFF,stroke:#2457FF,color:#132738
+    classDef transition fill:#E9F7F1,stroke:#007F72,color:#132738
+    classDef frontier fill:#FFF0EA,stroke:#C64D2D,color:#132738
+    class F foundation
+    class T1,T2 transition
+    class X1,X2,X3,X4 frontier
+```
+<!-- CAPABILITY-MAP:data-agent:END -->
+
+**Interactive filters:** [Open the Data Agent Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/?area=data-agent#explorer)
 
 <a id="all-benchmarks"></a>
 ## All Benchmarks by Area
 
 all 125 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
+
+<!-- CITATION-META:START -->
+Citation counts are from Semantic Scholar, last refreshed **2026-08-31**; `—` means no paper could be matched. Counts are context for adoption, not an input to stage labels.
+<!-- CITATION-META:END -->
 
 <a id="registry-memory"></a>
 ### Agent Memory

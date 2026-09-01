@@ -1,0 +1,23 @@
+---
+import { copyFor } from "../lib/i18n.mjs";
+import { localePath, REPOSITORY_URL, sitePath } from "../lib/site.mjs";
+
+interface Props {
+  lang: "zh" | "en";
+}
+
+const { lang } = Astro.props;
+const copy = copyFor(lang);
+---
+
+<footer class="site-footer">
+  <div class="site-footer__signal" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <p class="site-footer__statement">{copy.footer.statement}</p>
+  <div class="site-footer__links">
+    <a href={`${REPOSITORY_URL}/blob/main/data/benchmarks.json`}>{copy.footer.data}</a>
+    <a href={sitePath(localePath(lang, "methodology/"))}>{copy.nav.methodology}</a>
+    <a href={REPOSITORY_URL}>GitHub ↗</a>
+  </div>
+</footer>

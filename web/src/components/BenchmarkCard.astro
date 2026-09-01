@@ -1,0 +1,66 @@
+---
+import { copyFor } from "../lib/i18n.mjs";
+import { getArtifactKinds } from "../lib/registry.mjs";
+import { displayToken, localePath, sitePath } from "../lib/site.mjs";
+
+interface Props {
+  lang: "zh" | "en";
+  item: any;
+  summary: string;
+}
+
+const { lang, item, summary } = Astro.props;
+const copy = copyFor(lang);
+const artifactKinds = getArtifactKinds(item);
+const detailPath = sitePath(localePath(lang, `benchmarks/${item.id}/`));
+const citationCount = item.citations?.status === "ok" ? item.citations.count : undefined;
+const searchText = [
+  item.name,
+  item.summary,
+  item.measurement_strength,
+  ...(item.capabilities || []),
+  ...(item.environment || []),
+  ...(item.protocol || []),
+].join(" ");
+---
+
+<article
+  class={`benchmark-card benchmark-card--${item.area}`}
+  data-benchmark-id={item.id}
+  data-area={item.area}
+  data-role={item.evolution_role}
+  data-year={item.released.slice(0, 4)}
+  data-released={item.released}
+  data-artifacts={JSON.stringify(artifactKinds)}
+  data-capabilities={JSON.stringify(item.capabilities || [])}
+  data-environments={JSON.stringify(item.environment || [])}
+  data-protocols={JSON.stringify(item.protocol || [])}
+  data-citations={citationCount ?? -1}
+  data-search={searchText}
+>
+  <div class="benchmark-card__topline">
+    <span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span>
+    <span class={`role-label role-label--${item.evolution_role}`}>{copy.roles[item.evolution_role]}</span>
+    <time datetime={item.released}>{item.released}</time>
+  </div>
+  <h3><a href={detailPath}>{item.name}</a></h3>
+  <p class="benchmark-card__summary">{summary || item.summary}</p>
+  <ul class="token-list" aria-label={copy.detail.capabilities}>
+    {(item.capabilities || []).slice(0, 3).map((capability) => (
+      <li>{displayToken(capability)}</li>
+    ))}
+  </ul>
+  <div class="benchmark-card__footer">
+    <div class="artifact-links" aria-label={copy.filters.artifact}>
+      {artifactKinds.map((kind) => (
+        <a href={item.artifacts[kind]} rel="noreferrer" aria-label={`${item.name} · ${copy.artifacts[kind]}`}>
+          {copy.artifacts[kind]}
+        </a>
+      ))}
+      {citationCount !== undefined && (
+        <span title={copy.card.citations}>S2 · {citationCount}</span>
+      )}
+    </div>
+    <a class="card-arrow" href={detailPath} aria-label={`${copy.card.openDetail}: ${item.name}`}>↗</a>
+  </div>
+</article>

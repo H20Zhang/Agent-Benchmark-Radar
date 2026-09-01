@@ -1,0 +1,115 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+import { copyFor, LOCALES } from "../../lib/i18n.mjs";
+import { absoluteUrl, localePath, REPOSITORY_URL } from "../../lib/site.mjs";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+interface Props {
+  lang: "zh" | "en";
+}
+
+const { lang } = Astro.props;
+const copy = copyFor(lang);
+const canonicalPath = localePath(lang, "methodology/");
+const alternatePath = localePath(lang === "zh" ? "en" : "zh", "methodology/");
+const content = lang === "zh"
+  ? {
+      eyebrow: "Measurement methodology",
+      title: "把 Benchmark 当作测量仪器",
+      intro: "Radar 描述每个 benchmark 能测什么、在什么环境下测、通过什么协议测，以及它把评测问题推进到哪里。",
+      principles: [
+        ["研究问题优先", "先明确需要观察的能力与部署环境，再选择能够产生对应证据的 benchmark。"],
+        ["评测条件完整", "模型、提示词、工具权限、检索预算、数据快照与成本共同定义一次可解释的运行。"],
+        ["证据可复核", "原论文、代码、数据、项目页与最后核验时间组成每条记录的审计路径。"],
+      ],
+      sections: [
+        ["纳入单位", "Registry 的基本单位是具有明确任务、环境或协议的 benchmark。版本显著改变测量目标时，它获得独立稳定 ID。"],
+        ["演进阶段", "前身建立问题空间，基石形成可复用范式，过渡把问题带入 Agent 循环，前沿覆盖更完整的状态、行动、可靠性与真实环境。阶段表达测量设计的演进位置。"],
+        ["时间语义", "Released 保留来源公开时间的原始精度；last_verified 记录事实链接最近一次完成复核的日期，两者分别描述发布与维护。"],
+        ["引用上下文", "Semantic Scholar 引用数提供采用度与影响力上下文。阶段判断来自测量设计，引用数独立展示。"],
+        ["筛选语义", "同一 facet 内的多个值扩展候选集合，不同 facet 之间共同缩小候选集合。URL 使用稳定参数，便于分享与复现实验选择过程。"],
+        ["双语出版", "事实判断在 canonical registry 中保持一致，中英文页面提供对应的阅读投影与稳定互链。"],
+      ],
+    }
+  : {
+      eyebrow: "Measurement methodology",
+      title: "Treat each benchmark as a measurement instrument",
+      intro: "The Radar describes what a benchmark measures, where it measures it, which protocol produces evidence, and how it advances the evaluation question.",
+      principles: [
+        ["Research question first", "Define the capability and deployment environment before selecting the benchmark that can produce matching evidence."],
+        ["Complete evaluation conditions", "Model, prompt, tool access, retrieval budget, data snapshot, and cost jointly define an interpretable run."],
+        ["Auditable evidence", "Original papers, code, data, project pages, and verification dates form the audit path for every record."],
+      ],
+      sections: [
+        ["Unit of inclusion", "The registry unit is a benchmark with a distinct task, environment, or protocol. A version receives a stable ID when it materially changes the measurement target."],
+        ["Evolution roles", "Precursors establish the problem space, foundations create reusable paradigms, transitions move the question into agent loops, and frontiers cover richer state, action, reliability, and real environments."],
+        ["Time semantics", "Released preserves the source publication precision. last_verified records the latest completed fact and link review. Together they separate publication history from maintenance."],
+        ["Citation context", "Semantic Scholar citation counts provide adoption and impact context. Evolution roles derive from measurement design and remain independent from citation volume."],
+        ["Filter semantics", "Multiple values within one facet expand the candidate set; different facets jointly narrow it. Stable URL parameters make the benchmark-selection path shareable and reproducible."],
+        ["Bilingual publication", "The canonical registry preserves one factual judgment while Chinese and English pages provide corresponding reading projections and stable cross-links."],
+      ],
+    };
+const title = `${content.title} | Agent Benchmark Radar`;
+const description = content.intro;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: title,
+  description,
+  url: absoluteUrl(canonicalPath),
+  inLanguage: copy.langTag,
+  about: ["agent benchmarks", "evaluation methodology", "measurement design"],
+};
+---
+
+<BaseLayout
+  {lang}
+  {title}
+  {description}
+  {canonicalPath}
+  zhPath={lang === "zh" ? canonicalPath : alternatePath}
+  enPath={lang === "en" ? canonicalPath : alternatePath}
+  {jsonLd}
+  bodyClass="methodology-page"
+>
+  <Header {lang} alternatePath={alternatePath} />
+  <main id="main-content" class="shell methodology">
+    <header class="methodology__hero">
+      <p class="eyebrow">{content.eyebrow}</p>
+      <h1>{content.title}</h1>
+      <p>{content.intro}</p>
+    </header>
+
+    <section class="method-principles" aria-label={lang === "zh" ? "核心原则" : "Core principles"}>
+      {content.principles.map(([heading, text], index) => (
+        <article><span>0{index + 1}</span><h2>{heading}</h2><p>{text}</p></article>
+      ))}
+    </section>
+
+    <section class="method-sections">
+      {content.sections.map(([heading, text], index) => (
+        <article>
+          <p class="eyebrow">M{String(index + 1).padStart(2, "0")}</p>
+          <h2>{heading}</h2>
+          <p>{text}</p>
+        </article>
+      ))}
+    </section>
+
+    <aside class="method-sources">
+      <div><p class="eyebrow">Source of truth</p><h2>{lang === "zh" ? "继续审计这套方法" : "Continue auditing the method"}</h2></div>
+      <div>
+        <a href={`${REPOSITORY_URL}/blob/main/SCHEMA.md`}>Registry schema ↗</a>
+        <a href={`${REPOSITORY_URL}/blob/main/CURATION.md`}>Curation policy ↗</a>
+        <a href={`${REPOSITORY_URL}/blob/main/docs/BILINGUAL_PUBLICATION.md`}>Bilingual publication ↗</a>
+      </div>
+    </aside>
+  </main>
+  <SiteFooter {lang} />
+</BaseLayout>

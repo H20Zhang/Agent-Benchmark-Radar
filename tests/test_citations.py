@@ -35,6 +35,11 @@ class CitationProjectionTest(unittest.TestCase):
             text = (ROOT / filename).read_text(encoding="utf-8")
             with self.subTest(filename=filename):
                 self.assertIn("CITATION-META:START", text)
+                registry_heading = text.index('<a id="all-benchmarks"></a>')
+                citation_context = text.index("<!-- CITATION-META:START -->")
+                first_registry = text.index('<a id="registry-memory"></a>')
+                self.assertLess(registry_heading, citation_context)
+                self.assertLess(citation_context, first_registry)
                 for area in AREAS:
                     block = text.split(f"<!-- TABLE-FIRST:AREA:{area}:START -->", 1)[1].split(
                         f"<!-- TABLE-FIRST:AREA:{area}:END -->", 1

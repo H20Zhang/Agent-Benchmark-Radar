@@ -1,0 +1,54 @@
+---
+import BenchmarkCard from "./BenchmarkCard.astro";
+import FilterPanel from "./FilterPanel.astro";
+
+import { copyFor } from "../lib/i18n.mjs";
+import { sortBenchmarks } from "../lib/filters.mjs";
+
+interface Props {
+  lang: "zh" | "en";
+  items: any[];
+  summaries: Map<string, string>;
+}
+
+const { lang, items, summaries } = Astro.props;
+const copy = copyFor(lang);
+const sorted = sortBenchmarks(items, "newest");
+---
+
+<section id="explorer" class="explorer" data-explorer data-lang={lang}>
+  <div class="explorer__layout">
+    <aside class="explorer__filters">
+      <FilterPanel {lang} {items} />
+    </aside>
+    <div class="explorer__results">
+      <div class="results-toolbar">
+        <p>
+          <strong data-result-count aria-live="polite">{items.length}</strong>
+          <span>{copy.filters.results}</span>
+        </p>
+        <span class="results-toolbar__line" aria-hidden="true"></span>
+        <span class="results-toolbar__mode">Registry view · v1</span>
+      </div>
+      <div class="benchmark-grid" data-result-grid>
+        {sorted.map((item) => (
+          <BenchmarkCard
+            {lang}
+            {item}
+            summary={lang === "zh" ? summaries.get(item.id) || item.summary : item.summary}
+          />
+        ))}
+      </div>
+      <div class="empty-state" data-empty-state hidden>
+        <span aria-hidden="true">↙</span>
+        <h3>{copy.filters.expandResults}</h3>
+        <button type="button" class="button button--secondary" data-reset-filters>{copy.filters.reset}</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initExplorers } from "../scripts/explorer.mjs";
+  initExplorers();
+</script>

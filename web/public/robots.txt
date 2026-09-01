@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://h20zhang.github.io/Agent-Benchmark-Radar/sitemap-index.xml

@@ -1,0 +1,73 @@
+---
+import "../styles/global.css";
+
+import { absoluteUrl, sitePath } from "../lib/site.mjs";
+
+interface Props {
+  lang: "zh" | "en";
+  title: string;
+  description: string;
+  canonicalPath: string;
+  zhPath: string;
+  enPath: string;
+  robots?: string;
+  ogType?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  bodyClass?: string;
+}
+
+const {
+  lang,
+  title,
+  description,
+  canonicalPath,
+  zhPath,
+  enPath,
+  robots = "index,follow,max-image-preview:large",
+  ogType = "website",
+  jsonLd,
+  bodyClass = "",
+} = Astro.props;
+
+const canonicalUrl = absoluteUrl(canonicalPath);
+const zhUrl = absoluteUrl(zhPath);
+const enUrl = absoluteUrl(enPath);
+const json = jsonLd
+  ? JSON.stringify(jsonLd).replaceAll("<", "\\u003c")
+  : undefined;
+---
+
+<!doctype html>
+<html lang={lang === "zh" ? "zh-CN" : "en"}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f4f1e8" />
+    <meta name="robots" content={robots} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={zhUrl} />
+    <link rel="icon" href={sitePath("/favicon.svg")} type="image/svg+xml" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Agent Benchmark Radar" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <slot name="head" />
+    {json && <script type="application/ld+json" set:html={json} />}
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main-content">
+      {lang === "zh" ? "跳到主要内容" : "Skip to content"}
+    </a>
+    <div class="ambient-grid" aria-hidden="true"></div>
+    <slot />
+  </body>
+</html>

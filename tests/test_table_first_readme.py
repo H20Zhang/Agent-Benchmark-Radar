@@ -55,19 +55,31 @@ class TableFirstReadmeContractTest(unittest.TestCase):
                     self.assertNotIn("What changed", block)
                     self.assertNotIn("Why it changed the question", block)
 
-    def test_each_map_area_has_a_defining_chain(self):
-        cases = (("README.md", "**主干：**"), ("README.en.md", "**Defining chain:**"))
-        for filename, label in cases:
-            text = self.readmes[filename]
-            sections = (
-                ("benchmark-memory", "benchmark-rag"),
-                ("benchmark-rag", "benchmark-data"),
-                ("benchmark-data", "all-benchmarks"),
-            )
-            for start_anchor, end_anchor in sections:
-                start = text.index(f'<a id="{start_anchor}"></a>')
-                end = text.index(f'<a id="{end_anchor}"></a>', start)
-                self.assertEqual(1, text[start:end].count(label), (filename, start_anchor))
+    def test_each_map_area_has_an_accessible_capability_map(self):
+        sections = (
+            ("agent-memory", "benchmark-memory", "benchmark-rag"),
+            ("rag", "benchmark-rag", "benchmark-data"),
+            ("data-agent", "benchmark-data", "all-benchmarks"),
+        )
+        for filename, text in self.readmes.items():
+            for area, start_anchor, end_anchor in sections:
+                with self.subTest(filename=filename, area=area):
+                    start = text.index(f'<a id="{start_anchor}"></a>')
+                    end = text.index(f'<a id="{end_anchor}"></a>', start)
+                    section = text[start:end]
+                    start_marker = f"<!-- CAPABILITY-MAP:{area}:START -->"
+                    end_marker = f"<!-- CAPABILITY-MAP:{area}:END -->"
+                    self.assertEqual(1, section.count(start_marker))
+                    self.assertEqual(1, section.count(end_marker))
+                    diagram = section.split(start_marker, 1)[1].split(end_marker, 1)[0]
+                    self.assertEqual(1, diagram.count("```mermaid"))
+                    self.assertEqual(1, diagram.count("flowchart TB"))
+                    self.assertIn("accTitle:", diagram)
+                    self.assertIn("accDescr:", diagram)
+                    for stage in ("Foundation", "Transition", "Frontier"):
+                        self.assertIn(stage, diagram)
+                    self.assertNotIn("**主干：**", section)
+                    self.assertNotIn("**Defining chain:**", section)
 
     def test_complete_area_tables_remain_in_main_readme(self):
         for language, text in self.readmes.items():

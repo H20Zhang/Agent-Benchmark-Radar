@@ -1,0 +1,89 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import BenchmarkDetail from "../../../components/BenchmarkDetail.astro";
+import Header from "../../../components/Header.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+
+import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
+import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
+import { loadRegistry } from "../../../lib/registry.mjs";
+import { absoluteUrl, localePath, REPOSITORY_URL } from "../../../lib/site.mjs";
+
+export function getStaticPaths() {
+  const summaries = loadChineseSummaries();
+  return LOCALES.flatMap((lang) =>
+    loadRegistry().map((item) => ({
+      params: { lang, id: item.id },
+      props: {
+        lang,
+        item,
+        summary: lang === "zh" ? summaries.get(item.id) || item.summary : item.summary,
+      },
+    })),
+  );
+}
+
+interface Props {
+  lang: "zh" | "en";
+  item: any;
+  summary: string;
+}
+
+const { lang, item, summary } = Astro.props;
+const copy = copyFor(lang);
+const canonicalPath = localePath(lang, `benchmarks/${item.id}/`);
+const alternatePath = localePath(lang === "zh" ? "en" : "zh", `benchmarks/${item.id}/`);
+const title = `${item.name} · ${copy.areas[item.area].label} | Agent Benchmark Radar`;
+const description = summary;
+const sameAs = Object.values(item.artifacts || {}).filter(Boolean);
+const schemaType = item.artifacts?.data ? "Dataset" : "CreativeWork";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": schemaType,
+  name: item.name,
+  description,
+  url: absoluteUrl(canonicalPath),
+  inLanguage: copy.langTag,
+  datePublished: item.released,
+  dateModified: item.last_verified,
+  isPartOf: {
+    "@type": "CollectionPage",
+    name: "Agent Benchmark Radar",
+    url: absoluteUrl(localePath(lang)),
+  },
+  about: [...(item.capabilities || []), ...(item.environment || [])],
+  sameAs,
+  citation: item.artifacts?.paper,
+  publisher: {
+    "@type": "Organization",
+    name: "Agent Benchmark Radar",
+    url: REPOSITORY_URL,
+  },
+  ...(item.artifacts?.data
+    ? {
+        distribution: {
+          "@type": "DataDownload",
+          contentUrl: item.artifacts.data,
+        },
+      }
+    : {}),
+};
+---
+
+<BaseLayout
+  {lang}
+  {title}
+  {description}
+  {canonicalPath}
+  zhPath={lang === "zh" ? canonicalPath : alternatePath}
+  enPath={lang === "en" ? canonicalPath : alternatePath}
+  {jsonLd}
+  ogType="article"
+  bodyClass="detail-page"
+>
+  <Header {lang} alternatePath={alternatePath} />
+  <main id="main-content" class="shell">
+    <BenchmarkDetail {lang} {item} {summary} />
+  </main>
+  <SiteFooter {lang} />
+</BaseLayout>

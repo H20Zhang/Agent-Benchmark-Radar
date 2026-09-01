@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { sitePath } from "../lib/site.mjs";
+
+const zhPath = "/zh/";
+const enPath = "/en/";
+---
+
+<BaseLayout
+  lang="zh"
+  title="Agent Benchmark Radar"
+  description="面向 Agent Memory、Agentic Retrieval 与 Data Agents 的可筛选评测索引。"
+  canonicalPath={zhPath}
+  zhPath={zhPath}
+  enPath={enPath}
+  robots="noindex,follow"
+  bodyClass="language-entry"
+>
+  <Fragment slot="head">
+    <meta http-equiv="refresh" content={`0;url=${sitePath(zhPath)}`} />
+  </Fragment>
+  <main id="main-content" class="language-entry__card">
+    <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+    <p class="eyebrow">Agent Benchmark Radar</p>
+    <h1>Choose your research view</h1>
+    <p>选择语言，进入可筛选的 Agent Benchmark 研究地图。</p>
+    <div class="language-entry__actions">
+      <a class="button button--primary" href={sitePath(zhPath)}>中文</a>
+      <a class="button button--secondary" href={sitePath(enPath)}>English</a>
+    </div>
+  </main>
+</BaseLayout>

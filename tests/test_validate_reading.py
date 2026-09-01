@@ -16,6 +16,7 @@ from validate_reading import (
     validate_benchmark_aliases,
     validate_benchmark_library,
     validate_family_routes,
+    validate_public_readme,
 )
 
 
@@ -79,6 +80,32 @@ class EvaluationFrontierSurfaceTest(unittest.TestCase):
 
         self.assertEqual(1, result)
         self.assertIn("evaluation-frontiers", output)
+
+
+class CapabilityMapSurfaceTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.records = json.loads(
+            (ROOT / "data" / "benchmarks.json").read_text(encoding="utf-8")
+        )
+        cls.zh = (ROOT / "README.md").read_text(encoding="utf-8")
+        cls.en = (ROOT / "README.en.md").read_text(encoding="utf-8")
+
+    def test_repository_capability_maps_satisfy_public_contract(self):
+        self.assertEqual(
+            [], validate_public_readme(self.zh, self.en, self.records)
+        )
+
+    def test_map_direction_and_site_route_are_validated(self):
+        mutated = self.en.replace("flowchart TB", "flowchart LR", 1).replace(
+            "https://h20zhang.github.io/Agent-Benchmark-Radar/en/?area=agent-memory#explorer",
+            "https://example.com/agent-memory",
+            1,
+        )
+        errors = validate_public_readme(self.zh, mutated, self.records)
+
+        self.assertTrue(any("flowchart TB" in error for error in errors), errors)
+        self.assertTrue(any("interactive site route" in error for error in errors), errors)
 
 
 class AttentionNavigationTest(unittest.TestCase):

@@ -1,0 +1,116 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Explorer from "../../components/Explorer.astro";
+import Header from "../../components/Header.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+import { AREAS, copyFor, LOCALES } from "../../lib/i18n.mjs";
+import { loadChineseSummaries } from "../../lib/readme-localization.mjs";
+import { loadRegistry } from "../../lib/registry.mjs";
+import { absoluteUrl, localePath, sitePath } from "../../lib/site.mjs";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+interface Props {
+  lang: "zh" | "en";
+}
+
+const { lang } = Astro.props;
+const copy = copyFor(lang);
+const items = [...loadRegistry()];
+const summaries = loadChineseSummaries();
+const latestVerified = items.map((item) => item.last_verified).sort().at(-1);
+const canonicalPath = localePath(lang);
+const alternatePath = localePath(lang === "zh" ? "en" : "zh");
+const title = lang === "zh"
+  ? "Agent Benchmark Radar｜可筛选的 Agent 评测地图"
+  : "Agent Benchmark Radar | Searchable Agent Evaluation Map";
+const description = copy.hero.description;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: absoluteUrl(canonicalPath),
+  inLanguage: copy.langTag,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: items.length,
+    itemListElement: items.slice(0, 20).map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: absoluteUrl(localePath(lang, `benchmarks/${item.id}/`)),
+      name: item.name,
+    })),
+  },
+};
+---
+
+<BaseLayout
+  {lang}
+  {title}
+  {description}
+  {canonicalPath}
+  zhPath={lang === "zh" ? canonicalPath : alternatePath}
+  enPath={lang === "en" ? canonicalPath : alternatePath}
+  {jsonLd}
+  bodyClass="radar-page"
+>
+  <Header {lang} alternatePath={alternatePath} />
+  <main id="main-content">
+    <section class="hero shell">
+      <div class="hero__copy">
+        <p class="eyebrow">{copy.hero.eyebrow}</p>
+        <h1>{copy.hero.title}</h1>
+        <p class="hero__description">{copy.hero.description}</p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#explorer">{copy.hero.primaryAction}<span aria-hidden="true">↓</span></a>
+          <a class="button button--secondary" href={sitePath(localePath(lang, "methodology/"))}>{copy.hero.secondaryAction}</a>
+        </div>
+        <dl class="hero__stats">
+          <div><dt>{copy.hero.registry}</dt><dd>{items.length}</dd></div>
+          <div><dt>{copy.hero.areas}</dt><dd>{AREAS.length}</dd></div>
+          <div><dt>{copy.hero.updated}</dt><dd>{latestVerified}</dd></div>
+        </dl>
+      </div>
+      <div class="hero-radar" aria-label={lang === "zh" ? "三大研究领域雷达" : "Three-area research radar"}>
+        <div class="hero-radar__rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="hero-radar__sweep" aria-hidden="true"></div>
+        {AREAS.map((area, index) => (
+          <a
+            class={`hero-radar__point hero-radar__point--${index + 1}`}
+            href={sitePath(localePath(lang, `areas/${area}/`))}
+            data-area={area}
+          >
+            <span>{copy.areas[area].label}</span>
+            <small>{items.filter((item) => item.area === area).length}</small>
+          </a>
+        ))}
+        <span class="hero-radar__center">ABR<small>2026</small></span>
+      </div>
+    </section>
+
+    <section class="area-strip shell" aria-labelledby="area-strip-title">
+      <div class="area-strip__heading">
+        <p class="eyebrow">Evaluation territories</p>
+        <h2 id="area-strip-title">{lang === "zh" ? "三条评测演进主线" : "Three evaluation trajectories"}</h2>
+      </div>
+      <div class="area-strip__grid">
+        {AREAS.map((area, index) => (
+          <a class="area-card" data-area={area} href={sitePath(localePath(lang, `areas/${area}/`))}>
+            <span class="area-card__index">0{index + 1}</span>
+            <p class="eyebrow">{copy.areas[area].short}</p>
+            <h3>{copy.areas[area].label}</h3>
+            <p>{copy.areas[area].intro}</p>
+            <span class="area-card__arrow" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <Explorer {lang} {items} {summaries} />
+  </main>
+  <SiteFooter {lang} />
+</BaseLayout>

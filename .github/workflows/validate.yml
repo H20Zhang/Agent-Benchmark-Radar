@@ -17,7 +17,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
       - name: Test time-first contract
         run: python -m unittest discover -s tests -v
       - name: Validate bilingual entry and registry
         run: python scripts/validate_reading.py
+      - name: Install web dependencies
+        working-directory: web
+        run: npm install --no-audit --no-fund
+      - name: Test web contracts
+        working-directory: web
+        run: npm test
+      - name: Check Astro source
+        working-directory: web
+        run: npm run check
+      - name: Build Astro site
+        working-directory: web
+        run: npm run build

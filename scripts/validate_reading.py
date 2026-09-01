@@ -1437,8 +1437,8 @@ def validate_public_readme(
     errors: list[str] = []
     record_ids = {str(record.get("id")) for record in records}
     cases = (
-        ("README.md", zh, "**主干：**"),
-        ("README.en.md", en, "**Defining chain:**"),
+        ("README.md", zh, "zh"),
+        ("README.en.md", en, "en"),
     )
     banned = (
         "## 最新条目深读",
@@ -1448,7 +1448,7 @@ def validate_public_readme(
         "## Three Areas",
     )
 
-    for language, text, chain_label in cases:
+    for language, text, site_locale in cases:
         for phrase in banned:
             if phrase in text:
                 errors.append(f"{language}: retired reader surface returned: {phrase}")
@@ -1525,18 +1525,46 @@ def validate_public_readme(
                     errors.append(f"{language}: {label} still exposes parallel change column {forbidden}")
 
         sections = (
-            ("benchmark-memory", "benchmark-rag"),
-            ("benchmark-rag", "benchmark-data"),
-            ("benchmark-data", "all-benchmarks"),
+            ("agent-memory", "benchmark-memory", "benchmark-rag"),
+            ("rag", "benchmark-rag", "benchmark-data"),
+            ("data-agent", "benchmark-data", "all-benchmarks"),
         )
-        for anchor, next_anchor in sections:
+        for area, anchor, next_anchor in sections:
             start = text.find(f'<a id="{anchor}"></a>')
             end = text.find(f'<a id="{next_anchor}"></a>', start + 1)
             if start < 0 or end < 0:
                 errors.append(f"{language}: missing Benchmark Map section {anchor}")
                 continue
-            if text[start:end].count(chain_label) != 1:
-                errors.append(f"{language}: {anchor} needs exactly one defining chain")
+            section = text[start:end]
+            start_marker = f"<!-- CAPABILITY-MAP:{area}:START -->"
+            end_marker = f"<!-- CAPABILITY-MAP:{area}:END -->"
+            if section.count(start_marker) != 1 or section.count(end_marker) != 1:
+                errors.append(f"{language}: {anchor} needs one stable capability map block")
+                continue
+            diagram = section.split(start_marker, 1)[1].split(end_marker, 1)[0]
+            if diagram.count("```mermaid") != 1:
+                errors.append(f"{language}: {anchor} needs exactly one Mermaid diagram")
+            if diagram.count("flowchart TB") != 1:
+                errors.append(f"{language}: {anchor} capability map must use flowchart TB")
+            for accessibility_token in ("accTitle:", "accDescr:"):
+                if accessibility_token not in diagram:
+                    errors.append(
+                        f"{language}: {anchor} capability map needs {accessibility_token}"
+                    )
+            for stage in ("Foundation", "Transition", "Frontier"):
+                if stage not in diagram:
+                    errors.append(
+                        f"{language}: {anchor} capability map is missing {stage}"
+                    )
+            site_route = (
+                "https://h20zhang.github.io/Agent-Benchmark-Radar/"
+                f"{site_locale}/?area={area}#explorer"
+            )
+            if site_route not in section:
+                errors.append(f"{language}: {anchor} is missing its interactive site route")
+            for retired_label in ("**主干：**", "**Defining chain:**"):
+                if retired_label in section:
+                    errors.append(f"{language}: {anchor} still exposes {retired_label}")
 
         for label in ("TABLE-FIRST:AREA:agent-memory", "TABLE-FIRST:AREA:rag", "TABLE-FIRST:AREA:data-agent"):
             block = text.split(f"<!-- {label}:START -->", 1)[1].split(f"<!-- {label}:END -->", 1)[0]

@@ -1,0 +1,128 @@
+---
+import { copyFor } from "../lib/i18n.mjs";
+import { displayToken, localePath, REPOSITORY_URL, sitePath } from "../lib/site.mjs";
+
+interface Props {
+  lang: "zh" | "en";
+  item: any;
+  summary: string;
+}
+
+const { lang, item, summary } = Astro.props;
+const copy = copyFor(lang);
+const citationCount = item.citations?.status === "ok" ? item.citations.count : undefined;
+const sources = Object.entries(item.artifacts || {}).filter(([, value]) => Boolean(value));
+const measurementText = lang === "zh" ? summary : item.measurement_strength;
+const sourceLabel = (key: string) => copy.artifacts[key] || displayToken(key);
+---
+
+<article class={`benchmark-detail benchmark-detail--${item.area}`}>
+  <nav class="breadcrumb" aria-label={lang === "zh" ? "面包屑" : "Breadcrumb"}>
+    <a href={sitePath(localePath(lang))}>{copy.nav.explorer}</a>
+    <span aria-hidden="true">/</span>
+    <a href={sitePath(localePath(lang, `areas/${item.area}/`))}>{copy.areas[item.area].label}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{item.name}</span>
+  </nav>
+
+  <header class="detail-hero">
+    <div class="detail-hero__copy">
+      <div class="detail-hero__meta">
+        <span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span>
+        <span class={`role-label role-label--${item.evolution_role}`}>{copy.roles[item.evolution_role]}</span>
+        <time datetime={item.released}>{item.released}</time>
+      </div>
+      <h1>{item.name}</h1>
+      <p>{summary}</p>
+      <div class="detail-hero__actions">
+        {sources.slice(0, 3).map(([key, url]) => (
+          <a class="button button--secondary" href={url as string} rel="noreferrer">
+            {sourceLabel(key)} <span aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div class="detail-signal" aria-hidden="true">
+      <span class="detail-signal__ring"></span>
+      <span class="detail-signal__axis"></span>
+      <span class="detail-signal__point"></span>
+      <strong>{String(item.importance).padStart(2, "0")}</strong>
+      <small>measurement<br />signal</small>
+    </div>
+  </header>
+
+  <div class="detail-grid">
+    <section class="detail-feature">
+      <p class="eyebrow">01 · Core signal</p>
+      <h2>{copy.detail.measurement}</h2>
+      <p>{measurementText}</p>
+    </section>
+
+    <dl class="detail-facts">
+      <div>
+        <dt>{copy.card.released}</dt>
+        <dd>{item.released}</dd>
+      </div>
+      <div>
+        <dt>{copy.detail.lastVerified}</dt>
+        <dd>{item.last_verified}</dd>
+      </div>
+      <div>
+        <dt>{copy.detail.citationContext}</dt>
+        <dd>{citationCount ?? "—"}</dd>
+      </div>
+      <div>
+        <dt>Registry ID</dt>
+        <dd>{item.id}</dd>
+      </div>
+    </dl>
+
+    <section class="detail-section detail-section--wide">
+      <p class="eyebrow">02 · Evaluation design</p>
+      <h2>{copy.detail.scale}</h2>
+      <p>{item.scale}</p>
+    </section>
+
+    <section class="detail-section">
+      <p class="eyebrow">03 · Capability</p>
+      <h2>{copy.detail.capabilities}</h2>
+      <ul class="detail-token-list">
+        {(item.capabilities || []).map((value) => <li>{displayToken(value)}</li>)}
+      </ul>
+    </section>
+
+    <section class="detail-section">
+      <p class="eyebrow">04 · Context</p>
+      <h2>{copy.detail.environments}</h2>
+      <ul class="detail-token-list">
+        {(item.environment || []).map((value) => <li>{displayToken(value)}</li>)}
+      </ul>
+    </section>
+
+    <section class="detail-section">
+      <p class="eyebrow">05 · Protocol</p>
+      <h2>{copy.detail.protocols}</h2>
+      <ul class="detail-token-list">
+        {(item.protocol || []).map((value) => <li>{displayToken(value)}</li>)}
+      </ul>
+    </section>
+
+    <section class="detail-section detail-section--sources">
+      <p class="eyebrow">06 · Provenance</p>
+      <h2>{copy.detail.sources}</h2>
+      <ul class="source-list">
+        {sources.map(([key, url]) => (
+          <li><a href={url as string} rel="noreferrer"><span>{sourceLabel(key)}</span><span aria-hidden="true">↗</span></a></li>
+        ))}
+        {item.citations?.url && (
+          <li><a href={item.citations.url} rel="noreferrer"><span>Semantic Scholar</span><span aria-hidden="true">↗</span></a></li>
+        )}
+      </ul>
+    </section>
+  </div>
+
+  <footer class="detail-footer">
+    <a href={sitePath(localePath(lang, `areas/${item.area}/`))}>← {copy.detail.backToArea}</a>
+    <a href={`${REPOSITORY_URL}/blob/main/data/benchmarks.json`}>{copy.detail.registryRecord} ↗</a>
+  </footer>
+</article>
