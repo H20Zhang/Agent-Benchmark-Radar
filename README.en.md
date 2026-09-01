@@ -3,11 +3,11 @@
 
 <h1>Agent Benchmark Radar</h1>
 
-<p><strong>Track how agent evaluation is evolving—not just which benchmarks exist.</strong></p>
+<p><strong>Track how agent evaluation evolves and how benchmarks redefine progress.</strong></p>
 
 <p>
 Covers <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
-Maps new benchmarks back to their lineage: what became measurable, compared with what, and what is still missing.
+Places each new benchmark in its lineage: what it makes measurable, which baseline it advances, and which evaluation frontier comes next.
 </p>
 
 <p><a href="README.md">中文</a> · <strong>English</strong></p>
@@ -22,17 +22,17 @@ Maps new benchmarks back to their lineage: what became measurable, compared with
 
 ## Start Here
 
-**Choose your research object first.** The three benchmark families no longer require entering through one mixed timeline; each area has its own evolution map, evaluation recipes, and complete registry.
+**Choose your research area first.** Each area provides its own evolution map, evaluation recipes, and complete benchmark registry.
 
-| Area | Questions you are usually asking | Understand the lineage | Build an evaluation | Browse all |
+| Area | Questions you are usually asking | Understand the lineage | Build an evaluation | Browse |
 |---|---|---|---|---|
-| **Agent Memory** | Can long-term memory be recalled, updated, and used for later action? How should multimodal memory, safety, and governance be evaluated? | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [All Memory Benchmarks](#registry-memory) |
-| **RAG / Agentic Retrieval** | Can the system find the right evidence, perform complex search, and remain reliable under dynamic corpora and long trajectories? | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [All Retrieval Benchmarks](#registry-rag) |
-| **Data Agents** | Can an agent complete SQL, analytics, data-science, and ML-engineering work with verifiable results? | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [All Data Agent Benchmarks](#registry-data) |
+| **Agent Memory** | Can long-term memory be recalled, updated, and used for later action? How should multimodal memory, safety, and governance be evaluated? | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [Memory Benchmarks](#registry-memory) |
+| **RAG / Agentic Retrieval** | Can the system find the right evidence, perform complex search, and remain reliable under dynamic corpora and long trajectories? | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [Retrieval Benchmarks](#registry-rag) |
+| **Data Agents** | Can an agent complete SQL, analytics, data-science, and ML-engineering work with verifiable results? | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [Data Agent Benchmarks](#registry-data) |
 
-**Cross-area / not sure where to start:** [build an Evaluation Recipe from your claim](#evaluation-recipes) · [see the last 30 days of change](#frontier-signals) · [scan new benchmarks from the last six months](#release-timeline)
+**Cross-area exploration:** [build an Evaluation Recipe from your claim](#evaluation-recipes) · [see the last 30 days of change](#frontier-signals) · [scan new benchmarks from the last six months](#release-timeline)
 
-_Scope: the registry includes reusable benchmark / evaluation contributions. Papers that only report results on existing benchmarks are out of scope. See [Curation](CURATION.md)._
+_Scope: the registry uses reusable benchmark / evaluation contributions as its unit of inclusion. See [Curation](CURATION.md)._
 
 ---
 <!-- ONBOARDING:END -->
@@ -41,42 +41,42 @@ _Scope: the registry includes reusable benchmark / evaluation contributions. Pap
 <a id="evaluation-recipes"></a>
 ## Evaluation Recipes: Build the Suite from Your Claim
 
-More benchmarks are not automatically better. Start from the **claim** your paper or system needs to support: `Core` measures the primary object, `Complement` closes an adjacent validity gap, and the final column states what the suite **still does not establish**. These are research starting points, not fixed standards.
+An effective evaluation suite starts from the **claim** your paper or system needs to support: `Core` measures the primary object, `Complement` extends an adjacent validity dimension, and the final column identifies the next validation target. Adapt this framework to the specific claim and protocol.
 
 <a id="recipe-memory"></a>
 ### Agent Memory
 
-| Claim you want to support | Core | Complement | What this still does not establish |
+| Claim you want to support | Core | Complement | Additional validation needed |
 |---|---|---|---|
-| **Long-term conversational memory and temporal reasoning** | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) | [LongMemEval](https://arxiv.org/abs/2410.10813) | Remembering history does not establish that retained experience improves future action. |
-| **State update and stale-information handling** | [StateMemBench](https://arxiv.org/abs/2608.19652) | [LongMemEval](https://arxiv.org/abs/2410.10813) · [membench (staleness)](https://github.com/Ps23102004/membench) | The result still does not isolate which write, update, or retrieval component caused the outcome. |
-| **Memory improves later action** | [MemoryArena](https://arxiv.org/abs/2602.16313) | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) | Action gains do not establish general memory quality over broad personal histories. |
-| **Multimodal long-term memory** | [MemEye](https://arxiv.org/abs/2605.15128) | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) · [WorldMemArena](https://arxiv.org/abs/2605.29341) | Coverage of access control, poisoning, and compaction across the memory lifecycle remains limited. |
-| **Memory security and lifecycle governance** | [InjecMEM](https://arxiv.org/abs/2608.23471) | [Utility Under Attack](https://arxiv.org/abs/2608.21230) · [GateMem](https://arxiv.org/abs/2606.18829) · [The Compaction Cliff](https://arxiv.org/abs/2608.22752) | A security suite does not replace general utility, recall, and reasoning evaluation. |
+| **Long-term conversational memory and temporal reasoning** | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) | [LongMemEval](https://arxiv.org/abs/2410.10813) | Pair with action-oriented evaluation to measure how retained experience improves future action. |
+| **State update and stale-information handling** | [StateMemBench](https://arxiv.org/abs/2608.19652) | [LongMemEval](https://arxiv.org/abs/2410.10813) · [membench (staleness)](https://github.com/Ps23102004/membench) | Use component-level ablations to attribute gains to write, update, and retrieval. |
+| **Memory improves later action** | [MemoryArena](https://arxiv.org/abs/2602.16313) | [PAST-Bench](https://arxiv.org/abs/2608.04003) · [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) | Validate general memory quality over broad personal long-term histories. |
+| **Multimodal long-term memory** | [MemEye](https://arxiv.org/abs/2605.15128) | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) · [WorldMemArena](https://arxiv.org/abs/2605.29341) | Add lifecycle coverage for access control, poisoning, and compaction. |
+| **Memory security and lifecycle governance** | [InjecMEM](https://arxiv.org/abs/2608.23471) | [Utility Under Attack](https://arxiv.org/abs/2608.21230) · [GateMem](https://arxiv.org/abs/2606.18829) · [The Compaction Cliff](https://arxiv.org/abs/2608.22752) | Pair with general utility, recall, and reasoning evaluation. |
 
 <a id="recipe-rag"></a>
 ### RAG / Agentic Retrieval
 
-| Claim you want to support | Core | Complement | What this still does not establish |
+| Claim you want to support | Core | Complement | Additional validation needed |
 |---|---|---|---|
-| **Reasoning-intensive retrieval quality** | [BRIGHT](https://arxiv.org/abs/2407.12883) | [BEIR](https://arxiv.org/abs/2104.08663) · [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) | Static retrieval results do not establish live, iterative web-search capability. |
-| **Deep / long-horizon web search** | [BrowseComp](https://arxiv.org/abs/2504.12516) | [LiveBrowseComp](https://arxiv.org/abs/2605.28721) · [LoHoSearch](https://arxiv.org/abs/2606.12837) | End-to-end success alone does not localize where a search trajectory failed. |
-| **Search-trajectory diagnosis and tool policy** | [SearchAuditBench](https://arxiv.org/abs/2608.05212) | [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) · [VAKRA](https://arxiv.org/abs/2608.12282) | Trajectory diagnostics do not establish broad live-web retrieval or corpus robustness. |
-| **Dynamic, writable, feedback-forming corpora** | [KBGym](https://arxiv.org/abs/2608.21829) | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) · [RAG Collapse](https://arxiv.org/abs/2608.22118) | These results do not replace conventional retrieval-quality evaluation on a static corpus. |
-| **Multimodal search and visual-document retrieval** | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) | [MC-Search](https://arxiv.org/abs/2603.00873) · [MERRIN](https://arxiv.org/abs/2604.13418) | Modality and tool interfaces strongly affect outcomes, so headline scores are not directly comparable across benchmarks. |
+| **Reasoning-intensive retrieval quality** | [BRIGHT](https://arxiv.org/abs/2407.12883) | [BEIR](https://arxiv.org/abs/2104.08663) · [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) | Pair with live, iterative web-search evaluation. |
+| **Deep / long-horizon web search** | [BrowseComp](https://arxiv.org/abs/2504.12516) | [LiveBrowseComp](https://arxiv.org/abs/2605.28721) · [LoHoSearch](https://arxiv.org/abs/2606.12837) | Add trajectory-level diagnostics to localize key failure stages. |
+| **Search-trajectory diagnosis and tool policy** | [SearchAuditBench](https://arxiv.org/abs/2608.05212) | [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) · [VAKRA](https://arxiv.org/abs/2608.12282) | Add broad live-web retrieval and corpus-robustness evaluation. |
+| **Dynamic, writable, feedback-forming corpora** | [KBGym](https://arxiv.org/abs/2608.21829) | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) · [RAG Collapse](https://arxiv.org/abs/2608.22118) | Pair with conventional retrieval-quality evaluation on a static corpus. |
+| **Multimodal search and visual-document retrieval** | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) | [MC-Search](https://arxiv.org/abs/2603.00873) · [MERRIN](https://arxiv.org/abs/2604.13418) | Stratify results by modality and tool interface to produce comparable headline scores. |
 
 <a id="recipe-data"></a>
 ### Data Agents
 
-| Claim you want to support | Core | Complement | What this still does not establish |
+| Claim you want to support | Core | Complement | Additional validation needed |
 |---|---|---|---|
-| **Text-to-SQL / warehouse task capability** | [Spider 2.0](https://arxiv.org/abs/2411.07763) | [Spider](https://aclanthology.org/D18-1425/) · [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) | SQL success does not cover the full data-understanding, analysis, and delivery workflow. |
-| **End-to-end data-science agent** | [DataSpace](https://arxiv.org/abs/2608.03451) | [DSAgentBench](https://arxiv.org/abs/2608.10366) · [DataClawBench](https://arxiv.org/abs/2605.02503) | Workflow completion alone does not isolate statistical or modeling validity. |
-| **Data understanding and autonomous exploration** | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) | [DataClawBench](https://arxiv.org/abs/2605.02503) · [AgenticDataBench](https://arxiv.org/abs/2607.01647) | Exploration quality is not equivalent to downstream model, causal, or business-decision quality. |
-| **Statistical and causal analysis** | [CausalDS](https://arxiv.org/abs/2607.08093) | [StatABench](https://arxiv.org/abs/2606.22977) | Controlled statistical/causal tasks do not cover real warehouse, repository, and data-engineering constraints. |
-| **Long-horizon ML engineering / research improvement** | [MLE-bench](https://arxiv.org/abs/2410.07095) | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [AI4AI-Bench](https://arxiv.org/abs/2608.20318) | ML improvement does not establish BI, warehouse-semantics, or general analytics capability. |
+| **Text-to-SQL / warehouse task capability** | [Spider 2.0](https://arxiv.org/abs/2411.07763) | [Spider](https://aclanthology.org/D18-1425/) · [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) | Extend evaluation to the full data-understanding, analysis, and delivery workflow. |
+| **End-to-end data-science agent** | [DataSpace](https://arxiv.org/abs/2608.03451) | [DSAgentBench](https://arxiv.org/abs/2608.10366) · [DataClawBench](https://arxiv.org/abs/2605.02503) | Use component-level evaluation to validate statistical and modeling quality. |
+| **Data understanding and autonomous exploration** | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) | [DataClawBench](https://arxiv.org/abs/2605.02503) · [AgenticDataBench](https://arxiv.org/abs/2607.01647) | Pair with downstream model, causal, and business-decision quality evaluation. |
+| **Statistical and causal analysis** | [CausalDS](https://arxiv.org/abs/2607.08093) | [StatABench](https://arxiv.org/abs/2606.22977) | Extend evaluation to real warehouse, repository, and data-engineering constraints. |
+| **Long-horizon ML engineering / research improvement** | [MLE-bench](https://arxiv.org/abs/2410.07095) | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [AI4AI-Bench](https://arxiv.org/abs/2608.20318) | Pair with BI, warehouse-semantics, and general analytics evaluation. |
 
-> **Usage rule:** A recipe exists to align the experimental suite with the paper's claim, not to maximize benchmark count. Before running experiments, inspect each benchmark's protocol, confounders, and coverage gap.
+> **Usage rule:** Use recipes to align the experimental suite with the paper's claim. Match each benchmark's protocol and address its confounders and coverage boundaries explicitly.
 
 ---
 <!-- EVALUATION-RECIPES:END -->
@@ -88,7 +88,7 @@ More benchmarks are not automatically better. Start from the **claim** your pape
 | Area | What actually changed | Representative benchmarks |
 |---|---|---|
 | **Agent Memory** | Safety evaluation now reaches beyond “was the right content remembered?” to **integrity across the persistent-memory lifecycle**. InjecMEM traces malicious writes into later retrieval and generation; Utility Under Attack measures benign utility lost to defenses; The Compaction Cliff tests whether rules still govern behavior after repeated compression. | [InjecMEM](https://arxiv.org/abs/2608.23471) · [Utility Under Attack](https://arxiv.org/abs/2608.21230) · [The Compaction Cliff](https://arxiv.org/abs/2608.22752) |
-| **RAG / Agentic Retrieval** | The corpus is no longer treated as an inert fixed input; it is becoming **trainable, versioned state that can form feedback loops**. KBGym freezes and coverage-audits a curator-edited store; Snapshot Compatibility Audit measures stable answer flips from corpus growth; RAG Collapse isolates recursive feedback from self-authored sources. | [KBGym](https://arxiv.org/abs/2608.21829) · [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) · [RAG Collapse](https://arxiv.org/abs/2608.22118) |
+| **RAG / Agentic Retrieval** | The corpus is becoming **trainable, versioned state that can form feedback loops**. KBGym freezes and coverage-audits a curator-edited store; Snapshot Compatibility Audit measures stable answer flips from corpus growth; RAG Collapse isolates recursive feedback from self-authored sources. | [KBGym](https://arxiv.org/abs/2608.21829) · [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) · [RAG Collapse](https://arxiv.org/abs/2608.22118) |
 | **Data Agents** | The target keeps moving beyond “does SQL/code run?” toward **long-horizon ML improvement in real repositories with tighter score attribution**. AI4AI-Bench isolates algorithm changes through proxy exploration → source patch → clean-start final run; DeltaML-Bench joins published-baseline improvement with anti-gaming audits. | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
@@ -368,15 +368,15 @@ all 125 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | [0](https://www.semanticscholar.org/paper/3a779ef95d25521f2859c5710184e96f473a3352) | 2026-08-20 | Diagnosing and modifying learning algorithms in frozen training repositories, separated by proxy exploration, source-only handoff, and clean-start formal runs. |
 | 🔭 Frontier | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | [0](https://www.semanticscholar.org/paper/99baa4801ba4f9018a98382c1d6a154ac66ea6a9) | 2026-08-20 | Training-pipeline repair, iterative ML experimentation, published-baseline improvement, and specification-gaming resistance in real repositories. |<!-- TABLE-FIRST:AREA:data-agent:END -->
 
-## What Is Still Poorly Measured
+## Next Evaluation Frontiers
 
-| Missing coordinate | Why it changes research conclusions |
+| Evaluation direction | Research objective |
 |---|---|
-| **Longitudinal real-user effects** | Preference drift, project evolution, and delayed consequences are difficult to compress into static QA. |
-| **Irreversible actions + authority** | Correct retrieval is not enough when tools can spend money, modify state, or act with stale permissions. |
-| **Lifecycle cost** | Construction/indexing/memory-writing, retries, controller calls, tool latency, and re-acquisition are often reported separately or omitted. |
-| **Production reliability under drift** | Web, schema, tool, and environment changes can dominate a benchmark result without changing the model. |
-| **Business-semantic correctness** | Executable SQL/code can still return the wrong business meaning; clarification and abstention often have no clean benchmark target. |
+| **Longitudinal real-user effects** | Model preference drift, project evolution, and delayed consequences through long-term interaction traces. |
+| **Irreversible actions + authority** | Incorporate spending, state changes, and permission freshness into action-quality evaluation. |
+| **Lifecycle cost** | Report construction, indexing, memory writing, retries, controller calls, tool latency, and information reacquisition in one cost model. |
+| **Production reliability under drift** | Measure system reliability across evolving web content, schemas, tools, and runtime environments. |
+| **Business-semantic correctness** | Evaluate executable SQL and code against business ground truth, clarification strategy, and abstention quality. |
 
 <a id="reading-paths"></a>
 ## Reading Paths
@@ -394,6 +394,6 @@ all 125 benchmarks in the registry remain directly scannable here. The Library i
 - [Canonical registry](data/benchmarks.json)
 - [Research compactions](digests/README.md)
 
-This repository tracks what is measured and why. Methods and systems belong in the three topic radars so the same survey does not need to be maintained twice.
+This repository maps what is measured and why; the three topic radars develop the corresponding methods and systems in depth.
 
 [中文](README.md) · [Curation](CURATION.md) · [Schema](SCHEMA.md)
