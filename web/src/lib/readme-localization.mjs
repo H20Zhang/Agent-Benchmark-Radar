@@ -1,11 +1,9 @@
 import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 
 import { loadRegistry } from "./registry.mjs";
+import { fromRepositoryRoot } from "./repository-path.mjs";
 
-const CHINESE_README_PATH = fileURLToPath(
-  new URL("../../../README.md", import.meta.url),
-);
+const CHINESE_README_PATH = fromRepositoryRoot("README.md");
 
 /** @type {ReadonlyMap<string, string> | undefined} */
 let summaryCache;

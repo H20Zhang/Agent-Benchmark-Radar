@@ -1,9 +1,8 @@
 import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 
-const REGISTRY_PATH = fileURLToPath(
-  new URL("../../../data/benchmarks.json", import.meta.url),
-);
+import { fromRepositoryRoot } from "./repository-path.mjs";
+
+const REGISTRY_PATH = fromRepositoryRoot("data", "benchmarks.json");
 
 /** @typedef {{paper?: string, code?: string, data?: string, [key: string]: string | undefined}} Artifacts */
 /**

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { resolve } from "node:path";
 import test from "node:test";
 
 import {
@@ -6,6 +7,7 @@ import {
   getReleasedYear,
   loadRegistry,
 } from "../src/lib/registry.mjs";
+import { resolveRepositoryRoot } from "../src/lib/repository-path.mjs";
 import { loadChineseSummaries } from "../src/lib/readme-localization.mjs";
 
 test("registry and Chinese summaries cover the same stable ids", () => {
@@ -32,6 +34,16 @@ test("registry normalization preserves release precision and useful artifacts", 
   assert.equal(getReleasedYear(locomo.released), 2024);
   assert.equal(injecmem.released, "2026-08-24");
   assert.deepEqual(getArtifactKinds(locomo), ["paper", "code"]);
+});
+
+test("repository assets resolve from both root and Astro working directories", () => {
+  const repositoryRoot = resolve(import.meta.dirname, "../..");
+
+  assert.equal(resolveRepositoryRoot(repositoryRoot), repositoryRoot);
+  assert.equal(
+    resolveRepositoryRoot(resolve(repositoryRoot, "web")),
+    repositoryRoot,
+  );
 });
 
 test("Chinese summaries are clean sentences rather than Markdown table syntax", () => {
