@@ -122,7 +122,12 @@ export function filterBenchmarks(items, state) {
   });
 }
 
-/** @param {Array<object>} items @param {string} sort */
+/**
+ * @template {{released: string, name: string, citations?: {count?: number}}} T
+ * @param {ReadonlyArray<T>} items
+ * @param {string} sort
+ * @returns {T[]}
+ */
 export function sortBenchmarks(items, sort = "newest") {
   const result = [...items];
   if (sort === "oldest") {

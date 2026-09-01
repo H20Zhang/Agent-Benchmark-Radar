@@ -61,7 +61,7 @@ const json = jsonLd
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <slot name="head" />
-    {json && <script type="application/ld+json" set:html={json} />}
+    {json && <script is:inline type="application/ld+json" set:html={json} />}
   </head>
   <body class={bodyClass}>
     <a class="skip-link" href="#main-content">

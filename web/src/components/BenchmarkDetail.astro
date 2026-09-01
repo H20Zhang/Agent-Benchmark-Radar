@@ -87,7 +87,7 @@ const sourceLabel = (key: string) => copy.artifacts[key] || displayToken(key);
       <p class="eyebrow">03 · Capability</p>
       <h2>{copy.detail.capabilities}</h2>
       <ul class="detail-token-list">
-        {(item.capabilities || []).map((value) => <li>{displayToken(value)}</li>)}
+        {(item.capabilities || []).map((value: string) => <li>{displayToken(value)}</li>)}
       </ul>
     </section>
 
@@ -95,7 +95,7 @@ const sourceLabel = (key: string) => copy.artifacts[key] || displayToken(key);
       <p class="eyebrow">04 · Context</p>
       <h2>{copy.detail.environments}</h2>
       <ul class="detail-token-list">
-        {(item.environment || []).map((value) => <li>{displayToken(value)}</li>)}
+        {(item.environment || []).map((value: string) => <li>{displayToken(value)}</li>)}
       </ul>
     </section>
 
@@ -103,7 +103,7 @@ const sourceLabel = (key: string) => copy.artifacts[key] || displayToken(key);
       <p class="eyebrow">05 · Protocol</p>
       <h2>{copy.detail.protocols}</h2>
       <ul class="detail-token-list">
-        {(item.protocol || []).map((value) => <li>{displayToken(value)}</li>)}
+        {(item.protocol || []).map((value: string) => <li>{displayToken(value)}</li>)}
       </ul>
     </section>
 

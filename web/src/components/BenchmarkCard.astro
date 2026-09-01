@@ -46,7 +46,7 @@ const searchText = [
   <h3><a href={detailPath}>{item.name}</a></h3>
   <p class="benchmark-card__summary">{summary || item.summary}</p>
   <ul class="token-list" aria-label={copy.detail.capabilities}>
-    {(item.capabilities || []).slice(0, 3).map((capability) => (
+    {(item.capabilities || []).slice(0, 3).map((capability: string) => (
       <li>{displayToken(capability)}</li>
     ))}
   </ul>

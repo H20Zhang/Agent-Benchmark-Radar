@@ -8,7 +8,7 @@ import { sortBenchmarks } from "../lib/filters.mjs";
 interface Props {
   lang: "zh" | "en";
   items: any[];
-  summaries: Map<string, string>;
+  summaries: ReadonlyMap<string, string>;
 }
 
 const { lang, items, summaries } = Astro.props;
