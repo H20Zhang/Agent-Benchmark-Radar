@@ -66,7 +66,7 @@ function syncForm(form, params) {
 function initExplorer(root) {
   const form = root.querySelector("[data-filter-form]");
   const grid = root.querySelector("[data-result-grid]");
-  const count = root.querySelector('[aria-live="polite"]');
+  const count = root.querySelector("[data-result-count]");
   const empty = root.querySelector("[data-empty-state]");
   const active = root.querySelector("[data-active-filters]");
   if (!(form instanceof HTMLFormElement) || !grid || !count || !empty) return;

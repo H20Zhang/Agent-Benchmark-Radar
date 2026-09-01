@@ -71,8 +71,9 @@ test("client controller keeps filter state in the URL and updates visible result
     "sortBenchmarks",
     "history.replaceState",
     ".hidden",
-    "aria-live",
   ]) {
     assert.ok(controller.includes(token), token);
   }
+  assert.match(controller, /querySelector\(["']\[data-result-count\]["']\)/);
+  assert.doesNotMatch(controller, /querySelector\(["']\[aria-live=/);
 });
