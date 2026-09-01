@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/Header.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+
+import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
+import { loadRegistry } from "../../../lib/registry.mjs";
+import { loadResearchModel, localize } from "../../../lib/research-model.mjs";
+import { absoluteUrl, localePath, sitePath } from "../../../lib/site.mjs";
+
+export function getStaticPaths() {
+  const research = loadResearchModel();
+  return LOCALES.flatMap((lang) => research.opportunities.map((opportunity: any) => ({ params: { lang, id: opportunity.id }, props: { lang, opportunity } })));
+}
+interface Props { lang: "zh" | "en"; opportunity: any; }
+const { lang, opportunity } = Astro.props;
+const copy = copyFor(lang);
+const byId = new Map(loadRegistry().map((item) => [item.id, item]));
+const canonicalPath = localePath(lang, `opportunities/${opportunity.id}/`);
+const alternatePath = localePath(lang === "zh" ? "en" : "zh", `opportunities/${opportunity.id}/`);
+const title = `${localize(opportunity.title, lang)} | Agent Benchmark Radar`;
+const description = localize(opportunity.next_coordinate, lang);
+const jsonLd = { "@context": "https://schema.org", "@type": "Article", headline: title, description, url: absoluteUrl(canonicalPath), dateModified: opportunity.verified_at, inLanguage: copy.langTag };
+const sections = [
+  { index: "01", key: "why_it_matters", eyebrow: lang === "zh" ? "研究价值" : "Research value", title: lang === "zh" ? "为什么这个坐标重要" : "Why this coordinate matters" },
+  { index: "02", key: "current_coverage", eyebrow: lang === "zh" ? "当前证据" : "Current evidence", title: lang === "zh" ? "现有 Benchmark 已经测到哪里" : "What current benchmarks already measure" },
+  { index: "03", key: "next_coordinate", eyebrow: lang === "zh" ? "下一坐标" : "Next coordinate", title: lang === "zh" ? "可以把测量推进到哪里" : "Where measurement can move next" },
+  { index: "04", key: "candidate_evaluation", eyebrow: lang === "zh" ? "评测设计" : "Evaluation design", title: lang === "zh" ? "一个可执行的 Benchmark 起点" : "An executable benchmark starting point" },
+];
+---
+
+<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} ogType="article" bodyClass="radar-page opportunity-detail-page">
+  <Header {lang} alternatePath={alternatePath} />
+  <main id="main-content" class="shell opportunity-detail">
+    <nav class="breadcrumb"><a href={sitePath(localePath(lang, "opportunities/"))}>{copy.nav.opportunities}</a><span>/</span><span>{localize(opportunity.title, lang)}</span></nav>
+    <header class="opportunity-detail__hero" data-area={opportunity.area}><p class="eyebrow">Evaluation opportunity · {copy.areas[opportunity.area].label}</p><h1>{localize(opportunity.title, lang)}</h1><p>{localize(opportunity.why_it_matters, lang)}</p><div><span>{opportunity.confidence === "high" ? (lang === "zh" ? "高置信信号" : "High-confidence signal") : (lang === "zh" ? "演进信号" : "Emerging signal")}</span><time datetime={opportunity.verified_at}>{opportunity.verified_at}</time></div></header>
+    <div class="opportunity-detail__sections">{sections.map((section) => <section><span>{section.index}</span><div><p class="eyebrow">{section.eyebrow}</p><h2>{section.title}</h2></div><p>{localize(opportunity[section.key], lang)}</p></section>)}</div>
+    <section class="opportunity-evidence"><header><p class="eyebrow">Evidence anchors</p><h2>{lang === "zh" ? "支撑这个判断的 Benchmarks" : "Benchmarks anchoring this judgment"}</h2></header><div>{opportunity.benchmarks.map((id: string) => { const item = byId.get(id); return item && <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}><span>{copy.areas[item.area].label} · {item.released}</span><h3>{item.name}</h3><p>{item.summary}</p><b>↗</b></a>; })}</div></section>
+    <footer class="detail-footer"><a href={sitePath(localePath(lang, "opportunities/"))}>← {copy.nav.opportunities}</a><a href={sitePath(localePath(lang, `evaluate/?area=${opportunity.area}`))}>{lang === "zh" ? "配一组评测" : "Build a suite"} ↗</a></footer>
+  </main>
+  <SiteFooter {lang} />
+</BaseLayout>

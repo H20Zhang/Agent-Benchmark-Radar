@@ -7,6 +7,8 @@ const ALLOWED_ROLES = new Set([
 ]);
 const ALLOWED_ARTIFACTS = new Set(["paper", "code", "data"]);
 const ALLOWED_SORTS = new Set(["newest", "oldest", "citations", "name"]);
+const ALLOWED_RESULT_STATUSES = new Set(["tracked", "untracked", "live", "snapshot"]);
+const ALLOWED_HEADROOM_BANDS = new Set(["wide", "moderate", "limited", "unknown"]);
 const TAG_PATTERN = /^[\p{L}\p{N}][\p{L}\p{N}+._-]{0,99}$/u;
 
 function uniqueSorted(values) {
@@ -49,6 +51,11 @@ export function parseFilterState(params) {
     capabilities: tagValues(params, "capability"),
     environments: tagValues(params, "environment"),
     protocols: tagValues(params, "protocol"),
+    stableFacets: tagValues(params, "facet"),
+    resultStatuses: allowedValues(params, "status", ALLOWED_RESULT_STATUSES),
+    headroomBands: allowedValues(params, "headroom", ALLOWED_HEADROOM_BANDS),
+    metricFamilies: tagValues(params, "metric"),
+    rawTags: tagValues(params, "tag"),
     years,
     sort: ALLOWED_SORTS.has(requestedSort) ? requestedSort : "newest",
   };
@@ -66,6 +73,11 @@ export function serializeFilterState(state) {
     ["capability", state.capabilities],
     ["environment", state.environments],
     ["protocol", state.protocols],
+    ["facet", state.stableFacets],
+    ["status", state.resultStatuses],
+    ["headroom", state.headroomBands],
+    ["metric", state.metricFamilies],
+    ["tag", state.rawTags],
     ["year", state.years],
   ];
   for (const [key, values] of groups) {
@@ -117,6 +129,14 @@ export function filterBenchmarks(items, state) {
       includesAny(item.capabilities, state.capabilities) &&
       includesAny(item.environment, state.environments) &&
       includesAny(item.protocol, state.protocols) &&
+      includesAny(item.stableFacets, state.stableFacets) &&
+      includesAny([item.resultStatus], state.resultStatuses) &&
+      includesAny([item.headroomBand], state.headroomBands) &&
+      includesAny([item.metricFamily], state.metricFamilies) &&
+      includesAny(
+        [...(item.capabilities || []), ...(item.environment || []), ...(item.protocol || [])],
+        state.rawTags,
+      ) &&
       includesAny([year], state.years)
     );
   });

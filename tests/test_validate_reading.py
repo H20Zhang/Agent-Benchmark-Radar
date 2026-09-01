@@ -98,7 +98,7 @@ class CapabilityMapSurfaceTest(unittest.TestCase):
 
     def test_map_direction_and_site_route_are_validated(self):
         mutated = self.en.replace("flowchart TB", "flowchart LR", 1).replace(
-            "https://h20zhang.github.io/Agent-Benchmark-Radar/en/?area=agent-memory#explorer",
+            "https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/?area=agent-memory",
             "https://example.com/agent-memory",
             1,
         )

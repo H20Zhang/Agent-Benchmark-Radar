@@ -1,0 +1,32 @@
+{
+  "benchmark_id": "agent-memory-bakeoff",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [
+    {
+      "track_id": "bm25-mrr10",
+      "primary": true,
+      "label": { "zh": "BM25 MRR@10", "en": "BM25 MRR@10" },
+      "task": "Cross-vocabulary organizational memory retrieval",
+      "split": "390 generated queries",
+      "protocol_version": "repository-2026-08",
+      "metric": { "id": "mrr10", "family": "mrr", "label": "MRR@10", "unit": "", "direction": "higher", "range": [0, 1], "reference_target": { "value": 1, "type": "metric-ceiling", "source": "https://github.com/JaysonRawlins/agent-memory-bakeoff" } },
+      "entries": [
+        { "id": "plain", "method": "Plain memory", "model": "BM25", "score": 0.678, "date": "2026-08-21", "source": "https://github.com/JaysonRawlins/agent-memory-bakeoff" },
+        { "id": "write-enriched", "method": "Write-enriched memory", "model": "BM25", "score": 0.783, "date": "2026-08-21", "source": "https://github.com/JaysonRawlins/agent-memory-bakeoff" }
+      ]
+    },
+    {
+      "track_id": "symptom-recall5",
+      "label": { "zh": "症状查询 Recall@5", "en": "Symptom-query Recall@5" },
+      "task": "Cross-vocabulary symptom retrieval",
+      "split": "symptom query subset",
+      "protocol_version": "repository-2026-08",
+      "metric": { "id": "recall5", "family": "recall", "label": "Recall@5", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "metric-ceiling", "source": "https://github.com/JaysonRawlins/agent-memory-bakeoff" } },
+      "entries": [
+        { "id": "plain", "method": "Plain memory", "model": "BM25", "score": 60, "date": "2026-08-21", "source": "https://github.com/JaysonRawlins/agent-memory-bakeoff" },
+        { "id": "write-enriched", "method": "Write-enriched memory", "model": "BM25", "score": 83.8, "date": "2026-08-21", "source": "https://github.com/JaysonRawlins/agent-memory-bakeoff" }
+      ]
+    }
+  ]
+}

@@ -26,6 +26,10 @@ function modelFromCard(element) {
     capabilities: parseArray(element.dataset.capabilities),
     environment: parseArray(element.dataset.environments),
     protocol: parseArray(element.dataset.protocols),
+    stableFacets: parseArray(element.dataset.stableFacets),
+    resultStatus: element.dataset.resultStatus || "untracked",
+    headroomBand: element.dataset.headroomBand || "unknown",
+    metricFamily: element.dataset.metricFamily || "",
     artifacts: Object.fromEntries(
       parseArray(element.dataset.artifacts).map((kind) => [kind, true]),
     ),
@@ -64,6 +68,7 @@ function initExplorer(root) {
   const grid = root.querySelector("[data-result-grid]");
   const count = root.querySelector('[aria-live="polite"]');
   const empty = root.querySelector("[data-empty-state]");
+  const active = root.querySelector("[data-active-filters]");
   if (!(form instanceof HTMLFormElement) || !grid || !count || !empty) return;
 
   const models = [...grid.querySelectorAll("[data-benchmark-id]")].map(modelFromCard);
@@ -71,6 +76,10 @@ function initExplorer(root) {
 
   const apply = () => {
     const state = parseFilterState(paramsFromForm(form));
+    for (const facet of form.querySelectorAll("[data-facet-area]")) {
+      const area = facet.dataset.facetArea;
+      facet.hidden = Boolean(area && state.areas.length && !state.areas.includes(area));
+    }
     const matches = new Set(filterBenchmarks(models, state).map((item) => item.id));
     const ordered = sortBenchmarks(models, state.sort);
 
@@ -81,6 +90,16 @@ function initExplorer(root) {
 
     count.textContent = String(matches.size);
     empty.hidden = matches.size !== 0;
+    if (active) {
+      const labels = [...new FormData(form).entries()]
+        .filter(([key, value]) => key !== "sort" && String(value).trim())
+        .map(([key, value]) => `${key}: ${value}`);
+      active.replaceChildren(...labels.slice(0, 8).map((label) => {
+        const chip = document.createElement("span");
+        chip.textContent = label;
+        return chip;
+      }));
+    }
     const query = serializeFilterState(state);
     const next = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
     history.replaceState({}, "", next);

@@ -1,128 +1,146 @@
 ---
+import ResultsPanel from "./ResultsPanel.astro";
+
 import { copyFor } from "../lib/i18n.mjs";
 import { displayToken, localePath, REPOSITORY_URL, sitePath } from "../lib/site.mjs";
+import { localize } from "../lib/research-model.mjs";
 
 interface Props {
   lang: "zh" | "en";
   item: any;
   summary: string;
+  research: any;
+  resultSet?: any;
+  deepRead?: any;
+  genealogy?: any;
+  recipes: any[];
+  benchmarkById: Map<string, any>;
 }
 
-const { lang, item, summary } = Astro.props;
+const { lang, item, summary, research, resultSet, deepRead, genealogy, recipes, benchmarkById } = Astro.props;
 const copy = copyFor(lang);
 const citationCount = item.citations?.status === "ok" ? item.citations.count : undefined;
 const sources = Object.entries(item.artifacts || {}).filter(([, value]) => Boolean(value));
-const measurementText = lang === "zh" ? summary : item.measurement_strength;
+const measurementText = item.measurement_strength;
 const sourceLabel = (key: string) => copy.artifacts[key] || displayToken(key);
+const stageIndex = genealogy?.stages.findIndex((stage: any) => stage.benchmarks.includes(item.id)) ?? -1;
+const labels = lang === "zh" ? {
+  supports: "这个分数支持什么判断",
+  role: "在评测组合中的作用",
+  contract: "Evaluation contract",
+  target: "测量对象",
+  fair: "公平比较条件",
+  next: "下一步验证",
+  deep: "研究解读",
+  deepIntro: "从测量对象、决定性证据、公平比较和谱系位置理解这项评测。",
+  genealogy: "Benchmark 谱系",
+  genealogyIntro: "把单个 benchmark 放回领域测量能力的演进过程。",
+  recipes: "适合组合的评测方案",
+  recipesIntro: "单项分数提供一个坐标；组合评测让研究 claim 获得更完整的证据链。",
+  core: "核心评测",
+  complement: "补充评测",
+} : {
+  supports: "What this score supports",
+  role: "Role in an evaluation suite",
+  contract: "Evaluation contract",
+  target: "Measurement target",
+  fair: "Fair comparison conditions",
+  next: "Next validation",
+  deep: "Research interpretation",
+  deepIntro: "Understand the measurement object, decisive evidence, fair comparison conditions, and genealogy.",
+  genealogy: "Benchmark genealogy",
+  genealogyIntro: "Place one benchmark in the evolution of what the field can measure.",
+  recipes: "Evaluation suites that pair well",
+  recipesIntro: "One score supplies one coordinate; a suite builds a fuller evidence chain for a research claim.",
+  core: "Core",
+  complement: "Complement",
+};
 ---
 
 <article class={`benchmark-detail benchmark-detail--${item.area}`}>
   <nav class="breadcrumb" aria-label={lang === "zh" ? "面包屑" : "Breadcrumb"}>
-    <a href={sitePath(localePath(lang))}>{copy.nav.explorer}</a>
-    <span aria-hidden="true">/</span>
-    <a href={sitePath(localePath(lang, `areas/${item.area}/`))}>{copy.areas[item.area].label}</a>
-    <span aria-hidden="true">/</span>
+    <a href={sitePath(localePath(lang, "benchmarks/"))}>{copy.nav.benchmarks}</a><span aria-hidden="true">/</span>
+    <a href={sitePath(localePath(lang, `areas/${item.area}/`))}>{copy.areas[item.area].label}</a><span aria-hidden="true">/</span>
     <span aria-current="page">{item.name}</span>
   </nav>
 
-  <header class="detail-hero">
+  <header class="detail-hero detail-hero--v2">
     <div class="detail-hero__copy">
-      <div class="detail-hero__meta">
-        <span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span>
-        <span class={`role-label role-label--${item.evolution_role}`}>{copy.roles[item.evolution_role]}</span>
-        <time datetime={item.released}>{item.released}</time>
-      </div>
+      <div class="detail-hero__meta"><span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span><span class={`role-label role-label--${item.evolution_role}`}>{copy.roles[item.evolution_role]}</span><time datetime={item.released}>{item.released}</time></div>
       <h1>{item.name}</h1>
       <p>{summary}</p>
-      <div class="detail-hero__actions">
-        {sources.slice(0, 3).map(([key, url]) => (
-          <a class="button button--secondary" href={url as string} rel="noreferrer">
-            {sourceLabel(key)} <span aria-hidden="true">↗</span>
-          </a>
-        ))}
-      </div>
+      <div class="detail-hero__actions">{sources.slice(0, 3).map(([key, url]) => <a class="button button--secondary" href={url as string} rel="noreferrer">{sourceLabel(key)} <span aria-hidden="true">↗</span></a>)}</div>
     </div>
-    <div class="detail-signal" aria-hidden="true">
-      <span class="detail-signal__ring"></span>
-      <span class="detail-signal__axis"></span>
-      <span class="detail-signal__point"></span>
-      <strong>{String(item.importance).padStart(2, "0")}</strong>
-      <small>measurement<br />signal</small>
+    <div class="detail-signal-card">
+      <p class="eyebrow">Research signal</p>
+      <strong>{resultSet ? resultSet.tracks.length : String(item.importance).padStart(2, "0")}</strong>
+      <span>{resultSet ? (lang === "zh" ? "个可比结果轨道" : "comparable result tracks") : (lang === "zh" ? "测量重要度" : "measurement importance")}</span>
+      <i aria-hidden="true"></i>
+      <small>{research.suiteRole}</small>
     </div>
   </header>
 
-  <div class="detail-grid">
+  <div class="detail-grid detail-grid--v2">
     <section class="detail-feature">
-      <p class="eyebrow">01 · Core signal</p>
-      <h2>{copy.detail.measurement}</h2>
-      <p>{measurementText}</p>
+      <p class="eyebrow">01 · Claim support</p><h2>{labels.supports}</h2><p>{research.scoreSupports}</p>
     </section>
-
     <dl class="detail-facts">
-      <div>
-        <dt>{copy.card.released}</dt>
-        <dd>{item.released}</dd>
-      </div>
-      <div>
-        <dt>{copy.detail.lastVerified}</dt>
-        <dd>{item.last_verified}</dd>
-      </div>
-      <div>
-        <dt>{copy.detail.citationContext}</dt>
-        <dd>{citationCount ?? "—"}</dd>
-      </div>
-      <div>
-        <dt>Registry ID</dt>
-        <dd>{item.id}</dd>
-      </div>
+      <div><dt>{copy.card.released}</dt><dd>{item.released}</dd></div>
+      <div><dt>{copy.detail.lastVerified}</dt><dd>{item.last_verified}</dd></div>
+      <div><dt>{copy.detail.citationContext}</dt><dd>{citationCount ?? "—"}</dd></div>
+      <div><dt>Registry ID</dt><dd>{item.id}</dd></div>
     </dl>
 
     <section class="detail-section detail-section--wide">
-      <p class="eyebrow">02 · Evaluation design</p>
-      <h2>{copy.detail.scale}</h2>
-      <p>{item.scale}</p>
+      <p class="eyebrow">02 · Measurement advance</p><h2>{copy.detail.measurement}</h2><p>{measurementText}</p>
     </section>
 
-    <section class="detail-section">
-      <p class="eyebrow">03 · Capability</p>
-      <h2>{copy.detail.capabilities}</h2>
-      <ul class="detail-token-list">
-        {(item.capabilities || []).map((value: string) => <li>{displayToken(value)}</li>)}
-      </ul>
+    <section class="evaluation-contract">
+      <div class="evaluation-contract__heading"><p class="eyebrow">03 · {labels.contract}</p><h2>{lang === "zh" ? "先对齐评测对象，再比较分数" : "Align the evaluation object before comparing scores"}</h2></div>
+      <dl>
+        <div><dt>{labels.target}</dt><dd>{localize(research.evaluation_contract.target, lang)}</dd></div>
+        <div><dt>{copy.detail.scale}</dt><dd>{research.evaluation_contract.scale}</dd></div>
+        <div><dt>{copy.detail.environments}</dt><dd>{(research.evaluation_contract.environment || []).map(displayToken).join(" · ")}</dd></div>
+        <div><dt>{copy.detail.protocols}</dt><dd>{(research.evaluation_contract.protocol || []).map(displayToken).join(" · ")}</dd></div>
+      </dl>
     </section>
 
-    <section class="detail-section">
-      <p class="eyebrow">04 · Context</p>
-      <h2>{copy.detail.environments}</h2>
-      <ul class="detail-token-list">
-        {(item.environment || []).map((value: string) => <li>{displayToken(value)}</li>)}
-      </ul>
-    </section>
+    <section class="detail-section"><p class="eyebrow">04 · Capability</p><h2>{copy.detail.capabilities}</h2><ul class="detail-token-list">{(item.capabilities || []).map((value: string) => <li>{displayToken(value)}</li>)}</ul></section>
+    <section class="detail-section"><p class="eyebrow">05 · Context</p><h2>{copy.detail.environments}</h2><ul class="detail-token-list">{(item.environment || []).map((value: string) => <li>{displayToken(value)}</li>)}</ul></section>
+    <section class="detail-section"><p class="eyebrow">06 · Protocol</p><h2>{copy.detail.protocols}</h2><ul class="detail-token-list">{(item.protocol || []).map((value: string) => <li>{displayToken(value)}</li>)}</ul></section>
 
-    <section class="detail-section">
-      <p class="eyebrow">05 · Protocol</p>
-      <h2>{copy.detail.protocols}</h2>
-      <ul class="detail-token-list">
-        {(item.protocol || []).map((value: string) => <li>{displayToken(value)}</li>)}
-      </ul>
-    </section>
-
-    <section class="detail-section detail-section--sources">
-      <p class="eyebrow">06 · Provenance</p>
-      <h2>{copy.detail.sources}</h2>
-      <ul class="source-list">
-        {sources.map(([key, url]) => (
-          <li><a href={url as string} rel="noreferrer"><span>{sourceLabel(key)}</span><span aria-hidden="true">↗</span></a></li>
-        ))}
-        {item.citations?.url && (
-          <li><a href={item.citations.url} rel="noreferrer"><span>Semantic Scholar</span><span aria-hidden="true">↗</span></a></li>
-        )}
-      </ul>
+    <section class="comparison-section">
+      <div><p class="eyebrow">07 · Comparison contract</p><h2>{labels.fair}</h2></div>
+      <ol>{research.comparisonControls.map((control: string) => <li>{control}</li>)}</ol>
+      <aside><span>{labels.role}</span><strong>{research.suiteRole}</strong></aside>
     </section>
   </div>
 
-  <footer class="detail-footer">
-    <a href={sitePath(localePath(lang, `areas/${item.area}/`))}>← {copy.detail.backToArea}</a>
-    <a href={`${REPOSITORY_URL}/blob/main/data/benchmarks.json`}>{copy.detail.registryRecord} ↗</a>
-  </footer>
+  {resultSet && <ResultsPanel {lang} {resultSet} />}
+
+  {deepRead && <section class="deep-read" aria-labelledby="deep-read-heading">
+    <header><div><p class="eyebrow">Evidence brief</p><h2 id="deep-read-heading">{labels.deep}</h2></div><p>{labels.deepIntro}</p></header>
+    <div class="deep-read__content" set:html={deepRead.html}></div>
+  </section>}
+
+  {genealogy && <section class="genealogy-panel">
+    <header><div><p class="eyebrow">Evolution map</p><h2>{labels.genealogy}</h2></div><p>{labels.genealogyIntro}</p></header>
+    <div class="genealogy-rail">
+      {genealogy.stages.map((stage: any, index: number) => <article class={index === stageIndex ? "is-current" : undefined}>
+        <span>{String(index + 1).padStart(2, "0")}</span><h3>{localize(stage.label, lang)}</h3>
+        <div>{stage.benchmarks.slice(0, 5).map((id: string) => { const related = benchmarkById.get(id); return related && <a class={id === item.id ? "is-active" : undefined} href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{related.name}</a>; })}</div>
+      </article>)}
+    </div>
+  </section>}
+
+  {recipes.length > 0 && <section class="related-recipes">
+    <header><div><p class="eyebrow">Evaluation suites</p><h2>{labels.recipes}</h2></div><p>{labels.recipesIntro}</p></header>
+    <div>{recipes.slice(0, 3).map((recipe: any) => <a href={sitePath(localePath(lang, `evaluate/?recipe=${recipe.id}`))}><span>{copy.areas[recipe.area].label}</span><h3>{localize(recipe.claim, lang)}</h3><p>{recipe.core.includes(item.id) ? labels.core : labels.complement} · {recipe.core.length + recipe.complement.length} benchmarks</p><b>↗</b></a>)}</div>
+  </section>}
+
+  <section class="next-validation"><p class="eyebrow">Next coordinate</p><h2>{labels.next}</h2><p>{research.nextValidation}</p><a class="button button--primary" href={sitePath(localePath(lang, `opportunities/?area=${item.area}`))}>{lang === "zh" ? "查看相关评测机会" : "Explore related opportunities"} ↗</a></section>
+
+  <section class="detail-section detail-section--sources detail-sources-v2"><p class="eyebrow">08 · Provenance</p><h2>{copy.detail.sources}</h2><ul class="source-list">{sources.map(([key, url]) => <li><a href={url as string} rel="noreferrer"><span>{sourceLabel(key)}</span><span aria-hidden="true">↗</span></a></li>)}{item.citations?.url && <li><a href={item.citations.url} rel="noreferrer"><span>Semantic Scholar</span><span aria-hidden="true">↗</span></a></li>}</ul></section>
+
+  <footer class="detail-footer"><a href={sitePath(localePath(lang, "benchmarks/"))}>← {copy.nav.benchmarks}</a><a href={`${REPOSITORY_URL}/blob/main/data/benchmarks.json`}>{copy.detail.registryRecord} ↗</a></footer>
 </article>

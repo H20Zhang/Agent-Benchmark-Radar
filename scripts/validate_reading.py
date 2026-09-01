@@ -1558,7 +1558,7 @@ def validate_public_readme(
                     )
             site_route = (
                 "https://h20zhang.github.io/Agent-Benchmark-Radar/"
-                f"{site_locale}/?area={area}#explorer"
+                f"{site_locale}/benchmarks/?area={area}"
             )
             if site_route not in section:
                 errors.append(f"{language}: {anchor} is missing its interactive site route")

@@ -1,0 +1,29 @@
+{
+  "benchmark_id": "deltaml-bench",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [
+    {
+      "track_id": "4x6h-success",
+      "primary": true,
+      "label": { "zh": "4×6h 单次成功率", "en": "4×6h per-run success" },
+      "task": "Improve published ML baselines in executable repositories",
+      "split": "48 paper tasks",
+      "protocol_version": "paper-v1-4x6h",
+      "metric": { "id": "success-rate", "family": "success-rate", "label": "Per-run success", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "benchmark-ceiling", "source": "https://arxiv.org/abs/2608.19653" } },
+      "entries": [
+        { "id": "gpt5-base", "method": "Base scaffold", "model": "GPT-5", "score": 9.4, "date": "2026-08-20", "source": "https://arxiv.org/abs/2608.19653", "budget": "4 runs × 6h; one H100 per run" },
+        { "id": "gpt5-arg", "method": "ARG scaffold", "model": "GPT-5", "score": 33.9, "date": "2026-08-20", "source": "https://arxiv.org/abs/2608.19653", "budget": "4 runs × 6h; one H100 per run" }
+      ]
+    },
+    {
+      "track_id": "2x12h-success",
+      "label": { "zh": "2×12h 单次成功率", "en": "2×12h per-run success" },
+      "task": "Improve published ML baselines in executable repositories",
+      "split": "48 paper tasks",
+      "protocol_version": "paper-v1-2x12h",
+      "metric": { "id": "success-rate", "family": "success-rate", "label": "Per-run success", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "benchmark-ceiling", "source": "https://arxiv.org/abs/2608.19653" } },
+      "entries": [{ "id": "gpt5-arg", "method": "ARG scaffold", "model": "GPT-5", "score": 49, "date": "2026-08-20", "source": "https://arxiv.org/abs/2608.19653", "budget": "2 runs × 12h; one H100 per run" }]
+    }
+  ]
+}

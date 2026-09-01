@@ -1,32 +1,46 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Explorer from "../../components/Explorer.astro";
 import Header from "../../components/Header.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 
 import { AREAS, copyFor, LOCALES } from "../../lib/i18n.mjs";
 import { loadChineseSummaries } from "../../lib/readme-localization.mjs";
-import { loadRegistry } from "../../lib/registry.mjs";
+import { loadRegistry, getArtifactKinds } from "../../lib/registry.mjs";
+import { loadResearchModel, localize } from "../../lib/research-model.mjs";
+import { loadAllResultSets, summarizeTrack } from "../../lib/results.mjs";
 import { absoluteUrl, localePath, sitePath } from "../../lib/site.mjs";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
 }
 
-interface Props {
-  lang: "zh" | "en";
-}
+interface Props { lang: "zh" | "en"; }
 
 const { lang } = Astro.props;
 const copy = copyFor(lang);
 const items = [...loadRegistry()];
+const byId = new Map(items.map((item) => [item.id, item]));
 const summaries = loadChineseSummaries();
+const research = loadResearchModel();
+const resultSets = loadAllResultSets();
 const latestVerified = items.map((item) => item.last_verified).sort().at(-1);
+const latestItems: any[] = items.slice(0, 6);
+const resultHighlights: any[] = [];
+for (const resultSet of resultSets.values()) {
+  const item = byId.get(resultSet.benchmark_id);
+  const track = resultSet.tracks.find((entry: any) => entry.primary) || resultSet.tracks[0];
+  if (item) resultHighlights.push({ item, resultSet, track, summary: summarizeTrack(track) });
+}
+resultHighlights.sort((left: any, right: any) => right.item.released.localeCompare(left.item.released));
+resultHighlights.splice(4);
+const opportunities: any[] = research.opportunities.slice(0, 3);
+const shifts: any[] = research.frontierShifts;
+const missions: any[] = copy.home.missions;
 const canonicalPath = localePath(lang);
 const alternatePath = localePath(lang === "zh" ? "en" : "zh");
 const title = lang === "zh"
-  ? "Agent Benchmark Radar｜可筛选的 Agent 评测地图"
-  : "Agent Benchmark Radar | Searchable Agent Evaluation Map";
+  ? "Agent Benchmark Radar｜从评测边界发现研究前沿"
+  : "Agent Benchmark Radar | Map the Evaluation Frontier";
 const description = copy.hero.description;
 const jsonLd = {
   "@context": "https://schema.org",
@@ -38,7 +52,7 @@ const jsonLd = {
   mainEntity: {
     "@type": "ItemList",
     numberOfItems: items.length,
-    itemListElement: items.slice(0, 20).map((item, index) => ({
+    itemListElement: latestItems.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
       url: absoluteUrl(localePath(lang, `benchmarks/${item.id}/`)),
@@ -46,6 +60,14 @@ const jsonLd = {
     })),
   },
 };
+const missionPaths = ["benchmarks/", "opportunities/", "frontier/"];
+const summaryFor = (item: any) => lang === "zh" ? summaries.get(item.id) || item.summary : item.summary;
+const trackingLabels: Record<string, string> = {
+  live: lang === "zh" ? "动态追踪" : "Live tracking",
+  "paper-snapshot": lang === "zh" ? "论文快照" : "Paper snapshot",
+  "verified-snapshot": lang === "zh" ? "核验快照" : "Verified snapshot",
+};
+const trackingLabel = (status: string) => trackingLabels[status] || status;
 ---
 
 <BaseLayout
@@ -56,61 +78,136 @@ const jsonLd = {
   zhPath={lang === "zh" ? canonicalPath : alternatePath}
   enPath={lang === "en" ? canonicalPath : alternatePath}
   {jsonLd}
-  bodyClass="radar-page"
+  bodyClass="radar-page home-v2"
 >
   <Header {lang} alternatePath={alternatePath} />
   <main id="main-content">
-    <section class="hero shell">
-      <div class="hero__copy">
+    <section class="frontier-hero shell">
+      <div class="frontier-hero__copy">
         <p class="eyebrow">{copy.hero.eyebrow}</p>
         <h1>{copy.hero.title}</h1>
-        <p class="hero__description">{copy.hero.description}</p>
+        <p class="frontier-hero__description">{copy.hero.description}</p>
         <div class="hero__actions">
-          <a class="button button--primary" href="#explorer">{copy.hero.primaryAction}<span aria-hidden="true">↓</span></a>
-          <a class="button button--secondary" href={sitePath(localePath(lang, "methodology/"))}>{copy.hero.secondaryAction}</a>
+          <a class="button button--primary" href={sitePath(localePath(lang, "benchmarks/"))}>{copy.hero.primaryAction}<span aria-hidden="true">↗</span></a>
+          <a class="button button--secondary" href={sitePath(localePath(lang, "opportunities/"))}>{copy.hero.secondaryAction}</a>
         </div>
-        <dl class="hero__stats">
+        <dl class="frontier-hero__stats">
           <div><dt>{copy.hero.registry}</dt><dd>{items.length}</dd></div>
-          <div><dt>{copy.hero.areas}</dt><dd>{AREAS.length}</dd></div>
+          <div><dt>{copy.home.verifiedResults}</dt><dd>{resultSets.size}</dd></div>
           <div><dt>{copy.hero.updated}</dt><dd>{latestVerified}</dd></div>
         </dl>
       </div>
-      <div class="hero-radar" aria-label={lang === "zh" ? "三大研究领域雷达" : "Three-area research radar"}>
-        <div class="hero-radar__rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <div class="hero-radar__sweep" aria-hidden="true"></div>
-        {AREAS.map((area, index) => (
-          <a
-            class={`hero-radar__point hero-radar__point--${index + 1}`}
-            href={sitePath(localePath(lang, `areas/${area}/`))}
-            data-area={area}
-          >
-            <span>{copy.areas[area].label}</span>
-            <small>{items.filter((item) => item.area === area).length}</small>
-          </a>
-        ))}
-        <span class="hero-radar__center">ABR<small>2026</small></span>
+      <div class="evaluation-loop" aria-label={lang === "zh" ? "Benchmark 到 Frontier 的研究闭环" : "Research loop from benchmarks to the frontier"}>
+        <div class="evaluation-loop__orbit" aria-hidden="true"></div>
+        <span class="evaluation-loop__node evaluation-loop__node--benchmark"><b>01</b>Benchmark</span>
+        <span class="evaluation-loop__node evaluation-loop__node--results"><b>02</b>Results</span>
+        <span class="evaluation-loop__node evaluation-loop__node--opportunity"><b>03</b>Opportunity</span>
+        <span class="evaluation-loop__node evaluation-loop__node--frontier"><b>04</b>Frontier</span>
+        <span class="evaluation-loop__core">ABR<small>evaluation<br/>frontier</small></span>
       </div>
     </section>
 
-    <section class="area-strip shell" aria-labelledby="area-strip-title">
-      <div class="area-strip__heading">
-        <p class="eyebrow">Evaluation territories</p>
-        <h2 id="area-strip-title">{lang === "zh" ? "三条评测演进主线" : "Three evaluation trajectories"}</h2>
+    <section class="mission-section shell" aria-labelledby="mission-title">
+      <div class="section-heading section-heading--split">
+        <div><p class="eyebrow">{copy.home.missionEyebrow}</p><h2 id="mission-title">{copy.home.missionTitle}</h2></div>
+        <p>{lang === "zh" ? "网站围绕研究决策组织信息，让用户直接从问题进入证据。" : "The site organizes evidence around research decisions so readers can move directly from a question to evidence."}</p>
       </div>
-      <div class="area-strip__grid">
-        {AREAS.map((area, index) => (
-          <a class="area-card" data-area={area} href={sitePath(localePath(lang, `areas/${area}/`))}>
-            <span class="area-card__index">0{index + 1}</span>
-            <p class="eyebrow">{copy.areas[area].short}</p>
-            <h3>{copy.areas[area].label}</h3>
-            <p>{copy.areas[area].intro}</p>
-            <span class="area-card__arrow" aria-hidden="true">↗</span>
+      <div class="mission-grid">
+        {missions.map((mission: any, index: number) => (
+          <a class={`mission-card mission-card--${index + 1}`} href={sitePath(localePath(lang, missionPaths[index]))}>
+            <span class="mission-card__number">{mission.number}</span>
+            <p class="eyebrow">{mission.title}</p>
+            <h3>{mission.label}</h3>
+            <p>{mission.description}</p>
+            <span class="mission-card__action">{mission.action} <span aria-hidden="true">↗</span></span>
           </a>
         ))}
       </div>
     </section>
 
-    <Explorer {lang} {items} {summaries} />
+    <section class="home-section shell" aria-labelledby="latest-title">
+      <div class="section-heading section-heading--split">
+        <div><p class="eyebrow">{copy.home.latestEyebrow}</p><h2 id="latest-title">{copy.home.latestTitle}</h2></div>
+        <div><p>{copy.home.latestDescription}</p><a href={sitePath(localePath(lang, "benchmarks/"))}>{copy.home.viewAll} ↗</a></div>
+      </div>
+      <div class="latest-grid">
+        {latestItems.map((item: any) => (
+          <article class="release-card" data-area={item.area}>
+            <div class="release-card__meta"><span>{copy.areas[item.area].label}</span><time datetime={item.released}>{item.released}</time></div>
+            <h3><a href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}>{item.name}</a></h3>
+            <p>{summaryFor(item)}</p>
+            <div class="release-card__footer">
+              <span>{getArtifactKinds(item).map((kind) => copy.artifacts[kind]).join(" · ")}</span>
+              {resultSets.has(item.id) && <strong>{trackingLabel(resultSets.get(item.id).tracking_status)}</strong>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="home-section home-section--ink" aria-labelledby="results-title">
+      <div class="shell">
+        <div class="section-heading section-heading--split">
+          <div><p class="eyebrow">{copy.home.resultEyebrow}</p><h2 id="results-title">{copy.home.resultTitle}</h2></div>
+          <p>{copy.home.resultDescription}</p>
+        </div>
+        <div class="result-highlight-grid">
+          {resultHighlights.map(({ item, resultSet, track, summary }: any) => (
+            <a class="result-highlight" href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}>
+              <div><span>{trackingLabel(resultSet.tracking_status)}</span><time datetime={resultSet.verified_at}>{resultSet.verified_at}</time></div>
+              <h3>{item.name}</h3>
+              <strong>{summary.best.score}<small>{track.metric.unit}</small></strong>
+              <p>{localize(track.label, lang)} · {summary.best.method}</p>
+              {summary.headroom !== undefined && <span class="result-highlight__headroom">{lang === "zh" ? "参考空间" : "Reference headroom"} {summary.headroom}%</span>}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="home-section shell" aria-labelledby="opportunity-title">
+      <div class="section-heading section-heading--split">
+        <div><p class="eyebrow">{copy.home.opportunityEyebrow}</p><h2 id="opportunity-title">{copy.home.opportunityTitle}</h2></div>
+        <div><p>{copy.home.opportunityDescription}</p><a href={sitePath(localePath(lang, "opportunities/"))}>{copy.home.viewAll} ↗</a></div>
+      </div>
+      <div class="opportunity-preview-grid">
+        {opportunities.map((opportunity: any) => (
+          <a class="opportunity-preview" data-area={opportunity.area} href={sitePath(localePath(lang, `opportunities/${opportunity.id}/`))}>
+            <div><span>{copy.areas[opportunity.area].label}</span><small>{opportunity.confidence}</small></div>
+            <h3>{localize(opportunity.title, lang)}</h3>
+            <p>{localize(opportunity.next_coordinate, lang)}</p>
+            <span>{lang === "zh" ? "查看证据与评测设计" : "Inspect evidence and evaluation design"} ↗</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="home-section shell" aria-labelledby="shift-title">
+      <div class="section-heading section-heading--split">
+        <div><p class="eyebrow">{copy.home.shiftEyebrow}</p><h2 id="shift-title">{copy.home.shiftTitle}</h2></div>
+        <a href={sitePath(localePath(lang, "frontier/"))}>{copy.home.viewAll} ↗</a>
+      </div>
+      <div class="shift-grid">
+        {shifts.map((shift: any, index: number) => (
+          <article class="shift-card" data-area={shift.area}>
+            <span class="shift-card__index">0{index + 1}</span>
+            <p class="eyebrow">{copy.areas[shift.area].label}</p>
+            <h3>{localize(shift.title, lang)}</h3>
+            <p>{localize(shift.delta, lang)}</p>
+            <strong>{localize(shift.consequence, lang)}</strong>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="area-links shell" aria-labelledby="area-title">
+      <div class="section-heading"><p class="eyebrow">Research areas</p><h2 id="area-title">{lang === "zh" ? "三条评测演进主线" : "Three evaluation trajectories"}</h2></div>
+      <div class="area-links__grid">
+        {AREAS.map((area) => (
+          <a data-area={area} href={sitePath(localePath(lang, `areas/${area}/`))}><span>{copy.areas[area].label}</span><small>{items.filter((item) => item.area === area).length} benchmarks</small><b>↗</b></a>
+        ))}
+      </div>
+    </section>
   </main>
   <SiteFooter {lang} />
 </BaseLayout>

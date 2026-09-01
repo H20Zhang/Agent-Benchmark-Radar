@@ -1,0 +1,32 @@
+{
+  "benchmark_id": "browsecomp-plus-cm",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [
+    {
+      "track_id": "evidence-recall",
+      "primary": true,
+      "label": { "zh": "跨语料 Evidence Recall", "en": "Cross-corpus evidence recall" },
+      "task": "Evidence discovery for the same 57 multi-hop questions",
+      "split": "57 projection-survivor questions",
+      "protocol_version": "paper-v1-bm25",
+      "metric": { "id": "evidence-recall", "family": "recall", "label": "Evidence recall", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "metric-ceiling", "source": "https://arxiv.org/abs/2608.20317" } },
+      "entries": [
+        { "id": "query-built", "method": "Query-built corpus", "model": "GPT-5.6 Sol", "score": 84.3, "date": "2026-08-18", "source": "https://arxiv.org/abs/2608.20317", "budget": "mean 60.2 retrieval calls" },
+        { "id": "independent-553m", "method": "Independent 553M-document corpus", "model": "GPT-5.6 Sol", "score": 21.4, "date": "2026-08-18", "source": "https://arxiv.org/abs/2608.20317", "budget": "mean 98.3 retrieval calls" }
+      ]
+    },
+    {
+      "track_id": "answer-accuracy",
+      "label": { "zh": "跨语料回答准确率", "en": "Cross-corpus answer accuracy" },
+      "task": "Final-answer accuracy for the same 57 questions",
+      "split": "57 projection-survivor questions",
+      "protocol_version": "paper-v1-bm25",
+      "metric": { "id": "answer-accuracy", "family": "accuracy", "label": "Answer accuracy", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "metric-ceiling", "source": "https://arxiv.org/abs/2608.20317" } },
+      "entries": [
+        { "id": "query-built", "method": "Query-built corpus", "model": "GPT-5.6 Sol", "score": 86, "date": "2026-08-18", "source": "https://arxiv.org/abs/2608.20317" },
+        { "id": "independent-553m", "method": "Independent 553M-document corpus", "model": "GPT-5.6 Sol", "score": 80.7, "date": "2026-08-18", "source": "https://arxiv.org/abs/2608.20317" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/Header.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+
+import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
+import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
+import { loadRegistry } from "../../../lib/registry.mjs";
+import { loadResearchModel, localize } from "../../../lib/research-model.mjs";
+import { loadAllResultSets, summarizeTrack } from "../../../lib/results.mjs";
+import { absoluteUrl, localePath } from "../../../lib/site.mjs";
+
+export function getStaticPaths() { return LOCALES.map((lang) => ({ params: { lang }, props: { lang } })); }
+interface Props { lang: "zh" | "en"; }
+const { lang } = Astro.props;
+const copy = copyFor(lang);
+const items = [...loadRegistry()];
+const summaries = loadChineseSummaries();
+const research = loadResearchModel();
+const resultSets = loadAllResultSets();
+const comparisonData = items.map((item) => {
+  const editorial = research.benchmarkEditorial.get(item.id);
+  const resultSet = resultSets.get(item.id);
+  const track = resultSet && (resultSet.tracks.find((entry: any) => entry.primary) || resultSet.tracks[0]);
+  const result = track ? summarizeTrack(track) : undefined;
+  return {
+    id: item.id, name: item.name, area: copy.areas[item.area].label, released: item.released,
+    summary: lang === "zh" ? summaries.get(item.id) || item.summary : item.summary,
+    scale: item.scale, capabilities: item.capabilities, environment: item.environment, protocol: item.protocol,
+    scoreSupports: localize(editorial.score_supports, lang), suiteRole: localize(editorial.suite_role, lang),
+    comparison_controls: editorial.comparison_controls.map((control: any) => localize(control, lang)),
+    result: result && { score: result.best.score, method: result.best.method, metric: localize(track.label, lang), unit: track.metric.unit, verifiedAt: resultSet.verified_at },
+  };
+});
+const serializedData = JSON.stringify(comparisonData).replaceAll("<", "\\u003c");
+const canonicalPath = localePath(lang, "compare/");
+const alternatePath = localePath(lang === "zh" ? "en" : "zh", "compare/");
+const title = lang === "zh" ? "Agent Benchmark 对比工作台｜对齐协议、范围与成绩" : "Agent Benchmark Comparison Workspace | Align Protocols, Scope, and Results";
+const description = lang === "zh" ? "并排比较最多三个 Benchmark 的测量对象、环境、协议、规模、公平比较条件与已核验成绩。" : "Compare up to three benchmarks across measurement target, environment, protocol, scale, fair controls, and verified results.";
+const jsonLd = { "@context": "https://schema.org", "@type": "WebApplication", name: title, description, url: absoluteUrl(canonicalPath), applicationCategory: "ResearchApplication", inLanguage: copy.langTag };
+---
+
+<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="radar-page compare-page">
+  <Header {lang} alternatePath={alternatePath} />
+  <main id="main-content" data-compare-workspace data-lang={lang}>
+    <section class="tool-hero shell"><p class="eyebrow">Comparison workspace</p><h1>{lang === "zh" ? "并排对齐每个测量坐标" : "Align measurement coordinates side by side"}</h1><p>{description}</p></section>
+    <section class="compare-workspace shell">
+      <div class="compare-controls" data-compare-controls></div>
+      <div class="compare-table" data-compare-table aria-live="polite"></div>
+    </section>
+    <script is:inline type="application/json" id="compare-data" set:html={serializedData}></script>
+  </main>
+  <SiteFooter {lang} />
+</BaseLayout>
+
+<script>
+  import { initCompareWorkspaces } from "../../../scripts/compare.mjs";
+  initCompareWorkspaces();
+</script>

@@ -1,0 +1,32 @@
+{
+  "benchmark_id": "mpbench",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [
+    {
+      "track_id": "attack-success-rate",
+      "primary": true,
+      "label": { "zh": "持久记忆投毒 ASR", "en": "Persistent-memory poisoning ASR" },
+      "task": "Persistent-memory poisoning",
+      "split": "six attack classes",
+      "protocol_version": "paper-v1",
+      "metric": { "id": "asr", "family": "attack-success", "label": "Attack success rate", "unit": "%", "direction": "lower", "range": [0, 100], "reference_target": { "value": 0, "type": "safety-target", "source": "https://arxiv.org/abs/2606.04329" } },
+      "entries": [
+        { "id": "openclaw", "method": "OpenClaw", "model": "OpenClaw", "score": 34.25, "date": "2026-06-03", "source": "https://arxiv.org/abs/2606.04329" },
+        { "id": "hermes", "method": "HERMES", "model": "HERMES", "score": 66.67, "date": "2026-06-03", "source": "https://arxiv.org/abs/2606.04329" }
+      ]
+    },
+    {
+      "track_id": "conditional-rsr",
+      "label": { "zh": "Conditional RSR", "en": "Conditional RSR" },
+      "task": "Conditional retrieval after successful write",
+      "split": "six attack classes",
+      "protocol_version": "paper-v1",
+      "metric": { "id": "conditional-rsr", "family": "attack-success", "label": "Conditional RSR", "unit": "%", "direction": "lower", "range": [0, 100], "reference_target": { "value": 0, "type": "safety-target", "source": "https://arxiv.org/abs/2606.04329" } },
+      "entries": [
+        { "id": "openclaw", "method": "OpenClaw", "model": "OpenClaw", "score": 17.4, "date": "2026-06-03", "source": "https://arxiv.org/abs/2606.04329" },
+        { "id": "hermes", "method": "HERMES", "model": "HERMES", "score": 64.7, "date": "2026-06-03", "source": "https://arxiv.org/abs/2606.04329" }
+      ]
+    }
+  ]
+}

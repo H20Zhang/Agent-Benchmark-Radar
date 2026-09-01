@@ -5,8 +5,8 @@ import test from "node:test";
 const read = (path) =>
   readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("language home statically loads the complete canonical registry", () => {
-  const page = read("src/pages/[lang]/index.astro");
+test("benchmark explorer statically loads the complete canonical registry", () => {
+  const page = read("src/pages/[lang]/benchmarks/index.astro");
 
   assert.match(page, /getStaticPaths/);
   assert.match(page, /LOCALES\.map/);
@@ -28,6 +28,9 @@ test("benchmark cards expose filter metadata and positive public fields", () => 
     "data-capabilities",
     "data-environments",
     "data-protocols",
+    "data-stable-facets",
+    "data-result-status",
+    "data-headroom-band",
   ]) {
     assert.ok(card.includes(attribute), attribute);
   }
@@ -35,7 +38,7 @@ test("benchmark cards expose filter metadata and positive public fields", () => 
   assert.ok(!card.includes("coverage_gap"));
 });
 
-test("filter panel covers primary and advanced research facets", () => {
+test("filter panel keeps primary controls compact and groups stable research facets", () => {
   const panel = read("src/components/FilterPanel.astro");
 
   for (const name of [
@@ -44,13 +47,18 @@ test("filter panel covers primary and advanced research facets", () => {
     "role",
     "artifact",
     "year",
-    "capability",
-    "environment",
-    "protocol",
+    "facet",
+    "status",
+    "headroom",
+    "metric",
+    "tag",
     "sort",
   ]) {
     assert.match(panel, new RegExp(`name=["']${name}["']`));
   }
+  assert.match(panel, /stableFacets/);
+  assert.match(panel, /facet-disclosure/);
+  assert.doesNotMatch(panel, /<select name="capability"/);
 });
 
 test("client controller keeps filter state in the URL and updates visible results", () => {

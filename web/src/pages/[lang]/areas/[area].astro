@@ -8,6 +8,8 @@ import { AREAS, copyFor, LOCALES } from "../../../lib/i18n.mjs";
 import { sortBenchmarks } from "../../../lib/filters.mjs";
 import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
 import { loadRegistry } from "../../../lib/registry.mjs";
+import { loadResearchModel, localize } from "../../../lib/research-model.mjs";
+import { loadAllResultSets, summarizeTrack } from "../../../lib/results.mjs";
 import { absoluteUrl, localePath, sitePath } from "../../../lib/site.mjs";
 
 export function getStaticPaths() {
@@ -26,6 +28,16 @@ const copy = copyFor(lang);
 const allItems = [...loadRegistry()];
 const items = sortBenchmarks(allItems.filter((item) => item.area === area), "newest");
 const summaries = loadChineseSummaries();
+const research = loadResearchModel();
+const resultSets = loadAllResultSets();
+const genealogy = research.genealogy.areas.find((entry: any) => entry.id === area);
+const opportunities = research.opportunities.filter((entry: any) => entry.area === area);
+const frontierShifts = research.frontierShifts.filter((entry: any) => entry.area === area);
+const resultHighlights = items.filter((item) => resultSets.has(item.id)).slice(0, 4).map((item) => {
+  const resultSet = resultSets.get(item.id);
+  const track = resultSet.tracks.find((entry: any) => entry.primary) || resultSet.tracks[0];
+  return { item, track, resultSet, result: summarizeTrack(track) };
+});
 const canonicalPath = localePath(lang, `areas/${area}/`);
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", `areas/${area}/`);
 const title = `${copy.areas[area].label} Benchmark Radar | Agent Benchmark Radar`;
@@ -74,7 +86,7 @@ const jsonLd = {
         <p class="eyebrow">{copy.areas[area].short}</p>
         <h1>{copy.areas[area].label}</h1>
         <p>{copy.areas[area].intro}</p>
-        <a class="button button--primary" href={sitePath(`${localePath(lang)}?area=${area}#explorer`)}>
+        <a class="button button--primary" href={sitePath(`${localePath(lang, "benchmarks/")}?area=${area}`)}>
           {copy.hero.primaryAction} <span aria-hidden="true">↗</span>
         </a>
       </div>
@@ -83,6 +95,19 @@ const jsonLd = {
           <div><dt>{label}</dt><dd>{roleCounts[role]}</dd></div>
         ))}
       </dl>
+    </section>
+
+    <section class="area-intelligence shell" data-area={area}>
+      <div class="area-intelligence__genealogy">
+        <header><p class="eyebrow">Benchmark genealogy</p><h2>{lang === "zh" ? "测量能力怎样演进" : "How measurement evolved"}</h2><p>{localize(genealogy.thesis, lang)}</p></header>
+        <div>{genealogy.stages.map((stage: any, index: number) => <article><span>{String(index + 1).padStart(2, "0")}</span><h3>{localize(stage.label, lang)}</h3><div>{stage.benchmarks.map((id: string) => { const benchmark = allItems.find((entry) => entry.id === id); return benchmark && <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{benchmark.name}</a>; })}</div></article>)}</div>
+      </div>
+
+      {resultHighlights.length > 0 && <div class="area-intelligence__results"><header><p class="eyebrow">Measured progress</p><h2>{lang === "zh" ? "当前方法做到什么程度" : "How far current methods have progressed"}</h2></header><div>{resultHighlights.map(({ item, track, resultSet, result }: any) => <a href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}><span>{item.name}</span><strong>{result.best.score}<small>{track.metric.unit}</small></strong><p>{result.best.method} · {localize(track.label, lang)}</p><time datetime={resultSet.verified_at}>{resultSet.verified_at}</time></a>)}</div></div>}
+
+      <div class="area-intelligence__opportunities"><header><p class="eyebrow">Next coordinates</p><h2>{lang === "zh" ? "下一步值得建立什么" : "What is worth building next"}</h2></header><div>{opportunities.map((opportunity: any) => <a href={sitePath(localePath(lang, `opportunities/${opportunity.id}/`))}><h3>{localize(opportunity.title, lang)}</h3><p>{localize(opportunity.next_coordinate, lang)}</p><span>{lang === "zh" ? "查看评测设计" : "Inspect evaluation design"} ↗</span></a>)}</div></div>
+
+      {frontierShifts.map((shift: any) => <aside class="area-intelligence__shift"><p class="eyebrow">Latest frontier shift · {shift.period}</p><h2>{localize(shift.title, lang)}</h2><p>{localize(shift.delta, lang)}</p><strong>{localize(shift.consequence, lang)}</strong></aside>)}
     </section>
 
     <section class="area-registry">
@@ -97,6 +122,7 @@ const jsonLd = {
               {lang}
               {item}
               summary={lang === "zh" ? summaries.get(item.id) || item.summary : item.summary}
+              resultSet={resultSets.get(item.id)}
             />
           ))}
         </div>

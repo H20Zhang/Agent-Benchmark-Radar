@@ -7,6 +7,9 @@ import SiteFooter from "../../../components/SiteFooter.astro";
 import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
 import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
 import { loadRegistry } from "../../../lib/registry.mjs";
+import { loadDeepRead } from "../../../lib/deep-reads.mjs";
+import { getBenchmarkResearch, loadResearchModel } from "../../../lib/research-model.mjs";
+import { loadResultSet } from "../../../lib/results.mjs";
 import { absoluteUrl, localePath, REPOSITORY_URL } from "../../../lib/site.mjs";
 
 export function getStaticPaths() {
@@ -31,6 +34,13 @@ interface Props {
 
 const { lang, item, summary } = Astro.props;
 const copy = copyFor(lang);
+const researchModel = loadResearchModel();
+const research = getBenchmarkResearch(item.id, lang);
+const resultSet = loadResultSet(item.id);
+const deepRead = loadDeepRead(item.id, lang);
+const genealogy = researchModel.genealogy.areas.find((area: any) => area.id === item.area);
+const recipes = researchModel.recipes.filter((recipe: any) => [...recipe.core, ...recipe.complement].includes(item.id));
+const benchmarkById = new Map(loadRegistry().map((entry) => [entry.id, entry]));
 const canonicalPath = localePath(lang, `benchmarks/${item.id}/`);
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", `benchmarks/${item.id}/`);
 const title = `${item.name} · ${copy.areas[item.area].label} | Agent Benchmark Radar`;
@@ -83,7 +93,7 @@ const jsonLd = {
 >
   <Header {lang} alternatePath={alternatePath} />
   <main id="main-content" class="shell">
-    <BenchmarkDetail {lang} {item} {summary} />
+    <BenchmarkDetail {lang} {item} {summary} {research} {resultSet} {deepRead} {genealogy} {recipes} {benchmarkById} />
   </main>
   <SiteFooter {lang} />
 </BaseLayout>

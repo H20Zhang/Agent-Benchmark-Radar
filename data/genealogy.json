@@ -1,0 +1,34 @@
+{
+  "areas": [
+    {
+      "id": "agent-memory",
+      "thesis": { "zh": "评测从长程召回扩展到在线更新、行动效用、长期适应、治理与生命周期完整性。", "en": "Evaluation expands from long-horizon recall to online updates, action utility, sustained adaptation, governance, and lifecycle integrity." },
+      "stages": [
+        { "id": "memory-foundation", "role": "foundation", "label": { "zh": "长程召回与时间推理", "en": "Long-horizon recall and temporal reasoning" }, "benchmarks": ["beyond-goldfish-memory", "locomo", "longmemeval"] },
+        { "id": "memory-transition", "role": "transition", "label": { "zh": "在线写入、更新与结构化记忆", "en": "Online writing, updating, and structured memory" }, "benchmarks": ["membench", "memoryagentbench", "structmemeval"] },
+        { "id": "memory-action", "role": "frontier", "label": { "zh": "行动效用与长期适应", "en": "Action utility and sustained adaptation" }, "benchmarks": ["memoryarena", "mem2actbench", "past-bench", "dynamicmem"] },
+        { "id": "memory-integrity", "role": "frontier", "label": { "zh": "权限、安全与生命周期完整性", "en": "Authority, safety, and lifecycle integrity" }, "benchmarks": ["gatemem", "injecmem", "utility-under-attack", "compaction-cliff"] }
+      ]
+    },
+    {
+      "id": "rag",
+      "thesis": { "zh": "评测从相关性与跨域泛化扩展到推理密集检索、实时搜索、轨迹审计与语料状态。", "en": "Evaluation expands from relevance and cross-domain generalization to reasoning-intensive retrieval, live search, trajectory audit, and corpus state." },
+      "stages": [
+        { "id": "rag-foundation", "role": "foundation", "label": { "zh": "相关性、召回与跨域泛化", "en": "Relevance, recall, and cross-domain generalization" }, "benchmarks": ["hotpotqa", "kilt", "beir"] },
+        { "id": "rag-transition", "role": "transition", "label": { "zh": "推理密集检索与 Agent 搜索", "en": "Reasoning-intensive retrieval and agent search" }, "benchmarks": ["bright", "browsecomp", "browsecomp-plus"] },
+        { "id": "rag-live", "role": "frontier", "label": { "zh": "实时证据与长时程搜索", "en": "Live evidence and long-horizon search" }, "benchmarks": ["livebrowsecomp", "lohosearch", "wandr"] },
+        { "id": "rag-audit", "role": "frontier", "label": { "zh": "轨迹审计与语料状态", "en": "Trajectory audit and corpus state" }, "benchmarks": ["searchauditbench", "agenticragtracer", "kbgym", "snapshot-compatibility-audit"] }
+      ]
+    },
+    {
+      "id": "data-agent",
+      "thesis": { "zh": "评测从 SQL 与代码生成扩展到端到端分析、长时程 ML 工程、自主研究与业务语义可靠性。", "en": "Evaluation expands from SQL and code generation to end-to-end analytics, long-horizon ML engineering, autonomous research, and business-semantic reliability." },
+      "stages": [
+        { "id": "data-foundation", "role": "foundation", "label": { "zh": "Text-to-SQL 与代码生成", "en": "Text-to-SQL and code generation" }, "benchmarks": ["wikisql", "spider", "ds-1000"] },
+        { "id": "data-transition", "role": "transition", "label": { "zh": "端到端分析与 ML Engineering", "en": "End-to-end analytics and ML engineering" }, "benchmarks": ["spider-2", "mle-bench", "dabstep"] },
+        { "id": "data-workflow", "role": "frontier", "label": { "zh": "多源分析与可靠交付", "en": "Multi-source analytics and reliable delivery" }, "benchmarks": ["dataspace", "dsagentbench", "warehouse-reliability-bench"] },
+        { "id": "data-research", "role": "frontier", "label": { "zh": "可审计研究改进", "en": "Auditable research improvement" }, "benchmarks": ["causalds", "ai4ai-bench", "deltaml-bench"] }
+      ]
+    }
+  ]
+}

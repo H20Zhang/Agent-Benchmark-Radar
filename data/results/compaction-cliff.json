@@ -1,0 +1,18 @@
+{
+  "benchmark_id": "compaction-cliff",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [{
+    "track_id": "five-round-constraint-recall",
+    "primary": true,
+    "label": { "zh": "五轮压缩后的约束保留率", "en": "Constraint recall after five compaction rounds" },
+    "task": "Constraint survival after repeated compaction",
+    "split": "paper evaluation",
+    "protocol_version": "paper-v1",
+    "metric": { "id": "constraint-recall", "family": "recall", "label": "Constraint recall", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "benchmark-ceiling", "source": "https://arxiv.org/abs/2608.22752" } },
+    "entries": [
+      { "id": "sonnet-compact-round5", "method": "Sonnet /compact", "model": "Claude Sonnet", "score": 10, "date": "2026-08-24", "source": "https://arxiv.org/abs/2608.22752", "context": "five rounds" },
+      { "id": "typecompact-round5", "method": "TypeCompact", "model": "Claude Sonnet", "score": 96, "date": "2026-08-24", "source": "https://arxiv.org/abs/2608.22752", "context": "five rounds" }
+    ]
+  }]
+}

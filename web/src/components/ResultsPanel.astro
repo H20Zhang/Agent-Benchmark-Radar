@@ -1,0 +1,105 @@
+---
+import { localize } from "../lib/research-model.mjs";
+import { summarizeTrack } from "../lib/results.mjs";
+
+interface Props {
+  lang: "zh" | "en";
+  resultSet: any;
+}
+
+const { lang, resultSet } = Astro.props;
+const labels = lang === "zh" ? {
+  eyebrow: "Measured progress",
+  title: "当前方法做到什么程度",
+  verified: "最后核验",
+  task: "任务",
+  split: "数据切分",
+  protocol: "协议",
+  method: "方法 / 系统",
+  score: "分数",
+  date: "结果日期",
+  source: "来源",
+  best: "当前最佳",
+  headroom: "到参考目标的归一化空间",
+  direction: "优化方向",
+  higher: "越高越好",
+  lower: "越低越好",
+} : {
+  eyebrow: "Measured progress",
+  title: "How far current methods have progressed",
+  verified: "Last verified",
+  task: "Task",
+  split: "Split",
+  protocol: "Protocol",
+  method: "Method / system",
+  score: "Score",
+  date: "Result date",
+  source: "Source",
+  best: "Current best",
+  headroom: "Normalized headroom to reference target",
+  direction: "Direction",
+  higher: "Higher is better",
+  lower: "Lower is better",
+};
+const statusLabel = resultSet.tracking_status === "live"
+  ? (lang === "zh" ? "动态追踪" : "Live tracking")
+  : (lang === "zh" ? "来源快照" : "Source snapshot");
+---
+
+<section id="results" class="results-panel" aria-labelledby="results-heading">
+  <div class="results-panel__heading">
+    <div><p class="eyebrow">{labels.eyebrow}</p><h2 id="results-heading">{labels.title}</h2></div>
+    <div class="results-panel__status"><span>{statusLabel}</span><time datetime={resultSet.verified_at}>{labels.verified} · {resultSet.verified_at}</time></div>
+  </div>
+
+  <div class="result-tracks">
+    {resultSet.tracks.map((track: any, trackIndex: number) => {
+      const summary = summarizeTrack(track);
+      const metric = track.metric;
+      const sorted = [...track.entries].sort(metric.direction === "lower" ? (a, b) => a.score - b.score : (a, b) => b.score - a.score);
+      const range = metric.range || [Math.min(...track.entries.map((entry: any) => entry.score)), Math.max(...track.entries.map((entry: any) => entry.score))];
+      const span = Math.max(0.0001, range[1] - range[0]);
+      return (
+        <article class="result-track">
+          <header>
+            <div><span>{String(trackIndex + 1).padStart(2, "0")}</span><h3>{localize(track.label, lang)}</h3></div>
+            <div class="result-track__best"><small>{labels.best}</small><strong>{summary.best.score}<em>{metric.unit}</em></strong><span>{summary.best.method}</span></div>
+          </header>
+
+          <dl class="result-contract">
+            <div><dt>{labels.task}</dt><dd>{track.task}</dd></div>
+            <div><dt>{labels.split}</dt><dd>{track.split}</dd></div>
+            <div><dt>{labels.protocol}</dt><dd>{track.protocol_version}</dd></div>
+            <div><dt>{labels.direction}</dt><dd>{metric.direction === "higher" ? labels.higher : labels.lower}</dd></div>
+          </dl>
+
+          <div class="score-bars" aria-hidden="true">
+            {sorted.map((entry: any, index: number) => (
+              <div class="score-bar" style={`--score-width:${Math.max(3, (entry.score - range[0]) / span * 100)}%`}>
+                <span>{String(index + 1).padStart(2, "0")}</span><i></i><b>{entry.score}{metric.unit}</b>
+              </div>
+            ))}
+          </div>
+
+          <div class="result-table-wrap">
+            <table class="result-table">
+              <thead><tr><th>{labels.method}</th><th>{labels.score}</th><th>{labels.date}</th><th>{labels.source}</th></tr></thead>
+              <tbody>
+                {sorted.map((entry: any, index: number) => (
+                  <tr class={index === 0 ? "is-best" : undefined}>
+                    <td><strong>{entry.method}</strong>{entry.model && entry.model !== entry.method && <small>{entry.model}</small>}</td>
+                    <td>{entry.score} {metric.unit}</td>
+                    <td><time datetime={entry.date}>{entry.date}</time></td>
+                    <td><a href={entry.source} rel="noreferrer">{lang === "zh" ? "核验来源" : "Verify source"} ↗</a></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {summary.headroom !== undefined && <p class="result-track__headroom"><span>{labels.headroom}</span><strong>{summary.headroom}%</strong></p>}
+        </article>
+      );
+    })}
+  </div>
+</section>

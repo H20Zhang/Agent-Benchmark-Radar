@@ -3,3 +3,4 @@ __pycache__/
 .radar-private/
 /web/dist/
 /web/.astro/
+/web/node_modules/

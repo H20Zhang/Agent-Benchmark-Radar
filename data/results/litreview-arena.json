@@ -1,0 +1,18 @@
+{
+  "benchmark_id": "litreview-arena",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [{
+    "track_id": "expert-utility-correlation",
+    "primary": true,
+    "label": { "zh": "与专家 Utility 判断的相关性", "en": "Correlation with expert utility judgments" },
+    "task": "Judge alignment with domain-expert literature-review utility",
+    "split": "paper evaluation",
+    "protocol_version": "paper-v1",
+    "metric": { "id": "spearman-rho", "family": "correlation", "label": "Spearman ρ", "unit": "", "direction": "higher", "range": [-1, 1], "reference_target": { "value": 1, "type": "metric-ceiling", "source": "https://arxiv.org/abs/2608.21374" } },
+    "entries": [
+      { "id": "generic-judge", "method": "Generic judge", "model": "Paper generic judge", "score": 0.467, "date": "2026-07-01", "source": "https://arxiv.org/abs/2608.21374" },
+      { "id": "litjudge", "method": "LitJudge", "model": "LitJudge", "score": 0.792, "date": "2026-07-01", "source": "https://arxiv.org/abs/2608.21374" }
+    ]
+  }]
+}

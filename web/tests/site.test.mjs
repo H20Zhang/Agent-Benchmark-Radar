@@ -22,8 +22,10 @@ test("sitePath prefixes the GitHub project base exactly once", () => {
 
 test("locales expose symmetric positive navigation copy", () => {
   assert.deepEqual(LOCALES, ["zh", "en"]);
-  assert.equal(copyFor("zh").nav.explorer, "筛选 Radar");
-  assert.equal(copyFor("en").nav.explorer, "Explore Radar");
+  assert.equal(copyFor("zh").nav.benchmarks, "Benchmarks");
+  assert.equal(copyFor("en").nav.benchmarks, "Benchmarks");
+  assert.equal(copyFor("zh").nav.opportunities, "评测机会");
+  assert.equal(copyFor("en").nav.opportunities, "Opportunities");
   assert.throws(() => copyFor("fr"), /Unsupported locale/);
 });
 
@@ -47,7 +49,9 @@ test("base layout owns canonical, hreflang, social, and JSON-LD metadata", () =>
     'hreflang="en"',
     'hreflang="x-default"',
     'property="og:title"',
+    'property="og:image"',
     'name="twitter:card"',
+    "summary_large_image",
     'type="application/ld+json"',
   ]) {
     assert.ok(layout.includes(token), token);

@@ -3703,7 +3703,7 @@
     "released": "2026-06-13",
     "importance": 3,
     "status": "active",
-    "summary": "Evaluates tool-grounded question answering over irregularly sampled time series with asynchronous observations, informative missingness, and varying frequencies.",
+    "summary": "Evaluates tool-grounded question answering over irregularly sampled time series with asynchronous observations, informative observation gaps, and varying frequencies.",
     "capabilities": [
       "irregular-timeseries-analysis",
       "tool-selection",

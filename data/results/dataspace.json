@@ -1,0 +1,15 @@
+{
+  "benchmark_id": "dataspace",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [{
+    "track_id": "end-to-end-accuracy",
+    "primary": true,
+    "label": { "zh": "端到端表格交付准确率", "en": "End-to-end table-delivery accuracy" },
+    "task": "Verifiable analytics over heterogeneous workspaces",
+    "split": "410 paper tasks",
+    "protocol_version": "paper-v1",
+    "metric": { "id": "accuracy", "family": "accuracy", "label": "Accuracy", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "benchmark-ceiling", "source": "https://arxiv.org/abs/2608.03451" } },
+    "entries": [{ "id": "paper-best", "method": "Best reported agent", "model": "Paper best", "score": 66.34, "date": "2026-08-01", "source": "https://arxiv.org/abs/2608.03451", "context": "best paper result; harness spread at fixed backbone is 15.36 points" }]
+  }]
+}

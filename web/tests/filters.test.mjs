@@ -23,6 +23,10 @@ const fixtures = [
     protocol: ["question-answering"],
     artifacts: { paper: "paper", code: "code" },
     citations: { count: 780 },
+    stableFacets: ["memory-recall", "conversation", "answer-quality"],
+    resultStatus: "tracked",
+    headroomBand: "wide",
+    metricFamily: "accuracy",
   },
   {
     id: "livebrowsecomp",
@@ -37,6 +41,10 @@ const fixtures = [
     protocol: ["agentic-web-search"],
     artifacts: { paper: "paper" },
     citations: { count: 4 },
+    stableFacets: ["live-retrieval", "web", "answer-quality"],
+    resultStatus: "untracked",
+    headroomBand: "unknown",
+    metricFamily: "",
   },
   {
     id: "spider",
@@ -51,6 +59,10 @@ const fixtures = [
     protocol: ["execution-accuracy"],
     artifacts: { paper: "paper", code: "code", data: "data" },
     citations: { count: 2600 },
+    stableFacets: ["text-to-sql", "database", "execution-success"],
+    resultStatus: "tracked",
+    headroomBand: "limited",
+    metricFamily: "execution-accuracy",
   },
 ];
 
@@ -129,4 +141,21 @@ test("facet options expose useful counts", () => {
     { value: "temporal-reasoning", count: 1 },
     { value: "text-to-sql", count: 1 },
   ]);
+});
+
+test("research and result facets round-trip and combine with registry facets", () => {
+  const state = parseFilterState(
+    new URLSearchParams("facet=database&status=tracked&headroom=limited&metric=execution-accuracy&tag=text-to-sql"),
+  );
+
+  assert.deepEqual(state.stableFacets, ["database"]);
+  assert.deepEqual(state.resultStatuses, ["tracked"]);
+  assert.deepEqual(state.headroomBands, ["limited"]);
+  assert.deepEqual(state.metricFamilies, ["execution-accuracy"]);
+  assert.deepEqual(state.rawTags, ["text-to-sql"]);
+  assert.deepEqual(filterBenchmarks(fixtures, state).map((item) => item.id), ["spider"]);
+  assert.equal(
+    serializeFilterState(state),
+    "facet=database&status=tracked&headroom=limited&metric=execution-accuracy&tag=text-to-sql",
+  );
 });

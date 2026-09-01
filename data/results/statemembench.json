@@ -1,0 +1,18 @@
+{
+  "benchmark_id": "statemembench",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [{
+    "track_id": "deepseek-state-score",
+    "primary": true,
+    "label": { "zh": "DeepSeek 同底座状态维护得分", "en": "Same-backbone DeepSeek state-maintenance score" },
+    "task": "Maintain current state under controlled multi-session revision",
+    "split": "322 probes",
+    "protocol_version": "paper-v1",
+    "metric": { "id": "state-score", "family": "accuracy", "label": "State score", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "benchmark-ceiling", "source": "https://arxiv.org/abs/2608.19652" } },
+    "entries": [
+      { "id": "deepseek-base", "method": "Baseline", "model": "DeepSeek", "score": 20.5, "date": "2026-08-20", "source": "https://arxiv.org/abs/2608.19652" },
+      { "id": "deepseek-statemem", "method": "StateMem", "model": "DeepSeek", "score": 36.3, "date": "2026-08-20", "source": "https://arxiv.org/abs/2608.19652" }
+    ]
+  }]
+}

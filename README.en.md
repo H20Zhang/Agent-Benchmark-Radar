@@ -3,18 +3,18 @@
 
 <h1>Agent Benchmark Radar</h1>
 
-<p><strong>Track how agent evaluation evolves and how benchmarks redefine progress.</strong></p>
+<p><strong>Use benchmarks to see current capability, result headroom, and the next research move.</strong></p>
 
 <p>
 Covers <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
-Places each new benchmark in its lineage: what it makes measurable, which baseline it advances, and which evaluation frontier comes next.
+Follow the <b>Benchmark → Results → Opportunity → Frontier</b> loop: find the latest repositories, inspect current scores, assemble research suites, and discover the next coordinate.
 </p>
 
 <p><a href="README.md">中文</a> · <strong>English</strong></p>
 
 <p>
-<a href="https://h20zhang.github.io/Agent-Benchmark-Radar/en/"><strong>Open the interactive Benchmark Radar →</strong></a><br/>
-Filter every benchmark by capability, environment, protocol, and evolution stage.
+<a href="https://h20zhang.github.io/Agent-Benchmark-Radar/en/"><strong>Open the Evaluation Frontier website →</strong></a><br/>
+The website is the complete interactive edition; the README remains a fast surface for browsing, citation, and version review.
 </p>
 
 <p>
@@ -27,13 +27,20 @@ Filter every benchmark by capability, environment, protocol, and evolution stage
 
 ## Start Here
 
+| Research action | Website | Immediate value |
+|---|---|---|
+| **Pick** | [Benchmark Explorer](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/) | Filter recent benchmarks by capability, environment, objective, result status, and reference headroom. |
+| **Build** | [Evaluation Suite Builder](https://h20zhang.github.io/Agent-Benchmark-Radar/en/evaluate/) | Assemble Core / Complement benchmarks from a research claim and export Markdown. |
+| **Discover** | [Opportunity Map](https://h20zhang.github.io/Agent-Benchmark-Radar/en/opportunities/) | Move from current evidence to the next coordinate and an executable evaluation design. |
+| **Track** | [Evaluation Frontier](https://h20zhang.github.io/Agent-Benchmark-Radar/en/frontier/) | See releases, structured results, headroom, frontier shifts, and benchmark genealogies together. |
+
 **Choose your research area first.** Each area provides its own evolution map, evaluation recipes, and complete benchmark registry.
 
-| Area | Questions you are usually asking | Understand the lineage | Build an evaluation | Browse |
+| Area | Research claim | Understand the lineage | Build an evaluation | Browse |
 |---|---|---|---|---|
-| **Agent Memory** | Can long-term memory be recalled, updated, and used for later action? How should multimodal memory, safety, and governance be evaluated? | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [Memory Benchmarks](#registry-memory) |
-| **RAG / Agentic Retrieval** | Can the system find the right evidence, perform complex search, and remain reliable under dynamic corpora and long trajectories? | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [Retrieval Benchmarks](#registry-rag) |
-| **Data Agents** | Can an agent complete SQL, analytics, data-science, and ML-engineering work with verifiable results? | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [Data Agent Benchmarks](#registry-data) |
+| **Agent Memory** | Correct recall, online updates, action utility, multimodal capability, safety, and governance. | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [Memory Benchmarks](#registry-memory) |
+| **RAG / Agentic Retrieval** | Correct evidence, complex search, and sustained reliability under dynamic corpora and long trajectories. | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [Retrieval Benchmarks](#registry-rag) |
+| **Data Agents** | End-to-end, verifiable delivery across SQL, analytics, data science, and ML engineering. | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [Data Agent Benchmarks](#registry-data) |
 
 **Cross-area exploration:** [build an Evaluation Recipe from your claim](#evaluation-recipes) · [see the last 30 days of change](#frontier-signals) · [scan new benchmarks from the last six months](#release-timeline)
 
@@ -51,7 +58,7 @@ An effective evaluation suite starts from the **claim** your paper or system nee
 <a id="recipe-memory"></a>
 ### Agent Memory
 
-| Claim you want to support | Core | Complement | Additional validation needed |
+| Claim you want to support | Core | Complement | Next validation |
 |---|---|---|---|
 | **Long-term conversational memory and temporal reasoning** | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) | [LongMemEval](https://arxiv.org/abs/2410.10813) | Pair with action-oriented evaluation to measure how retained experience improves future action. |
 | **State update and stale-information handling** | [StateMemBench](https://arxiv.org/abs/2608.19652) | [LongMemEval](https://arxiv.org/abs/2410.10813) · [membench (staleness)](https://github.com/Ps23102004/membench) | Use component-level ablations to attribute gains to write, update, and retrieval. |
@@ -62,7 +69,7 @@ An effective evaluation suite starts from the **claim** your paper or system nee
 <a id="recipe-rag"></a>
 ### RAG / Agentic Retrieval
 
-| Claim you want to support | Core | Complement | Additional validation needed |
+| Claim you want to support | Core | Complement | Next validation |
 |---|---|---|---|
 | **Reasoning-intensive retrieval quality** | [BRIGHT](https://arxiv.org/abs/2407.12883) | [BEIR](https://arxiv.org/abs/2104.08663) · [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) | Pair with live, iterative web-search evaluation. |
 | **Deep / long-horizon web search** | [BrowseComp](https://arxiv.org/abs/2504.12516) | [LiveBrowseComp](https://arxiv.org/abs/2605.28721) · [LoHoSearch](https://arxiv.org/abs/2606.12837) | Add trajectory-level diagnostics to localize key failure stages. |
@@ -73,7 +80,7 @@ An effective evaluation suite starts from the **claim** your paper or system nee
 <a id="recipe-data"></a>
 ### Data Agents
 
-| Claim you want to support | Core | Complement | Additional validation needed |
+| Claim you want to support | Core | Complement | Next validation |
 |---|---|---|---|
 | **Text-to-SQL / warehouse task capability** | [Spider 2.0](https://arxiv.org/abs/2411.07763) | [Spider](https://aclanthology.org/D18-1425/) · [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) | Extend evaluation to the full data-understanding, analysis, and delivery workflow. |
 | **End-to-end data-science agent** | [DataSpace](https://arxiv.org/abs/2608.03451) | [DSAgentBench](https://arxiv.org/abs/2608.10366) · [DataClawBench](https://arxiv.org/abs/2605.02503) | Use component-level evaluation to validate statistical and modeling quality. |
@@ -81,7 +88,7 @@ An effective evaluation suite starts from the **claim** your paper or system nee
 | **Statistical and causal analysis** | [CausalDS](https://arxiv.org/abs/2607.08093) | [StatABench](https://arxiv.org/abs/2606.22977) | Extend evaluation to real warehouse, repository, and data-engineering constraints. |
 | **Long-horizon ML engineering / research improvement** | [MLE-bench](https://arxiv.org/abs/2410.07095) | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [AI4AI-Bench](https://arxiv.org/abs/2608.20318) | Pair with BI, warehouse-semantics, and general analytics evaluation. |
 
-> **Usage rule:** Use recipes to align the experimental suite with the paper's claim. Match each benchmark's protocol and address its confounders and coverage boundaries explicitly.
+> **Usage rule:** Use recipes to align the experimental suite with the paper's claim. Match each benchmark's protocol, fair-comparison conditions, and claim-support scope explicitly.
 
 ---
 <!-- EVALUATION-RECIPES:END -->
@@ -98,6 +105,19 @@ An effective evaluation suite starts from the **claim** your paper or system nee
 <!-- FRONTIER-SIGNALS:END -->
 
 Last updated: **2026-08-28**
+
+### Current Result Tracking
+
+The website now maintains source-verified structured result tracks for 12 benchmarks. Every score is bound to its task, split, protocol, metric, direction, date, and primary source.
+
+| Benchmark | Verified coordinate | Current best | Research entry |
+|---|---|---:|---|
+| **SCALE-QA** | 128K Full Context accuracy | 29.8% | [Inspect results and 70.2% reference headroom](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/scale-qa/#results) |
+| **StateMemBench** | Same-backbone state-maintenance score | 36.3% | [Compare methods](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/statemembench/#results) |
+| **DeltaML-Bench** | 4×6h per-run success | 33.9% | [Inspect long-horizon improvement headroom](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/deltaml-bench/#results) |
+| **DSAgentBench** | Complete data-science task success | 56.7% | [Inspect end-to-end results](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/dsagentbench/#results) |
+| **DataSpace** | End-to-end table-delivery accuracy | 66.34% | [Inspect multi-source workspace results](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/dataspace/#results) |
+| **The Compaction Cliff** | Five-round constraint recall | 96% | [Compare compaction methods](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/compaction-cliff/#results) |
 
 <a id="release-timeline"></a>
 ## Benchmark Timeline: Last Six Months
@@ -151,7 +171,7 @@ Last updated: **2026-08-28**
 | 2026-06-22 | Data Agent | [StatABench](https://arxiv.org/abs/2606.22977) <!-- benchmark-id:statabench --> | Statistical knowledge, tool selection and parameterization, plus open end-to-end modeling and reporting. |
 | 2026-06-22 | Agent Memory | [DynamicMem](https://arxiv.org/abs/2606.22877) <!-- benchmark-id:dynamicmem --> | Inference and updating of user attributes, habits, and preferences from fifteen months of multi-app behavior. |
 | 2026-06-17 | Agent Memory | [GateMem](https://arxiv.org/abs/2606.18829) <!-- benchmark-id:gatemem --> | Utility, access control, and active forgetting in multi-principal shared memory. |
-| 2026-06-13 | Data Agent | [IRTS-ToolBench](https://arxiv.org/abs/2606.15107) <!-- benchmark-id:irts-toolbench --> | Tool-grounded QA over asynchronous, missing, variably sampled irregular time series. |
+| 2026-06-13 | Data Agent | [IRTS-ToolBench](https://arxiv.org/abs/2606.15107) <!-- benchmark-id:irts-toolbench --> | Tool-grounded QA over asynchronous, variably sampled time series with informative observation gaps. |
 | 2026-06-11 | RAG | [LoHoSearch](https://arxiv.org/abs/2606.12837) <!-- benchmark-id:lohosearch --> | Long-horizon search under large candidate spaces, complex constraints, and context-management pressure. |
 | 2026-06-11 | RAG | [EvoBrowseComp](https://arxiv.org/abs/2606.13120) <!-- benchmark-id:evobrowsecomp --> | Broad English and Chinese web search over evolving knowledge. |
 | 2026-06-03 | Agent Memory | [MPBench](https://arxiv.org/abs/2606.04329) <!-- benchmark-id:mpbench --> | Write success and conditional later-session retrieval for six persistent-memory poisoning classes. |
@@ -226,7 +246,7 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:agent-memory:END -->
 
-**Interactive filters:** [Open the Agent Memory Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/?area=agent-memory#explorer)
+**Interactive filters:** [Open the Agent Memory Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/?area=agent-memory)
 
 <a id="benchmark-rag"></a>
 ### RAG / Agentic Retrieval
@@ -259,7 +279,7 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:rag:END -->
 
-**Interactive filters:** [Open the RAG / Agentic Retrieval Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/?area=rag#explorer)
+**Interactive filters:** [Open the RAG / Agentic Retrieval Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/?area=rag)
 
 <a id="benchmark-data"></a>
 ### Data Agents
@@ -292,15 +312,15 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:data-agent:END -->
 
-**Interactive filters:** [Open the Data Agent Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/?area=data-agent#explorer)
+**Interactive filters:** [Open the Data Agent Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/?area=data-agent)
 
 <a id="all-benchmarks"></a>
 ## All Benchmarks by Area
 
-all 125 benchmarks in the registry remain directly scannable here. The Library is an alternate canonical browse surface, not a reason to remove these tables from README.
+All 125 registry benchmarks remain directly scannable in the README, while the website adds filtering, comparison, and result-aware exploration.
 
 <!-- CITATION-META:START -->
-Citation counts are from Semantic Scholar, last refreshed **2026-08-31**; `—` means no paper could be matched. Counts are context for adoption, not an input to stage labels.
+Citation counts are from Semantic Scholar, last refreshed **2026-08-31**; `—` marks records led by a code or data entry while paper matching remains under verification. Counts provide adoption context; measurement evolution determines stage labels.
 <!-- CITATION-META:END -->
 
 <a id="registry-memory"></a>
@@ -442,7 +462,7 @@ Citation counts are from Semantic Scholar, last refreshed **2026-08-31**; `—` 
 | 🔭 Frontier | [TML-Bench](https://arxiv.org/abs/2603.05764) <!-- benchmark-id:tml-bench --> | [2](https://www.semanticscholar.org/paper/83d1649c2fb9e8ea0d8d6e2eb4071a6aeceb6163) | 2026-03-05 | Reliable end-to-end tabular-ML submissions under fixed wall-clock budgets and hidden labels. |
 | 🔭 Frontier | [AgentFuel](https://arxiv.org/abs/2603.12483) <!-- benchmark-id:agentfuel --> | [1](https://www.semanticscholar.org/paper/310cc57e018fec7b41ac9ffa95ef04fe7bea432b) | 2026-03-12 | Domain-customized functional evaluation of conversational time-series agents, especially stateful and incident-specific queries. |
 | 🔭 Frontier | [DataClawBench](https://arxiv.org/abs/2605.02503) <!-- benchmark-id:dataclawbench --> | [0](https://www.semanticscholar.org/paper/52d44ba95a8044cfb8f1f798c63deabefef06855) | 2026-05-04 | Low-prior exploratory analysis over unfamiliar, noisy, cross-domain financial data with verifiable conclusions. |
-| 🔭 Frontier | [IRTS-ToolBench](https://arxiv.org/abs/2606.15107) <!-- benchmark-id:irts-toolbench --> | [0](https://www.semanticscholar.org/paper/db7f79b56c8dbb846510867063c07a20bdd29b23) | 2026-06-13 | Tool-grounded QA over asynchronous, missing, variably sampled irregular time series. |
+| 🔭 Frontier | [IRTS-ToolBench](https://arxiv.org/abs/2606.15107) <!-- benchmark-id:irts-toolbench --> | [0](https://www.semanticscholar.org/paper/db7f79b56c8dbb846510867063c07a20bdd29b23) | 2026-06-13 | Tool-grounded QA over asynchronous, variably sampled time series with informative observation gaps. |
 | 🔭 Frontier | [StatABench](https://arxiv.org/abs/2606.22977) <!-- benchmark-id:statabench --> | [0](https://www.semanticscholar.org/paper/237728a651e017c40279683f250603ee1329c8cd) | 2026-06-22 | Statistical knowledge, tool selection and parameterization, plus open end-to-end modeling and reporting. |
 | 🔭 Frontier | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | [4](https://www.semanticscholar.org/paper/737422a2cb857d6f59da6d51036d7ec14fc73fe6) | 2026-07 | Benchmarks data agents across realistic data-science workflows using a skill taxonomy to quantify fine-grained coverage. |
 | 🔭 Frontier | [CausalDS](https://arxiv.org/abs/2607.08093) <!-- benchmark-id:causalds --> | [0](https://www.semanticscholar.org/paper/9b3b77ebcc2bc86a07c3ae6c202aa03fddb656ab) | 2026-07-09 | Executable causal data science across prediction, identification, effects, counterfactuals, uncertainty, and abstention. |
@@ -470,9 +490,9 @@ Citation counts are from Semantic Scholar, last refreshed **2026-08-31**; `—` 
 
 | Question | Start here | Then continue |
 |---|---|---|
-| **How did memory move from recall to action and governance?** | Multi-Session Chat → LoCoMo / LongMemEval → MemoryArena / WorldMemArena → GateMem / PerMemSafe / InMind | [Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) |
-| **How did retrieval become live, auditable search?** | BEIR / BRIGHT → BrowseComp / LiveBrowseComp → Bright-Pro / LoHoSearch / SearchAuditBench / VAKRA → MAPLE / VisDocAgentBench / WANDR | [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) |
-| **How did data-agent evaluation move from SQL/code to reliable data work?** | Spider / DS-1000 → KramaBench / DABstep → DataClawBench / DSGym → DataSpace / DSAgentBench / WarehouseReliabilityBench | [Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar#field-map) |
+| **Memory evaluation: from recall to action and governance** | Multi-Session Chat → LoCoMo / LongMemEval → MemoryArena / WorldMemArena → GateMem / PerMemSafe / InMind | [Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) |
+| **Retrieval evaluation: from relevance to live, auditable search** | BEIR / BRIGHT → BrowseComp / LiveBrowseComp → Bright-Pro / LoHoSearch / SearchAuditBench / VAKRA → MAPLE / VisDocAgentBench / WANDR | [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) |
+| **Data-agent evaluation: from SQL/code to reliable data work** | Spider / DS-1000 → KramaBench / DABstep → DataClawBench / DSGym → DataSpace / DSAgentBench / WarehouseReliabilityBench | [Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar#field-map) |
 
 <a id="library"></a>
 ## Benchmark Library

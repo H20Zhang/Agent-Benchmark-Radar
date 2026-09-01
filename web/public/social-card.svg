@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Agent Benchmark Radar</title>
+  <desc id="desc">Evaluation Frontier: Benchmark, Results, Opportunity, Frontier</desc>
+  <rect width="1200" height="630" fill="#f4f1e8"/>
+  <path d="M0 74h1200M0 556h1200M72 0v630M1128 0v630" stroke="#132738" stroke-opacity=".18"/>
+  <g transform="translate(850 315)">
+    <circle r="210" fill="#132738"/>
+    <circle r="155" fill="none" stroke="#f4f1e8" stroke-opacity=".25" stroke-width="2"/>
+    <circle r="95" fill="none" stroke="#f4f1e8" stroke-opacity=".25" stroke-dasharray="7 9" stroke-width="2"/>
+    <path d="M-210 0h420M0-210v420" stroke="#f4f1e8" stroke-opacity=".16" stroke-width="2"/>
+    <path d="M0 0 126-102" stroke="#a8f04a" stroke-width="12" stroke-linecap="round"/>
+    <circle r="17" fill="#ff6b4a"/>
+    <circle cx="126" cy="-102" r="12" fill="#a8f04a" stroke="#132738" stroke-width="5"/>
+  </g>
+  <g fill="#132738">
+    <text x="74" y="126" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" font-weight="700" letter-spacing="4">EVALUATION FRONTIER</text>
+    <text x="68" y="244" font-family="Inter, Arial, sans-serif" font-size="82" font-weight="850" letter-spacing="-5">Agent</text>
+    <text x="68" y="326" font-family="Inter, Arial, sans-serif" font-size="82" font-weight="850" letter-spacing="-5">Benchmark</text>
+    <text x="68" y="408" font-family="Inter, Arial, sans-serif" font-size="82" font-weight="850" letter-spacing="-5">Radar</text>
+    <text x="74" y="502" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">Benchmark → Results → Opportunity → Frontier</text>
+  </g>
+</svg>

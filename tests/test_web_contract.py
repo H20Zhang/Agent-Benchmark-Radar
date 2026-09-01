@@ -55,7 +55,8 @@ class WebPublicationContractTest(unittest.TestCase):
         self.assertNotIn("coverage_gap", source)
         self.assertNotIn("```mermaid", source)
         self.assertIn("data-filter-form", source)
-        self.assertIn("hero-radar", source)
+        self.assertIn("evaluation-loop", source)
+        self.assertIn("data-suite-builder", source)
 
 
 if __name__ == "__main__":

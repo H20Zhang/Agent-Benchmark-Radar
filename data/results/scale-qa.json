@@ -1,0 +1,15 @@
+{
+  "benchmark_id": "scale-qa",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [{
+    "track_id": "128k-full-context-accuracy",
+    "primary": true,
+    "label": { "zh": "128K Full Context 准确率", "en": "128K Full Context accuracy" },
+    "task": "Operative-episode reconstruction at 128K context",
+    "split": "paper evaluation",
+    "protocol_version": "paper-v1",
+    "metric": { "id": "accuracy", "family": "accuracy", "label": "Accuracy", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "benchmark-ceiling", "source": "https://arxiv.org/abs/2608.25655" } },
+    "entries": [{ "id": "gpt-4o-mini-full-context", "method": "Full Context", "model": "GPT-4o-mini", "score": 29.8, "date": "2026-08-26", "source": "https://arxiv.org/abs/2608.25655", "context": "128K; evidence containment 100%" }]
+  }]
+}

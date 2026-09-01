@@ -10,6 +10,12 @@ interface Props {
 const { lang, alternatePath = localePath(lang === "zh" ? "en" : "zh") } =
   Astro.props;
 const copy = copyFor(lang);
+const path = Astro.url.pathname;
+const navItems = [
+  { href: localePath(lang, "benchmarks/"), label: copy.nav.benchmarks, key: "/benchmarks/" },
+  { href: localePath(lang, "opportunities/"), label: copy.nav.opportunities, key: "/opportunities/" },
+  { href: localePath(lang, "frontier/"), label: copy.nav.frontier, key: "/frontier/" },
+];
 ---
 
 <header class="site-header">
@@ -21,9 +27,15 @@ const copy = copyFor(lang);
       <span class="site-brand__name">Agent<br />Benchmark Radar</span>
     </a>
     <nav class="site-nav" aria-label={lang === "zh" ? "主导航" : "Primary navigation"}>
-      <a href={sitePath(`${localePath(lang)}#explorer`)}>{copy.nav.explorer}</a>
-      <a href={sitePath(localePath(lang, "methodology/"))}>{copy.nav.methodology}</a>
-      <a href={REPOSITORY_URL} rel="noreferrer">{copy.nav.github}<span aria-hidden="true">↗</span></a>
+      <div class="site-nav__primary">
+        {navItems.map((item) => (
+          <a href={sitePath(item.href)} aria-current={path.includes(item.key) ? "page" : undefined}>{item.label}</a>
+        ))}
+      </div>
+      <div class="site-nav__utility">
+        <a class="site-nav__evaluate" href={sitePath(localePath(lang, "evaluate/"))}>{copy.nav.evaluate}</a>
+        <a href={REPOSITORY_URL} rel="noreferrer" aria-label={`${copy.nav.github} ↗`}>{copy.nav.github}<span aria-hidden="true">↗</span></a>
+      </div>
       <a class="site-nav__language" href={sitePath(alternatePath)} hreflang={lang === "zh" ? "en" : "zh-CN"}>
         {copy.nav.language}
       </a>

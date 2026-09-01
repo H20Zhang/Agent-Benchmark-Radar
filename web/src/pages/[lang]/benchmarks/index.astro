@@ -1,0 +1,63 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/Header.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+import Explorer from "../../../components/Explorer.astro";
+
+import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
+import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
+import { loadRegistry } from "../../../lib/registry.mjs";
+import { getStableFacets, loadResearchModel } from "../../../lib/research-model.mjs";
+import { loadAllResultSets } from "../../../lib/results.mjs";
+import { absoluteUrl, localePath } from "../../../lib/site.mjs";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+interface Props { lang: "zh" | "en"; }
+const { lang } = Astro.props;
+const copy = copyFor(lang);
+const items = [...loadRegistry()];
+const summaries = loadChineseSummaries();
+loadResearchModel();
+const stableFacets = getStableFacets(items);
+const resultSets = loadAllResultSets();
+const canonicalPath = localePath(lang, "benchmarks/");
+const alternatePath = localePath(lang === "zh" ? "en" : "zh", "benchmarks/");
+const title = lang === "zh" ? "Agent Benchmark Explorer｜筛选最新评测、结果与研究坐标" : "Agent Benchmark Explorer | Find Evaluations, Results, and Research Coordinates";
+const description = lang === "zh"
+  ? "按研究领域、能力、环境、评测目标、结果覆盖与参考空间筛选 Agent Benchmark。"
+  : "Filter agent benchmarks by research area, capability, environment, evaluation objective, result coverage, and reference headroom.";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: absoluteUrl(canonicalPath),
+  inLanguage: copy.langTag,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(localePath(lang, `benchmarks/${item.id}/`)),
+    })),
+  },
+};
+---
+
+<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="radar-page explorer-v2-page">
+  <Header {lang} alternatePath={alternatePath} />
+  <main id="main-content">
+    <section class="explorer-hero shell">
+      <div><p class="eyebrow">Benchmark explorer</p><h1>{lang === "zh" ? "找到能支撑研究判断的评测" : "Find evaluations that support your research claim"}</h1></div>
+      <p>{description}</p>
+      <dl><div><dt>Registry</dt><dd>{items.length}</dd></div><div><dt>{lang === "zh" ? "结构化结果" : "Result sets"}</dt><dd>{resultSets.size}</dd></div><div><dt>{lang === "zh" ? "稳定筛选维度" : "Stable dimensions"}</dt><dd>{stableFacets.length}</dd></div></dl>
+    </section>
+    <Explorer {lang} {items} {summaries} {stableFacets} {resultSets} />
+  </main>
+  <SiteFooter {lang} />
+</BaseLayout>

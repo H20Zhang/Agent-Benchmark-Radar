@@ -9,9 +9,11 @@ interface Props {
   lang: "zh" | "en";
   items: any[];
   summaries: ReadonlyMap<string, string>;
+  stableFacets: any[];
+  resultSets: Map<string, any>;
 }
 
-const { lang, items, summaries } = Astro.props;
+const { lang, items, summaries, stableFacets, resultSets } = Astro.props;
 const copy = copyFor(lang);
 const sorted = sortBenchmarks(items, "newest");
 ---
@@ -19,7 +21,7 @@ const sorted = sortBenchmarks(items, "newest");
 <section id="explorer" class="explorer" data-explorer data-lang={lang}>
   <div class="explorer__layout">
     <aside class="explorer__filters">
-      <FilterPanel {lang} {items} />
+      <FilterPanel {lang} {items} {stableFacets} {resultSets} />
     </aside>
     <div class="explorer__results">
       <div class="results-toolbar">
@@ -28,7 +30,7 @@ const sorted = sortBenchmarks(items, "newest");
           <span>{copy.filters.results}</span>
         </p>
         <span class="results-toolbar__line" aria-hidden="true"></span>
-        <span class="results-toolbar__mode">Registry view · v1</span>
+        <span class="results-toolbar__mode">Evaluation frontier · v2</span>
       </div>
       <div class="benchmark-grid" data-result-grid>
         {sorted.map((item) => (
@@ -36,6 +38,7 @@ const sorted = sortBenchmarks(items, "newest");
             {lang}
             {item}
             summary={lang === "zh" ? summaries.get(item.id) || item.summary : item.summary}
+            resultSet={resultSets.get(item.id)}
           />
         ))}
       </div>

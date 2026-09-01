@@ -1,0 +1,20 @@
+{
+  "benchmark_id": "dreambench-swe",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [{
+    "track_id": "s3-hidden-oracle-success",
+    "primary": true,
+    "label": { "zh": "S3 hidden-oracle 成功率", "en": "S3 hidden-oracle success" },
+    "task": "Multi-session coding-memory hygiene under hidden executable oracles",
+    "split": "180 S3 cells per complete condition",
+    "protocol_version": "v2",
+    "metric": { "id": "success-rate", "family": "success-rate", "label": "Success rate", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "benchmark-ceiling", "source": "https://arxiv.org/abs/2608.20664" } },
+    "entries": [
+      { "id": "b0", "method": "B0", "model": "Paper system", "score": 11.67, "date": "2026-08-21", "source": "https://arxiv.org/abs/2608.20664", "context": "21/180" },
+      { "id": "b5", "method": "B5", "model": "Paper system", "score": 45.56, "date": "2026-08-21", "source": "https://arxiv.org/abs/2608.20664", "context": "82/180" },
+      { "id": "typed-raw", "method": "Typed + raw reference probe", "model": "Paper system", "score": 46.11, "date": "2026-08-21", "source": "https://arxiv.org/abs/2608.20664", "context": "83/180" },
+      { "id": "mem0-pinned", "method": "Mem0 pinned literal storage", "model": "Paper system", "score": 53.89, "date": "2026-08-21", "source": "https://arxiv.org/abs/2608.20664", "context": "97/180" }
+    ]
+  }]
+}

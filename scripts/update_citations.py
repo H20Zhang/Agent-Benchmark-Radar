@@ -355,9 +355,9 @@ def _patch_area_block(block: str, records_by_id: dict[str, dict[str, object]], l
 
 def _citation_note(language: str, today: str) -> str:
     if language == "zh":
-        body = f"引用数来自 Semantic Scholar，最后刷新 **{today}**；`—` 表示暂无可匹配论文。引用数仅作影响力上下文，不参与阶段划分。"
+        body = f"引用数来自 Semantic Scholar，最后刷新 **{today}**；`—` 标记以代码或数据为主要入口、论文匹配仍在核验的记录。引用数呈现影响力背景，阶段由测量演进判断。"
     else:
-        body = f"Citation counts are from Semantic Scholar, last refreshed **{today}**; `—` means no paper could be matched. Counts are context for adoption, not an input to stage labels."
+        body = f"Citation counts are from Semantic Scholar, last refreshed **{today}**; `—` marks records led by a code or data entry while paper matching remains under verification. Counts provide adoption context; measurement evolution determines stage labels."
     return f"<!-- CITATION-META:START -->\n{body}\n<!-- CITATION-META:END -->"
 
 

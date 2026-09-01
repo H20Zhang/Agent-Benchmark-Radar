@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/Header.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+
+import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
+import { loadRegistry } from "../../../lib/registry.mjs";
+import { loadResearchModel, localize } from "../../../lib/research-model.mjs";
+import { getProgressPoint, loadAllResultSets } from "../../../lib/results.mjs";
+import { absoluteUrl, localePath, sitePath } from "../../../lib/site.mjs";
+
+export function getStaticPaths() { return LOCALES.map((lang) => ({ params: { lang }, props: { lang } })); }
+interface Props { lang: "zh" | "en"; }
+const { lang } = Astro.props;
+const copy = copyFor(lang);
+const items = [...loadRegistry()];
+const byId = new Map(items.map((item) => [item.id, item]));
+const research = loadResearchModel();
+const resultSets = loadAllResultSets();
+const progressPoints: any[] = [];
+for (const resultSet of resultSets.values()) {
+  const item = byId.get(resultSet.benchmark_id);
+  if (!item) continue;
+  const point = getProgressPoint(item, resultSet, new Date("2026-09-01T00:00:00Z"));
+  if (point.headroom !== undefined) progressPoints.push({ item, resultSet, point });
+}
+const maxAge = Math.max(...progressPoints.map((entry) => entry.point.ageDays), 1);
+const plot: any[] = progressPoints.map((entry) => ({ ...entry, x: 8 + (entry.point.ageDays / maxAge) * 84, y: 88 - Math.min(80, entry.point.headroom) }));
+const canonicalPath = localePath(lang, "frontier/");
+const alternatePath = localePath(lang === "zh" ? "en" : "zh", "frontier/");
+const title = lang === "zh" ? "Agent Evaluation Frontier｜追踪 Benchmark、成绩与研究进展" : "Agent Evaluation Frontier | Track Benchmarks, Results, and Research Progress";
+const description = lang === "zh" ? "把最新发布、成绩推进、Benchmark 谱系和评测范式变化放在同一张前沿地图中。" : "Place new releases, result progress, benchmark genealogy, and evaluation paradigm shifts on one frontier map.";
+const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: title, description, url: absoluteUrl(canonicalPath), inLanguage: copy.langTag };
+---
+
+<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="radar-page frontier-page">
+  <Header {lang} alternatePath={alternatePath} />
+  <main id="main-content">
+    <section class="tool-hero shell"><p class="eyebrow">Evaluation frontier</p><h1>{lang === "zh" ? "看见评测前沿怎样移动" : "See how the evaluation frontier moves"}</h1><p>{description}</p></section>
+
+    <section class="frontier-progress">
+      <div class="shell">
+        <header class="frontier-section-heading"><div><p class="eyebrow">Benchmark progress map</p><h2>{lang === "zh" ? "新鲜度 × 参考空间" : "Freshness × reference headroom"}</h2></div><p>{lang === "zh" ? "横轴从较早发布走向较新发布；纵轴越高，表示当前最佳分数到明确参考目标仍有更大空间。" : "The x-axis moves from older to newer releases; higher points indicate more room between the current best and an explicit reference target."}</p></header>
+        <div class="progress-map">
+          <svg viewBox="0 0 100 100" role="img" aria-label={lang === "zh" ? "Benchmark 新鲜度和参考空间散点图" : "Benchmark freshness and reference headroom scatter plot"}>
+            <path class="progress-map__grid" d="M8 8V88H96M8 28H96M8 48H96M8 68H96M30 8V88M52 8V88M74 8V88" />
+            {plot.map(({ item, point, x, y }) => <a href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}><circle class={`progress-map__point progress-map__point--${item.area}`} cx={x} cy={y} r={Math.min(3.6, 1.5 + point.activity * 0.25)}><title>{item.name} · {point.best} · {point.headroom}% headroom</title></circle></a>)}
+          </svg>
+          <div class="progress-map__x"><span>{lang === "zh" ? "较早发布" : "Older"}</span><span>{lang === "zh" ? "最近发布" : "Newer"}</span></div>
+          <div class="progress-map__legend">{Object.entries(copy.areas).map(([area, value]: any) => <span data-area={area}><i></i>{value.label}</span>)}</div>
+        </div>
+        <div class="progress-list">{[...plot].sort((a, b) => b.point.headroom - a.point.headroom).slice(0, 6).map(({ item, point }) => <a href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}><span>{copy.areas[item.area].label}</span><strong>{item.name}</strong><b>{point.headroom}% <small>{lang === "zh" ? "参考空间" : "headroom"}</small></b><time datetime={point.lastResultDate}>{point.lastResultDate}</time></a>)}</div>
+      </div>
+    </section>
+
+    <section class="frontier-shifts shell">
+      <header class="frontier-section-heading"><div><p class="eyebrow">Frontier shifts</p><h2>{lang === "zh" ? "最近改变测量边界的进展" : "Recent moves that changed the measurement boundary"}</h2></div><p>{lang === "zh" ? "这里联合记录新发布、评测对象演进与研究结论变化。" : "These shifts connect new releases with changes in evaluation objects and research conclusions."}</p></header>
+      <div class="frontier-shift-list">{research.frontierShifts.map((shift: any, index: number) => <article data-area={shift.area}><span>{String(index + 1).padStart(2, "0")} · {shift.period}</span><div><p class="eyebrow">{copy.areas[shift.area].label}</p><h3>{localize(shift.title, lang)}</h3></div><p>{localize(shift.delta, lang)}</p><strong>{localize(shift.consequence, lang)}</strong><div class="frontier-shift-list__benchmarks">{shift.benchmarks.map((id: string) => <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{byId.get(id)?.name}</a>)}</div></article>)}</div>
+    </section>
+
+    <section class="frontier-genealogy">
+      <div class="shell">
+        <header class="frontier-section-heading"><div><p class="eyebrow">Benchmark genealogy</p><h2>{lang === "zh" ? "三个领域的测量演进" : "Measurement evolution across three fields"}</h2></div><p>{lang === "zh" ? "每条谱系从基础能力锚点走向当前前沿，让新 Benchmark 的位置更加直观。" : "Each genealogy moves from foundation anchors to the current frontier, making the role of new benchmarks explicit."}</p></header>
+        <div class="frontier-genealogy__areas">{research.genealogy.areas.map((genealogy: any) => <section data-area={genealogy.id}><header><span>{copy.areas[genealogy.id].label}</span><p>{localize(genealogy.thesis, lang)}</p></header><div>{genealogy.stages.map((stage: any, index: number) => <article><b>{String(index + 1).padStart(2, "0")}</b><h3>{localize(stage.label, lang)}</h3><div>{stage.benchmarks.map((id: string) => <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{byId.get(id)?.name}</a>)}</div></article>)}</div></section>)}</div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter {lang} />
+</BaseLayout>

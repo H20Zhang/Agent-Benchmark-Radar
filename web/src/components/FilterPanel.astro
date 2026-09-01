@@ -1,36 +1,29 @@
 ---
 import { AREAS, copyFor } from "../lib/i18n.mjs";
-import { buildFacetOptions } from "../lib/filters.mjs";
-import { displayToken, localePath, sitePath } from "../lib/site.mjs";
+import { localePath, sitePath } from "../lib/site.mjs";
+import { localize } from "../lib/research-model.mjs";
 
 interface Props {
   lang: "zh" | "en";
   items: any[];
+  stableFacets: any[];
+  resultSets: Map<string, any>;
 }
 
-const { lang, items } = Astro.props;
+const { lang, items, stableFacets, resultSets } = Astro.props;
 const copy = copyFor(lang);
-const years = [...new Set(items.map((item) => Number(item.released.slice(0, 4))))].sort(
-  (left, right) => right - left,
-);
-const capabilities = buildFacetOptions(items, "capabilities");
-const environments = buildFacetOptions(items, "environment");
-const protocols = buildFacetOptions(items, "protocol");
-const allLabel = lang === "zh" ? "全部" : "All";
-const applyLabel = lang === "zh" ? "应用条件" : "Apply filters";
+const years = [...new Set(items.map((item) => Number(item.released.slice(0, 4))))]
+  .sort((left, right) => right - left);
+const metricFamilies = [...new Set(
+  [...resultSets.values()].flatMap((resultSet) => resultSet.tracks.map((track: any) => track.metric.family)),
+)].sort();
+const allLabel = lang === "zh" ? "全部年份" : "All years";
+const counts = { tracked: resultSets.size, untracked: items.length - resultSets.size };
 ---
 
-<form
-  class="filter-panel"
-  action={sitePath(localePath(lang))}
-  method="get"
-  data-filter-form
->
+<form class="filter-panel filter-panel--v2" action={sitePath(localePath(lang, "benchmarks/"))} method="get" data-filter-form>
   <div class="filter-panel__heading">
-    <div>
-      <p class="eyebrow">Research controls</p>
-      <h2>{copy.filters.title}</h2>
-    </div>
+    <div><p class="eyebrow">Research controls</p><h2>{copy.filters.title}</h2></div>
     <button class="filter-reset" type="reset" data-reset-filters>{copy.filters.reset}</button>
   </div>
 
@@ -38,100 +31,64 @@ const applyLabel = lang === "zh" ? "应用条件" : "Apply filters";
     <span>{copy.filters.search}</span>
     <span class="search-control__field">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
-      <input
-        type="search"
-        name="q"
-        autocomplete="off"
-        placeholder={copy.filters.searchPlaceholder}
-      />
+      <input type="search" name="q" autocomplete="off" placeholder={copy.filters.searchPlaceholder} />
     </span>
   </label>
 
-  <fieldset class="filter-group">
+  <fieldset class="filter-group filter-group--areas">
     <legend>{copy.filters.area}</legend>
     <div class="segmented-control segmented-control--areas">
-      {AREAS.map((area) => (
-        <label data-area={area}>
-          <input type="checkbox" name="area" value={area} />
-          <span>{copy.areas[area].label}</span>
-        </label>
-      ))}
+      {AREAS.map((area) => <label data-area={area}><input type="checkbox" name="area" value={area} /><span>{copy.areas[area].label}</span></label>)}
     </div>
   </fieldset>
 
-  <fieldset class="filter-group">
-    <legend>{copy.filters.role}</legend>
-    <div class="chip-control">
-      {Object.entries(copy.roles).map(([role, label]) => (
-        <label>
-          <input type="checkbox" name="role" value={role} />
-          <span>{label}</span>
-        </label>
+  <div class="filter-panel__quick-row">
+    <label class="select-control"><span>{copy.filters.year}</span><select name="year"><option value="">{allLabel}</option>{years.map((year) => <option value={year}>{year}</option>)}</select></label>
+    <label class="select-control select-control--sort"><span>{copy.filters.sort}</span><select name="sort">{Object.entries(copy.filters.sortOptions).map(([value, label]) => <option value={value}>{label}</option>)}</select></label>
+  </div>
+
+  <details class="refine-panel">
+    <summary><span><b>{copy.filters.advanced}</b><small>{copy.filters.advancedHint}</small></span><span aria-hidden="true">＋</span></summary>
+    <div class="refine-panel__body">
+      <fieldset class="filter-group">
+        <legend>{copy.filters.resultStatus}</legend>
+        <div class="chip-control chip-control--counts">
+          <label><input type="checkbox" name="status" value="tracked" /><span>{copy.filters.tracked}<small>{counts.tracked}</small></span></label>
+          <label><input type="checkbox" name="status" value="untracked" /><span>{copy.filters.registryOnly}<small>{counts.untracked}</small></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="filter-group">
+        <legend>{copy.filters.headroom}</legend>
+        <div class="chip-control">
+          <label><input type="checkbox" name="headroom" value="wide" /><span>{copy.filters.headroomWide}</span></label>
+          <label><input type="checkbox" name="headroom" value="moderate" /><span>{copy.filters.headroomModerate}</span></label>
+          <label><input type="checkbox" name="headroom" value="limited" /><span>{copy.filters.headroomLimited}</span></label>
+        </div>
+      </fieldset>
+
+      {metricFamilies.length > 0 && <fieldset class="filter-group"><legend>{copy.filters.metric}</legend><div class="chip-control">{metricFamilies.map((metric) => <label><input type="checkbox" name="metric" value={metric} /><span>{metric}</span></label>)}</div></fieldset>}
+
+      {stableFacets.map((facet) => (
+        <details class="facet-disclosure" data-facet-area={facet.area || ""}>
+          <summary><span>{localize(facet.label, lang)}</span><small>{facet.options.length}</small></summary>
+          <div class="chip-control chip-control--counts">
+            {facet.options.map((option: any) => <label><input type="checkbox" name="facet" value={option.id} /><span>{localize(option.label, lang)}<small>{option.count}</small></span></label>)}
+          </div>
+        </details>
       ))}
-    </div>
-  </fieldset>
 
-  <fieldset class="filter-group">
-    <legend>{copy.filters.artifact}</legend>
-    <div class="chip-control">
-      {Object.entries(copy.artifacts).map(([artifact, label]) => (
-        <label>
-          <input type="checkbox" name="artifact" value={artifact} />
-          <span>{label}</span>
-        </label>
-      ))}
-    </div>
-  </fieldset>
+      <fieldset class="filter-group"><legend>{copy.filters.role}</legend><div class="chip-control">{Object.entries(copy.roles).map(([role, label]) => <label><input type="checkbox" name="role" value={role} /><span>{label}</span></label>)}</div></fieldset>
+      <fieldset class="filter-group"><legend>{copy.filters.artifact}</legend><div class="chip-control">{Object.entries(copy.artifacts).map(([artifact, label]) => <label><input type="checkbox" name="artifact" value={artifact} /><span>{label}</span></label>)}</div></fieldset>
 
-  <label class="select-control">
-    <span>{copy.filters.year}</span>
-    <select name="year">
-      <option value="">{allLabel}</option>
-      {years.map((year) => <option value={year}>{year}</option>)}
-    </select>
-  </label>
-
-  <details class="advanced-filters">
-    <summary>{copy.filters.advanced}<span aria-hidden="true">＋</span></summary>
-    <div class="advanced-filters__grid">
-      <label class="select-control">
-        <span>{copy.filters.capability}</span>
-        <select name="capability">
-          <option value="">{allLabel}</option>
-          {capabilities.map(({ value, count }) => (
-            <option value={value}>{displayToken(value)} · {count}</option>
-          ))}
-        </select>
-      </label>
-      <label class="select-control">
-        <span>{copy.filters.environment}</span>
-        <select name="environment">
-          <option value="">{allLabel}</option>
-          {environments.map(({ value, count }) => (
-            <option value={value}>{displayToken(value)} · {count}</option>
-          ))}
-        </select>
-      </label>
-      <label class="select-control">
-        <span>{copy.filters.protocol}</span>
-        <select name="protocol">
-          <option value="">{allLabel}</option>
-          {protocols.map(({ value, count }) => (
-            <option value={value}>{displayToken(value)} · {count}</option>
-          ))}
-        </select>
+      <label class="search-control search-control--raw">
+        <span>{copy.filters.rawTag}</span>
+        <input type="search" name="tag" autocomplete="off" placeholder={copy.filters.rawTagPlaceholder} />
+        <small>{copy.filters.rawTagHint}</small>
       </label>
     </div>
   </details>
 
-  <label class="select-control select-control--sort">
-    <span>{copy.filters.sort}</span>
-    <select name="sort">
-      {Object.entries(copy.filters.sortOptions).map(([value, label]) => (
-        <option value={value}>{label}</option>
-      ))}
-    </select>
-  </label>
-
-  <button class="button button--primary filter-submit" type="submit">{applyLabel}</button>
+  <div class="active-filters" data-active-filters aria-live="polite"></div>
+  <button class="button button--primary filter-submit" type="submit">{copy.filters.apply}</button>
 </form>

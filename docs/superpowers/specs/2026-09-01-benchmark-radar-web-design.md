@@ -1,7 +1,7 @@
 # Agent Benchmark Radar Web Design
 
 **Date:** 2026-09-01  
-**Status:** Approved for implementation  
+**Status:** Implemented v1; superseded for subsequent product work by [`2026-09-01-evaluation-frontier-web-v2-design.md`](./2026-09-01-evaluation-frontier-web-v2-design.md)
 **Project site:** `https://h20zhang.github.io/Agent-Benchmark-Radar/`
 
 ## Outcome

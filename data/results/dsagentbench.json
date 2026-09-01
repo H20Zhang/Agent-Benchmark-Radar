@@ -1,0 +1,15 @@
+{
+  "benchmark_id": "dsagentbench",
+  "tracking_status": "live",
+  "verified_at": "2026-08-31",
+  "tracks": [{
+    "track_id": "task-success",
+    "primary": true,
+    "label": { "zh": "完整 Data Science 任务成功率", "en": "Complete data-science task success" },
+    "task": "Complete data-science workflows in real computer environments",
+    "split": "paper evaluation",
+    "protocol_version": "paper-v1",
+    "metric": { "id": "task-success", "family": "success-rate", "label": "Task success", "unit": "%", "direction": "higher", "range": [0, 100], "reference_target": { "value": 100, "type": "benchmark-ceiling", "source": "https://arxiv.org/abs/2608.10366" } },
+    "entries": [{ "id": "paper-best", "method": "Best reported agent", "model": "Paper best", "score": 56.7, "date": "2026-08-01", "source": "https://arxiv.org/abs/2608.10366" }]
+  }]
+}

@@ -32,6 +32,7 @@ const {
 const canonicalUrl = absoluteUrl(canonicalPath);
 const zhUrl = absoluteUrl(zhPath);
 const enUrl = absoluteUrl(enPath);
+const socialImageUrl = absoluteUrl("/social-card.png");
 const json = jsonLd
   ? JSON.stringify(jsonLd).replaceAll("<", "\\u003c")
   : undefined;
@@ -57,9 +58,14 @@ const json = jsonLd
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Agent Benchmark Radar — Evaluation Frontier" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
     <slot name="head" />
     {json && <script is:inline type="application/ld+json" set:html={json} />}
   </head>

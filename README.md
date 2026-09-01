@@ -3,18 +3,18 @@
 
 <h1>Agent Benchmark Radar</h1>
 
-<p><strong>追踪 Agent 评测的演进，理解 Benchmark 如何重新定义进展。</strong></p>
+<p><strong>从 Benchmark 看见当前能力、成绩空间与下一步研究。</strong></p>
 
 <p>
 覆盖 <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
-把最新 Benchmark 放回演化脉络：它新增了什么评测对象、相比何种基线推进了什么、下一步覆盖什么。
+沿着 <b>Benchmark → Results → Opportunity → Frontier</b> 追踪评测版图：找到最新 Repo，查看当前方法成绩，组合研究评测，并发现下一坐标。
 </p>
 
 <p><strong>中文</strong> · <a href="README.en.md">English</a></p>
 
 <p>
-<a href="https://h20zhang.github.io/Agent-Benchmark-Radar/zh/"><strong>打开在线 Benchmark Radar →</strong></a><br/>
-按能力、环境、协议与演进阶段筛选全部 Benchmark。
+<a href="https://h20zhang.github.io/Agent-Benchmark-Radar/zh/"><strong>打开 Evaluation Frontier 网站 →</strong></a><br/>
+网站提供完整交互版本；README 保留可快速浏览、引用和版本审阅的研究地图。
 </p>
 
 <p>
@@ -27,13 +27,20 @@
 
 ## 从这里开始
 
+| 研究动作 | 网站入口 | 直接获得 |
+|---|---|---|
+| **Pick** | [Benchmark Explorer](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/) | 按能力、环境、评测目标、结果状态和参考空间筛选最新 Benchmark。 |
+| **Build** | [评测组合生成器](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/evaluate/) | 从研究 claim 组合 Core / Complement，并导出 Markdown。 |
+| **Discover** | [评测机会地图](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/opportunities/) | 从当前证据进入下一测量坐标和可执行评测设计。 |
+| **Track** | [Evaluation Frontier](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/frontier/) | 联合查看新发布、结构化成绩、参考空间、前沿变化与 Benchmark 谱系。 |
+
 **先选你的研究方向。** 每个方向都提供独立的演化脉络、Evaluation Recipes 和完整 Benchmark 列表。
 
-| 方向 | 你通常想回答 | 先看脉络 | 配一套评测 | 查看列表 |
+| 方向 | 研究主张 | 先看脉络 | 配一套评测 | 查看列表 |
 |---|---|---|---|---|
-| **Agent Memory** | 长期记忆能否被正确召回、更新并用于后续行动？多模态、安全和治理怎么测？ | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [Memory Benchmark](#registry-memory) |
-| **RAG / Agentic Retrieval** | 系统能否找对证据、完成复杂搜索，并在动态语料和长轨迹下保持可靠？ | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [Retrieval Benchmark](#registry-rag) |
-| **Data Agents** | Agent 能否完成 SQL、分析、数据科学与 ML engineering，并得到可核验结果？ | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [Data Agent Benchmark](#registry-data) |
+| **Agent Memory** | 长期记忆的正确召回、在线更新、行动效用、多模态能力、安全和治理。 | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [Memory Benchmark](#registry-memory) |
+| **RAG / Agentic Retrieval** | 正确证据、复杂搜索，以及动态语料和长轨迹下的持续可靠性。 | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [Retrieval Benchmark](#registry-rag) |
+| **Data Agents** | SQL、分析、数据科学与 ML engineering 的端到端可核验交付。 | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [Data Agent Benchmark](#registry-data) |
 
 **跨领域探索：** [按 claim 配一套 Evaluation Recipe](#evaluation-recipes) · [看近 30 天的变化](#frontier-signals) · [看最近半年新 Benchmark](#release-timeline)
 
@@ -51,7 +58,7 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 <a id="recipe-memory"></a>
 ### Agent Memory
 
-| 你想证明 | Core | Complement | 需补充验证 |
+| 你想证明 | Core | Complement | 下一步验证 |
 |---|---|---|---|
 | **长期对话记忆与时间推理** | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) | [LongMemEval](https://arxiv.org/abs/2410.10813) | 结合行动导向评测，验证历史经验对后续行动的改善。 |
 | **状态更新与过期信息处理** | [StateMemBench](https://arxiv.org/abs/2608.19652) | [LongMemEval](https://arxiv.org/abs/2410.10813) · [membench (staleness)](https://github.com/Ps23102004/membench) | 通过组件级消融定位 write、update 与 retrieval 的贡献。 |
@@ -62,7 +69,7 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 <a id="recipe-rag"></a>
 ### RAG / Agentic Retrieval
 
-| 你想证明 | Core | Complement | 需补充验证 |
+| 你想证明 | Core | Complement | 下一步验证 |
 |---|---|---|---|
 | **推理密集型 Retrieval 质量** | [BRIGHT](https://arxiv.org/abs/2407.12883) | [BEIR](https://arxiv.org/abs/2104.08663) · [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) | 结合 live、迭代式 web search 评测。 |
 | **Deep / long-horizon web search** | [BrowseComp](https://arxiv.org/abs/2504.12516) | [LiveBrowseComp](https://arxiv.org/abs/2605.28721) · [LoHoSearch](https://arxiv.org/abs/2606.12837) | 加入轨迹级诊断，定位搜索过程中的关键失效阶段。 |
@@ -73,7 +80,7 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 <a id="recipe-data"></a>
 ### Data Agents
 
-| 你想证明 | Core | Complement | 需补充验证 |
+| 你想证明 | Core | Complement | 下一步验证 |
 |---|---|---|---|
 | **Text-to-SQL / Warehouse 任务能力** | [Spider 2.0](https://arxiv.org/abs/2411.07763) | [Spider](https://aclanthology.org/D18-1425/) · [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) | 扩展到完整的数据理解、分析与交付工作流。 |
 | **端到端 Data Science Agent** | [DataSpace](https://arxiv.org/abs/2608.03451) | [DSAgentBench](https://arxiv.org/abs/2608.10366) · [DataClawBench](https://arxiv.org/abs/2605.02503) | 通过组件级评测验证统计建模质量。 |
@@ -81,7 +88,7 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 | **统计与因果分析** | [CausalDS](https://arxiv.org/abs/2607.08093) | [StatABench](https://arxiv.org/abs/2606.22977) | 扩展到真实 warehouse、repo 与数据工程约束。 |
 | **长时程 ML Engineering / Research Improvement** | [MLE-bench](https://arxiv.org/abs/2410.07095) | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [AI4AI-Bench](https://arxiv.org/abs/2608.20318) | 结合 BI、warehouse semantics 与一般数据分析能力评测。 |
 
-> **使用原则：** Recipe 用于让实验组合与论文 claim 对齐。实验设计同时对齐每个 Benchmark 的 protocol，并显式处理 confounders 与 coverage 边界。
+> **使用原则：** Recipe 让实验组合与论文 claim 对齐。实验设计同时对齐每个 Benchmark 的 protocol、公平比较条件与 claim 支持范围。
 
 ---
 <!-- EVALUATION-RECIPES:END -->
@@ -98,6 +105,19 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 <!-- FRONTIER-SIGNALS:END -->
 
 最后更新：**2026-08-28**
+
+### 当前成绩追踪
+
+网站已为 12 个 Benchmark 建立来源核验的结构化结果轨道；每项成绩都绑定 task、split、protocol、metric、方向、日期与原始来源。
+
+| Benchmark | 当前已核验坐标 | 当前最佳 | 研究入口 |
+|---|---|---:|---|
+| **SCALE-QA** | 128K Full Context accuracy | 29.8% | [查看成绩与 70.2% 参考空间](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/scale-qa/#results) |
+| **StateMemBench** | Same-backbone state-maintenance score | 36.3% | [查看方法对比](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/statemembench/#results) |
+| **DeltaML-Bench** | 4×6h per-run success | 33.9% | [查看长时程改进空间](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/deltaml-bench/#results) |
+| **DSAgentBench** | Complete data-science task success | 56.7% | [查看端到端结果](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/dsagentbench/#results) |
+| **DataSpace** | End-to-end table-delivery accuracy | 66.34% | [查看多源工作区结果](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/dataspace/#results) |
+| **The Compaction Cliff** | Five-round constraint recall | 96% | [查看压缩方法对比](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/compaction-cliff/#results) |
 
 <a id="release-timeline"></a>
 ## 最近半年 Benchmark 时间线
@@ -145,7 +165,7 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 | 2026-07 | Agent Memory | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | 能否从长期历史中识别隐含的个体风险，并在风险缓解后及时更新判断。 |
 | 2026-07 | Agent Memory | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | 长期记忆是否会影响工具选择和参数填写。 |
 | 2026-07 | Agent Memory | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 多模态长期对话中的记忆抽取、适应、推理和知识管理。 |
-| 2026-07 | Agent Memory | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | 后续问题没有复述旧约束时，能否继续正确应用它。 |
+| 2026-07 | Agent Memory | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | 在后续问题省略旧约束时，评测智能体持续应用潜在用户约束的能力。 |
 | 2026-07 | Data Agent | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | 用细粒度技能分类检查真实数据科学工作流的覆盖情况。 |
 | 2026-06-23 | Agent Memory | [MEMPROBE](https://arxiv.org/abs/2606.24595) <!-- benchmark-id:memprobe --> | 普通协助结束后，能否从智能体留下的记忆产物中恢复隐藏的用户状态。 |
 | 2026-06-22 | Data Agent | [StatABench](https://arxiv.org/abs/2606.22977) <!-- benchmark-id:statabench --> | 同时评估统计知识、工具选择与参数设置，以及开放式建模和报告。 |
@@ -164,12 +184,12 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 | 2026-05-14 | Agent Memory | [MemEye](https://arxiv.org/abs/2605.15128) <!-- benchmark-id:memeye --> | 细粒度视觉证据、视觉状态变化，以及纯文本捷径检查。 |
 | 2026-05-14 | Agent Memory | [GroupMemBench](https://arxiv.org/abs/2605.14498) <!-- benchmark-id:groupmembench --> | 多人群聊中的说话者信念、群体动态、术语差异和面向不同受众的表达。 |
 | 2026-05-12 | Agent Memory | [MedMemoryBench](https://arxiv.org/abs/2605.11814) <!-- benchmark-id:medmemorybench --> | 在持续增长的医疗对话中追踪病情、时间变化和复杂临床信息，并观察记忆饱和。 |
-| 2026-05-04 | Data Agent | [DataClawBench](https://arxiv.org/abs/2605.02503) <!-- benchmark-id:dataclawbench --> | 在几乎没有先验提示时，自主探索陌生、含噪、跨域金融数据并形成可验证结论。 |
+| 2026-05-04 | Data Agent | [DataClawBench](https://arxiv.org/abs/2605.02503) <!-- benchmark-id:dataclawbench --> | 在极少先验引导下，自主探索陌生、含噪、跨域金融数据并形成可验证结论。 |
 | 2026-05 | RAG | [SGR-Bench](https://arxiv.org/abs/2605.22219) <!-- benchmark-id:sgr-bench --> | 在证据受站点筛选、层级、范围或视图状态控制时完成搜索。 |
 | 2026-05 | Agent Memory | [LongMemEval-V2](https://arxiv.org/abs/2605.12493) <!-- benchmark-id:longmemeval-v2 --> | 大量网页智能体轨迹中的环境状态、操作流程和易错点。 |
 | 2026-04-30 | RAG | [Bright-Pro](https://aclanthology.org/2026.acl-long.1705/) <!-- benchmark-id:bright-pro --> | 考察推理密集型检索、推理要点覆盖，以及检索器在静态与智能体搜索中的实际效用。 |
 | 2026-04-19 | RAG | [MuDABench](https://aclanthology.org/2026.findings-acl.341/) <!-- benchmark-id:mudabench --> | 考察大规模财务文档集合中的信息抽取、跨文档聚合和定量分析。 |
-| 2026-04-17 | Agent Memory | [MemEvoBench](https://arxiv.org/abs/2604.15774) <!-- benchmark-id:memevobench --> | 误导性记忆、噪声工具结果和偏置反馈在多轮写回后会不会使行为逐步失去安全性。 |
+| 2026-04-17 | Agent Memory | [MemEvoBench](https://arxiv.org/abs/2604.15774) <!-- benchmark-id:memevobench --> | 追踪误导性记忆、噪声工具结果和偏置反馈在多轮写回中的安全性演变。 |
 | 2026-04-15 | RAG | [MERRIN](https://arxiv.org/abs/2604.13418) <!-- benchmark-id:merrin --> | 考察智能体在嘈杂网络中自主选择模态、检索多模态证据并进行多跳推理。 |
 | 2026-04-14 | RAG | [EnterpriseRAG-Bench](https://arxiv.org/abs/2605.05253) <!-- benchmark-id:enterpriserag-bench --> | 考察企业式知识库中的检索、多文档推理、冲突处理、完整性和无答案识别。 |
 | 2026-04-09 | Agent Memory | [ImplicitMemBench](https://aclanthology.org/2026.acl-long.1301/) <!-- benchmark-id:implicitmembench --> | 干扰之后，模型能否在首次尝试中自动表现出已学程序、启动效应或条件联结。 |
@@ -180,7 +200,7 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 | 2026-03 | Agent Memory | [LifeBench](https://arxiv.org/abs/2603.03781) <!-- benchmark-id:lifebench --> | 多源长期轨迹中的事件、语义、习惯和程序性记忆。 |
 | 2026-03 | Data Agent | [Data Agent Benchmark (DAB)](https://arxiv.org/abs/2603.20576) <!-- benchmark-id:data-agent-benchmark --> | 跨多个 DBMS 完成数据集成、转换、分析和可执行核验。 |
 | 2026-02-27 | Data Agent | [DARE-bench](https://arxiv.org/abs/2602.24288) <!-- benchmark-id:dare-bench --> | 用可验证真值同时评估机器学习建模效果与对指定数据科学流程的遵循。 |
-| 2026-02-26 | RAG | [MTRAG-UN](https://aclanthology.org/2026.findings-acl.503/) <!-- benchmark-id:mtrag-un --> | 考察多轮 RAG 对不可回答、信息不足、非独立问题和含糊回复的处理。 |
+| 2026-02-26 | RAG | [MTRAG-UN](https://aclanthology.org/2026.findings-acl.503/) <!-- benchmark-id:mtrag-un --> | 评测多轮 RAG 对不可回答、需要澄清、依赖上下文和含糊回复的处理。 |
 | 2026-02-22 | RAG | [MC-Search](https://arxiv.org/abs/2603.00873) <!-- benchmark-id:mc-search --> | 考察多模态搜索规划、模态选择、逐跳证据检索和长链推理一致性。 |
 | 2026-02-18 | Agent Memory | [MemoryArena](https://arxiv.org/abs/2602.16313) <!-- benchmark-id:memoryarena --> | 在跨会话的智能体—环境循环中，用早期行动与反馈指导后续行动。 |
 | 2026-02-06 | RAG | [GISA](https://arxiv.org/abs/2602.08543) <!-- benchmark-id:gisa --> | 考察真实信息需求下的搜索规划、纵向推理、横向汇总和结构化作答。 |
@@ -226,7 +246,7 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:agent-memory:END -->
 
-**在线筛选：** [打开 Agent Memory Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/?area=agent-memory#explorer)
+**在线筛选：** [打开 Agent Memory Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/?area=agent-memory)
 
 <a id="benchmark-rag"></a>
 ### RAG / Agentic Retrieval
@@ -259,7 +279,7 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:rag:END -->
 
-**在线筛选：** [打开 RAG / Agentic Retrieval Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/?area=rag#explorer)
+**在线筛选：** [打开 RAG / Agentic Retrieval Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/?area=rag)
 
 <a id="benchmark-data"></a>
 ### Data Agents
@@ -292,15 +312,15 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:data-agent:END -->
 
-**在线筛选：** [打开 Data Agents Radar →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/?area=data-agent#explorer)
+**在线筛选：** [打开 Data Agents Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/?area=data-agent)
 
 <a id="all-benchmarks"></a>
 ## 按领域查看全部 Benchmark
 
-以下是 registry 中的全部 125 个基准。这里的表格是 README 的一等阅读界面，不因为长度而下沉到 Library。
+以下是 registry 中的全部 125 个基准。README 保留完整表格作为一等阅读界面，网站同时提供可筛选、可比较的增强视图。
 
 <!-- CITATION-META:START -->
-引用数来自 Semantic Scholar，最后刷新 **2026-08-31**；`—` 表示暂无可匹配论文。引用数仅作影响力上下文，不参与阶段划分。
+引用数来自 Semantic Scholar，最后刷新 **2026-08-31**；`—` 标记以代码或数据为主要入口、论文匹配仍在核验的记录。引用数呈现影响力背景，阶段由测量演进判断。
 <!-- CITATION-META:END -->
 
 <a id="registry-memory"></a>
@@ -325,7 +345,7 @@ flowchart TB
 | 🔭 前沿 | [MemoryArena](https://arxiv.org/abs/2602.16313) <!-- benchmark-id:memoryarena --> | [61](https://www.semanticscholar.org/paper/001da1314eb127dd40c6c7bf1f14081ec208978c) | 2026-02-18 | 在跨会话的智能体—环境循环中，用早期行动与反馈指导后续行动。 |
 | 🔭 前沿 | [LifeBench](https://arxiv.org/abs/2603.03781) <!-- benchmark-id:lifebench --> | [7](https://www.semanticscholar.org/paper/33284572e05aa5a0426c54312abdbc26738a0255) | 2026-03 | 多源长期轨迹中的事件、语义、习惯和程序性记忆。 |
 | 🔭 前沿 | [ImplicitMemBench](https://aclanthology.org/2026.acl-long.1301/) <!-- benchmark-id:implicitmembench --> | [3](https://www.semanticscholar.org/paper/86a759efe844ee45c11a69226b1478fee2bf1238) | 2026-04-09 | 干扰之后，模型能否在首次尝试中自动表现出已学程序、启动效应或条件联结。 |
-| 🔭 前沿 | [MemEvoBench](https://arxiv.org/abs/2604.15774) <!-- benchmark-id:memevobench --> | [0](https://www.semanticscholar.org/paper/e7fed24b1353cf82d465d68dbda87c2b7243c60a) | 2026-04-17 | 误导性记忆、噪声工具结果和偏置反馈在多轮写回后会不会使行为逐步失去安全性。 |
+| 🔭 前沿 | [MemEvoBench](https://arxiv.org/abs/2604.15774) <!-- benchmark-id:memevobench --> | [0](https://www.semanticscholar.org/paper/e7fed24b1353cf82d465d68dbda87c2b7243c60a) | 2026-04-17 | 追踪误导性记忆、噪声工具结果和偏置反馈在多轮写回中的安全性演变。 |
 | 🔭 前沿 | [LongMemEval-V2](https://arxiv.org/abs/2605.12493) <!-- benchmark-id:longmemeval-v2 --> | [8](https://www.semanticscholar.org/paper/0a664e226ad908e615063af230a87cfeaeee5d94) | 2026-05 | 大量网页智能体轨迹中的环境状态、操作流程和易错点。 |
 | 🔭 前沿 | [MedMemoryBench](https://arxiv.org/abs/2605.11814) <!-- benchmark-id:medmemorybench --> | [1](https://www.semanticscholar.org/paper/916768bffc01cae15c7f4b913f0a0c6f66cf2fc7) | 2026-05-12 | 在持续增长的医疗对话中追踪病情、时间变化和复杂临床信息，并观察记忆饱和。 |
 | 🔭 前沿 | [GroupMemBench](https://arxiv.org/abs/2605.14498) <!-- benchmark-id:groupmembench --> | [5](https://www.semanticscholar.org/paper/469cd86992948b1b4d4286d1bbf5a7e2a779ff33) | 2026-05-14 | 多人群聊中的说话者信念、群体动态、术语差异和面向不同受众的表达。 |
@@ -338,7 +358,7 @@ flowchart TB
 | 🔭 前沿 | [GateMem](https://arxiv.org/abs/2606.18829) <!-- benchmark-id:gatemem --> | [1](https://www.semanticscholar.org/paper/a524f9cbffc89db36eb8afae61b3d4e3d33b0ccb) | 2026-06-17 | 多人共享记忆能否同时保持可用、阻止越权泄露并执行删除请求。 |
 | 🔭 前沿 | [DynamicMem](https://arxiv.org/abs/2606.22877) <!-- benchmark-id:dynamicmem --> | [2](https://www.semanticscholar.org/paper/3ec6edd820d52abe3b15a6f25624be0997d2d39c) | 2026-06-22 | 从十五个月、多个应用的零散行为中推断并更新用户属性、习惯和偏好。 |
 | 🔭 前沿 | [MEMPROBE](https://arxiv.org/abs/2606.24595) <!-- benchmark-id:memprobe --> | [1](https://www.semanticscholar.org/paper/dcbc83076a37f6200d84d8815b7a6ba0aa309ef4) | 2026-06-23 | 普通协助结束后，能否从智能体留下的记忆产物中恢复隐藏的用户状态。 |
-| 🔭 前沿 | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | [6](https://www.semanticscholar.org/paper/301809842a80f6231a8d00883f92290b62e65d97) | 2026-07 | 后续问题没有复述旧约束时，能否继续正确应用它。 |
+| 🔭 前沿 | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | [6](https://www.semanticscholar.org/paper/301809842a80f6231a8d00883f92290b62e65d97) | 2026-07 | 在后续问题省略旧约束时，评测智能体持续应用潜在用户约束的能力。 |
 | 🔭 前沿 | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | [35](https://www.semanticscholar.org/paper/c69c7ab705735b24903511d62fad8110699f708a) | 2026-07 | 多模态长期对话中的记忆抽取、适应、推理和知识管理。 |
 | 🔭 前沿 | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | [25](https://www.semanticscholar.org/paper/c8e2417a59515b4f74dec06f631cc0a2280cbf60) | 2026-07 | 长期记忆是否会影响工具选择和参数填写。 |
 | 🔭 前沿 | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | [0](https://www.semanticscholar.org/paper/e9ceaad85060375e02926322f959a6285a891cac) | 2026-07 | 能否从长期历史中识别隐含的个体风险，并在风险缓解后及时更新判断。 |
@@ -384,7 +404,7 @@ flowchart TB
 | 🔭 前沿 | [SAGE](https://arxiv.org/abs/2602.05975) <!-- benchmark-id:sage --> | [4](https://www.semanticscholar.org/paper/9ca391c5c9e7a7f482408a405f1eeea7dd2c02b7) | 2026-02-05 | 考察深度研究智能体在受控科学论文库中的定向找文与开放式文献搜集。 |
 | 🔭 前沿 | [GISA](https://arxiv.org/abs/2602.08543) <!-- benchmark-id:gisa --> | [5](https://www.semanticscholar.org/paper/85dbc02766ab1e47b63a4422e5392694fe31e49f) | 2026-02-06 | 考察真实信息需求下的搜索规划、纵向推理、横向汇总和结构化作答。 |
 | 🔭 前沿 | [MC-Search](https://arxiv.org/abs/2603.00873) <!-- benchmark-id:mc-search --> | [9](https://www.semanticscholar.org/paper/45bce40ccf1997b960f08fc1f03d276ff3128c34) | 2026-02-22 | 考察多模态搜索规划、模态选择、逐跳证据检索和长链推理一致性。 |
-| 🔭 前沿 | [MTRAG-UN](https://aclanthology.org/2026.findings-acl.503/) <!-- benchmark-id:mtrag-un --> | [24](https://www.semanticscholar.org/paper/f5354cb3ee53a1048c9fe60e5b50e12bcb8cdab6) | 2026-02-26 | 考察多轮 RAG 对不可回答、信息不足、非独立问题和含糊回复的处理。 |
+| 🔭 前沿 | [MTRAG-UN](https://aclanthology.org/2026.findings-acl.503/) <!-- benchmark-id:mtrag-un --> | [24](https://www.semanticscholar.org/paper/f5354cb3ee53a1048c9fe60e5b50e12bcb8cdab6) | 2026-02-26 | 评测多轮 RAG 对不可回答、需要澄清、依赖上下文和含糊回复的处理。 |
 | 🔭 前沿 | [AutoResearchBench](https://arxiv.org/abs/2604.25256) <!-- benchmark-id:autoresearchbench --> | [8](https://www.semanticscholar.org/paper/86f82b41dab50da936b9454d169a633e9051d361) | 2026-04-01 | 考察科学文献中的目标论文追踪、条件约束、开放集合搜集和停止判断。 |
 | 🔭 前沿 | [LeakDojo](https://aclanthology.org/2026.findings-acl.287/) <!-- benchmark-id:leakdojo --> | [0](https://www.semanticscholar.org/paper/824d4b562281ab3020e716cfff9db02f7f4e61a1) | 2026-04-07 | 考察攻击者从 RAG 数据库抽取文本内容的能力，以及不同管线和防御下的泄露风险。 |
 | 🔭 前沿 | [EnterpriseRAG-Bench](https://arxiv.org/abs/2605.05253) <!-- benchmark-id:enterpriserag-bench --> | [6](https://www.semanticscholar.org/paper/5d41c21f0cf12c5f0822b81cb8f77a6e3067ece6) | 2026-04-14 | 考察企业式知识库中的检索、多文档推理、冲突处理、完整性和无答案识别。 |
@@ -441,7 +461,7 @@ flowchart TB
 | 🔭 前沿 | [Data Agent Benchmark (DAB)](https://arxiv.org/abs/2603.20576) <!-- benchmark-id:data-agent-benchmark --> | [10](https://www.semanticscholar.org/paper/69ddb757f0bd296a99c4cb121780873a174a5377) | 2026-03 | 跨多个 DBMS 完成数据集成、转换、分析和可执行核验。 |
 | 🔭 前沿 | [TML-Bench](https://arxiv.org/abs/2603.05764) <!-- benchmark-id:tml-bench --> | [2](https://www.semanticscholar.org/paper/83d1649c2fb9e8ea0d8d6e2eb4071a6aeceb6163) | 2026-03-05 | 在固定时间预算和隐藏标签下，产出有效且有竞争力的表格机器学习提交。 |
 | 🔭 前沿 | [AgentFuel](https://arxiv.org/abs/2603.12483) <!-- benchmark-id:agentfuel --> | [1](https://www.semanticscholar.org/paper/310cc57e018fec7b41ac9ffa95ef04fe7bea432b) | 2026-03-12 | 面向具体领域的时序对话智能体功能测试，重点覆盖有状态与事故型查询。 |
-| 🔭 前沿 | [DataClawBench](https://arxiv.org/abs/2605.02503) <!-- benchmark-id:dataclawbench --> | [0](https://www.semanticscholar.org/paper/52d44ba95a8044cfb8f1f798c63deabefef06855) | 2026-05-04 | 在几乎没有先验提示时，自主探索陌生、含噪、跨域金融数据并形成可验证结论。 |
+| 🔭 前沿 | [DataClawBench](https://arxiv.org/abs/2605.02503) <!-- benchmark-id:dataclawbench --> | [0](https://www.semanticscholar.org/paper/52d44ba95a8044cfb8f1f798c63deabefef06855) | 2026-05-04 | 在极少先验引导下，自主探索陌生、含噪、跨域金融数据并形成可验证结论。 |
 | 🔭 前沿 | [IRTS-ToolBench](https://arxiv.org/abs/2606.15107) <!-- benchmark-id:irts-toolbench --> | [0](https://www.semanticscholar.org/paper/db7f79b56c8dbb846510867063c07a20bdd29b23) | 2026-06-13 | 在异步、缺失且采样频率不一的非规则时间序列上选择工具并完成可核验问答。 |
 | 🔭 前沿 | [StatABench](https://arxiv.org/abs/2606.22977) <!-- benchmark-id:statabench --> | [0](https://www.semanticscholar.org/paper/237728a651e017c40279683f250603ee1329c8cd) | 2026-06-22 | 同时评估统计知识、工具选择与参数设置，以及开放式建模和报告。 |
 | 🔭 前沿 | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | [4](https://www.semanticscholar.org/paper/737422a2cb857d6f59da6d51036d7ec14fc73fe6) | 2026-07 | 用细粒度技能分类检查真实数据科学工作流的覆盖情况。 |
@@ -470,9 +490,9 @@ flowchart TB
 
 | 你想理解什么 | 从这里开始 | 然后进入 |
 |---|---|---|
-| **记忆评测如何从回忆走向行动与治理？** | Multi-Session Chat → LoCoMo / LongMemEval → MemoryArena / WorldMemArena → GateMem / PerMemSafe / InMind | [Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) |
-| **检索评测如何变成实时、可审计的搜索？** | BEIR / BRIGHT → BrowseComp / LiveBrowseComp → Bright-Pro / LoHoSearch / SearchAuditBench / VAKRA → MAPLE / VisDocAgentBench / WANDR | [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) |
-| **数据智能体评测如何从 SQL/代码走到可靠的数据工作？** | Spider / DS-1000 → KramaBench / DABstep → DataClawBench / DSGym → DataSpace / DSAgentBench / WarehouseReliabilityBench | [Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar#field-map) |
+| **记忆评测：从回忆到行动与治理** | Multi-Session Chat → LoCoMo / LongMemEval → MemoryArena / WorldMemArena → GateMem / PerMemSafe / InMind | [Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) |
+| **检索评测：从相关性到实时、可审计搜索** | BEIR / BRIGHT → BrowseComp / LiveBrowseComp → Bright-Pro / LoHoSearch / SearchAuditBench / VAKRA → MAPLE / VisDocAgentBench / WANDR | [Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) |
+| **数据智能体评测：从 SQL/代码到可靠数据工作** | Spider / DS-1000 → KramaBench / DABstep → DataClawBench / DSGym → DataSpace / DSAgentBench / WarehouseReliabilityBench | [Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar#field-map) |
 
 <a id="library"></a>
 ## Benchmark Library

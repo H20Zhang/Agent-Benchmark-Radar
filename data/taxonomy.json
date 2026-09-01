@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "facets": [
+    {
+      "id": "memory-capability",
+      "area": "agent-memory",
+      "label": { "zh": "Memory 能力", "en": "Memory capability" },
+      "options": [
+        { "id": "memory-recall", "label": { "zh": "长期召回", "en": "Long-term recall" }, "match": ["recall", "retrieval", "long-range", "long-horizon", "temporal-reasoning"] },
+        { "id": "memory-update", "label": { "zh": "状态更新", "en": "State update" }, "match": ["update", "stale", "superseded", "dynamic", "state-tracking"] },
+        { "id": "memory-structure", "label": { "zh": "结构化记忆", "en": "Structured memory" }, "match": ["structured", "schema", "organization", "memory-structure"] },
+        { "id": "memory-multimodal", "label": { "zh": "多模态记忆", "en": "Multimodal memory" }, "match": ["multimodal", "visual", "image", "video"] },
+        { "id": "memory-action", "label": { "zh": "记忆驱动行动", "en": "Memory-driven action" }, "match": ["action", "tool-use", "task-performance", "agent-environment"] },
+        { "id": "memory-personalization", "label": { "zh": "用户状态与个性化", "en": "User state and personalization" }, "match": ["personalization", "preference", "user-state", "implicit"] },
+        { "id": "memory-governance", "label": { "zh": "权限与治理", "en": "Authority and governance" }, "match": ["privacy", "permission", "access-control", "forgetting", "governance"] },
+        { "id": "memory-integrity", "label": { "zh": "生命周期完整性", "en": "Lifecycle integrity" }, "match": ["poison", "attack", "compaction", "provenance", "safety", "lifecycle"] }
+      ]
+    },
+    {
+      "id": "rag-capability",
+      "area": "rag",
+      "label": { "zh": "Retrieval 能力", "en": "Retrieval capability" },
+      "options": [
+        { "id": "retrieval-quality", "label": { "zh": "相关性与召回", "en": "Relevance and recall" }, "match": ["retrieval-quality", "relevance", "recall", "ranking", "retrieval"] },
+        { "id": "reasoning-retrieval", "label": { "zh": "推理密集检索", "en": "Reasoning-intensive retrieval" }, "match": ["reasoning", "multi-hop", "multihop", "evidence-integration"] },
+        { "id": "agentic-search", "label": { "zh": "迭代式搜索", "en": "Iterative agentic search" }, "match": ["agentic", "iterative", "web-search", "browsing", "search-planning"] },
+        { "id": "live-retrieval", "label": { "zh": "实时与变化语料", "en": "Live and evolving corpora" }, "match": ["live", "fresh", "evolving", "snapshot", "dynamic"] },
+        { "id": "multimodal-retrieval", "label": { "zh": "多模态检索", "en": "Multimodal retrieval" }, "match": ["multimodal", "visual", "ocr", "page"] },
+        { "id": "trajectory-audit", "label": { "zh": "轨迹诊断", "en": "Trajectory diagnosis" }, "match": ["trajectory", "audit", "failure-localization", "hop-aware"] },
+        { "id": "corpus-state", "label": { "zh": "语料状态与反馈", "en": "Corpus state and feedback" }, "match": ["writable", "feedback", "corpus-growth", "self-authored", "knowledge-base"] },
+        { "id": "retrieval-robustness", "label": { "zh": "可靠性与鲁棒性", "en": "Reliability and robustness" }, "match": ["robustness", "unanswerable", "conflict", "leakage", "attack"] }
+      ]
+    },
+    {
+      "id": "data-capability",
+      "area": "data-agent",
+      "label": { "zh": "Data Agent 能力", "en": "Data Agent capability" },
+      "options": [
+        { "id": "text-to-sql", "label": { "zh": "Text-to-SQL", "en": "Text-to-SQL" }, "match": ["text-to-sql", "sql", "database-query"] },
+        { "id": "data-code", "label": { "zh": "数据代码生成", "en": "Data code generation" }, "match": ["code-generation", "python", "data-science-code"] },
+        { "id": "analytics-workflow", "label": { "zh": "端到端分析", "en": "End-to-end analytics" }, "match": ["analytics", "workflow", "end-to-end", "analysis"] },
+        { "id": "data-understanding", "label": { "zh": "数据理解与探索", "en": "Data understanding and exploration" }, "match": ["exploration", "understanding", "profiling", "schema", "discovery"] },
+        { "id": "ml-engineering", "label": { "zh": "ML Engineering", "en": "ML engineering" }, "match": ["machine-learning", "ml-engineering", "training", "kaggle", "model-improvement"] },
+        { "id": "statistics-causality", "label": { "zh": "统计与因果", "en": "Statistics and causality" }, "match": ["statistical", "causal", "counterfactual", "uncertainty"] },
+        { "id": "data-engineering", "label": { "zh": "数据工程与 Warehouse", "en": "Data engineering and warehouses" }, "match": ["data-engineering", "warehouse", "dbt", "transformation"] },
+        { "id": "business-semantics", "label": { "zh": "业务语义与交付", "en": "Business semantics and delivery" }, "match": ["business", "semantic", "clarification", "abstention", "reporting"] }
+      ]
+    },
+    {
+      "id": "environment",
+      "label": { "zh": "评测环境", "en": "Evaluation environment" },
+      "options": [
+        { "id": "conversation", "label": { "zh": "对话与长期历史", "en": "Conversation and long histories" }, "match": ["conversation", "dialogue", "session", "chat"] },
+        { "id": "documents", "label": { "zh": "文档与语料库", "en": "Documents and corpora" }, "match": ["document", "corpus", "paper", "report"] },
+        { "id": "web", "label": { "zh": "网页与实时搜索", "en": "Web and live search" }, "match": ["web", "browser", "website", "live"] },
+        { "id": "database", "label": { "zh": "数据库与表格", "en": "Databases and tables" }, "match": ["database", "table", "sql", "warehouse"] },
+        { "id": "code-workspace", "label": { "zh": "代码与研究仓库", "en": "Code and research workspaces" }, "match": ["repository", "code", "ide", "notebook", "terminal"] },
+        { "id": "multimodal-gui", "label": { "zh": "多模态与 GUI", "en": "Multimodal and GUI" }, "match": ["multimodal", "visual", "image", "gui", "mobile"] },
+        { "id": "multi-source", "label": { "zh": "企业多源工作区", "en": "Enterprise multi-source workspace" }, "match": ["enterprise", "multi-source", "heterogeneous", "workspace"] }
+      ]
+    },
+    {
+      "id": "objective",
+      "label": { "zh": "评测目标", "en": "Evaluation objective" },
+      "options": [
+        { "id": "answer-quality", "label": { "zh": "回答质量", "en": "Answer quality" }, "match": ["question-answering", "answer", "qa", "generation"] },
+        { "id": "retrieval-quality", "label": { "zh": "检索质量", "en": "Retrieval quality" }, "match": ["retrieval", "ranking", "recall", "precision"] },
+        { "id": "execution-success", "label": { "zh": "执行成功", "en": "Execution success" }, "match": ["execution", "task-success", "unit-test", "executable"] },
+        { "id": "trajectory-quality", "label": { "zh": "轨迹质量", "en": "Trajectory quality" }, "match": ["trajectory", "steps", "planning", "tool-use"] },
+        { "id": "robustness-safety", "label": { "zh": "鲁棒性与安全", "en": "Robustness and safety" }, "match": ["robustness", "safety", "privacy", "attack", "reliability"] },
+        { "id": "efficiency", "label": { "zh": "效率与成本", "en": "Efficiency and cost" }, "match": ["efficiency", "cost", "latency", "budget"] }
+      ]
+    },
+    {
+      "id": "evaluator",
+      "label": { "zh": "验证方式", "en": "Evaluator" },
+      "options": [
+        { "id": "deterministic", "label": { "zh": "确定性指标", "en": "Deterministic metric" }, "match": ["exact-match", "recall", "precision", "f1", "accuracy"] },
+        { "id": "executable", "label": { "zh": "可执行验证", "en": "Executable verification" }, "match": ["execution", "unit-test", "hidden-test", "executable", "oracle"] },
+        { "id": "llm-judge", "label": { "zh": "LLM Judge", "en": "LLM judge" }, "match": ["llm-judge", "judge", "pairwise"] },
+        { "id": "human", "label": { "zh": "人工评估", "en": "Human evaluation" }, "match": ["human", "expert", "annotation"] }
+      ]
+    }
+  ]
+}
