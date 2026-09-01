@@ -24,7 +24,9 @@ class WebPublicationContractTest(unittest.TestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("node-version: 22.12.0", text)
+        self.assertIn("actions/checkout@v7", text)
+        self.assertIn("actions/setup-node@v7", text)
+        self.assertIn("node-version: 24", text)
         self.assertIn("npm install --no-audit --no-fund", text)
         self.assertIn("npm test", text)
         self.assertIn("npm run check", text)
