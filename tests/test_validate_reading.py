@@ -1,12 +1,17 @@
+import contextlib
+import io
 import json
 from pathlib import Path
 import sys
+import tempfile
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import validate_reading
 from validate_reading import (
     validate_benchmark_aliases,
     validate_benchmark_library,
@@ -25,6 +30,55 @@ ALIASES = """<a id="frontier"></a>
 <a id="benchmark-rag"></a>
 <a id="benchmark-data"></a>
 """
+
+
+class EvaluationFrontierSurfaceTest(unittest.TestCase):
+    def _run_validator(self, zh: str, en: str) -> tuple[int, str]:
+        with (
+            tempfile.NamedTemporaryFile(
+                dir=ROOT, prefix="README.frontier-", suffix=".md", delete=False
+            ) as zh_file,
+            tempfile.NamedTemporaryFile(
+                dir=ROOT, prefix="README.frontier-en-", suffix=".md", delete=False
+            ) as en_file,
+        ):
+            zh_path = Path(zh_file.name)
+            en_path = Path(en_file.name)
+        try:
+            zh_path.write_text(zh, encoding="utf-8")
+            en_path.write_text(en, encoding="utf-8")
+            output = io.StringIO()
+            with (
+                patch.object(validate_reading, "ZH", zh_path),
+                patch.object(validate_reading, "EN", en_path),
+                contextlib.redirect_stdout(output),
+            ):
+                result = validate_reading.main()
+        finally:
+            zh_path.unlink()
+            en_path.unlink()
+        return result, output.getvalue()
+
+    def test_repository_validator_accepts_positive_frontier_headings(self):
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            result = validate_reading.main()
+
+        self.assertEqual(0, result, output.getvalue())
+
+    def test_stable_frontier_anchor_is_required(self):
+        anchor = '<a id="evaluation-frontiers"></a>'
+        zh = (ROOT / "README.md").read_text(encoding="utf-8")
+        en = (ROOT / "README.en.md").read_text(encoding="utf-8")
+        self.assertIn(anchor, zh)
+        self.assertIn(anchor, en)
+
+        result, output = self._run_validator(
+            zh.replace(anchor, "", 1), en
+        )
+
+        self.assertEqual(1, result)
+        self.assertIn("evaluation-frontiers", output)
 
 
 class AttentionNavigationTest(unittest.TestCase):
