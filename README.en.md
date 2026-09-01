@@ -368,6 +368,7 @@ all 125 benchmarks in the registry remain directly scannable here. The Library i
 | 🔭 Frontier | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | [0](https://www.semanticscholar.org/paper/3a779ef95d25521f2859c5710184e96f473a3352) | 2026-08-20 | Diagnosing and modifying learning algorithms in frozen training repositories, separated by proxy exploration, source-only handoff, and clean-start formal runs. |
 | 🔭 Frontier | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | [0](https://www.semanticscholar.org/paper/99baa4801ba4f9018a98382c1d6a154ac66ea6a9) | 2026-08-20 | Training-pipeline repair, iterative ML experimentation, published-baseline improvement, and specification-gaming resistance in real repositories. |<!-- TABLE-FIRST:AREA:data-agent:END -->
 
+<a id="evaluation-frontiers"></a>
 ## Next Evaluation Frontiers
 
 | Evaluation direction | Research objective |
