@@ -1,25 +1,39 @@
-# BrowseComp：把 web search 的 persistence 与 creativity 拉到极限
+# BrowseComp：为难找事实持续搜索，而不是只做一次检索
 
-**中文** | [English](browsecomp.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](browsecomp.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-[官方说明](https://openai.com/index/browsecomp/) · [代码](https://github.com/openai/simple-evals)
+[OpenAI 发布页](https://openai.com/index/browsecomp/) · [论文](https://arxiv.org/abs/2504.12516) · [评测代码](https://github.com/openai/simple-evals)
 
-## 它在测什么
+## 它到底测什么
 
-BrowseComp 有 1,266 个短答案、可验证但极难找到的 web questions。成功通常需要持续 browsing、query reformulation、跨页面追踪和寻找非显然 source，因此它比普通 factual QA 更直接测 information-seeking persistence。
+BrowseComp 有 1,266 个很难找的 factual question，需要 agent 持续、创造性地浏览多个 web source。答案刻意设计成短且可验证，因此 grading 很简单，真正困难的是 **evidence discovery**。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-HotpotQA 等 benchmark 固定 corpus 和 evidence；BrowseComp 把环境换成 live web，让“找到哪里搜、怎么继续搜”成为主要难点。代价是 search provider、web drift 与 tool interface 也进入 benchmark contract。
+简单 factual QA / shallow web search 在模型能发几次 search 后很快接近饱和。BrowseComp 把难度放到 persistence、query reformulation、source chaining 和 obscure evidence discovery，而不是长文本生成。
 
-## 决定性证据与当前成绩
+## 决定性证据
 
-OpenAI 原始评测报告 Deep Research 51.5%、o1 无浏览 9.9%、GPT-4o browsing 1.9% 等，说明强 browsing agent 与纯 parametric answering 存在巨大差距。网页 result track 保留这组 2025-04-10 官方 snapshot；它不与后续不同 search provider、tool budget 或 BrowseComp-derived variants 混排。原始发布还明确指出 Deep Research 曾用 BrowseComp-style data 训练，因此 leakage/benchmark familiarity 是重要解释变量。
+题目围绕单一、稳定、可验证的短答案构造，很多题需要浏览大量网页才能定位。这种设计的重要价值是把“搜索难”与“长报告主观评分难”拆开：多数失败首先是没有找到答案，而不是 prose judge 不同意。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定题集版本、搜索提供方、browser/tool interface、tool-call budget、knowledge cutoff 与 evaluator。live-web time drift 意味着 result date 必须和 score 一起保存。
+分数证明特定 search provider、browser interface、时间点、model 下 browsing agent 的整体能力，不能干净归因给 retriever，因为 web navigation、query generation、model prior 与 tool implementation 是耦合的。
 
-## 下一步评测坐标
+## 公平比较契约
 
-BrowseComp 的短答案无法评价 citation quality、evidence portfolio 与长文 synthesis；BrowseComp-Plus 等工作随后用 fixed corpus 来换取 attribution 与 reproducibility。
+必须记录 model/version、search provider、tool interface、运行日期、call/token budget，以及能否 fetch page。web drift 使历史分数只能近似比较；同一个 answer grader 并不意味着信息访问条件相同。
+
+## 还没有测什么
+
+OpenAI 自己也指出短答案分布和真实 open-ended user query 的相关性未知。BrowseComp 不测 citation quality、长文 synthesis、ambiguity clarification、artifact generation 或用户需求完整性。
+
+## 下一步最有判别力的验证
+
+给题目增加 evidence-set scoring，并固定 search budget，区分“靠 prior/运气猜到答案”和“高效找到了足够 supporting evidence”。
+
+## 演化位置
+
+`factual QA → persistent web search → evidence-aware research agents`
+
+它是一个很干净的 search-hardness benchmark，但不是完整 research-usefulness benchmark。

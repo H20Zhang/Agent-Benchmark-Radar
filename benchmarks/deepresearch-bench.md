@@ -1,25 +1,39 @@
-# DeepResearch Bench：从“找到答案”转向可引用的长文 research artifact
+# DeepResearch Bench：评估 evidence、citation 与最终研究报告
 
-**中文** | [English](deepresearch-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](deepresearch-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-[论文](https://arxiv.org/abs/2506.11763) · [代码](https://github.com/Ayanami0730/deep_research_bench)
+[论文](https://arxiv.org/abs/2506.11763) · [项目页](https://deepresearch-bench.github.io/) · [代码](https://github.com/Ayanami0730/deep_research_bench)
 
-## 它在测什么
+## 它到底测什么
 
-DeepResearch Bench 用 100 个跨 22 个领域的 PhD-level research tasks，评价多步 web research、evidence collection、citation accuracy/effectiveness 与 long-form report quality。evaluation object 不再是一个短答案，而是接近 analyst deliverable 的 research report。
+DeepResearch Bench 评估会多步 web exploration、最终产出 **长篇 citation-rich research report** 的 agent。100 个专家编写任务覆盖 22 个领域，同时评 report quality 和 citation/retrieval effectiveness。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-BrowseComp 强调 search persistence，但不要求完整 research artifact。DeepResearch Bench 把 retrieval、citation 与 synthesis 连起来，因此“答案有道理但 citation 不支持 claim”可以单独成为失败。
+BrowseComp 故意把 output 压成一个短事实答案；DeepResearch Bench 改变了 artifact：系统既要选 evidence，又要综合成 coherent analysis，还要让 claim 有 citation grounding，因此 information sufficiency 与 reporting quality 被一起测量。
 
-## 决定性证据与成绩边界
+## 决定性证据
 
-该 benchmark 的 evaluator 仍在演进：官方仓库 2026-05 切换到 GPT-5.5，并同时维护迁移期 leaderboard；GPT-5.5 evaluator 与 human IAA 的 overall alignment 约 71.82 vs human baseline 68.78。这个变化说明 evaluator version 是 load-bearing variable。Radar 不把旧 judge 与新 judge 的 agent scores混为一个当前榜单，而应分 evaluator-generation tracking。
+任务由领域专家编写，topic distribution 还参考了大规模真实 web-search chatbot query。RACE 用 adaptive reference-based criterion 评报告，FACT 看 effective citation count 与 citation accuracy，从而避免“文笔很好”直接等价于“研究扎实”。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 task set、web/search provider、report budget、citation extraction、judge generation 与 scoring rubric。不同 evaluator 版本的分数必须带日期和 protocol version。
+它支持特定 evaluator 下 deep-research agent 的 end-to-end quality，但 retrieval、planning、writing 都会影响最终报告，且 judge/evaluator 本身也有 assumption，因此很难从总分直接做 component attribution。
 
-## 下一步评测坐标
+## 公平比较契约
 
-100 个高成本 tasks 足以测系统，但不利于细粒度 causal attribution。下一步需要可重放 evidence snapshots 和 component-level intervention，区分 search、source selection、writing 与 citation verifier 的贡献。
+应固定 search access、model/version、time/call/token budget、语言、报告长度约束与 evaluator version，并把 citation metric 与 holistic report quality 分开报告。web drift 与 search provider 差异应作为实验变量记录。
+
+## 还没有测什么
+
+100 个高成本任务限制统计分辨率；长报告 judge 仍可能漏掉细微事实/方法错误。真实研究还经常需要 clarification、private corpus、计算工具和与用户反复 review。
+
+## 下一步最有判别力的验证
+
+加入 claim-level evidence graph 与 retrieval-budget sweep，判断 report improvement 到底来自找到了更好的 evidence，还是只是在同一 evidence set 上写得更漂亮。
+
+## 演化位置
+
+`hard web answer finding → citation-grounded report generation → auditable research workflow`
+
+它把 search benchmark 从“找到答案”推进到了“交付可审计的研究 artifact”。

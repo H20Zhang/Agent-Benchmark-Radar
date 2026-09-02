@@ -1,25 +1,39 @@
-# GateMem: shared memory needs utility, access control, and forgetting at once
+# GateMem: useful shared memory under access control and deletion
 
-[中文](gatemem.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](gatemem.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2606.18829) · [Code](https://github.com/rzhub/GateMem)
 
-## What it measures
+## What it actually measures
 
-GateMem contains 91 multi-party episodes and 2,218 hidden checkpoints across medical, office, education, and household settings. It jointly evaluates legitimate utility, unauthorized disclosure, and recovery after deletion, making multi-principal governance part of the memory contract.
+GateMem evaluates whether a shared-memory agent can remain useful while enforcing **who may access which memory and what must be forgotten**. It models multiple principals across medical, office, education, and household scenarios, with long-form episodes, incremental memory injection, hidden checkpoints, access boundaries, and deletion targets.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Traditional memory benchmarks treat retrievability as uniformly good. GateMem makes one fact potentially visible, forbidden, or deleted depending on the principal, so memory quality must be optimized together with access boundaries and active forgetting.
+Most memory benchmarks reward remembering more. Privacy benchmarks often test leakage without measuring whether the system remains useful. GateMem makes the tension explicit: utility, access-control violations, and deletion leakage are scored together. A system cannot win by storing everything, and it cannot win by refusing to remember anything.
 
-## Score boundary
+## Decisive evidence
 
-The Memory Governance Score supports behavioral access/forgetting under the synthetic policy and harness. It does not prove physical erasure or real authentication/authorization security. Deletion success means non-retrievability under the protocol, not storage-layer deletion proof.
+The evaluation finds no tested approach simultaneously strong on utility, access control, and active forgetting. Long-context baselines can provide strong governance behavior but pay high token cost, while retrieval/external-memory approaches reduce cost yet can surface unauthorized or deleted information. The released evaluator tracks utility together with privacy and deletion leakage rather than collapsing them into one accuracy number.
 
-## Fair comparison conditions
+## What the score supports
 
-Align authorization policy, harness, backbone, judge, and retrieval budget. Different principal policies or deletion semantics require distinct tracks.
+GateMem supports a claim about the **governed memory system** under a specific principal/policy model. It does not isolate whether a leak originates in storage, indexing, retrieval filtering, generation, or policy interpretation. A good aggregate score therefore should be accompanied by the separate utility/access/deletion axes.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step integrates real identity, authorization, and storage lifecycle so revocation removes information consistently from caches, indexes, and derived representations.
+Fix principals, policy rules, deletion requests, memory history, model, retrieval top-k, and query set. Measure latency/token/storage overhead because stricter governance may be achieved by expensive full-context inspection. Do not expose hidden leak-target annotations to the agent; they are evaluator metadata, not task input.
+
+## What remains unmeasured
+
+Real enterprise policies include nested groups, delegated authority, purpose limitation, retention schedules, auditability, and policy changes over time. Cryptographic deletion and physical data erasure are also outside a language-level benchmark.
+
+## Next discriminating validation
+
+Separate policy enforcement at write, index, retrieval, and generation time under the same tasks. The key systems question is where to enforce access/deletion constraints so that violations fall without paying full-context cost.
+
+## Genealogy
+
+`remember more → remember selectively → governed multi-principal memory`
+
+GateMem turns privacy and forgetting from caveats into first-class memory-system objectives.

@@ -1,25 +1,39 @@
-# GateMem：shared memory 必须同时有 utility、access control 与 forgetting
+# GateMem：共享 memory 同时要有用、守权限、能删除
 
-**中文** | [English](gatemem.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](gatemem.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2606.18829) · [代码](https://github.com/rzhub/GateMem)
 
-## 它在测什么
+## 它到底测什么
 
-GateMem 有 91 个 multi-party episodes、2,218 个 hidden checkpoints，跨 medical、office、education、household。它联合评估 legitimate utility、unauthorized disclosure 与 deletion 后是否还能恢复信息，让 multi-principal governance 成为 memory contract 的一部分。
+GateMem 测共享 memory agent 能否在保持 utility 的同时，正确执行 **谁可以访问什么、什么必须被忘掉**。它覆盖医疗、办公、教育、家庭等多 principal 场景，通过长 episode、增量 memory injection、隐藏 checkpoint、访问边界和 deletion target 来评估治理能力。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-传统 memory benchmark 把“能检索回来”当好事。GateMem 明确指出 shared memory 中同一条信息对不同 principal 可能该可见、不可见或已删除，因此 memory quality 必须和 access boundary、active forgetting 一起优化。
+多数 memory benchmark 奖励“记得更多”；privacy benchmark 又常只看泄露，不看系统还能不能正常服务。GateMem 把冲突本身变成评测对象：utility、access-control violation 与 deletion leakage 必须一起看。全部存下来不行，什么都不记同样不行。
 
-## 分数边界
+## 决定性证据
 
-Memory Governance Score 支持 behavioral access/forgetting under the synthetic policy 与 harness；它不能证明 bytes 被物理擦除，也没有真实 authentication/authorization infrastructure。因此 deletion success 应解释为 non-retrievability under protocol，而非存储层安全证明。
+论文发现，没有一种被测方案能同时在 utility、access control 与 active forgetting 上都表现强。long-context baseline 往往治理更稳，但 token cost 高；retrieval / external-memory 方案成本更低，却可能重新暴露无权限或已经请求删除的信息。公开 evaluator 也保留了 utility、privacy leakage、deletion leakage 等独立坐标。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 authorization policy、agent harness、backbone、judge 与 retrieval budget。不同 principal policy 或 deletion semantics 必须独立 track。
+GateMem 能支持特定 principal / policy model 下 **governed memory system** 的系统级判断，但不能直接定位泄漏来自 storage、indexing、retrieval filtering、generation 还是 policy interpretation。因此 aggregate score 必须和三个子轴一起看。
 
-## 下一步评测坐标
+## 公平比较契约
 
-下一步要接入真实身份、权限与 storage lifecycle，验证 revocation 后缓存、索引与派生 representation 都能一致删除。
+应固定 principal、policy rule、deletion request、memory history、model、retrieval top-k 与 query set，同时报告 latency/token/storage overhead，因为更严格的治理可能只是靠昂贵的 full-context inspection 实现。隐藏 leak-target annotation 属于 evaluator metadata，不能泄露给 agent。
+
+## 还没有测什么
+
+真实企业策略还包括嵌套 group、delegated authority、purpose limitation、retention schedule、审计和动态 policy change；cryptographic deletion 与物理数据擦除也不是语言层 benchmark 能验证的。
+
+## 下一步最有判别力的验证
+
+在同一批任务上分别把 policy enforcement 放到 write、index、retrieval、generation 四个阶段。真正的系统问题是：把权限/删除约束放在哪里，才能在不付出 full-context 成本的情况下显著减少 violation。
+
+## 演化位置
+
+`remember more → remember selectively → governed multi-principal memory`
+
+它把 privacy 与 forgetting 从附带 caveat 提升成了 memory system 的一等目标。

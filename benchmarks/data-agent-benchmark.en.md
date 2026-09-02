@@ -1,25 +1,39 @@
-# Data Agent Benchmark (DAB): real enterprise data questions span DBMSes and data forms
+# Data Agent Benchmark (DAB): enterprise questions across heterogeneous databases
 
-[中文](data-agent-benchmark.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](data-agent-benchmark.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2603.20576) · [Code and leaderboard](https://github.com/ucbepic/DataAgentBench)
+[Paper](https://arxiv.org/abs/2603.20576) · [Project](https://ucbepic.github.io/DataAgentBench/) · [Code](https://github.com/ucbepic/DataAgentBench)
 
-## What it measures
+## What it actually measures
 
-DAB contains 54 queries over 12 datasets, nine domains, and four DBMSes—PostgreSQL, MongoDB, SQLite, and DuckDB. Grounded in an enterprise workload study, it stresses multi-database integration, ill-formatted key joins, unstructured-text transformation, and domain knowledge rather than one text-to-SQL translation.
+DAB evaluates whether agents can answer enterprise data questions when relevant information is **fragmented across multiple heterogeneous database systems**, references are inconsistent, and useful context may be buried in unstructured fields.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Spider and BIRD largely assume the needed facts live inside one relational database. DAB makes one question span database systems, heterogeneous keys, and textual fields, forcing integration, transformation, and analysis.
+Text-to-SQL assumes one database and a known schema. DAB moves the target to integration, transformation, and analysis across PostgreSQL, MongoDB, SQLite, and DuckDB, making data-location discovery and cross-system reconciliation part of the task.
 
-## How to interpret current scores
+## Decisive evidence
 
-The official leaderboard uses Pass@1 and requires at least five trials per query; the site can recompute historical submissions with current validators. Result tracks therefore need a recomputation/protocol date rather than copying submission-time numbers. High Pass@1 supports reliability of the full agent stack on the 54-query suite and does not isolate one integration, reasoning, or model component.
+DAB contains 54 queries across 12 datasets, nine domains, and four DBMSes, derived from a formative study of enterprise workloads across six industries. The reported best frontier model, Gemini-3-Pro, reaches only 38% pass@1, despite the relatively small query count.
 
-## Fair comparison conditions
+## What the score supports
 
-Align dataset/ground-truth revision, validators, trials per query, hints, DBMS versions, agent scaffold, and model mixture. Five-trial submissions and 50-trial paper baselines are different protocols.
+The benchmark is evidence for end-to-end enterprise data-question answering under a heterogeneous backend. It cannot attribute failure to semantic mapping, integration, transformation, SQL/NoSQL generation, or answer synthesis without trajectory analysis.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-DAB captures cross-database complexity but has only 54 queries. The next step adds more schema drift, permissions, writes, analyst artifacts, and business-semantic correctness.
+Fix database snapshots, credentials/access, tool interfaces, model, retry policy, and number of trials; the leaderboard asks for at least five trials per query. Report pass@1 and variance, since stochastic agents can look substantially different under best-of-n evaluation.
+
+## What remains unmeasured
+
+The suite is small and read-oriented. Production agents face permissions, writes, lineage, semantic layers, changing schemas, cost constraints, and ambiguous business definitions.
+
+## Next discriminating validation
+
+Annotate each query with a ground-truth integration/semantic plan and score intermediate relation resolution before final execution. That would reveal whether heterogeneous data access or business semantics is the dominant bottleneck.
+
+## Genealogy
+
+`single-database text-to-SQL → cross-database integration → enterprise data agent`
+
+DAB makes backend heterogeneity a first-class evaluation property.

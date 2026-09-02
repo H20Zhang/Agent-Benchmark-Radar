@@ -1,25 +1,39 @@
-# Data Agent Benchmark (DAB)：真正的 enterprise data question 往往跨多个 DBMS 与数据形态
+# Data Agent Benchmark (DAB)：跨异构数据库回答企业数据问题
 
-**中文** | [English](data-agent-benchmark.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](data-agent-benchmark.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-[论文](https://arxiv.org/abs/2603.20576) · [代码与榜单](https://github.com/ucbepic/DataAgentBench)
+[论文](https://arxiv.org/abs/2603.20576) · [项目页](https://ucbepic.github.io/DataAgentBench/) · [代码](https://github.com/ucbepic/DataAgentBench)
 
-## 它在测什么
+## 它到底测什么
 
-DAB 有 54 个 queries、12 个 datasets、9 个 domains、4 个 DBMS（PostgreSQL、MongoDB、SQLite、DuckDB）。任务来自 enterprise workload study，集中测试 multi-database integration、ill-formatted key joins、unstructured-text transformation 与 domain knowledge，而不是只把自然语言翻译成一条 SQL。
+DAB 评估 enterprise data question 在 **多个异构 database system** 之间分散、引用不一致、部分信息还藏在 unstructured field 时，agent 能不能完成整合、转换与分析。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-Spider/BIRD 假设主要事实在一个 relational database 内。DAB 让同一个问题跨 database systems、异构 key 和文本字段，迫使 agent 做 integration、transformation 与 analysis，measurement object 更接近企业数据问题本身。
+Text-to-SQL 通常假设一个 database 和已知 schema。DAB 同时覆盖 PostgreSQL、MongoDB、SQLite、DuckDB，把“数据到底在哪、不同系统里的 reference 怎么对应”也变成 task。
 
-## 当前成绩如何解释
+## 决定性证据
 
-官方 leaderboard 用 Pass@1，并要求提交至少 5 trials/query；官方页面还会用当前 validators 重新计算历史 submissions。因此 result track 必须保存 recompute/protocol date，而不能只抄 submission 当天数字。高 Pass@1 支持完整 agent stack 在 54-query suite 下的可靠性，不定位 integration、reasoning 或 model 的单一贡献。
+benchmark 有 54 个 query、12 个 dataset、9 个 domain、4 类 DBMS，设计来自 6 个行业 enterprise workload 的 formative study。论文报告最好的 frontier model Gemini-3-Pro pass@1 也只有 38%，说明即使 query 数不大，跨系统整合仍远未解决。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 dataset/ground-truth revision、validators、trials/query、是否使用 hints、DBMS versions、agent scaffold 与 model mix。5-trial submissions 与 50-trial paper baselines应分 protocol。
+它支持 heterogeneous backend 下 enterprise data QA 的 end-to-end 判断，但不能直接说失败来自 semantic mapping、integration、transformation、SQL/NoSQL generation 还是 answer synthesis，除非进一步看 trajectory。
 
-## 下一步评测坐标
+## 公平比较契约
 
-DAB 已覆盖跨库复杂性，但 query 数仍少。下一步需要更多真实 schema drift、permissions、writes、analyst artifacts 与业务语义 correctness。
+必须固定 database snapshot、credentials/access、tool interface、model、retry policy 与 trial 数；leaderboard 本身要求每题至少 5 次。应报告 pass@1 和 variance，不能用 best-of-n 掩盖 stochastic instability。
+
+## 还没有测什么
+
+任务数量小、主要是 read。生产 data agent 还会遇到 permission、write、lineage、semantic layer、schema evolution、成本约束与 business ambiguity。
+
+## 下一步最有判别力的验证
+
+给每题增加 ground-truth integration/semantic plan，在最终 execution 之前单独评分 relation resolution，区分主要瓶颈到底是 heterogeneous access 还是 business semantics。
+
+## 演化位置
+
+`single-database text-to-SQL → cross-database integration → enterprise data agent`
+
+它第一次把 backend heterogeneity 真正放进 data-agent 评测核心。

@@ -1,23 +1,39 @@
-# DABStep：复杂 data workflow 应该有可验证的 intermediate milestones
+# DABstep：多步金融数据分析，同时保留 objective grading
 
-**中文** | [English](dabstep.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](dabstep.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-## 它在测什么
+[论文](https://arxiv.org/abs/2506.23719) · [Benchmark](https://huggingface.co/spaces/adyen/DABstep)
 
-DABStep 的 paper 描述约 450 个 tasks、来自 95 个 workflows、覆盖超过 100K payment transactions；当前公开 dataset 约 460 rows。任务把 data analysis 拆成一组可验证 steps，并通过 deterministic final answers、hidden tests/online leaderboard 检查 agent 是否真正完成 workflow，而不是只生成合理解释。
+## 它到底测什么
 
-## 相比什么前进了
+DABstep 来自金融 analytics platform 的 **realistic multi-step data analysis**：450+ 个 challenge 要同时处理 transaction data、heterogeneous documentation、cross-source lookup，并通过 code 得到精确结果。
 
-开放式 analyst benchmark 的难点是最终报告很难归因。DABStep 用 step structure 建立中间 execution contract，使 schema inspection、transformation、aggregation 等错误可以在 final answer 前被定位。
+## 相比此前评测多测了什么
 
-## 分数边界
+很多 open-ended analytics benchmark 强依赖 LLM judge。DABstep 保留较长 agentic workflow，却把最终答案设计为 factoid，并可自动 correctness check，因此把 realistic multi-step analysis 与 objective grading 放到了一起。
 
-final/step success 支持 payments data 与当前 workflow definitions 下的执行可靠性；paper 与 public artifact 的规模差异意味着必须绑定 release，不应把不同 task set 的结果混排。
+## 决定性证据
 
-## 公平比较条件
+最强被测 agent 在 hardest task 上 accuracy 也只有 14.55%。环境不仅有 transaction record，还有 fee structure、merchant metadata、category/country lookup table 与 documentation，因此必须同时完成 executable data manipulation 与 semantic cross-reference。
 
-锁定 dataset release、workflow version、runtime、hidden tests、tool budget 与 agent scaffold，并记录 public/online evaluator generation。
+## 这个分数能证明什么
 
-## 下一步评测坐标
+DABstep 对 bounded financial workspace 下 end-to-end analytical execution 证据很强，但不能单独定位 planning、code quality、documentation retrieval 或 semantic interpretation；synthetic benchmark environment 也绝不能被理解成真实金融系统访问能力。
 
-下一步应将 step correctness 与 business invariant、recovery 和 artifact provenance 联合起来，区分“步骤执行了”与“业务状态正确”。
+## 公平比较契约
+
+应固定 benchmark version、file/documentation、tool interface、model、trajectory/call budget 与 final scorer，并按 difficulty slice 报告。预先给某个系统 parsed relation 或手工 semantic mapping，会把 cross-source 难度直接降低。
+
+## 还没有测什么
+
+生产金融 analytics 还有 live schema、permission、PII、governance、write、audit trail 与变化的 business logic；factoid grading 也不能覆盖完整 analyst-facing deliverable 的质量。
+
+## 下一步最有判别力的验证
+
+在 source selection、join/mapping、computed quantity 等中间步骤加入 deterministic checkpoint，既保留 objective grading，又能定位 multi-step workflow 到底在哪一步失败。
+
+## 演化位置
+
+`single-table analysis → heterogeneous documented workspace → objectively graded multi-step data agent`
+
+它说明 realistic agentic analysis 并不一定只能依赖主观 LLM judge。

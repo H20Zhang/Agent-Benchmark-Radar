@@ -1,25 +1,39 @@
-# Spider 2.0: moving text-to-SQL toward enterprise database workflows
+# Spider 2.0: enterprise text-to-SQL becomes an agent workflow
 
-[中文](spider-2.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](spider-2.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Project](https://spider2-sql.github.io/)
+[Paper](https://arxiv.org/abs/2411.07763) · [Project](https://spider2-sql.github.io/)
 
-## What it measures
+## What it actually measures
 
-Spider 2.0 targets enterprise-like SQL-agent tasks. Current official families include Spider 2.0-Snow, Spider 2.0-Lite, and Spider 2.0-DBT, with public sizes around 547, 547, and 68 tasks respectively and continuing release evolution. Tasks cover large schemas, multiple SQL dialects, complex analytics, and database-management/DBT-style work.
+Spider 2.0 evaluates **real-world enterprise text-to-SQL workflows**, not isolated query generation. Its 632 problems use real application databases, often with more than 1,000 columns and cloud systems such as BigQuery and Snowflake; solving them can require metadata search, dialect documentation, project code, multiple queries, and workflows exceeding 100 SQL lines.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Original Spider is primarily static text-to-SQL. Spider 2.0 adds schema scale, real database systems, dialect differences, and multi-step operations, requiring exploration and execution rather than one SQL string.
+Spider 1.0 asks for generalization to unseen schemas; BIRD adds realistic database values. Spider 2.0 changes the unit of work itself: an agent must navigate a large data environment and construct a multi-step SQL workflow, closer to data engineering/analytics than one semantic-parsing prediction.
 
-## Score boundary
+## Decisive evidence
 
-Success rates bind to a concrete family, release, context setting, and evaluator. Oracle-table and other assisted conditions are different contracts and should not be mixed with full schema-discovery results.
+The original evaluation reports an o1-preview-based code agent at only 17.0% success on Spider 2.0, versus 91.2% on Spider 1.0 and 73.0% on BIRD. The collapse is direct evidence that prior benchmark saturation did not transfer to enterprise workflow complexity.
 
-## Fair comparison conditions
+## What the score supports
 
-Align Snow/Lite/DBT family, release, database version, schema/table hints, agent scaffold, step budget, and evaluator. Oracle conditions must be explicitly separated.
+Spider 2.0 supports end-to-end competence at enterprise SQL workflow construction under its environment. It does not isolate SQL reasoning from metadata retrieval, long-context management, dialect knowledge, code navigation, or agent scaffold quality.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step moves beyond SQL-centric workflows to multiple databases, unstructured documents, and business semantics, as in DAB and AgenticDataBench.
+Pin database/cloud snapshots, SQL dialects, metadata and codebase access, agent harness, model, execution/retry budget, and evaluator. A system given preselected relevant tables is solving a materially easier task than one required to discover them.
+
+## What remains unmeasured
+
+Business definitions, ambiguous stakeholder intent, governance, permission, production writes, and persistent maintenance remain only partially represented. Real warehouses also evolve continuously rather than staying frozen for one benchmark run.
+
+## Next discriminating validation
+
+Decompose performance into metadata discovery, semantic/schema resolution, workflow planning, query execution, and repair using oracle interventions. This would tell whether the 17% bottleneck is mostly retrieval/context or SQL/program synthesis.
+
+## Genealogy
+
+`single query → complex unseen schema → large enterprise SQL workflow`
+
+Spider 2.0 is where text-to-SQL evaluation becomes unmistakably an agent-systems problem.
