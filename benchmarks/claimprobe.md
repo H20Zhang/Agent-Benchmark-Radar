@@ -4,14 +4,40 @@
 
 [论文](https://arxiv.org/abs/2608.28643) · [代码](https://github.com/SalesforceAIResearch/claimwriter-deep-research)
 
-**一句话：** ClaimProbe 在固定检索证据后逐 claim 审计“有没有依据、引对没引对、漏没漏引、关键事实有没有写进来”，从而把 writer-side faithfulness 与 retrieval/search 质量分开。
+## 它到底测什么
 
-**问题。** DeepResearch Bench、DAS-Bench 与 LitReview Arena 已覆盖整体报告、citation/discourse 和专家偏好，但整体分数仍会把 retrieval、writer 与成品质感混在一起。
+ClaimProbe 测的是 **retrieved evidence 到最终 report claim 之间的信息转译是否忠实**。在检索证据固定以后，它逐 claim 审计：陈述有没有来源支持、引用是否归到了正确 source、已有支持是否漏引、关键必要事实是否真正写进报告。这样可以把 writer-side evidence materialization / attribution 与 retrieval/search quality 分离。
 
-**证据。** Enterprise Deep Research 的 fixed-evidence writer intervention 中，hallucination 15.89→5.02、misattribution 18.94→5.43、necessary fact recall 36.83→45.85；上游 evidence 不变，因此支持 writer-side evidence materialization / attribution 改变，而不是 retrieval 或 planning 变好。
+## 相比前身多测了什么
 
-**限制。** 主 hallucination judge 与人工的一致性只有 Cohen κ=0.484，support search 还受 top-20 embedding shortlist 限制；动态更新只覆盖 5 个 DeepResearch Bench tasks，整体 RACE 变化也较小且 readability 有时下降。
+DeepResearch Bench、DAS-Bench 与 LitReview Arena 已经覆盖整体报告质量、citation/discourse 与专家偏好，但 holistic score 往往把多个 failure layer 压成一个数字：证据没找到、找到了但没写、写了但引错、写得不好看都可能一起扣分。ClaimProbe 增加了 **`retrieved evidence → written claim → cited source`** 的细粒度诊断坐标，因此更适合做 causal-ish system debugging。
 
-**地图。** `early_signal`：新增 `retrieved evidence → written claim → cited source` 的独立诊断坐标，但单篇证据不改 durable Benchmark Map。
+## 决定性证据
 
-**链接。** [Primary](https://arxiv.org/abs/2608.28643) · [Code](https://github.com/SalesforceAIResearch/claimwriter-deep-research)
+在 Enterprise Deep Research 的 **fixed-evidence writer intervention** 中，上游 evidence 保持不变，hallucination 从 **15.89 降到 5.02**，misattribution 从 **18.94 降到 5.43**，necessary fact recall 从 **36.83 提高到 45.85**。由于检索集合固定，这组结果比端到端总分更能支持“writer-side evidence materialization / attribution 改善”这一层的增益，而不是把变化误归因于 search 或 planning。
+
+## 这个分数支持什么判断
+
+ClaimProbe 可以支持“给定同一 evidence set，某个 writer / synthesis mechanism 更少 hallucinate、更少错引、能覆盖更多必要事实”。它不能支持“整个 deep-research agent 更会找证据”，也不能把最终 report utility 完全还原成这些局部指标：holistic RACE 改善较小，readability 还有时下降，说明局部 faithfulness 与整体可读/有用性并非同一个目标。
+
+## 公平比较条件
+
+比较 writer 时需要固定 evidence set、claim segmentation、support-search procedure、citation availability、writer token budget、prompt 与 judge。尤其不能让一个 writer 获得更多或更相关 evidence，再把 hallucination 下降解释为 writing mechanism 更强。若比较 evaluator，也应报告人类一致性与 support-retrieval recall，因为 judge 的错误会直接进入 benchmark score。
+
+## 证据强度与限制
+
+主 hallucination judge 与人工的一致性只有 **Cohen κ=0.484**，support search 受 **top-20 embedding shortlist** 限制；dynamic-update study 只覆盖 **5 个 DeepResearch Bench tasks**。因此当前最可信的是 fixed-evidence 条件下的 writer-layer相对差异，而不是所有 claim-level error 的绝对 prevalence。
+
+## 研究上怎么用
+
+如果研究新的 agentic retrieval / report generation 系统，ClaimProbe 很适合作为 **failure-layer attribution benchmark**：先固定 retrieval 判断 writer，再固定 writer 改 retrieval，最后才看端到端 report utility。这样可以避免“最终报告更好”这种 package-level claim 无法回答到底是 search、evidence selection、synthesis 还是 citation grounding 在起作用。
+
+## 下一步最有价值的验证
+
+最高杠杆的缺口有两个：一是把 claim-support judge 做到更高的人类一致性并验证 shortlist recall；二是在更大规模 held-out deep-research tasks 上测试局部 faithfulness 改善是否稳定转化为专家 report preference。若二者不相关，未来 benchmark 需要把 factual faithfulness 与 research usefulness 保持为两个独立坐标。
+
+## 谱系位置
+
+`map_delta=early_signal`。ClaimProbe 新增了 `retrieved evidence → written claim → cited source` 的独立诊断层，但单篇证据不足以改 durable Benchmark Map。它的潜在重要性在于：未来 Deep Research benchmark 可能从“评一个最终 artifact”演化成**按 retrieval、materialization、attribution、utility 分层评测**。
+
+**Primary:** https://arxiv.org/abs/2608.28643 · **Code:** https://github.com/SalesforceAIResearch/claimwriter-deep-research

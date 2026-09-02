@@ -1,11 +1,35 @@
 # StateMemBench
 
-- **Measurement object:** Whether answers use the currently operative state rather than a superseded state as facts, constraints, and decisions are revised across sessions.
-- **Closest predecessor:** LongMemEval / MemoryAgentBench already cover updates; StateMemBench uses symbolic event programs, deterministic replay, and closed-pool grading to isolate state drift more directly from retrieval and generic reasoning failure.
-- **Decisive evidence:** 234 multi-session scenarios and 322 probes; the grader separates current, targeted-superseded, and other outcomes. StateMem raises the same-backbone DeepSeek score from 0.205 to 0.363, while a length- and cost-matched control retains a +15–32 point structural gain.
-- **Score ceiling:** The score supports current-state maintenance under explicit dependencies and controlled revisions; it is not a general memory-quality measure or direct evidence of long-horizon action benefit in the wild.
-- **Strongest confounder:** The benchmark is aligned with state-structured methods; dialogue is model-synthesized, dependencies are explicit, and grading uses a fixed LLM judge.
-- **Remaining gap:** Latent relation discovery, real user/environment drift, privacy governance, and whether state tracking improves later closed-loop action.
-- **Genealogy:** `early_signal`. It advances update evaluation from “are old and new facts stored?” to “what is the operative state now?” without yet changing the durable map.
+## What it actually measures
+
+StateMemBench measures **maintenance of the currently operative state after cross-session revisions**. Facts, constraints, and decisions can be added, superseded, or linked by dependencies; the final answer must use what remains valid now rather than succeeding merely because some historical record can be recalled. The object is “what should the system currently believe and which rules are still in force,” not only local old-versus-new ranking.
+
+## What changed relative to predecessors
+
+LongMemEval and MemoryAgentBench already include knowledge updates, but update failures can remain entangled with retrieval, long-context understanding, and generic reasoning. StateMemBench uses symbolic event programs, deterministic replay, and a closed-pool grader to generate explicit dependencies and revision trajectories. This isolates **state drift** more directly: an output can be classified as current, targeted-superseded, or another failure.
+
+## Decisive evidence
+
+The benchmark contains **234 multi-session scenarios and 322 probes**. Its grader separates current, targeted-superseded, and other outcomes. The paper reports that StateMem raises the score from **0.205 to 0.363 with the same DeepSeek backbone**; a length- and cost-matched control still retains roughly a **+15–32 point** structural advantage. The important evidence is that the gain is not fully explained by simply keeping more context or spending more tokens.
+
+## What the score supports
+
+The results support the claim that structured current-state maintenance improves operative-state correctness under explicit dependencies and controlled revisions. They are not a general memory-quality measure and do not directly establish better long-horizon action in open environments because dependencies, revisions, and final probes are deliberately constructed.
+
+## Fair comparison contract
+
+Backbone, event program, visible history, state-representation budget, token/cost budget, replay policy, and grader should be fixed. Length- and cost-matched controls are especially important; otherwise a structured-state method can benefit simply from retaining more explicit information. Current-state accuracy and targeted-superseded error rate should also be reported separately so an average score cannot hide old-state leakage.
+
+## How to use it in research
+
+StateMemBench is useful for evaluating **state stores, versioned memory, dependency-aware update, and structured consolidation**. It complements a staleness benchmark: StateMemBench tests whether a complete current state can be reconstructed after multiple revisions, while staleness is closer to a local retrieval/ranking unit test. For an agent-memory paper, the combination localizes update mechanisms more cleanly than downstream long-context QA alone.
+
+## Next discriminating validation
+
+The main gaps are latent relation discovery, real user/environment drift, privacy governance, and whether better state tracking improves later closed-loop action. The highest-leverage next step is to remove explicit dependency annotations, require the agent to infer which natural-language facts supersede or constrain others, and connect state correctness to downstream tool/action success.
+
+## Genealogy
+
+`map_delta=early_signal`. The benchmark advances update evaluation from “are both old and new facts stored?” to “**what is the operative state now?**” This coordinate complements staleness and applicability evaluation, but independent natural-data evidence is still missing, so the durable Benchmark Map should not yet change.
 
 Primary: https://arxiv.org/abs/2608.19652

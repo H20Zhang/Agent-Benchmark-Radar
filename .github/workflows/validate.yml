@@ -24,6 +24,8 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Validate bilingual entry and registry
         run: python scripts/validate_reading.py
+      - name: Validate benchmark detail pages
+        run: python scripts/validate_detail_pages.py
       - name: Install web dependencies
         working-directory: web
         run: npm install --no-audit --no-fund
