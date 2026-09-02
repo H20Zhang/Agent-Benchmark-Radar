@@ -25,10 +25,10 @@ const stableFacets = getStableFacets(items);
 const resultSets = loadAllResultSets();
 const canonicalPath = localePath(lang, "benchmarks/");
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", "benchmarks/");
-const title = lang === "zh" ? "Agent Benchmark Explorer｜筛选最新评测、结果与研究坐标" : "Agent Benchmark Explorer | Find Evaluations, Results, and Research Coordinates";
+const title = lang === "zh" ? "Agent Benchmark 筛选｜按领域、能力与成绩找评测" : "Agent Benchmark Explorer | Filter by Area, Capability, and Results";
 const description = lang === "zh"
-  ? "按研究领域、能力、环境、评测目标、结果覆盖与参考空间筛选 Agent Benchmark。"
-  : "Filter agent benchmarks by research area, capability, environment, evaluation objective, result coverage, and reference headroom.";
+  ? "从 126 个 Agent Benchmark 中按领域、时间、能力、环境、结果覆盖与参考空间快速筛选，并直接打开详情页。"
+  : "Filter the benchmark registry by area, time, capability, environment, result coverage, and reference headroom, then open any benchmark detail page.";
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
@@ -49,13 +49,13 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="radar-page explorer-v2-page">
+<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="radar-page explorer-v2-page core-tool-page">
   <Header {lang} alternatePath={alternatePath} />
   <main id="main-content">
-    <section class="explorer-hero shell">
-      <div><p class="eyebrow">Benchmark explorer</p><h1>{lang === "zh" ? "找到能支撑研究判断的评测" : "Find evaluations that support your research claim"}</h1></div>
+    <section class="tool-hero core-tool-hero explorer-hero shell">
+      <div><p class="eyebrow">Benchmark explorer</p><h1>{lang === "zh" ? "快速筛到真正适合你研究问题的 Benchmark" : "Find the benchmark that actually fits your research question"}</h1></div>
       <p>{description}</p>
-      <dl><div><dt>Registry</dt><dd>{items.length}</dd></div><div><dt>{lang === "zh" ? "结构化结果" : "Result sets"}</dt><dd>{resultSets.size}</dd></div><div><dt>{lang === "zh" ? "稳定筛选维度" : "Stable dimensions"}</dt><dd>{stableFacets.length}</dd></div></dl>
+      <dl><div><dt>Registry</dt><dd>{items.length}</dd></div><div><dt>{lang === "zh" ? "已有成绩" : "Result sets"}</dt><dd>{resultSets.size}</dd></div><div><dt>{lang === "zh" ? "筛选维度" : "Stable dimensions"}</dt><dd>{stableFacets.length}</dd></div></dl>
     </section>
     <Explorer {lang} {items} {summaries} {stableFacets} {resultSets} />
   </main>

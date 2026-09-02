@@ -61,20 +61,31 @@ const headroomBand = resultSummary?.headroom === undefined
     <span class={`role-label role-label--${item.evolution_role}`}>{copy.roles[item.evolution_role]}</span>
     <time datetime={item.released}>{item.released}</time>
   </div>
-  <h3><a href={detailPath}>{item.name}</a></h3>
-  <p class="benchmark-card__summary">{summary || item.summary}</p>
-  {primaryTrack && resultSummary && (
-    <div class="benchmark-card__result">
-      <span>{lang === "zh" ? "已核验结果" : "Verified result"}</span>
-      <strong>{resultSummary.best.score}<small>{primaryTrack.metric.unit}</small></strong>
-      <p>{resultSummary.best.method} · {primaryTrack.label?.[lang] || primaryTrack.label?.en}</p>
-    </div>
-  )}
-  <ul class="token-list" aria-label={copy.detail.capabilities}>
-    {(item.capabilities || []).slice(0, 3).map((capability: string) => (
-      <li>{displayToken(capability)}</li>
-    ))}
-  </ul>
+  <div class="benchmark-card__main">
+    <h3><a href={detailPath}>{item.name}</a></h3>
+    <p class="benchmark-card__summary">{summary || item.summary}</p>
+    <ul class="token-list" aria-label={copy.detail.capabilities}>
+      {(item.capabilities || []).slice(0, 3).map((capability: string) => (
+        <li>{displayToken(capability)}</li>
+      ))}
+    </ul>
+  </div>
+  <div class="benchmark-card__progress">
+    {primaryTrack && resultSummary ? (
+      <div class="benchmark-card__result">
+        <span>{lang === "zh" ? "当前最好" : "Current best"}</span>
+        <strong>{resultSummary.best.score}<small>{primaryTrack.metric.unit}</small></strong>
+        <p>{resultSummary.best.method}</p>
+        <small>{primaryTrack.label?.[lang] || primaryTrack.label?.en}</small>
+        <em>{resultSummary.headroom !== undefined ? (lang === "zh" ? `参考空间 ${resultSummary.headroom}%` : `${resultSummary.headroom}% reference headroom`) : (lang === "zh" ? "无统一上限" : "No shared ceiling")}</em>
+      </div>
+    ) : (
+      <div class="benchmark-card__result benchmark-card__result--empty">
+        <span>{lang === "zh" ? "当前成绩" : "Current result"}</span>
+        <p>{lang === "zh" ? "尚未结构化" : "Not structured yet"}</p>
+      </div>
+    )}
+  </div>
   <div class="benchmark-card__footer">
     <div class="artifact-links" aria-label={copy.filters.artifact}>
       {artifactKinds.map((kind) => (
@@ -86,6 +97,6 @@ const headroomBand = resultSummary?.headroom === undefined
         <span title={copy.card.citations}>S2 · {citationCount}</span>
       )}
     </div>
-    <a class="card-arrow" href={detailPath} aria-label={`${copy.card.openDetail}: ${item.name}`}>↗</a>
+    <a class="card-arrow" href={detailPath} aria-label={`${copy.card.openDetail}: ${item.name}`}>{lang === "zh" ? "详情" : "Detail"} ↗</a>
   </div>
 </article>
