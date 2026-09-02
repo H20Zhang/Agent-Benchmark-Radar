@@ -1,0 +1,24 @@
+{
+  "benchmark_id": "livebrowsecomp",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "paper-unified-search-agent-avg4",
+      "primary": true,
+      "label": { "zh": "论文统一 Search-Agent Scaffold · avg@4", "en": "Paper unified search-agent scaffold · avg@4" },
+      "task": "Fresh-fact agentic web search",
+      "split": "LiveBrowseComp · 335 questions",
+      "protocol_version": "paper-v1-unified-scaffold; serper.dev search + Jina visit + code sandbox; 256k context; 250-step budget",
+      "metric": { "id": "avg-at-4", "family": "accuracy", "label": "avg@4", "unit": "%", "direction": "higher", "range": [0, 100] },
+      "entries": [
+        { "id": "gpt54", "method": "GPT 5.4", "score": 43.2, "date": "2026-05-27", "source": "https://arxiv.org/abs/2605.28721" },
+        { "id": "seed20", "method": "Seed 2.0", "score": 41.5, "date": "2026-05-27", "source": "https://arxiv.org/abs/2605.28721" },
+        { "id": "claude-sonnet46", "method": "Claude Sonnet 4.6", "score": 41.4, "date": "2026-05-27", "source": "https://arxiv.org/abs/2605.28721" },
+        { "id": "gemini31pro", "method": "Gemini 3.1 Pro", "score": 40.0, "date": "2026-05-27", "source": "https://arxiv.org/abs/2605.28721" },
+        { "id": "deepseek-v4-pro", "method": "DeepSeek V4 Pro", "score": 38.3, "date": "2026-05-27", "source": "https://arxiv.org/abs/2605.28721" },
+        { "id": "deepseek-v32", "method": "DeepSeek v3.2", "score": 37.6, "date": "2026-05-27", "source": "https://arxiv.org/abs/2605.28721" }
+      ]
+    }
+  ]
+}
