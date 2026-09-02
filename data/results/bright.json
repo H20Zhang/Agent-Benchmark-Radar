@@ -1,0 +1,23 @@
+{
+  "benchmark_id": "bright",
+  "tracking_status": "live",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "short-document-ndcg10",
+      "primary": true,
+      "label": { "zh": "Short-document 平均 nDCG@10", "en": "Short-document mean nDCG@10" },
+      "task": "Reasoning-intensive retrieval",
+      "split": "12 BRIGHT datasets, short-document leaderboard",
+      "protocol_version": "official-leaderboard-2026-09-02",
+      "metric": { "id": "ndcg10", "family": "ranking", "label": "nDCG@10", "unit": "", "direction": "higher", "range": [0, 100] },
+      "entries": [
+        { "id": "mira-reasoning-retrieval", "method": "Mira-Reasoning-Retrieval", "model": "Mira-Reasoning-Retrieval", "score": 66.9, "date": "2026-04-22", "source": "https://brightbenchmark.github.io/" },
+        { "id": "inf-x-retriever", "method": "INF-X-Retriever", "model": "INF-X-Retriever", "score": 63.4, "date": "2025-12-20", "source": "https://brightbenchmark.github.io/" },
+        { "id": "rakanembed4b", "method": "RakanEmbed4B", "model": "RakanEmbed4B", "score": 52.4, "date": "2026-03-20", "source": "https://brightbenchmark.github.io/" },
+        { "id": "nemo-agentic-retrieval", "method": "NeMo Retriever Agentic Retrieval", "model": "NeMo Retriever", "score": 50.9, "date": "2026-03-13", "source": "https://brightbenchmark.github.io/" },
+        { "id": "diver-v3-grouprank", "method": "DIVER-v3-GroupRank", "model": "DIVER-v3-GroupRank", "score": 46.8, "date": "2025-11-13", "source": "https://brightbenchmark.github.io/" }
+      ]
+    }
+  ]
+}
