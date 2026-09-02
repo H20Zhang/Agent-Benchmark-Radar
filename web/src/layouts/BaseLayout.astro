@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../styles/research-tool.css";
 
 import { absoluteUrl, sitePath } from "../lib/site.mjs";
 
@@ -70,9 +71,7 @@ const json = jsonLd
     {json && <script is:inline type="application/ld+json" set:html={json} />}
   </head>
   <body class={bodyClass}>
-    <a class="skip-link" href="#main-content">
-      {lang === "zh" ? "跳到主要内容" : "Skip to content"}
-    </a>
+    <a class="skip-link" href="#main-content">{lang === "zh" ? "跳到主要内容" : "Skip to content"}</a>
     <div class="ambient-grid" aria-hidden="true"></div>
     <slot />
   </body>

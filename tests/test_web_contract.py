@@ -38,7 +38,7 @@ class WebPublicationContractTest(unittest.TestCase):
             with self.subTest(filename=filename):
                 self.assertIn(SITE_URL, text[:5000])
 
-    def test_public_web_source_uses_positive_fields_and_custom_ui(self):
+    def test_public_web_source_uses_positive_fields_and_research_tool_ui(self):
         public_paths = [
             ROOT / "web" / "src" / "components",
             ROOT / "web" / "src" / "layouts",
@@ -55,8 +55,11 @@ class WebPublicationContractTest(unittest.TestCase):
         self.assertNotIn("coverage_gap", source)
         self.assertNotIn("```mermaid", source)
         self.assertIn("data-filter-form", source)
-        self.assertIn("evaluation-loop", source)
+        self.assertIn("benchmark-timeline", source)
+        self.assertIn("tool-result-table", source)
+        self.assertIn("benchmark-at-a-glance", source)
         self.assertIn("data-suite-builder", source)
+        self.assertNotIn("evaluation-loop", source)
 
 
 if __name__ == "__main__":
