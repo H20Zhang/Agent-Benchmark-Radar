@@ -3,6 +3,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Header from "../../../components/Header.astro";
 import SiteFooter from "../../../components/SiteFooter.astro";
 
+import { localizeChineseProse } from "../../../lib/chinese-localization.mjs";
 import { AREAS, copyFor, LOCALES } from "../../../lib/i18n.mjs";
 import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
 import { loadRegistry } from "../../../lib/registry.mjs";
@@ -18,10 +19,10 @@ const items = [...loadRegistry()];
 const summaries = loadChineseSummaries();
 const canonicalPath = localePath(lang, "evaluate/");
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", "evaluate/");
-const title = lang === "zh" ? "Agent 评测组合｜按研究 Claim 选择 Benchmarks" : "Agent Evaluation Suites | Select Benchmarks from a Research Claim";
-const description = lang === "zh" ? "从研究主张出发，选择一组常见 Core + Complement Benchmark，并明确这组分数能支持什么判断。" : "Start from a research claim, choose a common Core + Complement benchmark suite, and make the supported claim explicit.";
+const title = lang === "zh" ? "Agent 评测组合｜按研究主张选择基准" : "Agent Evaluation Suites | Select Benchmarks from a Research Claim";
+const description = lang === "zh" ? "从研究主张出发，选择一组常见的核心评测与补充评测，并明确这组分数能够支持什么判断。" : "Start from a research claim, choose a common Core + Complement benchmark suite, and make the supported claim explicit.";
 const jsonLd = { "@context": "https://schema.org", "@type": "WebApplication", name: title, description, url: absoluteUrl(canonicalPath), applicationCategory: "ResearchApplication", inLanguage: copy.langTag };
-const itemSummary = (item: any) => lang === "zh" ? summaries.get(item.id) || item.summary : item.summary;
+const itemSummary = (item: any) => localizeChineseProse(lang === "zh" ? summaries.get(item.id) || item.summary : item.summary, lang);
 const suiteGroups = AREAS.map((area) => ({ area, recipes: research.recipes.filter((recipe: any) => recipe.area === area) }));
 ---
 
@@ -29,27 +30,27 @@ const suiteGroups = AREAS.map((area) => ({ area, recipes: research.recipes.filte
   <Header {lang} alternatePath={alternatePath} />
   <main id="main-content" data-suite-builder data-lang={lang}>
     <section class="tool-hero core-tool-hero shell">
-      <p class="eyebrow">Evaluation suites</p>
-      <h1>{lang === "zh" ? "按研究问题选一组常用 Benchmark" : "Choose a benchmark suite from the research question"}</h1>
+      <p class="eyebrow">{lang === "zh" ? "评测组合" : "Evaluation suites"}</p>
+      <h1>{lang === "zh" ? "按研究问题选一组常用基准" : "Choose a benchmark suite from the research question"}</h1>
       <p>{description}</p>
     </section>
 
     <section class="suite-workspace suite-workspace--tool shell">
       <div class="suite-catalog suite-catalog--tool">
         <header class="tool-section-heading tool-section-heading--compact">
-          <div><p class="eyebrow">Common suites</p><h2>{lang === "zh" ? "15 组可复用评测组合" : "15 reusable evaluation suites"}</h2></div>
-          <p>{lang === "zh" ? "按 Agent Memory、RAG / Agentic Retrieval、Data Agents 分组。点一行即可看到组合边界与包含的 benchmark。" : "Grouped by Agent Memory, RAG / Agentic Retrieval, and Data Agents. Select a row to inspect its claim boundary and benchmarks."}</p>
+          <div><p class="eyebrow">{lang === "zh" ? "常用组合" : "Common suites"}</p><h2>{lang === "zh" ? "15 组可复用评测组合" : "15 reusable evaluation suites"}</h2></div>
+          <p>{lang === "zh" ? "按 Agent Memory、RAG / Agentic Retrieval、Data Agents 分组。点选一行即可查看组合边界与包含的基准。" : "Grouped by Agent Memory, RAG / Agentic Retrieval, and Data Agents. Select a row to inspect its claim boundary and benchmarks."}</p>
         </header>
 
         <div class="suite-recipe-groups">
           {suiteGroups.map(({ area, recipes }) => (
             <section class="suite-recipe-group" data-area={area}>
-              <header><h3>{copy.areas[area].label}</h3><span>{recipes.length} suites</span></header>
+              <header><h3>{copy.areas[area].label}</h3><span>{recipes.length} {lang === "zh" ? "组方案" : "suites"}</span></header>
               <div class="recipe-list recipe-list--rows">
                 {recipes.map((recipe: any) => (
-                  <button type="button" class="recipe-option recipe-option--row" data-recipe={recipe.id} data-core={JSON.stringify(recipe.core)} data-complement={JSON.stringify(recipe.complement)} data-boundary={localize(recipe.claim_boundary, lang)} data-next={localize(recipe.next_validation, lang)}>
-                    <strong>{localize(recipe.claim, lang)}</strong>
-                    <small>{recipe.core.length} Core · {recipe.complement.length} Complement</small>
+                  <button type="button" class="recipe-option recipe-option--row" data-recipe={recipe.id} data-core={JSON.stringify(recipe.core)} data-complement={JSON.stringify(recipe.complement)} data-boundary={localizeChineseProse(localize(recipe.claim_boundary, lang), lang)} data-next={localizeChineseProse(localize(recipe.next_validation, lang), lang)}>
+                    <strong>{localizeChineseProse(localize(recipe.claim, lang), lang)}</strong>
+                    <small>{lang === "zh" ? `${recipe.core.length} 个核心 · ${recipe.complement.length} 个补充` : `${recipe.core.length} Core · ${recipe.complement.length} Complement`}</small>
                     <span>{lang === "zh" ? "选择" : "Select"} →</span>
                   </button>
                 ))}
@@ -59,8 +60,8 @@ const suiteGroups = AREAS.map((area) => ({ area, recipes: research.recipes.filte
         </div>
 
         <details class="suite-library suite-library--tool">
-          <summary><span>{lang === "zh" ? "需要自定义？按需增删 Benchmark" : "Need a custom suite? Add or remove benchmarks"}</span><b>＋</b></summary>
-          <label class="suite-search"><span>{lang === "zh" ? "搜索 Registry" : "Search registry"}</span><input type="search" data-suite-search placeholder={lang === "zh" ? "名称、能力或环境" : "Name, capability, or environment"} /></label>
+          <summary><span>{lang === "zh" ? "需要自定义？按需增删基准" : "Need a custom suite? Add or remove benchmarks"}</span><b>＋</b></summary>
+          <label class="suite-search"><span>{lang === "zh" ? "搜索基准目录" : "Search registry"}</span><input type="search" data-suite-search placeholder={lang === "zh" ? "名称、能力或环境" : "Name, capability, or environment"} /></label>
           <div class="suite-library__items">
             {items.map((item) => <label data-suite-item data-search={`${item.name} ${item.area} ${item.capabilities.join(" ")} ${item.environment.join(" ")}`.toLowerCase()}><input type="checkbox" name="benchmark" value={item.id} /><span><strong>{item.name}</strong><small>{copy.areas[item.area].label} · {item.released}</small><em>{itemSummary(item)}</em></span></label>)}
           </div>
@@ -68,10 +69,10 @@ const suiteGroups = AREAS.map((area) => ({ area, recipes: research.recipes.filte
       </div>
 
       <aside class="suite-output suite-output--tool">
-        <p class="eyebrow">Selected suite</p>
+        <p class="eyebrow">{lang === "zh" ? "当前组合" : "Selected suite"}</p>
         <h2 data-suite-title>{lang === "zh" ? "选择一个评测组合" : "Choose a suite"}</h2>
         <p data-suite-boundary>{lang === "zh" ? "这里会显示该组合支持的判断范围。" : "The supported claim boundary will appear here."}</p>
-        <div class="suite-output__count"><strong data-suite-count>0</strong><span>Benchmarks</span></div>
+        <div class="suite-output__count"><strong data-suite-count>0</strong><span>{lang === "zh" ? "个基准" : "Benchmarks"}</span></div>
         <ol data-suite-selection></ol>
         <div class="suite-output__next"><span>{lang === "zh" ? "下一步验证" : "Next validation"}</span><p data-suite-next>—</p></div>
         <div class="suite-output__actions"><button class="button button--primary" type="button" data-copy-suite>{lang === "zh" ? "复制 Markdown" : "Copy Markdown"}</button><a class="button button--secondary" data-compare-suite href={sitePath(localePath(lang, "compare/"))}>{lang === "zh" ? "并排比较" : "Compare"} ↗</a></div>
