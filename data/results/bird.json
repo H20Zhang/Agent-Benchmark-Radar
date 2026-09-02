@@ -1,1 +1,54 @@
-x
+{
+  "benchmark_id": "bird",
+  "tracking_status": "live",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "official-overall-ex-test-oracle-knowledge",
+      "primary": true,
+      "label": { "zh": "官方 Overall · EX Test（Oracle Knowledge）", "en": "Official Overall · EX Test (Oracle Knowledge)" },
+      "task": "Database-grounded text-to-SQL",
+      "split": "official BIRD test leaderboard",
+      "protocol_version": "overall-oracle-knowledge-snapshot-2026-09-02",
+      "metric": {
+        "id": "execution-accuracy",
+        "family": "accuracy",
+        "label": "Execution Accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [0, 100],
+        "reference_target": { "value": 92.96, "source": "https://bird-bench.github.io/" }
+      },
+      "entries": [
+        { "id": "askdata-gpt4o", "method": "AskData + GPT-4o", "score": 81.95, "date": "2025-12-16", "source": "https://bird-bench.github.io/" },
+        { "id": "agentar-scale-sql", "method": "Agentar-Scale-SQL", "score": 81.67, "date": "2025-09-25", "source": "https://bird-bench.github.io/" },
+        { "id": "sber-text2sql", "method": "Sber Text2SQL", "score": 81.33, "date": "2026-06-19", "source": "https://bird-bench.github.io/" },
+        { "id": "xiaomi-text2sql", "method": "Xiaomi Text2SQL", "score": 80.83, "date": "2026-05-27", "source": "https://bird-bench.github.io/" },
+        { "id": "deepeye", "method": "DeepEye", "score": 79.09, "date": "2026-07-14", "source": "https://bird-bench.github.io/" }
+      ]
+    },
+    {
+      "track_id": "official-overall-rves-test-oracle-knowledge",
+      "label": { "zh": "官方 Overall · R-VES Test（Oracle Knowledge）", "en": "Official Overall · R-VES Test (Oracle Knowledge)" },
+      "task": "Efficient database-grounded text-to-SQL",
+      "split": "official BIRD test leaderboard",
+      "protocol_version": "overall-oracle-knowledge-rves-snapshot-2026-09-02",
+      "metric": {
+        "id": "r-ves",
+        "family": "efficiency-adjusted-accuracy",
+        "label": "Reward-based Valid Efficiency Score",
+        "unit": "%",
+        "direction": "higher",
+        "range": [0, 100],
+        "reference_target": { "value": 83.26, "source": "https://bird-bench.github.io/" }
+      },
+      "entries": [
+        { "id": "agentar-scale-sql", "method": "Agentar-Scale-SQL", "score": 77.0, "date": "2025-09-25", "source": "https://bird-bench.github.io/" },
+        { "id": "askdata-gpt4o", "method": "AskData + GPT-4o", "score": 76.31, "date": "2025-12-16", "source": "https://bird-bench.github.io/" },
+        { "id": "markovsql", "method": "MarkovSQL", "score": 74.68, "date": "2026-07-04", "source": "https://bird-bench.github.io/" },
+        { "id": "xiaomi-text2sql", "method": "Xiaomi Text2SQL", "score": 73.93, "date": "2026-05-27", "source": "https://bird-bench.github.io/" },
+        { "id": "sber-text2sql", "method": "Sber Text2SQL", "score": 73.75, "date": "2026-06-19", "source": "https://bird-bench.github.io/" }
+      ]
+    }
+  ]
+}
