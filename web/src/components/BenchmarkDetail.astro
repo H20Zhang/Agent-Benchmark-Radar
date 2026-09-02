@@ -2,6 +2,7 @@
 import ResultsPanel from "./ResultsPanel.astro";
 
 import { copyFor } from "../lib/i18n.mjs";
+import { summarizeTrack } from "../lib/results.mjs";
 import { displayToken, localePath, REPOSITORY_URL, sitePath } from "../lib/site.mjs";
 import { localize } from "../lib/research-model.mjs";
 
@@ -24,126 +25,148 @@ const sources = Object.entries(item.artifacts || {}).filter(([, value]) => Boole
 const measurementText = item.measurement_strength;
 const sourceLabel = (key: string) => copy.artifacts[key] || displayToken(key);
 const stageIndex = genealogy?.stages.findIndex((stage: any) => stage.benchmarks.includes(item.id)) ?? -1;
+const primaryTrack = resultSet ? (resultSet.tracks.find((track: any) => track.primary) || resultSet.tracks[0]) : undefined;
+const primarySummary = primaryTrack ? summarizeTrack(primaryTrack) : undefined;
 const labels = lang === "zh" ? {
+  why: "为什么值得看",
+  currentBest: "当前最好成绩",
+  headroom: "剩余参考空间",
+  noScore: "尚未整理成可比结果",
+  noHeadroom: "尚无可靠统一上限",
   supports: "这个分数支持什么判断",
-  role: "在评测组合中的作用",
-  contract: "Evaluation contract",
+  setup: "Evaluation setup",
+  contract: "公平比较条件",
   target: "测量对象",
-  fair: "公平比较条件",
-  next: "下一步验证",
+  next: "下一步最值得验证",
   deep: "研究解读",
-  deepIntro: "从测量对象、决定性证据、公平比较和谱系位置理解这项评测。",
+  deepIntro: "再往下看决定性证据、限制、比较条件和谱系位置。",
   fallbackDeep: "Canonical evidence brief",
-  fallbackDeepIntro: "该条目尚无独立深读 note；以下内容直接由已验证的 canonical record 生成，明确测量增量、推断边界与比较条件。",
+  fallbackDeepIntro: "以下内容直接由已验证的 canonical record 生成。",
   resultsUnavailable: "当前没有规范化的可比结果轨道",
-  resultsUnavailableBody: "我们尚未把主论文或官方 leaderboard 中的结果整理成可跨系统比较的统一轨道。这里保留测量协议与证据边界，而不是补造一个看似完整的排行榜；需要具体数字时请优先查看上方 primary source。",
+  resultsUnavailableBody: "主论文或官方 leaderboard 的结果尚未整理成可跨系统比较的统一轨道。这里不补造排行榜；需要具体数字时请查看 primary source。",
   genealogy: "Benchmark 谱系",
-  genealogyIntro: "把单个 benchmark 放回领域测量能力的演进过程。",
-  recipes: "适合组合的评测方案",
-  recipesIntro: "单项分数提供一个坐标；组合评测让研究 claim 获得更完整的证据链。",
+  genealogyIntro: "它位于这条评测演进路线的什么位置。",
+  recipes: "常见评测组合",
+  recipesIntro: "单个 benchmark 测一个坐标；组合评测覆盖更完整的 research claim。",
   core: "核心评测",
   complement: "补充评测",
+  verified: "最后核验",
+  citations: "引用上下文",
 } : {
+  why: "Why it matters",
+  currentBest: "Current best",
+  headroom: "Reference headroom",
+  noScore: "No normalized score track yet",
+  noHeadroom: "No reliable shared ceiling yet",
   supports: "What this score supports",
-  role: "Role in an evaluation suite",
-  contract: "Evaluation contract",
+  setup: "Evaluation setup",
+  contract: "Fair comparison conditions",
   target: "Measurement target",
-  fair: "Fair comparison conditions",
-  next: "Next validation",
+  next: "Most useful next validation",
   deep: "Research interpretation",
-  deepIntro: "Understand the measurement object, decisive evidence, fair comparison conditions, and genealogy.",
+  deepIntro: "Read on for decisive evidence, limitations, comparison controls, and genealogy.",
   fallbackDeep: "Canonical evidence brief",
-  fallbackDeepIntro: "No standalone deep-read note exists yet; this brief is generated directly from the verified canonical record to make the measurement advance, inference boundary, and comparison conditions explicit.",
+  fallbackDeepIntro: "This brief is generated directly from the verified canonical record.",
   resultsUnavailable: "No normalized comparable result track yet",
-  resultsUnavailableBody: "Results from the primary paper or official leaderboard have not yet been normalized into a cross-system comparison track. The page keeps the measurement contract and evidence boundary explicit rather than inventing a complete-looking leaderboard; use the primary source above when exact scores are needed.",
+  resultsUnavailableBody: "Results from the primary paper or official leaderboard have not yet been normalized into a cross-system comparison track. We do not fabricate a complete-looking leaderboard; use the primary source when exact scores are needed.",
   genealogy: "Benchmark genealogy",
-  genealogyIntro: "Place one benchmark in the evolution of what the field can measure.",
-  recipes: "Evaluation suites that pair well",
-  recipesIntro: "One score supplies one coordinate; a suite builds a fuller evidence chain for a research claim.",
+  genealogyIntro: "See where it sits in the evolution of what the field can measure.",
+  recipes: "Common evaluation suites",
+  recipesIntro: "One benchmark measures one coordinate; a suite supports a fuller research claim.",
   core: "Core",
   complement: "Complement",
+  verified: "Last verified",
+  citations: "Citation context",
 };
 ---
 
-<article class={`benchmark-detail benchmark-detail--${item.area}`}>
+<article class={`benchmark-detail benchmark-detail--${item.area} benchmark-detail--research-brief`}>
   <nav class="breadcrumb" aria-label={lang === "zh" ? "面包屑" : "Breadcrumb"}>
     <a href={sitePath(localePath(lang, "benchmarks/"))}>{copy.nav.benchmarks}</a><span aria-hidden="true">/</span>
     <a href={sitePath(localePath(lang, `areas/${item.area}/`))}>{copy.areas[item.area].label}</a><span aria-hidden="true">/</span>
     <span aria-current="page">{item.name}</span>
   </nav>
 
-  <header class="detail-hero detail-hero--v2">
+  <header class="detail-hero detail-hero--brief">
     <div class="detail-hero__copy">
-      <div class="detail-hero__meta"><span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span><span class={`role-label role-label--${item.evolution_role}`}>{copy.roles[item.evolution_role]}</span><time datetime={item.released}>{item.released}</time></div>
+      <div class="detail-hero__meta">
+        <span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span>
+        <span class={`role-label role-label--${item.evolution_role}`}>{copy.roles[item.evolution_role]}</span>
+        <time datetime={item.released}>{item.released}</time>
+      </div>
       <h1>{item.name}</h1>
       <p>{summary}</p>
       <div class="detail-hero__actions">{sources.slice(0, 3).map(([key, url]) => <a class="button button--secondary" href={url as string} rel="noreferrer">{sourceLabel(key)} <span aria-hidden="true">↗</span></a>)}</div>
     </div>
-    <div class="detail-signal-card">
-      <p class="eyebrow">Research signal</p>
-      <strong>{resultSet ? resultSet.tracks.length : String(item.importance).padStart(2, "0")}</strong>
-      <span>{resultSet ? (lang === "zh" ? "个可比结果轨道" : "comparable result tracks") : (lang === "zh" ? "测量重要度" : "measurement importance")}</span>
-      <i aria-hidden="true"></i>
-      <small>{research.suiteRole}</small>
+
+    <div class="benchmark-at-a-glance" aria-label={lang === "zh" ? "Benchmark 快速判断" : "Benchmark at a glance"}>
+      <section class="benchmark-glance__why">
+        <span>{labels.why}</span>
+        <p>{measurementText}</p>
+      </section>
+      <section>
+        <span>{labels.currentBest}</span>
+        {primarySummary && primaryTrack ? <><strong>{primarySummary.best.score}<small>{primaryTrack.metric.unit}</small></strong><p>{primarySummary.best.method} · {localize(primaryTrack.label, lang)}</p></> : <p class="benchmark-glance__empty">{labels.noScore}</p>}
+      </section>
+      <section>
+        <span>{labels.headroom}</span>
+        {primarySummary?.headroom !== undefined ? <><strong>{primarySummary.headroom}<small>%</small></strong><p>{lang === "zh" ? "相对来源核验的 reference target" : "to a source-backed reference target"}</p></> : <p class="benchmark-glance__empty">{labels.noHeadroom}</p>}
+      </section>
+      <section>
+        <span>{labels.verified}</span>
+        <strong class="benchmark-glance__date">{item.last_verified}</strong>
+        <p>{labels.citations}: {citationCount ?? "—"}</p>
+      </section>
     </div>
   </header>
 
-  <div class="detail-grid detail-grid--v2">
-    <section class="detail-feature">
-      <p class="eyebrow">01 · Claim support</p><h2>{labels.supports}</h2><p>{research.scoreSupports}</p>
-    </section>
-    <dl class="detail-facts">
-      <div><dt>{copy.card.released}</dt><dd>{item.released}</dd></div>
-      <div><dt>{copy.detail.lastVerified}</dt><dd>{item.last_verified}</dd></div>
-      <div><dt>{copy.detail.citationContext}</dt><dd>{citationCount ?? "—"}</dd></div>
-      <div><dt>Registry ID</dt><dd>{item.id}</dd></div>
-    </dl>
+  {resultSet ? <ResultsPanel {lang} {resultSet} /> : <section class="deep-read result-gap compact-result-gap" aria-label={labels.resultsUnavailable}>
+    <header><div><p class="eyebrow">Results</p><h2>{labels.resultsUnavailable}</h2></div><p>{labels.resultsUnavailableBody}</p></header>
+  </section>}
 
-    <section class="detail-section detail-section--wide">
-      <p class="eyebrow">02 · Measurement advance</p><h2>{copy.detail.measurement}</h2><p>{measurementText}</p>
-    </section>
+  <section class="benchmark-brief-grid" aria-label={lang === "zh" ? "Benchmark 评测摘要" : "Benchmark evaluation brief"}>
+    <article class="benchmark-brief-card benchmark-brief-card--wide">
+      <p class="eyebrow">Claim support</p>
+      <h2>{labels.supports}</h2>
+      <p>{research.scoreSupports}</p>
+    </article>
 
-    <section class="evaluation-contract">
-      <div class="evaluation-contract__heading"><p class="eyebrow">03 · {labels.contract}</p><h2>{lang === "zh" ? "先对齐评测对象，再比较分数" : "Align the evaluation object before comparing scores"}</h2></div>
-      <dl>
+    <article class="benchmark-brief-card benchmark-setup-card">
+      <p class="eyebrow">{labels.setup}</p>
+      <h2>{lang === "zh" ? "它到底怎么测" : "What is actually evaluated"}</h2>
+      <dl class="benchmark-setup-list">
         <div><dt>{labels.target}</dt><dd>{localize(research.evaluation_contract.target, lang)}</dd></div>
         <div><dt>{copy.detail.scale}</dt><dd>{research.evaluation_contract.scale}</dd></div>
+        <div><dt>{copy.detail.capabilities}</dt><dd>{(item.capabilities || []).map(displayToken).join(" · ")}</dd></div>
         <div><dt>{copy.detail.environments}</dt><dd>{(research.evaluation_contract.environment || []).map(displayToken).join(" · ")}</dd></div>
         <div><dt>{copy.detail.protocols}</dt><dd>{(research.evaluation_contract.protocol || []).map(displayToken).join(" · ")}</dd></div>
       </dl>
-    </section>
+    </article>
 
-    <section class="detail-section"><p class="eyebrow">04 · Capability</p><h2>{copy.detail.capabilities}</h2><ul class="detail-token-list">{(item.capabilities || []).map((value: string) => <li>{displayToken(value)}</li>)}</ul></section>
-    <section class="detail-section"><p class="eyebrow">05 · Context</p><h2>{copy.detail.environments}</h2><ul class="detail-token-list">{(item.environment || []).map((value: string) => <li>{displayToken(value)}</li>)}</ul></section>
-    <section class="detail-section"><p class="eyebrow">06 · Protocol</p><h2>{copy.detail.protocols}</h2><ul class="detail-token-list">{(item.protocol || []).map((value: string) => <li>{displayToken(value)}</li>)}</ul></section>
-
-    <section class="comparison-section">
-      <div><p class="eyebrow">07 · Comparison contract</p><h2>{labels.fair}</h2></div>
+    <article class="benchmark-brief-card benchmark-comparison-card">
+      <p class="eyebrow">Comparison contract</p>
+      <h2>{labels.contract}</h2>
       <ol>{research.comparisonControls.map((control: string) => <li>{control}</li>)}</ol>
-      <aside><span>{labels.role}</span><strong>{research.suiteRole}</strong></aside>
-    </section>
-  </div>
+    </article>
 
-  {resultSet ? <ResultsPanel {lang} {resultSet} /> : <section class="deep-read result-gap" aria-label={labels.resultsUnavailable}>
-    <header><div><p class="eyebrow">Result evidence</p><h2>{labels.resultsUnavailable}</h2></div><p>{labels.resultsUnavailableBody}</p></header>
-  </section>}
+    <article class="benchmark-brief-card benchmark-next-card">
+      <p class="eyebrow">Next coordinate</p>
+      <h2>{labels.next}</h2>
+      <p>{research.nextValidation}</p>
+    </article>
+  </section>
 
-  {deepRead && <section class="deep-read" aria-labelledby="deep-read-heading">
+  {deepRead && <section class="deep-read deep-read--research" aria-labelledby="deep-read-heading">
     <header><div><p class="eyebrow">Evidence brief</p><h2 id="deep-read-heading">{labels.deep}</h2></div><p>{labels.deepIntro}</p></header>
     <div class="deep-read__content" set:html={deepRead.html}></div>
   </section>}
 
-  {!deepRead && <section class="deep-read" aria-labelledby="canonical-evidence-heading">
+  {!deepRead && <section class="deep-read deep-read--research" aria-labelledby="canonical-evidence-heading">
     <header><div><p class="eyebrow">Evidence brief</p><h2 id="canonical-evidence-heading">{labels.fallbackDeep}</h2></div><p>{labels.fallbackDeepIntro}</p></header>
-    <div class="deep-read__content">
-      <p>{research.evidenceBrief}</p>
-      <h3>{labels.supports}</h3><p>{research.scoreSupports}</p>
-      <h3>{labels.fair}</h3><ul>{research.comparisonControls.map((control: string) => <li>{control}</li>)}</ul>
-      <h3>{labels.next}</h3><p>{research.nextValidation}</p>
-    </div>
+    <div class="deep-read__content"><p>{research.evidenceBrief}</p></div>
   </section>}
 
-  {genealogy && <section class="genealogy-panel">
+  {genealogy && <section class="genealogy-panel genealogy-panel--compact">
     <header><div><p class="eyebrow">Evolution map</p><h2>{labels.genealogy}</h2></div><p>{labels.genealogyIntro}</p></header>
     <div class="genealogy-rail">
       {genealogy.stages.map((stage: any, index: number) => <article class={index === stageIndex ? "is-current" : undefined}>
@@ -153,14 +176,15 @@ const labels = lang === "zh" ? {
     </div>
   </section>}
 
-  {recipes.length > 0 && <section class="related-recipes">
+  {recipes.length > 0 && <section class="related-recipes related-recipes--compact">
     <header><div><p class="eyebrow">Evaluation suites</p><h2>{labels.recipes}</h2></div><p>{labels.recipesIntro}</p></header>
     <div>{recipes.slice(0, 3).map((recipe: any) => <a href={sitePath(localePath(lang, `evaluate/?recipe=${recipe.id}`))}><span>{copy.areas[recipe.area].label}</span><h3>{localize(recipe.claim, lang)}</h3><p>{recipe.core.includes(item.id) ? labels.core : labels.complement} · {recipe.core.length + recipe.complement.length} benchmarks</p><b>↗</b></a>)}</div>
   </section>}
 
-  <section class="next-validation"><p class="eyebrow">Next coordinate</p><h2>{labels.next}</h2><p>{research.nextValidation}</p><a class="button button--primary" href={sitePath(localePath(lang, `opportunities/?area=${item.area}`))}>{lang === "zh" ? "查看相关评测机会" : "Explore related opportunities"} ↗</a></section>
-
-  <section class="detail-section detail-section--sources detail-sources-v2"><p class="eyebrow">08 · Provenance</p><h2>{copy.detail.sources}</h2><ul class="source-list">{sources.map(([key, url]) => <li><a href={url as string} rel="noreferrer"><span>{sourceLabel(key)}</span><span aria-hidden="true">↗</span></a></li>)}{item.citations?.url && <li><a href={item.citations.url} rel="noreferrer"><span>Semantic Scholar</span><span aria-hidden="true">↗</span></a></li>}</ul></section>
+  <section class="detail-section detail-section--sources detail-sources-v2 detail-sources--compact">
+    <p class="eyebrow">Sources</p><h2>{copy.detail.sources}</h2>
+    <ul class="source-list">{sources.map(([key, url]) => <li><a href={url as string} rel="noreferrer"><span>{sourceLabel(key)}</span><span aria-hidden="true">↗</span></a></li>)}{item.citations?.url && <li><a href={item.citations.url} rel="noreferrer"><span>Semantic Scholar</span><span aria-hidden="true">↗</span></a></li>}</ul>
+  </section>
 
   <footer class="detail-footer"><a href={sitePath(localePath(lang, "benchmarks/"))}>← {copy.nav.benchmarks}</a><a href={`${REPOSITORY_URL}/blob/main/data/benchmarks.json`}>{copy.detail.registryRecord} ↗</a></footer>
 </article>
