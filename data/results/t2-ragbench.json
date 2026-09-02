@@ -1,0 +1,26 @@
+{
+  "benchmark_id": "t2-ragbench",
+  "tracking_status": "live",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "official-weighted-average-number-match",
+      "primary": true,
+      "label": {"zh": "官网 W. Avg Total · Number Match", "en": "Official W. Avg Total · Number Match"},
+      "task": "End-to-end text-and-table RAG with retrieval before numerical reasoning",
+      "split": "Official leaderboard weighted average across FinQA, ConvFinQA, and TAT-DQA",
+      "protocol_version": "official-live-leaderboard-verified-2026-09-03",
+      "metric": {"id": "number-match", "family": "task-success", "label": "Weighted average Number Match", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "gpt54-metadata-bm25", "method": "GPT-5.4 · Metadata-aware BM25", "score": 73.7, "date": "2026-05-13", "source": "https://t2ragbench.demo.hcds.uni-hamburg.de/"},
+        {"id": "qwq32b-oracle", "method": "QwQ-32B · Oracle Context", "score": 72.5, "date": "2025-05-19", "source": "https://t2ragbench.demo.hcds.uni-hamburg.de/"},
+        {"id": "llama33-oracle", "method": "LLaMA 3.3-70B · Oracle Context", "score": 72.3, "date": "2025-05-19", "source": "https://t2ragbench.demo.hcds.uni-hamburg.de/"},
+        {"id": "qwq32b-hybrid-bm25", "method": "QwQ-32B · Multilingual-E5 · Hybrid BM25", "score": 41.7, "date": "2025-05-19", "source": "https://t2ragbench.demo.hcds.uni-hamburg.de/"},
+        {"id": "llama33-hybrid-bm25", "method": "LLaMA 3.3-70B · Multilingual-E5 · Hybrid BM25", "score": 41.3, "date": "2025-05-19", "source": "https://t2ragbench.demo.hcds.uni-hamburg.de/"},
+        {"id": "llama33-sumcontext", "method": "LLaMA 3.3-70B · Multilingual-E5 · SumContext", "score": 37.4, "date": "2025-05-19", "source": "https://t2ragbench.demo.hcds.uni-hamburg.de/"},
+        {"id": "llama33-base-rag", "method": "LLaMA 3.3-70B · Multilingual-E5 · Base-RAG", "score": 37.2, "date": "2025-05-19", "source": "https://t2ragbench.demo.hcds.uni-hamburg.de/"},
+        {"id": "qwq32b-base-rag", "method": "QwQ-32B · Multilingual-E5 · Base-RAG", "score": 37.1, "date": "2025-05-19", "source": "https://t2ragbench.demo.hcds.uni-hamburg.de/"}
+      ]
+    }
+  ]
+}
