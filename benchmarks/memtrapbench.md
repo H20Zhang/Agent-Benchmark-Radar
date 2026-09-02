@@ -1,11 +1,35 @@
 # MemTrapBench
 
-- **测量对象：** 当历史记忆被正确保存且与当前问题语义相关时，智能体能否判断它是否仍应影响当前推理，而不是机械复用。
-- **最近前身：** LoCoMo / LongMemEval 一类评测主要问“能否回忆”；MemTrapBench 把失败坐标转到“相关记忆是否应该被采用”。
-- **决定性证据：** 同一当前任务配对比较 memory 与 no-memory 条件；四个子集共 1,050 个多轮样例，覆盖 reasoning fixation 与 belief distortion。作者报告所有受测 memory strategy 均低于 no-memory，最强下降超过 10 个百分点。
-- **结论上限：** 分数支持“在刻意构造的上下文转移中，相关但不再有效的历史记忆会造成可测负效应”；它不支持“长期记忆平均而言有害”。
-- **最强混淆：** 最终问题被设计为不依赖历史即可作答，因此 no-memory 天然避开 planted prior；合成对话、judge、framework × backbone 交互会影响下降幅度。
-- **未覆盖：** 自然工作流里这类 harmful reuse 的真实发生率，以及智能体在开放环境中自主判定记忆适用边界的能力。
-- **谱系：** `early_signal`。与 staleness/update benchmark 形成“memory validity before use”方向的独立证据，但单篇工作不足以改写 durable Benchmark Map。
+## 它到底测什么
+
+MemTrapBench 测的是 **memory applicability judgment**：即使一段历史记忆被正确保存、也与当前问题语义相关，agent 能否判断它现在是否仍应该参与推理，而不是因为“retrieval 相关”就机械复用。它把长期记忆的失败模式从“忘了什么”推进到“记得没错，但用错了”。
+
+## 相比前身多测了什么
+
+LoCoMo / LongMemEval 一类评测主要问历史信息能否被召回并支持 QA；staleness benchmark 又更多问新旧事实冲突时能否排对版本。MemTrapBench 的增量在于：历史内容本身可以依然真实、也可以语义相关，但**当前任务的条件已经变化，使这段记忆不再是有效先验**。因此 retrieval relevance 与 decision relevance 被显式拆开。
+
+## 决定性证据
+
+benchmark 对同一当前任务构造 memory 与 no-memory 配对条件，四个子集共 **1,050 个多轮样例**，覆盖 reasoning fixation 与 belief distortion。作者报告所有受测 memory strategy 都低于 no-memory，最大下降超过 **10 个百分点**。重要信号不是“memory 总体有害”，而是 planted prior 在 context shift 后仍会被 agent 过度采用。
+
+## 这个分数支持什么判断
+
+它支持“在刻意构造的 context shift 中，相关但当前无效的历史记忆会产生可测负效应”。它不支持“长期记忆平均而言不如 no-memory”，因为最终问题被设计成不依赖历史也能作答，no-memory 条件天然规避了 planted prior；真实工作负载中旧经验有时恰恰是必要信息。
+
+## 公平比较条件
+
+比较 memory strategy 时应固定 backbone、当前任务、历史内容、memory visibility、retrieval policy、prompt、judge 和 no-memory baseline。最好进一步区分三种失败：错误检索了不相关记忆、正确检索但错误采用、正确采用但推理失败。否则只看最终 accuracy 无法判断 applicability mechanism 是否真的工作。
+
+## 研究上怎么用
+
+MemTrapBench 很适合验证 **retrieve-then-decide、memory gating、contextual validity classifier、confidence-aware memory use** 等机制。一个 memory system 如果只优化 recall/precision，可能反而增加 harmful exposure；研究者应该同时报告 recall utility 与 harmful-reuse rate，形成“accessibility × applicability”二维评测。
+
+## 下一步最有价值的验证
+
+当前最大缺口是自然工作流中 harmful reuse 的真实发生率，以及开放环境里 agent 是否能自主推断记忆的适用边界。最高杠杆实验是从真实 coding/data-agent/personal-assistant trajectory 中构造自然 context shift，比较显式 gating、temporal/version metadata 与纯 LLM judgment，验证收益是否超出人工 planted trap。
+
+## 谱系位置
+
+`map_delta=early_signal`。它与 staleness/update benchmark 共同支持“**memory validity before use**”这一方向，但测量对象不同：staleness 关注哪个版本当前有效，MemTrapBench 关注即使记忆是真的、它是否适用于当前决策。单篇工作仍不足以改写 durable Benchmark Map。
 
 Primary: https://arxiv.org/abs/2608.20202
