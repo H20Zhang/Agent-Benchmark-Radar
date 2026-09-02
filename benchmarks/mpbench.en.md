@@ -1,6 +1,6 @@
 # MPBench
 
-## What it actually measures
+## Measurement object
 
 MPBench measures the **cross-session lifecycle of persistent-memory poisoning**. Six classes of malicious content enter persistent memory through four write channels; the benchmark then asks whether the content is actually stored and, in a later session with a relevant query, whether the poisoned record is retrieved and influences the output. The object is therefore the full `write → persist → retrieve → respond` chain rather than immediate prompt-injection success.
 
