@@ -33,6 +33,10 @@ const labels = lang === "zh" ? {
   next: "下一步验证",
   deep: "研究解读",
   deepIntro: "从测量对象、决定性证据、公平比较和谱系位置理解这项评测。",
+  fallbackDeep: "Canonical evidence brief",
+  fallbackDeepIntro: "该条目尚无独立深读 note；以下内容直接由已验证的 canonical record 生成，明确测量增量、推断边界与比较条件。",
+  resultsUnavailable: "当前没有规范化的可比结果轨道",
+  resultsUnavailableBody: "我们尚未把主论文或官方 leaderboard 中的结果整理成可跨系统比较的统一轨道。这里保留测量协议与证据边界，而不是补造一个看似完整的排行榜；需要具体数字时请优先查看上方 primary source。",
   genealogy: "Benchmark 谱系",
   genealogyIntro: "把单个 benchmark 放回领域测量能力的演进过程。",
   recipes: "适合组合的评测方案",
@@ -48,6 +52,10 @@ const labels = lang === "zh" ? {
   next: "Next validation",
   deep: "Research interpretation",
   deepIntro: "Understand the measurement object, decisive evidence, fair comparison conditions, and genealogy.",
+  fallbackDeep: "Canonical evidence brief",
+  fallbackDeepIntro: "No standalone deep-read note exists yet; this brief is generated directly from the verified canonical record to make the measurement advance, inference boundary, and comparison conditions explicit.",
+  resultsUnavailable: "No normalized comparable result track yet",
+  resultsUnavailableBody: "Results from the primary paper or official leaderboard have not yet been normalized into a cross-system comparison track. The page keeps the measurement contract and evidence boundary explicit rather than inventing a complete-looking leaderboard; use the primary source above when exact scores are needed.",
   genealogy: "Benchmark genealogy",
   genealogyIntro: "Place one benchmark in the evolution of what the field can measure.",
   recipes: "Evaluation suites that pair well",
@@ -116,11 +124,23 @@ const labels = lang === "zh" ? {
     </section>
   </div>
 
-  {resultSet && <ResultsPanel {lang} {resultSet} />}
+  {resultSet ? <ResultsPanel {lang} {resultSet} /> : <section class="deep-read result-gap" aria-label={labels.resultsUnavailable}>
+    <header><div><p class="eyebrow">Result evidence</p><h2>{labels.resultsUnavailable}</h2></div><p>{labels.resultsUnavailableBody}</p></header>
+  </section>}
 
   {deepRead && <section class="deep-read" aria-labelledby="deep-read-heading">
     <header><div><p class="eyebrow">Evidence brief</p><h2 id="deep-read-heading">{labels.deep}</h2></div><p>{labels.deepIntro}</p></header>
     <div class="deep-read__content" set:html={deepRead.html}></div>
+  </section>}
+
+  {!deepRead && <section class="deep-read" aria-labelledby="canonical-evidence-heading">
+    <header><div><p class="eyebrow">Evidence brief</p><h2 id="canonical-evidence-heading">{labels.fallbackDeep}</h2></div><p>{labels.fallbackDeepIntro}</p></header>
+    <div class="deep-read__content">
+      <p>{research.evidenceBrief}</p>
+      <h3>{labels.supports}</h3><p>{research.scoreSupports}</p>
+      <h3>{labels.fair}</h3><ul>{research.comparisonControls.map((control: string) => <li>{control}</li>)}</ul>
+      <h3>{labels.next}</h3><p>{research.nextValidation}</p>
+    </div>
   </section>}
 
   {genealogy && <section class="genealogy-panel">
