@@ -1,0 +1,37 @@
+{
+  "benchmark_id": "hotpotqa",
+  "tracking_status": "verified-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "official-fullwiki-joint-f1",
+      "primary": true,
+      "label": {"zh": "官方 Fullwiki Joint F1", "en": "Official Fullwiki Joint F1"},
+      "task": "Open-domain multi-hop question answering over full Wikipedia with supporting-fact prediction",
+      "split": "official Fullwiki leaderboard",
+      "protocol_version": "hotpotqa-fullwiki-official-leaderboard",
+      "metric": {"id": "joint-f1", "family": "task-success", "label": "Joint F1", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "aiso", "method": "AISO", "score": 72.00, "date": "2021-05-10", "source": "https://hotpotqa.github.io/"},
+        {"id": "chain-of-skills", "method": "Chain-of-Skills", "score": 71.65, "date": "2023-01-31", "source": "https://hotpotqa.github.io/"},
+        {"id": "tprr", "method": "TPRR", "score": 70.83, "date": "2021-02-01", "source": "https://hotpotqa.github.io/"},
+        {"id": "hopretriever-sp-search", "method": "HopRetriever + Sp-search", "score": 70.61, "date": "2021-01-15", "source": "https://hotpotqa.github.io/"}
+      ]
+    },
+    {
+      "track_id": "official-distractor-joint-f1",
+      "primary": false,
+      "label": {"zh": "官方 Distractor Joint F1", "en": "Official Distractor Joint F1"},
+      "task": "Multi-hop question answering over ten supplied paragraphs with supporting-fact prediction",
+      "split": "official Distractor leaderboard",
+      "protocol_version": "hotpotqa-distractor-official-leaderboard",
+      "metric": {"id": "joint-f1", "family": "task-success", "label": "Joint F1", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "beam-retrieval", "method": "Beam Retrieval (single model)", "score": 77.54, "date": "2023-08-07", "source": "https://hotpotqa.github.io/"},
+        {"id": "pipnet", "method": "PipNet (single model)", "score": 76.95, "date": "2022-07-07", "source": "https://hotpotqa.github.io/"},
+        {"id": "smoothing-r3", "method": "Smoothing R3 (single model)", "score": 76.69, "date": "2022-06-27", "source": "https://hotpotqa.github.io/"},
+        {"id": "fe2h-albert", "method": "FE2H on ALBERT (single model)", "score": 76.54, "date": "2022-01-28", "source": "https://hotpotqa.github.io/"}
+      ]
+    }
+  ]
+}
