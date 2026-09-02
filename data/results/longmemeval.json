@@ -1,0 +1,27 @@
+{
+  "benchmark_id": "longmemeval",
+  "tracking_status": "verified-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "hindsight-author-snapshot-overall",
+      "primary": true,
+      "label": {"zh": "LongMemEval-S · Author-maintained Overall", "en": "LongMemEval-S · Author-maintained overall"},
+      "task": "Long-term conversational memory QA across 500 LongMemEval-S questions",
+      "split": "LongMemEval-S · 500 questions",
+      "protocol_version": "hindsight-benchmarks-snapshot-55c51f1",
+      "metric": {"id": "overall-accuracy", "family": "task-success", "label": "Overall accuracy", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "hindsight-gemini3", "method": "Hindsight · Gemini-3", "score": 91.4, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "hindsight-oss120b", "method": "Hindsight · OSS-120B", "score": 89.0, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "supermemory-gemini3", "method": "Supermemory · Gemini-3", "score": 85.2, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "supermemory-gpt5", "method": "Supermemory · GPT-5", "score": 84.6, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "hindsight-oss20b", "method": "Hindsight · OSS-20B", "score": 83.6, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "supermemory-gpt4o", "method": "Supermemory · GPT-4o", "score": 81.6, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "zep-gpt4o", "method": "Zep · GPT-4o", "score": 71.2, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "full-context-gpt4o", "method": "Full-context · GPT-4o", "score": 60.2, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "full-context-oss20b", "method": "Full-context · OSS-20B", "score": 39.0, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"}
+      ]
+    }
+  ]
+}
