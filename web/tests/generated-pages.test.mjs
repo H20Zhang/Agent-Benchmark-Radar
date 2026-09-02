@@ -5,23 +5,28 @@ import test from "node:test";
 const read = (path) =>
   readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("home leads with benchmark, opportunity, and frontier decisions", () => {
+test("home leads with benchmark browsing, timeline, suites, and current scores", () => {
   const page = read("src/pages/[lang]/index.astro");
   assert.match(page, /loadResearchModel/);
   assert.match(page, /loadAllResultSets/);
-  for (const path of ["benchmarks/", "opportunities/", "frontier/"]) {
-    assert.ok(page.includes(path), path);
-  }
-  for (const token of ["mission-grid", "latest-grid", "shift-grid"]) {
+  for (const token of ["benchmarks/", "evaluate/", 'id="timeline"', 'id="results"', 'id="suites"']) {
     assert.ok(page.includes(token), token);
   }
+  for (const token of ["benchmark-timeline", "tool-result-table", "tool-suite-grid"]) {
+    assert.ok(page.includes(token), token);
+  }
+  assert.ok(!page.includes("evaluation-loop"));
+  assert.ok(!page.includes("opportunity-preview-grid"));
+  assert.ok(!page.includes("shift-grid"));
 });
 
-test("primary navigation follows the evaluation frontier model", () => {
+test("primary navigation stays focused on the four repeat research actions", () => {
   const header = read("src/components/Header.astro");
-  for (const token of ["benchmarks/", "opportunities/", "frontier/", "evaluate/"]) {
+  for (const token of ["benchmarks/", "#timeline", "evaluate/", "#results"]) {
     assert.ok(header.includes(token), token);
   }
+  assert.ok(!header.includes('localePath(lang, "opportunities/")'));
+  assert.ok(!header.includes('localePath(lang, "frontier/")'));
 });
 
 test("benchmark route generates every locale and stable registry id", () => {
@@ -35,7 +40,7 @@ test("benchmark route generates every locale and stable registry id", () => {
   assert.match(page, /CreativeWork/);
 });
 
-test("benchmark details expose auditable positive evidence without raw gap copy", () => {
+test("benchmark details expose a fast research judgment before deep reading", () => {
   const detail = read("src/components/BenchmarkDetail.astro");
 
   for (const token of [
@@ -50,7 +55,7 @@ test("benchmark details expose auditable positive evidence without raw gap copy"
     assert.ok(detail.includes(token), token);
   }
   assert.ok(!detail.includes("coverage_gap"));
-  for (const token of ["scoreSupports", "suiteRole", "comparisonControls", "nextValidation", "ResultsPanel", "deepRead"]) {
+  for (const token of ["scoreSupports", "comparisonControls", "nextValidation", "ResultsPanel", "deepRead", "benchmark-at-a-glance", "benchmark-setup-list", "summarizeTrack"]) {
     assert.ok(detail.includes(token), token);
   }
 });
@@ -91,7 +96,7 @@ test("suite builder and comparison workspace expose reusable research decisions"
   for (const token of ["comparison_controls", "data-compare-workspace", "loadAllResultSets"]) assert.ok(comparePage.includes(token), token);
 });
 
-test("opportunity and frontier routes connect evidence to future evaluation coordinates", () => {
+test("opportunity and frontier routes remain available as secondary research surfaces", () => {
   const opportunities = read("src/pages/[lang]/opportunities/index.astro");
   const opportunity = read("src/pages/[lang]/opportunities/[id].astro");
   const frontier = read("src/pages/[lang]/frontier/index.astro");
