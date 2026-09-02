@@ -1,25 +1,39 @@
-# BrowseComp: stress-testing persistence and creativity in web search
+# BrowseComp: persistent search for hard-to-find web evidence
 
-[中文](browsecomp.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](browsecomp.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Official description](https://openai.com/index/browsecomp/) · [Code](https://github.com/openai/simple-evals)
+[OpenAI release](https://openai.com/index/browsecomp/) · [Paper](https://arxiv.org/abs/2504.12516) · [Eval code](https://github.com/openai/simple-evals)
 
-## What it measures
+## What it actually measures
 
-BrowseComp contains 1,266 short-answer, verifiable but deliberately hard-to-find web questions. Success often requires persistent browsing, query reformulation, cross-page tracking, and discovering non-obvious sources, making information-seeking persistence the central difficulty.
+BrowseComp contains 1,266 hard fact-seeking questions whose answers require persistent, creative web browsing across multiple sources. Answers are deliberately short and verifiable, keeping grading simple while making **evidence discovery** difficult.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Benchmarks such as HotpotQA fix the corpus and supporting evidence. BrowseComp moves the environment to the live web, so deciding where and how to keep searching becomes part of the task. Search provider, web drift, and tool interface consequently become part of the evaluation contract too.
+Simple factual QA and shallow web search saturate once a browsing model can issue a few searches. BrowseComp shifts difficulty into search persistence, query reformulation, source chaining, and finding obscure evidence rather than long-form answer generation.
 
-## Decisive evidence and current results
+## Decisive evidence
 
-OpenAI's original evaluation reports Deep Research at 51.5%, o1 without browsing at 9.9%, GPT-4o with browsing at 1.9%, and lower no-browsing baselines. Radar preserves this as a dated 2025-04-10 official snapshot rather than merging it with later providers or derived benchmarks. The launch also notes that Deep Research had been trained on BrowseComp-style data, making benchmark familiarity/leakage a real interpretation variable.
+The benchmark was constructed around single, stable, indisputable short answers, often requiring tens or potentially hundreds of pages to locate. Its continued usefulness comes from separating hard search from subjective report judging: failure is usually inability to find the answer rather than disagreement over prose quality.
 
-## Fair comparison conditions
+## What the score supports
 
-Align question version, search provider, browser/tool interface, tool-call budget, knowledge cutoff, and evaluator. Because the web changes, score date is part of the result.
+A score supports end-to-end browsing-agent ability under a particular search provider, browsing interface, time, and model. It does not cleanly measure retrieval algorithm quality because web navigation, query generation, model priors, and tool implementation are inseparable.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-Short answers do not measure citation quality, evidence portfolios, or long-form synthesis. BrowseComp-Plus and related fixed-corpus variants trade live-web realism for stronger attribution and reproducibility.
+Record model/version, search provider, tool interface, date, call/token budget, and whether page fetching is available. Web drift makes historical scores only approximately comparable. Equal answer grading does not imply equal information access.
+
+## What remains unmeasured
+
+OpenAI explicitly notes the short-answer distribution may correlate poorly with open-ended user research. BrowseComp does not evaluate citation quality, synthesis, ambiguity clarification, artifact generation, or user-facing completeness.
+
+## Next discriminating validation
+
+Pair BrowseComp questions with evidence-set scoring and controlled search budgets. This would distinguish “found the answer by luck/priors” from efficient discovery of sufficient supporting evidence.
+
+## Genealogy
+
+`factual QA → persistent web search → evidence-aware research agents`
+
+BrowseComp is a clean benchmark of search hardness, not a complete benchmark of research usefulness.

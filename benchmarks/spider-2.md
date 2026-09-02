@@ -1,25 +1,39 @@
-# Spider 2.0：text-to-SQL 从 benchmark schema 走向 enterprise database workflows
+# Spider 2.0：enterprise text-to-SQL 已经变成 agent workflow
 
-**中文** | [English](spider-2.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](spider-2.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-[项目](https://spider2-sql.github.io/)
+[论文](https://arxiv.org/abs/2411.07763) · [项目页](https://spider2-sql.github.io/)
 
-## 它在测什么
+## 它到底测什么
 
-Spider 2.0 面向更接近 enterprise 的 SQL agent tasks。当前官方 families 包括 Spider 2.0-Snow、Spider 2.0-Lite 与 Spider 2.0-DBT；公开规模约为 Snow 547、Lite 547、DBT 68，并持续版本演化。任务覆盖大型 schema、多 SQL dialect、复杂 analytics 与 database-management/DBT-style work。
+Spider 2.0 测 **真实 enterprise text-to-SQL workflow**，而不是一次 query generation。632 个任务来自真实应用数据库，常有 1,000+ column，并使用 BigQuery、Snowflake 等 cloud system；完成任务可能要搜 metadata、查 dialect documentation、读 project code、写多个 query，完整 workflow 甚至超过 100 行 SQL。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-Spider 主要是静态 text-to-SQL。Spider 2.0 把 schema 规模、真实 database systems、dialect 与 multi-step operations 拉进环境，使 agent 需要探索和操作，而不只生成一条 SQL。
+Spider 1.0 测 unseen schema generalization，BIRD 加入 realistic database value；Spider 2.0 进一步把“工作单位”本身改掉：agent 必须在大型数据环境里导航并构造 multi-step SQL workflow，已经更像 data engineering / analytics，而不是一次 semantic parsing prediction。
 
-## 分数边界
+## 决定性证据
 
-success rate 只能绑定具体 family、release、context setting 与 evaluator。官方还存在 oracle-table 等辅助条件，这些不是 standard-agent track，不能和完整 schema-discovery 结果混排。
+原始评估中，基于 o1-preview 的 code agent 在 Spider 2.0 上只有 17.0% success；同一框架在 Spider 1.0 为 91.2%，BIRD 为 73.0%。这个断崖直接说明：旧 benchmark 的高分没有迁移到 enterprise workflow complexity。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 Snow/Lite/DBT family、release、database version、schema/table hints、agent scaffold、step budget 与 evaluator。oracle conditions 必须单独标记。
+Spider 2.0 支持其环境下 enterprise SQL workflow 的 end-to-end competence，但不能把失败单独归因给 SQL reasoning；metadata retrieval、long-context management、dialect knowledge、code navigation 和 agent scaffold 都在因果链上。
 
-## 下一步评测坐标
+## 公平比较契约
 
-下一步从 SQL-centric workflow 推进到跨数据库、非结构化文档和业务语义，这正是 DAB / AgenticDataBench 等 benchmark 的重点。
+应 pin database/cloud snapshot、SQL dialect、metadata/codebase access、agent harness、model、execution/retry budget 与 evaluator。给一边预选 relevant table，和让另一边自己发现，已经不是同一道题。
+
+## 还没有测什么
+
+business definition、stakeholder ambiguity、governance、permission、production write 与 persistent maintenance 仍只覆盖一部分；真实 warehouse 还会持续变化，而不是一次 benchmark run 内冻结。
+
+## 下一步最有判别力的验证
+
+通过 oracle intervention 把 performance 拆成 metadata discovery、semantic/schema resolution、workflow planning、query execution、repair，判断 17% 的主要瓶颈到底是 retrieval/context 还是 SQL/program synthesis。
+
+## 演化位置
+
+`single query → complex unseen schema → large enterprise SQL workflow`
+
+到 Spider 2.0，text-to-SQL benchmark 已经明确变成了一个 agent-systems problem。

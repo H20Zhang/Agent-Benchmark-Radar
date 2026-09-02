@@ -1,25 +1,39 @@
-# Warehouse Reliability Bench: the dangerous failure is not merely being wrong, but looking successful while violating business truth
+# WarehouseReliabilityBench: business truth instead of executable SQL
 
-[中文](warehouse-reliability-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](warehouse-reliability-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.09254) · [Code](https://github.com/k-w-lee/query_proof)
+[Paper](https://arxiv.org/abs/2608.09254)
 
-## What it measures
+## What it actually measures
 
-Warehouse Reliability Bench contains 400 tasks over two deterministic synthetic warehouses: 184 directly answerable cases, 216 cases requiring clarification, abstention, or refusal, plus 80 held-out cases. Business Truth Rate and False Success Rate use executable ground truth, behavioral contracts, and rule gates to detect systems that return plausible but semantically wrong results.
+WarehouseReliabilityBench (WRB) evaluates whether an analytics agent returns **business-correct behavior** under standard, ambiguous, unanswerable, schema-drift, and adversarial questions. Roughly half of the 400 frozen tasks over two synthetic warehouses have no correct SQL; the correct action is clarification, abstention, or refusal.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Traditional text-to-SQL asks whether SQL or its result matches a reference. In BI, a more dangerous failure is using the wrong metric definition, grain, join, or time semantics while still producing a plausible answer. This benchmark makes business truth and non-answer behavior first-class outcomes.
+Execution-match assumes every question maps to a query. Production analytics often fails one level earlier: “revenue” has two valid definitions, a requested quantity is absent, or a deprecated column still executes but means the wrong thing. WRB evaluates semantic behavior contracts and false success, not syntax alone.
 
-## Score boundary
+## Decisive evidence
 
-Business Truth and False Success support reliability under the synthetic warehouse rules and validators. They do not capture all enterprise semantics, but they are closer to analyst risk than SQL execution alone.
+On an 80-task frozen test split, QueryProof improves Business Truth Rate over a direct-prompted 32B baseline by +0.237 with a reported 95% interval [+0.112, +0.375], and reduces false-success rate from 0.754 to 0.351. But the paper explicitly warns that the comparison is scaffold-confounded; template-family resampling widens intervals enough to include zero, so direction is better supported than effect magnitude.
 
-## Fair comparison conditions
+## What the score supports
 
-Align warehouse generation, business rules, behavior contract, validator version, hints, and tool budget, and inspect answerable versus clarify/abstain/refuse slices separately.
+WRB strongly supports the benchmark claim that **successful execution is not business correctness**. The QueryProof result supports a system-level deterministic semantic/rule-gating direction, not a claim that 7B models outperform 32B models or that any single component caused the gain.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step uses real semantic layers, metric evolution, access policies, and downstream decision cost so the impact of wrong business answers becomes measurable.
+Fix warehouse seed/snapshot, semantic-layer definitions, physical catalog, task split, model, scaffold, and cost accounting. Report Business Truth Rate, False Success Rate, coverage, abstention/clarification behavior, and cost separately. Never compare model sizes when scaffolding differs.
+
+## What remains unmeasured
+
+The evidence base is narrow: two synthetic domains, one seed, one model family, one SQL dialect, and disclosed test exposure. Transfer to BIRD/Spider or real warehouses is unproven.
+
+## Next discriminating validation
+
+Run the same semantic/rule scaffold over the larger baseline model on a fresh unseen warehouse family, then ablate semantic resolution and post-execution checks separately. That is the experiment needed for causal attribution.
+
+## Genealogy
+
+`SQL execution correctness → semantic business truth → reliability-aware analytics agent`
+
+WRB moves evaluation above the query language: sometimes the correct data-agent output is no query at all.

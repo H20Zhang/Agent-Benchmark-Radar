@@ -1,25 +1,39 @@
-# DeepResearch Bench: moving from finding an answer to producing a citable research artifact
+# DeepResearch Bench: evaluating research artifacts, evidence, and citations
 
-[中文](deepresearch-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](deepresearch-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2506.11763) · [Code](https://github.com/Ayanami0730/deep_research_bench)
+[Paper](https://arxiv.org/abs/2506.11763) · [Project](https://deepresearch-bench.github.io/) · [Code](https://github.com/Ayanami0730/deep_research_bench)
 
-## What it measures
+## What it actually measures
 
-DeepResearch Bench uses 100 PhD-level research tasks across 22 fields to evaluate multi-step web research, evidence collection, citation accuracy/effectiveness, and long-form report quality. The evaluation object is an analyst-like research artifact rather than a short answer.
+DeepResearch Bench evaluates agents that perform multi-step web exploration and produce **long-form, citation-rich research reports**. Its 100 expert-authored tasks span 22 fields and are paired with evaluation of both report quality and citation/retrieval effectiveness.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-BrowseComp stresses search persistence but does not require a complete research deliverable. DeepResearch Bench connects retrieval, citation, and synthesis, making “plausible answer with unsupported citations” a separately observable failure.
+BrowseComp deliberately compresses output to a short factual answer. DeepResearch Bench changes the artifact: the system must select evidence, synthesize it into a coherent analysis, and ground claims with citations. The benchmark therefore measures information sufficiency and reporting quality together.
 
-## Decisive evidence and score boundary
+## Decisive evidence
 
-The evaluator itself continues to evolve. The official repository switched to GPT-5.5 in May 2026 and maintained separate leaderboards during migration; GPT-5.5 evaluator overall alignment is reported around 71.82 versus a human IAA reference around 68.78. That makes evaluator generation a load-bearing protocol variable. Radar should not merge agent scores from old and new judges into one current ranking.
+Tasks are written by domain experts, with the topic distribution informed by a large sample of real web-search-enabled chatbot queries. RACE evaluates report quality with adaptive reference-based criteria, while FACT measures effective citation quantity and citation accuracy. This explicitly prevents polished prose from standing in for grounded research.
 
-## Fair comparison conditions
+## What the score supports
 
-Align task set, search provider, report budget, citation extraction, judge generation, and scoring rubric. Every evaluator version needs its own dated protocol track.
+The benchmark supports end-to-end deep-research quality under its report evaluators. It is difficult to attribute differences to retrieval, planning, or writing because all three affect the final report and the evaluation itself contains model/judge assumptions.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-One hundred expensive tasks measure systems well but make causal attribution hard. Stronger evaluation needs replayable evidence snapshots and component interventions that separate search, source selection, writing, and citation verification.
+Fix search access, model/version, time/call/token budget, language, report length constraints, and evaluator version. Report citation metrics separately from holistic report quality. Web drift and search-provider differences should be treated as experimental variables.
+
+## What remains unmeasured
+
+One hundred high-cost tasks limit statistical resolution. Long-form reference/judge scoring can miss subtle factual or methodological errors, and real research often requires clarification, private corpora, computation, or iterative review with users.
+
+## Next discriminating validation
+
+Add claim-level evidence graphs and controlled retrieval-budget sweeps. Then measure whether report quality improves because the agent found better evidence or simply generated better prose from the same evidence set.
+
+## Genealogy
+
+`hard web answer finding → citation-grounded report generation → auditable research workflow`
+
+The benchmark moves search evaluation from answer discovery to research-artifact quality.

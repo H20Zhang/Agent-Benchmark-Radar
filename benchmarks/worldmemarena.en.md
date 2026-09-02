@@ -1,25 +1,39 @@
-# WorldMemArena: localizing multimodal memory failure to lifecycle stages
+# WorldMemArena: the full memory lifecycle in evolving multimodal worlds
 
-[中文](worldmemarena.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](worldmemarena.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2605.29341) · [Code](https://github.com/UCSB-AI/WorldMemArena)
+[Paper](https://arxiv.org/abs/2605.29341) · [Project](https://worldmemarena-mem.github.io/)
 
-## What it measures
+## What it actually measures
 
-WorldMemArena uses multi-session action-world trajectories with visual observations and evaluates writing, maintenance, retrieval, and use as four memory-lifecycle stages. The current artifact contains 461 samples with a balanced 150-sample subset; the paper describes about 400 annotated multimodal tasks.
+WorldMemArena evaluates multimodal agent memory over **evolving action-world trajectories** and explicitly separates four lifecycle stages: write, maintain, retrieve, and use. Gold memory points, state updates, distractors, and evidence chains make it possible to inspect whether the agent stored the right event, kept it current, surfaced it later, and actually used it for the final decision.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Most multimodal memory benchmarks report only final QA. Gold memory points and stage-level diagnosis separate writing errors, stale maintenance, retrieval misses, and failures to use correctly retrieved memory.
+Long-memory QA often treats a history as a static corpus and evaluates only final answers. WorldMemArena treats memory as mutable state coupled to a changing world. Its Lifelong Evolution and Agentic Execution regimes make obsolete evidence, visual observations, and state transitions first-class rather than assuming that every past fact remains equally valid.
 
-## Score boundary
+## Decisive evidence
 
-Stage-level accuracy supports failure localization under the constructed trajectories. It does not establish utility in real persistent environments because checkpoint QA, judge, multimodal backbone, and storage representation remain important variables.
+The benchmark contains 400 multi-session multimodal tasks and compares long-context, manually constructed retrieval/external-memory systems, and dedicated memory harnesses. The analysis finds that better writing/storage does not automatically translate into end performance, visual evidence is underused, cross-domain reliability is unstable, and real trajectories are harder than simplified alternatives. This is direct evidence that memory quality is a pipeline property, not a retrieval score.
 
-## Fair comparison conditions
+## What the score supports
 
-Align artifact/sample version, backbone, memory representation, judge, compute budget, and the four-stage interface. Different sample counts must be versioned explicitly.
+The final score supports whole-system memory performance, while stage annotations provide stronger diagnostic evidence than end QA alone. Yet causal attribution still requires matched backbones and stage-level intervention: a system can retrieve the right evidence and fail at use, or write a good memory and later overwrite it incorrectly.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step connects lifecycle diagnosis to irreversible future actions, permissions, and recovery so each memory failure has an observable consequence.
+Fix backbone, trajectory, visual observations, session segmentation, memory budget, retrieval budget, and action protocol. Report write/maintenance cost as well as read-time cost. Comparisons should preserve access to the same modalities; converting images into richer captions for only one system changes the evidence channel.
+
+## What remains unmeasured
+
+The benchmark remains finite and task-scoped. Policy governance, deletion rights, cross-user boundaries, months-long storage economics, and catastrophic corruption recovery are not its primary target.
+
+## Next discriminating validation
+
+Run oracle interventions at each lifecycle stage and measure how much final task success is recovered. The resulting error budget—write versus maintain versus retrieve versus use—would directly guide systems research investment.
+
+## Genealogy
+
+`static history QA → mutable multimodal state → lifecycle-diagnostic memory`
+
+WorldMemArena is important because it makes memory lifecycle decomposition observable instead of treating “memory” as one opaque module.

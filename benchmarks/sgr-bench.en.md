@@ -1,25 +1,39 @@
-# SGR-Bench: search can fail after finding the right site but before reaching the right retrieval state
+# SGR-Bench: search where the correct website is not enough
 
-[中文](sgr-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](sgr-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2605.22219) · [Data](https://huggingface.co/datasets/PKUAIWeb/SGR-BENCH)
+[Paper](https://arxiv.org/abs/2605.22219) · [Dataset](https://huggingface.co/datasets/PKUAIWeb/SGR-BENCH)
 
-## What it measures
+## What it actually measures
 
-SGR-Bench contains 100 expert-curated tasks across six source families and 12 public data ecosystems. The hard part is not merely finding the right website: the agent must configure filters, hierarchy, scope, or view until the site exposes the answer-bearing state, then produce structured evidence scored with item-F1 or row-F1.
+SGR-Bench evaluates **state-gated retrieval**: answer-bearing evidence becomes available only after an agent reaches the right specialized site and configures the correct filters, hierarchy, scope, or view. The task therefore includes retrieval-state control, not just source discovery.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-BrowseComp-style benchmarks mostly ask whether a hidden fact can be found on the web. SGR-Bench decomposes the failure further: after source discovery, can the agent establish the correct site-specific retrieval state? Retrieval-state control therefore becomes an explicit capability rather than a browser implementation detail.
+Web benchmarks often count reaching a relevant source as substantial progress. SGR-Bench shows that specialized data portals behave more like interactive query interfaces: the same site can expose the wrong slice of data unless the agent establishes the correct state.
 
-## Score boundary
+## Decisive evidence
 
-Higher item/row F1 supports state-gated retrieval under the named browser tool, site snapshot, and harness. It does not establish stronger general web research because tasks concentrate on particular portals and site drift can change the interaction path.
+The benchmark has 100 expert-curated tasks across six source families and 12 public data ecosystems, with paired constraint-guided and goal-oriented formulations. The strongest evaluated system reaches 66.18% item-level F1 while row-level F1 remains much lower. In 156 analyzable failed CLI trajectories, retrieval-scope drift accounts for 37.2% and criterion mismatch 27.6%; final answer composition is only 10.3%.
 
-## Fair comparison conditions
+## What the score supports
 
-Align browser/tool interface, site version, task constraints, agent harness, and allowed actions. A changed page structure or filter API requires a new protocol snapshot.
+This is strong evidence that source discovery and retrieval-state control are distinct capabilities. The result remains browser/harness dependent because interacting with site controls is part of the measured system.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step combines state-gated retrieval with cross-site evidence composition, freshness, and recovery: can the agent diagnose a wrong filter state and re-plan rather than merely be scored at the end?
+Fix site snapshot/time, browser/tool interface, agent model, action budget, and task formulation. Report item-level and row-level F1 and preserve constraint-guided versus goal-oriented variants; explicit filters in the prompt materially change the planning burden.
+
+## What remains unmeasured
+
+The setting is narrower than general deep research and is sensitive to public-site UI drift. Authentication, private enterprise tools, write operations, and arbitrary document retrieval are outside the core protocol.
+
+## Next discriminating validation
+
+Expose a canonical structured API for the same data and compare it with browser interaction. The gap would quantify how much failure comes from semantic query planning versus GUI/interface grounding.
+
+## Genealogy
+
+`find the source → configure retrieval state → execute semantic data query`
+
+SGR-Bench links search-agent evaluation directly to semantic query processing.

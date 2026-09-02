@@ -1,25 +1,39 @@
-# AgenticRAGTracer：final answer 错了之后，必须知道是哪一 hop 先坏掉
+# AgenticRAGTracer：定位 retrieval-reasoning chain 到底在哪一跳坏掉
 
-**中文** | [English](agenticragtracer.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](agenticragtracer.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2602.19127) · [代码](https://github.com/YqjMartin/AgenticRAGTracer)
 
-## 它在测什么
+## 它到底测什么
 
-AgenticRAGTracer 提供 1,305 个 multi-domain instances，并为 multi-step agentic RAG 提供 hop-level intermediate validation。evaluation object 不只是 final exact match，而是每一步 retrieval/reasoning chain 是否沿着可验证的中间状态推进。
+AgenticRAGTracer 给 multi-step retrieval reasoning 增加 **hop-aware intermediate validation**。它不只提供 final question/answer，还给出从 atomic evidence need 逐步连接到最终 query 的 intermediate hop question。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-普通 multi-hop QA 只知道最后答错；RAGCap-Bench 等能力测试又可能脱离真实 trajectory。AgenticRAGTracer 把 validation 放回实际 chain，使“第一 hop 没搜到”“hop allocation 不合理”“后续 reasoning 基于错误 evidence”可以被分开观察。
+multi-hop answer 做错后，传统 benchmark 无法区分 agent 是停得太早、走了多余分支、取错证据，还是取对后推理错。hop label 让 step allocation 与 chain shape 变成可观测对象。
 
-## 分数边界
+## 决定性证据
 
-hop-level correctness 支持定位在 benchmark 定义的 chain 上哪里发生偏离；它不等于真实 agent 的唯一 causal trace。自动生成的 hop structure 可能只是一条可行路径，模型用另一条有效路径也可能被判 deviation，因此不能把 hop agreement 当作 universal planning quality。
+benchmark 有 1,305 个自动构造实例，覆盖多个 domain，并与主流 benchmark 去重。最难 subset 上 GPT-5 也只有 22.6% exact match。hop-aware diagnosis 发现很多失败来自 distorted chain：要么过早 collapse，要么无必要地 over-extend。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 hop definition、instance version、retrieval interface、backbone 与 final evaluator。若允许不同工具或 alternative valid trajectories，应单独建立 tolerant track，而非直接和 strict-hop 分数混排。
+它能诊断 reasoning-chain allocation 与 intermediate retrieval，但因为大量数据由 LLM 自动构造，annotated hop structure 不应被默认成问题唯一的因果分解。
 
-## 下一步评测坐标
+## 公平比较契约
 
-下一步应从 gold-hop tracing 推进到 counterfactual repair：替换某一步 evidence 或 decision 后，最终 success 是否恢复，从而验证真正 load-bearing 的 failure point。
+应固定 model、tool、step/call budget 与 hop evaluator，同时报告 final EM、hop completion 和 chain length。若一种不同但有效的 reasoning path 仅因不符合生成模板就被判错，测到的是 conformity，不是 search competence。
+
+## 还没有测什么
+
+真实 web research 往往有多条可行 decomposition、uncertain subgoal，甚至边搜边发现路径；自动生成的 hop chain 可能带 construction artifact。
+
+## 下一步最有判别力的验证
+
+人工给一部分题标注多个等价 solution graph，检查 diagnostic conclusion 在 alternative path 下是否仍成立，从而验证“wrong chain”是真推理错误，而不是路径不同。
+
+## 演化位置
+
+`multi-hop final answer → hop-level trace → causal diagnosis of search allocation`
+
+它把 reasoning chain 的长度和形状本身变成了评测对象。

@@ -1,25 +1,39 @@
-# InMind：当 personal fact 与 query 语义很远，retrieval 需要 world knowledge bridge
+# InMind：真正相关的 memory 可能和 query 一点也不像
 
-**中文** | [English](inmind.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](inmind.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-[论文](https://arxiv.org/abs/2607.24368) · [代码](https://github.com/imlrz/InMind)
+[论文](https://arxiv.org/abs/2607.24368) · [项目页](https://keep-it-inmind.github.io/) · [代码](https://github.com/imlrz/InMind)
 
-## 它在测什么
+## 它到底测什么
 
-InMind 有 125 个 expert-verified tasks、覆盖 10 个 life domains。每个 task 都有 direct query 与 indirect query：后者只有先用 world knowledge 理解某个 personal fact 为什么相关，才能触发正确 retrieval，因此 embedding similarity 不再足够。
+InMind 针对一个 **implicit-association retrieval blind spot**：真正影响当前 query 的个人 memory，表面语义可能和 query 很远；只有把个人事实与外部 world knowledge 结合起来，才知道它其实相关。benchmark 因而明确拆开“模型看到 memory 后会不会用”与“memory system 能不能意识到应该把它找出来”。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-普通 memory retrieval 假设 query 与 stored fact 在语义空间接近。InMind 用 paired controls 把 storage failure、backbone knowledge gap、retrieval-routing failure 与 final application failure 区分开，专门测 implicit association retrieval。
+多数 memory retrieval 依赖 lexical/embedding similarity，多数 benchmark 也奖励 direct fact recall。InMind 对同一个个人事实构造 direct / indirect paired control；indirect query 的 relevance 必须经过外部知识桥接，而不是靠表面相似度。
 
-## 分数边界
+## 决定性证据
 
-direct/indirect 差距支持“系统在世界知识桥接后是否能找到 target memory”的判断；它不测 update、forget 或 actions。base-model world knowledge 本身是必要变量，因此换 backbone 后绝对分数不能直接归因给 memory retriever。
+套件包含 10 个 domain 的 125 个专家验证任务，其中 113 个由公开来源 grounding。当 decisive memory 直接放入 context 时，backbone 对 indirect question 的正确率达到 84.0%；但要求 memory system 自己 retrieve 后，6 类 vector / graph / agentic memory 方法最高只有 14.4%，而 direct recall 可以达到 100%。让 memory 始终可见的 diagnostic probe 能恢复大部分差距。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 base model、embedding/retrieval budget、synthetic personal facts、fixed background trace 与 judge，并分别报告 direct 与 indirect conditions。
+这是很强的证据：瓶颈可能位于 **query-to-memory interface**，而不是 storage capacity 或 answer reasoning。它也不能推出 similarity retrieval 应该被淘汰，因为 benchmark 本身就是有意选择“相似度不够”的 case。
 
-## 下一步评测坐标
+## 公平比较契约
 
-下一步应让 implicit association 在动态、多事实 memory 中竞争，并验证被召回的关联是否真的改善后续行动而非只答对一个问题。
+应固定 background memory trace、backbone、world-knowledge access、retrieval budget 与 direct/indirect paired task，并一起报告 oracle-in-context、target recall、end-answer accuracy。没有 oracle 条件时，retrieval failure 和 answerer failure 会再次混在一起。
+
+## 还没有测什么
+
+数据规模不大，而且专门针对 similarity 的弱点；真实 personal-agent workload 中这种 indirect relevance 的占比还未知。主动 world-knowledge search 还可能引入明显成本与 hallucination risk。
+
+## 下一步最有判别力的验证
+
+先在真实个人 agent log 中测 indirect relevance 的发生率，再在 equal-cost 下比较 query expansion、world-knowledge-conditioned retrieval 与 agentic search。系统层真正的问题是：能不能用一个便宜 trigger 判断什么时候普通 similarity retrieval 已经不可信。
+
+## 演化位置
+
+`semantic recall → query-conditioned retrieval → knowledge-mediated relevance discovery`
+
+它挑战的是一个很基础的假设：当前 query 并不总是一个足够好的 retrieval key。
