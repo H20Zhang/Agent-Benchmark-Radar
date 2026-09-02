@@ -21,43 +21,51 @@ const allLabel = lang === "zh" ? "全部年份" : "All years";
 const counts = { tracked: resultSets.size, untracked: items.length - resultSets.size };
 ---
 
-<form class="filter-panel filter-panel--v2" action={sitePath(localePath(lang, "benchmarks/"))} method="get" data-filter-form>
+<form class="filter-panel filter-panel--v2 filter-panel--tool" action={sitePath(localePath(lang, "benchmarks/"))} method="get" data-filter-form>
   <div class="filter-panel__heading">
-    <div><p class="eyebrow">Research controls</p><h2>{copy.filters.title}</h2></div>
+    <div>
+      <p class="eyebrow">Benchmark filters</p>
+      <h2>{lang === "zh" ? "先用常用条件快速缩小范围" : "Start with the filters you use most"}</h2>
+    </div>
     <button class="filter-reset" type="reset" data-reset-filters>{copy.filters.reset}</button>
   </div>
 
-  <label class="search-control">
-    <span>{copy.filters.search}</span>
-    <span class="search-control__field">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
-      <input type="search" name="q" autocomplete="off" placeholder={copy.filters.searchPlaceholder} />
-    </span>
-  </label>
+  <div class="filter-primary-grid">
+    <label class="search-control filter-primary-search">
+      <span>{copy.filters.search}</span>
+      <span class="search-control__field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
+        <input type="search" name="q" autocomplete="off" placeholder={copy.filters.searchPlaceholder} />
+      </span>
+    </label>
 
-  <fieldset class="filter-group filter-group--areas">
-    <legend>{copy.filters.area}</legend>
-    <div class="segmented-control segmented-control--areas">
-      {AREAS.map((area) => <label data-area={area}><input type="checkbox" name="area" value={area} /><span>{copy.areas[area].label}</span></label>)}
+    <fieldset class="filter-group filter-group--areas filter-primary-areas">
+      <legend>{copy.filters.area}</legend>
+      <div class="segmented-control segmented-control--areas">
+        {AREAS.map((area) => <label data-area={area}><input type="checkbox" name="area" value={area} /><span>{copy.areas[area].label}</span></label>)}
+      </div>
+    </fieldset>
+
+    <div class="filter-panel__quick-row filter-primary-selects">
+      <label class="select-control"><span>{copy.filters.year}</span><select name="year"><option value="">{allLabel}</option>{years.map((year) => <option value={year}>{year}</option>)}</select></label>
+      <label class="select-control select-control--sort"><span>{copy.filters.sort}</span><select name="sort">{Object.entries(copy.filters.sortOptions).map(([value, label]) => <option value={value}>{label}</option>)}</select></label>
     </div>
-  </fieldset>
 
-  <div class="filter-panel__quick-row">
-    <label class="select-control"><span>{copy.filters.year}</span><select name="year"><option value="">{allLabel}</option>{years.map((year) => <option value={year}>{year}</option>)}</select></label>
-    <label class="select-control select-control--sort"><span>{copy.filters.sort}</span><select name="sort">{Object.entries(copy.filters.sortOptions).map(([value, label]) => <option value={value}>{label}</option>)}</select></label>
+    <fieldset class="filter-group filter-primary-results">
+      <legend>{copy.filters.resultStatus}</legend>
+      <div class="chip-control chip-control--counts">
+        <label><input type="checkbox" name="status" value="tracked" /><span>{copy.filters.tracked}<small>{counts.tracked}</small></span></label>
+        <label><input type="checkbox" name="status" value="untracked" /><span>{copy.filters.registryOnly}<small>{counts.untracked}</small></span></label>
+      </div>
+    </fieldset>
   </div>
 
-  <details class="refine-panel">
-    <summary><span><b>{copy.filters.advanced}</b><small>{copy.filters.advancedHint}</small></span><span aria-hidden="true">＋</span></summary>
+  <details class="refine-panel refine-panel--tool">
+    <summary>
+      <span><b>{lang === "zh" ? "更多筛选维度" : "More filters"}</b><small>{lang === "zh" ? "参考空间、Metric、能力、环境、协议与角色" : "Headroom, metric, capability, environment, protocol, and role"}</small></span>
+      <span aria-hidden="true">＋</span>
+    </summary>
     <div class="refine-panel__body">
-      <fieldset class="filter-group">
-        <legend>{copy.filters.resultStatus}</legend>
-        <div class="chip-control chip-control--counts">
-          <label><input type="checkbox" name="status" value="tracked" /><span>{copy.filters.tracked}<small>{counts.tracked}</small></span></label>
-          <label><input type="checkbox" name="status" value="untracked" /><span>{copy.filters.registryOnly}<small>{counts.untracked}</small></span></label>
-        </div>
-      </fieldset>
-
       <fieldset class="filter-group">
         <legend>{copy.filters.headroom}</legend>
         <div class="chip-control">
@@ -89,6 +97,8 @@ const counts = { tracked: resultSets.size, untracked: items.length - resultSets.
     </div>
   </details>
 
-  <div class="active-filters" data-active-filters aria-live="polite"></div>
-  <button class="button button--primary filter-submit" type="submit">{copy.filters.apply}</button>
+  <div class="filter-panel__bottomline">
+    <div class="active-filters" data-active-filters aria-live="polite"></div>
+    <small>{lang === "zh" ? "筛选即时生效 · 当前 URL 可直接分享" : "Filters apply instantly · the current URL is shareable"}</small>
+  </div>
 </form>
