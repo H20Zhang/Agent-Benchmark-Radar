@@ -1,23 +1,39 @@
-# DA-Code: turning data-analysis decomposition into an executable coding benchmark
+# DA-Code: grounded executable code for real data-analysis tasks
 
-[中文](da-code.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](da-code.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-## What it measures
+[Paper](https://arxiv.org/abs/2410.07331) · [Project](https://da-code-bench.github.io/)
 
-DA-Code contains 500 executable Python/SQL tasks covering data wrangling, machine learning, and exploratory analysis, testing whether an agent can decompose natural-language analytical requirements into runnable data operations.
+## What it actually measures
 
-## Compared with what
+DA-Code evaluates generation of **grounded executable data-science code** over real and diverse data, covering difficult wrangling, exploratory analysis, and machine-learning operations in a controlled execution environment.
 
-DS-1000 mostly measures local library coding. DA-Code moves closer to analysis workflows by combining SQL/Python and multi-step data operations, bringing task decomposition and execution into one evaluation.
+## What changed relative to prior evaluation
 
-## Score boundary
+DS-1000 uses realistic library-level coding problems. DA-Code raises the unit of work toward agentic data analysis: tasks require grounding in supplied datasets, planning several operations, and producing the required answer through complex data-science programs rather than filling a local code hole.
 
-Execution success supports completing analytical operations under the current sandbox, assets, and task specification. It does not cover autonomous question discovery, business semantics, or final report quality.
+## Decisive evidence
 
-## Fair comparison conditions
+The benchmark's evaluation suite is manually designed for robust executable checking. Even using the strongest contemporary LLMs in the authors' experiments, accuracy reaches only 30.5%, showing a large gap despite the tasks being objectively executable.
 
-Align Python/SQL runtime, package versions, task data, allowed tools, step/retry budget, and completion criteria.
+## What the score supports
 
-## Next evaluation coordinate
+DA-Code supports grounded program synthesis for bounded analysis tasks. It still does not measure the full data-agent loop of discovering the question, inspecting intermediate outputs over many turns, maintaining project state, and delivering a user-facing artifact.
 
-Successors need to combine executable analysis with uncertain ground truth, visualization, reporting, and cross-system data access.
+## Fair comparison contract
+
+Fix data files, runtime/library versions, allowed languages/tools, execution budget, retry policy, and answer evaluator. Distinguish one-shot generation from iterative agent repair; execution feedback can materially change the task.
+
+## What remains unmeasured
+
+Repository-scale engineering, heterogeneous documentation, business semantics, long-lived state, and open-ended insight discovery sit outside the core benchmark.
+
+## Next discriminating validation
+
+Construct paired tasks where the same target requires either one monolithic program or a multi-step inspect-and-repair workflow. This isolates the value of agentic iteration beyond stronger code generation.
+
+## Genealogy
+
+`library-level code → grounded multi-operation analysis code → iterative data-analysis agent`
+
+DA-Code is a bridge between executable coding benchmarks and full data-agent workflows.

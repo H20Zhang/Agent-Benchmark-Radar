@@ -1,25 +1,39 @@
-# AgenticDataBench: the target is a complete data-agent deliverable, not one query
+# AgenticDataBench: fine-grained skills behind realistic data-science tasks
 
-[中文](agenticdatabench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](agenticdatabench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Project](https://agenticdatabench.github.io/)
+[Paper](https://arxiv.org/abs/2607.01647) · [Project](https://agenticdatabench.github.io/) · [Code](https://github.com/AgenticDataBench/AgenticDataBench)
 
-## What it measures
+## What it actually measures
 
-AgenticDataBench covers 344 realistic end-to-end data tasks, 97 datasets, 15 domains, roughly 27.3GB and 123.1M rows, with 433 skill labels. It evaluates full data-agent workflows and compares scaffolds such as Codex, Claude Code, Smolagents, and DA-Agent paired with different backbones.
+AgenticDataBench evaluates realistic data-science tasks while attaching **fine-grained skill labels** to the required work. It covers 344 tasks across 15 domains, 97 real-world datasets totaling 27.3 GB / 123.1M rows, and 433 ground-truth skill labels.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-DAB focuses on enterprise questions spanning databases. AgenticDataBench emphasizes complete analytical workflows and skill coverage. Strong SQL alone is insufficient if data understanding, transformation, analysis, or delivery fails.
+End-to-end data-science benchmarks reveal whether a task succeeded but often provide weak coverage accounting. AgenticDataBench adds a skill taxonomy so benchmark composition and agent weakness can be analyzed at finer granularity.
 
-## How to interpret current scores
+## Decisive evidence
 
-In the official 2026-07-02 snapshot, the best system is about 49.39%, with the other agent/model combinations spanning roughly 31.83%–47.77%. These are packaged scaffold+model comparisons, not causal evidence for one orchestration idea. The web stores the full 12-row official snapshot while README remains score-free.
+The benchmark supports both a DevSet for standardized result submission and a TestSet where agent code is sandbox-executed and traces are captured. Human performance is reported around 84–90%, preserving substantial but not unreachable headroom.
 
-## Fair comparison conditions
+## What the score supports
 
-Align benchmark snapshot, scaffold, model, tool/runtime, task limits, and evaluator. Agent+model combinations are system entries rather than raw model rankings.
+Skill-level results can show coverage and recurring weak competencies. They do not prove that a skill label is an independent causal module: one task can require interacting skills, and agent scaffolding determines how those skills appear in trajectories.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step separates business truth, artifact correctness, recovery, and cost so end-to-end failure can be localized to workflow stages.
+Fix dataset version, sandbox, tool availability, agent harness, model, and execution budget. Compare skill distributions as well as aggregate accuracy, and preserve the hidden TestSet when making tuning decisions.
+
+## What remains unmeasured
+
+Skill labels are an ontology chosen by benchmark designers; production business semantics, longitudinal data change, collaboration, and data governance are only partially represented.
+
+## Next discriminating validation
+
+Use the skill labels to construct matched task pairs differing in exactly one required competency, then test whether targeted agent interventions improve only the predicted slice. That would validate the taxonomy as a diagnostic instrument.
+
+## Genealogy
+
+`end-to-end data tasks → skill-labeled coverage → capability-targeted data-agent improvement`
+
+AgenticDataBench makes “what kinds of data work are actually covered?” measurable.

@@ -1,23 +1,39 @@
-# DSAEval：Data Science Agent 的输出包括 reasoning、code、result 和 report
+# DSAEval：累积式、多模态 data-science project
 
-**中文** | [English](dsaeval.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](dsaeval.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-## 它在测什么
+[论文](https://arxiv.org/abs/2601.13591) · [项目页](https://dsaeval.github.io/DSAEval/)
 
-DSAEval 有 641 个 problems、285 个 real datasets，覆盖 tabular、image、text，并在 GPU Jupyter 环境中支持 cumulative multi-query sessions。evaluation 同时检查 reasoning、code、execution result 与 report；paper 比较 13 个 agents。
+## 它到底测什么
 
-## 相比什么前进了
+DSAEval 评估 **真实 data-science project**：包含 multimodal environment perception、cumulative multi-query interaction，并分别评分 reasoning、code 与 result。共有 641 个问题、285 个 structured/unstructured dataset。
 
-只测 code correctness 会漏掉分析 reasoning 与最终沟通。DSAEval 把多模态 data-science session 的中间过程和 deliverable 共同设为评价对象，且后续 query 可以依赖前面 notebook state。
+## 相比此前评测多测了什么
 
-## 分数边界
+one-shot coding task 每题都会 reset；DSAEval 让后续 query 依赖此前分析，并把 observation 从 table 扩展到 image/text data，更接近连续的数据科学工作 session。
 
-multi-component score 支持完整 agent 在指定 GPU/Jupyter、datasets 与 judge/rules 下的 data-science quality；不同 component 权重或 judge 会改变 aggregate rank。
+## 决定性证据
 
-## 公平比较条件
+论文评估 11 种先进 agentic LLM：Claude-Sonnet-4.5 overall 最强，GPT-5.2 efficiency 最好，MiMo-V2-Flash cost-effectiveness 最好；multimodal perception 对 vision-related task 带来 2.04–11.30% 提升。structured/routine analysis 明显比 unstructured workload 容易。
 
-锁定 dataset/version、GPU/runtime、session ordering、agent budget、component metrics 与 report judge，并保留 component breakdown。
+## 这个分数能证明什么
 
-## 下一步评测坐标
+benchmark 支持 cumulative project competence，并暴露 quality–efficiency–cost trade-off；但 model/scaffold 仍是一个组合系统，multi-dimensional grading 也可能包含 deterministic execution 之外的 evaluator assumption。
 
-下一步应增加数据/目标随 session 演化、artifact review 和业务 consequence，检验累计 state 是否最终帮助或污染分析。
+## 公平比较契约
+
+应固定 dataset、query order、accumulated workspace state、tool environment、model、budget 与 evaluator，并精确保留 prior-query output；如果不同系统采用不同 reset/summary 策略，累计任务本身已经变了。
+
+## 还没有测什么
+
+真实项目会跨数周，有 stakeholder feedback、data update、version control 与 production deployment；这里的 cumulative interaction 仍是 bounded benchmark episode。
+
+## 下一步最有判别力的验证
+
+在早期分析里人为注入可控错误，测后续 recovery 与 error propagation，验证 agent 是否维护可信 analytical state，而不只是累积 conversation context。
+
+## 演化位置
+
+`one-shot data analysis → cumulative multimodal project → persistent analytical state`
+
+它把跨请求的 state continuity 变成 data-agent 的显式能力。

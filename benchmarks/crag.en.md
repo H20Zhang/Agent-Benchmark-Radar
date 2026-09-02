@@ -1,25 +1,39 @@
-# CRAG: bringing freshness, long-tail knowledge, and abstention into RAG evaluation
+# CRAG: RAG under freshness, long-tail knowledge, and abstention pressure
 
-[中文](crag.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](crag.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2406.04744) · [Code](https://github.com/facebookresearch/CRAG)
 
-## What it measures
+## What it actually measures
 
-CRAG contains 4,409 QA pairs across five domains and eight question categories, with mock web and knowledge-graph APIs for dynamic facts, long-tail entities, retrieval, and abstention. Hallucination-sensitive grading makes refusing when evidence is insufficient part of the capability.
+CRAG evaluates factual RAG across changing facts, entity popularity, question complexity, web search, knowledge-graph access, and abstention. Its 4,409 QA pairs span five domains and eight categories, with temporal dynamism ranging from years to seconds.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Static RAG benchmarks often treat the corpus as timeless ground truth. CRAG introduces popularity, freshness, and dynamic facts as evaluation variables and was used for the KDD Cup 2024 challenge, making model knowledge cutoff and retrieval source visibly load-bearing.
+Static QA benchmarks blur model knowledge and retrieval value because many answers are already memorized. CRAG stresses facts whose freshness and long-tail nature make external retrieval necessary and makes hallucination-sensitive correctness central.
 
-## Decisive evidence and score boundary
+## Decisive evidence
 
-CRAG makes the boundary between static parametric knowledge and dynamic external evidence measurable. A high score supports factual handling under the named mock API/KG snapshot and grading rule; it does not prove that the same system is a better live-web agent because provider ranking, interface complexity, and drift are controlled away.
+The paper reports advanced LLMs at no more than 34% accuracy, straightforward RAG around 44%, and state-of-the-art industry RAG systems answering only 63% of questions without hallucination. Accuracy falls further for more dynamic, less popular, and more complex facts.
 
-## Fair comparison conditions
+## What the score supports
 
-Align mock API/KG version, knowledge cutoff, answer grader, allowed tools, and retrieval budget. Different model cutoffs or real search interfaces belong in separate tracks.
+CRAG provides evidence about trustworthy factual QA under its mock web/KG interfaces. The strong freshness effect supports the value of retrieval, but the score remains system-level: model knowledge cutoff, retrieval stack, source handling, and answer policy all matter.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-A stronger successor preserves freshness while using replayable web snapshots or recorded tool traces to separate retrieval policy, source quality, and model knowledge.
+Fix model snapshot/knowledge cutoff, mock APIs, retrieval budget, KG access, and grading. Report hallucination/abstention separately from raw accuracy; a system that guesses aggressively should not be equated with one that correctly knows when evidence is insufficient.
+
+## What remains unmeasured
+
+Mock APIs improve reproducibility but remove much of live-web navigation, interface variability, authentication, and search-provider drift. The benchmark is factual QA rather than long-form research or open-ended tool use.
+
+## Next discriminating validation
+
+Replay the same factual targets through both frozen mock APIs and live-web agents, measuring the gap due to source discovery and interface control. That would isolate how much modern search-agent difficulty lies outside the retriever itself.
+
+## Genealogy
+
+`static RAG QA → dynamic/long-tail factuality → live information-seeking reliability`
+
+CRAG made knowledge freshness a first-class RAG variable rather than a hidden dataset property.

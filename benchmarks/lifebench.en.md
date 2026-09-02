@@ -1,23 +1,39 @@
-# LifeBench: evaluating declarative and habitual/procedural memory in one long life trajectory
+# LifeBench: long-horizon memory beyond explicit facts
 
-[中文](lifebench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](lifebench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-## What it measures
+[Paper](https://arxiv.org/abs/2603.03781) · [Code and data synthesis](https://github.com/1754955896/LifeBench)
 
-LifeBench constructs long, densely connected multi-source life events and evaluates both declarative facts and habitual/procedural patterns. A memory system must recover individual events and infer repeated behaviors, routines, and cross-event structure.
+## What it actually measures
 
-## Compared with what
+LifeBench evaluates whether an agent can integrate **declarative and non-declarative memory** across long, heterogeneous life-event streams. In addition to explicit episodic and semantic facts, tasks require inferring habits and procedures from repeated behavior distributed across time and sources.
 
-Most conversational-memory benchmarks center on explicit factual QA. LifeBench brings non-declarative memory into the evaluation object, so retrieving all factual statements is no longer sufficient evidence that an agent has learned a user's recurring behavioral patterns.
+## What changed relative to prior evaluation
 
-## Decisive evidence and score boundary
+Conversation-memory benchmarks mainly encode what the user explicitly said. LifeBench asks what can be inferred from what the user repeatedly does. Its event simulation is densely connected over long horizons and draws on real-world priors, so a useful memory representation must aggregate repeated evidence rather than treat every event as an independent retrievable chunk.
 
-The paper reports that top-tier memory systems reach only about 55.2% accuracy, leaving the coordinate far from saturated. This supports the difficulty of long-horizon life-pattern modeling; it does not identify storage, retrieval, or reasoning as the causal bottleneck because the evaluation remains end-to-end.
+## Decisive evidence
 
-## Fair comparison conditions
+The paper reports that top evaluated memory systems reach only 55.2% accuracy. This matters because the added difficulty is not only context length: the benchmark mixes semantic, episodic, habitual, and procedural memory across multi-source traces, requiring evidence integration and behavioral abstraction.
 
-Align event generation, task family, backbone, memory budget, and evaluator, and report declarative versus habitual/procedural slices separately. One aggregate score cannot diagnose the representation mechanism.
+## What the score supports
 
-## Next evaluation coordinate
+A LifeBench score supports whole-system ability to reconstruct and reason over long-horizon life patterns. It cannot cleanly attribute gains to retrieval versus aggregation versus inference, and the synthetic event generator embeds behavioral priors that may differ from real users.
 
-A stronger benchmark should make habitual/procedural memory influence later actions directly and test whether those patterns update when preferences change rather than becoming stale stereotypes.
+## Fair comparison contract
+
+Fix the event stream, backbone, accessible sources, temporal cutoff, retrieval budget, and answer evaluator. Report results by memory type; an approach strong on explicit episodic facts can otherwise hide failure on habits/procedures. Prevent future-event leakage when evaluating earlier time points.
+
+## What remains unmeasured
+
+Real personal data is sparse, contradictory, private, and often lacks objective labels for habits or intent. The benchmark also does not establish whether inferred habits should be persisted or acted on without user confirmation.
+
+## Next discriminating validation
+
+Pair inferred habits/procedures with future decisions and explicit user corrections. The crucial question is whether a memory system can both infer latent patterns and revise them when the user changes behavior.
+
+## Genealogy
+
+`explicit conversational facts → multi-source life traces → inferred habitual/procedural memory`
+
+LifeBench expands the memory object from what users say to recurring structure in what they do.

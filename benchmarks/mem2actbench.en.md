@@ -1,25 +1,39 @@
-# Mem2ActBench: measuring memory where it changes a tool call
+# Mem2ActBench: from remembered facts to grounded tool actions
 
-[中文](mem2actbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](mem2actbench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://aclanthology.org/2026.acl-long.370/) · [Code](https://github.com/Cantaloupe-M/Mem2ActBench)
+[Paper](https://arxiv.org/abs/2601.19935) · [ACL 2026](https://aclanthology.org/2026.acl-long.370/)
 
-## What it measures
+## What it actually measures
 
-Mem2ActBench contains 400 tool-use tasks derived from 2,029 sessions averaging about 12 user-assistant-tool turns; 91.3% of tasks were judged strongly memory-dependent. Systems must reuse preferences and task state to select tools and ground parameters correctly.
+Mem2ActBench tests whether long-term memory is **proactively converted into tool use**. An agent must decide which tool to call and ground tool parameters in information learned from earlier interactions. The memory dependency is deliberately indirect: the task is not phrased as a request to recall a stored fact.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Conversational QA only measures memory utility indirectly. Mem2ActBench scores tool-call correctness directly, exposing cases where a preference was remembered but not used for parameter grounding and separating action-level utilization from retrieval quality.
+Most memory benchmarks stop at retrieval or answer generation. Tool-use benchmarks usually provide the information needed for the current call inside the immediate prompt. Mem2ActBench couples the two: success requires recovering a previously learned personal/contextual fact and applying it at the correct point in an action schema.
 
-## Score boundary
+## Decisive evidence
 
-Tool-call success supports correct use of memory under the named schema, backbone, and harness. It does not establish that the memory representation itself is better because synthetic generation, tool schema, and agent capability all affect the outcome.
+The construction pipeline synthesizes 2,029 multi-turn sessions and 400 memory-dependent tool-use tasks from tool/dialogue sources; human checking finds 91.3% of the tasks strongly dependent on memory. Seven representative memory frameworks are evaluated, and the paper finds that current systems remain weak particularly on active memory utilization and parameter grounding.
 
-## Fair comparison conditions
+## What the score supports
 
-Align tool schemas, allowed calls, backbone, memory implementation, and task version. Different tool sets or parameter constraints require distinct tracks.
+The benchmark supports claims about an end-to-end **memory → tool selection/argument grounding** pipeline. It is stronger than recall accuracy as evidence that stored information is operationally useful. It still does not isolate retrieval from reasoning: a correct memory can be retrieved but mapped to the wrong tool field, and a missed action may come from planning rather than memory storage.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The stronger test lets tool calls modify persistent environment state and checks whether downstream errors caused by bad memory can be detected and repaired.
+Keep the tool schema, backbone, available tool set, session history, retrieval budget, and number of action attempts fixed. Report tool-selection and parameter-grounding errors separately when possible. Allowing one system to inspect extra tool documentation or to retry calls changes the action problem.
+
+## What remains unmeasured
+
+The tasks are synthesized around benchmark tool schemas rather than long-running real accounts with permissions, irreversible side effects, and evolving APIs. The protocol focuses on using remembered information, not on whether the memory was written, updated, or deleted correctly over months.
+
+## Next discriminating validation
+
+Introduce oracle-retrieval and oracle-planning controls. If oracle memory barely improves tool success, the bottleneck is action grounding; if it closes most of the gap, retrieval/write policy is the dominant research target.
+
+## Genealogy
+
+`memory QA → memory-conditioned decision → memory-grounded tool action`
+
+Mem2ActBench makes “memory utility” concrete: a remembered fact matters only when it changes the right action.

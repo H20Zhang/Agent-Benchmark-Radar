@@ -1,25 +1,39 @@
-# AMA-Bench：从 conversation memory 转向 agent trajectory memory
+# AMA-Bench：从对话历史走向 agent-environment trajectory memory
 
-**中文** | [English](ama-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](ama-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-[论文](https://arxiv.org/abs/2602.22769) · [代码](https://github.com/AMA-Bench/AMA-Bench) · [项目页](https://ama-bench.github.io/)
+[论文](https://arxiv.org/abs/2602.22769) · [项目页](https://ama-bench.github.io/) · [代码](https://github.com/AMA-Bench/AMA-Bench)
 
-## 它在测什么
+## 它到底测什么
 
-AMA-Bench 的 memory source 是 agent 与环境交互产生的 trajectories，而不是只来自 human-agent dialogue。官方套件覆盖 GAIA、WebArena、BALROG、ALFWorld、SWE-bench 等真实/近真实 agent 场景，并通过统一的 `memory_construction → memory_retrieve` 两阶段接口比较 long context、RAG 与 memory-agent methods；项目页报告主实验共评 2,471 个 QA pairs。
+AMA-Bench 评估的是 **agent-environment trajectory** 上的 memory，而不再只是 human-agent conversation。问题覆盖 Recall、Causal Inference、State Updating、State Abstraction，需要理解 action、observation 与环境状态变化之间的关系。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-LoCoMo / LongMemEval 主要回答“过去对话里发生了什么”。AMA-Bench 把需要记住的对象改成 action、objective state、causal transition 与工具执行经验，因此更接近 agent 真正需要复用的 experience。统一两阶段接口也比完全自由的 agent stack 更有利于观察 memory construction 与 retrieval 的差异。
+LoCoMo、LongMemEval 建立了长期对话 memory 的基础，但 history 主要还是 communication artifact。AMA-Bench 把 memory source 换成机器生成的 experience：agent 做了什么、environment 返回了什么、state 怎样变化。因此 causality 与 objective state 比对话表述本身更重要。
 
-## 决定性证据与分数边界
+## 决定性证据
 
-官方结果明确显示 long-context baseline 会随 trajectory horizon 增长而退化，并提供 recall、causal inference、state updating、state abstraction 等分项。当前项目页同时出现两组不同的 AMA-Agent headline 数字（55.80%/+10.88pp 与 57.22%/+11.16pp），因此 Radar 不把其中任意一组未经版本解释的数字写成唯一“当前最好”。这正说明成绩追踪必须绑定具体 snapshot、base model 与 judge，而不是只复制首页 headline。
+项目报告 206 个 trajectory sample、2,471 个 QA pair、6 个 domain 和 4 类核心能力。AMA-Agent 使用 causality graph + tool-augmented retrieval，平均 accuracy 为 57.22%，比论文中最强 baseline 高 11.16 个百分点。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 Qwen3-32B 等 base model、open-ended QA split、LLM-as-judge、trajectory subset 与 memory interface。官方仓库还展示不同 judges 的严格程度差异，因此 judge 变化本身足以移动绝对 accuracy。跨 judge、跨 backbone 的数字应拆成不同 tracks。
+benchmark 能证明系统是否会对 stored trajectory 做 memory reasoning，也提示 causal structure 与 active retrieval 可能有效。但方法增益仍是 system-level evidence：graph construction、retrieval tool、backbone 与 answerer 一起变化。另外终点仍然是“对 experience 做 QA”，不是“未来环境任务做得更好”。
 
-## 下一步评测坐标
+## 公平比较契约
 
-AMA-Bench 已把 memory 放进 agent trajectories，但终点仍是 trajectory QA。下一步应直接执行未来 tasks，验证记忆到的 workflow/causal knowledge 是否提升 action success，并同时计入 memory construction 与 retrieval cost。
+应固定 trajectory set、backbone、retrieval/tool budget、evidence visibility 与 QA evaluator，并拆分四类能力报告；raw recall 强不代表 state abstraction 或 causal inference 强。tool-augmented system 还应披露额外 search call 与 latency。
+
+## 还没有测什么
+
+它只是间接测试 trajectory memory 会不会改善后续 acting；长期 error accumulation、experience deletion、policy learning 和对 unseen environment 的 transfer 都是不同问题。
+
+## 下一步最有判别力的验证
+
+在同一批 trajectory 后追加 paired future task，让最优 action 必须依赖刚才的 causal/state memory，从而把 trajectory QA 真正连接到 behavior improvement。
+
+## 演化位置
+
+`conversation history → agent trajectory → causal/state memory of experience`
+
+它是从 conversational memory 走向 acting-agent memory 的一座桥。

@@ -1,23 +1,39 @@
-# DSGym: data-science agents should work inside a stateful Jupyter environment, not answer isolated questions
+# DSGym: a data-science agent benchmark that filters shortcut-solvable tasks
 
-[中文](dsgym.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dsgym.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-## What it measures
+[Paper](https://arxiv.org/abs/2601.16344) · [Code](https://github.com/fannie1208/DSGym)
 
-DSGym contains 972 analysis tasks plus 114 prediction tasks, 1,086 total, with an additional 90-task DSBio slice. Docker and stateful Jupyter execution require agents to analyze, model, debug, and reuse notebook state, with shortcut audits included.
+## What it actually measures
 
-## Compared with what
+DSGym is both a standardized **execution framework** and a curated suite for evaluating/training data-science agents across analysis, prediction, and domain-specialized tasks in self-contained environments.
 
-DS-1000 is isolated coding. DSGym makes code, data, runtime state, and later steps interdependent, closer to analyst notebook workflows and able to expose shortcut solutions.
+## What changed relative to prior evaluation
 
-## Score boundary
+The authors show that a substantial fraction of existing data-science benchmark tasks can be solved without using the supplied data. DSGym explicitly filters shortcut-solvable problems and standardizes environment interfaces, making data grounding and cross-benchmark comparison central.
 
-Execution or task success supports performance under the current notebook environment and release. Stateful semantics, package versions, and shortcut detection are load-bearing protocol variables.
+## Decisive evidence
 
-## Fair comparison conditions
+DSGym refines existing tasks and adds DSBio and DSPredict for bioinformatics and challenging prediction workloads. It also supports execution-verified trajectory synthesis; as a training case study, a 4B model trained on 2,000 generated examples outperforms GPT-4o on standardized analysis benchmarks.
 
-Align Docker image, Jupyter-state semantics, datasets, packages, step budget, shortcut policy, and evaluator.
+## What the score supports
 
-## Next evaluation coordinate
+The benchmark strongly supports whether an agent can plan, implement, and validate analyses in a controlled execution environment. The training result is evidence for the framework's usefulness but not a general claim that smaller models dominate stronger models outside the standardized tasks.
 
-The next step connects notebook execution to final reports/artifacts, review and recovery, and persistent project state.
+## Fair comparison contract
+
+Fix Docker/environment image, tools, datasets, metric implementation, agent scaffold, model, and execution budget. Preserve shortcut filters and report pass@k separately from average trajectory score.
+
+## What remains unmeasured
+
+Standardization trades away some messy production reality: enterprise semantics, permissions, evolving repositories, collaboration, and deployment are not the central focus.
+
+## Next discriminating validation
+
+Track performance before and after shortcut filtering for each benchmark source and publish the delta. This quantifies how much apparent data-agent progress was actually benchmark leakage or task solvability without data.
+
+## Genealogy
+
+`fragmented data-science benchmarks → grounded standardized gym → execution-verified agent training/evaluation`
+
+DSGym treats benchmark validity and environment reproducibility as part of the research contribution.

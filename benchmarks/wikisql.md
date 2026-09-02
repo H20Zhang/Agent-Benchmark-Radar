@@ -1,23 +1,39 @@
-# WikiSQL：text-to-SQL 的早期可执行锚点，但只覆盖单表查询
+# WikiSQL：大规模 executable text-to-SQL 的起点，但还不是复杂数据库推理
 
-**中文** | [English](wikisql.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](wikisql.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-## 它在测什么
+[论文](https://arxiv.org/abs/1709.00103)
 
-WikiSQL 包含 80,654 个 natural-language/SQL examples，覆盖 24,241 张 Wikipedia tables。核心 contract 是把问题翻译成可执行 SQL，并用 execution result 判断正确性；query 主要是单表 selection、filter 与 aggregation。
+## 它到底测什么
 
-## 相比什么前进了
+WikiSQL 在 **单张 Wikipedia table** 上评估 natural-language-to-SQL，并可通过真正执行 query 判断结果。原始发布包含 80,654 对人工标注 question–SQL，覆盖 24,241 张 table，SQL grammar 受限且基本不涉及多表 join。
 
-早期 semantic parsing 常用小型 domain-specific datasets。WikiSQL 把 text-to-SQL 扩到大规模、跨表 schema 的训练/测试环境，并推动 execution accuracy 成为自然语言数据库接口的标准指标之一。
+## 相比此前评测多测了什么
 
-## 分数边界
+WikiSQL 之前的 semantic-parsing dataset 通常规模更小、domain 更窄。它第一次把 execution-grounded text-to-SQL 扩到足以支持神经模型训练/评估的规模；Seq2SQL 还直接利用数据库执行结果，为 SQL 中无序部分提供 reinforcement-learning signal。
 
-高 execution accuracy 支持单表 schema grounding 与 SQL generation；它不支持多表 join、复杂业务语义、数据库探索或 agentic analysis。现代模型在 WikiSQL 上接近饱和，也不能推出真实 Data Agent 已解决。
+## 决定性证据
 
-## 公平比较条件
+Seq2SQL 论文报告：相比 attentional seq2seq baseline，execution accuracy 从 35.9% 提升到 59.4%，logical-form accuracy 从 23.4% 提升到 48.3%。这证明 SQL structure 与 execution supervision 都具有实质价值。
 
-锁定 split、schema serialization、execution engine、value access 与 decoding constraints。使用额外 schema/value hints 的系统应和纯 text-to-SQL 分开。
+## 这个分数能证明什么
 
-## 下一步评测坐标
+WikiSQL 证明的是：模型能否把问题映射成一张已知 table 上的简单 executable query。它对 enterprise data agent 的证明很弱，因为 schema discovery、join、nested query、business semantics、database value 与 workflow planning 基本都不存在。
 
-Spider 将问题推进到 unseen multi-table databases；更进一步的 Data Agent benchmark 还需要跨库、非结构化数据、分析过程与业务正确性。
+## 公平比较契约
+
+应固定 official split、table content、SQL grammar、execution engine，以及是否允许 execution-guided decoding；execution accuracy 与 exact logical-form matching 要分开报告，因为语义等价 SQL 可能长得不同。
+
+## 还没有测什么
+
+它没有像 Spider 那样真正测试复杂 unseen multi-table schema generalization，也不覆盖 dirty data、external knowledge、SQL dialect 或 interactive database exploration。
+
+## 下一步最有判别力的验证
+
+今天更适合把 WikiSQL 当作一条 scaling curve 的低阶基线：single table → unseen multi-table schema → large dirty database → enterprise workflow，而不是 frontier endpoint。
+
+## 演化位置
+
+`natural-language database query → executable single-table SQL → cross-domain schema generalization`
+
+WikiSQL 的重要性恰恰在于：后来的 benchmark 可以清楚说明它还漏掉了什么。

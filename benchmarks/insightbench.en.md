@@ -1,25 +1,39 @@
-# InsightBench: a data analyst delivers useful insights, not SQL
+# InsightBench: from answering queries to discovering business insights
 
-[中文](insightbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](insightbench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2407.06423) · [Code](https://github.com/ServiceNow/insight-bench)
 
-## What it measures
+## What it actually measures
 
-InsightBench constructs 100 business-use-case datasets with verifiable planted insights. An agent performs question formulation, EDA, insight discovery, and recommendation, with evaluators judging whether the final report captures important findings rather than only executing a predefined query.
+InsightBench evaluates **end-to-end business analytics**: formulate useful questions, run analyses, interpret results, synthesize insights, and propose actionable next steps. It contains 100 datasets representing business use cases such as finance and incident management, each with curated planted insights.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Text-to-SQL benchmarks already specify what question to answer. InsightBench adds deciding what to analyze and what is worth reporting, closer to open-ended analyst work.
+Most data-analysis benchmarks hand the model a precise query. InsightBench moves agency upstream: the agent must decide what to investigate and communicate a coherent set of findings, not merely compute a requested statistic.
 
-## Score boundary
+## Decisive evidence
 
-Insight coverage supports discovery under the planted-insight distribution and judge. It does not establish real business value because synthetic patterns and the evaluator define what counts as an insight.
+Because open-ended insight generation lacks one deterministic answer, the benchmark introduces a two-way LLaMA-3-based evaluator and extensive dataset quality assurance. AgentPoirot, the proposed end-to-end baseline, outperforms approaches such as Pandas Agent that focus on resolving single queries.
 
-## Fair comparison conditions
+## What the score supports
 
-Align dataset generation, reference insights, analysis budget, agent scaffold, and evaluator generation. Different judges or planted-insight density require separate snapshots.
+The benchmark supports discovering benchmark-authored business insights and packaging them into analysis. It is weaker evidence for genuinely novel or decision-useful discovery because the planted-insight set defines what counts as relevant and evaluator judgments mediate credit.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step moves from planted insights to real business semantics, stakeholder goals, and decision impact, measuring whether analysis changes actual decisions.
+Fix datasets, agent starting prompt, toolset, exploration budget, evaluator model/version, and report format. Report planted-insight coverage separately from presentation quality; otherwise fluent summaries can obscure missed evidence.
+
+## What remains unmeasured
+
+Real business insight depends on stakeholder objectives, causal validity, opportunity cost, and whether a recommendation changes a decision. A planted insight can be statistically recoverable yet economically unimportant.
+
+## Next discriminating validation
+
+Add blinded domain-expert scoring of unseen insights and downstream decision tasks. The key test is whether an agent finds something worth acting on, not only whether it rediscovers what benchmark designers planted.
+
+## Genealogy
+
+`answer a data query → discover a set of insights → decision-oriented business analysis`
+
+InsightBench moves data agents from execution toward analytical agenda setting.

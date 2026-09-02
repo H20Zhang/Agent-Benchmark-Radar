@@ -1,25 +1,39 @@
-# MultiHop-RAG: putting multi-hop retrieval failure back inside the RAG pipeline
+# MultiHop-RAG: retrieval must compose evidence, not only rank passages
 
-[中文](multihop-rag.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](multihop-rag.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2401.15391) · [Code](https://github.com/yixuantt/MultiHop-RAG)
 
-## What it measures
+## What it actually measures
 
-MultiHop-RAG uses a news-based knowledge base and questions requiring multiple pieces of supporting evidence, evaluating retrieval and answers together. Systems must find evidence across hops instead of relying on the generator to perform multi-hop reasoning after one retrieval step.
+MultiHop-RAG evaluates whether a RAG pipeline can retrieve **multiple mutually necessary pieces of evidence** and reason over their composition. The benchmark provides a news knowledge base, multi-hop queries, ground-truth answers, and supporting evidence, so retrieval and answer reasoning can be inspected separately.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-HotpotQA already introduced multi-document QA. MultiHop-RAG more directly targets a RAG pipeline and observes retrieval failure alongside answer failure, preventing a strong reader from completely hiding a missing first-hop evidence problem.
+Single-hop retrieval can look strong even when the final answer requires evidence that is individually weakly related to the query. MultiHop-RAG makes evidence composition the retrieval target instead of assuming one relevant chunk is sufficient.
 
-## Decisive evidence and score boundary
+## Decisive evidence
 
-Its key contribution is exposing systematic gaps in single-shot retrieval on multi-hop questions. Retrieval recall and answer accuracy support evidence discovery under the fixed news corpus and pipeline; they do not support claims about live web search, adaptive retrieval policy, or general tool orchestration. If retriever and reader both change, the end-to-end delta remains packaged-system evidence.
+The paper evaluates embedding retrievers and several strong LLM readers and finds both stages unsatisfactory on multi-hop queries. This establishes a useful separation: improving the reader with gold evidence does not fix missing-hop retrieval, while a better retriever cannot compensate for a reader unable to compose the evidence.
 
-## Fair comparison conditions
+## What the score supports
 
-Align corpus, query set, retriever-reader boundary, candidate budget, and answer evaluator. Results using a different snapshot or external search need separate tracks.
+Retrieval metrics support evidence-discovery claims; answer metrics support the combined retriever-reader pipeline. Neither alone identifies adaptive search quality because the corpus and retrieval process are static rather than interactive.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The stronger successor lets the agent choose the next hop from evidence already found and measures stopping, query reformulation, evidence sufficiency, and search cost.
+Fix corpus snapshot, chunking, embedding/index configuration, top-k budget, and reader model. Report supporting-evidence recall together with answer quality. A larger top-k that increases reader context should be treated as a resource change, not a free retrieval improvement.
+
+## What remains unmeasured
+
+The corpus is static news and the protocol does not require iterative query reformulation, source selection, tool calls, or stopping. It therefore captures multi-evidence composition but not the control loop of modern agentic retrieval.
+
+## Next discriminating validation
+
+Allow iterative search under a fixed retrieval/token budget and compare one-shot top-k against adaptive hop-by-hop retrieval. The key question is when adaptive control reduces evidence volume rather than merely spending more calls.
+
+## Genealogy
+
+`single-hop relevance → multi-evidence retrieval → adaptive multi-step search`
+
+MultiHop-RAG is a foundation for asking whether retrieval quality should be measured as evidence coverage rather than passage similarity.

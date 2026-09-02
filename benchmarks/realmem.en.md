@@ -1,25 +1,39 @@
-# RealMem: moving from casual chat to evolving project state
+# RealMem: memory for evolving long-term projects
 
-[中文](realmem.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](realmem.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://aclanthology.org/2026.findings-acl.703/) · [Code](https://github.com/AvatarMemory/RealMemBench)
+[Paper](https://arxiv.org/abs/2601.06966) · [ACL 2026](https://aclanthology.org/2026.findings-acl.703/) · [Code](https://github.com/AvatarMemory/RealMemBench)
 
-## What it measures
+## What it actually measures
 
-RealMem covers 11 realistic project scenarios and more than 2,000 cross-session dialogues in which goals, artifacts, and relevant state evolve over time. The target is project dependencies and changing objectives rather than facts from casual conversation.
+RealMem evaluates memory in **long-term project-oriented interaction**. The agent must track goals, schedules, decisions, evolving project attributes, and dependencies across sessions, then answer natural user queries against the current project state.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Benchmarks such as LoCoMo primarily evaluate conversational memory. RealMem moves toward persistent project state, where an old goal may be obsolete and an artifact may have a current version, closer to production collaboration.
+Casual conversation and task-dialogue memory can treat sessions as collections of personal facts. A project creates a different object: state is jointly produced over time, commitments have deadlines, later decisions supersede earlier ones, and relevance depends on the current project phase. RealMem synthesizes this evolution explicitly.
 
-## Score boundary
+## Decisive evidence
 
-Natural-user-query performance supports project-state tracking under the synthetic trajectory and judge. It does not establish reliability of permissions, writes, or external tools in real collaboration because trajectories are multi-agent generated and interaction remains dialogue-only.
+The benchmark contains more than 2,000 cross-session dialogues across 11 project scenarios. Its generation pipeline combines project-foundation construction, multi-agent dialogue generation, and memory/schedule management so that project state evolves rather than remaining a static fact set. Experiments show current memory systems struggle with dynamic context dependencies and long-term project state.
 
-## Fair comparison conditions
+## What the score supports
 
-Align trajectory generation, dialogue model, project scenario, history visibility, and judge. A different synthetic generator can change dependency density and difficulty.
+RealMem supports claims about retrieval and reasoning over evolving project histories. Because final evaluation remains query answering, it is indirect evidence for whether memory improves actual project execution, scheduling, or artifact delivery.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step connects project memory to real files, code, calendars, database writes, and permissions so the operational consequences of stale state become measurable.
+Fix project history, time checkpoint, backbone, retrieval budget, schedule visibility, and query evaluator. Evaluate superseded versus still-active facts separately, and prevent later project state from leaking into earlier checkpoints.
+
+## What remains unmeasured
+
+Project success is more than answering questions: agents must create artifacts, negotiate scope, manage permissions, recover from failures, and execute irreversible actions. Those operational loops are largely outside the benchmark.
+
+## Next discriminating validation
+
+Attach executable project tasks to each checkpoint—update a plan, edit an artifact, choose the next action—and score consistency with the evolving project state. That would test whether memory reduces real coordination error rather than only improving QA.
+
+## Genealogy
+
+`casual conversation memory → cross-session project state → persistent work context`
+
+RealMem makes evolving project state a distinct memory object, closer to how workplace agents will actually be used.
