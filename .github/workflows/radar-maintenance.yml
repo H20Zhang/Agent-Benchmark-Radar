@@ -5,8 +5,41 @@ on:
 permissions:
   contents: write
 jobs:
-  test:
+  build-candidate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: echo ok
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Apply accepted transaction
+        run: python scripts/_radar_candidate_claimprobe.py
+      - name: Run repository unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate bilingual reading contract
+        run: python scripts/validate_reading.py
+      - name: Install web dependencies
+        working-directory: web
+        run: npm install --no-audit --no-fund
+      - name: Test web contracts
+        working-directory: web
+        run: npm test
+      - name: Check Astro source
+        working-directory: web
+        run: npm run check
+      - name: Build Astro site
+        working-directory: web
+        run: npm run build
+      - name: Commit validated candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/benchmarks.json README.md README.en.md library/README.md library/README.en.md benchmarks/claimprobe.md benchmarks/claimprobe.en.md
+          git diff --cached --quiet && exit 0
+          git commit -m "radar: add ClaimProbe fixed-evidence report audit"
+          git push origin HEAD:${GITHUB_REF_NAME}
