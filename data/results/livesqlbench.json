@@ -1,0 +1,26 @@
+{
+  "benchmark_id": "livesqlbench",
+  "tracking_status": "live",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "base-full-v1-overall",
+      "primary": true,
+      "label": { "zh": "Base-Full v1 · 官方 Overall 榜", "en": "Base-Full v1 · Official Overall leaderboard" },
+      "task": "Contamination-resistant real-world text-to-SQL",
+      "split": "LiveSQLBench-Base-Full v1 · 600 tasks",
+      "protocol_version": "official Base leaderboard; Base-Full v1 selected; Overall model type; snapshot 2026-09-02",
+      "metric": { "id": "success-rate", "family": "success-rate", "label": "Success Rate", "unit": "%", "direction": "higher", "range": [0, 100] },
+      "entries": [
+        { "id": "dia", "method": "DIA (Data Intelligence Agents)", "score": 48.00, "date": "2026-05-29", "source": "https://livesqlbench.ai/" },
+        { "id": "minimax-m3-claude-code", "method": "MiniMax M3 (Claude Code)", "score": 40.17, "date": "2026-06-01", "source": "https://livesqlbench.ai/" },
+        { "id": "claude-opus46-openhands", "method": "Claude Opus 4.6 (OpenHands CLI)", "score": 38.00, "date": "2026-03-27", "source": "https://livesqlbench.ai/" },
+        { "id": "gemini31pro", "method": "Gemini 3.1 Pro", "score": 36.50, "date": "2026-04-26", "source": "https://livesqlbench.ai/" },
+        { "id": "claude-opus46", "method": "Claude Opus 4.6", "score": 35.50, "date": "2026-03-02", "source": "https://livesqlbench.ai/" },
+        { "id": "claude-sonnet45-openhands", "method": "Claude Sonnet 4.5 (OpenHands CLI)", "score": 35.20, "date": "2026-03-27", "source": "https://livesqlbench.ai/" },
+        { "id": "gpt55-low", "method": "GPT-5.5 (low)", "score": 33.50, "date": "2026-04-25", "source": "https://livesqlbench.ai/" },
+        { "id": "gpt55-xhigh", "method": "GPT-5.5 (xhigh)", "score": 33.33, "date": "2026-05-01", "source": "https://livesqlbench.ai/" }
+      ]
+    }
+  ]
+}
