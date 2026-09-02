@@ -1,0 +1,34 @@
+{
+  "benchmark_id": "memoryagentbench",
+  "tracking_status": "verified-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "factconsolidation-sh-gpt5mini",
+      "primary": true,
+      "label": { "zh": "FactConsolidation · Single-hop · GPT-5-mini", "en": "FactConsolidation · Single-hop · GPT-5-mini" },
+      "task": "Memory consolidation and outdated-fact handling",
+      "split": "FactConsolidation single-hop; average across four context sizes",
+      "protocol_version": "MemoryAgentBench Substring Exact Match; GPT-5-mini backbone; verified result snapshot 2026-09-02",
+      "metric": { "id": "substring-exact-match", "family": "accuracy", "label": "Substring Exact Match", "unit": "", "direction": "higher", "range": [0, 1] },
+      "entries": [
+        { "id": "mindmemos-dreaming", "method": "MindMemOS-MindVanilla + Dreaming", "model": "GPT-5-mini", "score": 0.92, "date": "2026-09-02", "source": "https://github.com/mindscale-noah/MindMemOS" },
+        { "id": "mindmemos-vanilla", "method": "MindMemOS-MindVanilla", "model": "GPT-5-mini", "score": 0.90, "date": "2026-09-02", "source": "https://github.com/mindscale-noah/MindMemOS" },
+        { "id": "infini-memory", "method": "Infini Memory", "model": "GPT-5-mini", "score": 0.80, "date": "2026-06-09", "source": "https://arxiv.org/abs/2606.10677" }
+      ]
+    },
+    {
+      "track_id": "factconsolidation-mh-gpt5mini",
+      "label": { "zh": "FactConsolidation · Multi-hop · GPT-5-mini", "en": "FactConsolidation · Multi-hop · GPT-5-mini" },
+      "task": "Multi-hop memory consolidation and outdated-fact handling",
+      "split": "FactConsolidation multi-hop; average across four context sizes",
+      "protocol_version": "MemoryAgentBench Substring Exact Match; GPT-5-mini backbone; verified result snapshot 2026-09-02",
+      "metric": { "id": "substring-exact-match", "family": "accuracy", "label": "Substring Exact Match", "unit": "", "direction": "higher", "range": [0, 1] },
+      "entries": [
+        { "id": "mindmemos-dreaming", "method": "MindMemOS-MindVanilla + Dreaming", "model": "GPT-5-mini", "score": 0.25, "date": "2026-09-02", "source": "https://github.com/mindscale-noah/MindMemOS" },
+        { "id": "infini-memory", "method": "Infini Memory", "model": "GPT-5-mini", "score": 0.22, "date": "2026-06-09", "source": "https://arxiv.org/abs/2606.10677" },
+        { "id": "mindmemos-vanilla", "method": "MindMemOS-MindVanilla", "model": "GPT-5-mini", "score": 0.19, "date": "2026-09-02", "source": "https://github.com/mindscale-noah/MindMemOS" }
+      ]
+    }
+  ]
+}
