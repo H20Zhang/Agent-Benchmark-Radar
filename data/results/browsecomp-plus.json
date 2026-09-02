@@ -1,0 +1,21 @@
+{
+  "benchmark_id": "browsecomp-plus",
+  "tracking_status": "verified-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "fixed-corpus-agent-accuracy",
+      "primary": true,
+      "label": { "zh": "固定语料端到端准确率", "en": "Fixed-corpus end-to-end accuracy" },
+      "task": "Deep search over the fixed human-verified BrowseComp-Plus corpus",
+      "split": "paper evaluation set",
+      "protocol_version": "acl-2026-paper",
+      "metric": { "id": "accuracy", "family": "task-success", "label": "Accuracy", "unit": "%", "direction": "higher", "range": [0, 100] },
+      "entries": [
+        { "id": "gpt5-qwen3embed", "method": "GPT-5 + Qwen3-Embedding-8B retrieval", "model": "GPT-5", "score": 70.1, "date": "2026-09-02", "source": "https://aclanthology.org/2026.acl-long.1023/" },
+        { "id": "gpt5", "method": "GPT-5 benchmark agent", "model": "GPT-5", "score": 55.9, "date": "2026-09-02", "source": "https://aclanthology.org/2026.acl-long.1023/" },
+        { "id": "search-r1-bm25", "method": "Search-R1 + BM25", "model": "Search-R1", "score": 3.86, "date": "2026-09-02", "source": "https://aclanthology.org/2026.acl-long.1023/" }
+      ]
+    }
+  ]
+}
