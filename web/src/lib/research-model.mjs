@@ -35,6 +35,10 @@ function assertUnique(items, label) {
   }
 }
 
+function humanizeToken(value) {
+  return String(value || "").replaceAll("-", " ");
+}
+
 function defaultEditorial(item, chineseSummary) {
   const areaValidation = {
     "agent-memory": {
@@ -57,22 +61,49 @@ function defaultEditorial(item, chineseSummary) {
     frontier: { zh: "前沿测量坐标", en: "Frontier measurement coordinate" },
   }[item.evolution_role];
 
+  const measurement = item.measurement_strength || item.summary;
+  const inferenceBoundary = item.coverage_gap || areaValidation.en;
+  const confounders = (item.confounders || []).map(humanizeToken).filter(Boolean);
+  const confounderText = confounders.join(", ");
+  const confounderTextZh = confounders.join("、");
+  const benchmarkSpecificControl = confounders.length
+    ? {
+        zh: `这项评测尤其需要固定或完整报告这些 load-bearing 条件：${confounderTextZh}。否则分数差异只能视为 system-level evidence。`,
+        en: `This benchmark is especially sensitive to these load-bearing conditions: ${confounderText}. If they differ, score gaps are system-level evidence rather than component attribution.`,
+      }
+    : {
+        zh: "完整报告模型、工具、harness、预算与 evaluator；存在差异时只做系统级比较。",
+        en: "Report model, tools, harness, budget, and evaluator completely; treat mismatches as system-level comparisons only.",
+      };
+
   return {
     id: item.id,
     score_supports: {
-      zh: `该评测用于支持关于“${chineseSummary}”的系统级判断。`,
-      en: `This evaluation supports system-level claims about ${item.measurement_strength || item.summary}`,
+      zh: `这个分数首先支持对该测量对象的判断：${measurement} 只有在模型、工具、资源预算和协议充分对齐后，才适合比较系统差异；分数本身不能识别收益来自哪个内部组件。`,
+      en: `The score first supports a claim about this measurement object: ${measurement} Under sufficiently matched model, tools, resource budget, and protocol, it can compare systems; by itself it does not identify which internal component caused a gain.`,
     },
     suite_role: role,
-    next_validation: areaValidation,
+    next_validation: {
+      zh: item.coverage_gap
+        ? `当前最有判别力的下一评测坐标是：${item.coverage_gap}`
+        : areaValidation.zh,
+      en: item.coverage_gap
+        ? `The next discriminating evaluation coordinate is: ${item.coverage_gap}`
+        : areaValidation.en,
+    },
+    evidence_brief: {
+      zh: `这项 benchmark 的核心测量增量是：${measurement} 当前推断边界是：${inferenceBoundary}${confounders.length ? ` 公平比较最敏感的条件包括 ${confounderTextZh}。` : ""}`,
+      en: `The benchmark's core measurement advance is: ${measurement} Its current inference boundary is: ${inferenceBoundary}${confounders.length ? ` Fair comparison is especially sensitive to ${confounderText}.` : ""}`,
+    },
     comparison_controls: [
       {
-        zh: "对齐模型版本、可访问状态、工具接口、提示方式与资源预算。",
-        en: "Align model version, accessible state, tool interface, prompting, and resource budget.",
+        zh: "对齐模型版本、可访问状态、工具接口、提示方式、重试/停止规则与资源预算。",
+        en: "Align model version, accessible state, tool interface, prompting, retry/stopping rules, and resource budget.",
       },
+      benchmarkSpecificControl,
       {
-        zh: "使用相同任务切分、评测协议、指标定义与验证器版本。",
-        en: "Use the same task split, evaluation protocol, metric definition, and verifier version.",
+        zh: "使用相同任务切分、评测协议、指标定义、evaluator 与环境版本；若任一项变化，单独报告。",
+        en: "Use the same task split, evaluation protocol, metric definition, evaluator, and environment version; report any mismatch separately.",
       },
     ],
     evaluation_contract: {
@@ -108,7 +139,7 @@ function loadEditorial(registry) {
     registry.map((item) => {
       const base = defaultEditorial(item, chinese.get(item.id) || item.summary);
       const editorial = mergeEditorial(base, overlays.get(item.id) || {});
-      for (const field of ["score_supports", "suite_role", "next_validation"]) {
+      for (const field of ["score_supports", "suite_role", "next_validation", "evidence_brief"]) {
         assertLocalized(editorial[field], `${item.id}.${field}`);
       }
       for (const [index, control] of editorial.comparison_controls.entries()) {
@@ -184,6 +215,7 @@ export function getBenchmarkResearch(id, lang = "en") {
     scoreSupports: localize(editorial.score_supports, lang),
     suiteRole: localize(editorial.suite_role, lang),
     nextValidation: localize(editorial.next_validation, lang),
+    evidenceBrief: localize(editorial.evidence_brief, lang),
     comparisonControls: editorial.comparison_controls.map((item) => localize(item, lang)),
   };
 }
