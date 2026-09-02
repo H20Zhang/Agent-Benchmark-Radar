@@ -1,0 +1,23 @@
+{
+  "benchmark_id": "browsecomp",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "official-openai-accuracy",
+      "primary": true,
+      "label": { "zh": "OpenAI 原始评测准确率", "en": "Original OpenAI evaluation accuracy" },
+      "task": "Hard-to-find web information seeking",
+      "split": "BrowseComp 1,266-question release",
+      "protocol_version": "openai-2025-04-10",
+      "metric": { "id": "accuracy", "family": "task-success", "label": "Accuracy", "unit": "%", "direction": "higher", "range": [0, 100] },
+      "entries": [
+        { "id": "deep-research", "method": "Deep Research", "model": "OpenAI Deep Research", "score": 51.5, "date": "2025-04-10", "source": "https://openai.com/index/browsecomp/" },
+        { "id": "o1", "method": "No browsing", "model": "OpenAI o1", "score": 9.9, "date": "2025-04-10", "source": "https://openai.com/index/browsecomp/" },
+        { "id": "gpt4o-browse", "method": "Browsing", "model": "GPT-4o", "score": 1.9, "date": "2025-04-10", "source": "https://openai.com/index/browsecomp/" },
+        { "id": "gpt45", "method": "No browsing", "model": "GPT-4.5", "score": 0.9, "date": "2025-04-10", "source": "https://openai.com/index/browsecomp/" },
+        { "id": "gpt4o", "method": "No browsing", "model": "GPT-4o", "score": 0.6, "date": "2025-04-10", "source": "https://openai.com/index/browsecomp/" }
+      ]
+    }
+  ]
+}

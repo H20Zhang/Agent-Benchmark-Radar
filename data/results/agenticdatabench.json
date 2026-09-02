@@ -1,0 +1,30 @@
+{
+  "benchmark_id": "agenticdatabench",
+  "tracking_status": "live",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "official-overall-accuracy",
+      "primary": true,
+      "label": { "zh": "官方 Overall Accuracy", "en": "Official overall accuracy" },
+      "task": "End-to-end realistic data-agent tasks",
+      "split": "official benchmark leaderboard",
+      "protocol_version": "official-leaderboard-2026-07-02",
+      "metric": { "id": "accuracy", "family": "task-success", "label": "Overall accuracy", "unit": "%", "direction": "higher", "range": [0, 100] },
+      "entries": [
+        { "id": "codex-kimi-k25", "method": "Codex · Kimi-K2.5", "score": 49.39, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "claude-code-sonnet46", "method": "Claude Code · Claude Sonnet 4.6", "score": 47.77, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "smolagents-qwen35", "method": "Smolagents · Qwen3.5-397B-A17B", "score": 47.46, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "da-agent-kimi-k25", "method": "DA-Agent · Kimi-K2.5", "score": 47.12, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "smolagents-sonnet46", "method": "Smolagents · Claude Sonnet 4.6", "score": 46.97, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "da-agent-sonnet46", "method": "DA-Agent · Claude Sonnet 4.6", "score": 46.32, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "claude-code-kimi-k25", "method": "Claude Code · Kimi-K2.5", "score": 45.15, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "smolagents-kimi-k25", "method": "Smolagents · Kimi-K2.5", "score": 44.21, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "da-agent-qwen35", "method": "DA-Agent · Qwen3.5-397B-A17B", "score": 43.74, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "claude-code-qwen35", "method": "Claude Code · Qwen3.5-397B-A17B", "score": 40.54, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "codex-qwen35", "method": "Codex · Qwen3.5-397B-A17B", "score": 39.22, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" },
+        { "id": "codex-sonnet46", "method": "Codex · Claude Sonnet 4.6", "score": 31.83, "date": "2026-07-02", "source": "https://agenticdatabench.github.io/" }
+      ]
+    }
+  ]
+}

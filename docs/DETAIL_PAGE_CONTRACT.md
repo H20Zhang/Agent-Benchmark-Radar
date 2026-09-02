@@ -30,6 +30,20 @@ The web research model must turn those fields into benchmark-specific claim supp
 
 If a normalized comparable result set is absent, the page must say so explicitly rather than fabricate a leaderboard or silently leave the result layer empty.
 
+## Result tracking is a GitHub Pages surface, not a README surface
+
+Current-score tracking belongs on the benchmark detail page through `data/results/<id>.json`. `README.md` and `README.en.md` remain benchmark inventory and research-signal surfaces; they must not grow leaderboard, current-best, SOTA-score, rank, or progress columns. A reader who wants scores follows the benchmark link to the web detail page.
+
+Result tracking should be as complete as the evidence permits, but comparability is a harder requirement than visual completeness:
+
+- use `live` only when an official or stable leaderboard can be re-verified; use `verified-snapshot` for a rechecked public snapshot and `paper-snapshot` when the primary paper is the durable source;
+- split different task subsets, data splits, evaluator versions, tool/search budgets, model families, environment versions, or protocol versions into separate tracks whenever their scores are not directly comparable;
+- every visible entry records method/system, model when distinct, metric, score, result date, protocol version, and a primary or official verification source;
+- never merge scores across materially different harnesses or budgets merely to create a longer ranking;
+- when no defensible normalized track exists, keep the explicit no-result state and retain the benchmark in the result-backfill queue.
+
+A result file is evidence about performance under a named evaluation contract. It is not a claim that the top row is globally best, nor that a packaged system gap identifies the causal contribution of one component.
+
 ## Deep-note publication gate
 
 Activation time: `2026-09-02T13:31:45Z`.
@@ -43,11 +57,12 @@ Pre-activation canonical records remain valid while their notes are backfilled. 
 After genuinely new material is processed, use remaining run budget to improve multiple existing pages in this order:
 
 1. canonical records with no paired note;
-2. existing notes that are materially thin or generic;
-3. frontier and transition benchmarks;
-4. foundations and precursors.
+2. benchmarks with official or primary-source score evidence but no normalized result set;
+3. existing notes that are materially thin or generic;
+4. frontier and transition benchmarks;
+5. foundations and precursors.
 
-A historical backfill is a material content update and may be published even when no new benchmark is discovered.
+A historical note or result backfill is a material content update and may be published even when no new benchmark is discovered. The note backlog and result-coverage backlog are independent: a page can have a complete research interpretation while its result layer still correctly says that no comparable normalized track is available.
 
 ## Bilingual and evidence rules
 
@@ -65,4 +80,4 @@ python -m unittest discover -s tests -v
 python scripts/validate_reading.py
 ```
 
-`validate_detail_pages.py` hard-fails missing canonical baseline fields, unpaired existing notes, underspecified notes below the safety floor, and post-activation accepted records without paired deep notes. It also reports the historical note backlog so the Daily Agent can continue reducing it over time.
+`validate_detail_pages.py` hard-fails missing canonical baseline fields, unpaired existing notes, underspecified notes below the safety floor, and post-activation accepted records without paired deep notes. It also reports the historical note backlog so the Daily Agent can continue reducing it over time. Result-set schema and source grounding are validated by the web result loader/tests; result absence remains an explicit evidence/backfill state rather than a reason to fabricate numbers.

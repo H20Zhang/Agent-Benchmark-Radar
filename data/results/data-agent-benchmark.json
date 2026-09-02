@@ -1,0 +1,53 @@
+{
+  "benchmark_id": "data-agent-benchmark",
+  "tracking_status": "live",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "official-pass1-current-validators",
+      "primary": true,
+      "label": {"zh": "官方 Pass@1 · 当前 validators", "en": "Official Pass@1 · current validators"},
+      "task": "Enterprise data-agent queries across heterogeneous databases",
+      "split": "12 datasets · 54 queries",
+      "protocol_version": "official-leaderboard-validators-2026-08-18",
+      "metric": {"id":"pass1","family":"task-success","label":"Pass@1","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"camber-opus5","method":"Camber · Claude-Opus-5 · tuned · hints · n=5","score":87.90,"date":"2026-08-27","source":"https://github.com/ucbepic/DataAgentBench/pull/92"},
+        {"id":"permute-eq-opus5","method":"Permute EQ · Claude-Opus-5 · tuned · hints · n=5","score":87.13,"date":"2026-08-18","source":"https://github.com/ucbepic/DataAgentBench/pull/88"},
+        {"id":"sentinel-fable-opus47","method":"Sentinel (Actioneer) · Fable-5 + Claude-Opus-4.7 · tuned · hints · n=5","score":86.17,"date":"2026-07-20","source":"https://github.com/ucbepic/DataAgentBench/pull/73"},
+        {"id":"permute-core-opus5","method":"Permute Core · Claude-Opus-5 · tuned · hints · n=5","score":84.13,"date":"2026-08-05","source":"https://github.com/ucbepic/DataAgentBench/pull/85"},
+        {"id":"alkera-fable-opus48","method":"Alkera · Fable-5 + Claude-Opus-4.8 · tuned · hints · n=5","score":84.11,"date":"2026-07-14","source":"https://github.com/ucbepic/DataAgentBench/pull/70"},
+        {"id":"sarvam036-glm52","method":"Sarvam Code v0.36 · GLM-5.2 · tuned · hints · n=5","score":82.08,"date":"2026-07-28","source":"https://github.com/ucbepic/DataAgentBench/pull/75"},
+        {"id":"scribe-opus47","method":"SCRIBE (Actioneer) · Claude-Opus-4.7 · tuned · hints · n=5","score":81.85,"date":"2026-06-26","source":"https://github.com/ucbepic/DataAgentBench/pull/67"},
+        {"id":"alkera-opus48","method":"Alkera · Claude-Opus-4.8 · tuned · hints · n=5","score":80.44,"date":"2026-07-15","source":"https://github.com/ucbepic/DataAgentBench/pull/69"},
+        {"id":"labrat-opus5-cartographer","method":"LabRat · Claude-Opus-5 + Cartographer · tuned · hints · n=5","score":80.18,"date":"2026-08-03","source":"https://github.com/ucbepic/DataAgentBench/pull/84"},
+        {"id":"spacedock-gpt55","method":"Spacedock (Recce) · GPT-5.5 · hints · n=5","score":78.50,"date":"2026-06-23","source":"https://github.com/ucbepic/DataAgentBench/pull/63"},
+        {"id":"sarvam035-glm52","method":"Sarvam Code v0.35 · GLM-5.2 · tuned · hints · n=5","score":78.12,"date":"2026-07-27","source":"https://github.com/ucbepic/DataAgentBench/pull/74"},
+        {"id":"labrat-gpt56-cartographer","method":"LabRat · GPT-5.6-Luna-Max + Cartographer · hints · n=5","score":77.51,"date":"2026-07-16","source":"https://github.com/ucbepic/DataAgentBench/pull/72"},
+        {"id":"altimate-gpt55-sonnet46","method":"Altimate Code · GPT-5.5 + Claude Sonnet 4.6 · hints · n=5","score":75.88,"date":"2026-06-01","source":"https://github.com/ucbepic/DataAgentBench/pull/53"},
+        {"id":"agenda-opus48","method":"AgenDA · Claude-Opus-4.8 · hints · n=5","score":72.44,"date":"2026-07-10","source":"https://github.com/ucbepic/DataAgentBench/pull/68"},
+        {"id":"fabric-rlm-gpt56","method":"fabric-rlm · GPT-5.6-Luna-Max · hints · n=5","score":69.56,"date":"2026-07-31","source":"https://github.com/ucbepic/DataAgentBench/pull/76"},
+        {"id":"altimate-sonnet46","method":"Altimate Code · Claude-Sonnet-4.6 · hints · n=5","score":68.22,"date":"2026-05-10","source":"https://github.com/ucbepic/DataAgentBench/pull/44"},
+        {"id":"spacedock-opus48","method":"Spacedock (Recce) · Claude-Opus-4.8 · hints · n=5","score":68.04,"date":"2026-06-08","source":"https://github.com/ucbepic/DataAgentBench/pull/55"},
+        {"id":"minusx-mix","method":"MinusX · Sonnet 4.6 + GPT5.5-mini + Haiku 4.5 · hints · n=5","score":66.01,"date":"2026-05-21","source":"https://github.com/ucbepic/DataAgentBench/pull/50"},
+        {"id":"databridge-glm52","method":"DataBridge · GLM-5.2 · tuned · hints · n=6","score":61.37,"date":"2026-06-22","source":"https://github.com/ucbepic/DataAgentBench/pull/61"},
+        {"id":"pi-opus46","method":"Pi Coding Agent · Claude-Opus-4.6 · hints · n=5","score":61.03,"date":"2026-04-21","source":"https://github.com/ucbepic/DataAgentBench/pull/31"},
+        {"id":"labrat-sonnet46-cartographer","method":"LabRat · Claude-Sonnet-4.6 + Cartographer · hints · n=5","score":60.88,"date":"2026-06-24","source":"https://github.com/ucbepic/DataAgentBench/pull/65"},
+        {"id":"promptql-gemini31","method":"PromptQL · Gemini-3.1-Pro · hints · n=5","score":60.00,"date":"2026-03-18","source":"https://github.com/ucbepic/DataAgentBench/pull/24"},
+        {"id":"promptql-opus46","method":"PromptQL · Claude-Opus-4.6 · hints · n=5","score":59.33,"date":"2026-03-02","source":"https://github.com/ucbepic/DataAgentBench/pull/23"},
+        {"id":"spacedock-opus46","method":"Spacedock (Recce) · Claude-Opus-4.6 · no hints · n=5","score":58.28,"date":"2026-05-08","source":"https://github.com/ucbepic/DataAgentBench/pull/47"},
+        {"id":"opus46","method":"Claude-Opus-4.6 · hints · n=5","score":55.51,"date":"2026-03-18","source":"https://github.com/ucbepic/DataAgentBench/pull/22"},
+        {"id":"labrat-sonnet46","method":"LabRat · Claude-Sonnet-4.6 · no hints · n=5","score":51.38,"date":"2026-06-01","source":"https://github.com/ucbepic/DataAgentBench/pull/54"},
+        {"id":"oracle-palm-gemini31","method":"Oracle Forge Team PaLM · Gemini-3.1-Pro-Preview · hints · n=5","score":47.21,"date":"2026-05-10","source":"https://github.com/ucbepic/DataAgentBench/pull/37"},
+        {"id":"gemini3pro","method":"Gemini-3-Pro · hints · n=50","score":46.63,"date":"2026-03-02","source":"https://github.com/ucbepic/DataAgentBench"},
+        {"id":"nquery","method":"nQuery · gpt-oss-safeguard-120b · hints · n=5","score":45.47,"date":"2026-07-02","source":"https://github.com/ucbepic/DataAgentBench/pull/56"},
+        {"id":"oracle-tenacious-sonnet46","method":"Oracle Forge Tenacious · Claude-Sonnet-4.6 · no hints · n=5–7","score":44.64,"date":"2026-04-21","source":"https://github.com/ucbepic/DataAgentBench/pull/32"},
+        {"id":"gpt5mini","method":"GPT-5-mini · hints · n=50","score":36.63,"date":"2026-03-02","source":"https://github.com/ucbepic/DataAgentBench"},
+        {"id":"gpt52","method":"GPT-5.2 · hints · n=50","score":29.91,"date":"2026-03-02","source":"https://github.com/ucbepic/DataAgentBench"},
+        {"id":"kimik2","method":"Kimi-K2 · hints · n=50","score":29.25,"date":"2026-03-02","source":"https://github.com/ucbepic/DataAgentBench"},
+        {"id":"oracle-cohere-gemini20","method":"Oracle Forge Team Cohere · Gemini-2.0-Flash · hints · n=5","score":16.71,"date":"2026-04-21","source":"https://github.com/ucbepic/DataAgentBench/pull/38"},
+        {"id":"gemini25flash","method":"Gemini-2.5-Flash · hints · n=50","score":10.49,"date":"2026-03-02","source":"https://github.com/ucbepic/DataAgentBench"}
+      ]
+    }
+  ]
+}
