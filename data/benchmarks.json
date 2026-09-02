@@ -6490,5 +6490,63 @@
       "paper_id": "c73b59d446d064835acc4f499b12ae0b33c647de",
       "url": "https://www.semanticscholar.org/paper/c73b59d446d064835acc4f499b12ae0b33c647de"
     }
+  },
+  {
+    "id": "claimprobe",
+    "name": "ClaimProbe",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-08-12",
+    "importance": 4,
+    "status": "active",
+    "summary": "Audits deep-research reports at claim-source granularity to distinguish unsupported claims, citation misattribution, uncited support, and missing necessary facts while holding retrieved evidence fixed for writer-side comparisons.",
+    "capabilities": [
+      "claim-level-faithfulness-audit",
+      "citation-attribution",
+      "necessary-fact-recall",
+      "writer-side-evaluation"
+    ],
+    "environment": [
+      "deep-research-reports",
+      "retrieved-web-evidence",
+      "fixed-evidence-writer-comparison"
+    ],
+    "protocol": [
+      "source-fact-extraction",
+      "claim-citation-extraction",
+      "embedding-top-20-source-shortlist",
+      "llm-judge",
+      "human-judge-calibration",
+      "fixed-evidence-writer-intervention"
+    ],
+    "scale": "ClaimProbe is run on 100 deep-research tasks across three host systems; human calibration uses 100 annotations, with holistic RACE evaluation on 50 English tasks and a 10-task stronger-judge subset.",
+    "measurement_strength": "Separates writer-side claim faithfulness from upstream retrieval by keeping the evidence set fixed, exposing unsupported claims and source misattribution that holistic report scores can hide.",
+    "coverage_gap": "The hallucination judge reaches only moderate human agreement, support search is limited to an embedding top-20 shortlist, and the dynamic-update study covers only five DeepResearch Bench tasks.",
+    "confounders": [
+      "llm-judge",
+      "moderate-hallucination-judge-agreement",
+      "embedding-shortlist-support-misses",
+      "generator-model",
+      "readability-tradeoff",
+      "small-dynamic-update-study"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.28643",
+      "code": "https://github.com/SalesforceAIResearch/claimwriter-deep-research"
+    },
+    "last_verified": "2026-09-02",
+    "published_at": "2026-08-12T18:01:55Z",
+    "first_seen_at": "2026-09-02T00:29:13Z",
+    "radar_published_at": "2026-09-02T00:39:05Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-02",
+      "status": "unmatched",
+      "paper_id": null,
+      "url": null
+    }
   }
 ]

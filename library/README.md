@@ -31,6 +31,7 @@
 | 2026-08-17 | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | Data Agents | 🔭 前沿 | 把通常隐含的数据探索阶段从最终答案的前置假设变成可独立评分、可验证下游价值的对象。 |
 | 2026-08-17 | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | Agent Memory | 🔭 前沿 | 把个性化收益、授权与泄露风险放进同一记忆生命周期协议。 |
 | 2026-08-17 | [The Commercial Tax](https://arxiv.org/abs/2608.16096) <!-- benchmark-id:commercial-tax --> | RAG / Agentic Retrieval | 🔭 前沿 | 把 license、query format、index construction 与 cost 纳入 retrieval number 的可迁移性审计。 |
+| 2026-08-12 | [ClaimProbe](https://arxiv.org/abs/2608.28643) <!-- benchmark-id:claimprobe --> | RAG / Agentic Retrieval | 🔭 前沿 | 把 deep-research 成品评价从整体分数拆到固定检索证据下的 claim→source 忠实度与引用归因。 |
 | 2026-08-10 | [The Recall Trap](https://arxiv.org/abs/2608.14838) <!-- benchmark-id:recall-trap --> | RAG / Agentic Retrieval | 🔭 前沿 | 证明固定槽位下更高 file recall 可能对应更低 repair success，限制 recall 指标的解释。 |
 | 2026-08-10 | [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) <!-- benchmark-id:warehouse-reliability-bench --> | Data Agents | 🔭 前沿 | 从“SQL 能运行且结果匹配”转向“业务含义正确，并在不该给数字时不虚假成功”。 |
 | 2026-08-07 | [DAS-Bench / DAS-Eval](https://arxiv.org/abs/2608.18034) <!-- benchmark-id:das-bench --> | RAG / Agentic Retrieval | 🔭 前沿 | 把学术综述的覆盖、taxonomy、claim、citation、discourse 与成品质量变成 16 项协议。 |
@@ -239,6 +240,7 @@
 | 🔭 前沿 | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | 2026-08-05 | 考察审计模型能否在超长搜索轨迹中定位错误、归因根因并生成可执行修复。 | 从最终答案成败推进到专家标注的关键步骤、六类根因和修复后恢复评测。 |
 | 🔭 前沿 | [DAS-Bench / DAS-Eval](https://arxiv.org/abs/2608.18034) <!-- benchmark-id:das-bench --> | 2026-08-07 | 对文献覆盖、taxonomy、claim、citation、discourse 与渲染成品质量评分的学术综述基准及评测器。 | 把学术综述的覆盖、taxonomy、claim、citation、discourse 与成品质量变成 16 项协议。 |
 | 🔭 前沿 | [The Recall Trap](https://arxiv.org/abs/2608.14838) <!-- benchmark-id:recall-trap --> | 2026-08-10 | 有效性审计：在固定槽位代码检索协议下，更高 file recall 可能降低下游修复成功率。 | 证明固定槽位下更高 file recall 可能对应更低 repair success，限制 recall 指标的解释。 |
+| 🔭 前沿 | [ClaimProbe](https://arxiv.org/abs/2608.28643) <!-- benchmark-id:claimprobe --> | 2026-08-12 | 在固定检索证据下，按 claim-source 对齐审计无依据 claim、引用错配、漏引支持与必要事实覆盖。 | 把 writer-side faithfulness 从 retrieval/search 质量中隔离出来，使 holistic report score 掩盖的 provenance failure 可见。 |
 | 🔭 前沿 | [The Commercial Tax](https://arxiv.org/abs/2608.16096) <!-- benchmark-id:commercial-tax --> | 2026-08-17 | 把原始 embedder 分数绑定到许可、query format、索引构造与部署成本的检索复现性审计。 | 把 license、query format、index construction 与 cost 纳入 retrieval number 的可迁移性审计。 |
 | 🔭 前沿 | [BrowseComp-Plus_CM](https://arxiv.org/abs/2608.20317) <!-- benchmark-id:browsecomp-plus-cm --> | 2026-08-18 | 在独立构建的 5.53 亿文档 ClimbMix 语料中，测多跳证据发现、答案正确率、evidence recall 与工具调用。 | 以 matched corpus swap 限定 BrowseComp-Plus：固定语料还不足以控制 query-conditioned construction 与规模。 |
 | 🔭 前沿 | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | 2026-08-18 | 在统一页面排序协议下比较静态 ranker 与迭代视觉/OCR agent 的视觉文档检索基准。 | 在统一 top-10 输出下直接比较静态视觉检索与迭代式页面发现、检查。 |
