@@ -1,0 +1,35 @@
+{
+  "benchmark_id": "crag",
+  "tracking_status": "verified-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "kdd-cup-final-end-to-end",
+      "primary": true,
+      "label": {"zh": "KDD Cup Final · End-to-End RAG", "en": "KDD Cup Final · End-to-End RAG"},
+      "task": "End-to-end RAG with multiple web sources and mock API access",
+      "split": "KDD Cup 2024 Phase 2 final private evaluation",
+      "protocol_version": "aicrowd-final-round-1360",
+      "metric": {"id": "crag-score", "family": "task-success", "label": "CRAG Score", "unit": "", "direction": "higher", "range": [-1, 1]},
+      "entries": [
+        {"id": "db3", "method": "db3", "score": 0.309, "date": "2024-06-26", "source": "https://www.aicrowd.com/challenges/meta-comprehensive-rag-benchmark-kdd-cup-2024/problems/meta-kdd-cup-24-crag-end-to-end-retrieval-augmented-generation/leaderboards?challenge_round_id=1360"},
+        {"id": "apex", "method": "APEX", "score": 0.289, "date": "2024-06-26", "source": "https://www.aicrowd.com/challenges/meta-comprehensive-rag-benchmark-kdd-cup-2024/problems/meta-kdd-cup-24-crag-end-to-end-retrieval-augmented-generation/leaderboards?challenge_round_id=1360"},
+        {"id": "dragonrangers", "method": "dRAGonRAnGers", "score": 0.205, "date": "2024-06-26", "source": "https://www.aicrowd.com/challenges/meta-comprehensive-rag-benchmark-kdd-cup-2024/problems/meta-kdd-cup-24-crag-end-to-end-retrieval-augmented-generation/leaderboards?challenge_round_id=1360"}
+      ]
+    },
+    {
+      "track_id": "kdd-cup-final-kg-web-retrieval",
+      "primary": false,
+      "label": {"zh": "KDD Cup Final · KG + Web Retrieval", "en": "KDD Cup Final · KG + Web Retrieval"},
+      "task": "RAG with mock knowledge-graph APIs and web retrieval",
+      "split": "KDD Cup 2024 Phase 2 final private evaluation",
+      "protocol_version": "aicrowd-final-round-1359",
+      "metric": {"id": "crag-score", "family": "task-success", "label": "CRAG Score", "unit": "", "direction": "higher", "range": [-1, 1]},
+      "entries": [
+        {"id": "db3", "method": "db3", "score": 0.297, "date": "2024-06-26", "source": "https://www.aicrowd.com/challenges/meta-comprehensive-rag-benchmark-kdd-cup-2024/problems/meta-kdd-cup-24-crag-knowledge-graph-and-web-retrieval/leaderboards?challenge_leaderboard_extra_id=1375&challenge_round_id=1359&post_challenge=false"},
+        {"id": "apex", "method": "APEX", "score": 0.278, "date": "2024-06-26", "source": "https://www.aicrowd.com/challenges/meta-comprehensive-rag-benchmark-kdd-cup-2024/problems/meta-kdd-cup-24-crag-knowledge-graph-and-web-retrieval/leaderboards?challenge_leaderboard_extra_id=1375&challenge_round_id=1359&post_challenge=false"},
+        {"id": "dragonrangers", "method": "dRAGonRAnGers", "score": 0.199, "date": "2024-06-26", "source": "https://www.aicrowd.com/challenges/meta-comprehensive-rag-benchmark-kdd-cup-2024/problems/meta-kdd-cup-24-crag-knowledge-graph-and-web-retrieval/leaderboards?challenge_leaderboard_extra_id=1375&challenge_round_id=1359&post_challenge=false"}
+      ]
+    }
+  ]
+}
