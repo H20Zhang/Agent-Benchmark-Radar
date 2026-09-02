@@ -1,0 +1,39 @@
+{
+  "benchmark_id": "datascibench",
+  "tracking_status": "verified-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "official-overall-pass1",
+      "primary": true,
+      "label": {"zh": "官方 Overall Pass@1", "en": "Official overall Pass@1"},
+      "task": "End-to-end data-science problem solving with executable outputs and task-specific evaluation",
+      "split": "official final-results aggregate",
+      "protocol_version": "official-final-results-commit-84ef3d4",
+      "metric": {"id": "pass1", "family": "task-success", "label": "Pass@1", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "gpt-4o-2024-05-13", "method": "GPT-4o-2024-05-13", "score": 19.82, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"},
+        {"id": "gpt-4-turbo", "method": "GPT-4-Turbo", "score": 17.27, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"},
+        {"id": "o1-mini", "method": "o1-mini", "score": 13.45, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"},
+        {"id": "gpt-4o-mini", "method": "GPT-4o-mini", "score": 12.73, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"},
+        {"id": "deepseek-coder-33b", "method": "DeepSeek-Coder-33B-Instruct", "score": 12.55, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"}
+      ]
+    },
+    {
+      "track_id": "official-average-completion-rate",
+      "primary": false,
+      "label": {"zh": "官方 Average Completion Rate", "en": "Official average completion rate"},
+      "task": "Partial completion quality across end-to-end data-science tasks",
+      "split": "official final-results aggregate",
+      "protocol_version": "official-final-results-commit-84ef3d4",
+      "metric": {"id": "average-cr", "family": "task-progress", "label": "Average completion rate", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "gpt-4o-2024-05-13", "method": "GPT-4o-2024-05-13", "score": 17.89, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"},
+        {"id": "gpt-4-turbo", "method": "GPT-4-Turbo", "score": 17.36, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"},
+        {"id": "gpt-4o-mini", "method": "GPT-4o-mini", "score": 17.35, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"},
+        {"id": "o1-mini", "method": "o1-mini", "score": 15.43, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"},
+        {"id": "deepseek-coder-6.7b", "method": "DeepSeek-Coder-6.7B-Instruct", "score": 13.56, "date": "2026-09-02", "source": "https://github.com/THUDM/DataSciBench/blob/84ef3d4d94d7362a5149cf14a73dc168fc4f2f33/evaluation_results/final_results.csv"}
+      ]
+    }
+  ]
+}

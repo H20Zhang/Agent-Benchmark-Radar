@@ -1,0 +1,23 @@
+{
+  "benchmark_id": "ds-1000",
+  "tracking_status": "verified-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "official-eval-arena-pass1",
+      "primary": true,
+      "label": {"zh": "官方 Eval-Arena Pass@1", "en": "Official Eval-Arena Pass@1"},
+      "task": "Data-science code generation across seven Python libraries",
+      "split": "DS-1000 official Eval-Arena snapshot",
+      "protocol_version": "official-eval-arena-snapshot-2026-09-02",
+      "metric": {"id": "pass1", "family": "task-success", "label": "Pass@1", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "gpt-4o-2024-08-06", "method": "GPT-4o-2024-08-06", "score": 59.9, "date": "2026-09-02", "source": "https://ds1000-code-gen.github.io/model_DS1000.html"},
+        {"id": "claude-3-5-sonnet-20240620", "method": "Claude-3.5-Sonnet-20240620", "score": 54.3, "date": "2026-09-02", "source": "https://ds1000-code-gen.github.io/model_DS1000.html"},
+        {"id": "gpt-4-turbo-2024-04-09", "method": "GPT-4-Turbo-2024-04-09", "score": 54.0, "date": "2026-09-02", "source": "https://ds1000-code-gen.github.io/model_DS1000.html"},
+        {"id": "deepseek-coder-v2-sft", "method": "DeepSeek-Coder-V2-SFT", "score": 53.2, "date": "2026-09-02", "source": "https://ds1000-code-gen.github.io/model_DS1000.html"},
+        {"id": "qwen2-72b-instruct", "method": "Qwen2-72B-Instruct", "score": 52.8, "date": "2026-09-02", "source": "https://ds1000-code-gen.github.io/model_DS1000.html"}
+      ]
+    }
+  ]
+}
