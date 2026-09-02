@@ -1,0 +1,39 @@
+{
+  "benchmark_id": "wikisql",
+  "tracking_status": "verified-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "official-supervised-test-execution",
+      "primary": true,
+      "label": {"zh": "官方 Supervised · Test Execution Accuracy", "en": "Official supervised · Test execution accuracy"},
+      "task": "Single-table text-to-SQL with logical-form supervision",
+      "split": "WikiSQL test set",
+      "protocol_version": "official-supervised-leaderboard-verified-2026-09-03",
+      "metric": {"id": "execution-accuracy", "family": "task-success", "label": "Test execution accuracy", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "sead-eg", "method": "SeaD + Execution-Guided Decoding", "score": 93.0, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"},
+        {"id": "sdsql-eg", "method": "SDSQL + Execution-Guided Decoding", "score": 92.7, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"},
+        {"id": "ie-sql-eg", "method": "IE-SQL + Execution-Guided Decoding", "score": 92.5, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"},
+        {"id": "hydranet-eg", "method": "HydraNet + Execution-Guided Decoding", "score": 92.2, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"},
+        {"id": "bridge-eg", "method": "BRIDGE + Execution-Guided Decoding", "score": 91.9, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"}
+      ]
+    },
+    {
+      "track_id": "official-weakly-supervised-test-execution",
+      "primary": false,
+      "label": {"zh": "官方 Weakly Supervised · Test Execution Accuracy", "en": "Official weakly supervised · Test execution accuracy"},
+      "task": "Single-table text-to-SQL without logical-form supervision",
+      "split": "WikiSQL test set",
+      "protocol_version": "official-weak-supervision-leaderboard-verified-2026-09-03",
+      "metric": {"id": "execution-accuracy", "family": "task-success", "label": "Test execution accuracy", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "tapex", "method": "TAPEX", "score": 89.5, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"},
+        {"id": "hardem", "method": "HardEM", "score": 83.9, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"},
+        {"id": "latent-alignment", "method": "LatentAlignment", "score": 79.3, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"},
+        {"id": "merl", "method": "MeRL", "score": 74.8, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"},
+        {"id": "mapo", "method": "MAPO", "score": 72.1, "date": "2026-09-03", "source": "https://github.com/salesforce/WikiSQL"}
+      ]
+    }
+  ]
+}
