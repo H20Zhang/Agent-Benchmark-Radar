@@ -1,6 +1,6 @@
 # MPBench
 
-## 它到底测什么
+## 测量对象
 
 MPBench 测的是 **persistent-memory poisoning 的完整跨会话链路**：六类恶意内容通过四种写入渠道进入持久记忆后，系统是否会把它们真正写入；之后在另一次会话中出现相关查询时，恶意记录是否会被检索并影响输出。关键点是把攻击拆成 `write → persist → retrieve → respond`，而不是只看一次 prompt injection 是否即时劫持 agent。
 
@@ -18,7 +18,9 @@ MPBench 的 headline score 描述的是 **system + harness 的 persistent-poison
 
 ## 公平比较条件
 
-比较防御或 memory stack 时要固定 backbone、写入渠道、memory admission policy、retrieval top-k / ranking、触发查询、攻击预算和 evaluator。防御结果必须同时报告 security 与 benign utility；只降低 RSR 但大量拒绝正常写入，并不构成更好的 memory system。
+- 固定 backbone、写入渠道与 memory admission policy。
+- 对齐 retrieval top-k / ranking、触发查询与攻击预算。
+- 使用相同 evaluator，并同时报告 security 与 benign utility；只降低 RSR 但大量拒绝正常写入，并不构成更好的 memory system。
 
 ## 研究上怎么用
 
