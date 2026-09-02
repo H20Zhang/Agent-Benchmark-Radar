@@ -1,25 +1,39 @@
-# StructMemEval: making memory structure itself an evaluation target
+# StructMemEval: evaluating how agents organize memory
 
-[中文](structmemeval.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](structmemeval.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2602.11243)
 
-## What it measures
+## What it actually measures
 
-StructMemEval selects tasks that humans naturally solve with structures such as ledgers, to-do lists, and trees, and asks whether an agent can organize long-term memory into a task-appropriate representation rather than merely chunking history for similarity retrieval. Memory organization therefore becomes an explicit capability instead of an implementation detail.
+StructMemEval asks whether an agent can choose and maintain a **task-appropriate memory structure**—for example a transaction ledger, to-do list, or tree—rather than only retrieving facts from an undifferentiated store. The central capability is representation organization.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-LoCoMo, LongMemEval, and many RAG-style memory benchmarks can largely be approached as store-and-retrieve problems. StructMemEval deliberately uses tasks whose solution depends on structured maintenance, exposing the ceiling of simple retrieval and moving the evaluation coordinate toward representation selection and structured state tracking.
+Fact-retention, multi-hop recall, and temporal-update benchmarks can often be attacked with generic retrieval-augmented context. StructMemEval constructs tasks whose natural solution depends on a particular organization, making memory structure itself observable rather than treating storage layout as an implementation detail.
 
-## Decisive evidence and score boundary
+## Decisive evidence
 
-Initial experiments report that simple retrieval-augmented LLMs struggle, while memory agents can reliably solve the tasks when told how to organize memory. Without a structure hint, however, modern LLMs often fail to recognize the appropriate organization. The important conclusion is therefore that structure selection is itself a bottleneck. Success with an explicit ledger/tree hint does not establish autonomous representation discovery.
+The paper's initial experiments show simple retrieval-augmented LLMs struggle on the structured tasks. Memory agents can solve them reliably when explicitly prompted with the appropriate organization, but modern LLMs do not consistently recognize the needed structure without such hints. This separates **executing a known representation** from **discovering the right representation**.
 
-## Fair comparison conditions
+## What the score supports
 
-Align whether structure hints are provided, task templates, backbone reasoning, and available memory operations. Mixing “use this ledger” with “discover the representation yourself” in one ranking would erase the benchmark's load-bearing variable.
+The benchmark can show whether a system benefits from structured state and whether it can instantiate a requested organization. It is weaker evidence for autonomous representation learning if the task or prompt reveals the intended structure.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step is to move from narrow structure-sensitive tasks to open environments where structure is induced autonomously and revised under updates, conflicts, and schema evolution.
+Fix backbone, task instructions, whether structure hints are available, memory operations, and token/storage budget. Results with an oracle structure hint should be reported separately from autonomous structure selection; otherwise the main research question is hidden.
+
+## What remains unmeasured
+
+The task suite is intentionally narrow and uses human-interpretable structures. Real agents may need hybrid or learned representations whose utility is only visible through future queries/actions, and they may need to migrate structure as workloads change.
+
+## Next discriminating validation
+
+Hide structure identity, introduce tasks with multiple plausible organizations, and measure adaptation when query distributions shift. The key question is not whether an agent can use a ledger, but whether it knows when a ledger is the right representation.
+
+## Genealogy
+
+`retrieve facts → maintain structured state → autonomously choose memory representation`
+
+StructMemEval exposes representation selection as an independent memory capability.

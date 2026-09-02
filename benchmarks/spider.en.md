@@ -1,23 +1,39 @@
-# Spider: from single-table SQL to compositional generalization over unseen databases
+# Spider: generalizing text-to-SQL to unseen database schemas
 
-[中文](spider.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](spider.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-## What it measures
+[Paper](https://arxiv.org/abs/1809.08887) · [Project](https://yale-lily.github.io/spider)
 
-Spider contains 10,181 questions and 5,693 unique complex SQL queries over 200 databases in 138 domains. Databases are split across train and test, requiring joins, nested queries, aggregation, and schema grounding on unseen schemas.
+## What it actually measures
 
-## Compared with what
+Spider evaluates **complex cross-domain text-to-SQL generalization**. It contains 10,181 questions and 5,693 unique SQL queries over 200 multi-table databases spanning 138 domains, with databases separated between train and test so systems must handle unseen schemas.
 
-WikiSQL focuses mostly on single-table operations with much simpler schema transfer. Spider makes cross-database generalization and compositional multi-table SQL central evaluation requirements.
+## What changed relative to prior evaluation
 
-## Score boundary
+WikiSQL largely operates on one table at a time with a constrained grammar. Spider makes joins, nested queries, set operations, aggregation, and new database schemas central. The benchmark changed the core question from memorizing query patterns to aligning language with an unfamiliar relational structure.
 
-Execution or exact-match supports text-to-SQL generalization on static relational schemas. It does not measure database exploration, external documentation, business rules, writes, or multi-turn analysis. Stronger schema-linking prompts also change the comparison contract.
+## Decisive evidence
 
-## Fair comparison conditions
+At release, the strongest reported model achieved only 12.4% exact match on the database split. The low score was not merely a scale effect: train and test differ in both SQL programs and schemas, deliberately blocking direct template reuse.
 
-Align Spider version, schema/value access, execution evaluator, test databases, and external retrieval policy. Different schema hints require separate tracks.
+## What the score supports
 
-## Next evaluation coordinate
+Spider strongly supports schema-generalization and complex SQL-generation claims under a static, relatively compact database setting. High scores do not establish robustness to dirty values, huge catalogs, dialect documentation, business-rule drift, or multi-query workflows.
 
-BIRD adds larger real databases and external knowledge, while Spider 2.0 expands toward enterprise SQL, multiple dialects, and database operations.
+## Fair comparison contract
+
+Use the same database split, schema serialization, value-access policy, SQL evaluator, and model/tool budget. Distinguish exact-match from execution-based evaluation and disclose any schema-linking retrieval or external metadata added beyond the benchmark input.
+
+## What remains unmeasured
+
+Schemas are small compared with enterprise warehouses, database contents are not the main difficulty, and each task still has a well-formed query intent. Real analysts must search metadata, resolve ambiguous business terms, and sometimes decide that no query should be executed.
+
+## Next discriminating validation
+
+Treat Spider as the schema-generalization rung and measure the same agent on BIRD, Spider 2.0, and reliability-oriented warehouse tasks. The degradation across rungs is more informative than one Spider leaderboard number.
+
+## Genealogy
+
+`single-table SQL → unseen multi-table schema → enterprise SQL workflow`
+
+Spider established cross-schema generalization; later benchmarks mainly make the database and workflow more real.

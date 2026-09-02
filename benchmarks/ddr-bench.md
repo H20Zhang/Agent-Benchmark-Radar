@@ -1,23 +1,39 @@
-# DDR-Bench：开放数据研究里，最重要的能力可能是自己决定“什么值得分析”
+# DDR-Bench：data agent 能不能自己决定“什么值得查”
 
-**中文** | [English](ddr-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](ddr-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-## 它在测什么
+[论文](https://arxiv.org/abs/2602.02039) · [代码](https://github.com/thinkwee/DDR_Bench)
 
-DDR-Bench 覆盖 291 个 entities：MIMIC 100、GLOBEM 91、10-K 100，底层超过 203M records、40 tables、6,372 fields，并用 2,058 个 checklist items 评价 agent 在 minimal prompt 下自主 goal setting、exploration 与 insight generation。
+## 它到底测什么
 
-## 相比什么前进了
+DDR-Bench 测 **investigatory intelligence**：agent 拿到 data/entity context，但没有预定义 analytical question，需要自己设 goal、探索并发现可验证 insight。这和用户已经告诉你“请做什么分析”的 executional intelligence 不同。
 
-多数 benchmark 明确告诉 agent 要回答哪个 query。DDR-Bench 把 research objective 留得更开放，检查 agent 是否能在大型数据库中选择有价值的分析方向，而不是只执行已有 specification。
+## 相比此前评测多测了什么
 
-## 分数边界
+大多数 data-agent benchmark 都从 well-formed task 开始，而真实 analyst 经常从“这里到底发生了什么？”开始。DDR 把 problem formulation 放进 agent loop，并用 checklist-based evaluation 让 open-ended discovery 仍有部分可验证 ground truth。
 
-checklist/insight score 支持在三类 dataset 与 benchmark-defined research criteria 下的 autonomous exploration；它仍不能等同真实科研/业务价值，因为 checklist 构造决定“什么算值得发现”。
+## 决定性证据
 
-## 公平比较条件
+benchmark 覆盖 healthcare record、SEC 10-K/XBRL financial data 与 behavioral data 等真实 domain。论文发现 frontier model 已出现一定 autonomous exploration 能力，但 long-horizon exploration 仍困难，而且表现不只由 scaffold 大小或模型规模决定，还依赖 agent 本身的探索策略。
 
-锁定 dataset snapshot、minimal prompt、tool access、exploration budget、checklist/judge 与 entity split，并报告 domain slices。
+## 这个分数能证明什么
 
-## 下一步评测坐标
+DDR-Bench 能支持 checklist 范围内 autonomous exploration 的判断，但不能等价于真正 novel discovery：任何 checklist 都预先定义了一组期待发现，open-ended credit 也会受到 evaluator/judge 影响。
 
-下一步需要更强的 novelty/decision-value evaluation，以及 agent 对“没有足够证据形成 insight”的校准与停止能力。
+## 公平比较契约
+
+应固定 data snapshot、starting metadata、toolset、model、exploration budget 与 evaluator。不能给一边额外 candidate goal/schema interpretation，并要同时报告 insight coverage、成本和 exploration depth。
+
+## 还没有测什么
+
+business value、causal validity、checklist 外 novelty 与 stakeholder relevance 没有被完整测量；真实 investigation 还需要交互 clarification 和“证据什么时候已经够了”的 stopping judgment。
+
+## 下一步最有判别力的验证
+
+混合 planted verifiable insight 与真正 unlabeled dataset，再由 blinded domain expert 评 novelty。关键是区分 agent 会不会寻找 important unknown，而不是只会找回 benchmark 作者预埋的 checklist item。
+
+## 演化位置
+
+`answer a specified query → choose analytical subgoals → autonomous data investigation`
+
+它把 agency 从执行阶段前移到了“决定要分析什么”。

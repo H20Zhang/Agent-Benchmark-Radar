@@ -1,23 +1,39 @@
-# DSAEval: a data-science agent produces reasoning, code, results, and reports
+# DSAEval: cumulative, multimodal data-science projects
 
-[中文](dsaeval.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dsaeval.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-## What it measures
+[Paper](https://arxiv.org/abs/2601.13591) · [Project](https://dsaeval.github.io/DSAEval/)
 
-DSAEval contains 641 problems over 285 real datasets spanning tabular, image, and text data, with GPU Jupyter execution and cumulative multi-query sessions. Evaluation inspects reasoning, code, execution results, and reports; the paper compares 13 agents.
+## What it actually measures
 
-## Compared with what
+DSAEval evaluates agents on **real-world data-science projects** with multimodal environment perception, cumulative multi-query interaction, and separate assessment of reasoning, code, and results. It includes 641 problems grounded in 285 structured and unstructured datasets.
 
-Code-only benchmarks miss analytical reasoning and communication. DSAEval jointly evaluates intermediate process and deliverables in multimodal data-science sessions where later queries can depend on prior notebook state.
+## What changed relative to prior evaluation
 
-## Score boundary
+One-shot coding tasks reset state between queries. DSAEval makes later requests depend on earlier analysis and expands observations beyond tables into image/text data, closer to an iterative data-science session.
 
-The multi-component score supports the full agent under the named GPU/Jupyter environment, datasets, and judge/rules. Component weights or judge changes can move aggregate rankings.
+## Decisive evidence
 
-## Fair comparison conditions
+Eleven advanced agentic LLMs are evaluated. The paper reports Claude-Sonnet-4.5 strongest overall, GPT-5.2 most efficient, and MiMo-V2-Flash most cost-effective; multimodal perception improves vision-related tasks by 2.04–11.30%. Structured/routine analysis is substantially easier than unstructured workloads.
 
-Align dataset/version, GPU/runtime, session order, agent budget, component metrics, and report judge, and preserve the component breakdown.
+## What the score supports
 
-## Next evaluation coordinate
+The benchmark supports cumulative project competence and exposes quality–efficiency–cost trade-offs. The model/scaffold is still a combined system, and multi-dimensional grading can contain evaluator assumptions beyond deterministic code execution.
 
-The next step adds evolving data/objectives, artifact review, and business consequences, testing whether accumulated state ultimately helps or contaminates analysis.
+## Fair comparison contract
+
+Fix dataset, query order, accumulated workspace state, tool environment, model, budget, and evaluator. Preserve prior-query outputs exactly; resetting or summarizing history differently changes the cumulative task.
+
+## What remains unmeasured
+
+Long projects can span weeks, involve stakeholder feedback, data updates, version control, and production deployment. DSAEval's cumulative interactions are still bounded benchmark episodes.
+
+## Next discriminating validation
+
+Inject controlled mistakes early in a project and measure downstream recovery versus error propagation. This would test whether agents maintain trustworthy analytical state, not merely accumulate conversation context.
+
+## Genealogy
+
+`one-shot data analysis → cumulative multimodal project → persistent analytical state`
+
+DSAEval makes state continuity across analytical requests an explicit capability.

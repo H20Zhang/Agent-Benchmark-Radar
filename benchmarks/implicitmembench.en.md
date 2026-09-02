@@ -1,25 +1,39 @@
-# ImplicitMemBench: memory can change the first action without an explicit recall request
+# ImplicitMemBench: memory that changes first behavior without recall
 
-[中文](implicitmembench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](implicitmembench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://aclanthology.org/2026.acl-long.1301/) · [Code](https://github.com/qinchonghanzuibang/ImplicitMemBench)
+[Paper](https://arxiv.org/abs/2604.08064) · [ACL 2026](https://aclanthology.org/2026.acl-long.1301/) · [Project](https://www.chonghanqin.com/project/implicitmembench/)
 
-## What it measures
+## What it actually measures
 
-ImplicitMemBench contains 300 items evenly split across procedural memory, priming, and classical conditioning over 18 task families. A `learning → interference → test` protocol scores the first attempt, asking whether prior experience automatically changes behavior without an explicit instruction to recall it.
+ImplicitMemBench measures **implicit / non-declarative memory**: whether prior learning, priming, or conditioning automatically changes an agent's first response even when the test prompt does not explicitly ask it to recall the earlier episode. It covers Procedural Memory, Priming, and Classical Conditioning under a shared learn/prime → interference → test protocol.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Most agent-memory benchmarks are declarative: a query points back to past information. ImplicitMemBench makes non-declarative memory an explicit object so procedures, priming, and conditioned associations can be observed without a recall request.
+Conventional long-term-memory benchmarks reward explicit access to declarative content: retrieve a fact, answer a question, summarize a history. This benchmark changes the observable from “can the model report what it remembers?” to “does prior experience alter behavior at the moment it matters?” First-attempt scoring is important because repeated prompting would turn an implicit effect back into explicit deliberation.
 
-## Score boundary
+## Decisive evidence
 
-Paired priming controls support an effect of prior experience on first behavior, but short in-context episodes can still be explained by recency or in-context learning rather than durable external memory. Backbone susceptibility also matters.
+Across 300 items and 17 models, no evaluated model exceeds 66% overall. Reported aggregate scores include DeepSeek-R1 at 65.3, Qwen3-32B at 64.1, and GPT-5 at 63.0. A particularly sharp asymmetry appears between inhibition and preference behavior: 17.6% versus 75.0%, suggesting that models more readily acquire positive tendencies than suppress previously primed behavior.
 
-## Fair comparison conditions
+## What the score supports
 
-Align learning/interference/test order, first-attempt scoring, answerer, judge, and context placement, and retain paired controls instead of reporting treatment accuracy alone.
+The score supports a claim about **behavioral adaptation from prior exposure**. It should not automatically be interpreted as evidence for an external agent-memory store: model context, prompting, latent adaptation, and explicit memory modules can all influence the behavior. This is a measurement-target contribution more than a clean component benchmark.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next test should reproduce implicit effects across sessions and external memory under longer interference, including when they should be updated or suppressed.
+Fix the backbone/version, learning examples, interference sequence, test prompt, decoding policy, and first-attempt rule. Do not compare a system allowed explicit reflection/retrieval loops against one scored on the immediate first response; that changes implicit memory into explicit reasoning.
+
+## What remains unmeasured
+
+The suite does not establish durable learning across long real-world time spans, nor does it identify where the acquired behavior is represented. Safety-relevant persistence, forgetting, transfer across tasks, and interaction with external memory systems remain open.
+
+## Next discriminating validation
+
+Cross a fixed model with no external memory, explicit episodic retrieval, procedural summaries, and learned skill representations while keeping the test prompt identical. The key question is which representation improves first-action transfer without increasing harmful persistence.
+
+## Genealogy
+
+`explicit recall → retained experience → automatic behavior change`
+
+ImplicitMemBench broadens “memory” from stored information to learned behavioral bias.

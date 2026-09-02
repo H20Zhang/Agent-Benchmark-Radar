@@ -1,25 +1,39 @@
-# GroupMemBench: in multi-party dialogue, who knows what is part of memory state
+# GroupMemBench: memory in multi-party conversations
 
-[中文](groupmembench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](groupmembench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2605.14498) · [Code](https://github.com/UCSB-NLP-Chang/GroupMemBench)
+[Paper](https://arxiv.org/abs/2605.14498)
 
-## What it measures
+## What it actually measures
 
-GroupMemBench releases 745 questions across four synthetic enterprise domains covering multi-hop, update, temporal, user-implicit, ambiguity, and abstention cases. Answers depend on speaker identity, reply structure, group state, and audience-specific terminology, so memory is no longer one global fact set.
+GroupMemBench evaluates memory in **multi-party conversations** where identity and audience matter. It targets group dynamics, speaker-grounded beliefs, and audience-adapted language, so the same term or proposition can mean different things depending on who said it and who is asking.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-One-to-one memory benchmarks implicitly treat a fact as having the same meaning for every query. GroupMemBench makes participant identity and asker conditioning part of the contract, testing who said or believes something and how it should be expressed to a particular audience.
+Most agent-memory systems and benchmarks are dyadic: one user talks to one agent. Concatenating several one-on-one histories does not preserve reply structure, per-speaker beliefs, shared versus private context, or Theory-of-Mind effects. GroupMemBench generates graph-grounded conversations and binds each adversarial query to a specific asker.
 
-## Score boundary
+## Decisive evidence
 
-Asker-conditioned QA supports group-state tracking under the synthetic conversation graph. It does not test real organizational permissions, deletion, or collaborative writes. Speaker metadata can also make retrieval easier and must be treated as protocol state.
+The benchmark covers six query categories including multi-hop reasoning, knowledge update, term ambiguity, user-implicit reasoning, temporal reasoning, and abstention. The strongest evaluated memory system reaches only 46.0% average accuracy; knowledge update is 27.1% and term ambiguity 37.7%. A simple BM25 baseline matches or exceeds most agent-memory systems, suggesting current ingestion pipelines erase lexical and structural signals that group memory needs.
 
-## Fair comparison conditions
+## What the score supports
 
-Align conversation graph, asker role, retriever metadata access, answerer, and judge, and report the six question types separately.
+This is strong evidence that **speaker/audience structure is not a cosmetic metadata field**. Still, the benchmark is synthetic and does not isolate whether failure comes from ingestion, indexing, retrieval, or final Theory-of-Mind reasoning.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step combines participant-conditioned memory with real authorization, shared artifacts, and group actions, separating belief tracking from access control.
+Fix conversation graph, speaker identities, asker identity, backbone, retrieval budget, and visible audience metadata. Preserve exact lexical forms when comparing ingestion schemes; summarizing one system's memory more aggressively can destroy the very ambiguity cues being tested.
+
+## What remains unmeasured
+
+Real group spaces include permissions, private threads, changing membership, moderation, and cross-channel identity. Social consequences of exposing one person's belief to another are governance questions beyond answer accuracy.
+
+## Next discriminating validation
+
+Add oracle speaker-aware retrieval and compare raw-message, per-user, thread, and graph memory under the same answer model. This would reveal whether the main loss happens when memories are written or when the model reasons over correctly retrieved social state.
+
+## Genealogy
+
+`single-user memory → speaker-grounded group memory → socially governed shared state`
+
+GroupMemBench shows that multi-user memory is not simply more text; it is relational state.

@@ -1,25 +1,39 @@
-# DataSciBench: when ground truth is not a simple unit test, data science needs structured evaluators
+# DataSciBench: programmatic evaluation for multi-step data-science prompts
 
-[中文](datascibench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](datascibench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Project](https://datascibench.github.io/) · [Code](https://github.com/THUDM/DataSciBench)
+[Paper](https://arxiv.org/abs/2502.13897) · [Project](https://datascibench.github.io/) · [Code](https://github.com/THUDM/DataSciBench)
 
-## What it measures
+## What it actually measures
 
-DataSciBench covers six data-science task types, 25 aggregate functions, and 519 test cases with natural, complex prompts whose ground truth is not always directly available. Its Intention-Function-Code (IFC) framework maps intent, functions, and executable outcomes to programmatic metrics; the ACL 2026 version evaluates 26 models.
+DataSciBench evaluates LLMs/agents on **multi-step data-science prompts** spanning six task types: cleaning/preprocessing, exploration/statistics, visualization, predictive modeling, data mining/pattern recognition, and interpretability/report generation.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-DS-1000 works well when unit tests define correctness. DataSciBench addresses uncertain ground truth and multiple valid analytical outputs using semi-automated GT generation, human verification, and aggregate metrics.
+Data-science evaluation is difficult once outputs are not single code snippets with obvious ground truth. DataSciBench introduces Task–Function–Code (TFC): 25 aggregate functions plus programmatic rules map complex outputs into 519 ground-truth test cases over 222 curated prompts.
 
-## Score boundary
+## Decisive evidence
 
-IFC and completion metrics support competence under the current GT pipeline and evaluator rules. They may still favor analyses expressible through the predefined aggregate functions and do not fully measure analyst-artifact quality.
+The benchmark evaluates 23 models: six API models and 17 open-source general/code models. Its key contribution is measurement infrastructure rather than a single leaderboard number: LLM self-consistency plus human verification is used to construct ground truth, then TFC evaluates execution outcomes at multiple granularities.
 
-## Fair comparison conditions
+## What the score supports
 
-Align benchmark version, GT generation/verification, IFC rules, runtime, agent scaffold, and model budget. Different evaluator generations require separate tracks.
+DataSciBench supports broad data-science task completion under the TFC ontology. It does not fully measure autonomous workflow control if the prompt already specifies the analysis goal, and visualization/report metrics still have more evaluator subjectivity than deterministic transformations.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step jointly evaluates code outcomes, reasoning traces, visual artifacts, source grounding, and stakeholder-facing reports.
+Fix prompt/data versions, execution environment, TFC rules, model, tool access, and retry budget. Report task-type and aggregate-function results rather than only a final score; a system can pass routine transformations while failing modeling or interpretation.
+
+## What remains unmeasured
+
+Long-horizon project state, repository maintenance, data discovery, business semantics, collaboration, and production deployment are beyond the bounded prompt episodes.
+
+## Next discriminating validation
+
+Measure whether TFC categories predict failure in longer agent trajectories: when an end-to-end project fails, can the benchmark correctly identify the missing primitive capability?
+
+## Genealogy
+
+`single code task → multi-step data-science prompt → decomposable execution evaluation`
+
+DataSciBench's durable contribution is making complex analysis outputs more mechanically testable.

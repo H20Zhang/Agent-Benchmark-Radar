@@ -1,25 +1,39 @@
-# LiveSQLBench: SQL benchmarks drift too, and enterprise databases are more than SELECT queries
+# LiveSQLBench: text-to-SQL under schema and business-rule drift
 
-[中文](livesqlbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](livesqlbench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Project](https://livesqlbench.ai/)
+[Project](https://livesqlbench.ai/) · [Code](https://github.com/bird-bench/livesqlbench)
 
-## What it measures
+## What it actually measures
 
-LiveSQLBench includes tracks such as Base-Lite (about 270 tasks/18 databases), Base-Full (about 600/22), and Large-v1 (about 480 tasks over 18 industrial databases averaging roughly 1K columns and 54 tables), covering query SQL and management/DDL-style tasks with separate model/agent tracks and evolving hidden releases.
+LiveSQLBench evaluates SQL agents against **evolving industrial databases**, not one frozen schema. It stresses large schemas, long metadata/context, business-rule drift, and both query and management-style interactions.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Spider and BIRD are fixed snapshots. LiveSQLBench makes dataset and validator evolution part of the benchmark lifecycle, reduces overfitting to a permanent test set, increases enterprise schema scale, and includes database operations beyond SELECT.
+Spider/BIRD largely freeze the database and task distribution. LiveSQLBench makes temporal change part of the benchmark lifecycle: schema complexity grows, business rules change, and agents must use current context rather than rely on benchmark memorization.
 
-## Score boundary
+## Decisive evidence
 
-Success rate is meaningful only for a concrete track, release, and harness. Hidden tests, rules, and schemas can change, so old and new results cannot be merged into a timeless SOTA.
+LiveSQLBench-Large-v1 expands to 18 databases with roughly 1K columns each and 480 tasks, with average prompts around 84K tokens and explicit Business Rule Drift. The project also releases an agent framework with per-task DB isolation and multi-provider support.
 
-## Fair comparison conditions
+## What the score supports
 
-Align Base/Large track, release date, schema hints, database engine, model/agent mode, tool budget, and evaluator rules.
+Results support text-to-SQL/data-agent robustness under the benchmark's evolving snapshots. They do not isolate model reasoning from schema-linking/harness quality, and live versions require careful version pinning before comparing scores.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step connects SQL execution to business semantic layers, multi-system integration, and persistent operational state.
+Pin benchmark release, DB snapshot, business-rule documents, SQL dialect, agent framework, model, and execution budget. Never compare scores from different evolving versions as though they came from one static test set.
+
+## What remains unmeasured
+
+Enterprise analytics also requires semantic definitions, permissions, lineage, clarification, write safety, and artifact delivery. Very large schemas still do not reproduce all organization-specific metadata and governance.
+
+## Next discriminating validation
+
+Create paired tasks immediately before and after a schema/business-rule change and measure update latency: how quickly does an agent stop using obsolete semantics without losing stable knowledge?
+
+## Genealogy
+
+`static text-to-SQL → industrial-scale schema → continuously evolving data environment`
+
+LiveSQLBench makes benchmark freshness itself part of data-agent evaluation.

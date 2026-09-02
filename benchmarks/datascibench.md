@@ -1,25 +1,39 @@
-# DataSciBench：当 ground truth 不再是一个简单 unit test，Data Science 需要 IFC-style evaluator
+# DataSciBench：用程序化规则评估 multi-step data-science prompt
 
-**中文** | [English](datascibench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](datascibench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-[项目页](https://datascibench.github.io/) · [代码](https://github.com/THUDM/DataSciBench)
+[论文](https://arxiv.org/abs/2502.13897) · [项目页](https://datascibench.github.io/) · [代码](https://github.com/THUDM/DataSciBench)
 
-## 它在测什么
+## 它到底测什么
 
-DataSciBench 覆盖六类 data-science tasks、25 个 aggregate functions 与 519 个 test cases，问题来自更自然、复杂且 ground truth 不容易直接获得的分析需求。它用 Intention-Function-Code (IFC) framework 将意图、函数与 executable code outcomes 映射到 programmatic metrics；ACL 2026 版本评估了 26 个 models。
+DataSciBench 评估 LLM/agent 对 **multi-step data-science prompt** 的完成能力，覆盖 6 类任务：cleaning/preprocessing、exploration/statistics、visualization、predictive modeling、data mining/pattern recognition、interpretability/report generation。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-DS-1000 适合有明确 unit tests 的代码问题。DataSciBench 面对 uncertain GT 与多种可行 analysis outputs，尝试用半自动 GT generation + human verification + aggregate metrics 扩大可评价任务范围。
+当 output 不再是一段有唯一答案的 code 时，data-science evaluation 很难自动化。DataSciBench 提出 Task–Function–Code (TFC)：用 25 个 aggregate function + programmatic rule，把 222 个 curated prompt 拆成 519 个可验证 ground-truth test case。
 
-## 分数边界
+## 决定性证据
 
-IFC/completion metrics 支持在当前 GT pipeline 与 evaluator rules 下的 data-science competence；它仍可能偏向被预定义 aggregate functions 覆盖的分析形式，不能等同于完整 analyst artifact quality。
+benchmark 一共评估 23 个模型：6 个 API model + 17 个 open-source general/code model。真正重要的贡献不是某个 leaderboard 数字，而是 measurement infrastructure：先用 LLM self-consistency + human verification 构造 GT，再由 TFC 多粒度判断 execution outcome。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 benchmark version、GT generation/verification、IFC rules、runtime、agent scaffold 与 model budget。不同 evaluator generation 应分 track。
+DataSciBench 支持 TFC ontology 下较广的 data-science task completion，但如果 prompt 已经指定分析目标，它对 autonomous workflow control 的证明有限；visualization/report metric 也比 deterministic transformation 更依赖 evaluator assumption。
 
-## 下一步评测坐标
+## 公平比较契约
 
-下一步要把代码结果与 reasoning trace、visual artifact、source grounding 和 stakeholder-facing report 联合评价。
+应固定 prompt/data version、execution environment、TFC rule、model、tool access 与 retry budget，并按 task type / aggregate function 报告，而不是只给 final score；routine transform 强可能掩盖 modeling/interpretation 弱。
+
+## 还没有测什么
+
+long-horizon project state、repository maintenance、data discovery、business semantics、collaboration 与 production deployment 都超出 bounded prompt episode。
+
+## 下一步最有判别力的验证
+
+检查 TFC category 是否能预测更长 agent trajectory 的 failure：end-to-end project 做错后，benchmark 能不能正确指出缺的是哪种 primitive capability。
+
+## 演化位置
+
+`single code task → multi-step data-science prompt → decomposable execution evaluation`
+
+DataSciBench 更持久的贡献，是让复杂分析 output 变得更可程序化验证。

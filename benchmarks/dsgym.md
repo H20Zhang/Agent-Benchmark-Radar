@@ -1,23 +1,39 @@
-# DSGym：Data Science Agent 需要在 stateful Jupyter 里工作，而不是只答一道题
+# DSGym：先过滤“不看数据也能做”的 data-science benchmark
 
-**中文** | [English](dsgym.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](dsgym.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-## 它在测什么
+[论文](https://arxiv.org/abs/2601.16344) · [代码](https://github.com/fannie1208/DSGym)
 
-DSGym 有 972 个 analysis tasks + 114 个 prediction tasks，共 1,086 个，另含 DSBio 90-task slice。它使用 Docker/stateful Jupyter execution，让 agent 在持续 notebook state 中做分析、建模与调试，并包含 shortcut audits。
+## 它到底测什么
 
-## 相比什么前进了
+DSGym 同时是标准化 **execution framework** 和经过筛选的 task suite，用 self-contained environment 评估/训练 data-science agent 的分析、prediction 与 domain-specialized workflow。
 
-DS-1000 是 isolated coding problem；DSGym 让代码、数据、运行状态与后续步骤相互依赖，更接近 analyst notebook workflow，并能观察 agent 是否用 shortcut 绕过真正的数据推理。
+## 相比此前评测多测了什么
 
-## 分数边界
+作者发现现有 data-science benchmark 有相当一部分任务即使不使用给定数据也能答。DSGym 显式过滤 shortcut-solvable problem，并标准化 environment interface，把 data grounding 与 cross-benchmark comparability 放到中心。
 
-execution/task success 支持当前 notebook environment 与 task release 下的 agent performance；stateful execution、package versions 和 shortcut detection 都是 load-bearing protocol variables。
+## 决定性证据
 
-## 公平比较条件
+DSGym 清洗既有任务，并新增 DSBio 与 DSPredict，覆盖 bioinformatics 和更难的 prediction；它还支持 execution-verified trajectory synthesis。作为 training case，2,000 个生成样本训练出的 4B model 在标准化 analysis benchmark 上超过 GPT-4o。
 
-锁定 Docker image、Jupyter state semantics、datasets、packages、agent step budget、shortcut policy 与 evaluator。
+## 这个分数能证明什么
 
-## 下一步评测坐标
+它对“agent 是否真的会在受控 environment 中 plan、implement、validate analysis”证据较强。4B training result 说明 framework 可用于训练，但不能推出小模型在 benchmark 外普遍优于更强模型。
 
-下一步应把 notebook execution 与最终 report/artifact、review/recovery 和长期 project state 结合起来。
+## 公平比较契约
+
+应固定 Docker/environment image、tool、dataset、metric implementation、agent scaffold、model 与 execution budget，保留 shortcut filter，并把 pass@k 与 average trajectory score 分开报告。
+
+## 还没有测什么
+
+标准化也牺牲了一部分生产 messy reality：enterprise semantics、permission、evolving repository、collaboration 与 deployment 不是核心对象。
+
+## 下一步最有判别力的验证
+
+对每个 benchmark source 公布 shortcut filtering 前后的 performance delta，直接量化过去看似的 data-agent progress 有多少其实来自 benchmark leakage 或“不用数据也能答”。
+
+## 演化位置
+
+`fragmented data-science benchmarks → grounded standardized gym → execution-verified agent training/evaluation`
+
+它把 benchmark validity 与 environment reproducibility 本身当成研究贡献。

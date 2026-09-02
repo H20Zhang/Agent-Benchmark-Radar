@@ -1,25 +1,39 @@
-# CausalDS：Data Science Agent 不应把 correlation、intervention 与 counterfactual 混成一种分析
+# CausalDS：让 data agent 真正跨过 Pearl 三层因果推理
 
-**中文** | [English](causalds.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](causalds.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-[论文](https://arxiv.org/abs/2607.08093) · [代码](https://github.com/andleb/causalds)
+[论文](https://arxiv.org/abs/2607.08093)
 
-## 它在测什么
+## 它到底测什么
 
-CausalDS 从 sampled structural causal models 生成 observational data 与 graph-faithful realistic stories，再导出 Pearl 三个 rungs 的任务：prediction/association、causal structure/identification/effect estimation，以及 counterfactual/mediation 等。frozen main exam 有 100 tasks，并将无可识别答案时的 abstention 设为一等结果；大多数任务还需要 coding/tool use。
+CausalDS 评估 tool-using data-science agent 在 **Pearl 三个 rung** 上的 causal task。每个 scene 包含 sampled structural causal model、生成的 observational data 与 graph-faithful natural-language story；任务覆盖 prediction、structure recovery、identification、effect estimation、bias diagnosis、counterfactual、mediation、uncertainty 与 warranted abstention。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-传统 causal benchmark 偏 symbolic；传统 data-science benchmark 又常没有 principled causal ground truth。CausalDS 用 hidden SCM 同时提供 executable data work 与精确 causal truth，使“算得出来”和“因果上有资格回答”可以分开。
+symbolic causal benchmark 常缺真实 data analysis，data-science benchmark 又没有已知 causal ground truth。CausalDS 直接生成 SCM，因此既能 deterministic 地判断因果答案，又要求 agent 面对 imperfect observation、coding 和 tool use。
 
-## 分数边界
+## 决定性证据
 
-CausalDSScore/accuracy 支持在 synthetic SCM generator、observation model 与 frozen exam 下的 causal data-science competence；它不证明真实领域因果假设正确，因为真实世界最大难点往往是 model specification 本身。
+论文的 100-task exam 评估 6 个 contemporary agent：symbolic causal reasoning 相对接近解决，而 abstention、uncertainty quantification 与 coding/tool-use efficiency 仍明显拉开模型差距。不可回答问题也被作为一等 scored outcome，而不是 evaluator exception。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 main exam/ablation config、public/private boundary、observation variant、tool/runtime、agent budget 与 grader。clean/noisy/proxy observations 必须分开。
+它对 causal reasoning + tool-grounded analysis 提供非常干净的 ground truth；但 scene 是 synthetic，因此对 algorithmic competence 的证据比对真实 messy observational science 的 ecological validity 更强。
 
-## 下一步评测坐标
+## 公平比较契约
 
-下一步应加入 imperfect causal assumptions、human domain constraints 与 experimental intervention cost，测试 agent 能否质疑 SCM，而不仅是在已定义 SCM 内推理。
+应固定 generated exam seed/version、observation model、tool environment、model、token/tool budget 与 grader，并按 Pearl rung、abstention、uncertainty 分开报告；平均分会掩盖在 non-identifiable query 上危险的过度断言。
+
+## 还没有测什么
+
+真实 causal inference 还有 ambiguous assumption、generator 未覆盖的 measurement error、experiment design、domain expertise，以及“causal graph 本身就有争议”的情况。
+
+## 下一步最有判别力的验证
+
+把 synthetic scene 与 assumption 故意不完整的真实 dataset 配对，测试 agent 会不会主动询问缺失 identification assumption，而不是自己编出来，连接 causal correctness 与 scientific judgment。
+
+## 演化位置
+
+`symbolic causality ↔ data-science execution → agentic causal analysis with abstention`
+
+它把“知道什么时候因果不可识别”提升到和给出 estimate 同样重要。

@@ -1,25 +1,39 @@
-# RAGBench: benchmarking not only RAG systems, but how RAG is judged
+# RAGBench: benchmarking the evaluator, not only the RAG system
 
-[中文](ragbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](ragbench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2407.11005) · [Data](https://huggingface.co/datasets/rungalileo/ragbench)
+[Paper](https://arxiv.org/abs/2407.11005) · [Dataset](https://huggingface.co/datasets/rungalileo/ragbench)
 
-## What it measures
+## What it actually measures
 
-RAGBench provides roughly 100K examples across five industry-oriented domains with trace-style labels for retrieval/generation quality and for benchmarking RAG evaluators themselves. The target is not only whether a system answers correctly, but whether an evaluator produces interpretable failure signals.
+RAGBench is a 100K-example benchmark across five industry-oriented domains for evaluating **RAG quality and RAG evaluators**. Its TRACe framework provides explainable/actionable labels rather than only one end-answer score.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Many RAG benchmarks implicitly trust the judge. RAGBench makes the evaluator an evaluation object, exposing consistency and failure modes of automatic metrics such as faithfulness or context relevance across domains.
+A RAG pipeline can only be optimized if evaluation distinguishes retrieval/context defects from answer defects. RAGBench shifts part of the benchmark target from “which RAG system wins?” to “does the evaluator reliably identify the kind of failure that occurred?”
 
-## Decisive evidence and score boundary
+## Decisive evidence
 
-The large labeled set allows evaluator predictions to be compared with reference labels. An evaluator score supports its ability to identify a failure type on the named domain mixture; it does not establish that a RAG architecture rated highly by that judge is causally better. Label construction and source systems shape the observed error distribution.
+The dataset spans multiple RAG task types and industry corpora such as user manuals. The paper finds that general LLM-based evaluation methods can struggle to match a finetuned RoBERTa model on the RAG-evaluation task, showing that evaluator sophistication and evaluator validity are different things.
 
-## Fair comparison conditions
+## What the score supports
 
-Align dataset/domain subset, label schema, source RAG outputs, and evaluator model/prompt. Different judge generations or domain mixtures require separate result tracks.
+RAGBench supports claims about evaluator quality and labeled RAG failure dimensions under its annotation scheme. It is not evidence for adaptive retrieval policy, and any system ranking derived from an evaluator inherits that evaluator's biases.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The stronger test asks whether evaluator signals actually improve retrieval policy: when a failure label triggers more search, do evidence coverage and task success reproducibly increase?
+Fix the labeled split, evaluator prompt/model/version, thresholding, and RAG outputs being judged. Report evaluator agreement/calibration before using it to rank new RAG systems. Human-label uncertainty should not disappear behind an aggregate metric.
+
+## What remains unmeasured
+
+Static labeled examples do not capture live-web drift, iterative tool use, budget allocation, or agent stopping. Explainable labels are useful only insofar as they predict interventions that improve end-to-end behavior.
+
+## Next discriminating validation
+
+Use each diagnostic label to trigger a targeted pipeline change, then measure whether the predicted failure class actually improves. This converts explainability from descriptive taxonomy into causal usefulness.
+
+## Genealogy
+
+`RAG output score → failure labels → evaluator validity and actionable diagnosis`
+
+RAGBench matters because benchmark quality itself becomes part of the RAG systems problem.

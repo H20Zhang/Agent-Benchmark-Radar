@@ -1,25 +1,39 @@
-# RealMem：从 casual chat 转向 evolving project state
+# RealMem：面向持续演化长期项目的 memory
 
-**中文** | [English](realmem.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](realmem.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
-[论文](https://aclanthology.org/2026.findings-acl.703/) · [代码](https://github.com/AvatarMemory/RealMemBench)
+[论文](https://arxiv.org/abs/2601.06966) · [ACL 2026](https://aclanthology.org/2026.findings-acl.703/) · [代码](https://github.com/AvatarMemory/RealMemBench)
 
-## 它在测什么
+## 它到底测什么
 
-RealMem 覆盖 11 个 realistic project scenarios、超过 2,000 段 cross-session dialogues，任务中的 goals、artifacts 与 relevant state 会随项目进展变化。问题不再是日常闲聊事实，而是能否维护跨 session 的 project dependencies 与 evolving objectives。
+RealMem 评估 **long-term project-oriented interaction** 中的 memory：agent 要跨 session 跟踪目标、schedule、决策、不断变化的项目属性和依赖关系，并针对“当前项目状态”回答自然用户 query。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-LoCoMo 等 benchmark 主要测 conversation memory。RealMem 把长期记忆推向 persistent project state，使“旧目标是否已失效”“某个 artifact 处于什么版本”成为更接近生产协作的 memory 问题。
+casual conversation / task dialogue 可以把 session 看成个人事实集合；project memory 则不同：状态由多轮协作共同产生，承诺有 deadline，后续决策会覆盖前面决策，relevance 取决于当前 project phase。RealMem 显式模拟这种 evolution。
 
-## 分数边界
+## 决定性证据
 
-natural-user-query performance 支持给定 synthetic trajectory 与 judge 下的 project-state tracking；它仍不能说明真实协作系统中的 permissions、writes 与 external tools 是否可靠，因为 trajectories 由 multi-agent pipeline 生成且 interaction 仍是 dialogue-only。
+benchmark 包含 11 类项目场景、超过 2,000 段 cross-session dialogue。合成 pipeline 结合 project foundation construction、multi-agent dialogue generation、memory/schedule management，使 project state 真正随时间变化。实验显示当前 memory system 在动态 context dependency 与长期 project state 管理上仍明显困难。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-锁定 trajectory generation、dialogue model、project scenario、history visibility 与 judge。不同 synthetic generator 可能改变 dependency density 与 difficulty。
+RealMem 能支持对 evolving project history 的 retrieval/reasoning 能力判断；但最终仍以 query answering 为主，因此只能间接说明 memory 会不会改善真正的项目执行、排程或 artifact delivery。
 
-## 下一步评测坐标
+## 公平比较契约
 
-下一步要把 project memory 接到真实文件、代码、calendar/database writes 与权限系统，让 stale state 的操作后果可测。
+应固定 project history、time checkpoint、backbone、retrieval budget、schedule visibility 与 query evaluator，并把 superseded 与 still-active fact 分开评估，防止后续项目状态泄漏到早期 checkpoint。
+
+## 还没有测什么
+
+项目成功远不只是回答问题：还需要创建 artifact、协商 scope、管理权限、失败恢复和执行不可逆 action，这些 operational loop 基本还没有进入 benchmark。
+
+## 下一步最有判别力的验证
+
+在每个 checkpoint 附加 executable project task，例如更新计划、修改 artifact、选择下一步行动，并检查是否与当前 project state 一致。这样才能验证 memory 是否真正减少协作错误，而不只是提高 QA。
+
+## 演化位置
+
+`casual conversation memory → cross-session project state → persistent work context`
+
+它把 evolving project state 变成一个独立 memory object，更接近 workplace agent 的真实使用方式。

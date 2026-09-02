@@ -1,25 +1,39 @@
-# CausalDS: data-science agents should not collapse association, intervention, and counterfactual reasoning
+# CausalDS: data agents across all three rungs of causal reasoning
 
-[中文](causalds.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](causalds.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2607.08093) · [Code](https://github.com/andleb/causalds)
+[Paper](https://arxiv.org/abs/2607.08093)
 
-## What it measures
+## What it actually measures
 
-CausalDS samples structural causal models, generates observational data and graph-faithful realistic stories, and derives tasks across all three of Pearl's rungs: prediction/association, causal structure and effect identification/estimation, and counterfactual or mediation reasoning. The frozen main exam has 100 tasks, treats abstention on non-identifiable questions as first-class, and usually requires coding/tool use.
+CausalDS evaluates tool-using data-science agents on **causal tasks across all three of Pearl's rungs**. Each scene contains a sampled structural causal model, generated observational data, and a graph-faithful natural-language story; tasks include prediction, structure recovery, identification, effect estimation, bias diagnosis, counterfactuals, mediation, uncertainty, and warranted abstention.
 
-## Compared with what
+## What changed relative to prior evaluation
 
-Symbolic causal benchmarks lack realistic data analysis, while data-science benchmarks often lack principled causal ground truth. A hidden SCM supplies exact causal truth while retaining executable data work, separating numerical solvability from whether a causal answer is warranted.
+Symbolic causal benchmarks often omit realistic data analysis, while data-science benchmarks lack known causal ground truth. CausalDS generates the SCM itself, allowing deterministic evaluation of causal correctness while still forcing agents to work with imperfect observations and code/tools.
 
-## Score boundary
+## Decisive evidence
 
-CausalDSScore or accuracy supports causal data-science competence under the synthetic SCM generator, observation model, and frozen exam. It does not establish correct causal assumptions in real domains, where model specification itself is often the hard problem.
+A reported 100-task exam across six contemporary agents finds symbolic causal reasoning comparatively strong while abstention, uncertainty quantification, and coding/tool-use efficiency still separate models. Non-answerable questions are first-class scored outcomes rather than evaluation errors.
 
-## Fair comparison conditions
+## What the score supports
 
-Align main exam or ablation configuration, public/private boundary, observation variant, runtime/tools, agent budget, and grader. Clean, noisy, and proxy observations require separate tracks.
+The benchmark provides unusually clean ground truth for causal reasoning and tool-grounded analysis. Because scenes are synthetic, it supports algorithmic competence more strongly than ecological validity on messy observational science.
 
-## Next evaluation coordinate
+## Fair comparison contract
 
-The next step adds imperfect causal assumptions, human domain constraints, and intervention cost, testing whether an agent can challenge the SCM rather than only reason inside a supplied one.
+Fix generated exam seed/version, observation model, tool environment, model, token/tool budget, and grader. Report Pearl rung and abstention/uncertainty metrics separately; average score can hide dangerous overclaiming on non-identifiable queries.
+
+## What remains unmeasured
+
+Real causal inference includes ambiguous assumptions, measurement error not captured by the generator, experiment design, domain expertise, and disputes about the causal graph itself.
+
+## Next discriminating validation
+
+Pair synthetic scenes with real datasets whose assumptions are deliberately underspecified, scoring whether the agent asks for missing identification assumptions rather than inventing them. This bridges causal correctness and scientific judgment.
+
+## Genealogy
+
+`symbolic causality ↔ data-science execution → agentic causal analysis with abstention`
+
+CausalDS makes “knowing when causality is not identified” as important as producing an estimate.

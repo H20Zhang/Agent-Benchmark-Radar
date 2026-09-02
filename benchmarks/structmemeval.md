@@ -1,25 +1,39 @@
-# StructMemEval：把 memory structure 本身变成评测对象
+# StructMemEval：评估 agent 如何组织 memory，而不只是找事实
 
-**中文** | [English](structmemeval.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](structmemeval.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2602.11243)
 
-## 它在测什么
+## 它到底测什么
 
-StructMemEval 选择人类天然会用 ledger、to-do list、tree 等结构组织信息的任务，检查 agent 能否把长期记忆组织成与任务匹配的 representation，而不是仅把历史切块后做相似度 retrieval。评测因此首次把“memory 组织结构是否合适”从实现细节提升成独立 capability。
+StructMemEval 测 agent 能否选择并维护 **适合任务的 memory structure**，例如 transaction ledger、to-do list、tree，而不是把所有信息塞进无结构 store 后再做通用 retrieval。这里真正被测的是 representation organization。
 
-## 相比什么前进了
+## 相比此前评测多测了什么
 
-LoCoMo、LongMemEval 和许多 RAG-style memory benchmark 主要能被“存下来 + 找回来”解决。StructMemEval 故意选择需要结构化维护的任务，使 simple retrieval 的上限暴露出来；它把问题从 retrieval quality 推进到 representation selection 与 structured state tracking。
+fact retention、multi-hop recall、temporal update 很多时候都可以用 generic RAG 解。StructMemEval 专门选择天然依赖某种组织方式的任务，让 memory structure 本身变成可观测能力，而不再只是 implementation detail。
 
-## 决定性证据与分数边界
+## 决定性证据
 
-论文初步实验显示：简单 retrieval-augmented LLM 在这些任务上表现不佳，而 memory agents 在被明确提示应该如何组织 memory 时可以可靠解决；但不给 structure hint 时，现代 LLM 又经常无法自行识别合适结构。最重要的结论因此不是某个系统的绝对 SOTA，而是“structure selection 本身是瓶颈”。它同时暴露一个 ceiling：prompted structure success 不能证明 agent 能自主发现 representation。
+论文初步实验显示 simple retrieval-augmented LLM 在这些结构任务上较弱；如果显式提示正确 organization，memory agent 可以可靠完成，但现代 LLM 在没有提示时并不总能识别应该采用哪种结构。这把 **执行已知 representation** 和 **发现正确 representation** 两件事拆开了。
 
-## 公平比较条件
+## 这个分数能证明什么
 
-必须对齐是否提供 structure hints、task template、backbone reasoning 与允许的 memory operations。把“告诉模型用 ledger”与“让模型自己发现 ledger”放在同一排行榜会混掉 benchmark 最关键的因果变量。
+benchmark 能证明 structured state 是否有用、系统是否能实例化指定结构；如果 prompt 已经透露正确 structure，它对 autonomous representation learning 的证明就比较弱。
 
-## 下一步评测坐标
+## 公平比较契约
 
-下一步要从 narrow structure-sensitive tasks 推进到开放环境：结构应由 agent 自主诱导，并在数据更新、冲突与 schema 演化中持续调整，而不是一次选择后固定。
+应固定 backbone、task instruction、是否提供 structure hint、memory operation 与 token/storage budget，并把 oracle structure hint 与 autonomous selection 分开报告，否则最重要的研究问题会被掩盖。
+
+## 还没有测什么
+
+任务集有意偏窄，结构也都是人类可解释的。真实 agent 可能需要 hybrid / learned representation，并且 workload 变化后还要迁移结构；这些能力尚未覆盖。
+
+## 下一步最有判别力的验证
+
+隐藏 structure identity，加入多种合理 representation 都能工作的任务，并在 query distribution shift 后测 adaptation。真正的问题不是“会不会用 ledger”，而是“知不知道什么时候 ledger 才是正确表示”。
+
+## 演化位置
+
+`retrieve facts → maintain structured state → autonomously choose memory representation`
+
+它把 representation selection 单独提升成了一项 memory 能力。
