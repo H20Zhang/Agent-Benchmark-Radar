@@ -7,38 +7,34 @@ interface Props {
   alternatePath?: string;
 }
 
-const { lang, alternatePath = localePath(lang === "zh" ? "en" : "zh") } =
-  Astro.props;
+const { lang, alternatePath = localePath(lang === "zh" ? "en" : "zh") } = Astro.props;
 const copy = copyFor(lang);
 const path = Astro.url.pathname;
+const homePath = sitePath(localePath(lang));
 const navItems = [
-  { href: localePath(lang, "benchmarks/"), label: copy.nav.benchmarks, key: "/benchmarks/" },
-  { href: localePath(lang, "opportunities/"), label: copy.nav.opportunities, key: "/opportunities/" },
-  { href: localePath(lang, "frontier/"), label: copy.nav.frontier, key: "/frontier/" },
+  { href: sitePath(localePath(lang, "benchmarks/")), label: lang === "zh" ? "筛选 Benchmark" : "Browse", key: "/benchmarks/" },
+  { href: `${homePath}#timeline`, label: lang === "zh" ? "时间轴" : "Timeline", key: "#timeline" },
+  { href: sitePath(localePath(lang, "evaluate/")), label: lang === "zh" ? "评测组合" : "Suites", key: "/evaluate/" },
+  { href: `${homePath}#results`, label: lang === "zh" ? "当前成绩" : "Results", key: "#results" },
 ];
 ---
 
-<header class="site-header">
+<header class="site-header site-header--tool">
   <div class="site-header__inner">
-    <a class="site-brand" href={sitePath(localePath(lang))} aria-label={copy.siteName}>
-      <span class="site-brand__mark" aria-hidden="true">
-        <i></i><i></i><i></i>
-      </span>
-      <span class="site-brand__name">Agent<br />Benchmark Radar</span>
+    <a class="site-brand" href={homePath} aria-label={copy.siteName}>
+      <span class="site-brand__mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="site-brand__name">Agent Benchmark Radar</span>
     </a>
     <nav class="site-nav" aria-label={lang === "zh" ? "主导航" : "Primary navigation"}>
       <div class="site-nav__primary">
         {navItems.map((item) => (
-          <a href={sitePath(item.href)} aria-current={path.includes(item.key) ? "page" : undefined}>{item.label}</a>
+          <a href={item.href} aria-current={item.key.startsWith("/") && path.includes(item.key) ? "page" : undefined}>{item.label}</a>
         ))}
       </div>
       <div class="site-nav__utility">
-        <a class="site-nav__evaluate" href={sitePath(localePath(lang, "evaluate/"))}>{copy.nav.evaluate}</a>
         <a href={REPOSITORY_URL} rel="noreferrer" aria-label={`${copy.nav.github} ↗`}>{copy.nav.github}<span aria-hidden="true">↗</span></a>
       </div>
-      <a class="site-nav__language" href={sitePath(alternatePath)} hreflang={lang === "zh" ? "en" : "zh-CN"}>
-        {copy.nav.language}
-      </a>
+      <a class="site-nav__language" href={sitePath(alternatePath)} hreflang={lang === "zh" ? "en" : "zh-CN"}>{copy.nav.language}</a>
     </nav>
   </div>
 </header>
