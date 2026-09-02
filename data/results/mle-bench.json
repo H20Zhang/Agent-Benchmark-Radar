@@ -1,19 +1,23 @@
 {
   "benchmark_id": "mle-bench",
   "tracking_status": "verified-snapshot",
-  "verified_at": "2026-08-31",
-  "tracks": [{
-    "track_id": "gpt4o-any-medal",
-    "primary": true,
-    "label": { "zh": "GPT-4o Any Medal", "en": "GPT-4o Any Medal" },
-    "task": "Offline Kaggle competition work under the paper protocol",
-    "split": "paper benchmark",
-    "protocol_version": "paper-v1-pass@1",
-    "metric": { "id": "any-medal", "family": "success-rate", "label": "Any Medal", "unit": "%", "direction": "higher", "range": [0, 100] },
-    "entries": [
-      { "id": "mlab", "method": "MLAB", "model": "GPT-4o", "score": 0.8, "date": "2024-10-09", "source": "https://arxiv.org/abs/2410.07095" },
-      { "id": "openhands", "method": "OpenHands", "model": "GPT-4o", "score": 4.4, "date": "2024-10-09", "source": "https://arxiv.org/abs/2410.07095" },
-      { "id": "aide", "method": "AIDE", "model": "GPT-4o", "score": 8.7, "date": "2024-10-09", "source": "https://arxiv.org/abs/2410.07095" }
-    ]
-  }]
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "official-main-all-any-medal",
+      "primary": true,
+      "label": { "zh": "官方主榜 · All Any Medal", "en": "Official main leaderboard · All Any Medal" },
+      "task": "Autonomous machine-learning engineering across Kaggle competitions",
+      "split": "split75 / All · 75 competitions",
+      "protocol_version": "official-main-leaderboard-snapshot-2026-09-02; excludes Additional Leaderboard Submissions with test-set feedback",
+      "metric": { "id": "any-medal-percentage", "family": "success-rate", "label": "Any Medal", "unit": "%", "direction": "higher", "range": [0, 100] },
+      "entries": [
+        { "id": "famou-agent20-gemini3pro", "method": "Famou-Agent 2.0", "model": "Gemini-3-Pro-Preview", "score": 64.44, "date": "2026-02-23", "source": "https://github.com/openai/mle-bench" },
+        { "id": "aibuildai-opus46", "method": "AIBuildAI", "model": "Claude-Opus-4.6", "score": 63.11, "date": "2026-03-06", "source": "https://github.com/openai/mle-bench" },
+        { "id": "cair-marsplus-gemini3pro", "method": "CAIR MARS+", "model": "Gemini-3-Pro-Preview", "score": 62.67, "date": "2026-02-17", "source": "https://github.com/openai/mle-bench" },
+        { "id": "mlevolve-gemini3pro", "method": "MLEvolve", "model": "Gemini-3-Pro-Preview", "score": 61.33, "date": "2026-02-14", "source": "https://github.com/openai/mle-bench" },
+        { "id": "pievolve-gemini3pro", "method": "PiEvolve", "model": "Gemini-3-Pro-Preview", "score": 61.33, "date": "2026-01-05", "source": "https://github.com/openai/mle-bench" }
+      ]
+    }
+  ]
 }
