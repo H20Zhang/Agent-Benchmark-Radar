@@ -1,37 +1,37 @@
-# Agent Memory Bakeoff：跨词汇检索与写入时增强
+# Agent Memory Bakeoff：检验写入表征能否跨越词汇差异
 
-**中文** | [English](agent-memory-bakeoff.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](agent-memory-bakeoff.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
-[代码、数据与协议](https://github.com/JaysonRawlins/agent-memory-bakeoff)
+[代码、数据与评测协议](https://github.com/JaysonRawlins/agent-memory-bakeoff)
 
 ## 它到底测什么
 
-这个 benchmark 测的是 **memory write representation 是否改变未来可访问性**：当后续 query 不再复用原 incident / runbook 的词汇时，系统还能不能找回相关记忆；以及在写入时做 enrichment，是否比原文直接存储更能跨越 lexical mismatch。它把 memory pipeline 里经常被忽略的 write-side representation 变成可控变量。
+这个基准关注的是：**记忆在写入时采用什么表征，会不会影响之后能否被重新找到**。当后续查询不再复用原始事件或运维手册里的词汇时，系统还能不能找回相关记忆？在写入阶段做摘要、扩展或语义增强，是否比直接保存原文更能跨越词汇不一致？它把记忆系统中经常被忽略的“写入侧表征”变成了一个可控变量。
 
-## 相比常规 memory benchmark 多测了什么
+## 相比常规记忆基准多测了什么
 
-LoCoMo / LongMemEval 一类 benchmark 更多从最终 QA 看“记住了没有”，但 retrieval failure 与 answerer failure 很容易混在一起。Agent Memory Bakeoff 停在 retrieval 层，交叉比较 **BM25、vector、hybrid retrieval × plain / write-enriched memory**，因此可以更直接地问 enrichment 是否真的让同一事实更容易被不同表达方式访问。
+LoCoMo、LongMemEval 一类基准通常从最终问答结果判断“是否记住了”，但其中很难区分究竟是检索失败，还是回答模型拿到证据后仍然答错。Agent Memory Bakeoff 则停在检索层，直接交叉比较 **BM25、向量检索、混合检索 × 原始写入、增强写入**，因此更适合回答：写入增强本身是否真的让同一事实更容易被不同表达方式访问。
 
 ## 决定性证据
 
-套件包含 **225 个场景、497 份合成记忆文档和 390 个独立生成查询**，采用 sibling-aware gold，报告 MRR@10 与 recall@1/@5。写入增强把 **BM25 MRR 从 0.678 提升到 0.783**，并把 symptom query 的 **recall@5 从 60.0% 提升到 83.8%**。这一结果说明在所构造的 lexical-shift 场景中，write-time enrichment 能显著改变传统 lexical retriever 的可访问性。
+评测包含 **225 个场景、497 份合成记忆文档和 390 个独立生成的查询**，采用考虑同源文档的标准答案集合，报告 MRR@10 与 Recall@1 / Recall@5。写入增强把 **BM25 的 MRR 从 0.678 提升到 0.783**，并把症状类查询的 **Recall@5 从 60.0% 提升到 83.8%**。这说明在所构造的词汇变化场景中，仅改变写入表征就能显著影响传统词汇检索器的可达性。
 
 ## 这个分数支持什么判断
 
-它支持“在该 synthetic corpus 和一个本地 embedder 下，写入增强提高了跨词汇 retrieval accessibility”。它不支持“下游 agent 一定回答或行动得更好”，因为 protocol 终止于 retrieval；也不能证明 enrichment 普遍优于更强的 embedding / reranker，因为语料本身围绕 enrichment 机制构造。
+它可以支持这样的结论：**在该合成语料、给定查询集合和固定检索器下，写入增强提高了跨词汇检索的可达性**。但它不能证明下游 Agent 一定会回答得更准或行动得更好，因为评测在检索阶段就结束了；也不能证明写入增强普遍优于更强的嵌入模型或重排模型，因为语料设计本身就围绕这一机制展开。
 
 ## 公平比较条件
 
-比较不同 write representation 时，应固定 query set、gold definition、retrieval top-k、embedder、BM25 配置和文档粒度。尤其不能一边改变 memory enrichment，一边更换 embedder 或 reranker，再把全部增益归因于 write-side mechanism。最好分别报告 lexical、semantic 与 hybrid retriever，观察 enrichment 的收益是否只集中在某一种 retrieval family。
+比较不同写入表征时，应固定查询集合、标准答案定义、检索 top-k、嵌入模型、BM25 配置和文档粒度。尤其不能一边改变记忆写入方式，一边更换嵌入模型或重排模型，再把全部收益归因于写入机制。最好分别报告词汇检索、语义检索和混合检索，观察增强收益是否只集中在某一种检索方法上。
 
 ## 研究上怎么用
 
-它适合做 **memory component attribution**：当一个 memory system 声称“写入阶段做摘要、实体扩展或语义重写可以改善未来 recall”时，可以先用这个层级的 retrieval-only benchmark 隔离验证，再进入 LongMemEval/MemoryAgentBench 等 downstream benchmark 看 accessibility 是否真的转化为 task utility。
+它适合做 **记忆组件归因**。当一个记忆系统声称“写入阶段做摘要、实体扩展或语义重写能改善之后的召回”时，可以先用这种仅检索基准隔离验证，再进入 LongMemEval、MemoryAgentBench 等下游基准，观察检索可达性的提升是否真的转化为任务效用。
 
 ## 下一步最有价值的验证
 
-最关键的缺口是自然语料、多 embedder、多 query distribution，以及 retrieval gain 是否传导到最终 answer / action。一个高判别力实验是：在相同 memory corpus 和 query 上，对比 write enrichment、query expansion、reranking 三种 intervention 的等预算收益，回答“应该把计算花在写入、查询还是读取阶段”。
+目前最重要的缺口是自然语料、多种嵌入模型、不同查询分布，以及检索收益能否传导到最终回答或行动。一个更有判别力的实验是：在同一份记忆语料和查询上，用相同计算预算比较 **写入增强、查询扩展、重排** 三种方案，直接回答“计算预算应该花在写入、查询还是读取阶段”。
 
 ## 谱系位置
 
-`map_delta=early_signal`，绑定 `memory-component-attribution`。它增加了可控的 write-side intervention coordinate，但还不足以修改持久记忆主干；真正的 durable shift 需要证明 write representation 对跨任务、跨模型的长期 utility 有稳定增益。
+`map_delta=early_signal`，对应 `memory-component-attribution`。它增加了一个可控的写入侧干预坐标，但还不足以改变长期记忆评测的主干；更强的证据需要证明写入表征能在跨任务、跨模型条件下稳定改善长期任务效用。
