@@ -1,0 +1,24 @@
+{
+  "benchmark_id": "spider-2",
+  "tracking_status": "live",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "official-spider2-snow",
+      "primary": true,
+      "label": { "zh": "Spider 2.0-Snow 官方榜", "en": "Official Spider 2.0-Snow leaderboard" },
+      "task": "Enterprise text-to-SQL on Snowflake",
+      "split": "Spider 2.0-Snow · 547 examples",
+      "protocol_version": "official-snow-leaderboard-snapshot-2026-09-02; excludes oracle-table -* settings",
+      "metric": { "id": "official-score", "family": "success-rate", "label": "Official Score", "unit": "%", "direction": "higher", "range": [0, 100] },
+      "entries": [
+        { "id": "genloop-sentinel-v2-pro", "method": "Genloop's Sentinel Agent v2 Pro", "score": 96.70, "date": "2026-09-02", "source": "https://spider2-sql.github.io/" },
+        { "id": "native-mini", "method": "Native mini", "score": 96.53, "date": "2026-09-02", "source": "https://spider2-sql.github.io/" },
+        { "id": "quvi3-gemini3pro", "method": "QUVI-3 + Gemini-3-pro-preview", "score": 94.15, "date": "2026-09-02", "source": "https://spider2-sql.github.io/" },
+        { "id": "tcdataagent-contextual-scaling", "method": "TCDataAgent-SQL with Contextual Scaling Engine", "score": 93.97, "date": "2026-09-02", "source": "https://spider2-sql.github.io/" },
+        { "id": "prism-deepthink-sonnet45", "method": "Prism Swarm with Deepthink + Claude-Sonnet-4.5", "score": 90.49, "date": "2026-09-02", "source": "https://spider2-sql.github.io/" },
+        { "id": "genloop-sentinel-v2", "method": "Genloop's Sentinel Agent v2", "score": 88.48, "date": "2026-09-02", "source": "https://spider2-sql.github.io/" }
+      ]
+    }
+  ]
+}
