@@ -1,0 +1,26 @@
+{
+  "benchmark_id": "locomo",
+  "tracking_status": "verified-snapshot",
+  "verified_at": "2026-09-02",
+  "tracks": [
+    {
+      "track_id": "hindsight-author-snapshot-overall-no-adversarial",
+      "primary": true,
+      "label": {"zh": "LoCoMo Overall · 不含 Adversarial", "en": "LoCoMo overall · adversarial excluded"},
+      "task": "Long-conversation memory QA across single-hop, multi-hop, open-domain, and temporal categories",
+      "split": "author-maintained LoCoMo comparison snapshot; adversarial category excluded",
+      "protocol_version": "hindsight-benchmarks-snapshot-55c51f1-no-adversarial",
+      "metric": {"id": "overall-accuracy", "family": "task-success", "label": "Overall accuracy", "unit": "%", "direction": "higher", "range": [0, 100]},
+      "entries": [
+        {"id": "backboard", "method": "Backboard", "score": 90.00, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "hindsight-gemini3", "method": "Hindsight · Gemini-3", "score": 89.61, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "hindsight-oss120b", "method": "Hindsight · OSS-120B", "score": 85.67, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "hindsight-oss20b", "method": "Hindsight · OSS-20B", "score": 83.18, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "memobase-0037", "method": "Memobase · v0.0.37", "score": 75.78, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "zep", "method": "Zep", "score": 75.14, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "mem0-graph", "method": "Mem0-Graph", "score": 68.44, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"},
+        {"id": "mem0", "method": "Mem0", "score": 66.88, "date": "2026-09-02", "source": "https://github.com/vectorize-io/hindsight-benchmarks/blob/55c51f1d6e2477ee69c0a730a80b96a1596ff475/README.md"}
+      ]
+    }
+  ]
+}
