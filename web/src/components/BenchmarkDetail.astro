@@ -1,6 +1,7 @@
 ---
 import ResultsPanel from "./ResultsPanel.astro";
 
+import { localizeChineseHtml, localizeChineseProse, localizeTechnicalToken } from "../lib/chinese-localization.mjs";
 import { copyFor } from "../lib/i18n.mjs";
 import { summarizeTrack } from "../lib/results.mjs";
 import { displayToken, localePath, REPOSITORY_URL, sitePath } from "../lib/site.mjs";
@@ -22,8 +23,9 @@ const { lang, item, summary, research, resultSet, deepRead, genealogy, recipes, 
 const copy = copyFor(lang);
 const citationCount = item.citations?.status === "ok" ? item.citations.count : undefined;
 const sources = Object.entries(item.artifacts || {}).filter(([, value]) => Boolean(value));
-const measurementText = item.measurement_strength;
+const measurementText = localizeChineseProse(item.measurement_strength, lang);
 const sourceLabel = (key: string) => copy.artifacts[key] || displayToken(key);
+const tokenLabel = (value: string) => localizeTechnicalToken(value, lang, displayToken);
 const stageIndex = genealogy?.stages.findIndex((stage: any) => stage.benchmarks.includes(item.id)) ?? -1;
 const primaryTrack = resultSet ? (resultSet.tracks.find((track: any) => track.primary) || resultSet.tracks[0]) : undefined;
 const primarySummary = primaryTrack ? summarizeTrack(primaryTrack) : undefined;
@@ -34,24 +36,32 @@ const labels = lang === "zh" ? {
   noScore: "尚未整理成可比结果",
   noHeadroom: "尚无可靠统一上限",
   supports: "这个分数支持什么判断",
-  setup: "Evaluation setup",
+  setup: "评测设置",
   contract: "公平比较条件",
   target: "测量对象",
   next: "下一步最值得验证",
   deep: "研究解读",
-  deepIntro: "再往下看决定性证据、限制、比较条件和谱系位置。",
-  fallbackDeep: "Canonical evidence brief",
-  fallbackDeepIntro: "以下内容直接由已验证的 canonical record 生成。",
+  deepIntro: "继续查看决定性证据、限制、比较条件和谱系位置。",
+  fallbackDeep: "规范证据摘要",
+  fallbackDeepIntro: "以下内容直接由已核验的规范记录生成。",
   resultsUnavailable: "当前没有规范化的可比结果轨道",
-  resultsUnavailableBody: "主论文或官方 leaderboard 的结果尚未整理成可跨系统比较的统一轨道。这里不补造排行榜；需要具体数字时请查看 primary source。",
-  genealogy: "Benchmark 谱系",
+  resultsUnavailableBody: "主论文或官方排行榜的结果尚未整理成可跨系统比较的统一轨道。这里不补造排行榜；需要具体数字时请查看一手来源。",
+  genealogy: "基准谱系",
   genealogyIntro: "它位于这条评测演进路线的什么位置。",
   recipes: "常见评测组合",
-  recipesIntro: "单个 benchmark 测一个坐标；组合评测覆盖更完整的 research claim。",
+  recipesIntro: "单个基准只覆盖一个评测坐标；组合评测可以支撑更完整的研究主张。",
   core: "核心评测",
   complement: "补充评测",
   verified: "最后核验",
-  citations: "引用上下文",
+  citations: "引用",
+  resultsEyebrow: "成绩",
+  supportEyebrow: "结论边界",
+  comparisonEyebrow: "比较条件",
+  nextEyebrow: "下一验证坐标",
+  evidenceEyebrow: "证据摘要",
+  evolutionEyebrow: "演化位置",
+  suitesEyebrow: "评测组合",
+  sourcesEyebrow: "来源",
 } : {
   why: "Why it matters",
   currentBest: "Current best",
@@ -77,6 +87,14 @@ const labels = lang === "zh" ? {
   complement: "Complement",
   verified: "Last verified",
   citations: "Citation context",
+  resultsEyebrow: "Results",
+  supportEyebrow: "Claim support",
+  comparisonEyebrow: "Comparison contract",
+  nextEyebrow: "Next coordinate",
+  evidenceEyebrow: "Evidence brief",
+  evolutionEyebrow: "Evolution map",
+  suitesEyebrow: "Evaluation suites",
+  sourcesEyebrow: "Sources",
 };
 ---
 
@@ -95,11 +113,11 @@ const labels = lang === "zh" ? {
         <time datetime={item.released}>{item.released}</time>
       </div>
       <h1>{item.name}</h1>
-      <p>{summary}</p>
+      <p>{localizeChineseProse(summary, lang)}</p>
       <div class="detail-hero__actions">{sources.slice(0, 3).map(([key, url]) => <a class="button button--secondary" href={url as string} rel="noreferrer">{sourceLabel(key)} <span aria-hidden="true">↗</span></a>)}</div>
     </div>
 
-    <div class="benchmark-at-a-glance" aria-label={lang === "zh" ? "Benchmark 快速判断" : "Benchmark at a glance"}>
+    <div class="benchmark-at-a-glance" aria-label={lang === "zh" ? "基准快速判断" : "Benchmark at a glance"}>
       <section class="benchmark-glance__why">
         <span>{labels.why}</span>
         <p>{measurementText}</p>
@@ -110,7 +128,7 @@ const labels = lang === "zh" ? {
       </section>
       <section>
         <span>{labels.headroom}</span>
-        {primarySummary?.headroom !== undefined ? <><strong>{primarySummary.headroom}<small>%</small></strong><p>{lang === "zh" ? "相对来源核验的 reference target" : "to a source-backed reference target"}</p></> : <p class="benchmark-glance__empty">{labels.noHeadroom}</p>}
+        {primarySummary?.headroom !== undefined ? <><strong>{primarySummary.headroom}<small>%</small></strong><p>{lang === "zh" ? "相对已核验的参考目标" : "to a source-backed reference target"}</p></> : <p class="benchmark-glance__empty">{labels.noHeadroom}</p>}
       </section>
       <section>
         <span>{labels.verified}</span>
@@ -121,68 +139,68 @@ const labels = lang === "zh" ? {
   </header>
 
   {resultSet ? <ResultsPanel {lang} {resultSet} /> : <section class="deep-read result-gap compact-result-gap" aria-label={labels.resultsUnavailable}>
-    <header><div><p class="eyebrow">Results</p><h2>{labels.resultsUnavailable}</h2></div><p>{labels.resultsUnavailableBody}</p></header>
+    <header><div><p class="eyebrow">{labels.resultsEyebrow}</p><h2>{labels.resultsUnavailable}</h2></div><p>{labels.resultsUnavailableBody}</p></header>
   </section>}
 
-  <section class="benchmark-brief-grid" aria-label={lang === "zh" ? "Benchmark 评测摘要" : "Benchmark evaluation brief"}>
+  <section class="benchmark-brief-grid" aria-label={lang === "zh" ? "基准评测摘要" : "Benchmark evaluation brief"}>
     <article class="benchmark-brief-card benchmark-brief-card--wide">
-      <p class="eyebrow">Claim support</p>
+      <p class="eyebrow">{labels.supportEyebrow}</p>
       <h2>{labels.supports}</h2>
-      <p>{research.scoreSupports}</p>
+      <p>{localizeChineseProse(research.scoreSupports, lang)}</p>
     </article>
 
     <article class="benchmark-brief-card benchmark-setup-card">
       <p class="eyebrow">{labels.setup}</p>
       <h2>{lang === "zh" ? "它到底怎么测" : "What is actually evaluated"}</h2>
       <dl class="benchmark-setup-list">
-        <div><dt>{labels.target}</dt><dd>{localize(research.evaluation_contract.target, lang)}</dd></div>
-        <div><dt>{copy.detail.scale}</dt><dd>{research.evaluation_contract.scale}</dd></div>
-        <div><dt>{copy.detail.capabilities}</dt><dd>{(item.capabilities || []).map(displayToken).join(" · ")}</dd></div>
-        <div><dt>{copy.detail.environments}</dt><dd>{(research.evaluation_contract.environment || []).map(displayToken).join(" · ")}</dd></div>
-        <div><dt>{copy.detail.protocols}</dt><dd>{(research.evaluation_contract.protocol || []).map(displayToken).join(" · ")}</dd></div>
+        <div><dt>{labels.target}</dt><dd>{localizeChineseProse(localize(research.evaluation_contract.target, lang), lang)}</dd></div>
+        <div><dt>{copy.detail.scale}</dt><dd>{localizeChineseProse(research.evaluation_contract.scale, lang)}</dd></div>
+        <div><dt>{copy.detail.capabilities}</dt><dd>{(item.capabilities || []).map(tokenLabel).join(" · ")}</dd></div>
+        <div><dt>{copy.detail.environments}</dt><dd>{(research.evaluation_contract.environment || []).map(tokenLabel).join(" · ")}</dd></div>
+        <div><dt>{copy.detail.protocols}</dt><dd>{(research.evaluation_contract.protocol || []).map(tokenLabel).join(" · ")}</dd></div>
       </dl>
     </article>
 
     <article class="benchmark-brief-card benchmark-comparison-card">
-      <p class="eyebrow">Comparison contract</p>
+      <p class="eyebrow">{labels.comparisonEyebrow}</p>
       <h2>{labels.contract}</h2>
-      <ol>{research.comparisonControls.map((control: string) => <li>{control}</li>)}</ol>
+      <ol>{research.comparisonControls.map((control: string) => <li>{localizeChineseProse(control, lang)}</li>)}</ol>
     </article>
 
     <article class="benchmark-brief-card benchmark-next-card">
-      <p class="eyebrow">Next coordinate</p>
+      <p class="eyebrow">{labels.nextEyebrow}</p>
       <h2>{labels.next}</h2>
-      <p>{research.nextValidation}</p>
+      <p>{localizeChineseProse(research.nextValidation, lang)}</p>
     </article>
   </section>
 
   {deepRead && <section class="deep-read deep-read--research" aria-labelledby="deep-read-heading">
-    <header><div><p class="eyebrow">Evidence brief</p><h2 id="deep-read-heading">{labels.deep}</h2></div><p>{labels.deepIntro}</p></header>
-    <div class="deep-read__content" set:html={deepRead.html}></div>
+    <header><div><p class="eyebrow">{labels.evidenceEyebrow}</p><h2 id="deep-read-heading">{labels.deep}</h2></div><p>{labels.deepIntro}</p></header>
+    <div class="deep-read__content" set:html={localizeChineseHtml(deepRead.html, lang)}></div>
   </section>}
 
   {!deepRead && <section class="deep-read deep-read--research" aria-labelledby="canonical-evidence-heading">
-    <header><div><p class="eyebrow">Evidence brief</p><h2 id="canonical-evidence-heading">{labels.fallbackDeep}</h2></div><p>{labels.fallbackDeepIntro}</p></header>
-    <div class="deep-read__content"><p>{research.evidenceBrief}</p></div>
+    <header><div><p class="eyebrow">{labels.evidenceEyebrow}</p><h2 id="canonical-evidence-heading">{labels.fallbackDeep}</h2></div><p>{labels.fallbackDeepIntro}</p></header>
+    <div class="deep-read__content"><p>{localizeChineseProse(research.evidenceBrief, lang)}</p></div>
   </section>}
 
   {genealogy && <section class="genealogy-panel genealogy-panel--compact">
-    <header><div><p class="eyebrow">Evolution map</p><h2>{labels.genealogy}</h2></div><p>{labels.genealogyIntro}</p></header>
+    <header><div><p class="eyebrow">{labels.evolutionEyebrow}</p><h2>{labels.genealogy}</h2></div><p>{labels.genealogyIntro}</p></header>
     <div class="genealogy-rail">
       {genealogy.stages.map((stage: any, index: number) => <article class={index === stageIndex ? "is-current" : undefined}>
-        <span>{String(index + 1).padStart(2, "0")}</span><h3>{localize(stage.label, lang)}</h3>
+        <span>{String(index + 1).padStart(2, "0")}</span><h3>{localizeChineseProse(localize(stage.label, lang), lang)}</h3>
         <div>{stage.benchmarks.slice(0, 5).map((id: string) => { const related = benchmarkById.get(id); return related && <a class={id === item.id ? "is-active" : undefined} href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{related.name}</a>; })}</div>
       </article>)}
     </div>
   </section>}
 
   {recipes.length > 0 && <section class="related-recipes related-recipes--compact">
-    <header><div><p class="eyebrow">Evaluation suites</p><h2>{labels.recipes}</h2></div><p>{labels.recipesIntro}</p></header>
-    <div>{recipes.slice(0, 3).map((recipe: any) => <a href={sitePath(localePath(lang, `evaluate/?recipe=${recipe.id}`))}><span>{copy.areas[recipe.area].label}</span><h3>{localize(recipe.claim, lang)}</h3><p>{recipe.core.includes(item.id) ? labels.core : labels.complement} · {recipe.core.length + recipe.complement.length} benchmarks</p><b>↗</b></a>)}</div>
+    <header><div><p class="eyebrow">{labels.suitesEyebrow}</p><h2>{labels.recipes}</h2></div><p>{labels.recipesIntro}</p></header>
+    <div>{recipes.slice(0, 3).map((recipe: any) => <a href={sitePath(localePath(lang, `evaluate/?recipe=${recipe.id}`))}><span>{copy.areas[recipe.area].label}</span><h3>{localizeChineseProse(localize(recipe.claim, lang), lang)}</h3><p>{recipe.core.includes(item.id) ? labels.core : labels.complement} · {recipe.core.length + recipe.complement.length} {lang === "zh" ? "个基准" : "benchmarks"}</p><b>↗</b></a>)}</div>
   </section>}
 
   <section class="detail-section detail-section--sources detail-sources-v2 detail-sources--compact">
-    <p class="eyebrow">Sources</p><h2>{copy.detail.sources}</h2>
+    <p class="eyebrow">{labels.sourcesEyebrow}</p><h2>{copy.detail.sources}</h2>
     <ul class="source-list">{sources.map(([key, url]) => <li><a href={url as string} rel="noreferrer"><span>{sourceLabel(key)}</span><span aria-hidden="true">↗</span></a></li>)}{item.citations?.url && <li><a href={item.citations.url} rel="noreferrer"><span>Semantic Scholar</span><span aria-hidden="true">↗</span></a></li>}</ul>
   </section>
 

@@ -20,12 +20,13 @@ test("sitePath prefixes the GitHub project base exactly once", () => {
   );
 });
 
-test("locales expose symmetric positive navigation copy", () => {
+test("locales expose semantically aligned, natural navigation copy", () => {
   assert.deepEqual(LOCALES, ["zh", "en"]);
-  assert.equal(copyFor("zh").nav.benchmarks, "Benchmarks");
+  assert.equal(copyFor("zh").nav.benchmarks, "筛选基准");
   assert.equal(copyFor("en").nav.benchmarks, "Benchmarks");
   assert.equal(copyFor("zh").nav.opportunities, "评测机会");
   assert.equal(copyFor("en").nav.opportunities, "Opportunities");
+  assert.notEqual(copyFor("zh").nav.benchmarks, copyFor("en").nav.benchmarks);
   assert.throws(() => copyFor("fr"), /Unsupported locale/);
 });
 

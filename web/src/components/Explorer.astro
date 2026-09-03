@@ -30,7 +30,7 @@ const sorted = sortBenchmarks(items, "newest");
           <span>{copy.filters.results}</span>
         </p>
         <span class="results-toolbar__line" aria-hidden="true"></span>
-        <span class="results-toolbar__mode">{lang === "zh" ? "Benchmark Registry · 来源核验" : "Benchmark Registry · source verified"}</span>
+        <span class="results-toolbar__mode">{lang === "zh" ? "基准目录 · 来源已核验" : "Benchmark Registry · source verified"}</span>
       </div>
       <div class="benchmark-grid" data-result-grid>
         {sorted.map((item) => (

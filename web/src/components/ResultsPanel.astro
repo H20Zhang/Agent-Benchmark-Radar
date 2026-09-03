@@ -1,4 +1,5 @@
 ---
+import { localizeChineseProse } from "../lib/chinese-localization.mjs";
 import { localize } from "../lib/research-model.mjs";
 import { summarizeTrack } from "../lib/results.mjs";
 
@@ -9,12 +10,12 @@ interface Props {
 
 const { lang, resultSet } = Astro.props;
 const labels = lang === "zh" ? {
-  eyebrow: "Measured progress",
+  eyebrow: "成绩进展",
   title: "当前方法做到什么程度",
   verified: "最后核验",
   task: "任务",
   split: "数据切分",
-  protocol: "协议",
+  protocol: "评测协议",
   method: "方法 / 系统",
   score: "分数",
   date: "结果日期",
@@ -41,9 +42,19 @@ const labels = lang === "zh" ? {
   higher: "Higher is better",
   lower: "Lower is better",
 };
-const statusLabel = resultSet.tracking_status === "live"
-  ? (lang === "zh" ? "动态追踪" : "Live tracking")
-  : (lang === "zh" ? "来源快照" : "Source snapshot");
+const zhTrackingLabels: Record<string, string> = {
+  live: "动态追踪",
+  "paper-snapshot": "论文快照",
+  "verified-snapshot": "核验快照",
+};
+const enTrackingLabels: Record<string, string> = {
+  live: "Live tracking",
+  "paper-snapshot": "Paper snapshot",
+  "verified-snapshot": "Verified snapshot",
+};
+const statusLabel = lang === "zh"
+  ? (zhTrackingLabels[resultSet.tracking_status] || "来源快照")
+  : (enTrackingLabels[resultSet.tracking_status] || "Source snapshot");
 ---
 
 <section id="results" class="results-panel" aria-labelledby="results-heading">
@@ -67,8 +78,8 @@ const statusLabel = resultSet.tracking_status === "live"
           </header>
 
           <dl class="result-contract">
-            <div><dt>{labels.task}</dt><dd>{track.task}</dd></div>
-            <div><dt>{labels.split}</dt><dd>{track.split}</dd></div>
+            <div><dt>{labels.task}</dt><dd>{localizeChineseProse(track.task, lang)}</dd></div>
+            <div><dt>{labels.split}</dt><dd>{localizeChineseProse(track.split, lang)}</dd></div>
             <div><dt>{labels.protocol}</dt><dd>{track.protocol_version}</dd></div>
             <div><dt>{labels.direction}</dt><dd>{metric.direction === "higher" ? labels.higher : labels.lower}</dd></div>
           </dl>

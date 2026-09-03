@@ -38,7 +38,7 @@ const canonicalPath = localePath(lang);
 const alternatePath = localePath(lang === "zh" ? "en" : "zh");
 const title = lang === "zh" ? "Agent Benchmark Radar｜筛选、时间轴、评测组合与当前成绩" : "Agent Benchmark Radar | Browse, Timeline, Suites, and Current Scores";
 const description = lang === "zh"
-  ? "用于筛选 Agent Benchmark、查看发布时间轴、打开 benchmark 详情、组合常见评测，并追踪当前最好成绩与剩余参考空间。"
+  ? "用于筛选 Agent 基准、查看发布时间轴、打开基准详情、组合常见评测，并追踪当前最好成绩与剩余参考空间。"
   : "Browse agent benchmarks, inspect the release timeline, open benchmark details, reuse common evaluation suites, and track current best scores with source-backed headroom.";
 const jsonLd = {
   "@context": "https://schema.org",
@@ -81,16 +81,16 @@ const trackingLabel = (status: string) => trackingLabels[status] || status;
   <main id="main-content">
     <section class="tool-home-hero shell">
       <p class="eyebrow">Agent Benchmark Radar</p>
-      <h1>{lang === "zh" ? "一个用来选 Benchmark、看进展的研究工具" : "A research tool for choosing benchmarks and tracking progress"}</h1>
+      <h1>{lang === "zh" ? "一个用来选基准、看进展的研究工具" : "A research tool for choosing benchmarks and tracking progress"}</h1>
       <p>{description}</p>
       <div class="tool-home-actions">
-        <a class="button button--primary" href={sitePath(localePath(lang, "benchmarks/"))}>{lang === "zh" ? "筛选 Benchmark" : "Browse benchmarks"} ↗</a>
+        <a class="button button--primary" href={sitePath(localePath(lang, "benchmarks/"))}>{lang === "zh" ? "筛选基准" : "Browse benchmarks"} ↗</a>
         <a class="button button--secondary" href="#timeline">{lang === "zh" ? "看时间轴" : "View timeline"}</a>
         <a class="button button--secondary" href={sitePath(localePath(lang, "evaluate/"))}>{lang === "zh" ? "常见评测组合" : "Common suites"}</a>
         <a class="button button--secondary" href="#results">{lang === "zh" ? "看当前成绩" : "Current scores"}</a>
       </div>
       <dl class="tool-home-stats">
-        <div><dt>Benchmarks</dt><dd>{items.length}</dd></div>
+        <div><dt>{lang === "zh" ? "基准总数" : "Benchmarks"}</dt><dd>{items.length}</dd></div>
         <div><dt>{lang === "zh" ? "已有结构化成绩" : "Tracked results"}</dt><dd>{resultSets.size}</dd></div>
         <div><dt>{lang === "zh" ? "最近核验" : "Last verified"}</dt><dd>{latestVerified}</dd></div>
       </dl>
@@ -98,8 +98,8 @@ const trackingLabel = (status: string) => trackingLabels[status] || status;
 
     <section class="home-section shell" id="timeline" aria-labelledby="timeline-title">
       <div class="tool-section-heading">
-        <div><p class="eyebrow">Timeline</p><h2 id="timeline-title">{lang === "zh" ? "最新 Benchmark 时间轴" : "Latest benchmark timeline"}</h2></div>
-        <p>{lang === "zh" ? "按 benchmark 的 canonical release time 排序。点开任意条目直接进入详情页。" : "Ordered by canonical benchmark release time. Open any item for its detail page."}</p>
+        <div><p class="eyebrow">{lang === "zh" ? "时间轴" : "Timeline"}</p><h2 id="timeline-title">{lang === "zh" ? "最新基准时间轴" : "Latest benchmark timeline"}</h2></div>
+        <p>{lang === "zh" ? "按基准的规范发布时间排序。点开任意条目直接进入详情页。" : "Ordered by canonical benchmark release time. Open any item for its detail page."}</p>
       </div>
       <div class="benchmark-timeline">
         {timelineItems.map((item: any) => (
@@ -117,14 +117,14 @@ const trackingLabel = (status: string) => trackingLabels[status] || status;
           </article>
         ))}
       </div>
-      <p class="tool-section-more"><a href={sitePath(localePath(lang, "benchmarks/?sort=newest"))}>{lang === "zh" ? "查看全部 Benchmark" : "View all benchmarks"} ↗</a></p>
+      <p class="tool-section-more"><a href={sitePath(localePath(lang, "benchmarks/?sort=newest"))}>{lang === "zh" ? "查看全部基准" : "View all benchmarks"} ↗</a></p>
     </section>
 
     <section class="home-section home-results-section" id="results" aria-labelledby="results-title">
       <div class="shell">
         <div class="tool-section-heading">
-          <div><p class="eyebrow">Current scores</p><h2 id="results-title">{lang === "zh" ? "常见与最新 Benchmark 目前刷到多少" : "How far common and recent benchmarks have been pushed"}</h2></div>
-          <p>{lang === "zh" ? "只展示已绑定 task、split、protocol、metric 与一手来源的结果；只有存在可靠 reference target 时才显示 headroom。" : "Only source-backed tracks with explicit task, split, protocol, and metric are shown. Headroom appears only when a reliable reference target exists."}</p>
+          <div><p class="eyebrow">{lang === "zh" ? "当前成绩" : "Current scores"}</p><h2 id="results-title">{lang === "zh" ? "常见与最新基准目前刷到多少" : "How far common and recent benchmarks have been pushed"}</h2></div>
+          <p>{lang === "zh" ? "只展示已绑定任务、数据切分、评测协议、指标与一手来源的结果；只有存在可靠参考目标时才显示剩余空间。" : "Only source-backed tracks with explicit task, split, protocol, and metric are shown. Headroom appears only when a reliable reference target exists."}</p>
         </div>
         <div class="tool-result-table" role="list">
           {resultHighlights.map(({ item, resultSet, track, summary }: any) => (
@@ -142,15 +142,15 @@ const trackingLabel = (status: string) => trackingLabels[status] || status;
 
     <section class="home-section shell" id="suites" aria-labelledby="suite-title">
       <div class="tool-section-heading">
-        <div><p class="eyebrow">Evaluation suites</p><h2 id="suite-title">{lang === "zh" ? "常见评测组合" : "Common evaluation suites"}</h2></div>
-        <p>{lang === "zh" ? "按 research claim 组合 Core + Complement，而不是随便堆 benchmark。" : "Combine Core + Complement benchmarks around a research claim rather than stacking unrelated scores."}</p>
+        <div><p class="eyebrow">{lang === "zh" ? "评测组合" : "Evaluation suites"}</p><h2 id="suite-title">{lang === "zh" ? "常见评测组合" : "Common evaluation suites"}</h2></div>
+        <p>{lang === "zh" ? "围绕研究主张组合核心评测与补充评测，而不是简单堆叠互不相关的基准。" : "Combine Core + Complement benchmarks around a research claim rather than stacking unrelated scores."}</p>
       </div>
       <div class="tool-suite-grid">
         {suiteHighlights.map((recipe: any) => (
           <a href={sitePath(localePath(lang, `evaluate/?recipe=${recipe.id}`))} data-area={recipe.area}>
             <span>{copy.areas[recipe.area].label}</span>
             <h3>{localize(recipe.claim, lang)}</h3>
-            <p>{recipe.core.length} Core · {recipe.complement.length} Complement</p>
+            <p>{lang === "zh" ? `${recipe.core.length} 个核心 · ${recipe.complement.length} 个补充` : `${recipe.core.length} Core · ${recipe.complement.length} Complement`}</p>
             <strong>{lang === "zh" ? "打开组合" : "Open suite"} ↗</strong>
           </a>
         ))}
@@ -159,10 +159,10 @@ const trackingLabel = (status: string) => trackingLabels[status] || status;
     </section>
 
     <section class="area-links shell area-links--compact" aria-labelledby="area-title">
-      <div class="tool-section-heading"><div><p class="eyebrow">Research areas</p><h2 id="area-title">{lang === "zh" ? "按研究方向进入" : "Browse by research area"}</h2></div></div>
+      <div class="tool-section-heading"><div><p class="eyebrow">{lang === "zh" ? "研究方向" : "Research areas"}</p><h2 id="area-title">{lang === "zh" ? "按研究方向进入" : "Browse by research area"}</h2></div></div>
       <div class="area-links__grid">
         {AREAS.map((area) => (
-          <a data-area={area} href={sitePath(localePath(lang, `areas/${area}/`))}><span>{copy.areas[area].label}</span><small>{items.filter((item) => item.area === area).length} benchmarks</small><b>↗</b></a>
+          <a data-area={area} href={sitePath(localePath(lang, `areas/${area}/`))}><span>{copy.areas[area].label}</span><small>{items.filter((item) => item.area === area).length} {lang === "zh" ? "个基准" : "benchmarks"}</small><b>↗</b></a>
         ))}
       </div>
     </section>
