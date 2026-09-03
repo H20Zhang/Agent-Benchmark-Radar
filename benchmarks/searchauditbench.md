@@ -1,25 +1,29 @@
-# SearchAuditBench：只看 final answer 无法知道 deep-search agent 为什么失败
+# SearchAuditBench：只看最终答案，无法知道深度搜索智能体为什么失败
 
-**中文** | [English](searchauditbench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](searchauditbench.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
 [论文](https://arxiv.org/abs/2608.05212) · [代码](https://github.com/lzzzx666/SearchAuditor)
 
 ## 它在测什么
 
-SearchAuditBench 收集 1,243 条 failed trajectories，来自 8 个 open-weight models 与 5 个 deep-search benchmarks，平均 73.1 messages、65.1K tokens。expert annotations 标出 critical step、六类 root cause 与可执行 repair，并评价 strict/loose localization、cause accuracy、diagnosis 与 repair pass rate。
+SearchAuditBench 收集了 1,243 条失败搜索轨迹，来自 8 个开放权重模型和 5 个深度搜索基准；每条轨迹平均包含 73.1 条消息和 65.1K tokens。专家为每个失败样例标注关键错误步骤、六类根因以及可执行的参考修复方案，并分别评估严格/宽松步骤定位、根因判断、完整诊断和修复通过率。
 
 ## 相比什么前进了
 
-大多数 benchmark 把失败压成 0 分。SearchAuditBench 把 post-hoc auditor 设为 evaluation object：能否找到最早关键错误、解释原因并给出足以让 trajectory 恢复的 repair。
+大多数搜索基准最终只告诉你一次运行“对还是错”，但无法回答错误最早在哪里形成。SearchAuditBench 把**事后轨迹审计**本身变成评测对象：审计器是否能在很长的搜索轨迹中找到关键错误、解释为什么错，并提出足以让后续执行恢复的修复方案。
 
-## 分数边界
+## 当前成绩说明了什么
 
-高 diagnosis/repair score 支持 auditor 在 failures-only mixture 上定位和修复错误；它不说明原始 search agent 更强，也不覆盖 proactive prevention。source-model、harness 与 benchmark mixture 会塑造 failure distribution。
+在固定 GPT-5.5 作为审计骨干时，最强基线的端到端 Fully-Passed Score（FPS）为 26.55%，SearchAuditor 提升到 32.26%；但它的严格关键步骤定位率也只有 44.89%。换成 Gemini 3.1 Pro 或 Claude Opus 4.8 后，SearchAuditor 的 FPS 分别为 18.91% 和 24.62%。这说明当前瓶颈既来自审计框架，也强烈受审计模型骨干影响，因此网站按 backbone 分轨，不把不同模型条件下的成绩混成一个排行榜。
+
+## 这个分数能证明什么
+
+较高的诊断或修复分数，可以支持“某个审计框架在这批失败轨迹上更擅长定位、归因和修复错误”。它不能说明原始搜索智能体本身更强，因为数据集只包含失败轨迹；也不能直接证明在线提前干预一定有效。来源模型、搜索 harness 和五个基准的混合比例都会塑造失败分布。
 
 ## 公平比较条件
 
-锁定 trajectory corpus、failure sampling、cause taxonomy、repair execution/judge 与 tolerance span。不能把不同 failure mixtures 的 auditor scores 直接排名。
+应固定轨迹语料、失败样本集合、根因分类体系、关键步骤容忍窗口、修复执行方式和判分器。比较审计方法时还必须固定审计骨干模型；不能把 GPT-5.5 + 某框架与 Gemini 3.1 Pro + 另一框架直接归因于框架差异。
 
 ## 下一步评测坐标
 
-下一步应将 auditor 在线接入 agent，测提前干预是否真正减少最终失败，而不是只在事后解释。
+下一步最有判别力的是把审计器在线接入搜索智能体：在检测到高置信度错误后立即干预，比较“继续原轨迹、从关键步骤恢复、完全重启”三种策略，测它是否真正减少最终失败，同时报告额外 token、延迟和工具调用成本。
