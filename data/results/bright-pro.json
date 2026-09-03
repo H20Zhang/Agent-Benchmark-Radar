@@ -1,0 +1,91 @@
+{
+  "benchmark_id": "bright-pro",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "paper-table-2-static-alpha-ndcg25-overall",
+      "primary": true,
+      "label": {"zh":"静态检索 · Overall α-nDCG@25","en":"Static retrieval · Overall α-nDCG@25"},
+      "task": {"zh":"单轮静态检索中覆盖互补的加权推理要点","en":"Cover complementary weighted reasoning aspects in single-shot static retrieval"},
+      "split": {"zh":"完整 Bright-Pro：739 个查询、7 个领域；论文 Table 2 Overall","en":"Full Bright-Pro: 739 queries across seven domains; paper Table 2 Overall"},
+      "protocol_version": "paper-table-2-static-alpha0.5-k25",
+      "metric": {"id":"alpha-ndcg25","family":"alpha-ndcg","label":"α-nDCG@25","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"bge-reasoner-8b","method":"BGE-Reasoner-8B","model":"BGE-Reasoner-8B","score":68.0,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"diver-4b-1020","method":"DIVER-4B-1020","model":"DIVER-Retriever-4B-1020","score":63.7,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"diver-4b","method":"DIVER-4B","model":"DIVER-Retriever-4B","score":59.9,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"rtriever-4b","method":"RTriever-4B","model":"RTriever-4B","score":55.3,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"inf-retriever-pro","method":"INF-Retriever-Pro","model":"INF-Retriever-v1-Pro","score":53.8,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"qwen3-8b","method":"Qwen3-8B","model":"Qwen3-Embedding-8B","score":49.5,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"instructor-xl","method":"INSTRUCTOR-XL","model":"INSTRUCTOR-XL","score":46.3,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"openai-embed-3l","method":"OpenAI-Embed-3L","model":"text-embedding-3-large","score":45.8,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"gte-7b","method":"GTE-7B","model":"GTE-Qwen2-7B-Instruct","score":45.5,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"gritlm-7b","method":"GritLM (7B)","model":"GritLM-7B","score":44.1,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"reasonir-8b","method":"ReasonIR-8B","model":"ReasonIR-8B","score":41.0,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"bm25","method":"BM25","model":"BM25","score":40.3,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"embeddinggemma-300m","method":"EmbeddingGemma-300M","model":"EmbeddingGemma-300M","score":39.4,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"}
+      ]
+    },
+    {
+      "track_id": "paper-table-3-fixed-round3-gpt5mini-overall",
+      "label": {"zh":"固定 3 轮智能体搜索 · GPT-5-mini · 最终回答 Overall","en":"Fixed 3-round agentic search · GPT-5-mini · final-answer Overall"},
+      "task": {"zh":"固定三轮搜索预算下，检索器作为智能体搜索工具时的最终回答质量","en":"Final answer quality when the retriever is used as the search tool under a fixed three-round budget"},
+      "split": {"zh":"固定 175 个查询（每领域 25 个）；每轮 top-5，第三轮累计 15 篇证据；论文 Table 3","en":"Fixed 175-query subset (25 per domain); top-5 per round, 15 cumulative passages after round 3; paper Table 3"},
+      "protocol_version": "paper-table-3-gpt5mini-fixed-r3-top5-gpt5-judge",
+      "metric": {"id":"overall-quality-r3","family":"llm-judge-quality","label":"Overall Quality","unit":"/5","direction":"higher","range":[1,5]},
+      "entries": [
+        {"id":"bge-reasoner-8b","method":"BGE-Reasoner-8B","model":"GPT-5-mini agent","score":4.31,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"diver-4b","method":"DIVER-4B","model":"GPT-5-mini agent","score":4.29,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"rtriever-4b","method":"RTriever-4B","model":"GPT-5-mini agent","score":4.25,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"gte-7b","method":"GTE-7B","model":"GPT-5-mini agent","score":4.23,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"diver-4b-1020","method":"DIVER-4B-1020","model":"GPT-5-mini agent","score":4.16,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"instructor-xl","method":"INSTRUCTOR-XL","model":"GPT-5-mini agent","score":4.14,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"bm25","method":"BM25","model":"GPT-5-mini agent","score":4.12,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"reasonir-8b","method":"ReasonIR-8B","model":"GPT-5-mini agent","score":4.11,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"qwen3-8b","method":"Qwen3-8B","model":"GPT-5-mini agent","score":4.10,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"gritlm-7b","method":"GritLM (7B)","model":"GPT-5-mini agent","score":4.07,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"}
+      ]
+    },
+    {
+      "track_id": "paper-table-4-adaptive-gpt5mini-aer",
+      "label": {"zh":"自适应轮次智能体搜索 · GPT-5-mini · AER","en":"Adaptive-round agentic search · GPT-5-mini · AER"},
+      "task": {"zh":"由智能体自行决定停止搜索，在回答质量与检索轮数之间评估效率—质量权衡","en":"Let the agent decide when to stop and evaluate the efficiency-quality trade-off between answer quality and retrieval rounds"},
+      "split": {"zh":"固定 175 个查询；GPT-5-mini 搜索智能体、GPT-5 judge；论文 Table 4","en":"Fixed 175-query subset; GPT-5-mini search agent and GPT-5 judge; paper Table 4"},
+      "protocol_version": "paper-table-4-adaptive-gpt5mini-gamma0.05-gpt5-judge",
+      "metric": {"id":"aer","family":"efficiency-quality","label":"AER","unit":"","direction":"higher","range":[0,5]},
+      "entries": [
+        {"id":"bge-reasoner-8b","method":"BGE-Reasoner-8B","model":"GPT-5-mini agent","score":3.65,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"diver-4b-1020","method":"DIVER-4B-1020","model":"GPT-5-mini agent","score":3.56,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"bm25","method":"BM25","model":"GPT-5-mini agent","score":3.53,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"diver-4b","method":"DIVER-4B","model":"GPT-5-mini agent","score":3.53,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"rtriever-4b","method":"RTriever-4B","model":"GPT-5-mini agent","score":3.51,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"qwen3-8b","method":"Qwen3-8B","model":"GPT-5-mini agent","score":3.50,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"gte-7b","method":"GTE-7B","model":"GPT-5-mini agent","score":3.44,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"gritlm-7b","method":"GritLM (7B)","model":"GPT-5-mini agent","score":3.36,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"reasonir-8b","method":"ReasonIR-8B","model":"GPT-5-mini agent","score":3.31,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"instructor-xl","method":"INSTRUCTOR-XL","model":"GPT-5-mini agent","score":3.26,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"}
+      ]
+    },
+    {
+      "track_id": "paper-table-4-adaptive-qwen35-aer",
+      "label": {"zh":"自适应轮次智能体搜索 · Qwen3.5-122B-A10B · AER","en":"Adaptive-round agentic search · Qwen3.5-122B-A10B · AER"},
+      "task": {"zh":"更换搜索智能体骨干后，在同一自适应停止协议下评估检索器的效率—质量权衡","en":"Evaluate retriever efficiency-quality trade-offs under the same adaptive stopping protocol with a different search-agent backbone"},
+      "split": {"zh":"固定 175 个查询；Qwen3.5-122B-A10B 搜索智能体、GPT-5 judge；论文 Table 4","en":"Fixed 175-query subset; Qwen3.5-122B-A10B search agent and GPT-5 judge; paper Table 4"},
+      "protocol_version": "paper-table-4-adaptive-qwen35-122b-a10b-gamma0.05-gpt5-judge",
+      "metric": {"id":"aer","family":"efficiency-quality","label":"AER","unit":"","direction":"higher","range":[0,5]},
+      "entries": [
+        {"id":"bge-reasoner-8b","method":"BGE-Reasoner-8B","model":"Qwen3.5-122B-A10B agent","score":3.44,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"rtriever-4b","method":"RTriever-4B","model":"Qwen3.5-122B-A10B agent","score":3.38,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"bm25","method":"BM25","model":"Qwen3.5-122B-A10B agent","score":3.31,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"diver-4b","method":"DIVER-4B","model":"Qwen3.5-122B-A10B agent","score":3.29,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"gte-7b","method":"GTE-7B","model":"Qwen3.5-122B-A10B agent","score":3.18,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"qwen3-8b","method":"Qwen3-8B","model":"Qwen3.5-122B-A10B agent","score":3.14,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"diver-4b-1020","method":"DIVER-4B-1020","model":"Qwen3.5-122B-A10B agent","score":3.11,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"gritlm-7b","method":"GritLM (7B)","model":"Qwen3.5-122B-A10B agent","score":3.08,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"reasonir-8b","method":"ReasonIR-8B","model":"Qwen3.5-122B-A10B agent","score":3.08,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"},
+        {"id":"instructor-xl","method":"INSTRUCTOR-XL","model":"Qwen3.5-122B-A10B agent","score":3.04,"date":"2026-05-05","source":"https://arxiv.org/abs/2605.04018"}
+      ]
+    }
+  ]
+}

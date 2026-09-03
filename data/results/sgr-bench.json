@@ -1,0 +1,70 @@
+{
+  "benchmark_id": "sgr-bench",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "paper-table-3-cli-overall-item-f1",
+      "primary": true,
+      "label": {"zh":"CLI 智能体系统 · Overall Item-F1","en":"CLI-based agent systems · Overall Item-F1"},
+      "task": {"zh":"发现专业数据网站、建立正确的站点检索状态，并输出完整结构化答案中的字段项","en":"Discover specialized data sites, establish the correct site-specific retrieval state, and recover answer items in the structured output"},
+      "split": {"zh":"SGR-Bench 全部 100 个专家任务；constraint-guided 与 goal-oriented 两种表述的 Overall；仅比较论文统一 CLI harness 下的 8 个系统","en":"All 100 expert SGR-Bench tasks; Overall across constraint-guided and goal-oriented formulations; only the eight systems evaluated under the paper's common CLI harness"},
+      "protocol_version": "paper-table-3-cli-common-harness-overall-item-f1",
+      "metric": {"id":"item-f1","family":"f1","label":"Item-F1","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"gpt-5-5","method":"GPT-5.5","model":"GPT-5.5","score":66.18,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"glm-5-1","method":"GLM-5.1","model":"GLM-5.1","score":65.64,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"claude-opus-4-7","method":"Claude Opus 4.7","model":"Claude Opus 4.7","score":61.38,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"deepseek-v4-pro","method":"DeepSeek V4 Pro","model":"DeepSeek V4 Pro","score":60.98,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"gemini-3-1-pro","method":"Gemini 3.1 Pro","model":"Gemini 3.1 Pro","score":59.06,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"kimi-k2-5","method":"Kimi K2.5","model":"Kimi K2.5","score":47.39,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"qwen3-6-plus","method":"Qwen3.6-Plus","model":"Qwen3.6-Plus","score":36.88,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"seed-2-0-pro","method":"Seed-2.0 Pro","model":"Seed-2.0 Pro","score":29.88,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"}
+      ]
+    },
+    {
+      "track_id": "paper-table-3-cli-overall-row-f1",
+      "label": {"zh":"CLI 智能体系统 · Overall Row-F1","en":"CLI-based agent systems · Overall Row-F1"},
+      "task": {"zh":"在正确检索状态下恢复整行结构化答案，而不只是局部字段值","en":"Recover complete structured answer rows under the correct retrieval state rather than only locally correct field values"},
+      "split": {"zh":"SGR-Bench 全部 100 个专家任务；仅比较统一 CLI harness 下的 8 个系统","en":"All 100 expert SGR-Bench tasks; only the eight systems evaluated under the common CLI harness"},
+      "protocol_version": "paper-table-3-cli-common-harness-overall-row-f1",
+      "metric": {"id":"row-f1","family":"f1","label":"Row-F1","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"gpt-5-5","method":"GPT-5.5","model":"GPT-5.5","score":43.37,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"claude-opus-4-7","method":"Claude Opus 4.7","model":"Claude Opus 4.7","score":38.51,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"kimi-k2-5","method":"Kimi K2.5","model":"Kimi K2.5","score":33.74,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"glm-5-1","method":"GLM-5.1","model":"GLM-5.1","score":33.32,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"deepseek-v4-pro","method":"DeepSeek V4 Pro","model":"DeepSeek V4 Pro","score":32.64,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"gemini-3-1-pro","method":"Gemini 3.1 Pro","model":"Gemini 3.1 Pro","score":27.11,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"seed-2-0-pro","method":"Seed-2.0 Pro","model":"Seed-2.0 Pro","score":20.45,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"qwen3-6-plus","method":"Qwen3.6-Plus","model":"Qwen3.6-Plus","score":11.62,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"}
+      ]
+    },
+    {
+      "track_id": "paper-table-3-commercial-overall-item-f1",
+      "label": {"zh":"商业搜索智能体 · Overall Item-F1","en":"Commercial search-agent products · Overall Item-F1"},
+      "task": {"zh":"商业搜索/深度研究产品在相同 SGR-Bench 任务上的字段项恢复能力","en":"Answer-item recovery by commercial search/deep-research products on the same SGR-Bench tasks"},
+      "split": {"zh":"SGR-Bench 全部 100 个专家任务；商业产品单独成轨，不与 CLI harness 直接混排","en":"All 100 expert SGR-Bench tasks; commercial products are kept on a separate track rather than directly mixed with the CLI harness"},
+      "protocol_version": "paper-table-3-commercial-product-overall-item-f1",
+      "metric": {"id":"item-f1","family":"f1","label":"Item-F1","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"openai-deep-research","method":"OpenAI Deep Research","model":"OpenAI Deep Research","score":54.20,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"gemini-deep-research","method":"Gemini Deep Research","model":"Gemini Deep Research","score":29.93,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"google-search-ai-mode","method":"Google Search AI Mode","model":"Google Search AI Mode","score":14.87,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"}
+      ]
+    },
+    {
+      "track_id": "paper-table-3-commercial-overall-row-f1",
+      "label": {"zh":"商业搜索智能体 · Overall Row-F1","en":"Commercial search-agent products · Overall Row-F1"},
+      "task": {"zh":"商业搜索/深度研究产品恢复完整结构化答案行的能力","en":"Complete-row recovery by commercial search/deep-research products"},
+      "split": {"zh":"SGR-Bench 全部 100 个专家任务；商业产品单独成轨","en":"All 100 expert SGR-Bench tasks; commercial products kept on their own track"},
+      "protocol_version": "paper-table-3-commercial-product-overall-row-f1",
+      "metric": {"id":"row-f1","family":"f1","label":"Row-F1","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"openai-deep-research","method":"OpenAI Deep Research","model":"OpenAI Deep Research","score":41.50,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"gemini-deep-research","method":"Gemini Deep Research","model":"Gemini Deep Research","score":10.27,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"},
+        {"id":"google-search-ai-mode","method":"Google Search AI Mode","model":"Google Search AI Mode","score":2.36,"date":"2026-05-21","source":"https://arxiv.org/abs/2605.22219"}
+      ]
+    }
+  ]
+}
