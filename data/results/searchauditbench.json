@@ -1,0 +1,68 @@
+{
+  "benchmark_id": "searchauditbench",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "paper-table-2-gpt55-fps",
+      "primary": true,
+      "label": {"zh":"GPT-5.5 审计骨干 · 端到端 FPS","en":"GPT-5.5 auditor backbone · end-to-end FPS"},
+      "task": {"zh":"在失败搜索轨迹中同时正确定位/诊断关键错误，并给出完全通过专家 rubric 的修复方案","en":"Both soundly diagnose the critical failure in a failed search trajectory and produce a repair that fully passes the expert-written rubrics"},
+      "split": {"zh":"SearchAuditBench 全部 1,243 条失败轨迹；固定 GPT-5.5 作为 auditor backbone；论文 Table 2","en":"All 1,243 failed SearchAuditBench trajectories; GPT-5.5 fixed as the auditor backbone; paper Table 2"},
+      "protocol_version": "paper-table-2-gpt55-backbone-fps",
+      "metric": {"id":"fps","family":"pass-rate","label":"Fully-Passed Score (FPS)","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"all-at-once","method":"All-at-Once","model":"GPT-5.5","score":26.55,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"step-by-step","method":"Step-by-Step","model":"GPT-5.5","score":21.48,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"binary-search","method":"Binary Search","model":"GPT-5.5","score":24.46,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"agentrx","method":"AgentRx","model":"GPT-5.5","score":17.70,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"searchauditor","method":"SearchAuditor","model":"GPT-5.5","score":32.26,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"}
+      ]
+    },
+    {
+      "track_id": "paper-table-2-gpt55-cs-strict",
+      "label": {"zh":"GPT-5.5 审计骨干 · 关键步骤严格定位","en":"GPT-5.5 auditor backbone · strict critical-step localization"},
+      "task": {"zh":"精确定位专家标注的关键错误步骤，而不是只落在容忍窗口附近","en":"Exactly localize the expert-annotated critical failure step rather than merely landing inside the tolerance window"},
+      "split": {"zh":"SearchAuditBench 全部 1,243 条失败轨迹；固定 GPT-5.5 审计骨干；论文 Table 2","en":"All 1,243 failed SearchAuditBench trajectories; fixed GPT-5.5 auditor backbone; paper Table 2"},
+      "protocol_version": "paper-table-2-gpt55-backbone-cs-strict",
+      "metric": {"id":"cs-strict","family":"localization-accuracy","label":"CS-Strict","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"all-at-once","method":"All-at-Once","model":"GPT-5.5","score":38.29,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"step-by-step","method":"Step-by-Step","model":"GPT-5.5","score":31.30,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"binary-search","method":"Binary Search","model":"GPT-5.5","score":39.02,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"agentrx","method":"AgentRx","model":"GPT-5.5","score":36.85,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"searchauditor","method":"SearchAuditor","model":"GPT-5.5","score":44.89,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"}
+      ]
+    },
+    {
+      "track_id": "paper-table-2-gemini31pro-fps",
+      "label": {"zh":"Gemini 3.1 Pro 审计骨干 · 端到端 FPS","en":"Gemini 3.1 Pro auditor backbone · end-to-end FPS"},
+      "task": {"zh":"固定 Gemini 3.1 Pro 骨干后比较不同轨迹审计框架的端到端诊断与修复成功率","en":"Compare end-to-end diagnosis-and-repair success across auditing frameworks with Gemini 3.1 Pro fixed as the backbone"},
+      "split": {"zh":"SearchAuditBench 全部 1,243 条失败轨迹；论文 Table 2","en":"All 1,243 failed SearchAuditBench trajectories; paper Table 2"},
+      "protocol_version": "paper-table-2-gemini31pro-backbone-fps",
+      "metric": {"id":"fps","family":"pass-rate","label":"Fully-Passed Score (FPS)","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"all-at-once","method":"All-at-Once","model":"Gemini 3.1 Pro","score":13.59,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"step-by-step","method":"Step-by-Step","model":"Gemini 3.1 Pro","score":9.75,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"binary-search","method":"Binary Search","model":"Gemini 3.1 Pro","score":11.58,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"agentrx","method":"AgentRx","model":"Gemini 3.1 Pro","score":10.30,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"searchauditor","method":"SearchAuditor","model":"Gemini 3.1 Pro","score":18.91,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"}
+      ]
+    },
+    {
+      "track_id": "paper-table-2-claude-opus48-fps",
+      "label": {"zh":"Claude Opus 4.8 审计骨干 · 端到端 FPS","en":"Claude Opus 4.8 auditor backbone · end-to-end FPS"},
+      "task": {"zh":"固定 Claude Opus 4.8 骨干后比较不同轨迹审计框架的端到端诊断与修复成功率","en":"Compare end-to-end diagnosis-and-repair success across auditing frameworks with Claude Opus 4.8 fixed as the backbone"},
+      "split": {"zh":"SearchAuditBench 全部 1,243 条失败轨迹；论文 Table 2","en":"All 1,243 failed SearchAuditBench trajectories; paper Table 2"},
+      "protocol_version": "paper-table-2-claude-opus48-backbone-fps",
+      "metric": {"id":"fps","family":"pass-rate","label":"Fully-Passed Score (FPS)","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"all-at-once","method":"All-at-Once","model":"Claude Opus 4.8","score":20.19,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"step-by-step","method":"Step-by-Step","model":"Claude Opus 4.8","score":13.03,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"binary-search","method":"Binary Search","model":"Claude Opus 4.8","score":17.86,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"agentrx","method":"AgentRx","model":"Claude Opus 4.8","score":12.39,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"},
+        {"id":"searchauditor","method":"SearchAuditor","model":"Claude Opus 4.8","score":24.62,"date":"2026-08-05","source":"https://arxiv.org/abs/2608.05212"}
+      ]
+    }
+  ]
+}
