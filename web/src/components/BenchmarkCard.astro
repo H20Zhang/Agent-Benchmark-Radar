@@ -1,4 +1,5 @@
 ---
+import { localizeChineseProse, localizeTechnicalToken } from "../lib/chinese-localization.mjs";
 import { copyFor } from "../lib/i18n.mjs";
 import { getArtifactKinds } from "../lib/registry.mjs";
 import { getStableFacetValues } from "../lib/research-model.mjs";
@@ -36,6 +37,7 @@ const headroomBand = resultSummary?.headroom === undefined
     : resultSummary.headroom >= 12
       ? "moderate"
       : "limited";
+const tokenLabel = (value: string) => localizeTechnicalToken(value, lang, displayToken);
 ---
 
 <article
@@ -63,10 +65,10 @@ const headroomBand = resultSummary?.headroom === undefined
   </div>
   <div class="benchmark-card__main">
     <h3><a href={detailPath}>{item.name}</a></h3>
-    <p class="benchmark-card__summary">{summary || item.summary}</p>
+    <p class="benchmark-card__summary">{localizeChineseProse(summary || item.summary, lang)}</p>
     <ul class="token-list" aria-label={copy.detail.capabilities}>
       {(item.capabilities || []).slice(0, 3).map((capability: string) => (
-        <li>{displayToken(capability)}</li>
+        <li>{tokenLabel(capability)}</li>
       ))}
     </ul>
   </div>
