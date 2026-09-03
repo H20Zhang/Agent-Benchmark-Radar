@@ -78,8 +78,8 @@ const statusLabel = lang === "zh"
           </header>
 
           <dl class="result-contract">
-            <div><dt>{labels.task}</dt><dd>{localizeChineseProse(track.task, lang)}</dd></div>
-            <div><dt>{labels.split}</dt><dd>{localizeChineseProse(track.split, lang)}</dd></div>
+            <div><dt>{labels.task}</dt><dd>{localizeChineseProse(localize(track.task, lang), lang)}</dd></div>
+            <div><dt>{labels.split}</dt><dd>{localizeChineseProse(localize(track.split, lang), lang)}</dd></div>
             <div><dt>{labels.protocol}</dt><dd>{track.protocol_version}</dd></div>
             <div><dt>{labels.direction}</dt><dd>{metric.direction === "higher" ? labels.higher : labels.lower}</dd></div>
           </dl>

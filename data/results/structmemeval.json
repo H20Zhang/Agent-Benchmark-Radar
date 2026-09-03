@@ -1,0 +1,70 @@
+{
+  "benchmark_id": "structmemeval",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "paper-v2-main-gemini-3-1-pro-total-accuracy",
+      "primary": true,
+      "label": {
+        "zh": "论文 v2 · 主评测集 · 固定 Gemini 3.1 Pro 骨干模型",
+        "en": "Paper v2 · main set · fixed Gemini 3.1 Pro backbone"
+      },
+      "task": {
+        "zh": "需要组织长期记忆结构才能回答的状态跟踪、树结构、计数与推荐任务",
+        "en": "State-tracking, tree, counting, and recommendation tasks requiring long-term memory organization"
+      },
+      "split": {
+        "zh": "StructMemEval 主评测集 · 51 个最长场景 · 每类场景至少 250 条消息",
+        "en": "StructMemEval main set · 51 longest scenarios · at least 250 messages per scenario"
+      },
+      "protocol_version": "paper-v2-table-1-fixed-gemini-3.1-pro",
+      "metric": {
+        "id": "equal-weighted-total-accuracy",
+        "family": "accuracy",
+        "label": "Equal-weighted Total Accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [0,100]
+      },
+      "entries": [
+        {"id":"retrieval","method":"Retrieval","model":"Gemini 3.1 Pro","score":6.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
+        {"id":"emem","method":"EMem","model":"Gemini 3.1 Pro","score":17.5,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
+        {"id":"emem-g","method":"EMem-G","model":"Gemini 3.1 Pro","score":19.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
+        {"id":"mem-agent","method":"Mem-agent","model":"Gemini 3.1 Pro","score":66.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
+        {"id":"mem0","method":"Mem0","model":"Gemini 3.1 Pro","score":39.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"}
+      ]
+    },
+    {
+      "track_id": "paper-v2-main-mem-agent-backbone-total-accuracy",
+      "label": {
+        "zh": "论文 v2 · 主评测集 · 固定 Mem-agent 的骨干模型比较",
+        "en": "Paper v2 · main set · fixed Mem-agent backbone comparison"
+      },
+      "task": {
+        "zh": "固定 Mem-agent 后比较不同骨干模型的长期记忆组织能力",
+        "en": "Long-term memory organization with Mem-agent fixed and the backbone model varied"
+      },
+      "split": {
+        "zh": "StructMemEval 主评测集 · 51 个最长场景 · 每类场景至少 250 条消息",
+        "en": "StructMemEval main set · 51 longest scenarios · at least 250 messages per scenario"
+      },
+      "protocol_version": "paper-v2-table-2-fixed-mem-agent",
+      "metric": {
+        "id": "equal-weighted-total-accuracy",
+        "family": "accuracy",
+        "label": "Equal-weighted Total Accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [0,100]
+      },
+      "entries": [
+        {"id":"gemini-3-0-flash","method":"Mem-agent","model":"Gemini 3.0 Flash","score":53.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
+        {"id":"gemini-3-1-pro","method":"Mem-agent","model":"Gemini 3.1 Pro","score":66.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
+        {"id":"gpt-5-5","method":"Mem-agent","model":"GPT-5.5","score":35.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
+        {"id":"deepseek-v4-flash","method":"Mem-agent","model":"DeepSeek-V4-Flash","score":46.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
+        {"id":"deepseek-v4-pro","method":"Mem-agent","model":"DeepSeek-V4-Pro","score":47.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"}
+      ]
+    }
+  ]
+}

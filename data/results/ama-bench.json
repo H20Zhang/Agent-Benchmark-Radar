@@ -1,0 +1,117 @@
+{
+  "benchmark_id": "ama-bench",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "paper-v4-real-world-qwen3-32b-average-accuracy",
+      "primary": true,
+      "label": {
+        "zh": "论文 v4 · 真实轨迹 · 固定 Qwen3-32B 骨干模型",
+        "en": "Paper v4 · real-world trajectories · fixed Qwen3-32B backbone"
+      },
+      "task": {
+        "zh": "长程智能体轨迹上的记忆问答",
+        "en": "Memory QA over long-horizon agent trajectories"
+      },
+      "split": {
+        "zh": "AMA-Bench 真实世界子集 · 6 类智能体任务 · 2,496 个问答对",
+        "en": "AMA-Bench real-world subset · six agent domains · 2,496 QA pairs"
+      },
+      "protocol_version": "paper-v4-table-5-qwen3-32b-memory-comparison",
+      "metric": {
+        "id": "average-accuracy",
+        "family": "accuracy",
+        "label": "Average Accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {"id":"bm25","method":"BM25","model":"Qwen3-32B","score":34.36,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"qwen3-emb-4b","method":"Qwen3-Emb-4B","model":"Qwen3-32B","score":42.27,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"graphrag","method":"GraphRAG","model":"Qwen3-32B","score":32.58,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"hipporag2","method":"HippoRAG2","model":"Qwen3-32B","score":44.8,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"memagent","method":"MemAgent","model":"Qwen3-32B","score":27.68,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"mem1","method":"Mem1","model":"Qwen3-32B","score":12.29,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"amem","method":"Amem","model":"Qwen3-32B","score":31.86,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"mem0","method":"Mem0","model":"Qwen3-32B","score":21.04,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"memorag","method":"MemoRAG","model":"Qwen3-32B","score":46.06,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"memgpt","method":"MemGPT","model":"Qwen3-32B","score":33.04,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"mem-alpha","method":"Mem-alpha","model":"Qwen3-32B","score":31.17,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"memorybank","method":"MemoryBank","model":"Qwen3-32B","score":33.97,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"simplemem","method":"Simple mem","model":"Qwen3-32B","score":18.11,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"himem","method":"HiMem","model":"Qwen3-32B","score":29.95,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"emem","method":"EMem","model":"Qwen3-32B","score":46.1,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"ama-agent","method":"AMA-Agent","model":"Qwen3-32B","score":57.22,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"}
+      ]
+    },
+    {
+      "track_id": "paper-v4-textworld-e2e-qwen3-32b",
+      "label": {
+        "zh": "论文 v4 · TextWorld 闭环任务成功率 · 固定 Qwen3-32B 执行智能体",
+        "en": "Paper v4 · TextWorld end-to-end success · fixed Qwen3-32B execution agent"
+      },
+      "task": {
+        "zh": "在长程 TextWorld 交互中，仅改变记忆机制后的闭环任务执行",
+        "en": "End-to-end TextWorld execution with only the memory mechanism varied"
+      },
+      "split": {
+        "zh": "AMA-Bench TextWorld 下游闭环检验",
+        "en": "AMA-Bench TextWorld downstream end-to-end check"
+      },
+      "protocol_version": "paper-v4-table-6-qwen3-32b-memory-only-varied",
+      "metric": {
+        "id": "task-success",
+        "family": "task-success",
+        "label": "End-to-end Task Success",
+        "unit": "%",
+        "direction": "higher",
+        "range": [0,100]
+      },
+      "entries": [
+        {"id":"ama-agent","method":"AMA-Agent","model":"Qwen3-32B","score":51.5,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"longcontext","method":"LongContext","model":"Qwen3-32B","score":47.5,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"hipporag","method":"HippoRAG","model":"Qwen3-32B","score":27.5,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"qwen3-emb-4b","method":"Embedding (Qwen3-Emb-4B)","model":"Qwen3-32B","score":37.5,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"memorybank","method":"MemoryBank","model":"Qwen3-32B","score":31.5,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"mem0","method":"Mem0","model":"Qwen3-32B","score":30.0,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"}
+      ]
+    },
+    {
+      "track_id": "paper-v4-spider2-e2e-qwen3-32b",
+      "label": {
+        "zh": "论文 v4 · Spider 2.0 闭环任务成功率 · 固定 Qwen3-32B 执行智能体",
+        "en": "Paper v4 · Spider 2.0 end-to-end success · fixed Qwen3-32B execution agent"
+      },
+      "task": {
+        "zh": "在长程 Spider 2.0 交互中，仅改变记忆机制后的闭环任务执行",
+        "en": "End-to-end Spider 2.0 execution with only the memory mechanism varied"
+      },
+      "split": {
+        "zh": "AMA-Bench Spider 2.0 下游闭环检验",
+        "en": "AMA-Bench Spider 2.0 downstream end-to-end check"
+      },
+      "protocol_version": "paper-v4-table-6-qwen3-32b-memory-only-varied",
+      "metric": {
+        "id": "task-success",
+        "family": "task-success",
+        "label": "End-to-end Task Success",
+        "unit": "%",
+        "direction": "higher",
+        "range": [0,100]
+      },
+      "entries": [
+        {"id":"ama-agent","method":"AMA-Agent","model":"Qwen3-32B","score":26.2,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"longcontext","method":"LongContext","model":"Qwen3-32B","score":23.5,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"hipporag","method":"HippoRAG","model":"Qwen3-32B","score":23.8,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"qwen3-emb-4b","method":"Embedding (Qwen3-Emb-4B)","model":"Qwen3-32B","score":21.4,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"memorybank","method":"MemoryBank","model":"Qwen3-32B","score":17.2,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"},
+        {"id":"mem0","method":"Mem0","model":"Qwen3-32B","score":15.6,"date":"2026-05-27","source":"https://arxiv.org/abs/2602.22769"}
+      ]
+    }
+  ]
+}
