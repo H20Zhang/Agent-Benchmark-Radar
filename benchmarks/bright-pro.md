@@ -1,25 +1,29 @@
-# Bright-Pro：retrieval 不只要找到 relevant passage，还要覆盖完整 reasoning aspects
+# Bright-Pro：检索不只要找到相关段落，还要覆盖完整推理要点
 
-**中文** | [English](bright-pro.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](bright-pro.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
 [论文](https://aclanthology.org/2026.acl-long.1705/) · [代码](https://github.com/yale-nlp/Bright-Pro)
 
 ## 它在测什么
 
-Bright-Pro 含 739 个 queries、7 个 StackExchange domains、2,763 个 reasoning aspects、5,272 个 gold passages 和 526,319 篇文档；其中 175 queries 构成 agentic-search subset。它用 α-nDCG 与 weighted aspect recall 评价 evidence portfolio 是否覆盖互补 reasoning aspects，并同时提供 fixed-round/adaptive agentic search。
+Bright-Pro 包含 739 个查询、7 个 StackExchange 领域、2,763 个推理要点、5,272 个标准证据段落和 526,319 篇文档；其中固定抽取 175 个查询用于智能体搜索评测。它用 α-nDCG 与加权要点召回率衡量一组证据是否覆盖互补的推理要点，并同时提供静态检索、固定轮次智能体搜索和自适应轮次智能体搜索三种协议。
 
 ## 相比什么前进了
 
-BRIGHT 证明 relevance 本身需要 reasoning，但 relevance set 仍较窄。Bright-Pro 把每个 query 拆成多个 weighted aspects，因此系统不能靠重复找同类 passage 获得高分；retriever 是否为 agent 提供 complementary evidence 变成独立坐标。
+BRIGHT 证明“相关性判断”本身可能需要推理，但它的标准相关文档集合仍然较窄。Bright-Pro 进一步把每个查询拆成多个带权重的推理要点，因此系统不能靠反复找同一类段落获得高分；检索器能否持续为智能体补齐互补证据，成为一个独立的评测坐标。
+
+## 当前成绩说明了什么
+
+静态检索与智能体搜索不能混成一张榜。论文中，BGE-Reasoner-8B 在完整静态集上的 Overall α-nDCG@25 为 68.0；在固定三轮、GPT-5-mini 搜索智能体的协议下，它的第三轮最终回答质量为 4.31/5。自适应轮次进一步把搜索成本纳入 AER：同一个检索器换用不同智能体骨干后排名会发生变化，因此网站按协议和智能体骨干分别展示，不计算一个跨协议“总分”。
 
 ## 分数边界
 
-高 α-nDCG/aspect recall 支持在 fixed corpus 与 annotation version 下的 evidence-portfolio coverage；agentic-search success 还取决于 agent-retriever coupling、round budget 与 judge。static retrieval 与 175-query agentic subset 不是同一 evaluation object，应分 track。
+较高的 α-nDCG 或要点召回率，只能支持在固定语料与标注版本下“证据组合覆盖得更完整”；智能体搜索中的最终回答质量还同时取决于搜索智能体、停止策略、搜索轮数和 judge。静态检索与 175-query 智能体子集不是同一个评测对象，固定轮次与自适应轮次也不能直接混排。
 
 ## 公平比较条件
 
-锁定 corpus、aspect annotations、search-round budget、agent backbone、judge 与 static/adaptive protocol。annotation version drift 必须和分数一起记录。
+应固定语料、推理要点标注、搜索轮数或停止协议、每轮返回的 top-k、搜索智能体骨干和 judge。尤其不能把 GPT-5-mini 与 Qwen3.5-122B-A10B 两种搜索智能体产生的 AER 放在同一排行榜里；标注版本变化也必须和成绩一起记录。
 
 ## 下一步评测坐标
 
-下一步应把 aspect coverage 与最终 answer claim coverage 对齐：哪些 reasoning aspects 真正改变了结论，哪些只是冗余 evidence。
+下一步最值得验证的是把“证据要点覆盖”与最终答案中的主张覆盖直接对齐：哪些推理要点真正改变了最终结论，哪些只是冗余证据；同时把 token、搜索轮数和延迟纳入统一成本曲线，判断更强检索器是否真的能让智能体更早停止。
