@@ -15,7 +15,8 @@ function initBuilder(root) {
     const list = root.querySelector("[data-suite-selection]");
     list.replaceChildren(...[...selected].map((id) => {
       const item = document.createElement("li");
-      item.innerHTML = `<span>${names.get(id)}</span><button type="button" data-remove="${id}" aria-label="Remove ${names.get(id)}">×</button>`;
+      const removeLabel = lang === "zh" ? `移除 ${names.get(id)}` : `Remove ${names.get(id)}`;
+      item.innerHTML = `<span>${names.get(id)}</span><button type="button" data-remove="${id}" aria-label="${removeLabel}">×</button>`;
       return item;
     }));
     const query = new URLSearchParams();
@@ -47,7 +48,9 @@ function initBuilder(root) {
     const boundary = root.querySelector("[data-suite-boundary]").textContent;
     const next = root.querySelector("[data-suite-next]").textContent;
     const names = [...root.querySelectorAll("[data-suite-selection] span")].map((node) => `- ${node.textContent}`).join("\n");
-    const Markdown = `## ${title}\n\n${boundary}\n\n### Benchmarks\n\n${names}\n\n### Next validation\n\n${next}`;
+    const benchmarkHeading = lang === "zh" ? "基准" : "Benchmarks";
+    const nextHeading = lang === "zh" ? "下一步验证" : "Next validation";
+    const Markdown = `## ${title}\n\n${boundary}\n\n### ${benchmarkHeading}\n\n${names}\n\n### ${nextHeading}\n\n${next}`;
     await navigator.clipboard.writeText(Markdown);
     root.querySelector("[data-suite-feedback]").textContent = lang === "zh" ? "Markdown 已复制" : "Markdown copied";
   });
