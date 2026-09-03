@@ -1,0 +1,92 @@
+{
+  "benchmark_id": "evobrowsecomp",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "v1-table-2-english-tools-accuracy",
+      "primary": true,
+      "label": {"zh":"英文 · 使用网页工具 · Accuracy","en":"English · web tools enabled · Accuracy"},
+      "task": {"zh":"在包含 2026 年后新知识的复杂英文问题上，通过多轮网页搜索与访问得到最终短答案","en":"Answer complex English questions containing post-2026 knowledge through multi-turn web search and page visits"},
+      "split": {"zh":"EvoBrowseComp-EN v1：400 题；Search+Visit 工具；128K 最大上下文、最多 40 次工具调用、最大 thinking mode；GLM-5-Chat judge；三次运行均值","en":"EvoBrowseComp-EN v1: 400 questions; Search+Visit tools; 128K max context, at most 40 tool calls, maximum thinking mode; GLM-5-Chat judge; mean over three runs"},
+      "protocol_version": "arxiv-v1-table-2-en-tools-128k-40calls-glm5judge-3run",
+      "metric": {"id":"accuracy","family":"accuracy","label":"Accuracy","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"claude-opus-4-6","method":"Claude Opus 4.6","model":"Claude Opus 4.6","score":44.8,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-397b","method":"Qwen3.5-397B-A17B-FP8","model":"Qwen3.5-397B-A17B-FP8","score":42.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"glm-5","method":"GLM-5","model":"GLM-5","score":39.2,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"kimi-k2-6","method":"Kimi-K2.6","model":"Kimi-K2.6","score":31.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-122b","method":"Qwen3.5-122B-A10B","model":"Qwen3.5-122B-A10B","score":29.2,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-35b","method":"Qwen3.5-35B-A3B","model":"Qwen3.5-35B-A3B","score":29.2,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-27b","method":"Qwen3.5-27B","model":"Qwen3.5-27B","score":25.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v3-2","method":"DeepSeek-V3.2","model":"DeepSeek-V3.2","score":23.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen3-235b-thinking","method":"Qwen3-235B-A22B-Thinking-2507","model":"Qwen3-235B-A22B-Thinking-2507","score":16.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v4-pro","method":"DeepSeek-V4-Pro","model":"DeepSeek-V4-Pro","score":16.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v4-flash","method":"DeepSeek-V4-Flash","model":"DeepSeek-V4-Flash","score":16.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"}
+      ]
+    },
+    {
+      "track_id": "v1-table-2-chinese-tools-accuracy",
+      "label": {"zh":"中文 · 使用网页工具 · Accuracy","en":"Chinese · web tools enabled · Accuracy"},
+      "task": {"zh":"在包含 2026 年后新知识的复杂中文问题上，通过多轮网页搜索与访问得到最终短答案","en":"Answer complex Chinese questions containing post-2026 knowledge through multi-turn web search and page visits"},
+      "split": {"zh":"EvoBrowseComp-ZH v1：400 题；与英文轨道相同的 128K、40 次工具调用、最大 thinking mode 与 GLM-5-Chat judge 协议；三次运行均值","en":"EvoBrowseComp-ZH v1: 400 questions; same 128K, 40-tool-call, maximum-thinking and GLM-5-Chat judge protocol as the English track; mean over three runs"},
+      "protocol_version": "arxiv-v1-table-2-zh-tools-128k-40calls-glm5judge-3run",
+      "metric": {"id":"accuracy","family":"accuracy","label":"Accuracy","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"claude-opus-4-6","method":"Claude Opus 4.6","model":"Claude Opus 4.6","score":36.8,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-397b","method":"Qwen3.5-397B-A17B-FP8","model":"Qwen3.5-397B-A17B-FP8","score":34.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"glm-5","method":"GLM-5","model":"GLM-5","score":30.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v3-2","method":"DeepSeek-V3.2","model":"DeepSeek-V3.2","score":30.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-122b","method":"Qwen3.5-122B-A10B","model":"Qwen3.5-122B-A10B","score":21.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"kimi-k2-6","method":"Kimi-K2.6","model":"Kimi-K2.6","score":19.8,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-27b","method":"Qwen3.5-27B","model":"Qwen3.5-27B","score":18.6,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen3-235b-thinking","method":"Qwen3-235B-A22B-Thinking-2507","model":"Qwen3-235B-A22B-Thinking-2507","score":17.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v4-pro","method":"DeepSeek-V4-Pro","model":"DeepSeek-V4-Pro","score":15.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-35b","method":"Qwen3.5-35B-A3B","model":"Qwen3.5-35B-A3B","score":14.2,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v4-flash","method":"DeepSeek-V4-Flash","model":"DeepSeek-V4-Flash","score":10.8,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"}
+      ]
+    },
+    {
+      "track_id": "v1-table-2-english-no-tools-accuracy",
+      "label": {"zh":"英文 · 无网页工具 · Accuracy","en":"English · no web tools · Accuracy"},
+      "task": {"zh":"禁止网页搜索与访问工具后，仅依赖模型参数知识回答同一批新鲜知识问题","en":"Answer the same fresh-knowledge questions from parametric knowledge only, with web search and visit tools disabled"},
+      "split": {"zh":"EvoBrowseComp-EN v1：400 题；无工具对照；GLM-5-Chat judge；三次运行均值","en":"EvoBrowseComp-EN v1: 400 questions; tool-free control; GLM-5-Chat judge; mean over three runs"},
+      "protocol_version": "arxiv-v1-table-2-en-no-tools-glm5judge-3run",
+      "metric": {"id":"accuracy","family":"accuracy","label":"Accuracy","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"deepseek-v3-2","method":"DeepSeek-V3.2","model":"DeepSeek-V3.2","score":6.3,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"claude-opus-4-6","method":"Claude Opus 4.6","model":"Claude Opus 4.6","score":6.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen3-235b-thinking","method":"Qwen3-235B-A22B-Thinking-2507","model":"Qwen3-235B-A22B-Thinking-2507","score":3.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-397b","method":"Qwen3.5-397B-A17B-FP8","model":"Qwen3.5-397B-A17B-FP8","score":2.9,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-122b","method":"Qwen3.5-122B-A10B","model":"Qwen3.5-122B-A10B","score":2.9,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-27b","method":"Qwen3.5-27B","model":"Qwen3.5-27B","score":2.8,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v4-flash","method":"DeepSeek-V4-Flash","model":"DeepSeek-V4-Flash","score":2.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"glm-5","method":"GLM-5","model":"GLM-5","score":1.1,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v4-pro","method":"DeepSeek-V4-Pro","model":"DeepSeek-V4-Pro","score":0.8,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-35b","method":"Qwen3.5-35B-A3B","model":"Qwen3.5-35B-A3B","score":0.8,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"kimi-k2-6","method":"Kimi-K2.6","model":"Kimi-K2.6","score":0.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"}
+      ]
+    },
+    {
+      "track_id": "v1-table-2-chinese-no-tools-accuracy",
+      "label": {"zh":"中文 · 无网页工具 · Accuracy","en":"Chinese · no web tools · Accuracy"},
+      "task": {"zh":"禁止网页搜索与访问工具后，仅依赖模型参数知识回答同一批中文新鲜知识问题","en":"Answer the same Chinese fresh-knowledge questions from parametric knowledge only, with web tools disabled"},
+      "split": {"zh":"EvoBrowseComp-ZH v1：400 题；无工具对照；GLM-5-Chat judge；三次运行均值","en":"EvoBrowseComp-ZH v1: 400 questions; tool-free control; GLM-5-Chat judge; mean over three runs"},
+      "protocol_version": "arxiv-v1-table-2-zh-no-tools-glm5judge-3run",
+      "metric": {"id":"accuracy","family":"accuracy","label":"Accuracy","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"deepseek-v3-2","method":"DeepSeek-V3.2","model":"DeepSeek-V3.2","score":10.3,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"claude-opus-4-6","method":"Claude Opus 4.6","model":"Claude Opus 4.6","score":8.8,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen3-235b-thinking","method":"Qwen3-235B-A22B-Thinking-2507","model":"Qwen3-235B-A22B-Thinking-2507","score":7.0,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-27b","method":"Qwen3.5-27B","model":"Qwen3.5-27B","score":4.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v4-flash","method":"DeepSeek-V4-Flash","model":"DeepSeek-V4-Flash","score":4.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"deepseek-v4-pro","method":"DeepSeek-V4-Pro","model":"DeepSeek-V4-Pro","score":3.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-397b","method":"Qwen3.5-397B-A17B-FP8","model":"Qwen3.5-397B-A17B-FP8","score":3.1,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-122b","method":"Qwen3.5-122B-A10B","model":"Qwen3.5-122B-A10B","score":2.6,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"glm-5","method":"GLM-5","model":"GLM-5","score":2.5,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"kimi-k2-6","method":"Kimi-K2.6","model":"Kimi-K2.6","score":1.6,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"},
+        {"id":"qwen35-35b","method":"Qwen3.5-35B-A3B","model":"Qwen3.5-35B-A3B","score":1.2,"date":"2026-06-11","source":"https://arxiv.org/abs/2606.13120"}
+      ]
+    }
+  ]
+}

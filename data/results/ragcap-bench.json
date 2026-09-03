@@ -1,0 +1,80 @@
+{
+  "benchmark_id": "ragcap-bench",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "v2-table-3-informative-overall-f1",
+      "primary": true,
+      "label": {"zh":"Informative prompt · Overall F1","en":"Informative prompt · Overall F1"},
+      "task": {"zh":"综合规划、证据提取、基于证据的推理和噪声鲁棒性四类中间能力","en":"Aggregate the four intermediate capability families: planning, evidence extraction, grounded reasoning, and noise robustness"},
+      "split": {"zh":"RAGCap-Bench v2 全部 255 道人工标注 MCQ；informative prompt；论文 Table 3，三次运行均值","en":"All 255 human-annotated RAGCap-Bench v2 MCQs; informative prompt; paper Table 3, averaged over three runs"},
+      "protocol_version": "arxiv-v2-table-3-informative-prompt-3run",
+      "metric": {"id":"overall-f1","family":"f1","label":"Overall F1","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"deepseek-r1","method":"DeepSeek-R1","model":"DeepSeek-R1","score":81.05,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen3-235b-a22b-think","method":"Qwen3-235B-A22B w/ think","model":"Qwen3-235B-A22B","score":79.66,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwq-32b","method":"QwQ-32B","model":"QwQ-32B","score":78.73,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"deepseek-v3","method":"DeepSeek-V3","model":"DeepSeek-V3","score":78.06,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gemini-2-5-flash","method":"Gemini-2.5-Flash","model":"Gemini-2.5-Flash","score":77.75,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gpt-5-5","method":"GPT-5.5","model":"GPT-5.5","score":77.27,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen3-8b","method":"Qwen3-8B","model":"Qwen3-8B","score":76.51,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gemini-1-5-pro","method":"Gemini-1.5-Pro","model":"Gemini-1.5-Pro","score":76.26,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen-plus-no-think","method":"Qwen-Plus w/o think","model":"Qwen-Plus","score":75.95,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gemini-3-1-pro","method":"Gemini-3.1-Pro","model":"Gemini-3.1-Pro","score":73.80,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen3-32b-think","method":"Qwen3-32B w/ think","model":"Qwen3-32B","score":73.68,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen2-5-72b","method":"Qwen2.5-72B-Instruct","model":"Qwen2.5-72B-Instruct","score":72.37,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"o1-mini","method":"o1-mini","model":"o1-mini","score":71.96,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gpt-4o","method":"GPT-4o","model":"GPT-4o","score":71.40,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"}
+      ]
+    },
+    {
+      "track_id": "v2-table-3-informative-evidence-extraction-em",
+      "label": {"zh":"Informative prompt · 证据提取 EM","en":"Informative prompt · Evidence Extraction EM"},
+      "task": {"zh":"从真实搜索轨迹中的多个网页证据候选中完整排除无关证据","en":"Exactly identify the relevant evidence among multiple web-page candidates drawn from real search trajectories"},
+      "split": {"zh":"RAGCap-Bench v2 Evidence Extraction 子集；informative prompt；论文 Table 3，三次运行均值","en":"RAGCap-Bench v2 Evidence Extraction subset; informative prompt; paper Table 3, averaged over three runs"},
+      "protocol_version": "arxiv-v2-table-3-informative-prompt-evidence-em-3run",
+      "metric": {"id":"evidence-extraction-em","family":"exact-match","label":"Evidence Extraction EM","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"gemini-3-1-pro","method":"Gemini-3.1-Pro","model":"Gemini-3.1-Pro","score":42.02,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gpt-5-5","method":"GPT-5.5","model":"GPT-5.5","score":40.58,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen3-235b-a22b-think","method":"Qwen3-235B-A22B w/ think","model":"Qwen3-235B-A22B","score":40.10,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen3-8b","method":"Qwen3-8B","model":"Qwen3-8B","score":37.68,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwq-32b","method":"QwQ-32B","model":"QwQ-32B","score":36.23,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gpt-4o","method":"GPT-4o","model":"GPT-4o","score":34.78,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"deepseek-r1","method":"DeepSeek-R1","model":"DeepSeek-R1","score":34.78,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gemini-2-5-flash","method":"Gemini-2.5-Flash","model":"Gemini-2.5-Flash","score":34.78,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen2-5-72b","method":"Qwen2.5-72B-Instruct","model":"Qwen2.5-72B-Instruct","score":31.88,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"o1-mini","method":"o1-mini","model":"o1-mini","score":30.34,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen-plus-no-think","method":"Qwen-Plus w/o think","model":"Qwen-Plus","score":27.54,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen3-32b-think","method":"Qwen3-32B w/ think","model":"Qwen3-32B","score":25.60,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gemini-1-5-pro","method":"Gemini-1.5-Pro","model":"Gemini-1.5-Pro","score":18.84,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"deepseek-v3","method":"DeepSeek-V3","model":"DeepSeek-V3","score":15.94,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"}
+      ]
+    },
+    {
+      "track_id": "v2-table-3-informative-grounded-reasoning-em",
+      "label": {"zh":"Informative prompt · 基于证据的推理 EM","en":"Informative prompt · Grounded Reasoning EM"},
+      "task": {"zh":"完整识别推理链中与给定证据不一致、无支撑或存在隐含推理缺口的陈述","en":"Exactly identify unsupported, contradictory, or logically gapped statements in reasoning grounded on supplied evidence"},
+      "split": {"zh":"RAGCap-Bench v2 Grounded Reasoning 子集；informative prompt；论文 Table 3，三次运行均值","en":"RAGCap-Bench v2 Grounded Reasoning subset; informative prompt; paper Table 3, averaged over three runs"},
+      "protocol_version": "arxiv-v2-table-3-informative-prompt-grounded-em-3run",
+      "metric": {"id":"grounded-reasoning-em","family":"exact-match","label":"Grounded Reasoning EM","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"qwen3-235b-a22b-think","method":"Qwen3-235B-A22B w/ think","model":"Qwen3-235B-A22B","score":57.23,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"deepseek-r1","method":"DeepSeek-R1","model":"DeepSeek-R1","score":55.35,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen3-32b-think","method":"Qwen3-32B w/ think","model":"Qwen3-32B","score":54.09,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwq-32b","method":"QwQ-32B","model":"QwQ-32B","score":53.46,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gemini-3-1-pro","method":"Gemini-3.1-Pro","model":"Gemini-3.1-Pro","score":52.83,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gpt-4o","method":"GPT-4o","model":"GPT-4o","score":50.94,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gpt-5-5","method":"GPT-5.5","model":"GPT-5.5","score":49.06,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"deepseek-v3","method":"DeepSeek-V3","model":"DeepSeek-V3","score":41.51,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"o1-mini","method":"o1-mini","model":"o1-mini","score":39.62,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gemini-2-5-flash","method":"Gemini-2.5-Flash","model":"Gemini-2.5-Flash","score":38.36,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"gemini-1-5-pro","method":"Gemini-1.5-Pro","model":"Gemini-1.5-Pro","score":37.74,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen3-8b","method":"Qwen3-8B","model":"Qwen3-8B","score":37.74,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen2-5-72b","method":"Qwen2.5-72B-Instruct","model":"Qwen2.5-72B-Instruct","score":35.85,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"},
+        {"id":"qwen-plus-no-think","method":"Qwen-Plus w/o think","model":"Qwen-Plus","score":35.85,"date":"2026-05-21","source":"https://arxiv.org/abs/2510.13910v2"}
+      ]
+    }
+  ]
+}

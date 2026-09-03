@@ -1,39 +1,39 @@
 # RAGCap-Bench：把 Agentic RAG 的中间能力单独测出来
 
-**中文** | [English](ragcap-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](ragcap-bench.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
 [论文](https://arxiv.org/abs/2510.13910)
 
 ## 它到底测什么
 
-RAGCap-Bench 不只看最终答案，而是评估 Agentic RAG workflow 中反复出现的 **intermediate task / capability**。taxonomy 来自真实系统输出、常见任务和 failure pattern，希望把黑盒 end-to-end failure 分解成更具体能力。
+RAGCap-Bench 不只看最终答案，而是把 Agentic RAG 执行过程中反复出现的中间任务拆出来单独评估。它覆盖四类能力：规划、证据提取、基于证据的推理和噪声鲁棒性。题目来自真实 Agentic RAG 系统的执行轨迹和常见失败模式，目标是把一个黑盒的端到端失败拆成更具体、可诊断的能力缺口。
 
 ## 相比此前评测多测了什么
 
-传统 end-to-end RAG score 把 planning、retrieval、reasoning 和中间决策错误压成一个数。RAGCap-Bench 让这些 latent ability 显式可测，使失败可以对应到 capability class，而不是从最终答案倒猜。
+传统端到端 RAG 分数会把规划、检索、推理和中间决策错误压成一个最终数字，研究者只能从答案错误倒猜到底哪里出了问题。RAGCap-Bench 把这些中间能力变成显式可测的 MCQ 坐标，因此可以直接问“模型究竟是不善于规划、不会筛证据，还是无法在证据上做严格推理”。
 
-## 决定性证据
+## 当前成绩说明了什么
 
-论文发现，在 RAGCap 上表现更强的 slow-thinking model，end-to-end Agentic RAG 结果也更好。这个相关性说明所选 intermediate task 至少捕捉到了一部分真实有用的能力，而不是任意 micro-benchmark。
+在论文 v2 的 informative prompt 协议下，DeepSeek-R1 的 Overall F1 最高，为 81.05%。但拆开看，最难的能力仍然很明显：证据提取严格 EM 的最好成绩只有 Gemini-3.1-Pro 的 42.02%，基于证据的推理严格 EM 最高也只有 Qwen3-235B-A22B 的 57.23%。也就是说，一个看起来超过 80% 的综合 F1 会掩盖“完整做对中间步骤”仍然很困难这一事实。
 
 ## 这个分数能证明什么
 
-capability score 能用于诊断 standardized micro-task 下的 weakness，但不能证明“把某个 capability 提高就一定会改善部署系统”；interface、tool 与 orchestration 决定能力能否在真实 trajectory 里被兑现。
+能力分数适合诊断标准化中间任务下的薄弱环节，但不能直接证明“只要把某个能力分数提高，部署系统就一定会更强”。工具接口、搜索引擎、执行编排、停止策略和上下文预算，都会决定模型能力能否在真实轨迹中兑现。论文发现 RAGCap 表现与端到端 Agentic RAG 表现相关，这支持它具有一定诊断价值，但相关性还不是因果证明。
 
-## 公平比较契约
+## 公平比较条件
 
-应固定 prompt/harness、backbone version、tool description 与 task budget。把 RAGCap 和 end-to-end 关联时，还要用 matched system / resource budget，否则更大的 scaffold 可能同时把两个分数都抬高。
+比较模型时应固定 prompt、评测版本和运行次数；论文 Table 3 使用 informative prompt，并报告三次运行均值。把 RAGCap 与端到端系统成绩关联时，还需要尽量固定系统框架、工具和资源预算，否则更大的 scaffold 可能同时抬高两个分数，使“能力相关性”部分来自系统规模差异。
 
 ## 还没有测什么
 
-capability decomposition 可能漏掉 emergent coordination effect；micro-task 也可能比真实 trajectory 的 messy state 简单。cost、stopping 与 error recovery 仍是系统层属性。
+把流程拆成独立能力可能漏掉能力之间的协同效应；标准化 MCQ 也比真实长轨迹中的混乱状态更干净。成本、何时停止搜索、错误恢复以及多个中间能力如何联动，仍然是系统层问题。
 
 ## 下一步最有判别力的验证
 
-只干预一个弱 capability，保持其他 agent 组件不变，检查预测的 end-to-end failure 是否真的下降，从 correlation 推进到 causal diagnostic value。
+最值得做的是单点干预：先用 RAGCap 找到一个明确弱项，只增强这一项能力并保持其他智能体组件不变，再检查对应的端到端失败是否真的下降。这样才能从“相关性诊断”推进到“因果上有用的诊断”。
 
 ## 演化位置
 
-`final RAG score → capability decomposition → intervention-based agent diagnosis`
+`最终 RAG 分数 → 中间能力分解 → 基于干预的智能体诊断`
 
-它是否重要，取决于这些中间坐标能不能真的告诉研究者“下一步该修哪里”。
+它真正的价值不只是给模型再排一张榜，而是帮助研究者判断下一步到底该修哪里。
