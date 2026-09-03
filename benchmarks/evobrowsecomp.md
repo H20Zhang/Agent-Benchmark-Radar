@@ -1,25 +1,33 @@
-# EvoBrowseComp：如果 benchmark 会过时，就把 regeneration pipeline 也做成 benchmark infrastructure
+# EvoBrowseComp：如果基准会过时，就让题目生成机制也能持续更新
 
-**中文** | [English](evobrowsecomp.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](evobrowsecomp.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
 [论文](https://arxiv.org/abs/2606.13120) · [数据](https://huggingface.co/datasets/Krystalan/EvoBrowseComp)
 
 ## 它在测什么
 
-EvoBrowseComp 当前发布 800 个 complex live-web questions：400 English、400 Chinese，由 multi-agent web traversal、synthesis 与 filtering pipeline 自动生成，并设计为可周期 regeneration。它评价 bilingual agentic web search 与 reasoning-graph following。
+EvoBrowseComp 当前发布 800 道复杂实时网页问题，其中英文 400 道、中文 400 道。问题由三个协作智能体自动完成网页信息采集、证据过滤、问题合成和推理图约束，并且这套流程可以周期性重新运行。它主要评估搜索智能体能否在不断变化的网页知识上进行跨站检索、证据聚合和多步推理。
 
 ## 相比什么前进了
 
-LiveBrowseComp 通过手工 recent facts 提升 freshness，但维护成本高。EvoBrowseComp 把“如何持续生成新问题”纳入 benchmark design，目标是让 evaluation 本身随 web 演化。
+BrowseComp 一类静态基准会随着时间逐渐进入模型训练语料，导致“会背答案”和“真的会搜索”越来越难区分。EvoBrowseComp 的关键变化不是单纯再做一批更难的问题，而是把“如何持续生成使用新鲜网页知识的问题”也做成基准基础设施，试图让评测随着真实世界知识一起演化。
+
+## 当前成绩说明了什么
+
+论文 v1 使用统一的 Search + Visit 工具、128K 最大上下文、最多 40 次工具调用和 GLM-5-Chat judge。英文 400 题上，Claude Opus 4.6 的工具增强 Accuracy 最高，为 44.8%；中文 400 题上同样由 Claude Opus 4.6 最高，为 36.8%。关闭网页工具后，英文最好只有 DeepSeek-V3.2 的 6.3%，中文最好也只有 10.3%。这组对照说明当前题目很难仅靠参数记忆解决，同时也表明即使允许搜索，最强系统仍有很大的未解决空间。
 
 ## 分数边界
 
-一个 snapshot 的 short-answer score 只支持该 generation/filter/judge pipeline 与 web date 下的表现。自动 regeneration 不保证跨版本 difficulty 等价，因此不同 generations 不应直接画成 progress curve，除非先做 calibration。
+一个版本上的短答案 Accuracy 只能说明模型在该次题目生成、过滤、网页时间点和 judge 条件下的表现。自动重新生成并不保证下一代题目和上一代难度完全等价，所以不同 generation 的分数不能直接画成一条“模型进步曲线”，除非先建立跨版本校准。
 
 ## 公平比较条件
 
-锁定 snapshot、generation/filter models、judge、language、search provider 与 tool interface。EN/ZH 与不同 regeneration versions 应分 track。
+应固定数据版本、语言、搜索工具、访问工具、最大上下文、工具调用上限、推理模式和 judge。英文与中文必须分轨，有工具和无工具也必须分轨。论文主实验还统一将最大上下文设为 128K、工具调用上限设为 40，并对每个模型运行三次取平均，这些条件都应和成绩一起保留。
+
+## 还没有测什么
+
+当前 judge 只判断最终答案，并不检查整条搜索和推理轨迹，因此一个模型可能通过低效甚至偶然的路径得到正确答案。另外，自动生成流程依赖 DeepSeek-V3.2，题目分布可能继承生成模型的偏差；不同时间版本之间的难度稳定性目前也没有被充分证明。
 
 ## 下一步评测坐标
 
-最重要的是建立 cross-generation calibration：证明新一代 benchmark 变新了，而不是仅变难/变易或更像生成模型的风格。
+最重要的是建立跨 generation 校准：在每次更新时保留一组锚点题和共同模型，估计新旧版本的难度变化，再把“世界知识变新”和“基准本身变难/变易”分开。进一步还应加入搜索成本和轨迹效率，使高准确率不能通过无节制搜索获得。
