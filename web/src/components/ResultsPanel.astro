@@ -42,9 +42,19 @@ const labels = lang === "zh" ? {
   higher: "Higher is better",
   lower: "Lower is better",
 };
+const zhTrackingLabels: Record<string, string> = {
+  live: "动态追踪",
+  "paper-snapshot": "论文快照",
+  "verified-snapshot": "核验快照",
+};
+const enTrackingLabels: Record<string, string> = {
+  live: "Live tracking",
+  "paper-snapshot": "Paper snapshot",
+  "verified-snapshot": "Verified snapshot",
+};
 const statusLabel = lang === "zh"
-  ? ({ live: "动态追踪", "paper-snapshot": "论文快照", "verified-snapshot": "核验快照" }[resultSet.tracking_status] || "来源快照")
-  : ({ live: "Live tracking", "paper-snapshot": "Paper snapshot", "verified-snapshot": "Verified snapshot" }[resultSet.tracking_status] || "Source snapshot");
+  ? (zhTrackingLabels[resultSet.tracking_status] || "来源快照")
+  : (enTrackingLabels[resultSet.tracking_status] || "Source snapshot");
 ---
 
 <section id="results" class="results-panel" aria-labelledby="results-heading">
