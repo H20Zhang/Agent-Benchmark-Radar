@@ -1,39 +1,39 @@
-# SGR-Bench：找到正确网站还不够，还要建立正确 retrieval state
+# SGR-Bench：找到正确网站还不够，还要建立正确的检索状态
 
-**中文** | [English](sgr-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](sgr-bench.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
 [论文](https://arxiv.org/abs/2605.22219) · [数据](https://huggingface.co/datasets/PKUAIWeb/SGR-BENCH)
 
 ## 它到底测什么
 
-SGR-Bench 评估 **state-gated retrieval**：agent 即使到了正确专业网站，只有把 filter、hierarchy、scope、view 配成正确状态，answer-bearing evidence 才会出现。因此 retrieval-state control 本身就是任务，而不是 source discovery 后的 UI 细节。
+SGR-Bench 评估的是**状态门控检索（state-gated retrieval）**：智能体即使已经找到正确的专业数据网站，也只有在筛选器、层级、结果范围和视图等控件被配置到正确状态后，真正承载答案的证据才会出现。因此，“建立并维持正确的站内检索状态”本身就是任务，而不只是找到数据源之后的界面操作细节。
 
 ## 相比此前评测多测了什么
 
-很多 web benchmark 把“找到相关 source”当作主要进展；SGR-Bench 说明 specialized data portal 更像 interactive query interface：同一个网站在不同 state 下会给完全不同的数据 slice。
+很多网页搜索基准把“找到相关数据源”当作主要难点；SGR-Bench 指出，专业数据门户更像一个交互式查询接口：同一个网站在不同状态下会返回完全不同的数据切片。它因此把“找到网站”和“在网站内部建立正确查询状态”拆成两个不同能力。
 
 ## 决定性证据
 
-benchmark 有 100 个专家任务，覆盖 6 类 source family、12 个公开 data ecosystem，并对同一问题提供 constraint-guided 与 goal-oriented 两种 formulation。最强系统 item-level F1 只有 66.18%，row-level F1 更低。对 156 条可分析失败 trajectory，retrieval-scope drift 占 37.2%，criterion mismatch 27.6%，最终 answer composition 只有 10.3%。
+基准包含 100 个专家任务，覆盖 6 类数据源、12 个公开数据生态，并为同一底层问题提供“约束提示较明确”和“仅给目标”的两种表述。统一 CLI 评测中，最强的 GPT-5.5 Overall Item-F1 只有 66.18%，而完整行 Row-F1 只有 43.37%。对 156 条可分析的失败轨迹，检索范围漂移占 37.2%，判定条件不匹配占 27.6%，最终答案拼装只占 10.3%。这说明当前主要瓶颈往往发生在站内状态控制，而不是最后写答案。
 
 ## 这个分数能证明什么
 
-这是很强的证据：source discovery 与 retrieval-state control 是不同能力。但结果仍依赖 browser/harness，因为如何操作网站控件本身就在 measurement object 里。
+这些结果能支持一个较强判断：数据源发现与检索状态控制是不同能力，拿到若干局部正确字段也不等于获得了正确的结构化结果。但成绩仍然依赖浏览器与工具接口，因为如何操作网站控件本身就在评测对象里；商业 Deep Research 产品与统一 CLI harness 也不能直接混成一个公平排行榜。
 
-## 公平比较契约
+## 公平比较条件
 
-应固定 site snapshot/time、browser/tool interface、agent model、action budget 与 task formulation，同时报告 item/row F1，并保留 constraint-guided 与 goal-oriented 的区分；prompt 里直接给 filter 会显著降低 planning 难度。
+应固定网站时间快照、浏览器/工具接口、智能体模型、动作预算和任务表述，并同时报告 Item-F1 与 Row-F1。还应保留两种任务表述的区分：如果提示里直接暴露应设置的筛选条件，会显著降低规划难度。本站因此把统一 CLI 系统与商业搜索产品分轨展示。
 
 ## 还没有测什么
 
-这个 setting 比 general deep research 窄，也容易受到公开网站 UI drift 影响；authentication、private enterprise tool、write operation 和任意文档 retrieval 都不在核心 protocol。
+这个场景比通用深度研究更窄，也容易受到公开网站界面变化影响。身份认证、企业私有工具、写操作以及任意文档检索都不在当前核心协议中。
 
 ## 下一步最有判别力的验证
 
-为同一数据提供 canonical structured API，与 browser interaction 做 paired comparison，直接量化 semantic query planning 与 GUI/interface grounding 各自贡献了多少失败。
+最值得做的配对实验，是为同一批数据同时提供规范化结构化 API 和网页交互入口，在完全相同的问题上比较两者，从而直接拆分“语义查询规划”和“界面/控件落地”分别贡献了多少失败。
 
 ## 演化位置
 
-`find the source → configure retrieval state → execute semantic data query`
+`找到数据源 → 建立并维持检索状态 → 执行语义数据查询`
 
-它把 search-agent benchmark 和 semantic query processing 直接连了起来。
+它把搜索智能体评测与语义查询处理直接连接起来。
