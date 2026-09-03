@@ -24,7 +24,7 @@ const counts = { tracked: resultSets.size, untracked: items.length - resultSets.
 <form class="filter-panel filter-panel--v2 filter-panel--tool" action={sitePath(localePath(lang, "benchmarks/"))} method="get" data-filter-form>
   <div class="filter-panel__heading">
     <div>
-      <p class="eyebrow">Benchmark filters</p>
+      <p class="eyebrow">{lang === "zh" ? "基准筛选" : "Benchmark filters"}</p>
       <h2>{lang === "zh" ? "先用常用条件快速缩小范围" : "Start with the filters you use most"}</h2>
     </div>
     <button class="filter-reset" type="reset" data-reset-filters>{copy.filters.reset}</button>
@@ -62,7 +62,7 @@ const counts = { tracked: resultSets.size, untracked: items.length - resultSets.
 
   <details class="refine-panel refine-panel--tool">
     <summary>
-      <span><b>{lang === "zh" ? "更多筛选维度" : "More filters"}</b><small>{lang === "zh" ? "参考空间、Metric、能力、环境、协议与角色" : "Headroom, metric, capability, environment, protocol, and role"}</small></span>
+      <span><b>{lang === "zh" ? "更多筛选维度" : "More filters"}</b><small>{lang === "zh" ? "参考空间、指标、能力、环境、评测协议与角色" : "Headroom, metric, capability, environment, protocol, and role"}</small></span>
       <span aria-hidden="true">＋</span>
     </summary>
     <div class="refine-panel__body">
@@ -99,6 +99,6 @@ const counts = { tracked: resultSets.size, untracked: items.length - resultSets.
 
   <div class="filter-panel__bottomline">
     <div class="active-filters" data-active-filters aria-live="polite"></div>
-    <small>{lang === "zh" ? "筛选即时生效 · 当前 URL 可直接分享" : "Filters apply instantly · the current URL is shareable"}</small>
+    <small>{lang === "zh" ? "筛选即时生效 · 当前链接可直接分享" : "Filters apply instantly · the current URL is shareable"}</small>
   </div>
 </form>
