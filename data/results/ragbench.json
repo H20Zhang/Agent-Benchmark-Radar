@@ -1,0 +1,96 @@
+{
+  "benchmark_id": "ragbench",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "paper-table-3-cross-dataset-hallucination-auroc-mean",
+      "primary": true,
+      "label": {
+        "zh": "论文 Table 3 · 12 个子测试集等权均值 · 幻觉检测 AUROC",
+        "en": "Paper Table 3 · unweighted mean across 12 component test sets · hallucination AUROC"
+      },
+      "task": {
+        "zh": "根据 RAGBench 标注判断回答是否包含未被上下文支持的内容",
+        "en": "Detect whether a RAG response contains content unsupported by the supplied context"
+      },
+      "split": {
+        "zh": "RAGBench Table 3 的 12 个 component test set；这里展示从论文逐数据集结果计算的等权均值，不是论文定义的官方总分",
+        "en": "The 12 component test sets in RAGBench Table 3; values shown here are unweighted means derived from the per-dataset paper results, not an official paper-defined global score"
+      },
+      "protocol_version": "paper-table-3-derived-unweighted-mean-12-component-tests",
+      "metric": {
+        "id": "hallucination-auroc-mean",
+        "family": "auroc",
+        "label": "Mean Hallucination AUROC",
+        "unit": "",
+        "direction": "higher",
+        "range": [0, 1]
+      },
+      "entries": [
+        {"id":"gpt-3-5-judge","method":"GPT-3.5 judge","model":"GPT-3.5","score":0.5558,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"},
+        {"id":"ragas","method":"RAGAS","model":"GPT-3.5 judge","score":0.6008,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"},
+        {"id":"trulens","method":"TruLens","model":"LLM judge","score":0.5933,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"},
+        {"id":"deberta","method":"Fine-tuned DeBERTa-v3-Large","model":"DeBERTa-v3-Large","score":0.7917,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"}
+      ]
+    },
+    {
+      "track_id": "paper-table-3-cross-dataset-relevance-rmse-mean",
+      "label": {
+        "zh": "论文 Table 3 · 12 个子测试集等权均值 · 上下文相关性 RMSE",
+        "en": "Paper Table 3 · unweighted mean across 12 component test sets · context relevance RMSE"
+      },
+      "task": {
+        "zh": "预测检索上下文对回答问题是否真正相关",
+        "en": "Predict whether retrieved context is actually relevant for answering the question"
+      },
+      "split": {
+        "zh": "RAGBench Table 3 的 12 个 component test set；等权均值为本站从论文逐数据集结果派生",
+        "en": "The 12 component test sets in RAGBench Table 3; the unweighted mean is derived here from the paper's per-dataset results"
+      },
+      "protocol_version": "paper-table-3-derived-unweighted-mean-12-component-tests",
+      "metric": {
+        "id": "context-relevance-rmse-mean",
+        "family": "rmse",
+        "label": "Mean Context Relevance RMSE",
+        "unit": "",
+        "direction": "lower",
+        "range": [0, 1]
+      },
+      "entries": [
+        {"id":"gpt-3-5-judge","method":"GPT-3.5 judge","model":"GPT-3.5","score":0.19,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"},
+        {"id":"ragas","method":"RAGAS","model":"GPT-3.5 judge","score":0.2058,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"},
+        {"id":"trulens","method":"TruLens","model":"LLM judge","score":0.6508,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"},
+        {"id":"deberta","method":"Fine-tuned DeBERTa-v3-Large","model":"DeBERTa-v3-Large","score":0.1775,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"}
+      ]
+    },
+    {
+      "track_id": "paper-table-3-cross-dataset-utilization-rmse-mean",
+      "label": {
+        "zh": "论文 Table 3 · 12 个子测试集等权均值 · 上下文利用率 RMSE",
+        "en": "Paper Table 3 · unweighted mean across 12 component test sets · context utilization RMSE"
+      },
+      "task": {
+        "zh": "预测回答实际使用了检索上下文中的哪些相关信息",
+        "en": "Predict which relevant information in the retrieved context was actually used by the response"
+      },
+      "split": {
+        "zh": "RAGBench Table 3 的 12 个 component test set；RAGAS 与 TruLens 在论文中不评估 Utilization，因此不纳入此轨道",
+        "en": "The 12 component test sets in RAGBench Table 3; RAGAS and TruLens do not evaluate Utilization in the paper and are therefore omitted from this track"
+      },
+      "protocol_version": "paper-table-3-derived-unweighted-mean-12-component-tests",
+      "metric": {
+        "id": "context-utilization-rmse-mean",
+        "family": "rmse",
+        "label": "Mean Context Utilization RMSE",
+        "unit": "",
+        "direction": "lower",
+        "range": [0, 1]
+      },
+      "entries": [
+        {"id":"gpt-3-5-judge","method":"GPT-3.5 judge","model":"GPT-3.5","score":0.1258,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"},
+        {"id":"deberta","method":"Fine-tuned DeBERTa-v3-Large","model":"DeBERTa-v3-Large","score":0.1167,"date":"2024-06-25","source":"https://arxiv.org/abs/2407.11005"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "benchmark_id": "kilt",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-03",
+  "tracks": [
+    {
+      "track_id": "re3val-table-2-nq-kilt-em",
+      "primary": true,
+      "label": {"zh":"KILT · Natural Questions · KILT-EM","en":"KILT · Natural Questions · KILT-EM"},
+      "task": {"zh":"开放域问答，同时要求答案正确并提供完全命中的 Wikipedia provenance","en":"Open-domain QA requiring both a correct answer and fully matched Wikipedia provenance"},
+      "split": {"zh":"KILT Natural Questions blind test set · Re3val 论文 Table 2 / KILT leaderboard 快照","en":"KILT Natural Questions blind test set · Re3val paper Table 2 / KILT leaderboard snapshot"},
+      "protocol_version": "re3val-table-2-kilt-leaderboard-2024",
+      "metric": {"id":"kilt-em","family":"exact-match","label":"KILT-EM","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"rag","method":"RAG","model":"RAG","score":32.69,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"seal","method":"SEAL","model":"SEAL","score":38.78,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-5","method":"Re3val · 5 contexts","model":"Re3val","score":38.92,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-10","method":"Re3val · 10 contexts","model":"Re3val","score":40.17,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-i-5","method":"Re3val + context imputation · 5 contexts","model":"Re3val","score":40.44,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"}
+      ]
+    },
+    {
+      "track_id": "re3val-table-2-triviaqa-kilt-em",
+      "label": {"zh":"KILT · TriviaQA · KILT-EM","en":"KILT · TriviaQA · KILT-EM"},
+      "task": {"zh":"开放域 TriviaQA 问答，并要求答案与 Wikipedia provenance 同时正确","en":"Open-domain TriviaQA requiring both answer correctness and correct Wikipedia provenance"},
+      "split": {"zh":"KILT TriviaQA blind test set · Re3val 论文 Table 2 / KILT leaderboard 快照","en":"KILT TriviaQA blind test set · Re3val paper Table 2 / KILT leaderboard snapshot"},
+      "protocol_version": "re3val-table-2-kilt-leaderboard-2024",
+      "metric": {"id":"kilt-em","family":"exact-match","label":"KILT-EM","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"rag","method":"RAG","model":"RAG","score":38.13,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"seal","method":"SEAL","model":"SEAL","score":50.56,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-5","method":"Re3val · 5 contexts","model":"Re3val","score":50.05,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-10","method":"Re3val · 10 contexts","model":"Re3val","score":51.31,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-i-5","method":"Re3val + context imputation · 5 contexts","model":"Re3val","score":50.41,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"}
+      ]
+    },
+    {
+      "track_id": "re3val-table-2-hotpotqa-kilt-em",
+      "label": {"zh":"KILT · HotpotQA · KILT-EM","en":"KILT · HotpotQA · KILT-EM"},
+      "task": {"zh":"多跳开放域问答，并要求答案与 Wikipedia provenance 同时正确","en":"Multi-hop open-domain QA requiring both answer correctness and correct Wikipedia provenance"},
+      "split": {"zh":"KILT HotpotQA blind test set · Re3val 论文 Table 2 / KILT leaderboard 快照","en":"KILT HotpotQA blind test set · Re3val paper Table 2 / KILT leaderboard snapshot"},
+      "protocol_version": "re3val-table-2-kilt-leaderboard-2024",
+      "metric": {"id":"kilt-em","family":"exact-match","label":"KILT-EM","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"rag","method":"RAG","model":"RAG","score":3.21,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"seal","method":"SEAL","model":"SEAL","score":18.06,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-5","method":"Re3val · 5 contexts","model":"Re3val","score":23.94,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-10","method":"Re3val · 10 contexts","model":"Re3val","score":24.13,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-i-5","method":"Re3val + context imputation · 5 contexts","model":"Re3val","score":24.33,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"}
+      ]
+    },
+    {
+      "track_id": "re3val-table-2-fever-kilt-accuracy",
+      "label": {"zh":"KILT · FEVER · KILT-Accuracy","en":"KILT · FEVER · KILT-Accuracy"},
+      "task": {"zh":"事实核查，并要求分类正确且 Wikipedia provenance 完全命中","en":"Fact checking requiring both the correct label and fully matched Wikipedia provenance"},
+      "split": {"zh":"KILT FEVER blind test set · Re3val 论文 Table 2 / KILT leaderboard 快照","en":"KILT FEVER blind test set · Re3val paper Table 2 / KILT leaderboard snapshot"},
+      "protocol_version": "re3val-table-2-kilt-leaderboard-2024",
+      "metric": {"id":"kilt-accuracy","family":"accuracy","label":"KILT-Accuracy","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"rag","method":"RAG","model":"RAG","score":53.45,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"kgi","method":"KGI","model":"KGI","score":64.41,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"seal","method":"SEAL","model":"SEAL","score":71.28,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-i-pretrain-5","method":"Re3val + context imputation · pre-training · 5 contexts","model":"Re3val","score":73.09,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-i-10","method":"Re3val + context imputation · 10 contexts","model":"Re3val","score":73.02,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"}
+      ]
+    },
+    {
+      "track_id": "re3val-table-2-wow-kilt-rouge-l",
+      "label": {"zh":"KILT · Wizard of Wikipedia · KILT-Rouge-L","en":"KILT · Wizard of Wikipedia · KILT-Rouge-L"},
+      "task": {"zh":"知识型对话生成，并要求生成质量与 Wikipedia provenance 同时正确","en":"Knowledge-grounded dialogue generation requiring both generation quality and correct Wikipedia provenance"},
+      "split": {"zh":"KILT Wizard of Wikipedia blind test set · Re3val 论文 Table 2 / KILT leaderboard 快照","en":"KILT Wizard of Wikipedia blind test set · Re3val paper Table 2 / KILT leaderboard snapshot"},
+      "protocol_version": "re3val-table-2-kilt-leaderboard-2024",
+      "metric": {"id":"kilt-rouge-l","family":"rouge-l","label":"KILT-Rouge-L","unit":"%","direction":"higher","range":[0,100]},
+      "entries": [
+        {"id":"rag","method":"RAG","model":"RAG","score":7.59,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"kgi","method":"KGI","model":"KGI","score":10.36,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"seal","method":"SEAL","model":"SEAL","score":10.45,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-5","method":"Re3val · 5 contexts","model":"Re3val","score":11.70,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"},
+        {"id":"re3val-i-5","method":"Re3val + context imputation · 5 contexts","model":"Re3val","score":12.01,"date":"2024-03-17","source":"https://aclanthology.org/2024.findings-eacl.27/"}
+      ]
+    }
+  ]
+}
