@@ -73,11 +73,15 @@ const TOKEN_ZH = new Map([
   ["dynamic", "动态"],
 ]);
 
+function escapeRegExp(value) {
+  const special = new Set(["\\", "^", "$", ".", "*", "+", "?", "(", ")", "[", "]", "{", "}", "|"]);
+  return [...value].map((character) => special.has(character) ? `\\${character}` : character).join("");
+}
+
 function replaceLowercaseTechnicalTerms(text) {
   let output = String(text ?? "");
   for (const [from, to] of PHRASE_REPLACEMENTS) {
-    const escaped = from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    output = output.replace(new RegExp(`\\b${escaped}\\b`, "g"), to);
+    output = output.replace(new RegExp(`\\b${escapeRegExp(from)}\\b`, "g"), to);
   }
   return output;
 }
