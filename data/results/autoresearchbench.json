@@ -1,0 +1,274 @@
+{
+  "benchmark_id": "autoresearchbench",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-04",
+  "tracks": [
+    {
+      "track_id": "arxiv-v1-table-2-react-deepxiv-deep-accuracy",
+      "primary": true,
+      "label": {
+        "zh": "统一 ReAct + DeepXiv · Deep Research 准确率",
+        "en": "Unified ReAct + DeepXiv · Deep Research Accuracy"
+      },
+      "task": {
+        "zh": "在三百多万篇论文的受控全文语料中，根据多项隐晦技术约束找到唯一目标论文，或正确判断不存在满足条件的论文",
+        "en": "Identify the unique paper satisfying multiple obfuscated technical constraints, or correctly conclude that none exists, in a controlled full-text corpus of more than three million papers"
+      },
+      "split": {
+        "zh": "AutoResearchBench v1 Deep Research 全部 600 题；统一 ReAct 框架与 DeepXiv 检索工具；仅纳入论文表 2 的开放权重模型与闭源模型组，排除另用 50 题样本且工具链不同的端到端系统",
+        "en": "All 600 AutoResearchBench v1 Deep Research queries; unified ReAct harness and DeepXiv search tool; includes only the open-weight/closed-model groups in paper Table 2 and excludes end-to-end systems evaluated on a separate 50-query sample and tool stack"
+      },
+      "protocol_version": "arxiv-v1-table-2-react-deepxiv-models",
+      "metric": {
+        "id": "deep-research-accuracy",
+        "family": "accuracy",
+        "label": "Deep Research Accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "qwen3-5-35b-a3b",
+          "method": "Qwen3.5-35B-A3B",
+          "model": "Qwen3.5-35B-A3B",
+          "score": 1.94,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "qwen3-5-122b-a10b",
+          "method": "Qwen3.5-122B-A10B",
+          "model": "Qwen3.5-122B-A10B",
+          "score": 3.88,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "qwen3-5-397b-a17b",
+          "method": "Qwen3.5-397B-A17B",
+          "model": "Qwen3.5-397B-A17B",
+          "score": 6.97,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "deepseek-v3-2",
+          "method": "DeepSeek-V3.2",
+          "model": "DeepSeek-V3.2",
+          "score": 4.21,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "minimax-m2-5",
+          "method": "MiniMax-M2.5",
+          "model": "MiniMax-M2.5",
+          "score": 2.91,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "kimi-k2-5",
+          "method": "Kimi-K2.5",
+          "model": "Kimi-K2.5",
+          "score": 4.69,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "qwen3-max",
+          "method": "Qwen3-Max",
+          "model": "Qwen3-Max",
+          "score": 3.24,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "seed-2-0-pro",
+          "method": "Seed-2.0-Pro",
+          "model": "Seed-2.0-Pro",
+          "score": 6.8,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "gemini-3-flash",
+          "method": "Gemini-3-Flash",
+          "model": "Gemini-3-Flash",
+          "score": 2.75,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "gemini-3-1-pro-preview",
+          "method": "Gemini-3.1-Pro-Preview",
+          "model": "Gemini-3.1-Pro-Preview",
+          "score": 7.93,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "gpt-5-4",
+          "method": "GPT-5.4",
+          "model": "GPT-5.4",
+          "score": 7.44,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "claude-sonnet-4-6",
+          "method": "Claude-Sonnet-4.6",
+          "model": "Claude-Sonnet-4.6",
+          "score": 6.96,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "claude-opus-4-6",
+          "method": "Claude-Opus-4.6",
+          "model": "Claude-Opus-4.6",
+          "score": 9.39,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        }
+      ]
+    },
+    {
+      "track_id": "arxiv-v1-table-2-react-deepxiv-wide-iou",
+      "label": {
+        "zh": "统一 ReAct + DeepXiv · Wide Research IoU",
+        "en": "Unified ReAct + DeepXiv · Wide Research IoU"
+      },
+      "task": {
+        "zh": "在未知答案集合大小的科学检索任务中，尽可能完整找出所有满足严格技术条件的论文，同时避免把边界外论文纳入结果",
+        "en": "Recover the complete set of papers satisfying strict scientific constraints when the answer-set size is unknown, balancing coverage against out-of-scope inclusions"
+      },
+      "split": {
+        "zh": "AutoResearchBench v1 Wide Research 全部 400 题；统一 ReAct 框架与 DeepXiv 检索工具；仅纳入论文表 2 的开放权重模型与闭源模型组，排除另用 50 题样本且工具链不同的端到端系统",
+        "en": "All 400 AutoResearchBench v1 Wide Research queries; unified ReAct harness and DeepXiv search tool; includes only the open-weight/closed-model groups in paper Table 2 and excludes end-to-end systems evaluated on a separate 50-query sample and tool stack"
+      },
+      "protocol_version": "arxiv-v1-table-2-react-deepxiv-models",
+      "metric": {
+        "id": "wide-research-iou",
+        "family": "iou",
+        "label": "Wide Research IoU",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "qwen3-5-35b-a3b",
+          "method": "Qwen3.5-35B-A3B",
+          "model": "Qwen3.5-35B-A3B",
+          "score": 2.71,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "qwen3-5-122b-a10b",
+          "method": "Qwen3.5-122B-A10B",
+          "model": "Qwen3.5-122B-A10B",
+          "score": 2.76,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "qwen3-5-397b-a17b",
+          "method": "Qwen3.5-397B-A17B",
+          "model": "Qwen3.5-397B-A17B",
+          "score": 3.83,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "deepseek-v3-2",
+          "method": "DeepSeek-V3.2",
+          "model": "DeepSeek-V3.2",
+          "score": 7.7,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "minimax-m2-5",
+          "method": "MiniMax-M2.5",
+          "model": "MiniMax-M2.5",
+          "score": 1.39,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "kimi-k2-5",
+          "method": "Kimi-K2.5",
+          "model": "Kimi-K2.5",
+          "score": 6.23,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "qwen3-max",
+          "method": "Qwen3-Max",
+          "model": "Qwen3-Max",
+          "score": 6.89,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "seed-2-0-pro",
+          "method": "Seed-2.0-Pro",
+          "model": "Seed-2.0-Pro",
+          "score": 7.87,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "gemini-3-flash",
+          "method": "Gemini-3-Flash",
+          "model": "Gemini-3-Flash",
+          "score": 6.61,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "gemini-3-1-pro-preview",
+          "method": "Gemini-3.1-Pro-Preview",
+          "model": "Gemini-3.1-Pro-Preview",
+          "score": 9.31,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "gpt-5-4",
+          "method": "GPT-5.4",
+          "model": "GPT-5.4",
+          "score": 8.12,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "claude-sonnet-4-6",
+          "method": "Claude-Sonnet-4.6",
+          "model": "Claude-Sonnet-4.6",
+          "score": 5.83,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        },
+        {
+          "id": "claude-opus-4-6",
+          "method": "Claude-Opus-4.6",
+          "model": "Claude-Opus-4.6",
+          "score": 6.56,
+          "date": "2026-04-28",
+          "source": "https://arxiv.org/abs/2604.25256"
+        }
+      ]
+    }
+  ]
+}

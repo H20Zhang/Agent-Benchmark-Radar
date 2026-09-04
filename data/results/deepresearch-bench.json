@@ -1,0 +1,187 @@
+{
+  "benchmark_id": "deepresearch-bench",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-04",
+  "tracks": [
+    {
+      "track_id": "paper-v1-table-1-deep-research-agent-race-overall",
+      "primary": true,
+      "label": {
+        "zh": "深度研究智能体 · RACE 总分",
+        "en": "Deep Research Agent · RACE Overall"
+      },
+      "task": {
+        "zh": "在 100 个专家设计的深度研究任务上，对最终长篇研究报告的完整性、深度、指令遵循和可读性进行参考答案辅助的综合质量评估",
+        "en": "Assess final long-form research reports across comprehensiveness, depth, instruction following, and readability on 100 expert-authored deep-research tasks using reference-assisted evaluation"
+      },
+      "split": {
+        "zh": "DeepResearch Bench 原始论文全部 100 题（中文 50、英文 50）；仅纳入表 1 的深度研究智能体组；RACE 使用 Gemini 2.5 Pro Preview 作为裁判模型；不与带搜索工具的模型组混合",
+        "en": "All 100 tasks in the original DeepResearch Bench paper (50 Chinese, 50 English); Deep Research Agent group only from Table 1; RACE uses Gemini 2.5 Pro Preview as judge; search-tool-mode systems are kept out of this track"
+      },
+      "protocol_version": "paper-v1-table-1-dra-race-gemini-2.5-pro-preview-judge",
+      "metric": {
+        "id": "race-overall",
+        "family": "judge-score",
+        "label": "RACE Overall",
+        "unit": "points",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "grok-deeper-search",
+          "method": "Grok Deeper Search",
+          "model": "Grok Deeper Search",
+          "score": 40.24,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "id": "perplexity-deep-research",
+          "method": "Perplexity Deep Research",
+          "model": "Perplexity Deep Research",
+          "score": 42.25,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "id": "gemini-2-5-pro-deep-research",
+          "method": "Gemini-2.5-Pro Deep Research",
+          "model": "Gemini-2.5-Pro Deep Research",
+          "score": 48.88,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "id": "openai-deep-research",
+          "method": "OpenAI Deep Research",
+          "model": "OpenAI Deep Research",
+          "score": 46.98,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        }
+      ]
+    },
+    {
+      "track_id": "paper-v1-table-1-deep-research-agent-citation-accuracy",
+      "label": {
+        "zh": "深度研究智能体 · 引用准确率",
+        "en": "Deep Research Agent · Citation Accuracy"
+      },
+      "task": {
+        "zh": "检查研究报告中的引用是否真实支撑其对应陈述，衡量来源归属与证据支撑的准确性",
+        "en": "Measure whether citations in the research report actually support the associated claims, capturing source attribution and evidential accuracy"
+      },
+      "split": {
+        "zh": "DeepResearch Bench 原始论文全部 100 题（中文 50、英文 50）；仅纳入表 1 的深度研究智能体组；使用 FACT 引用评估；不与带搜索工具的模型组混合",
+        "en": "All 100 tasks in the original DeepResearch Bench paper (50 Chinese, 50 English); Deep Research Agent group only from Table 1; evaluated with FACT citation metrics; search-tool-mode systems are kept out of this track"
+      },
+      "protocol_version": "paper-v1-table-1-dra-fact",
+      "metric": {
+        "id": "citation-accuracy",
+        "family": "accuracy",
+        "label": "Citation Accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "grok-deeper-search",
+          "method": "Grok Deeper Search",
+          "model": "Grok Deeper Search",
+          "score": 83.59,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "id": "perplexity-deep-research",
+          "method": "Perplexity Deep Research",
+          "model": "Perplexity Deep Research",
+          "score": 90.24,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "id": "gemini-2-5-pro-deep-research",
+          "method": "Gemini-2.5-Pro Deep Research",
+          "model": "Gemini-2.5-Pro Deep Research",
+          "score": 81.44,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "id": "openai-deep-research",
+          "method": "OpenAI Deep Research",
+          "model": "OpenAI Deep Research",
+          "score": 77.96,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        }
+      ]
+    },
+    {
+      "track_id": "paper-v1-table-1-deep-research-agent-effective-citations",
+      "label": {
+        "zh": "深度研究智能体 · 平均有效引用数",
+        "en": "Deep Research Agent · Average Effective Citations"
+      },
+      "task": {
+        "zh": "统计每份研究报告中既相关又能有效支撑内容的引用数量，用于刻画证据收集的有效覆盖",
+        "en": "Count citations per report that are both relevant and effective support, capturing the useful evidence coverage assembled by the agent"
+      },
+      "split": {
+        "zh": "DeepResearch Bench 原始论文全部 100 题（中文 50、英文 50）；仅纳入表 1 的深度研究智能体组；使用 FACT 有效引用统计；不与带搜索工具的模型组混合",
+        "en": "All 100 tasks in the original DeepResearch Bench paper (50 Chinese, 50 English); Deep Research Agent group only from Table 1; evaluated with FACT effective-citation counts; search-tool-mode systems are kept out of this track"
+      },
+      "protocol_version": "paper-v1-table-1-dra-fact",
+      "metric": {
+        "id": "effective-citations",
+        "family": "count",
+        "label": "Average Effective Citations",
+        "unit": "citations/report",
+        "direction": "higher"
+      },
+      "entries": [
+        {
+          "id": "grok-deeper-search",
+          "method": "Grok Deeper Search",
+          "model": "Grok Deeper Search",
+          "score": 8.15,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "id": "perplexity-deep-research",
+          "method": "Perplexity Deep Research",
+          "model": "Perplexity Deep Research",
+          "score": 31.26,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "id": "gemini-2-5-pro-deep-research",
+          "method": "Gemini-2.5-Pro Deep Research",
+          "model": "Gemini-2.5-Pro Deep Research",
+          "score": 111.21,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "id": "openai-deep-research",
+          "method": "OpenAI Deep Research",
+          "model": "OpenAI Deep Research",
+          "score": 40.79,
+          "date": "2025-06-13",
+          "source": "https://arxiv.org/abs/2506.11763"
+        }
+      ]
+    }
+  ]
+}
