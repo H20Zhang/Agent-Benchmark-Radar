@@ -1556,12 +1556,6 @@ def validate_public_readme(
                     errors.append(
                         f"{language}: {anchor} capability map is missing {stage}"
                     )
-            site_route = (
-                "https://h20zhang.github.io/Agent-Benchmark-Radar/"
-                f"{site_locale}/benchmarks/?area={area}"
-            )
-            if site_route not in section:
-                errors.append(f"{language}: {anchor} is missing its interactive site route")
             for retired_label in ("**主干：**", "**Defining chain:**"):
                 if retired_label in section:
                     errors.append(f"{language}: {anchor} still exposes {retired_label}")

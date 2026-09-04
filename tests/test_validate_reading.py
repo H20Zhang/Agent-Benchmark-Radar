@@ -96,16 +96,12 @@ class CapabilityMapSurfaceTest(unittest.TestCase):
             [], validate_public_readme(self.zh, self.en, self.records)
         )
 
-    def test_map_direction_and_site_route_are_validated(self):
-        mutated = self.en.replace("flowchart TB", "flowchart LR", 1).replace(
-            "https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/?area=agent-memory",
-            "https://example.com/agent-memory",
-            1,
-        )
+    def test_map_direction_is_validated_without_requiring_a_site_route(self):
+        mutated = self.en.replace("flowchart TB", "flowchart LR", 1)
         errors = validate_public_readme(self.zh, mutated, self.records)
 
         self.assertTrue(any("flowchart TB" in error for error in errors), errors)
-        self.assertTrue(any("interactive site route" in error for error in errors), errors)
+        self.assertFalse(any("interactive site route" in error for error in errors), errors)
 
 
 class AttentionNavigationTest(unittest.TestCase):

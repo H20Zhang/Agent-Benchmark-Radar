@@ -32,11 +32,16 @@ class WebPublicationContractTest(unittest.TestCase):
         self.assertIn("npm run check", text)
         self.assertIn("npm run build", text)
 
-    def test_readmes_present_the_live_radar_in_the_first_screen(self):
-        for filename in ("README.md", "README.en.md"):
+    def test_readmes_keep_the_wip_website_hidden(self):
+        markers = {
+            "README.md": "网站待完善；当前内容以本 README 为准。",
+            "README.en.md": "Website under improvement; this README is the source of truth for now.",
+        }
+        for filename, marker in markers.items():
             text = (ROOT / filename).read_text(encoding="utf-8")
             with self.subTest(filename=filename):
-                self.assertIn(SITE_URL, text[:5000])
+                self.assertNotIn(SITE_URL, text)
+                self.assertIn(marker, text[:5000])
 
     def test_public_web_source_uses_positive_fields_and_research_tool_ui(self):
         public_paths = [
@@ -55,8 +60,9 @@ class WebPublicationContractTest(unittest.TestCase):
         self.assertNotIn("coverage_gap", source)
         self.assertNotIn("```mermaid", source)
         self.assertIn("data-filter-form", source)
-        self.assertIn("benchmark-timeline", source)
-        self.assertIn("tool-result-table", source)
+        self.assertIn("wip-shell", source)
+        self.assertIn("Website under improvement", source)
+        self.assertIn('robots="noindex,nofollow"', source)
         self.assertIn("benchmark-at-a-glance", source)
         self.assertIn("data-suite-builder", source)
         self.assertNotIn("evaluation-loop", source)
