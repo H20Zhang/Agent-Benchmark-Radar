@@ -13,8 +13,8 @@
 <p><strong>中文</strong> · <a href="README.en.md">English</a></p>
 
 <p>
-<strong>网站版：待完善。</strong><br/>
-当前请以 README 为主要入口；Benchmark 列表、评测组合、前沿变化与成绩追踪都保留在这里。
+<a href="https://h20zhang.github.io/Agent-Benchmark-Radar/zh/"><strong>打开 Evaluation Frontier 网站 →</strong></a><br/>
+网站提供完整交互版本；README 保留可快速浏览、引用和版本审阅的研究地图。
 </p>
 
 <p>
@@ -27,12 +27,12 @@
 
 ## 从这里开始
 
-| 研究动作 | README 入口 | 直接获得 |
+| 研究动作 | 网站入口 | 直接获得 |
 |---|---|---|
-| **Pick** | [Benchmark 列表](#all-benchmarks) | 按领域浏览完整 Benchmark，并从能力演进理解当前测量边界。 |
-| **Build** | [Evaluation Recipes](#evaluation-recipes) | 从研究 claim 组合 Core / Complement，并明确下一步验证目标。 |
-| **Discover** | [下一阶段关键评测方向](#evaluation-frontiers) | 从当前证据进入下一测量坐标和可执行评测设计。 |
-| **Track** | [前沿变化与成绩追踪](#frontier-signals) | 联合查看新发布、结构化成绩、参考空间与前沿变化。 |
+| **Pick** | [Benchmark Explorer](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/) | 按能力、环境、评测目标、结果状态和参考空间筛选最新 Benchmark。 |
+| **Build** | [评测组合生成器](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/evaluate/) | 从研究 claim 组合 Core / Complement，并导出 Markdown。 |
+| **Discover** | [评测机会地图](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/opportunities/) | 从当前证据进入下一测量坐标和可执行评测设计。 |
+| **Track** | [Evaluation Frontier](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/frontier/) | 联合查看新发布、结构化成绩、参考空间、前沿变化与 Benchmark 谱系。 |
 
 **先选你的研究方向。** 每个方向都提供独立的演化脉络、Evaluation Recipes 和完整 Benchmark 列表。
 
@@ -57,6 +57,7 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 
 <a id="recipe-memory"></a>
 ### Agent Memory
+
 | 你想证明 | Core | Complement | 下一步验证 |
 |---|---|---|---|
 | **长期对话记忆与时间推理** | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) | [LongMemEval](https://arxiv.org/abs/2410.10813) | 结合行动导向评测，验证历史经验对后续行动的改善。 |
@@ -107,16 +108,16 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 
 ### 当前成绩追踪
 
-仓库已为 12 个 Benchmark 建立来源核验的结构化结果轨道；每项成绩都绑定 task、split、protocol、metric、方向、日期与原始来源。
+网站已为 12 个 Benchmark 建立来源核验的结构化结果轨道；每项成绩都绑定 task、split、protocol、metric、方向、日期与原始来源。
 
-| Benchmark | 当前已核验坐标 | 当前最佳 | 研究信号 |
+| Benchmark | 当前已核验坐标 | 当前最佳 | 研究入口 |
 |---|---|---:|---|
-| **SCALE-QA** | 128K Full Context accuracy | 29.8% | 70.2% 参考空间 |
-| **StateMemBench** | Same-backbone state-maintenance score | 36.3% | 方法对比 |
-| **DeltaML-Bench** | 4×6h per-run success | 33.9% | 长时程改进空间 |
-| **DSAgentBench** | Complete data-science task success | 56.7% | 端到端结果 |
-| **DataSpace** | End-to-end table-delivery accuracy | 66.34% | 多源工作区结果 |
-| **The Compaction Cliff** | Five-round constraint recall | 96% | 压缩方法对比 |
+| **SCALE-QA** | 128K Full Context accuracy | 29.8% | [查看成绩与 70.2% 参考空间](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/scale-qa/#results) |
+| **StateMemBench** | Same-backbone state-maintenance score | 36.3% | [查看方法对比](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/statemembench/#results) |
+| **DeltaML-Bench** | 4×6h per-run success | 33.9% | [查看长时程改进空间](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/deltaml-bench/#results) |
+| **DSAgentBench** | Complete data-science task success | 56.7% | [查看端到端结果](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/dsagentbench/#results) |
+| **DataSpace** | End-to-end table-delivery accuracy | 66.34% | [查看多源工作区结果](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/dataspace/#results) |
+| **The Compaction Cliff** | Five-round constraint recall | 96% | [查看压缩方法对比](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/compaction-cliff/#results) |
 
 <a id="release-timeline"></a>
 ## 最近半年 Benchmark 时间线
@@ -246,7 +247,7 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:agent-memory:END -->
 
-**README：** [查看 Agent Memory 完整 Benchmark 列表](#registry-memory)
+**在线筛选：** [打开 Agent Memory Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/?area=agent-memory)
 
 <a id="benchmark-rag"></a>
 ### RAG / Agentic Retrieval
@@ -279,7 +280,7 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:rag:END -->
 
-**README：** [查看 RAG / Agentic Retrieval 完整 Benchmark 列表](#registry-rag)
+**在线筛选：** [打开 RAG / Agentic Retrieval Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/?area=rag)
 
 <a id="benchmark-data"></a>
 ### Data Agents
@@ -312,11 +313,12 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:data-agent:END -->
 
-**README：** [查看 Data Agents 完整 Benchmark 列表](#registry-data)
+**在线筛选：** [打开 Data Agents Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/?area=data-agent)
 
 <a id="all-benchmarks"></a>
 ## 按领域查看全部 Benchmark
-以下是 registry 中的全部 126 个基准。README 当前作为主要阅读界面；网站版待完善，暂不作为对外入口。
+
+以下是 registry 中的全部 126 个基准。README 保留完整表格作为一等阅读界面，网站同时提供可筛选、可比较的增强视图。
 
 <!-- CITATION-META:START -->
 引用数来自 Semantic Scholar，最后刷新 **2026-09-03**；`—` 标记以代码或数据为主要入口、论文匹配仍在核验的记录。引用数呈现影响力背景，阶段由测量演进判断。
