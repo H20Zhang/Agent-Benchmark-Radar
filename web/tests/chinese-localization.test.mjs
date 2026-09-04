@@ -65,7 +65,7 @@ test("core Chinese pages do not hardcode the retired English eyebrow labels on t
   assert.match(detail, /supportEyebrow: "结论边界"/);
   assert.match(detail, /evidenceEyebrow: "证据摘要"/);
   assert.match(results, /eyebrow: "成绩进展"/);
-  assert.match(home, /lang === "zh" \? "时间轴" : "Timeline"/);
+  assert.match(home, /lang === "zh" \? "网站待完善" : "Website under improvement"/);
   assert.match(explorer, /lang === "zh" \? "基准筛选" : "Benchmark explorer"/);
   assert.match(suites, /lang === "zh" \? "评测组合" : "Evaluation suites"/);
 });
