@@ -12,10 +12,7 @@ Follow the <b>Benchmark → Results → Opportunity → Frontier</b> loop: find 
 
 <p><a href="README.md">中文</a> · <strong>English</strong></p>
 
-<p>
-<a href="https://h20zhang.github.io/Agent-Benchmark-Radar/en/"><strong>Open the Evaluation Frontier website →</strong></a><br/>
-The website is the complete interactive edition; the README remains a fast surface for browsing, citation, and version review.
-</p>
+<p><strong>Website under improvement; this README is the source of truth for now.</strong></p>
 
 <p>
 <a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml/badge.svg"></a>
@@ -27,12 +24,12 @@ The website is the complete interactive edition; the README remains a fast surfa
 
 ## Start Here
 
-| Research action | Website | Immediate value |
+| Research action | README entry | Immediate value |
 |---|---|---|
-| **Pick** | [Benchmark Explorer](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/) | Filter recent benchmarks by capability, environment, objective, result status, and reference headroom. |
-| **Build** | [Evaluation Suite Builder](https://h20zhang.github.io/Agent-Benchmark-Radar/en/evaluate/) | Assemble Core / Complement benchmarks from a research claim and export Markdown. |
-| **Discover** | [Opportunity Map](https://h20zhang.github.io/Agent-Benchmark-Radar/en/opportunities/) | Move from current evidence to the next coordinate and an executable evaluation design. |
-| **Track** | [Evaluation Frontier](https://h20zhang.github.io/Agent-Benchmark-Radar/en/frontier/) | See releases, structured results, headroom, frontier shifts, and benchmark genealogies together. |
+| **Pick** | [Benchmark Library](#all-benchmarks) | Browse the full registry and choose evaluations using capability evolution, release time, and current results. |
+| **Build** | [Evaluation Recipes](#evaluation-recipes) | Assemble Core / Complement benchmarks from a research claim into a reusable evaluation suite. |
+| **Discover** | [Next Evaluation Frontiers](#evaluation-frontiers) | Move from current evidence to the next coordinate and an executable evaluation design. |
+| **Track** | [Last 30 days + current results](#frontier-signals) | See recent releases, structured results, reference headroom, frontier shifts, and benchmark lineages together. |
 
 **Choose your research area first.** Each area provides its own evolution map, evaluation recipes, and complete benchmark registry.
 
@@ -108,16 +105,16 @@ Last updated: **2026-09-02**
 
 ### Current Result Tracking
 
-The website now maintains source-verified structured result tracks for 12 benchmarks. Every score is bound to its task, split, protocol, metric, direction, date, and primary source.
+The repository now maintains source-verified structured result tracks for 12 benchmarks. Every score is bound to its task, split, protocol, metric, direction, date, and primary source.
 
-| Benchmark | Verified coordinate | Current best | Research entry |
+| Benchmark | Verified coordinate | Current best | Research judgment |
 |---|---|---:|---|
-| **SCALE-QA** | 128K Full Context accuracy | 29.8% | [Inspect results and 70.2% reference headroom](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/scale-qa/#results) |
-| **StateMemBench** | Same-backbone state-maintenance score | 36.3% | [Compare methods](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/statemembench/#results) |
-| **DeltaML-Bench** | 4×6h per-run success | 33.9% | [Inspect long-horizon improvement headroom](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/deltaml-bench/#results) |
-| **DSAgentBench** | Complete data-science task success | 56.7% | [Inspect end-to-end results](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/dsagentbench/#results) |
-| **DataSpace** | End-to-end table-delivery accuracy | 66.34% | [Inspect multi-source workspace results](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/dataspace/#results) |
-| **The Compaction Cliff** | Five-round constraint recall | 96% | [Compare compaction methods](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/compaction-cliff/#results) |
+| **SCALE-QA** | 128K Full Context accuracy | 29.8% | 70.2% reference headroom |
+| **StateMemBench** | Same-backbone state-maintenance score | 36.3% | Method comparison |
+| **DeltaML-Bench** | 4×6h per-run success | 33.9% | Long-horizon improvement headroom |
+| **DSAgentBench** | Complete data-science task success | 56.7% | End-to-end results |
+| **DataSpace** | End-to-end table-delivery accuracy | 66.34% | Multi-source workspace results |
+| **The Compaction Cliff** | Five-round constraint recall | 96% | Compaction-method comparison |
 
 <a id="release-timeline"></a>
 ## Benchmark Timeline: Last Six Months
@@ -247,7 +244,7 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:agent-memory:END -->
 
-**Interactive filters:** [Open the Agent Memory Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/?area=agent-memory)
+**Full list:** [Agent Memory Benchmarks](#registry-memory)
 
 <a id="benchmark-rag"></a>
 ### RAG / Agentic Retrieval
@@ -280,7 +277,7 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:rag:END -->
 
-**Interactive filters:** [Open the RAG / Agentic Retrieval Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/?area=rag)
+**Full list:** [RAG / Agentic Retrieval Benchmarks](#registry-rag)
 
 <a id="benchmark-data"></a>
 ### Data Agents
@@ -313,12 +310,12 @@ flowchart TB
 ```
 <!-- CAPABILITY-MAP:data-agent:END -->
 
-**Interactive filters:** [Open the Data Agent Explorer →](https://h20zhang.github.io/Agent-Benchmark-Radar/en/benchmarks/?area=data-agent)
+**Full list:** [Data Agent Benchmarks](#registry-data)
 
 <a id="all-benchmarks"></a>
 ## All Benchmarks by Area
 
-All 126 registry benchmarks remain directly scannable in the README, while the website adds filtering, comparison, and result-aware exploration.
+All 126 registry benchmarks remain directly scannable in the README.
 
 <!-- CITATION-META:START -->
 Citation counts are from Semantic Scholar, last refreshed **2026-09-03**; `—` marks records led by a code or data entry while paper matching remains under verification. Counts provide adoption context; measurement evolution determines stage labels.
