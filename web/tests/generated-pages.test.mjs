@@ -5,19 +5,25 @@ import test from "node:test";
 const read = (path) =>
   readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("home leads with benchmark browsing, timeline, suites, and current scores", () => {
+test("home temporarily sends readers to README while the website is under improvement", () => {
   const page = read("src/pages/[lang]/index.astro");
-  assert.match(page, /loadResearchModel/);
-  assert.match(page, /loadAllResultSets/);
-  for (const token of ["benchmarks/", "evaluate/", 'id="timeline"', 'id="results"', 'id="suites"']) {
+  for (const token of [
+    "网站待完善",
+    "Website under improvement",
+    "github.com/H20Zhang/Agent-Benchmark-Radar",
+    'robots="noindex,nofollow"',
+  ]) {
     assert.ok(page.includes(token), token);
   }
-  for (const token of ["benchmark-timeline", "tool-result-table", "tool-suite-grid"]) {
-    assert.ok(page.includes(token), token);
+  for (const token of [
+    "loadResearchModel",
+    "loadAllResultSets",
+    "benchmark-timeline",
+    "tool-result-table",
+    "tool-suite-grid",
+  ]) {
+    assert.ok(!page.includes(token), token);
   }
-  assert.ok(!page.includes("evaluation-loop"));
-  assert.ok(!page.includes("opportunity-preview-grid"));
-  assert.ok(!page.includes("shift-grid"));
 });
 
 test("primary navigation stays focused on the four repeat research actions", () => {

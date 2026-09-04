@@ -1,14 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Header from "../../components/Header.astro";
-import SiteFooter from "../../components/SiteFooter.astro";
-
-import { AREAS, copyFor, LOCALES } from "../../lib/i18n.mjs";
-import { loadChineseSummaries } from "../../lib/readme-localization.mjs";
-import { loadRegistry, getArtifactKinds } from "../../lib/registry.mjs";
-import { loadResearchModel, localize } from "../../lib/research-model.mjs";
-import { loadAllResultSets, summarizeTrack } from "../../lib/results.mjs";
-import { absoluteUrl, localePath, sitePath } from "../../lib/site.mjs";
+import { LOCALES } from "../../lib/i18n.mjs";
+import { localePath, sitePath } from "../../lib/site.mjs";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
@@ -17,54 +10,17 @@ export function getStaticPaths() {
 interface Props { lang: "zh" | "en"; }
 
 const { lang } = Astro.props;
-const copy = copyFor(lang);
-const items = [...loadRegistry()];
-const byId = new Map(items.map((item) => [item.id, item]));
-const summaries = loadChineseSummaries();
-const research = loadResearchModel();
-const resultSets = loadAllResultSets();
-const latestVerified = items.map((item) => item.last_verified).sort().at(-1);
-const timelineItems = [...items].sort((a, b) => b.released.localeCompare(a.released) || a.name.localeCompare(b.name)).slice(0, 15);
-const resultHighlights: any[] = [];
-for (const resultSet of resultSets.values()) {
-  const item = byId.get(resultSet.benchmark_id);
-  const track = resultSet.tracks.find((entry: any) => entry.primary) || resultSet.tracks[0];
-  if (item) resultHighlights.push({ item, resultSet, track, summary: summarizeTrack(track) });
-}
-resultHighlights.sort((left: any, right: any) => right.item.released.localeCompare(left.item.released));
-resultHighlights.splice(8);
-const suiteHighlights = AREAS.flatMap((area) => research.recipes.filter((recipe: any) => recipe.area === area).slice(0, 2));
 const canonicalPath = localePath(lang);
 const alternatePath = localePath(lang === "zh" ? "en" : "zh");
-const title = lang === "zh" ? "Agent Benchmark Radar｜筛选、时间轴、评测组合与当前成绩" : "Agent Benchmark Radar | Browse, Timeline, Suites, and Current Scores";
+const title = lang === "zh"
+  ? "Agent Benchmark Radar｜网站待完善"
+  : "Agent Benchmark Radar | Website under improvement";
 const description = lang === "zh"
-  ? "用于筛选 Agent 基准、查看发布时间轴、打开基准详情、组合常见评测，并追踪当前最好成绩与剩余参考空间。"
-  : "Browse agent benchmarks, inspect the release timeline, open benchmark details, reuse common evaluation suites, and track current best scores with source-backed headroom.";
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  name: title,
-  description,
-  url: absoluteUrl(canonicalPath),
-  inLanguage: copy.langTag,
-  mainEntity: {
-    "@type": "ItemList",
-    numberOfItems: items.length,
-    itemListElement: timelineItems.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      url: absoluteUrl(localePath(lang, `benchmarks/${item.id}/`)),
-      name: item.name,
-    })),
-  },
-};
-const summaryFor = (item: any) => lang === "zh" ? summaries.get(item.id) || item.summary : item.summary;
-const trackingLabels: Record<string, string> = {
-  live: lang === "zh" ? "动态追踪" : "Live",
-  "paper-snapshot": lang === "zh" ? "论文快照" : "Paper snapshot",
-  "verified-snapshot": lang === "zh" ? "核验快照" : "Verified snapshot",
-};
-const trackingLabel = (status: string) => trackingLabels[status] || status;
+  ? "Agent Benchmark Radar 网站正在重新整理，当前请以 GitHub README 为准。"
+  : "The Agent Benchmark Radar website is being reorganized. Please use the GitHub README for now.";
+const readmeUrl = lang === "zh"
+  ? "https://github.com/H20Zhang/Agent-Benchmark-Radar"
+  : "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/main/README.en.md";
 ---
 
 <BaseLayout
@@ -74,98 +30,101 @@ const trackingLabel = (status: string) => trackingLabels[status] || status;
   {canonicalPath}
   zhPath={lang === "zh" ? canonicalPath : alternatePath}
   enPath={lang === "en" ? canonicalPath : alternatePath}
-  {jsonLd}
-  bodyClass="radar-page home-v2 home-research-tool"
+  robots="noindex,nofollow"
+  bodyClass="wip-page"
 >
-  <Header {lang} alternatePath={alternatePath} />
-  <main id="main-content">
-    <section class="tool-home-hero shell">
-      <p class="eyebrow">Agent Benchmark Radar</p>
-      <h1>{lang === "zh" ? "一个用来选基准、看进展的研究工具" : "A research tool for choosing benchmarks and tracking progress"}</h1>
-      <p>{description}</p>
-      <div class="tool-home-actions">
-        <a class="button button--primary" href={sitePath(localePath(lang, "benchmarks/"))}>{lang === "zh" ? "筛选基准" : "Browse benchmarks"} ↗</a>
-        <a class="button button--secondary" href="#timeline">{lang === "zh" ? "看时间轴" : "View timeline"}</a>
-        <a class="button button--secondary" href={sitePath(localePath(lang, "evaluate/"))}>{lang === "zh" ? "常见评测组合" : "Common suites"}</a>
-        <a class="button button--secondary" href="#results">{lang === "zh" ? "看当前成绩" : "Current scores"}</a>
-      </div>
-      <dl class="tool-home-stats">
-        <div><dt>{lang === "zh" ? "基准总数" : "Benchmarks"}</dt><dd>{items.length}</dd></div>
-        <div><dt>{lang === "zh" ? "已有结构化成绩" : "Tracked results"}</dt><dd>{resultSets.size}</dd></div>
-        <div><dt>{lang === "zh" ? "最近核验" : "Last verified"}</dt><dd>{latestVerified}</dd></div>
-      </dl>
-    </section>
-
-    <section class="home-section shell" id="timeline" aria-labelledby="timeline-title">
-      <div class="tool-section-heading">
-        <div><p class="eyebrow">{lang === "zh" ? "时间轴" : "Timeline"}</p><h2 id="timeline-title">{lang === "zh" ? "最新基准时间轴" : "Latest benchmark timeline"}</h2></div>
-        <p>{lang === "zh" ? "按基准的规范发布时间排序。点开任意条目直接进入详情页。" : "Ordered by canonical benchmark release time. Open any item for its detail page."}</p>
-      </div>
-      <div class="benchmark-timeline">
-        {timelineItems.map((item: any) => (
-          <article class="benchmark-timeline__item" data-area={item.area}>
-            <time datetime={item.released}>{item.released}</time>
-            <div>
-              <span>{copy.areas[item.area].label} · {copy.roles[item.evolution_role]}</span>
-              <h3><a href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}>{item.name}</a></h3>
-              <p>{summaryFor(item)}</p>
-            </div>
-            <aside>
-              <span>{getArtifactKinds(item).map((kind) => copy.artifacts[kind]).join(" · ")}</span>
-              {resultSets.has(item.id) && <strong>{trackingLabel(resultSets.get(item.id).tracking_status)}</strong>}
-            </aside>
-          </article>
-        ))}
-      </div>
-      <p class="tool-section-more"><a href={sitePath(localePath(lang, "benchmarks/?sort=newest"))}>{lang === "zh" ? "查看全部基准" : "View all benchmarks"} ↗</a></p>
-    </section>
-
-    <section class="home-section home-results-section" id="results" aria-labelledby="results-title">
-      <div class="shell">
-        <div class="tool-section-heading">
-          <div><p class="eyebrow">{lang === "zh" ? "当前成绩" : "Current scores"}</p><h2 id="results-title">{lang === "zh" ? "常见与最新基准目前刷到多少" : "How far common and recent benchmarks have been pushed"}</h2></div>
-          <p>{lang === "zh" ? "只展示已绑定任务、数据切分、评测协议、指标与一手来源的结果；只有存在可靠参考目标时才显示剩余空间。" : "Only source-backed tracks with explicit task, split, protocol, and metric are shown. Headroom appears only when a reliable reference target exists."}</p>
-        </div>
-        <div class="tool-result-table" role="list">
-          {resultHighlights.map(({ item, resultSet, track, summary }: any) => (
-            <a class="tool-result-row" role="listitem" href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}>
-              <div><strong>{item.name}</strong><span>{copy.areas[item.area].label} · {item.released}</span></div>
-              <div><span>{localize(track.label, lang)}</span><small>{summary.best.method}</small></div>
-              <div class="tool-result-row__score"><strong>{summary.best.score}<small>{track.metric.unit}</small></strong></div>
-              <div class="tool-result-row__headroom">{summary.headroom !== undefined ? <><strong>{summary.headroom}%</strong><span>{lang === "zh" ? "剩余参考空间" : "headroom"}</span></> : <span>{lang === "zh" ? "无统一上限" : "no shared ceiling"}</span>}</div>
-              <span class="tool-result-row__status">{trackingLabel(resultSet.tracking_status)}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="home-section shell" id="suites" aria-labelledby="suite-title">
-      <div class="tool-section-heading">
-        <div><p class="eyebrow">{lang === "zh" ? "评测组合" : "Evaluation suites"}</p><h2 id="suite-title">{lang === "zh" ? "常见评测组合" : "Common evaluation suites"}</h2></div>
-        <p>{lang === "zh" ? "围绕研究主张组合核心评测与补充评测，而不是简单堆叠互不相关的基准。" : "Combine Core + Complement benchmarks around a research claim rather than stacking unrelated scores."}</p>
-      </div>
-      <div class="tool-suite-grid">
-        {suiteHighlights.map((recipe: any) => (
-          <a href={sitePath(localePath(lang, `evaluate/?recipe=${recipe.id}`))} data-area={recipe.area}>
-            <span>{copy.areas[recipe.area].label}</span>
-            <h3>{localize(recipe.claim, lang)}</h3>
-            <p>{lang === "zh" ? `${recipe.core.length} 个核心 · ${recipe.complement.length} 个补充` : `${recipe.core.length} Core · ${recipe.complement.length} Complement`}</p>
-            <strong>{lang === "zh" ? "打开组合" : "Open suite"} ↗</strong>
-          </a>
-        ))}
-      </div>
-      <p class="tool-section-more"><a href={sitePath(localePath(lang, "evaluate/"))}>{lang === "zh" ? "查看全部 15 组评测方案" : "View all 15 suite recipes"} ↗</a></p>
-    </section>
-
-    <section class="area-links shell area-links--compact" aria-labelledby="area-title">
-      <div class="tool-section-heading"><div><p class="eyebrow">{lang === "zh" ? "研究方向" : "Research areas"}</p><h2 id="area-title">{lang === "zh" ? "按研究方向进入" : "Browse by research area"}</h2></div></div>
-      <div class="area-links__grid">
-        {AREAS.map((area) => (
-          <a data-area={area} href={sitePath(localePath(lang, `areas/${area}/`))}><span>{copy.areas[area].label}</span><small>{items.filter((item) => item.area === area).length} {lang === "zh" ? "个基准" : "benchmarks"}</small><b>↗</b></a>
-        ))}
-      </div>
-    </section>
+  <main id="main-content" class="wip-shell">
+    <p class="wip-brand">Agent Benchmark Radar</p>
+    <h1>{lang === "zh" ? "网站待完善" : "Website under improvement"}</h1>
+    <p class="wip-summary">
+      {lang === "zh"
+        ? "聚合 Agent Memory、RAG / Agentic Retrieval 与 Data Agents 的 Benchmark、当前成绩与研究空间。"
+        : "Tracking benchmarks, current results, and research headroom across Agent Memory, RAG / Agentic Retrieval, and Data Agents."}
+    </p>
+    <p class="wip-status">
+      {lang === "zh"
+        ? "当前版本请以 GitHub README 为准。网站的内容结构正在重新整理，成熟后再开放完整入口。"
+        : "Please use the GitHub README as the source of truth for now. The website content structure is being reorganized before the full experience returns."}
+    </p>
+    <div class="wip-links">
+      <a class="wip-primary" href={readmeUrl}>{lang === "zh" ? "查看 GitHub README →" : "Read the GitHub README →"}</a>
+      <a class="wip-language" href={sitePath(alternatePath)}>{lang === "zh" ? "English" : "中文"}</a>
+    </div>
   </main>
-  <SiteFooter {lang} />
+
+  <style>
+    :global(.wip-page) {
+      background: #fff;
+      color: #171717;
+    }
+
+    :global(.wip-page .ambient-grid) {
+      display: none;
+    }
+
+    .wip-shell {
+      width: min(720px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: clamp(96px, 16vh, 180px) 0 80px;
+    }
+
+    .wip-brand {
+      margin: 0 0 48px;
+      font: 600 14px/1.4 ui-sans-serif, system-ui, sans-serif;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      margin: 0;
+      font: 650 clamp(40px, 7vw, 68px)/1.05 ui-sans-serif, system-ui, sans-serif;
+      letter-spacing: -0.045em;
+    }
+
+    .wip-summary {
+      max-width: 650px;
+      margin: 30px 0 0;
+      font: 500 clamp(19px, 2.5vw, 24px)/1.55 ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .wip-status {
+      max-width: 620px;
+      margin: 20px 0 0;
+      color: #666;
+      font: 400 16px/1.7 ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .wip-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-top: 40px;
+      font: 600 15px/1.4 ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .wip-links a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .wip-primary {
+      padding-bottom: 3px;
+      border-bottom: 1px solid currentColor;
+    }
+
+    .wip-language {
+      color: #777 !important;
+      font-weight: 500;
+    }
+
+    @media (max-width: 560px) {
+      .wip-shell {
+        width: min(100% - 32px, 720px);
+        padding-top: 72px;
+      }
+
+      .wip-brand {
+        margin-bottom: 40px;
+      }
+    }
+  </style>
 </BaseLayout>
