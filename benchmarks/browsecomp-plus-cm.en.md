@@ -57,3 +57,8 @@ Hold questions, agent, search API, and budget fixed while swapping only the corp
 ## Genealogy consequence
 
 `map_delta=revises`, bound to `retrieval-harness-validity`. Its matched corpus swap directly qualifies the durable BrowseComp-Plus claim: a fixed corpus is necessary for drift control and attribution, but query-conditioned construction, scale, and qrels remain load-bearing variables. The map receives only that smallest qualification; one projection is not promoted into a universal trend.
+
+
+## Remaining gap and next validation
+
+What remains unmeasured is stability across settings and transfer to realistic workflows. The next experiment should hold model and budget fixed and add deployment-like tasks to test whether gains come from the target capability itself.

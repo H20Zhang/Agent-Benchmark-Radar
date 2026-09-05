@@ -57,3 +57,8 @@ Compare one long run with several short runs under equal total compute and a fix
 ## Genealogy consequence
 
 `map_delta=early_signal`, bound to `data-agent-research-integrity`. It moves Data Agent evaluation toward autonomous ML research in real repositories and makes reward integrity first-class. One new record does not change the durable defining chain.
+
+
+## Remaining gap and next validation
+
+What remains unmeasured is stability across settings and transfer to realistic workflows. The next experiment should hold model and budget fixed and add deployment-like tasks to test whether gains come from the target capability itself.

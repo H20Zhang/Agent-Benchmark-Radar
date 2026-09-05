@@ -61,3 +61,7 @@ task-local data 仍避开 enterprise longitudinal change、permission、write、
 `single-source analytics → heterogeneous evidence workflows → multi-source data-agent orchestration`
 
 它把 data-agent 的评测对象从 query execution 扩成了 evidence orchestration。
+
+## 结论边界
+
+该分数不能单独证明端到端真实场景能力；模型、harness、工具预算和 evaluator 都可能形成混杂因素，跨设置比较必须先控制这些变量。

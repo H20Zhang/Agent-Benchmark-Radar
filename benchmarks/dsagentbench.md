@@ -65,3 +65,8 @@ DSAgentBench 把数据智能体评测从孤立的 SQL、代码或分析步骤，
 > **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
 
 <!-- RESEARCH-DECISION:END -->
+
+
+## 测量对象
+
+这个基准的核心测量对象不是泛化的“Agent 能力”，而是上文任务定义所对应的具体能力；解读时应把任务、输入、工具与 evaluator 一起视为 measurement object。

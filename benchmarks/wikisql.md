@@ -61,3 +61,7 @@ WikiSQL 证明的是：模型能否把问题映射成一张已知 table 上的�
 `natural-language database query → executable single-table SQL → cross-domain schema generalization`
 
 WikiSQL 的重要性恰恰在于：后来的 benchmark 可以清楚说明它还漏掉了什么。
+
+## 结论边界
+
+该分数不能单独证明端到端真实场景能力；模型、harness、工具预算和 evaluator 都可能形成混杂因素，跨设置比较必须先控制这些变量。

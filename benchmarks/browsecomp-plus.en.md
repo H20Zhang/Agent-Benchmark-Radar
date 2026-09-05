@@ -47,3 +47,8 @@ Cross retrievers with agents under fixed documents, top-k, and total calls, repo
 > **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
 
 <!-- RESEARCH-DECISION:END -->
+
+
+## Score boundary
+
+The score cannot by itself establish end-to-end real-world capability. Model, harness, tool budget, and evaluator are potential confounds, so cross-setting comparisons require those controls.

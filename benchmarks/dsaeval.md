@@ -61,3 +61,7 @@ benchmark 支持 cumulative project competence，并暴露 quality–efficiency�
 `one-shot data analysis → cumulative multimodal project → persistent analytical state`
 
 它把跨请求的 state continuity 变成 data-agent 的显式能力。
+
+## 结论边界
+
+该分数不能单独证明端到端真实场景能力；模型、harness、工具预算和 evaluator 都可能形成混杂因素，跨设置比较必须先控制这些变量。

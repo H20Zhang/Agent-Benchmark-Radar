@@ -57,3 +57,8 @@ Pin project, backend, and hidden-verifier commits and re-run the same patch acro
 > **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
 
 <!-- RESEARCH-DECISION:END -->
+
+
+## Remaining gap and next validation
+
+What remains unmeasured is stability across settings and transfer to realistic workflows. The next experiment should hold model and budget fixed and add deployment-like tasks to test whether gains come from the target capability itself.

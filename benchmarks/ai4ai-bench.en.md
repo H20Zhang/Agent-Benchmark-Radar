@@ -57,3 +57,8 @@ Match proxy and formal-training budgets, pin baseline reruns and patch boundarie
 ## Genealogy consequence
 
 `map_delta=early_signal`, bound to `data-agent-research-integrity`. It isolates learning-algorithm design more tightly than broad ML-agent suites, but one record does not change the durable defining chain.
+
+
+## Remaining gap and next validation
+
+What remains unmeasured is stability across settings and transfer to realistic workflows. The next experiment should hold model and budget fixed and add deployment-like tasks to test whether gains come from the target capability itself.

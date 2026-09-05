@@ -61,3 +61,7 @@ RealMem 能支持对 evolving project history 的 retrieval/reasoning 能力判�
 `casual conversation memory → cross-session project state → persistent work context`
 
 它把 evolving project state 变成一个独立 memory object，更接近 workplace agent 的真实使用方式。
+
+## 结论边界
+
+该分数不能单独证明端到端真实场景能力；模型、harness、工具预算和 evaluator 都可能形成混杂因素，跨设置比较必须先控制这些变量。

@@ -57,3 +57,12 @@ Fix requested volume, search tools, and fetch budget. Report deduplicated discov
 > **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
 
 <!-- RESEARCH-DECISION:END -->
+
+
+## Remaining gap and next validation
+
+What remains unmeasured is stability across settings and transfer to realistic workflows. The next experiment should hold model and budget fixed and add deployment-like tasks to test whether gains come from the target capability itself.
+
+## What changed relative to precursors
+
+Compared with precursors on the same research line, its value is the newly explicit task boundary described above. The meaningful comparison is the added measurement coordinate, not dataset size alone.

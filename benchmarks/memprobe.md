@@ -61,3 +61,7 @@ recovery score 能说明 **哪些信息真正进入了可查询的持久 memory 
 `task success → persistent-memory artifact → representation coverage audit`
 
 它暴露了一个容易被忽略的事实：agent 表面上很能干，背后的长期状态却可能非常差。
+
+## 结论边界
+
+该分数不能单独证明端到端真实场景能力；模型、harness、工具预算和 evaluator 都可能形成混杂因素，跨设置比较必须先控制这些变量。

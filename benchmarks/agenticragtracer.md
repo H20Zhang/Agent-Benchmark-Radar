@@ -61,3 +61,7 @@ benchmark 有 1,305 个自动构造实例，覆盖多个 domain，并与主流 b
 `multi-hop final answer → hop-level trace → causal diagnosis of search allocation`
 
 它把 reasoning chain 的长度和形状本身变成了评测对象。
+
+## 结论边界
+
+该分数不能单独证明端到端真实场景能力；模型、harness、工具预算和 evaluator 都可能形成混杂因素，跨设置比较必须先控制这些变量。
