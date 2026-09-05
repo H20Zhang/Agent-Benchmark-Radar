@@ -110,7 +110,7 @@ test("opportunity and frontier routes remain available as secondary research sur
 
   for (const token of ["research.opportunities", "candidate_evaluation", "Opportunity map"]) assert.ok(opportunities.includes(token), token);
   for (const token of ["why_it_matters", "current_coverage", "next_coordinate", "candidate_evaluation"]) assert.ok(opportunity.includes(token), token);
-  for (const token of ["frontierShifts", "getProgressPoint", "genealogy", "Evaluation frontier"]) assert.ok(frontier.includes(token), token);
+  for (const token of ["frontierShifts", "recentItems", "freshness.discovery_scan_at", "genealogy", "Evaluation frontier"]) assert.ok(frontier.includes(token), token);
 });
 
 test("area pages inherit genealogy, results, opportunities, and frontier shifts", () => {
