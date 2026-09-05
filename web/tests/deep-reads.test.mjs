@@ -14,8 +14,8 @@ test("deep reads load the matching bilingual benchmark note", () => {
 });
 
 test("thin deep reads are completed from the canonical registry without mutating source markdown", () => {
-  const zh = loadDeepRead("scale-qa", "zh");
-  const en = loadDeepRead("scale-qa", "en");
+  const zh = loadDeepRead("wikisql", "zh");
+  const en = loadDeepRead("wikisql", "en");
 
   assert.equal(zh.canonicalAppendixAdded, true);
   assert.equal(en.canonicalAppendixAdded, true);
@@ -27,8 +27,8 @@ test("thin deep reads are completed from the canonical registry without mutating
 });
 
 test("mature deep reads are preserved rather than padded with duplicate boilerplate", () => {
-  const zh = loadDeepRead("wikisql", "zh");
-  const en = loadDeepRead("wikisql", "en");
+  const zh = loadDeepRead("lifeside", "zh");
+  const en = loadDeepRead("lifeside", "en");
 
   assert.equal(zh.canonicalAppendixAdded, false);
   assert.equal(en.canonicalAppendixAdded, false);
