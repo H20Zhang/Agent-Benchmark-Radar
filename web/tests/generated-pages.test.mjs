@@ -5,22 +5,23 @@ import test from "node:test";
 const read = (path) =>
   readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("home temporarily sends readers to README while the website is under improvement", () => {
+test("home is a public content-first research index", () => {
   const page = read("src/pages/[lang]/index.astro");
   for (const token of [
-    "网站待完善",
-    "Website under improvement",
-    "github.com/H20Zhang/Agent-Benchmark-Radar",
-    'robots="noindex,nofollow"',
+    "loadRegistry",
+    "loadResearchModel",
+    "content-home__table",
+    "Latest releases",
+    "Research signals",
+    'robots="index,follow"',
   ]) {
     assert.ok(page.includes(token), token);
   }
   for (const token of [
-    "loadResearchModel",
-    "loadAllResultSets",
-    "benchmark-timeline",
-    "tool-result-table",
-    "tool-suite-grid",
+    "网站待完善",
+    "Website under improvement",
+    'robots="noindex,nofollow"',
+    "wip-shell",
   ]) {
     assert.ok(!page.includes(token), token);
   }
