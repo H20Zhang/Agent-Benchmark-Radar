@@ -1,0 +1,57 @@
+name: Materialize Full Editorial Pass
+on:
+  push:
+    branches: [chatgpt/full-editorial-20260905]
+    paths: [.github/workflows/materialize-editorial.yml]
+permissions:
+  contents: write
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: chatgpt/full-editorial-20260905
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Materialize all 126 bilingual decision guides
+        run: python scripts/materialize_full_editorial.py
+      - name: Assert authored coverage
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          zh=[]; en=[]
+          for p in Path('benchmarks').glob('*.md'):
+              if p.name.endswith('.en.md'): continue
+              if '<!-- RESEARCH-DECISION:START -->' in p.read_text(): zh.append(p.stem)
+          for p in Path('benchmarks').glob('*.en.md'):
+              if '<!-- RESEARCH-DECISION:START -->' in p.read_text(): en.append(p.name[:-6])
+          assert len(zh)==126, len(zh)
+          assert len(en)==126, len(en)
+          assert set(zh)==set(en), (set(zh)-set(en), set(en)-set(zh))
+          print('authored decision cards:', len(zh), 'zh +', len(en), 'en')
+          PY
+      - name: Validate repository contracts
+        run: |
+          python -m unittest discover -s tests -v
+          python scripts/validate_reading.py
+          python scripts/validate_detail_pages.py
+          python scripts/audit_detail_pages.py
+      - name: Validate and build website
+        working-directory: web
+        run: |
+          npm install --no-audit --no-fund
+          npm test
+          npm run check
+          npm run build
+      - name: Commit reviewed source pages
+        run: |
+          git config user.name 'Hao Zhang'
+          git config user.email 'zhanghaowuda12@gmail.com'
+          git add -A
+          git commit -m 'content: rewrite all benchmark detail pages and research homepage'
+          git push origin HEAD:chatgpt/full-editorial-20260905
