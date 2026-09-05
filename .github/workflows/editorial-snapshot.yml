@@ -1,3 +1,4 @@
+# Include the complete 126-benchmark authored editorial set.
 name: Editorial Source Snapshot
 on:
   push:
