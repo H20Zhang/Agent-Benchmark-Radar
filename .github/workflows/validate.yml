@@ -26,6 +26,8 @@ jobs:
         run: python scripts/validate_reading.py
       - name: Validate benchmark detail pages
         run: python scripts/validate_detail_pages.py
+      - name: Audit benchmark detail depth
+        run: python scripts/audit_detail_pages.py
       - name: Install web dependencies
         working-directory: web
         run: npm install --no-audit --no-fund
