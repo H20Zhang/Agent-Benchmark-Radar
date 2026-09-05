@@ -1,0 +1,297 @@
+name: Frontier Freshness Language 2026-09-05
+on:
+  push:
+    branches: [chatgpt/frontier-freshness-language-20260905]
+    paths: [.github/workflows/frontier-freshness-language-20260905.yml]
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: {ref: chatgpt/frontier-freshness-language-20260905}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v7
+        with: {node-version: '24'}
+      - name: Apply content and frontier repairs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re
+          root=Path('.')
+          registry_path=root/'data/benchmarks.json'
+          records=json.loads(registry_path.read_text())
+          ids={r['id'] for r in records}
+          new_records=[
+            {
+              'id':'eal-bench','name':'EAL-Bench','area':'agent-memory','evolution_role':'frontier','released':'2026-09-01','importance':5,'status':'active',
+              'summary':'Tests whether persistent agent memory preserves evolving authorization state and whether false permissions propagate into unauthorized downstream actions.',
+              'capabilities':['authorization-state-tracking','memory-update','provenance-preservation','downstream-action-safety'],
+              'environment':['persistent-agent-memory','tool-using-agent'],
+              'protocol':['memory-writer-executor','canonical-authorization-ledger','action-scoring'],
+              'scale':'Evaluates five LLMs as memory writers and two as executors across procurement, cybersecurity, and finance.',
+              'measurement_strength':'Separates formation of false authority in memory from propagation into executable unauthorized actions, making provenance and authorization state first-class memory-evaluation objects.',
+              'coverage_gap':'Does not yet establish behavior across broader agent stacks, long deployment histories, or heterogeneous real enterprise authorization systems.',
+              'confounders':['writer-model','executor-model','memory-update-format','authorization-policy-construction'],
+              'artifacts':{'paper':'https://arxiv.org/abs/2609.01836'},
+              'last_verified':'2026-09-05',
+              'citations':{'count':None,'source':'semantic-scholar','updated_at':'2026-09-05','status':'unmatched'}
+            },
+            {
+              'id':'memory-trust-gap','name':'The Memory Trust Gap','area':'agent-memory','evolution_role':'frontier','released':'2026-09-01','importance':4,'status':'active',
+              'summary':'Measures when persistent-memory agents over-trust stale stored facts over current authoritative evidence and how that failure changes with model capability.',
+              'capabilities':['stale-memory-conflict','source-authority','recency-reasoning','memory-safety'],
+              'environment':['persistent-agent-memory','authoritative-tool-evidence'],
+              'protocol':['frozen-closed-set','action-scoring','factorial-intervention','model-scale-series'],
+              'scale':'Uses Benefit and Safety suites plus a 2×2×2×2 factorial over memory cues, evaluated across Qwen3 model sizes with replication on Llama-Instruct and external datasets.',
+              'measurement_strength':'Turns stale-memory over-trust into a controlled causal evaluation by separating useful-memory cases from cases where an authoritative tool contradicts memory.',
+              'coverage_gap':'Closed-set controlled tasks do not yet show how trust failures behave in long-lived open-world agents with multiple tools, writers, and changing source policies.',
+              'confounders':['model-scale','memory-framing','source-presentation','closed-set-task-design'],
+              'artifacts':{'paper':'https://arxiv.org/abs/2609.01852'},
+              'last_verified':'2026-09-05',
+              'citations':{'count':None,'source':'semantic-scholar','updated_at':'2026-09-05','status':'unmatched'}
+            }
+          ]
+          for r in new_records:
+            if r['id'] not in ids: records.append(r)
+          registry_path.write_text(json.dumps(records,ensure_ascii=False,indent=2)+'\n')
+
+          freshness={
+            'discovery_scan_at':'2026-09-05','window_days':30,
+            'scope':['agent-memory','rag','data-agent'],
+            'sources':['arXiv recent/search','ACL Anthology','public benchmark repositories and leaderboards'],
+            'inclusion_rule':'Reusable benchmark or evaluation contribution with a public primary source and a measurement object inside the Radar scope. Methods without a distinct evaluation contribution are excluded.',
+            'note':'Benchmark discovery freshness is tracked separately from citation refresh and structured result-track verification.'
+          }
+          (root/'data/freshness.json').write_text(json.dumps(freshness,ensure_ascii=False,indent=2)+'\n')
+
+          scale_zh='''# SCALE-QA
+
+- **测量对象：** 在没有会话或主题边界的混合长对话里，当后续任务决策依赖早期、局部且长期未被触发的约束时，记忆系统能否重建真正具有因果关系的情节，而不是只找到语义相似片段。
+- **最近前身：** LongMemEval 已覆盖跨会话推理、更新与拒答，但仍保留带时间戳的会话结构；SCALE-QA 去掉显式边界，把“哪一段历史构成当前有效情节”本身变成待恢复对象。
+- **决定性证据：** 基准包含 3,000 个审计问题、10 个领域与 4,346 个精确证据片段；同一确定性运行环境可从 16K 扩到 128K，并提供 400 题的 1M 长度诊断。GPT-4o-mini 在 128K 全上下文设置下，即使相关证据全部已经包含在上下文中，准确率仍只有 29.8%，说明“证据已经出现”与“恢复正确情节”不是同一个测量对象。
+- **结论上限：** 这些结果支持 SCALE-QA 作为情节完整性的高区分度诊断；TSIM 在不同底层检索实现上领先最强对应基线 5.6–17.6 个百分点，是系统级证据，不能单独归因于分段、索引或路由中的某个组件。
+- **最强混淆：** 数据采用反事实合成构造，主协议是确定性的四选一问题；回答模型、检索上下文预算与运行时噪声构造仍会影响系统分数。
+- **未覆盖：** 真实长期日志、开放式回答、工具跟进与后续行动；论文在 LongMemEval 上的迁移诊断采用了在目标数据上选择配置的方式，不能当作严格的留出集泛化证据。
+- **谱系：** 把 LongMemEval 式“跨会话记住并更新”进一步拆成“在交错历史里先恢复当前任务真正绑定的情节与约束”；`map_delta=early_signal`，单篇工作不足以改写长期稳定的 Benchmark Map。
+
+Primary: https://arxiv.org/abs/2608.25655
+Code/data: https://github.com/LordTARN1SHED/SCALE-QA
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究交错历史中的情节恢复，而不是把长上下文问题简化为“证据有没有被召回”。证据全部可见时，模型仍可能套用错误情境与约束；因此它更接近任务绑定关系的诊断，而不是通用检索排行榜。
+
+### 一个具体任务长什么样
+
+示意任务：多个项目在一条没有明确边界的长对话里交替出现，相同实体被多次提及。当前问题受某个早期项目中的局部约束支配；找到实体相关片段之后，还要判断这些片段究竟属于哪个情节。
+
+### 最有判别力的实验
+
+固定支持证据与问题，分别提供原始交错历史、正确情节边界和正确有效状态，再改变干扰长度，拆分情节识别与状态推理的损失。论文中的某个全上下文模型分数只应作为该配置的历史基线，不是整个基准的“当前最好成绩”。
+
+### 建议搭配
+
+[came-bench](came-bench.md) · [statemembench](statemembench.md)
+
+> **读分数的原则：** 先对齐任务与数据切分、模型与智能体运行框架、工具与环境版本、资源预算、停止与重试规则以及评判器。协议不同的总分首先是系统级证据；没有配对干预或消融时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+'''
+          (root/'benchmarks/scale-qa.md').write_text(scale_zh)
+
+          pages={
+'eal-bench.md':'''# EAL-Bench：持久记忆是否会“洗出”从未存在的权限
+
+**中文** | [English](eal-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+
+[论文](https://arxiv.org/abs/2609.01836) · **领域：Agent Memory**
+
+## 它到底测什么
+
+EAL-Bench 把“记忆是否准确”进一步收紧为**授权状态是否被忠实保存，以及错误授权是否会传播成真实行动**。它把记忆写入者、下游执行者、规范授权账本和动作判定拆开，区分错误权限的形成与传播。
+
+## 相比前身多测了什么
+
+AuthMem-Bench 已把来源权威带进持久记忆评测；EAL-Bench 更进一步，直接追踪权限、限制和撤销随时间变化时，记忆是否会产生底层历史从未授予的权限，并检查执行者是否会据此采取越权行动。
+
+## 评测协议与证据
+
+论文在采购、网络安全和金融三个领域中，让 5 个模型担任记忆写入者、2 个模型担任执行者。增量记忆更新在部分设置下会为最多 50.2% 的未授权请求形成虚假权限；一旦虚假权限进入记忆，执行者在 98.6% 的试验中会据此行动。
+
+## 结论边界
+
+这说明持久记忆本身可能成为智能体的有效授权策略组成部分，而不只是性能组件。但结果仍依赖授权任务构造、写入格式、写入模型与执行模型，不能直接推广到所有企业权限系统。
+
+## 剩余缺口
+
+还需要更长时间跨度、更多工具与多写入者场景，以及真实权限系统中的独立复现；防御还要同时报告安全收益与合法请求被误拒的代价。
+
+## 研究决策卡
+
+最有判别力的下一实验是固定执行模型和授权历史，只改变记忆表示与更新机制，同时分别报告“虚假权限形成率”和“形成后越权执行率”。这样才能判断问题来自记忆写入，还是来自下游执行者对记忆的过度信任。
+
+Primary: https://arxiv.org/abs/2609.01836
+''',
+'eal-bench.en.md':'''# EAL-Bench: when persistent memory creates authority that history never granted
+
+[中文](eal-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+
+[Paper](https://arxiv.org/abs/2609.01836) · **Area: Agent Memory**
+
+## What it measures
+
+EAL-Bench narrows memory correctness to preservation of evolving authorization state and asks whether memory errors propagate into executable unauthorized actions. It separates the memory writer, downstream executor, canonical authorization ledger, and action predicate.
+
+## Compared with what
+
+AuthMem-Bench already makes source authority explicit. EAL-Bench adds evolving permissions, restrictions, and revocations, then tests both formation of false authority in memory and downstream propagation into actions.
+
+## Protocol and decisive evidence
+
+Across procurement, cybersecurity, and finance, five LLMs act as memory writers and two as executors. Under incremental memory updates, false authority is created for up to 50.2% of unauthorized requests in some settings; once present, executors act on it in 98.6% of trials.
+
+## Score boundary
+
+The result supports treating persistent memory as part of an agent's effective authorization policy, not merely as a performance component. It does not establish behavior across arbitrary enterprise authorization systems because writer, executor, update representation, and task construction remain load-bearing variables.
+
+## Remaining gap
+
+Longer deployments, multi-writer memory, broader tool stacks, and independent evaluation on real authorization systems remain open. Mitigations should report both security benefit and the utility cost from rejecting legitimate actions.
+
+## Research decision
+
+The most discriminating next experiment holds the executor and authorization history fixed while changing only the memory representation/update mechanism, reporting false-authority formation separately from execution after formation.
+
+Primary: https://arxiv.org/abs/2609.01836
+''',
+'memory-trust-gap.md':'''# The Memory Trust Gap：更强的模型也可能更相信过期记忆
+
+**中文** | [English](memory-trust-gap.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+
+[论文](https://arxiv.org/abs/2609.01852) · **领域：Agent Memory**
+
+## 它到底测什么
+
+该基准测量持久记忆与当前权威证据冲突时，模型何时会**错误相信过期记忆**。Benefit 套件中，任务没有记忆就无法完成；Safety 套件中，权威工具始终给出当前正确值，因此两套任务把“记忆有帮助”和“记忆会伤害”明确分开。
+
+## 相比前身多测了什么
+
+StateMemBench、MemTrapBench 等已暴露过期状态和记忆诱导错误；这里新增的关键坐标是**模型能力规模与记忆过度信任之间的交互**，并用受控因子实验分别改变标签、时间新近性、来源权威和位置。
+
+## 决定性证据
+
+论文在 Qwen3 0.6B、1.7B、4B、8B 的同系列模型上发现：Benefit 套件里各规模模型都高度依赖记忆；Safety 套件里，更大模型在某些“过期记忆看起来更新”的条件下反而出现更明显的伤害。作者还在 Llama-Instruct 系列和两个外部数据集上验证了主要模式。
+
+## 结论边界
+
+结果支持“持久记忆的信任策略具有模型能力依赖性”，但不能直接推出更强模型普遍更不安全；任务是冻结、封闭集合且受控的，具体失败还依赖记忆呈现方式与冲突构造。
+
+## 剩余缺口
+
+需要在开放世界、多工具、多来源以及长期写入历史中验证，并区分模型对记忆、普通文档和工具证据的信任策略是否一致。
+
+## 研究决策卡
+
+最有价值的用法是把“有记忆/无记忆”扩展成至少三臂：无记忆、过期记忆、过期记忆+当前权威工具证据，并按模型规模做同系列比较。这样可以区分记忆收益、记忆伤害与冲突解决能力。
+
+Primary: https://arxiv.org/abs/2609.01852
+''',
+'memory-trust-gap.en.md':'''# The Memory Trust Gap: stronger models can still over-trust stale memory
+
+[中文](memory-trust-gap.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+
+[Paper](https://arxiv.org/abs/2609.01852) · **Area: Agent Memory**
+
+## What it measures
+
+The benchmark measures when a persistent-memory agent trusts a stale stored fact over current authoritative evidence. A Benefit suite requires memory to solve the task; a Safety suite always exposes the correct current value through an authoritative tool, separating useful memory from harmful over-trust.
+
+## Compared with what
+
+StateMemBench and MemTrapBench already expose stale-state and memory-induced failures. This work adds model-capability scale as an explicit coordinate and uses controlled interventions over labeling, recency, source authority, and position.
+
+## Decisive evidence
+
+Across Qwen3 0.6B, 1.7B, 4B, and 8B, memory is heavily used in the Benefit suite. In the Safety suite, larger models can be harmed more strongly under conditions where stale memory is made to look newer. The main pattern is also tested on a Llama-Instruct size series and two external datasets.
+
+## Score boundary
+
+The evidence supports capability-dependent memory-trust behavior; it does not establish that stronger models are generally less safe. The tasks are frozen, closed-set, and controlled, and the observed interaction depends on presentation and conflict construction.
+
+## Remaining gap
+
+Open-world agents with multiple tools, multiple sources, and long write histories remain unmeasured, as does whether models apply the same trust policy to memory, ordinary documents, and tool evidence.
+
+## Research decision
+
+A useful minimum design is three-arm rather than memory/no-memory: no memory, stale memory, and stale memory plus current authoritative tool evidence, run across a same-family model-size series.
+
+Primary: https://arxiv.org/abs/2609.01852
+'''
+          }
+          for name,text in pages.items(): (root/'benchmarks'/name).write_text(text)
+
+          def update_readme(path,lang):
+            text=path.read_text(); count=len(records)
+            if lang=='zh':
+              text=re.sub(r'组织 \d+ 个 Benchmark',f'组织 {count} 个 Benchmark',text)
+              text=re.sub(r'以下是 registry 中的全部 \d+ 个基准',f'以下是 registry 中的全部 {count} 个基准',text)
+              text=re.sub(r'最后更新：\*\*\d{4}-\d{2}-\d{2}\*\*', '最后更新：**2026-09-05**', text)
+              recent='''| 2026-09-01 | Agent Memory | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | 测持久记忆能否忠实保存持续变化的授权状态，以及错误权限是否会传播成真实越权行动。 |\n| 2026-09-01 | Agent Memory | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | 测过期记忆与当前权威证据冲突时的过度信任，并显式比较这种失败如何随模型能力变化。 |\n'''
+              area='''| 🔭 前沿 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | — | 2026-09-01 | 测持久记忆中的虚假权限形成，以及错误授权向下游越权行动的传播。 |\n| 🔭 前沿 | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | — | 2026-09-01 | 测过期记忆与当前权威工具证据冲突时的过度信任，以及模型规模对该失败的影响。 |\n'''
+              text=text.replace('| 2026-08-26 | Agent Memory | [SCALE-QA]',recent+'| 2026-08-26 | Agent Memory | [SCALE-QA]',1)
+              text=text.replace('<!-- TABLE-FIRST:AREA:agent-memory:END -->',area+'<!-- TABLE-FIRST:AREA:agent-memory:END -->',1)
+              text=text.replace('| **Agent Memory** | 安全评价从“是否记住正确内容”扩展到**持久记忆整个生命周期的完整性**：InjecMEM 测恶意写入到后续检索与生成，Utility Under Attack 同时计算防御造成的良性 utility 损失，The Compaction Cliff 则测规则在反复压缩后是否仍能约束行动。 | [InjecMEM](https://arxiv.org/abs/2608.23471) · [Utility Under Attack](https://arxiv.org/abs/2608.21230) · [The Compaction Cliff](https://arxiv.org/abs/2608.22752) |','| **Agent Memory** | 评测从“记住了什么”进一步转向**记忆是否保留来源权威与授权状态，以及错误记忆是否真的改变行动**。EAL-Bench 直接测虚假权限形成与越权传播；The Memory Trust Gap 则显示记忆冲突的失败模式会随模型能力变化。 | [EAL-Bench](https://arxiv.org/abs/2609.01836) · [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) · [AuthMem-Bench](https://arxiv.org/abs/2608.01679) |')
+            else:
+              text=re.sub(r'\d+ benchmarks organized by',f'{count} benchmarks organized by',text, count=1)
+              text=re.sub(r'The registry contains all \d+ benchmarks',f'The registry contains all {count} benchmarks',text)
+              text=re.sub(r'Last updated: \*\*\d{4}-\d{2}-\d{2}\*\*','Last updated: **2026-09-05**',text)
+              recent='''| 2026-09-01 | Agent Memory | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | Tests whether persistent memory preserves evolving authorization state and whether false permissions propagate into unauthorized actions. |\n| 2026-09-01 | Agent Memory | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | Tests over-trust in stale memory when current authoritative evidence conflicts with it, including model-capability effects. |\n'''
+              area='''| 🔭 Frontier | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | — | 2026-09-01 | Formation of false authority in persistent memory and propagation into unauthorized downstream actions. |\n| 🔭 Frontier | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | — | 2026-09-01 | Capability-dependent over-trust of stale memory against current authoritative tool evidence. |\n'''
+              text=text.replace('| 2026-08-26 | Agent Memory | [SCALE-QA]',recent+'| 2026-08-26 | Agent Memory | [SCALE-QA]',1)
+              text=text.replace('<!-- TABLE-FIRST:AREA:agent-memory:END -->',area+'<!-- TABLE-FIRST:AREA:agent-memory:END -->',1)
+            path.write_text(text)
+          update_readme(root/'README.md','zh'); update_readme(root/'README.en.md','en')
+
+          fp=root/'web/src/pages/[lang]/frontier/index.astro'
+          s=fp.read_text()
+          s=s.replace('import { getProgressPoint, loadAllResultSets } from "../../../lib/results.mjs";','import { loadAllResultSets } from "../../../lib/results.mjs";\nimport { readFileSync } from "node:fs";\nimport { fromRepositoryRoot } from "../../../lib/repository-path.mjs";')
+          start=s.index('const resultSets = loadAllResultSets();')
+          end=s.index('const canonicalPath =',start)
+          logic='''const resultSets = loadAllResultSets();\nconst freshness = JSON.parse(readFileSync(fromRepositoryRoot("data", "freshness.json"), "utf8"));\nconst scanDate = new Date(`${freshness.discovery_scan_at}T00:00:00Z`);\nconst cutoff = new Date(scanDate.getTime() - freshness.window_days * 86_400_000);\nconst asDate = (released: string) => new Date(`${released.length === 7 ? `${released}-01` : released}T00:00:00Z`);\nconst recentItems = items.filter((item) => item.status === "active" && asDate(item.released) >= cutoff).sort((a,b) => b.released.localeCompare(a.released) || a.name.localeCompare(b.name));\n'''
+          s=s[:start]+logic+s[end:]
+          sec_start=s.index('    <section class="frontier-progress">')
+          sec_end=s.index('    <section class="frontier-shifts shell">',sec_start)
+          section='''    <section class="frontier-progress">\n      <div class="shell">\n        <header class="frontier-section-heading"><div><p class="eyebrow">Frontier watchlist</p><h2>{lang === "zh" ? "最近 30 天：全部新收录 Benchmark" : "Last 30 days: every newly released benchmark in scope"}</h2></div><p>{lang === "zh" ? "这里不再做跨指标的伪归一化散点图。选入规则是客观的：在最近一次 discovery scan 前 30 天内发布、属于三条 Radar 主线、且 canonical registry 中状态为 active 的全部 Benchmark，一个不抽样。" : "This replaces the cross-metric scatter plot. The inclusion rule is objective: every active canonical benchmark in the three Radar areas released within 30 days before the latest discovery scan—no sampling."}</p></header>\n        <div class="frontier-freshness-summary">\n          <strong>{lang === "zh" ? `Discovery 最近核验：${freshness.discovery_scan_at}` : `Discovery last verified: ${freshness.discovery_scan_at}`}</strong>\n          <span>{lang === "zh" ? `最近 ${freshness.window_days} 天共 ${recentItems.length} 个` : `${recentItems.length} in the last ${freshness.window_days} days`}</span>\n          <span>{lang === "zh" ? `Registry：${items.length} 个` : `Registry: ${items.length}`}</span>\n          <span>{lang === "zh" ? `结构化成绩轨道：${resultSets.size} 个` : `Structured result tracks: ${resultSets.size}`}</span>\n        </div>\n        <div class="frontier-watchlist" role="table" aria-label={lang === "zh" ? "最近三十天 benchmark watchlist" : "30-day benchmark watchlist"}>\n          <div class="frontier-watchlist__row frontier-watchlist__head" role="row"><b>{lang === "zh" ? "发布日期" : "Released"}</b><b>Benchmark</b><b>{lang === "zh" ? "方向" : "Area"}</b><b>{lang === "zh" ? "条目核验" : "Registry verified"}</b><b>{lang === "zh" ? "成绩轨道" : "Result track"}</b></div>\n          {recentItems.map((item) => { const rs = resultSets.get(item.id); return <a class="frontier-watchlist__row" role="row" href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}><time datetime={item.released}>{item.released}</time><strong>{item.name}</strong><span>{copy.areas[item.area].label}</span><time datetime={item.last_verified}>{item.last_verified}</time><span>{rs ? (lang === "zh" ? `已核验至 ${rs.verified_at}` : `verified ${rs.verified_at}`) : (lang === "zh" ? "尚未建立" : "not tracked yet")}</span></a>; })}\n        </div>\n        <p class="frontier-selection-note">{lang === "zh" ? "为什么这些 Benchmark 在这里？因为它们满足时间窗口与收录范围，而不是因为人工挑选了“看起来强”的点。真正的前沿判断放在下面的 Frontier shifts：那里每条判断都必须说明测量边界发生了什么变化。" : "Why these benchmarks? They satisfy the time window and scope, rather than being hand-picked as visually impressive points. Actual frontier judgments live in Frontier shifts below, where each entry must state what changed in the measurement boundary."}</p>\n      </div>\n    </section>\n\n'''
+          s=s[:sec_start]+section+s[sec_end:]
+          fp.write_text(s)
+
+          test='''from pathlib import Path\nimport json,re,unittest\nROOT=Path(__file__).resolve().parents[1]\nclass FreshnessLanguageContract(unittest.TestCase):\n  def test_readme_counts_follow_registry(self):\n    n=len(json.loads((ROOT/'data/benchmarks.json').read_text()))\n    self.assertIn(f'组织 {n} 个 Benchmark',(ROOT/'README.md').read_text())\n    self.assertIn(f'{n} benchmarks organized by',(ROOT/'README.en.md').read_text())\n  def test_frontier_has_explicit_selection_not_opaque_scatter(self):\n    t=(ROOT/'web/src/pages/[lang]/frontier/index.astro').read_text()\n    self.assertIn('every active canonical benchmark',t)\n    self.assertIn('Discovery last verified',t)\n    self.assertNotIn('progress-map__point',t)\n    self.assertNotIn('getProgressPoint',t)\n  def test_scale_qa_chinese_avoids_unnecessary_english_prose(self):\n    t=(ROOT/'benchmarks/scale-qa.md').read_text()\n    for phrase in ['memory system','evidence containment','system-level evidence','runtime noise construction','protocol cell']:\n      self.assertNotIn(phrase,t)\n  def test_freshness_scan_is_current_and_separate(self):\n    f=json.loads((ROOT/'data/freshness.json').read_text())\n    self.assertEqual('2026-09-05',f['discovery_scan_at'])\n    self.assertIn('separately',f['note'])\nif __name__=='__main__': unittest.main()\n'''
+          (root/'tests/test_freshness_language.py').write_text(test)
+          PY
+      - name: Validate repository and web
+        run: |
+          python -m unittest discover -s tests -v
+          python scripts/validate_reading.py
+          python scripts/validate_detail_pages.py
+          python scripts/audit_detail_pages.py
+          cd web
+          npm install --no-audit --no-fund
+          npm test
+          npm run check
+          npm run build
+      - name: Commit and remove one-off workflow
+        run: |
+          rm .github/workflows/frontier-freshness-language-20260905.yml
+          git config user.name 'Hao Zhang'
+          git config user.email 'zhanghaowuda12@gmail.com'
+          git add -A
+          git commit -m 'fix: make frontier selection freshness and Chinese prose explicit'
+          git push origin HEAD:chatgpt/frontier-freshness-language-20260905
