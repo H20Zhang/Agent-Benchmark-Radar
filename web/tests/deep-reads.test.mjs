@@ -14,8 +14,8 @@ test("deep reads load the matching bilingual benchmark note", () => {
 });
 
 test("thin deep reads are completed from the canonical registry without mutating source markdown", () => {
-  const zh = loadDeepRead("wikisql", "zh");
-  const en = loadDeepRead("wikisql", "en");
+  const zh = loadDeepRead("vakra", "zh");
+  const en = loadDeepRead("vakra", "en");
 
   assert.equal(zh.canonicalAppendixAdded, true);
   assert.equal(en.canonicalAppendixAdded, true);
