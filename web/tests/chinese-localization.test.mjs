@@ -56,7 +56,7 @@ test("Chinese locale does not expose known English UI labels", () => {
   }
 });
 
-test("core Chinese pages do not hardcode the retired English eyebrow labels on the zh branch", () => {
+test("core Chinese pages use explicit localized labels on the public content site", () => {
   const detail = source("src/components/BenchmarkDetail.astro");
   const results = source("src/components/ResultsPanel.astro");
   const home = source("src/pages/[lang]/index.astro");
@@ -65,7 +65,9 @@ test("core Chinese pages do not hardcode the retired English eyebrow labels on t
   assert.match(detail, /supportEyebrow: "结论边界"/);
   assert.match(detail, /evidenceEyebrow: "证据摘要"/);
   assert.match(results, /eyebrow: "成绩进展"/);
-  assert.match(home, /lang === "zh" \? "网站待完善" : "Website under improvement"/);
+  assert.match(home, /lang === "zh" \? "最新发布" : "Latest releases"/);
+  assert.match(home, /lang === "zh" \? "研究信号" : "Research signals"/);
+  assert.doesNotMatch(home, /网站待完善|Website under improvement/);
   assert.match(explorer, /lang === "zh" \? "基准筛选" : "Benchmark explorer"/);
   assert.match(suites, /lang === "zh" \? "评测组合" : "Evaluation suites"/);
 });

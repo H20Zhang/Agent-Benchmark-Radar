@@ -9,7 +9,7 @@ Start with time to see what recently became measurable, then use area timelines 
 <!-- COMPLETE-TIMELINE:START -->
 
 
-| Released | Benchmark | Area | Role | What changed |
+| Time | Benchmark | Area | Role | What changed |
 |---:|---|---|---|---|
 | 2026-08-26 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | Agent Memory | 🔭 Frontier | Removes session/topic boundaries so recovering the episode that actually governs the current task becomes an explicit evaluation object. |
 | 2026-08-24 | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | Agent Memory | 🔭 Frontier | Connects one ordinary malicious write to post-drift retrieval and targeted generation. |
@@ -38,12 +38,15 @@ Start with time to see what recently became measurable, then use area timelines 
 | 2026-08-05 | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | RAG / Agentic Retrieval | 🔭 Frontier | Adds expert critical-step labels, a six-way cause taxonomy, and repair-based recovery evaluation. |
 | 2026-08-04 | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | RAG / Agentic Retrieval | 🔭 Frontier | Measures whether one paper stays retrievable across aspects instead of only one-query relevance. |
 | 2026-08-04 | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | Agent Memory | 🔭 Frontier | Uses persistence-on/off controls to attribute executable cross-episode benefit to retained state. |
+| 2026-08-03 | [AuthMem-Bench](https://arxiv.org/abs/2608.01679) <!-- benchmark-id:authmem-bench --> | Agent Memory | 🔭 Frontier | Moves memory safety from whether content is retained to the authority under which it is retained and later reused. |
 | 2026-08 | [DataSpace](https://arxiv.org/abs/2608.03451) <!-- benchmark-id:dataspace --> | Data Agents | 🔭 Frontier | Unifies heterogeneous evidence discovery with deterministic complete-result evaluation in a task-local workspace. |
 | 2026-08 | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | Data Agents | 🔭 Frontier | Moves data-agent evaluation into real computer environments where success requires multi-stage, multi-tool execution grounded in intermediate outputs. |
 | 2026-08 | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | RAG / Agentic Retrieval | 🔭 Frontier | Unifies structured API interaction and unstructured retrieval in one executable evaluation with policy constraints. |
 | 2026-07-29 | [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) <!-- benchmark-id:data-eng-bench --> | Data Agents | 🔭 Frontier | Uses executable dbt tasks and hidden row-level checks; an August fix makes evaluator reliability part of the measurement object. |
+| 2026-07-27 | [Agent Retrieval Bench](https://arxiv.org/abs/2607.24882) <!-- benchmark-id:agent-retrieval-bench --> | RAG / Agentic Retrieval | 🔭 Frontier | Redefines coding-agent retrieval around next-workflow context need and adds natural and counterfactual no-gold controls. |
 | 2026-07-27 | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | Agent Memory | 🔭 Frontier | Paired controls separate storage, knowledge, routing, and final-use failures. |
 | 2026-07-21 | [MemFuseBench](https://arxiv.org/abs/2608.18704) <!-- benchmark-id:memfusebench --> | Agent Memory | 🔭 Frontier | Separates linking, causal fusion, conflict handling, and provenance across heterogeneous sources. |
+| 2026-07-14 | [PM-Bench](https://arxiv.org/abs/2607.12385) <!-- benchmark-id:pm-bench --> | Agent Memory | 🔭 Frontier | Extends agent memory from remembering the past to remembering what must be done later, directly measuring prospective memory. |
 | 2026-07-14 | [WANDR](https://arxiv.org/abs/2608.14747) <!-- benchmark-id:wandr --> | RAG / Agentic Retrieval | 🔭 Frontier | Combines open-set discovery, enrichment, and record-level verification on the live web. |
 | 2026-07-09 | [CausalDS](https://arxiv.org/abs/2607.08093) <!-- benchmark-id:causalds --> | Data Agents | 🔭 Frontier | Extends data-agent evaluation beyond association and prediction to all Pearl rungs and recognition of unwarranted answers. |
 | 2026-07-01 | [LitReview Arena / LitReviewBench / LitJudge](https://arxiv.org/abs/2608.21374) <!-- benchmark-id:litreview-arena --> | RAG / Agentic Retrieval | 🔭 Frontier | Calibrates literature-review evaluation to topic-matched experts instead of generic LLM judges. |
@@ -136,7 +139,8 @@ Start with time to see what recently became measurable, then use area timelines 
 | 2020-09 | [KILT](https://arxiv.org/abs/2009.02252) <!-- benchmark-id:kilt --> | RAG / Agentic Retrieval | 🧱 Foundation | Made retrieval provenance and reusable retrieval infrastructure first-class across multiple downstream tasks. |
 | 2018-10 | [HotpotQA](https://aclanthology.org/D18-1259/) <!-- benchmark-id:hotpotqa --> | RAG / Agentic Retrieval | 🌱 Precursor | Established multi-document evidence composition and explainable supporting facts as measurable retrieval-reasoning targets. |
 | 2018-10 | [Spider](https://aclanthology.org/D18-1425/) <!-- benchmark-id:spider --> | Data Agents | 🧱 Foundation | Made cross-schema generalization and complex SQL the canonical database-language benchmark rather than memorizing one schema. |
-| 2017-08 | [WikiSQL](https://arxiv.org/abs/1709.00103) <!-- benchmark-id:wikisql --> | Data Agents | 🌱 Precursor | Made executable natural-language database querying a large-scale benchmarkable task. |<!-- COMPLETE-TIMELINE:END -->
+| 2017-08 | [WikiSQL](https://arxiv.org/abs/1709.00103) <!-- benchmark-id:wikisql --> | Data Agents | 🌱 Precursor | Made executable natural-language database querying a large-scale benchmarkable task. |
+<!-- COMPLETE-TIMELINE:END -->
 
 ## Browse by Area — Complete Timelines
 
@@ -145,8 +149,8 @@ Start with time to see what recently became measurable, then use area timelines 
 <!-- COMPLETE-MAP:agent-memory:START -->
 
 
-| Role | Benchmark | Released | What it evaluates | Why it changed the question |
-|---|---|---:|---|---|
+| Benchmark | Role | Time | What changed |
+|---|---|---:|---|
 | 🌱 Precursor | [Beyond Goldfish Memory](https://aclanthology.org/2022.acl-long.356/) <!-- benchmark-id:beyond-goldfish-memory --> | 2022-05 | Benchmarks long-term open-domain conversation across multiple human-human chat sessions where partners must remember and remain consistent with prior interactions. | Established cross-session conversation as a distinct long-term-memory setting before modern memory-agent benchmarks. |
 | 🧱 Foundation | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | 2024-08 | Long-horizon conversational-memory benchmark spanning QA, event summarization, and multimodal dialogue generation over very long multi-session conversations. | Established very-long-term conversational memory as a first-class evaluation target rather than a short-context dialogue property. |
 | 🧱 Foundation | [LongMemEval](https://arxiv.org/abs/2410.10813) <!-- benchmark-id:longmemeval --> | 2024-10 | Evaluates sustained chat-assistant memory across extraction, multi-session reasoning, temporal reasoning, knowledge updates, and abstention. | Made update, temporal reasoning, and abstention explicit instead of collapsing long-term memory into factual recall. |
@@ -178,8 +182,10 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 2026-07 | Evaluates multimodal long-term conversational memory across extraction and test-time adaptation, reasoning, and memory knowledge management. | Makes visual retention, multimodal reasoning, and memory organization first-class long-term-memory evaluation targets. |
 | 🔭 Frontier | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | 2026-07 | Evaluates whether long-term memory is proactively used for tool selection and parameter grounding during tool-based assistant actions. | Makes action-level memory utilization directly measurable instead of reading memory quality only through answers about past context. |
 | 🔭 Frontier | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | 2026-07 | Recognition and updating of implicit personalized risk across long, noise-heavy histories. | Extends user-state memory to evolving personalized safety while retaining helpfulness. |
+| [PM-Bench](https://arxiv.org/abs/2607.12385) <!-- benchmark-id:pm-bench --> | 🔭 Frontier | 2026-07-14 | Prospective-memory benchmark testing whether agents maintain delayed user intentions and execute them at the correct future cue while continuing ongoing activities. |
 | 🔭 Frontier | [MemFuseBench](https://arxiv.org/abs/2608.18704) <!-- benchmark-id:memfusebench --> | 2026-07-21 | Cross-source memory benchmark for linking, causal fusion, conflict arbitration, and provenance over heterogeneous event streams. | Separates linking, causal fusion, conflict handling, and provenance across heterogeneous sources. |
 | 🔭 Frontier | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | 2026-07-27 | Retrieval and use of a personal fact whose relevance to the query depends on world knowledge. | Paired controls separate storage, knowledge, routing, and final-use failures. |
+| [AuthMem-Bench](https://arxiv.org/abs/2608.01679) <!-- benchmark-id:authmem-bench --> | 🔭 Frontier | 2026-08-03 | Paired evaluation of whether persistent-memory consolidation preserves source authority rather than laundering low-authority content into reusable instructions or user facts. |
 | 🔭 Frontier | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | 2026-08-04 | Paired persistent-state benchmark that tests whether retained cross-episode experience causally improves later executable work. | Uses persistence-on/off controls to attribute executable cross-episode benefit to retained state. |
 | 🔭 Frontier | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | 2026-08-17 | Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost. | Places personalization benefit, authorization, and leakage risk in one memory-lifecycle protocol. |
 | 🔭 Frontier | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | 2026-08-20 | Whether relevant prior memory causes reasoning fixation or belief distortion under paired memory/no-memory conditions. | Moves beyond whether memory is recalled to whether recalled content should be used for the current task. |
@@ -200,8 +206,9 @@ Start with time to see what recently became measurable, then use area timelines 
 
 <!-- COMPLETE-MAP:rag:START -->
 
-| Role | Benchmark | Released | What it evaluates | Why it changed the question |
-|---|---|---:|---|---|
+
+| Benchmark | Role | Time | What changed |
+|---|---|---:|---|
 | 🌱 Precursor | [HotpotQA](https://aclanthology.org/D18-1259/) <!-- benchmark-id:hotpotqa --> | 2018-10 | A foundational multi-hop QA benchmark requiring evidence retrieval and reasoning across multiple supporting documents. | Established multi-document evidence composition and explainable supporting facts as measurable retrieval-reasoning targets. |
 | 🧱 Foundation | [KILT](https://arxiv.org/abs/2009.02252) <!-- benchmark-id:kilt --> | 2020-09 | Unifies knowledge-intensive tasks against one Wikipedia snapshot and evaluates downstream task quality together with provenance. | Made retrieval provenance and reusable retrieval infrastructure first-class across multiple downstream tasks. |
 | 🧱 Foundation | [BEIR](https://arxiv.org/abs/2104.08663) <!-- benchmark-id:beir --> | 2021-04 | A heterogeneous benchmark for zero-shot information retrieval generalization across diverse domains and retrieval tasks. | Established cross-domain robustness as a retriever requirement instead of optimizing only one benchmark such as MS MARCO. |
@@ -235,6 +242,7 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [LoHoSearch](https://arxiv.org/abs/2606.12837) <!-- benchmark-id:lohosearch --> | 2026-06-11 | Long-horizon search under large candidate spaces, complex constraints, and context-management pressure. | Controls search-space size and structural complexity through a knowledge graph rather than annotator intuition alone. |
 | 🔭 Frontier | [LitReview Arena / LitReviewBench / LitJudge](https://arxiv.org/abs/2608.21374) <!-- benchmark-id:litreview-arena --> | 2026-07-01 | Domain-expert pairwise evaluation of review coverage, support, structure, suggestions, and overall utility. | Calibrates open-ended review judging with domain-expert preferences. |
 | 🔭 Frontier | [WANDR](https://arxiv.org/abs/2608.14747) <!-- benchmark-id:wandr --> | 2026-07-14 | Live-web benchmark for wide-and-deep record collection with hierarchical tasks and reference-free record verification. | Combines open-set discovery, enrichment, and record-level verification on the live web. |
+| [Agent Retrieval Bench](https://arxiv.org/abs/2607.24882) <!-- benchmark-id:agent-retrieval-bench --> | 🔭 Frontier | 2026-07-27 | File-level context-acquisition benchmark for coding agents, where relevance is defined by the repository context an agent needs next rather than direct query–file semantic similarity. |
 | 🔭 Frontier | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | 2026-08 | Evaluates agents that must compose executable APIs, document retrieval, multi-hop reasoning, and natural-language tool-use policies. | Unifies structured API interaction and unstructured retrieval in one executable evaluation with policy constraints. |
 | 🔭 Frontier | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | 2026-08-04 | Scientific retrieval benchmark that measures whether one paper remains retrievable across motivation, method, and result aspects. | Measures whether one paper stays retrievable across aspects instead of only one-query relevance. |
 | 🔭 Frontier | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | 2026-08-05 | Localization, root-cause attribution, and repair of failures in long deep-search trajectories. | Adds expert critical-step labels, a six-way cause taxonomy, and repair-based recovery evaluation. |
@@ -246,7 +254,8 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | 2026-08-18 | Visual-document retrieval benchmark that compares static rankers and iterative visual/OCR agents under one ranked-page contract. | Compares static visual retrieval with iterative page discovery and inspection under one top-10 contract. |
 | 🔭 Frontier | [KBGym / Training a Knowledge Base](https://arxiv.org/abs/2608.21829) <!-- benchmark-id:kbgym --> | 2026-08-22 | Frozen-store accuracy and action cost after supervised knowledge-base editing, stratified by answer-key coverage. | Turns a static corpus into a supervised-edited, frozen non-parametric model. |
 | 🔭 Frontier | [RAG Collapse](https://arxiv.org/abs/2608.22118) <!-- benchmark-id:rag-collapse --> | 2026-08-22 | Recursive feedback in which self-authored sources displace independent evidence. | Makes self-authored-source feedback an independent validity diagnostic. |
-| 🔭 Frontier | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | 2026-08-24 | Excess answer churn and stable flips induced by growing corpus snapshots. | Separates stable corpus-version answer flips from generation noise. |<!-- COMPLETE-MAP:rag:END -->
+| 🔭 Frontier | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | 2026-08-24 | Excess answer churn and stable flips induced by growing corpus snapshots. | Separates stable corpus-version answer flips from generation noise. |
+<!-- COMPLETE-MAP:rag:END -->
 
 [Continue to Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar)
 
@@ -254,8 +263,9 @@ Start with time to see what recently became measurable, then use area timelines 
 
 <!-- COMPLETE-MAP:data-agent:START -->
 
-| Role | Benchmark | Released | What it evaluates | Why it changed the question |
-|---|---|---:|---|---|
+
+| Benchmark | Role | Time | What changed |
+|---|---|---:|---|
 | 🌱 Precursor | [WikiSQL](https://arxiv.org/abs/1709.00103) <!-- benchmark-id:wikisql --> | 2017-08 | A large early benchmark for translating natural-language questions into executable SQL over individual Wikipedia tables. | Made executable natural-language database querying a large-scale benchmarkable task. |
 | 🧱 Foundation | [Spider](https://aclanthology.org/D18-1425/) <!-- benchmark-id:spider --> | 2018-10 | A foundational cross-domain text-to-SQL benchmark requiring generalization to unseen database schemas and complex multi-table SQL. | Made cross-schema generalization and complex SQL the canonical database-language benchmark rather than memorizing one schema. |
 | 🧱 Foundation | [DS-1000](https://arxiv.org/abs/2211.11501) <!-- benchmark-id:ds-1000 --> | 2022-11 | A natural benchmark for data-science code generation across major Python data libraries with execution-grounded evaluation. | Established reliable executable evaluation for practical data-science coding beyond SQL. |
@@ -291,7 +301,8 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) <!-- benchmark-id:warehouse-reliability-bench --> | 2026-08-10 | Business-correct analytics plus appropriate clarification, abstention, or refusal under ambiguity, unanswerability, drift, and attacks. | Moves beyond executable SQL to business truth and correct non-answer behavior when returning a number would be false success. |
 | 🔭 Frontier | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | 2026-08-17 | Structured dataset understanding before analysis, including logical tables, semantics, keys, relationships, and profiling signals. | Turns implicit data exploration from a prerequisite hidden behind final-answer accuracy into a directly scored artifact with measured downstream value. |
 | 🔭 Frontier | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | 2026-08-20 | Diagnosing and modifying learning algorithms in frozen training repositories, separated by proxy exploration, source-only handoff, and clean-start formal runs. | Observes algorithm design separately from run-side tuning and makes the source patch the boundary between exploration and final training. |
-| 🔭 Frontier | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 2026-08-20 | Training-pipeline repair, iterative ML experimentation, published-baseline improvement, and specification-gaming resistance in real repositories. | Places improvement over published ML baselines, repository realism, long compute budgets, and submission integrity in one executable object. |<!-- COMPLETE-MAP:data-agent:END -->
+| 🔭 Frontier | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 2026-08-20 | Training-pipeline repair, iterative ML experimentation, published-baseline improvement, and specification-gaming resistance in real repositories. | Places improvement over published ML baselines, repository realism, long compute budgets, and submission integrity in one executable object. |
+<!-- COMPLETE-MAP:data-agent:END -->
 
 [Continue to Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar)
 

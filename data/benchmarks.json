@@ -6548,5 +6548,151 @@
       "paper_id": "8e5a72a020b385eafdf54a2d5806f660d2a3862c",
       "url": "https://www.semanticscholar.org/paper/8e5a72a020b385eafdf54a2d5806f660d2a3862c"
     }
+  },
+  {
+    "id": "authmem-bench",
+    "name": "AuthMem-Bench",
+    "area": "agent-memory",
+    "released": "2026-08-03",
+    "importance": 4,
+    "status": "verified",
+    "evolution_role": "frontier",
+    "summary": "Paired evaluation of whether persistent-memory consolidation preserves source authority rather than laundering low-authority content into reusable instructions or user facts.",
+    "capabilities": [
+      "memory consolidation",
+      "authority preservation",
+      "authorization",
+      "memory safety",
+      "provenance"
+    ],
+    "environment": [
+      "persistent memory",
+      "paired source-authority conditions",
+      "action-grounded downstream tasks"
+    ],
+    "protocol": [
+      "paired focal-claim controls",
+      "write-time collapse audit",
+      "downstream unauthorized-action evaluation",
+      "authority-label intervention"
+    ],
+    "scale": "7 memory consolidators × 7 LLM backbones, with paired source-authority and action-grounded evaluations",
+    "measurement_strength": "Makes source authority a first-class memory invariant by holding remembered content fixed while varying the authority under which it may later be reused.",
+    "coverage_gap": "Does not yet establish governance robustness under real multi-principal identity systems, adversarial provenance spoofing, or long-lived production stores.",
+    "confounders": [
+      "consolidator",
+      "LLM backbone",
+      "authority metadata policy",
+      "memory write policy",
+      "downstream action harness"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2608.01679"
+    },
+    "last_verified": "2026-09-05",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-05",
+      "status": "unmatched"
+    }
+  },
+  {
+    "id": "agent-retrieval-bench",
+    "name": "Agent Retrieval Bench",
+    "area": "rag",
+    "released": "2026-07-27",
+    "importance": 4,
+    "status": "verified",
+    "evolution_role": "frontier",
+    "summary": "File-level context-acquisition benchmark for coding agents, where relevance is defined by the repository context an agent needs next rather than direct query–file semantic similarity.",
+    "capabilities": [
+      "agentic retrieval",
+      "code retrieval",
+      "context acquisition",
+      "selective retrieval",
+      "abstention"
+    ],
+    "environment": [
+      "25 software repositories",
+      "frozen base-commit snapshots",
+      "coding-workflow signals"
+    ],
+    "protocol": [
+      "four positive retrieval tracks",
+      "natural no-gold cases",
+      "counterfactual wrong-repository controls",
+      "token-budgeted context yield"
+    ],
+    "scale": "427 samples across 25 repositories; 392K files and 7.9M chunks in the released corpus inventory",
+    "measurement_strength": "Separates the upstream context-acquisition problem of coding agents from patch generation and evaluates whether retrieved files are useful for the next workflow need.",
+    "coverage_gap": "File-level hits do not establish function/span localization or end-to-end test-passing repair, and the current seed intervention is not a full repair benchmark.",
+    "confounders": [
+      "repository snapshot",
+      "candidate filtering",
+      "token packing",
+      "retriever",
+      "selective threshold",
+      "context budget"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2607.24882",
+      "code": "https://github.com/eyuansu62/agent-retrieval-bench"
+    },
+    "last_verified": "2026-09-05",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-05",
+      "status": "unmatched"
+    }
+  },
+  {
+    "id": "pm-bench",
+    "name": "PM-Bench",
+    "area": "agent-memory",
+    "released": "2026-07-14",
+    "importance": 4,
+    "status": "verified",
+    "evolution_role": "frontier",
+    "summary": "Prospective-memory benchmark testing whether agents maintain delayed user intentions and execute them at the correct future cue while continuing ongoing activities.",
+    "capabilities": [
+      "prospective memory",
+      "delayed intentions",
+      "cue monitoring",
+      "temporal memory",
+      "ongoing-task coordination"
+    ],
+    "environment": [
+      "text-based Virtual Week",
+      "simulated seven-day schedule",
+      "latent environment changes"
+    ],
+    "protocol": [
+      "ongoing activity plus delayed intentions",
+      "future cue monitoring",
+      "eight agent configurations",
+      "F1 evaluation"
+    ],
+    "scale": "Simulated seven-day Virtual Week; 8 LLMs evaluated under 8 agent configurations",
+    "measurement_strength": "Turns remembering to act later—not merely recalling a past fact—into a controlled agent-memory evaluation object.",
+    "coverage_gap": "Does not yet cover long real-world time horizons, noisy external calendars/tools, or the cost and safety of triggering deferred actions in production.",
+    "confounders": [
+      "agent configuration",
+      "LLM backbone",
+      "cue visibility",
+      "time representation",
+      "ongoing-task policy"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2607.12385"
+    },
+    "last_verified": "2026-09-05",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-05",
+      "status": "unmatched"
+    }
   }
 ]

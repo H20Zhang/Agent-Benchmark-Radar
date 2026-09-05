@@ -38,12 +38,15 @@
 | 2026-08-05 | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | RAG / Agentic Retrieval | 🔭 前沿 | 从最终答案成败推进到专家标注的关键步骤、六类根因和修复后恢复评测。 |
 | 2026-08-04 | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | RAG / Agentic Retrieval | 🔭 前沿 | 不再只问一条 query 是否命中，而是测同一论文跨多个 aspect 的可检索一致性。 |
 | 2026-08-04 | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | Agent Memory | 🔭 前沿 | 用 persistence on/off 配对控制识别跨 episode 记忆是否真的改善可执行任务。 |
+| 2026-08-03 | [AuthMem-Bench](https://arxiv.org/abs/2608.01679) <!-- benchmark-id:authmem-bench --> | Agent Memory | 🔭 前沿 | 把 memory safety 从内容是否被保存推进到‘内容以什么权威被保存并再次使用’。 |
 | 2026-08 | [DataSpace](https://arxiv.org/abs/2608.03451) <!-- benchmark-id:dataspace --> | Data Agents | 🔭 前沿 | 寻找异构证据和核验完整结果成为一项统一任务。 |
 | 2026-08 | [DSAgentBench](https://arxiv.org/abs/2608.10366) <!-- benchmark-id:dsagentbench --> | Data Agents | 🔭 前沿 | 评测进入真实计算机环境，要求多阶段、多工具执行能够可靠衔接。 |
 | 2026-08 | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | RAG / Agentic Retrieval | 🔭 前沿 | 跨来源依据、实际执行和策略一致性出现在同一条轨迹中。 |
 | 2026-07-29 | [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) <!-- benchmark-id:data-eng-bench --> | Data Agents | 🔭 前沿 | 用可执行 dbt 任务和隐藏行级核验测数据工程；8 月修复暴露 evaluator reliability 也是测量对象。 |
+| 2026-07-27 | [Agent Retrieval Bench](https://arxiv.org/abs/2607.24882) <!-- benchmark-id:agent-retrieval-bench --> | RAG / Agentic Retrieval | 🔭 前沿 | 把 coding-agent 检索从语义相似搜索改成 workflow-next-need context acquisition，并加入自然与反事实 no-gold 控制。 |
 | 2026-07-27 | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | Agent Memory | 🔭 前沿 | 用成对对照把存储失败、知识缺失、检索路由失败和应用失败分开。 |
 | 2026-07-21 | [MemFuseBench](https://arxiv.org/abs/2608.18704) <!-- benchmark-id:memfusebench --> | Agent Memory | 🔭 前沿 | 跨异构来源的 linking、causal fusion、conflict 与 provenance 被拆成诊断项。 |
+| 2026-07-14 | [PM-Bench](https://arxiv.org/abs/2607.12385) <!-- benchmark-id:pm-bench --> | Agent Memory | 🔭 前沿 | 把 Agent Memory 从‘记住过去’扩展到‘记得未来要做什么’，直接测 prospective memory。 |
 | 2026-07-14 | [WANDR](https://arxiv.org/abs/2608.14747) <!-- benchmark-id:wandr --> | RAG / Agentic Retrieval | 🔭 前沿 | 把实时网页上的开放集合发现、记录扩充与逐条复核合成 wide-and-deep 任务。 |
 | 2026-07-09 | [CausalDS](https://arxiv.org/abs/2607.08093) <!-- benchmark-id:causalds --> | Data Agents | 🔭 前沿 | 把数据智能体评测从相关性和预测拓展到 Pearl 三阶因果推理及“无法作答”的识别。 |
 | 2026-07-01 | [LitReview Arena / LitReviewBench / LitJudge](https://arxiv.org/abs/2608.21374) <!-- benchmark-id:litreview-arena --> | RAG / Agentic Retrieval | 🔭 前沿 | 用 topic-matched 专家偏好校准文献综述评价，而非依赖通用 LLM judge。 |
@@ -136,7 +139,8 @@
 | 2020-09 | [KILT](https://arxiv.org/abs/2009.02252) <!-- benchmark-id:kilt --> | RAG / Agentic Retrieval | 🧱 基石 | 正确性与来源追踪被放进共享、可复用的评测基础设施。 |
 | 2018-10 | [HotpotQA](https://aclanthology.org/D18-1259/) <!-- benchmark-id:hotpotqa --> | RAG / Agentic Retrieval | 🌱 前身 | 多文档证据组合和可解释支撑事实由此成为可测目标。 |
 | 2018-10 | [Spider](https://aclanthology.org/D18-1425/) <!-- benchmark-id:spider --> | Data Agents | 🧱 基石 | Text-to-SQL 从单表生成走向复杂查询和跨 schema 泛化。 |
-| 2017-08 | [WikiSQL](https://arxiv.org/abs/1709.00103) <!-- benchmark-id:wikisql --> | Data Agents | 🌱 前身 | 大规模、可执行的自然语言数据库访问由此成为标准任务。 |<!-- COMPLETE-TIMELINE:END -->
+| 2017-08 | [WikiSQL](https://arxiv.org/abs/1709.00103) <!-- benchmark-id:wikisql --> | Data Agents | 🌱 前身 | 大规模、可执行的自然语言数据库访问由此成为标准任务。 |
+<!-- COMPLETE-TIMELINE:END -->
 
 ## 按领域浏览（全部）
 
@@ -145,8 +149,8 @@
 <!-- COMPLETE-MAP:agent-memory:START -->
 
 
-| 阶段 | Benchmark | 时间 | 考察内容 | 带来的变化 |
-|---|---|---:|---|---|
+| Benchmark | 角色 | 时间 | 这次改变了什么 |
+|---|---|---:|---|
 | 🌱 前身 | [Beyond Goldfish Memory](https://aclanthology.org/2022.acl-long.356/) <!-- benchmark-id:beyond-goldfish-memory --> | 2022-05 | 多次真人聊天之间的开放域长期记忆与前后自洽。 | 跨会话的对话连续性由此成为独立评测问题。 |
 | 🧱 基石 | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | 2024-08 | 超长多会话对话中的 QA、事件总结和多模态对话生成。 | 在 Beyond Goldfish Memory 的基础上，形成了可复用的超长对话多任务评测。 |
 | 🧱 基石 | [LongMemEval](https://arxiv.org/abs/2410.10813) <!-- benchmark-id:longmemeval --> | 2024-10 | 长期助手历史中的信息抽取、跨会话推理、时间推理、知识更新和拒答。 | 将更新、时间推理和拒答从笼统的事实召回中拆分出来。 |
@@ -178,8 +182,10 @@
 | 🔭 前沿 | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 2026-07 | 多模态长期对话中的记忆抽取、适应、推理和知识管理。 | 视觉保留、多模态推理和记忆组织被放进同一套评测。 |
 | 🔭 前沿 | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | 2026-07 | 长期记忆是否会影响工具选择和参数填写。 | 记忆对行动的作用可以直接评分，而不再只通过问答间接判断。 |
 | 🔭 前沿 | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | 2026-07 | 能否从长期历史中识别隐含的个体风险，并在风险缓解后及时更新判断。 | 把用户状态记忆扩展到随时间变化的个性化安全与有用性权衡。 |
+| [PM-Bench](https://arxiv.org/abs/2607.12385) <!-- benchmark-id:pm-bench --> | 🔭 前沿 | 2026-07-14 | 在持续进行其他活动时，测智能体能否保留延迟意图，并在未来正确 cue 或状态出现时执行。 |
 | 🔭 前沿 | [MemFuseBench](https://arxiv.org/abs/2608.18704) <!-- benchmark-id:memfusebench --> | 2026-07-21 | 跨异构事件流的来源连接、因果融合、冲突裁决与溯源记忆基准。 | 跨异构来源的 linking、causal fusion、conflict 与 provenance 被拆成诊断项。 |
 | 🔭 前沿 | [InMind](https://arxiv.org/abs/2607.24368) <!-- benchmark-id:inmind --> | 2026-07-27 | 旧事实与新问题词义相远、只有借助常识才能建立联系时，记忆能否被正确调出并应用。 | 用成对对照把存储失败、知识缺失、检索路由失败和应用失败分开。 |
+| [AuthMem-Bench](https://arxiv.org/abs/2608.01679) <!-- benchmark-id:authmem-bench --> | 🔭 前沿 | 2026-08-03 | 固定记忆内容、只改变来源权威，测持久记忆 consolidation 是否把低权限内容洗成可复用的用户事实或指令。 |
 | 🔭 前沿 | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | 2026-08-04 | 通过配对持久状态控制，检验跨 episode 经验是否因果改善后续可执行工作的基准。 | 用 persistence on/off 配对控制识别跨 episode 记忆是否真的改善可执行任务。 |
 | 🔭 前沿 | [SP-Mem Privacy-Aware Memory Benchmark](https://arxiv.org/abs/2608.16551) <!-- benchmark-id:sp-mem --> | 2026-08-17 | 联合测量回答质量、个性化、同意处理、精确值暴露与成本的隐私感知记忆基准。 | 把个性化收益、授权与泄露风险放进同一记忆生命周期协议。 |
 | 🔭 前沿 | [MemTrapBench](https://arxiv.org/abs/2608.20202) <!-- benchmark-id:memtrapbench --> | 2026-08-20 | 同题 memory/no-memory 对照下，相关历史记忆是否会造成 reasoning fixation 或 belief distortion。 | 把“能否回忆”推进到“回忆到的内容是否应该被当前任务采用”。 |
@@ -200,8 +206,9 @@
 
 <!-- COMPLETE-MAP:rag:START -->
 
-| 阶段 | Benchmark | 时间 | 考察内容 | 带来的变化 |
-|---|---|---:|---|---|
+
+| Benchmark | 角色 | 时间 | 这次改变了什么 |
+|---|---|---:|---|
 | 🌱 前身 | [HotpotQA](https://aclanthology.org/D18-1259/) <!-- benchmark-id:hotpotqa --> | 2018-10 | 从多个 Wikipedia 文档中找证据、组合推理，并标出支撑事实。 | 多文档证据组合和可解释支撑事实由此成为可测目标。 |
 | 🧱 基石 | [KILT](https://arxiv.org/abs/2009.02252) <!-- benchmark-id:kilt --> | 2020-09 | 在同一份 Wikipedia 快照上评测多种知识密集任务，同时检查答案和证据来源。 | 正确性与来源追踪被放进共享、可复用的评测基础设施。 |
 | 🧱 基石 | [BEIR](https://arxiv.org/abs/2104.08663) <!-- benchmark-id:beir --> | 2021-04 | 检索器在不同领域和任务上的零样本泛化。 | 不再用单一 IR 数据集的最好成绩代替跨域鲁棒性。 |
@@ -235,6 +242,7 @@
 | 🔭 前沿 | [LoHoSearch](https://arxiv.org/abs/2606.12837) <!-- benchmark-id:lohosearch --> | 2026-06-11 | 考察超大候选空间、复杂约束结构、长程搜索和上下文管理。 | 用知识图谱系统控制搜索空间与结构复杂度，而非仅依赖人工主观设难。 |
 | 🔭 前沿 | [LitReview Arena / LitReviewBench / LitJudge](https://arxiv.org/abs/2608.21374) <!-- benchmark-id:litreview-arena --> | 2026-07-01 | 领域专家对文献综述的覆盖、依据、结构、研究建议与总体 utility 做 pairwise 评价。 | 用领域专家偏好数据校准开放式综述 judge。 |
 | 🔭 前沿 | [WANDR](https://arxiv.org/abs/2608.14747) <!-- benchmark-id:wandr --> | 2026-07-14 | 面向实时网页 wide-and-deep 记录收集的基准，包含分层任务和无需穷举金标的逐条核验。 | 把实时网页上的开放集合发现、记录扩充与逐条复核合成 wide-and-deep 任务。 |
+| [Agent Retrieval Bench](https://arxiv.org/abs/2607.24882) <!-- benchmark-id:agent-retrieval-bench --> | 🔭 前沿 | 2026-07-27 | 在真实代码仓库的冻结 commit 上，测 coding agent 能否找到下一步真正需要阅读的文件，或在无本地证据时正确弃答。 |
 | 🔭 前沿 | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | 2026-08 | 组合调用 API、检索文档、完成多跳推理，并遵守工具策略。 | 跨来源依据、实际执行和策略一致性出现在同一条轨迹中。 |
 | 🔭 前沿 | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | 2026-08-04 | 测量同一论文能否在动机、方法与结果等多个 aspect 下持续被找回的科学检索基准。 | 不再只问一条 query 是否命中，而是测同一论文跨多个 aspect 的可检索一致性。 |
 | 🔭 前沿 | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | 2026-08-05 | 考察审计模型能否在超长搜索轨迹中定位错误、归因根因并生成可执行修复。 | 从最终答案成败推进到专家标注的关键步骤、六类根因和修复后恢复评测。 |
@@ -246,7 +254,8 @@
 | 🔭 前沿 | [VisDocAgentBench](https://arxiv.org/abs/2608.17889) <!-- benchmark-id:visdocagentbench --> | 2026-08-18 | 在统一页面排序协议下比较静态 ranker 与迭代视觉/OCR agent 的视觉文档检索基准。 | 在统一 top-10 输出下直接比较静态视觉检索与迭代式页面发现、检查。 |
 | 🔭 前沿 | [KBGym / Training a Knowledge Base](https://arxiv.org/abs/2608.21829) <!-- benchmark-id:kbgym --> | 2026-08-22 | 监督式知识库编辑在冻结后对覆盖分层问题的准确率与行动成本。 | 把 static corpus 改成受监督编辑后冻结评测的 non-parametric model。 |
 | 🔭 前沿 | [RAG Collapse](https://arxiv.org/abs/2608.22118) <!-- benchmark-id:rag-collapse --> | 2026-08-22 | 递归检索中 self-authored sources 对独立来源的挤出与反馈崩塌。 | 把 self-authored source feedback 变成独立 validity diagnostic。 |
-| 🔭 前沿 | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | 2026-08-24 | corpus snapshot 增长造成的超额答案 churn 与稳定翻转。 | 把 corpus 版本升级引发的稳定答案翻转从随机生成噪声中隔离。 |<!-- COMPLETE-MAP:rag:END -->
+| 🔭 前沿 | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | 2026-08-24 | corpus snapshot 增长造成的超额答案 churn 与稳定翻转。 | 把 corpus 版本升级引发的稳定答案翻转从随机生成噪声中隔离。 |
+<!-- COMPLETE-MAP:rag:END -->
 
 [进入 Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar)
 
@@ -254,8 +263,9 @@
 
 <!-- COMPLETE-MAP:data-agent:START -->
 
-| 阶段 | Benchmark | 时间 | 考察内容 | 带来的变化 |
-|---|---|---:|---|---|
+
+| Benchmark | 角色 | 时间 | 这次改变了什么 |
+|---|---|---:|---|
 | 🌱 前身 | [WikiSQL](https://arxiv.org/abs/1709.00103) <!-- benchmark-id:wikisql --> | 2017-08 | 根据自然语言问题，在单个 Wikipedia 表格上生成可执行 SQL。 | 大规模、可执行的自然语言数据库访问由此成为标准任务。 |
 | 🧱 基石 | [Spider](https://aclanthology.org/D18-1425/) <!-- benchmark-id:spider --> | 2018-10 | 在未见过的 schema 上生成复杂的多表 SQL，并测试跨领域泛化。 | Text-to-SQL 从单表生成走向复杂查询和跨 schema 泛化。 |
 | 🧱 基石 | [DS-1000](https://arxiv.org/abs/2211.11501) <!-- benchmark-id:ds-1000 --> | 2022-11 | 使用七类 Python 数据科学库生成代码，并通过执行检查正确性。 | 在 SQL 之外建立了可复现的实用数据科学代码评测。 |
@@ -291,7 +301,8 @@
 | 🔭 前沿 | [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) <!-- benchmark-id:warehouse-reliability-bench --> | 2026-08-10 | 面对语义歧义、不可回答、模式漂移和对抗输入时，返回业务真值或正确地澄清、弃答、拒答。 | 从“SQL 能运行且结果匹配”转向“业务含义正确，并在不该给数字时不虚假成功”。 |
 | 🔭 前沿 | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | 2026-08-17 | 在下游分析前，构建包含逻辑表、列语义、键关系和质量信号的结构化数据理解产物。 | 把通常隐含的数据探索阶段从最终答案的前置假设变成可独立评分、可验证下游价值的对象。 |
 | 🔭 前沿 | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | 2026-08-20 | 在冻结训练仓库中诊断并修改学习算法，以 proxy 探索、源码交付和 clean-start 正式运行隔离成绩。 | 把 algorithm design 与 run-side tuning 分开观察，并以 source patch 作为探索和最终训练之间的边界。 |
-| 🔭 前沿 | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 2026-08-20 | 在真实研究仓库中修复训练管线、迭代机器学习实验、提高论文基线并抵抗 specification gaming。 | 把“改进已发表 ML 基线”与 repository realism、长算力预算和提交完整性放入同一执行对象。 |<!-- COMPLETE-MAP:data-agent:END -->
+| 🔭 前沿 | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 2026-08-20 | 在真实研究仓库中修复训练管线、迭代机器学习实验、提高论文基线并抵抗 specification gaming。 | 把“改进已发表 ML 基线”与 repository realism、长算力预算和提交完整性放入同一执行对象。 |
+<!-- COMPLETE-MAP:data-agent:END -->
 
 [进入 Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar)
 
