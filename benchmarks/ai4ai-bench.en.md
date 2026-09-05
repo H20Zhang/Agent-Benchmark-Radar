@@ -26,7 +26,7 @@ Across 290 cells, the mean normalized score is 0.166, the best system averages 0
 
 Learning-side submissions are observationally selected: stronger systems reach that layer more often, and the paper explicitly disclaims a causal interpretation. A separate LLM classifies patch families without reported reliability. Systems bundle model, harness, and reasoning effort; proxy and final stages are separated by access and time but are not always sample-disjoint.
 
-## What remains uncovered
+## Remaining Gap: What remains uncovered
 
 Ten B300-scale tasks are expensive, there is no human baseline, and the common score encodes heterogeneous task utility. The repository supports self-hosted final evaluation but currently operates no blind service, so third parties cannot reproduce the official hidden-boundary enforcement.
 

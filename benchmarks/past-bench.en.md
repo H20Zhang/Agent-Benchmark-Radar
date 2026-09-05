@@ -6,7 +6,7 @@
 
 Moves from visible-history recall to whether persistence causally improves later executable tasks.
 
-## What It Follows
+## Genealogy: What It Follows
 
 Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
 
@@ -26,11 +26,11 @@ Across 26 families and 204 episodes, persistence-on/off runs match seeds, prompt
 
 Generated tasks and closely related graders can create model-family template familiarity, and the study does not cover months-long deployment. The load-bearing confounders are task-generator-model-family, grader-coupling, tool-harness.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 Generated tasks and graders may favor related frontier coding-model templates, and the study remains short of months-long deployment.
 
-## Where It Fits in the Map
+## Genealogy: Where It Fits in the Map
 
 `map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
 

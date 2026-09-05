@@ -6,7 +6,7 @@
 
 Moves from single-history recall to linking, causal fusion, conflict handling, and provenance across devices, users, and time.
 
-## What It Follows
+## Genealogy: What It Follows
 
 Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
 
@@ -26,11 +26,11 @@ The 357 questions, 7,823 events, and six diagnostics isolate linking, causal fus
 
 Synthetic generation and model-guided verification lack a human ceiling and do not establish external validity on real user histories. The load-bearing confounders are synthetic-generator-style, model-guided-verification, missing-human-ceiling.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 Synthetic construction and model-guided verification have no human ceiling or demonstrated real-world external validity.
 
-## Where It Fits in the Map
+## Genealogy: Where It Fits in the Map
 
 `map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
 

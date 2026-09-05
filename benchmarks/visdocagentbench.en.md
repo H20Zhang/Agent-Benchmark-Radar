@@ -6,7 +6,7 @@
 
 Compares static rankers with search/inspection agents under the same ranked-page output.
 
-## What It Follows
+## Genealogy: What It Follows
 
 Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
 
@@ -26,11 +26,11 @@ Across 2,375 pages and 120 queries, a shared top-10 contract plus support interv
 
 The 120 queries, six cross-document paths, and unmatched agent routes limit causal attribution to a planner or vision component. The load-bearing confounders are small-query-set, planner-model-tool-mismatch, few-cross-document-paths.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 Only 120 queries and six cross-document paths; planner, model, and tool routes are not capacity matched.
 
-## Where It Fits in the Map
+## Genealogy: Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
 

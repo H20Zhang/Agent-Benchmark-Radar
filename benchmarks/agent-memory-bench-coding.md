@@ -16,7 +16,7 @@ PAST-Bench 等工作已经推动 memory 从 QA 走向 future action；这里进�
 
 公开 corpus 包含 **24 个真实仓库任务、24 条 precursor transcript 与 99 个 distractor**。各 arm 共用 baseline 和逐字 session feed；在隐藏 executable oracle 评分前，integration hash 与 proof-of-treatment gate 验证 memory 确实可用并被使用，同时显式记录 ingestion/session cost 与 negative transfer。当前预注册 pilot 最终只有 **13 个 survivor**，相对 CLAUDE.md baseline 的估计提升只有 **+0.014**，区间跨过零。
 
-## 这个分数支持什么判断
+## 结论边界：这个分数支持什么判断
 
 当前 pilot 支持的是“在这组 survivor、Claude-specific 环境和所测 memory product 下，还没有足够证据证明稳定正向收益”。它**不支持**“memory 对 coding agent 无用”：样本远低于目标统计功效，proof-of-treatment 又产生 survivor selection，而且参测 Recall memory 产品由作者开发。这里最重要的产出是因果评测 protocol，而不是一个确定的产品排名。
 

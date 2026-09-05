@@ -26,7 +26,7 @@ Under 4×6h, ARG raises GPT-5's per-run success from 9.4% to 33.9%; under 2×12h
 
 The study covers two model families and two scaffolds, while 4×6h versus 2×12h changes both run duration and restart count. Full evaluation is expensive and the suite is vision-heavy. Semantic and forensic audits depend on LLM judgments whose false-positive and false-negative rates are not estimated, so “no detected gaming” is not a general safety guarantee for ARG.
 
-## What remains uncovered
+## Remaining Gap: What remains uncovered
 
 Runs capped at 12 hours on one H100 exclude multi-node or multi-week research. Scoring captures improvement on a known metric, not methodological novelty, theoretical insight, or compute efficiency.
 

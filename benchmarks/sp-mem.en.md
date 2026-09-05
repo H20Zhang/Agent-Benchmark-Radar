@@ -6,7 +6,7 @@
 
 Places memory utility, consent, authorization, exact-value exposure, and cost in one protocol.
 
-## What It Follows
+## Genealogy: What It Follows
 
 Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
 
@@ -26,11 +26,11 @@ Matched modes over 1,000 profiles, 5,400 queries, and four domains score respons
 
 Explicit consent labels and an exact-string leakage proxy omit inference, re-identification, and adversarial multi-turn disclosure. The load-bearing confounders are synthetic-consent-labels, benchmark-system-codesign, exact-string-leakage-proxy.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 Explicit consent labels and exact-string leakage miss inference, re-identification, and adversarial multi-turn disclosure.
 
-## Where It Fits in the Map
+## Genealogy: Where It Fits in the Map
 
 `map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
 

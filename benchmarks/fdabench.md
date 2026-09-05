@@ -16,7 +16,7 @@ Text-to-SQL / notebook benchmark 通常只有一种主数据模态。FDABench �
 
 benchmark 有 2,007 个任务、50+ domain、3 类 task type 与多种 heterogeneous source；评测包含 choice correctness、rubric report、DAG trace metric、latency 和 token cost，因此 workflow structure 与资源消耗也成为可见结果。
 
-## 这个分数能证明什么
+## 结论边界：这个分数能证明什么
 
 它能支持给定 scaffold 下 multi-source analytical agent 的 end-to-end 能力，但任务广并不等于能做 component attribution；planning、retrieval、multimodal perception、tool execution 与 backbone 都可能造成差异。
 

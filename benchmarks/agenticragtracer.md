@@ -16,7 +16,7 @@ multi-hop answer 做错后，传统 benchmark 无法区分 agent 是停得太早
 
 benchmark 有 1,305 个自动构造实例，覆盖多个 domain，并与主流 benchmark 去重。最难 subset 上 GPT-5 也只有 22.6% exact match。hop-aware diagnosis 发现很多失败来自 distorted chain：要么过早 collapse，要么无必要地 over-extend。
 
-## 这个分数能证明什么
+## 结论边界：这个分数能证明什么
 
 它能诊断 reasoning-chain allocation 与 intermediate retrieval，但因为大量数据由 LLM 自动构造，annotated hop structure 不应被默认成问题唯一的因果分解。
 

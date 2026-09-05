@@ -16,7 +16,7 @@ one-shot coding task 每题都会 reset；DSAEval 让后续 query 依赖此前�
 
 论文评估 11 种先进 agentic LLM：Claude-Sonnet-4.5 overall 最强，GPT-5.2 efficiency 最好，MiMo-V2-Flash cost-effectiveness 最好；multimodal perception 对 vision-related task 带来 2.04–11.30% 提升。structured/routine analysis 明显比 unstructured workload 容易。
 
-## 这个分数能证明什么
+## 结论边界：这个分数能证明什么
 
 benchmark 支持 cumulative project competence，并暴露 quality–efficiency–cost trade-off；但 model/scaffold 仍是一个组合系统，multi-dimensional grading 也可能包含 deterministic execution 之外的 evaluator assumption。
 

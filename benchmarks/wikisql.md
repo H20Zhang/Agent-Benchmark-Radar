@@ -16,7 +16,7 @@ WikiSQL 之前的 semantic-parsing dataset 通常规模更小、domain 更窄。
 
 Seq2SQL 论文报告：相比 attentional seq2seq baseline，execution accuracy 从 35.9% 提升到 59.4%，logical-form accuracy 从 23.4% 提升到 48.3%。这证明 SQL structure 与 execution supervision 都具有实质价值。
 
-## 这个分数能证明什么
+## 结论边界：这个分数能证明什么
 
 WikiSQL 证明的是：模型能否把问题映射成一张已知 table 上的简单 executable query。它对 enterprise data agent 的证明很弱，因为 schema discovery、join、nested query、business semantics、database value 与 workflow planning 基本都不存在。
 

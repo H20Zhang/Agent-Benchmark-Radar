@@ -12,7 +12,7 @@ Stable-RAG / Con-RAG 一类工作通常控制固定证据扰动；这里使用 n
 
 在 NQ 上，报告的 excess churn 为 **6.438pp exact** 与 **10.250pp semantic**，即使 aggregate EM 只变化 **−1.50pp**。其中 **40 个稳定翻转贡献了 10.00pp semantic churn**。这说明“平均 benchmark 分数接近”并不意味着两个 corpus snapshot 对用户是行为兼容的。
 
-## 这个分数支持什么判断
+## 结论边界：这个分数支持什么判断
 
 它支持“在所测 nested-snapshot 升级中存在超出同 snapshot 随机波动的 compatibility failure”。它不支持“所有翻转都是事实性伤害”：有些回答可能只是等价表达、合理更新或从错误变正确，因此 churn 需要和 correctness / harm 分开解释。
 

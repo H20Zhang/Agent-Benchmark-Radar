@@ -6,7 +6,7 @@
 
 Extends retrieval/drafting into a revisable protocol for literature, taxonomy, claims, citations, discourse, and rendered artifacts.
 
-## What It Follows
+## Genealogy: What It Follows
 
 Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
 
@@ -26,11 +26,11 @@ Thirty topics and 16 criteria combine deterministic citation checks with blinded
 
 Generation-backbone and main-judge coupling plus closed-system native configurations keep cross-system gaps at the system level. The load-bearing confounders are generator-judge-coupling, closed-system-native-configurations, judge-sensitivity.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 The generation method is not yet public, and the shared generation backbone is also the main automatic judge.
 
-## Where It Fits in the Map
+## Genealogy: Where It Fits in the Map
 
 `map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
 

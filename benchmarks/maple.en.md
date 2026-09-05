@@ -6,7 +6,7 @@
 
 Splits single-query relevance from consistent retrieval of one paper across motivation, method, and result aspects.
 
-## What It Follows
+## Genealogy: What It Follows
 
 Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
 
@@ -26,11 +26,11 @@ Across 2,095 queries and 210 papers, the matched single-query recall versus AllA
 
 Generated queries, a single domain, and model-validated hard negatives can introduce style bias and label noise. The load-bearing confounders are llm-generated-queries, single-domain-corpus, hard-negative-label-noise.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 Generated questions, similarity selection, one ICLR-style domain, and model-validated negatives can create style bias and false negatives.
 
-## Where It Fits in the Map
+## Genealogy: Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
 
