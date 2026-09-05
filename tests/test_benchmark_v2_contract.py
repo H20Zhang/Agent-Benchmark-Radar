@@ -48,7 +48,12 @@ class PublicProjectionV3Test(unittest.TestCase):
         self.assertTrue(any("retired reader surface" in e for e in errors), errors)
 
     def test_parallel_change_column_is_rejected(self):
-        mutated = self.en.replace("| Time | Area | Benchmark | What it tests |", "| Time | Area | Benchmark | What it tests | What changed |", 1)
+        for header in ("| Time | Area | Benchmark | What it tests |", "| Time | Area | Benchmark | What it measures |"):
+            if header in self.en:
+                mutated = self.en.replace(header, header[:-1] + " What changed |", 1)
+                break
+        else:
+            self.fail("release table header not found")
         errors = validate_reading.validate_public_readme(self.zh, mutated, self.records)
         self.assertTrue(any("four visible columns" in e or "parallel change column" in e for e in errors), errors)
 
