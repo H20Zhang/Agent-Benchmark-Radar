@@ -33,3 +33,27 @@ generated queries、single domain 与 model-validated hard negatives 可能引�
 ## 放进演化图怎么看
 
 `map_delta=reinforces`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究同一论文能否从动机、方法和结果等不同角度被稳定找到。任意一个角度命中与全部角度命中并不等价；只报告平均 Recall，可能掩盖表征只编码了论文最显眼的一面。
+
+### 一个具体任务长什么样
+
+示意任务：同一篇论文对应几个不同信息需求，有的问题描述研究动机，有的关注方法结构或实验现象。系统应在这些表达下都定位到同一工作，而不是只在标题相近时命中。
+
+### 最有判别力的实验
+
+以论文为配对单位，分别报告任一要点命中、全部要点命中和各要点覆盖，固定总表示容量。比较单摘要、多视角表示与全文索引，并复核困难负例，避免错误负标签放大方法差异。
+
+### 建议搭配
+
+[bright-pro](bright-pro.md) · [sage](sage.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

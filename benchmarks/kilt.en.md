@@ -23,3 +23,27 @@ Lock the KILT Wikipedia snapshot, task split, index, provenance metric, and gene
 ## Next evaluation coordinate
 
 KILT controls snapshot differences, but that also removes freshness and environment drift. Stronger successors need time/version change and interactive search control without giving up reproducibility.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use KILT for reusable retrieval and provenance over a shared knowledge source. Its main contribution is a common evidence coordinate across knowledge-intensive tasks. Higher task quality does not necessarily imply more accurate provenance, so retain both readouts.
+
+### What a concrete task looks like
+
+Illustrative task: the same knowledge base supports fact checking, entity linking, and QA, with outputs tied to supporting pages. Retrieval infrastructure may be shared, but output formats and correctness definitions differ; success on one task does not establish success on all.
+
+### Most discriminating experiment
+
+Swap retrievers over a fixed knowledge snapshot while preserving each task's generator and evaluator. Report task and provenance scores separately and test whether the retrieval change transfers across tasks. A single-task improvement calls for task-adaptation checks before claims of general reuse.
+
+### Pair with
+
+[beir](beir.en.md) · [crag](crag.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

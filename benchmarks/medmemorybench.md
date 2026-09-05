@@ -32,6 +32,30 @@ MedMemoryBench 评估 **streaming clinical accumulation**：患者历史持续�
 
 分别对 write compression、retrieval、reasoning 画 stage-level saturation curve，并在每个 checkpoint 加 oracle retrieval，定位长临床 memory 主要是“写丢了、找不到、还是找到了不会用”。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究持续信息流下的状态维护与记忆饱和，不能当作临床部署安全验证。它的研究价值在于观察错误何时随历史积累出现；医疗语境中的合成问答成绩与实际诊疗效果是不同层级的证据。
+
+### 一个具体任务长什么样
+
+示意任务：一位合成用户的状态跨多次会话发生修订，系统在多个检查点回答历史与当前状态问题。早期相关事实可能被噪声挤出，新状态也可能未覆盖旧记录，需要逐阶段诊断。
+
+### 最有判别力的实验
+
+在相同流式输入上同时保留历史事实问答与当前状态问答，绘制检查点质量和累计写入成本。加入正确当前状态给定条件，区分记忆更新失败与回答模型的领域推理失败，并限制结论为模拟环境。
+
+### 建议搭配
+
+[memoryagentbench](memoryagentbench.md) · [statemembench](statemembench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `long conversation memory → streaming clinical state → saturation-aware high-stakes memory`

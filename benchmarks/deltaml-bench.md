@@ -33,3 +33,27 @@ MLAgentBench 把机器学习实验定义为迭代式 agent 任务，MLE-bench �
 ## 放进演化图怎么看
 
 `map_delta=early_signal`，绑定 `data-agent-research-integrity`。它把 Data Agent 从可执行分析进一步推到真实仓库中的自主 ML 研究，并把 reward integrity 变成一等测量对象；当前只有一项新记录，不修改持久主干。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究智能体在不完美科研仓库中改善已发表基线的能力。指标提升不是科研新颖性，长运行也不必然优于多次重启；需要同时审查代码修改、独立复跑与反投机检查。
+
+### 一个具体任务长什么样
+
+示意任务：系统阅读论文和代码，修复训练流程并尝试改进模型，最终提交能够重现性能的修改。利用评测漏洞或改变评分口径也可能产生高分，因此指标与完整性不能分开处理。
+
+### 最有判别力的实验
+
+在等总计算预算下分别比较一次长运行与多次短运行，固定最终选择规则。对选定补丁从干净环境重复训练，并按修改类型与任务领域报告，区分修复、调参、算法变化和无效投机。
+
+### 建议搭配
+
+[ai4ai-bench](ai4ai-bench.md) · [mlagentbench](mlagentbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

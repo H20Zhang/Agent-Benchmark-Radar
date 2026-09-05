@@ -23,3 +23,27 @@ Align task/domain split, tool library/version, irregularity pattern, agent budge
 ## Next evaluation coordinate
 
 The next step adds streaming updates, concept drift, and delayed labels, testing whether agents maintain temporal state rather than clean one dataset once.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use IRTS-ToolBench for temporal reasoning and tool selection on irregular time series. Regular-grid methods can hide interpolation or synchronization assumptions. Correct answers should be examined alongside whether tools preserve informative observation gaps.
+
+### What a concrete task looks like
+
+Illustrative task: unevenly spaced observations require trend or event analysis using appropriate tools. Treating adjacent records as equally spaced can produce executable computations with incorrect temporal meaning.
+
+### Most discriminating experiment
+
+Vary sampling patterns over the same underlying signal, comparing original timestamps, regularized interpolation, and irregularity-aware tools with matched queries and budgets. Allow functionally equivalent tool combinations and separate selection, parameterization, and question-format shortcuts.
+
+### Pair with
+
+[agentfuel](agentfuel.en.md) · [statabench](statabench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

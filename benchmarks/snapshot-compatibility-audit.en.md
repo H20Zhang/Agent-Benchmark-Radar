@@ -28,6 +28,30 @@ The metric is useful as a **compatibility regression test for production RAG**. 
 
 The main gaps are live corpus refresh, multi-step agent trajectories, causal attribution to specific documents, and explicit harm measurement. The highest-leverage next step is to identify which newly added or re-ranked evidence causes stable flips and separate correct updates, harmless wording changes, and true regressions.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use Snapshot Compatibility Audit to detect answer changes under corpus growth even when aggregate accuracy stays stable. Cross-snapshot disagreement can be a correct update or an incorrect flip. Subtract within-snapshot randomness and inspect the direction of changes before interpreting compatibility.
+
+### What a concrete task looks like
+
+Illustrative task: repeated answers to the same questions have similar aggregate accuracy on old and expanded corpora, yet some examples consistently flip. The audit must distinguish corrections from regressions caused by new distractors.
+
+### Most discriminating experiment
+
+Repeat sampling within each snapshot and classify cross-snapshot flips into correct-to-wrong, wrong-to-correct, and other changes. Fix generation settings and retrieval budget, then remove implicated new documents to localize the cause beyond an overall disagreement rate.
+
+### Pair with
+
+[crag](crag.en.md) · [rag-collapse](rag-collapse.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 The audit makes corpus version part of the RAG regression contract; `map_delta=reinforces`. It adds a **deployment-compatibility** coordinate that static answer-quality benchmarks usually miss rather than replacing conventional answer-quality evaluation.

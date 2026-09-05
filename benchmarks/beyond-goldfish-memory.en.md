@@ -86,6 +86,30 @@ The highest-value extension from this historical baseline is not simply longer d
 
 That moves evaluation from long-term storage to long-term maintenance.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use Beyond Goldfish Memory as a historical anchor for cross-session dialogue continuity. It motivates the need for memory but does not replace mechanism-level evaluation of writing, conflict updates, deletion, or action effects. Make that foundational role explicit in a modern suite.
+
+### What a concrete task looks like
+
+Illustrative task: two participants resume a conversation after a gap and must naturally continue earlier topics and relationships. Evaluation concerns not only fact repetition but consistency and coherence of the generated continuation.
+
+### Most discriminating experiment
+
+Compare no history, full history, and summary memory for the same continuation, scoring historical consistency separately from general fluency. Blind evaluators to conditions so longer or more polite replies are not mistaken for better memory. Add structured update tasks for mechanism-level claims.
+
+### Pair with
+
+[locomo](locomo.en.md) · [longmemeval](longmemeval.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Evolution position
 
 `single-session dialogue → cross-session conversational memory → updateable persistent memory → memory-guided action`

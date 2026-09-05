@@ -23,3 +23,27 @@ MC-Search 包含 3,333 个 tasks、平均约 3.7 hops、五种 reasoning topolog
 ## 下一步评测坐标
 
 下一步要允许 multiple valid trajectories，并将 modality choice 与真实 latency/cost 及 final evidence sufficiency 联合评价。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合诊断多模态搜索链中选错模态、缺少证据或规划偏离的环节。每跳标注提供可定位信号，但标准轨迹不是唯一可能路径；论文所述语料与公开子集的差异也会改变复现实验对象。
+
+### 一个具体任务长什么样
+
+示意任务：文字证据指出需要查看某幅图，视觉细节又决定下一轮应搜索哪个对象。系统必须在文字与图像之间切换；只使用文本检索或只评最终答案，会掩盖具体模态选择失误。
+
+### 最有判别力的实验
+
+固定公开语料版本，分别给定正确模态、正确中间证据和正确子问题，观察最终恢复。对可行的替代路径做证据检查，并分开报告论文规模与公开子集，避免将资源差异归因于策略。
+
+### 建议搭配
+
+[merrin](merrin.md) · [visdocagentbench](visdocagentbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

@@ -28,6 +28,30 @@ This benchmark is more useful as a **RAG validity and deployment-regression coor
 
 The highest-value missing evidence is longitudinal live-web evaluation, cross-model authorship, style/content separation, and human provenance labels. The experiment most likely to change the conclusion is not another synthetic replacement rule, but evidence that excess collapse persists under realistic corpus refresh, heterogeneous authorship, and real search ranking beyond ordinary corpus drift.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use RAG Collapse for recursive feedback when model-authored content re-enters retrieval, distinct from degradation caused by parameter training. The key issue is displacement of independent evidence. Declining quality can combine source homogenization, retrieval preference, and generation style.
+
+### What a concrete task looks like
+
+Illustrative task: retrieved evidence produces answers that become retrievable sources in later rounds. The system may increasingly rely on its own statements; more documents and citations can coexist with fewer independent sources.
+
+### Most discriminating experiment
+
+Fix models and questions and compare independent sources, same-model-generated sources, and cross-model sources. Vary feedback proportion and retrieval policy independently. Track factual quality, source diversity, and independent-evidence share each round, avoiding same-model stylistic preference as the sole collapse criterion.
+
+### Pair with
+
+[snapshot-compatibility-audit](snapshot-compatibility-audit.en.md) · [kbgym](kbgym.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 The benchmark makes corpus provenance and feedback dynamics a RAG-validity coordinate; `map_delta=reinforces`. It strengthens the argument that static benchmark scores are insufficient when the corpus itself changes through agent activity, rather than replacing standard retrieval-relevance evaluation.

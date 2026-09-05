@@ -32,6 +32,30 @@ GateMem 能支持特定 principal / policy model 下 **governed memory system** 
 
 在同一批任务上分别把 policy enforcement 放到 write、index、retrieval、generation 四个阶段。真正的系统问题是：把权限/删除约束放在哪里，才能在不付出 full-context 成本的情况下显著减少 violation。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究共享记忆的可用性、访问边界与删除行为。重点不是把所有敏感信息都藏起来，而是在合法用户仍能完成任务的同时限制越权访问；行为上的不再提及也不能替代物理删除证明。
+
+### 一个具体任务长什么样
+
+示意任务：多个参与者贡献了不同权限的信息，随后其中一人请求只对另一角色可见的内容，之后又发生删除请求。系统需要在身份、目的和时间变化下选择性使用记忆，而不是仅识别敏感关键词。
+
+### 最有判别力的实验
+
+将授权查询、未授权查询和删除后的再次查询配成组，固定底层存储与检索器，比较策略实现。报告合法效用、越权披露和删除后恢复三项结果；部署级结论还要检查身份验证与存储删除链路。
+
+### 建议搭配
+
+[sp-mem](sp-mem.md) · [utility-under-attack](utility-under-attack.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `remember more → remember selectively → governed multi-principal memory`

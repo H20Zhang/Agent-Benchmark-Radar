@@ -12,6 +12,7 @@ REGISTRY = ROOT / "data" / "benchmarks.json"
 NOTES = ROOT / "benchmarks"
 GATE_ACTIVATION = datetime.fromisoformat("2026-09-02T13:31:45+00:00")
 MIN_NOTE_CHARS = 450
+DECISION_MARKER = "<!-- RESEARCH-DECISION:START -->"
 
 
 def parse_time(value: str | None) -> datetime | None:

@@ -32,6 +32,30 @@ The tasks remain benchmarked life scenarios rather than open-world video streams
 
 Factor visual memory into store fidelity, retrieval recall, and downstream visual interpretation using oracle image retrieval. This would tell whether systems should invest in better multimodal indexing or better post-retrieval visual reasoning.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MemEye to test whether memory retains genuinely necessary visual detail. For multimodal-memory claims, visual-necessity controls matter more than a higher average over mixed questions; textual shortcuts can make a system that discards image information appear effective.
+
+### What a concrete task looks like
+
+Illustrative task: repeated visual observations record changes to the same object, and a later query asks about a specific attribute and its evolution. Image order, fine-grained evidence, and provenance must survive; correctly recognizing one image is insufficient.
+
+### Most discriminating experiment
+
+With a fixed backbone, compare original images, coarse captions, detailed captions, and external visual memory. Report both multiple-choice and open-ended results. Remove visual input for matched samples to attribute differences to necessary visual information rather than answer format or evaluator changes.
+
+### Pair with
+
+[mem-gallery](mem-gallery.en.md) · [worldmemarena](worldmemarena.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `textualized multimodal memory → visually necessary evidence → fine-grained temporal visual memory`

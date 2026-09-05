@@ -23,3 +23,27 @@ Align benchmark snapshot, search provider, tool interface, model cutoff, and sou
 ## Next evaluation coordinate
 
 The next step creates a continuous refresh lineage: does the same search agent remain strong across multiple fresh snapshots rather than one batch of recent facts?
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LiveBrowseComp to test dependence on recent evidence rather than web-assisted confirmation of known answers. Freshness is relative to model and construction dates. An unchanged release may not preserve its original low-memorization condition as time passes.
+
+### What a concrete task looks like
+
+Illustrative task: the answer comes from a low-salience fact published shortly before construction, requiring a specific source. Closed-book success or success after removing that source weakens the evidence that the task measures discovery.
+
+### Most discriminating experiment
+
+Repeat closed-book and source-removal controls for each model, slicing by fact date and source under a fixed search budget. When refreshing questions, report set changes rather than treating scores across different snapshots as a direct model-progress curve.
+
+### Pair with
+
+[browsecomp](browsecomp.en.md) · [evobrowsecomp](evobrowsecomp.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

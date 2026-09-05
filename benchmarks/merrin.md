@@ -23,3 +23,27 @@ short-answer accuracy 支持在当前 live web、search provider 与 multimodal 
 ## 下一步评测坐标
 
 下一步需要 citation-level multimodal evidence portfolios 与可重放 snapshots，区分 modality selection、retrieval 与 final reasoning 的贡献。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究系统能否在没有模态提示时主动寻找合适的图像、视频或音频证据。它把‘知道该看什么’放进搜索任务；实时网页与专有搜索接口的差异意味着结果通常先是系统级证据。
+
+### 一个具体任务长什么样
+
+示意任务：文字问题的答案藏在一段视频画面或图表中，普通文本搜索只提供线索。系统需要选择模态、定位相关片段并核对噪声或冲突材料，而不是把搜索摘要当作最终证据。
+
+### 最有判别力的实验
+
+固定多模态骨干和工具，比较自主模态选择、正确模态提示与正确证据给定。记录每种模态的调用与延迟，并保留闭卷条件，区分模态路由、内容理解和参数知识造成的差异。
+
+### 建议搭配
+
+[mc-search](mc-search.md) · [browsecomp](browsecomp.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

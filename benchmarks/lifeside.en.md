@@ -21,3 +21,27 @@ Align persona/history generation, privacy policy, answerer, and judge, and inspe
 ## Next evaluation coordinate
 
 The next step connects long-term user models to real permissions, deletion, tool-mediated actions, and externally observable consequences of incorrect personalization.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LifeSide to study interactions among memory, user understanding, and privacy in persistent-companion tasks, not to rank a memory component in isolation. With simulated personas and environments, results first describe behavior under those simulation rules; real longitudinal relationships require separate validation.
+
+### What a concrete task looks like
+
+Illustrative task: a user's goals or emotional context change across sessions, and the assistant must use relevant history without revealing personal content in an inappropriate setting. Personal relevance and appropriate information use are separate outcomes to evaluate together.
+
+### Most discriminating experiment
+
+Vary memory and privacy policy independently over identical simulated-user trajectories. Report assistance quality and inappropriate disclosure rather than only a composite reward. Repeat with a simulator not used during development to test dependence on persona generation or evaluator preferences.
+
+### Pair with
+
+[dynamicmem](dynamicmem.en.md) · [gatemem](gatemem.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

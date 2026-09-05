@@ -32,6 +32,30 @@ Real attackers may adapt strategically rather than follow a fixed corruption gen
 
 Factor the lifecycle into admission, consolidation, retrieval, and use, then inject the same misleading evidence at one stage at a time. The highest-leverage question is whether robust memory requires better filtering at write time or calibrated verification at use time.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MemEvoBench to study safety degradation across repeated memory updates, not only one-shot prompt injection. The central issue is accumulation through writeback. A final attack-success rate alone misses the degradation path and the cost of repair.
+
+### What a concrete task looks like
+
+Illustrative task: an agent stores feedback after ordinary tasks, with a small portion being misleading. Later decisions drift over repeated updates. Trace when incorrect content was written, when it was retrieved, and whether correction succeeds.
+
+### Most discriminating experiment
+
+Hold the benign task stream fixed and compare clean, noisy, and misleading feedback round by round, tracking both safety and legitimate utility. Compare selective removal of implicated records with a full reset to test targeted recovery rather than wholesale forgetting.
+
+### Pair with
+
+[injecmem](injecmem.en.md) · [utility-under-attack](utility-under-attack.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `memory utility → memory update dynamics → adversarial memory evolution`

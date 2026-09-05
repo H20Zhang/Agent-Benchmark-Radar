@@ -33,3 +33,27 @@ Uneven query-format tuning, drifting hosted endpoints, and a single main corpus 
 ## Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use The Commercial Tax to interpret embedding-retrieval scores alongside licensing, query format, and deployment cost. Controlled exact-search comparisons are useful, but one corpus and unequal tuning do not establish a production ranking for all workloads.
+
+### What a concrete task looks like
+
+Illustrative task: several embedding models index one corpus and serve queries through the same similarity search. Document-encoding cost, query cost, and applicable licensing can change the deployment choice independently of retrieval quality.
+
+### Most discriminating experiment
+
+Allocate equal query-format tuning budgets, freeze models and indexes, and report construction and query costs separately. Add a differently distributed corpus and approximate-search settings to test whether exact-search rankings persist under practical latency limits.
+
+### Pair with
+
+[beir](beir.en.md) · [bright](bright.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

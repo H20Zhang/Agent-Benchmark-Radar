@@ -33,3 +33,27 @@ The dedup flag changes breadth, depth, rank, position, token count, and distract
 ## Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use The Recall Trap to test whether retrieval metrics predict downstream code repair, not to claim that lower recall is generally better. Packing changes can jointly alter breadth, depth, position, and distractors, making the observed effect a compound intervention requiring decomposition.
+
+### What a concrete task looks like
+
+Illustrative task: a fixed number of code-context slots can contain shallow snippets from more files or deeper snippets from fewer files. Greater file recall may remove the surrounding code needed for a repair, making the downstream task harder.
+
+### Most discriminating experiment
+
+Vary file breadth, per-file depth, order, and total tokens independently under the same repair model and hidden execution tests. Pair results by repository and add a tool-using repair workflow to assess whether the effect is specific to single-shot fixed packing.
+
+### Pair with
+
+[beir](beir.en.md) · [browsecomp-plus](browsecomp-plus.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

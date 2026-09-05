@@ -32,6 +32,30 @@ The benchmark cannot cover all medical/legal/physical risk types or real user co
 
 Measure calibration: when should the agent act on a remembered risk, ask for clarification, or discard it as stale? The key frontier is not merely remembering safety context, but controlling confidence and lifecycle of personalized risk beliefs.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use PerMemSafe when a current request is benign in isolation but requires caution given personal history. Personalized safety requires both retention of relevant risk and updating when circumstances change. Persistently applying obsolete risk can also reduce helpfulness.
+
+### What a concrete task looks like
+
+Illustrative task: an earlier history establishes a personal restriction relevant to a service choice, and a later session explicitly revises it. A new request requires the operative state rather than automatic reuse of the earliest safety judgment.
+
+### Most discriminating experiment
+
+Pair histories with an active risk, a resolved risk, and no relevant risk while holding the current request fixed. Measure both omission of relevant history and overuse of obsolete risk, reporting safety alongside helpfulness to distinguish updating from blanket conservatism.
+
+### Pair with
+
+[longmemeval](longmemeval.en.md) · [memtrapbench](memtrapbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `generic safety → personalized memory → evolving personalized risk state`

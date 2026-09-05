@@ -28,6 +28,30 @@ Fixing the ReAct harness makes model comparison cleaner but also binds conclusio
 
 Component attribution, persistent long-horizon state, live API drift/permissions, tool latency/cost, irreversible external actions, and recovery remain open.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use VAKRA for composition of executable APIs, document evidence, and natural-language tool policies. A fixed ReAct harness controls system variation but primarily supports comparisons within that harness. New agent architectures need separately matched interface and budget experiments.
+
+### What a concrete task looks like
+
+Illustrative task: an enterprise-style request requires retrieving a policy document, calling an API for state, and composing the result while respecting call constraints. A correct answer with an invalid call, or a successful call grounded to the wrong entity, should not be conflated with success.
+
+### Most discriminating experiment
+
+Remove document evidence, API results, or tool policy separately to verify task dependence, then swap models within the same harness. For tool-retrieval research, fix the visible tool inventory so a smaller candidate set is not mistaken for large-scale tool-selection competence.
+
+### Pair with
+
+[crag](crag.en.md) · [data-agent-benchmark](data-agent-benchmark.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy consequence
 
 `document retrieval / API use in isolation → multi-hop agent trajectories → cross-source executable coherence under policy`

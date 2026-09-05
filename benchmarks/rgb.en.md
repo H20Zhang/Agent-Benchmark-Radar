@@ -23,3 +23,27 @@ Align the generator, prompt, constructed negatives/counterfactuals, and diagnost
 ## Next evaluation coordinate
 
 The stronger successor connects these diagnostics back to a retrieval loop: can an agent notice conflict, search again, and recover within a tool budget rather than passively consume fixed context?
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use RGB to isolate how a generator uses supplied evidence under noise, counterfactuals, and unanswerability. It is not a retriever benchmark. Improvements from supplying better context do not establish a better search policy.
+
+### What a concrete task looks like
+
+Illustrative task: a question is paired with correct, noisy, answer-free, or counterfactual context, testing evidence-grounded answering. The system must select usable material and recognize when an answer is unsupported.
+
+### Most discriminating experiment
+
+Vary context conditions for the same generator and report each of the four competencies. Keep supplied-context diagnosis separate from end-to-end retrieval tests. Check both over-trust and neglect of retrieved text rather than optimizing robustness in only one direction.
+
+### Pair with
+
+[ragtruth](ragtruth.en.md) · [lit-ragbench](lit-ragbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

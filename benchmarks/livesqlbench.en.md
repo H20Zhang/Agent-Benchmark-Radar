@@ -32,6 +32,30 @@ Enterprise analytics also requires semantic definitions, permissions, lineage, c
 
 Create paired tasks immediately before and after a schema/business-rule change and measure update latency: how quickly does an agent stop using obsolete semantics without losing stable knowledge?
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LiveSQLBench for industrial schemas, changing knowledge rules, and database-management operations. Continuing releases reduce static-test limitations but change tasks and environments. Compare within a release and track rather than interpreting cross-release score differences as model progress.
+
+### What a concrete task looks like
+
+Illustrative task: an agent interprets a large schema and hierarchical business knowledge, executes queries or management operations, and adapts to rule changes. Syntactically correct SQL does not establish correct state changes; management tasks require postcondition checks.
+
+### Most discriminating experiment
+
+Pin database release, knowledge base, and track, separating base-model and full-agent settings. Evaluate query equivalence, management postconditions, and adaptation to changed rules separately, recording recovery and cost and explicitly tracking errors from cached obsolete rules.
+
+### Pair with
+
+[spider-2](spider-2.en.md) · [warehouse-reliability-bench](warehouse-reliability-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `static text-to-SQL → industrial-scale schema → continuously evolving data environment`

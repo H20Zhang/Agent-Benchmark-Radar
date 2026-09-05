@@ -32,6 +32,30 @@ Real enterprise systems add permissions, production writes, incidents, stakehold
 
 Chain DE and DA tasks: require an agent to build/repair a transformation pipeline and then answer business questions from its outputs. This would test error propagation across the actual data lifecycle.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DAComp to cover both data engineering and open-ended analysis, without pooling their tracks into an unexplained average. Repository transformations rely more on executable verification, while analytical reports depend more on rubrics. These mechanisms imply different uncertainty in the conclusions.
+
+### What a concrete task looks like
+
+Illustrative task: an engineering task modifies a data pipeline to produce correct output, while an analysis task explores a business problem and writes a report. The first tests code and state changes; the second also tests analytical framing and evidence interpretation.
+
+### Most discriminating experiment
+
+Fix engineering test environments and report evaluators separately, showing quality, time, and calls by track. Supply correct edit locations for engineering and intermediate results for analysis to diagnose discovery versus reasoning. Establish gains in each track before claiming generality.
+
+### Pair with
+
+[data-eng-bench](data-eng-bench.en.md) · [insightbench](insightbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `local code/SQL → repository data engineering + open-ended analysis → integrated data-intelligence lifecycle`

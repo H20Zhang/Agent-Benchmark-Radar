@@ -33,3 +33,27 @@ MemTrapBench 很适合验证 **retrieve-then-decide、memory gating、contextual
 `map_delta=early_signal`。它与 staleness/update benchmark 共同支持“**memory validity before use**”这一方向，但测量对象不同：staleness 关注哪个版本当前有效，MemTrapBench 关注即使记忆是真的、它是否适用于当前决策。单篇工作仍不足以改写 durable Benchmark Map。
 
 Primary: https://arxiv.org/abs/2608.20202
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究何时不该使用看起来相关的记忆。它直接挑战‘正确保存、正确检索就一定有益’；但人为设置的陷阱主要证明这种失效可能发生，不能据此估计自然任务中的发生频率。
+
+### 一个具体任务长什么样
+
+示意任务：旧任务形成了某种解题习惯或判断，新任务的条件已经变化，但措辞仍相似。系统若执着套用过去的经验，会比没有旧记忆时表现更差；错误发生在使用边界而非事实是否保存。
+
+### 最有判别力的实验
+
+对相同当前任务比较无记忆、有效相关记忆和应拒绝的相似记忆，固定总上下文预算。报告正迁移与负迁移两侧，而不是只优化拒绝率；一个一律不用记忆的系统并没有解决选择性使用问题。
+
+### 建议搭配
+
+[locomo-plus](locomo-plus.md) · [statemembench](statemembench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

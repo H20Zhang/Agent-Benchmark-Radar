@@ -32,6 +32,30 @@ Live mobile applications drift, so reproducibility depends on environment snapsh
 
 Add paired fresh-agent versus experienced-agent runs with identical initial UI states, plus oracle-memory injection. This would quantify the marginal value of retained experience separately from stronger generic GUI competence.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MemGUI-Bench for experience reuse across mobile applications and attempts. More retries independently increase the chance of success, so separate memory transfer from repeated attempts. Perception errors should not all be attributed to memory.
+
+### What a concrete task looks like
+
+Illustrative task: an interaction reveals a navigation path or failure cause, and a related mirror task appears later. The agent must reuse valid experience while recognizing interface differences rather than replaying the old click sequence verbatim.
+
+### Most discriminating experiment
+
+Fix device snapshots, perception backbone, and total attempts; compare no memory, raw trajectories, and distilled experience. Report first-attempt success and per-attempt cost alongside pass@k, sliced by cross-step, cross-application, and cross-session transfer.
+
+### Pair with
+
+[memoryarena](memoryarena.en.md) · [mem2actbench](mem2actbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `single-session GUI grounding → cross-step retention → cross-session experience reuse`

@@ -23,3 +23,27 @@ retrieval MRR 与 numerical accuracy 支持当前 dataset/version、serializatio
 ## 下一步评测坐标
 
 下一步应覆盖更长 financial collections、cross-report aggregation 与 provenance，评价数字答案是否由完整证据链支持。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究真实文本与表格文档中的检索加数值推理。把已知正确上下文拿走，是它区别于纯表格问答的关键；文档序列化和解析也可能决定结果，不能把全部误差都归到语言推理。
+
+### 一个具体任务长什么样
+
+示意任务：问题不指明报告位置，系统需找到对应报告与表格，再理解行列语义并执行计算。检索到正确文件但未保留表头或单位，仍可能得到数量级错误的答案。
+
+### 最有判别力的实验
+
+固定数据发布版本，对比完整检索、正确文档给定与正确表格给定，分别测检索和数值答案。扫描语料规模时保持题目一致，并明确是否采用已移除的数据来源，避免版本不同却直接比较。
+
+### 建议搭配
+
+[mudabench](mudabench.md) · [lit-ragbench](lit-ragbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

@@ -32,6 +32,30 @@ The benchmark still uses bounded benchmark environments rather than months of op
 
 Add stage-level counterfactuals: oracle-write, oracle-retrieve, and oracle-use variants on the same trajectories. That would turn MemoryArena from a strong system benchmark into a diagnostic benchmark that can say **where** the memory-to-action loop breaks.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MemoryArena to move from answering questions about history to improving later actions. Evidence depends on inter-task dependence and a no-memory control. When a later task is independently solvable, higher success alone does not establish useful experience reuse.
+
+### What a concrete task looks like
+
+Illustrative task: an earlier attempt reveals an environment rule or user choice, and a later session can use it to complete a related operation more efficiently. Memory should affect search order or action parameters; copying every old trajectory is not automatically effective distillation.
+
+### Most discriminating experiment
+
+Pair memory, no-memory, and raw-trajectory-replay conditions using identical starting environments and seeds. Compare success and action cost, then introduce irrelevant experience to test negative transfer. This separates distillation from gains due to extra context or computation.
+
+### Pair with
+
+[past-bench](past-bench.en.md) · [mem2actbench](mem2actbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `conversation recall → trajectory memory → experience-conditioned action`

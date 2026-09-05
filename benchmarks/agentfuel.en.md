@@ -89,6 +89,30 @@ A high-value extension is a **state intervention matrix**: run the same sequenti
 
 If structured state remains better than raw history or cache under freshness stress, that provides much stronger evidence that the representation itself—not merely retaining more context—creates value.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use AgentFuel for domain-specific time-series query evaluation, particularly state and incident reasoning. Released queries and a customizable generation framework are different artifacts. Establish whether data, environments, or a generator are actually available before treating the design as turnkey software.
+
+### What a concrete task looks like
+
+Illustrative task: an agent determines when a state changed or how metrics behaved during an incident. A stateless aggregate cannot replace state-transition analysis, and timestamp semantics during loading can determine the answer.
+
+### Most discriminating experiment
+
+Pin the raw time series and temporal rules, separating stateless, stateful, and incident queries. Have connectors read equivalently validated data before comparing agents, excluding loading-semantics differences. Generated-task claims additionally need held-out domains.
+
+### Pair with
+
+[irts-toolbench](irts-toolbench.en.md) · [dabstep](dabstep.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Evolution position
 
 `independent data query → cross-query state reuse → updateable and forgettable long-term analytical state`

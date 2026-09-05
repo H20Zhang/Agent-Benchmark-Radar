@@ -23,3 +23,27 @@ LoCoMo、LongMemEval 主要把长期历史 QA 做得更难、更细。MemBench �
 ## 下一步评测坐标
 
 MemBench 增加了评价维度，但仍难定位 write、organization、retrieval、update 中哪个机制导致结果。下一步需要 matched component interventions，并把长期 maintenance cost 与行为改善联系起来。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合为记忆系统建立多维画像，尤其在效果、容量和代价必须同时考虑时。广覆盖不等于能直接归因到某个记忆组件；使用它时应把任务类别和资源曲线作为主结果，而不是只比较打包系统总分。
+
+### 一个具体任务长什么样
+
+示意任务：系统既要记住直接参与的交流，也要利用旁观得到的信息，并从多次经历提炼较高层判断。相同记忆预算可能更利于事实保存，却不利于反思性信息，因此两类任务需要分别观察。
+
+### 最有判别力的实验
+
+在相同回答模型下扫描记忆容量，分别绘制事实型与反思型任务的质量—写入成本—检索延迟关系。若优势只在更大容量下出现，就不能把收益简单归为更好的组织方法；应加入等容量、等查询预算的对照。
+
+### 建议搭配
+
+[memoryagentbench](memoryagentbench.md) · [evomembench](evomembench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

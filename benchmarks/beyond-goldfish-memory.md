@@ -86,6 +86,30 @@ Beyond Goldfish Memory 的重要性主要是历史位置：它在今天“Agent 
 
 这能把“长期保存”推进到“长期维护”。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合作为跨会话对话连续性的历史参照。它帮助界定为何助手需要记忆，但不能替代对写入、冲突更新、删除和行动效果的机制评价；今天使用它应明确其作为基础能力锚点的角色。
+
+### 一个具体任务长什么样
+
+示意任务：两位对话参与者在一段时间后重新交流，需要自然承接此前提到的人与事。评价的重点不仅是复述事实，还包括生成内容是否与过去一致、是否形成连贯的后续对话。
+
+### 最有判别力的实验
+
+对同一后续会话比较无历史、完整历史和摘要记忆，并把历史一致性与一般对话流畅度分开评分。盲测评分者，防止更长或更礼貌的回复被误认为记忆更好；机制研究还应补充结构化更新任务。
+
+### 建议搭配
+
+[locomo](locomo.md) · [longmemeval](longmemeval.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single-session dialogue → cross-session conversational memory → updateable persistent memory → memory-guided action`

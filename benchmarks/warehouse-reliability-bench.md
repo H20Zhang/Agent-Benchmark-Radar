@@ -32,6 +32,30 @@ WRB 很强地支持一个 benchmark claim：**成功执行 SQL ≠ business corr
 
 在全新 unseen warehouse family 上，把同一个 semantic/rule scaffold 加到更大的 baseline model，再分别 ablate semantic resolution 与 post-execution check，这才是做 causal attribution 所需的实验。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检查 SQL 成功执行却违背业务口径的假成功，以及应澄清、弃答或拒绝的情况。它针对的是语义可靠性，不只是语法与执行；规则层的质量本身会影响结果，需要与模型贡献分开。
+
+### 一个具体任务长什么样
+
+示意任务：用户要求一个业务指标，但可用模式允许多种口径，或缺少必须的数据。系统可能生成可执行且有结果的 SQL，正确行为却应该是澄清定义或说明无法回答。
+
+### 最有判别力的实验
+
+固定业务规则与数据库，将可回答和需要非回答行为的任务分开，报告业务正确率与假成功。再替换规则层和模型做交叉实验，检查可靠性收益是否主要来自人工规则，而非自主语义理解。
+
+### 建议搭配
+
+[livesqlbench](livesqlbench.md) · [dabstep](dabstep.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `SQL execution correctness → semantic business truth → reliability-aware analytics agent`

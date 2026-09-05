@@ -32,6 +32,30 @@ Real web research often has multiple valid decompositions, uncertain subgoals, a
 
 Annotate a subset with multiple human-validated solution graphs and evaluate whether diagnostic conclusions survive equivalent alternative paths. This would test whether “wrong chain” truly means wrong reasoning rather than different reasoning.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use AgenticRAGTracer to locate missing evidence or incorrect step allocation in multi-hop RAG. A reference trajectory improves diagnosis but may not be the only valid path. Distinguish deviation from that trace from inability to solve the task.
+
+### What a concrete task looks like
+
+Illustrative task: a question is decomposed into hops with evidence and intermediate answers. Choosing a wrong entity early can derail later retrieval. A final answer alone cannot show whether to repair retrieval or subquestion planning.
+
+### Most discriminating experiment
+
+Replace intermediate answers or evidence with correct versions one hop at a time and measure downstream recovery against autonomous trajectories. Review alternative evidence-supported paths so strict trace matching does not penalize valid search strategies.
+
+### Pair with
+
+[multihop-rag](multihop-rag.en.md) · [searchauditbench](searchauditbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `multi-hop final answer → hop-level trace → causal diagnosis of search allocation`

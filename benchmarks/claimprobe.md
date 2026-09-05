@@ -41,3 +41,27 @@ ClaimProbe 可以支持“给定同一 evidence set，某个 writer / synthesis 
 `map_delta=early_signal`。ClaimProbe 新增了 `retrieved evidence → written claim → cited source` 的独立诊断层，但单篇证据不足以改 durable Benchmark Map。它的潜在重要性在于：未来 Deep Research benchmark 可能从“评一个最终 artifact”演化成**按 retrieval、materialization、attribution、utility 分层评测**。
 
 **Primary:** https://arxiv.org/abs/2608.28643 · **Code:** https://github.com/SalesforceAIResearch/claimwriter-deep-research
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合把研究报告中的不支持、错引与遗漏分开审计，尤其适合固定证据后的写作侧改进。主张找不到支持既可能是生成错误，也可能是审计器的候选来源搜索漏检；两者需要独立验证。
+
+### 一个具体任务长什么样
+
+示意任务：报告中的一个主张确实被某份材料支持，但引用指向另一份不支持它的文档；另一个主张则在所有已检索材料中都没有支持。两种错误都会影响可信度，但修复路径不同。
+
+### 最有判别力的实验
+
+固定证据集合比较写作方法，对被判不支持的主张增加全来源人工复核，估计候选检索漏检。联合报告必要事实覆盖、主张支持与可读性，防止通过少写或把所有内容拆得极碎来优化忠实性分数。
+
+### 建议搭配
+
+[deepresearch-bench](deepresearch-bench.md) · [ragtruth](ragtruth.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

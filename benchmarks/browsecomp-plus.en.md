@@ -23,3 +23,27 @@ Align corpus/qrels, the 830-query subset, context cap, judge, search budget, and
 ## Next evaluation coordinate
 
 Fixed corpora improve attribution but remove freshness and provider interfaces. BrowseComp-Plus_CM later shows that query-conditioned small corpora can underestimate evidence-discovery difficulty, making corpus construction itself a visible variable.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use BrowseComp-Plus to compare deep-search policies and retrieval infrastructure over a fixed corpus, improving attribution relative to live web search. That control removes some drift and interface complexity, so it complements rather than replaces live-search evaluation.
+
+### What a concrete task looks like
+
+Illustrative task: an agent searches a fixed document collection across several rounds, progressively satisfying indirect constraints. A common corpus and interface make it easier to distinguish finding key documents from choosing productive follow-up searches.
+
+### Most discriminating experiment
+
+Cross retrievers with agents under fixed documents, top-k, and total calls, reporting evidence recall, answers, and cost. Expand distractors or use an independently assembled corpus to test whether gains depend on the curated candidate collection.
+
+### Pair with
+
+[browsecomp](browsecomp.en.md) · [browsecomp-plus-cm](browsecomp-plus-cm.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

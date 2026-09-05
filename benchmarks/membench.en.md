@@ -23,3 +23,27 @@ Align the backbone, agent harness, memory budget, interaction scenario, and aggr
 ## Next evaluation coordinate
 
 MemBench broadens what gets measured but still does not isolate which write, organization, retrieval, or update mechanism caused the outcome. Matched component interventions and long-term maintenance cost are the next useful coordinates.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MemBench to profile a memory system across effectiveness, capacity, and cost. Breadth does not itself identify a component contribution. Treat task slices and resource curves as primary results rather than comparing only bundled-system totals.
+
+### What a concrete task looks like
+
+Illustrative task: a system remembers interactions it participated in, uses information it only observed, and derives a higher-level conclusion from repeated experiences. The same storage budget may favor factual retention over reflective information, so these should be inspected separately.
+
+### Most discriminating experiment
+
+With one answerer, sweep memory capacity and report quality, write cost, and retrieval latency separately for factual and reflective tasks. An advantage that appears only with more capacity is not evidence of better organization; add capacity- and query-budget-matched controls.
+
+### Pair with
+
+[memoryagentbench](memoryagentbench.en.md) · [evomembench](evomembench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

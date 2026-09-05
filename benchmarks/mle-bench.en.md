@@ -28,6 +28,30 @@ MLE-bench is best treated as an evaluation of an **autonomous ML-engineering sys
 
 The benchmark still does not cover problem formulation, data/metric design, messy research-repository repair, methodological novelty, or human collaboration. Another important missing coordinate is cost-normalized performance: if a system wins through more retries and more GPU time, researchers need success per token, wall-clock, and compute unit to know whether the agent is genuinely more efficient.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MLE-bench for end-to-end ML engineering from data to valid competition submissions. Medal thresholds are historical human references, not contemporaneous budget-matched comparisons. Retry counts, compute resources, and scaffolds can change conclusions.
+
+### What a concrete task looks like
+
+Illustrative task: an agent explores data, trains models, and submits predictions in a locally reconstructed competition, scored with hidden labels. A prediction file is only the baseline requirement; quality, rule compliance, and leakage need joint review.
+
+### Most discriminating experiment
+
+Fix hardware, time, retries, and data splits, reporting valid submissions separately from quality thresholds. Compare scaffolds under the same backbone and retain failures in the statistics. Use historical human scores as context without claiming matched-condition superiority.
+
+### Pair with
+
+[mle-dojo](mle-dojo.en.md) · [deltaml-bench](deltaml-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 MLE-bench anchors the autonomous ML-engineering branch of Data Agent evaluation: `MLAgentBench → MLE-bench → MLE-Dojo → DeltaML / AI4AI`; `map_delta=splits`. It establishes a large-scale terminal-outcome coordinate that later work extends toward trajectories, research process, and verification loops.

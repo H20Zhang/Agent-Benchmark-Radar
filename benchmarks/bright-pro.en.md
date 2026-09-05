@@ -23,3 +23,27 @@ Align corpus, aspect annotations, search-round budget, agent backbone, judge, an
 ## Next evaluation coordinate
 
 The next step aligns aspect coverage with final claim coverage: which evidence aspects actually change the answer and which are redundant?
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use Bright-Pro for complementary reasoning-aspect coverage across an evidence set, not only relevance of individual documents. Static retrieval, fixed-round search, and adaptive search answer different questions. Do not pool coverage, answer quality, and efficiency into an undefined overall ranking.
+
+### What a concrete task looks like
+
+Illustrative task: a question needs several complementary aspects; early retrieval covers one, so the next search should target a missing aspect. More evidence of the same type may remain relevant without increasing useful coverage.
+
+### Most discriminating experiment
+
+Fix the agent backbone and search budget and compare relevance ranking with selection targeting uncovered aspects. Align aspect coverage with claims in the final answer and test whether earlier stopping preserves completeness. Report efficiency separately for different backbones.
+
+### Pair with
+
+[bright](bright.en.md) · [claimprobe](claimprobe.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

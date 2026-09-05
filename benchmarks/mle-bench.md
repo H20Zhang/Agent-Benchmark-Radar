@@ -33,3 +33,27 @@ MLE-bench 更适合评估 **autonomous ML engineering system**，而不是做 fo
 MLE-bench 补齐 Data Agent 的自主 ML engineering 分支：`MLAgentBench → MLE-bench → MLE-Dojo → DeltaML / AI4AI`；`map_delta=splits`。它建立了大规模 terminal outcome coordinate，后续工作再逐步把 trajectory、研究过程和验证环纳入评测。
 
 Primary: https://arxiv.org/abs/2410.07095
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合评价从数据到有效竞赛提交的端到端机器学习工程。奖牌阈值是历史人类参照，不是同期、等预算的人机对照；排行榜提交次数、计算资源和智能体框架都可能改变结论。
+
+### 一个具体任务长什么样
+
+示意任务：系统在本地重建的竞赛环境中探索数据、训练模型并提交预测，由隐藏测试标签评分。完成预测文件只是底线，模型质量、规则遵从和是否存在泄露仍需要一起审查。
+
+### 最有判别力的实验
+
+固定硬件、时间、重试次数与数据切分，分别报告有效提交率和达到质量阈值的比例。比较相同骨干下的框架，并将所有失败运行保留在统计中；历史人类成绩只作参照，不宣称等条件超越。
+
+### 建议搭配
+
+[mle-dojo](mle-dojo.md) · [deltaml-bench](deltaml-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

@@ -28,6 +28,30 @@ That makes the score a system-level measure of backbone × harness × discovery 
 
 Business-definition ambiguity, clarification, persistent workflow/project state, write-side irreversible actions, governance, and full tool/latency/token/recovery cost remain open.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DataSpace for discovery, cross-source joins, and complete-result delivery from raw heterogeneous workspaces. The output is a verifiable table, not merely a plausible explanation. Task-local workspaces do not by themselves test representation reuse and maintenance in a persistent shared environment.
+
+### What a concrete task looks like
+
+Illustrative task: a query joins database records with rules in documents and supporting information in media or files, then returns a complete table. A few correct rows may not suffice; omissions, type errors, and precision differences affect the deliverable.
+
+### Most discriminating experiment
+
+Fix backbone and raw workspace and compare direct access, prebuilt representations, and representations updated using training queries, isolating test queries and answers. Charge parsing, construction, and query costs; supply correct evidence sets or intermediate tables to distinguish discovery, transformation, and computation.
+
+### Pair with
+
+[kramabench](kramabench.en.md) · [data-agent-benchmark](data-agent-benchmark.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy consequence
 
 `structured query/code → heterogeneous analytics → workspace-scale verifiable data work`

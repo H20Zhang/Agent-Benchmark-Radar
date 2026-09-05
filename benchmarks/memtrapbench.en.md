@@ -28,6 +28,30 @@ MemTrapBench is well suited to **retrieve-then-decide, memory gating, contextual
 
 The largest missing piece is the real prevalence of harmful reuse in natural workflows and whether agents can infer applicability boundaries autonomously in open environments. A high-value next benchmark would mine natural context shifts from coding, data-agent, or personal-assistant trajectories and compare explicit gating, temporal/version metadata, and pure LLM judgment to see whether gains persist beyond manually planted traps.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MemTrapBench to study when seemingly relevant memory should not be used. It challenges the assumption that faithful storage and retrieval are always beneficial. Constructed traps establish a possible failure mode, not its frequency in natural workloads.
+
+### What a concrete task looks like
+
+Illustrative task: an earlier task establishes a solving habit or belief, while a similar-sounding new task changes the conditions. Reusing the old lesson can perform worse than no memory. The failure concerns applicability rather than retention.
+
+### Most discriminating experiment
+
+Compare no memory, applicable relevant memory, and similar but inapplicable memory for the same current task with a fixed context budget. Report both positive and negative transfer rather than only rejection. Always disabling memory does not solve selective use.
+
+### Pair with
+
+[locomo-plus](locomo-plus.en.md) · [statemembench](statemembench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `map_delta=early_signal`. Together with staleness/update benchmarks, it supports a **memory validity before use** direction, but the measured object is different: staleness asks which version is currently valid, while MemTrapBench asks whether a true memory is applicable to the current decision at all. One work is still insufficient to rewrite the durable Benchmark Map.

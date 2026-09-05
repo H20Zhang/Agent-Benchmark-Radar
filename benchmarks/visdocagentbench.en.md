@@ -33,3 +33,27 @@ Only 120 queries and six cross-document paths; planner, model, and tool routes a
 ## Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use VisDocAgentBench to compare static visual ranking with iterative page inspection under a common ranking contract and action budget. When iterative agents use stronger models or more tools, score differences first describe systems rather than the causal value of iteration.
+
+### What a concrete task looks like
+
+Illustrative task: a system ranks scientific-document pages using static representations or opens pages to inspect figures and OCR before reranking. Newly inspected evidence should affect selection rather than merely increase the number of calls.
+
+### Most discriminating experiment
+
+Share candidate sets, visual backbone, and final top-k between static and iterative methods, with a supplied-support-page control. Track ranking gains per inspection and report redistributable and complete page collections separately to control artifact availability.
+
+### Pair with
+
+[mc-search](mc-search.en.md) · [maple](maple.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

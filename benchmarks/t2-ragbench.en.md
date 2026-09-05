@@ -23,3 +23,27 @@ Align dataset version, document serialization, chunk/index pipeline, reader, and
 ## Next evaluation coordinate
 
 The next step covers longer financial collections, cross-report aggregation, and provenance, testing whether numerical answers are supported by complete evidence chains.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use T²-RAGBench for retrieval plus numerical reasoning over text–table documents. Removing oracle context is the important distinction from supplied-table QA. Serialization and parsing can determine outcomes, so language reasoning is not the sole source of error.
+
+### What a concrete task looks like
+
+Illustrative task: a query does not specify the report location, requiring retrieval of the report and table before interpreting rows, columns, and arithmetic. Finding the file without preserving headers or units can still produce a wrong-scale answer.
+
+### Most discriminating experiment
+
+Pin the release and compare end-to-end retrieval, supplied-correct-document, and supplied-correct-table conditions. Measure retrieval and numerical answers separately. Keep questions fixed when scaling the corpus and disclose whether removed source datasets are included.
+
+### Pair with
+
+[mudabench](mudabench.en.md) · [lit-ragbench](lit-ragbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

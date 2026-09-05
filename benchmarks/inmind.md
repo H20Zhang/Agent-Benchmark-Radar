@@ -32,6 +32,30 @@ InMind 针对一个 **implicit-association retrieval blind spot**：真正影响
 
 先在真实个人 agent log 中测 indirect relevance 的发生率，再在 equal-cost 下比较 query expansion、world-knowledge-conditioned retrieval 与 agentic search。系统层真正的问题是：能不能用一个便宜 trigger 判断什么时候普通 similarity retrieval 已经不可信。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究相关性必须借助常识才能成立的记忆检索。它尤其能挑战‘向量相似就足够’的前提；但间接问题失败也可能因为骨干缺少连接知识，不能未经对照就判定检索器有问题。
+
+### 一个具体任务长什么样
+
+示意任务：历史保存了一条个人事实，新问题使用完全不同的概念，只有理解二者的常识联系才知道应调出该事实。直接问原事实可以成功，却不能说明系统会在需要时主动检索它。
+
+### 最有判别力的实验
+
+对同一事实配对直接和间接查询，并补充事实已放在上下文中的条件。先检查骨干能否在证据给定时完成连接，再比较检索路由；另加不相关但词面相似的干扰，检验方法是否只是扩大召回。
+
+### 建议搭配
+
+[locomo-plus](locomo-plus.md) · [came-bench](came-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `semantic recall → query-conditioned retrieval → knowledge-mediated relevance discovery`

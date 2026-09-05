@@ -32,6 +32,30 @@ The benchmark is useful for **memory component attribution**. A system that clai
 
 The main gaps are natural corpora, multiple embedders, broader query distributions, and evidence that retrieval gains propagate to final answers or actions. A particularly informative next experiment would compare equal-budget write enrichment, query expansion, and reranking on the same memory corpus and query set, answering whether computation is best spent at write, query, or read time.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use Agent Memory Bakeoff as a fast component diagnostic of whether write-time retrieval cues bridge vocabulary mismatch. It is a retrieval testbed, not a benchmark of long-term agent utility. Ranking improvements require a downstream answering or execution check.
+
+### What a concrete task looks like
+
+Illustrative task: a memory uses an internal incident name while a later query describes an external symptom. Enrichment adds an alternative expression for the same event, potentially improving BM25 or hybrid retrieval but also introducing incorrect associations.
+
+### Most discriminating experiment
+
+Cross retrieval method with write-time enrichment on fixed documents and queries, accounting for added storage and ingestion cost. Add natural queries not used in enrichment construction and inspect negative transfer from incorrect enrichment, rather than demonstrating fit to a mechanism-aligned synthetic corpus.
+
+### Pair with
+
+[inmind](inmind.en.md) · [beir](beir.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `map_delta=early_signal`, bound to `memory-component-attribution`. The suite adds a controlled write-side intervention coordinate but does not yet justify changing the durable memory benchmark chain; that would require stable long-term utility gains across tasks and model families.

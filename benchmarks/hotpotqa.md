@@ -23,3 +23,27 @@ HotpotQA 包含约 113K 个 Wikipedia 问题，并给出 sentence-level supporti
 ## 下一步评测坐标
 
 HotpotQA 不覆盖动态网页、工具状态、搜索成本与 query reformulation。后续 benchmark 应让系统自己决定何时继续搜索、如何修正检索路径，并验证 evidence portfolio 是否真正驱动最终答案。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验多文档证据组合，是多跳检索的基础参照，而不是实时搜索智能体能力的完整代表。尤其要区分候选段落已给定与全库检索；两者对检索器的要求不同，不能把答案分数直接混比。
+
+### 一个具体任务长什么样
+
+示意任务：问题需要先通过一篇文档确定中间实体，再用另一篇文档取得最终属性。系统既要输出答案，也要找到足够支持两步推理的事实；猜中答案不等于证据链正确。
+
+### 最有判别力的实验
+
+固定回答模型，比较单次检索、迭代检索和给定支持事实，分别报告证据召回与答案质量。另做移除一个必要证据的检查，验证问题是否存在捷径；不要把更大候选池带来的收益全归给多跳规划。
+
+### 建议搭配
+
+[multihop-rag](multihop-rag.md) · [browsecomp-plus](browsecomp-plus.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

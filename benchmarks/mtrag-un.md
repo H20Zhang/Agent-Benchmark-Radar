@@ -23,3 +23,27 @@ IDK/faithfulness/retrieval metrics 支持在固定 corpus、conversation history
 ## 下一步评测坐标
 
 下一步应让 clarification 真的改变之后的 dialogue state 与 retrieval query，并评价一次追问是否减少后续搜索成本和错误。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验多轮 RAG 中省略、歧义与无答案情形的处理。当前话轮不一定是独立查询；直接检索原句可能失败，错误改写也可能引入用户从未提出的假设。
+
+### 一个具体任务长什么样
+
+示意任务：用户在前一轮讨论某个对象，随后只问‘那另一种情况呢’，但历史可能不足以唯一确定范围。系统应先恢复必要上下文，证据或意图仍不明确时采取适当澄清，而不是补造问题。
+
+### 最有判别力的实验
+
+比较原话轮检索、自动改写与正确独立问题给定条件，分别统计检索、回答和澄清行为。按可回答、不可回答和欠明确任务拆分，防止一律改写或一律弃答在总体指标中隐藏失败。
+
+### 建议搭配
+
+[rgb](rgb.md) · [longmemeval](longmemeval.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

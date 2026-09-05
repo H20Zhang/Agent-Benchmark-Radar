@@ -30,6 +30,30 @@ The 57 questions are a projection-survivor subset, and GPT-5.6 Sol already answe
 
 The result needs replication on larger independently authored question sets, more retrieval interfaces, and protocols that require explicit citations—especially to separate evidence exposure, evidence use, and parametric recall.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use BrowseComp-Plus_CM to examine how evidence discovery changes when fixed questions move to an independently assembled large corpus. Scaling changes coverage as well as distraction. Projection selection and closed-book solvability limit generalization to web search overall.
+
+### What a concrete task looks like
+
+Illustrative task: retain a question and search agent while replacing the candidate corpus with a much larger independent collection. The agent may face more distractors or lack the original evidence, so question projections and relevance judgments must be checked together.
+
+### Most discriminating experiment
+
+Hold questions, agent, search API, and budget fixed while swapping only the corpus, reporting evidence-coverage changes separately. Run closed-book checks on retained projections and separate known-answer from unknown-answer cases so memorization does not hide large-scale search failure.
+
+### Pair with
+
+[browsecomp-plus](browsecomp-plus.en.md) · [livebrowsecomp](livebrowsecomp.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy consequence
 
 `map_delta=revises`, bound to `retrieval-harness-validity`. Its matched corpus swap directly qualifies the durable BrowseComp-Plus claim: a fixed corpus is necessary for drift control and attribution, but query-conditioned construction, scale, and qrels remain load-bearing variables. The map receives only that smallest qualification; one projection is not promoted into a universal trend.

@@ -32,6 +32,30 @@ task-local data 仍避开 enterprise longitudinal change、permission、write、
 
 为同一 analytical question 构造 single-source / heterogeneous paired version，再对 source routing 做 intervention，量化真正来自 cross-source integration 的难度，而不是泛化的 reasoning difficulty。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究跨结构化、文档和多模态来源的分析工作流。它把数据获取、工具使用和报告放在一起，但异构任务的统一总分容易掩盖失败位置；应同时保留正确性、报告质量与资源成本。
+
+### 一个具体任务长什么样
+
+示意任务：分析请求需要同时查看表格、文档和媒体材料，系统规划访问顺序并形成结论。缺少一类来源可能导致片面报告；报告写得完整，也不保证支撑结论的计算和证据都正确。
+
+### 最有判别力的实验
+
+固定工具与骨干，按来源组合和任务类型拆分，并用正确来源集合给定条件定位发现瓶颈。把选择题、报告评分和轨迹指标分别展示，计入多模态解析成本，避免通过更昂贵的输入处理获得不透明优势。
+
+### 建议搭配
+
+[dataspace](dataspace.md) · [kramabench](kramabench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single-source analytics → heterogeneous evidence workflows → multi-source data-agent orchestration`

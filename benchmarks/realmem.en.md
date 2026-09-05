@@ -32,6 +32,30 @@ Project success is more than answering questions: agents must create artifacts, 
 
 Attach executable project tasks to each checkpoint—update a plan, edit an artifact, choose the next action—and score consistency with the evolving project state. That would test whether memory reduces real coordination error rather than only improving QA.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use RealMem for evolving project goals, artifacts, and progress rather than only static user attributes. Its usefulness depends on later queries requiring evolving project state. Correctly retrieving an obsolete plan and acting on it is still a memory failure.
+
+### What a concrete task looks like
+
+Illustrative task: a user sets a project direction, later revises deliverables and priorities, and then asks for the next step. The system must distinguish completed, cancelled, and operative items instead of merging every historical request into one list.
+
+### Most discriminating experiment
+
+Vary revision order within the same project and compare log retrieval, state summaries, and explicit state maintenance. Score resurrection of cancelled requirements separately and test on new projects. Improvements confined to one project template do not establish cross-project generalization.
+
+### Pair with
+
+[longmemeval](longmemeval.en.md) · [statemembench](statemembench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `casual conversation memory → cross-session project state → persistent work context`

@@ -32,6 +32,30 @@ BrowseComp 故意把 output 压成一个短事实答案；DeepResearch Bench 改
 
 加入 claim-level evidence graph 与 retrieval-budget sweep，判断 report improvement 到底来自找到了更好的 evidence，还是只是在同一 evidence set 上写得更漂亮。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合评价带引用的长篇研究交付，而不是只检查能否找到一个事实。报告质量、引用正确性和覆盖范围可能相互背离；更长、更流畅的报告也可能掩盖证据不足，因此不宜只依赖整体偏好分。
+
+### 一个具体任务长什么样
+
+示意任务：系统先分解研究问题、搜集多来源材料，再组织成一份有论点和引用的报告。每个阶段都可能失败：漏查材料、误解来源或在写作时扩大结论，最终文章质量不能自动定位原因。
+
+### 最有判别力的实验
+
+先固定检索到的证据比较写作者，再固定写作者比较检索策略；同时控制报告长度和研究预算。结合主张级支持审查，检查整体评分的提升是否来自更好的证据，而非格式、文风或评价器偏好。
+
+### 建议搭配
+
+[claimprobe](claimprobe.md) · [litreview-arena](litreview-arena.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `hard web answer finding → citation-grounded report generation → auditable research workflow`

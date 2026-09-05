@@ -32,6 +32,30 @@ The suite is useful as a **unit test for update mechanisms**, including timestam
 
 The main gaps are scale, natural data, complex validity intervals, and downstream action. A high-value next benchmark would include multi-step supersession chains, non-monotonic rollback, time-bounded facts, and entity conflicts and compare recency ranking, explicit version graphs, and learned conflict resolvers under the same retrieval budget, measuring both current-state accuracy and historical traceability.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use membench (staleness) as a quick regression test for stale-fact handling, not as the main evidence for general memory quality. It tests whether current facts outrank superseded ones. Passing small exact-match probes does not establish reliable state understanding in complex histories.
+
+### What a concrete task looks like
+
+Illustrative task: a fact about an entity is stored and later negated or superseded. A query should return the operative value rather than a forbidden old one. Returning nothing may reduce stale outputs without satisfying legitimate retrieval.
+
+### Most discriminating experiment
+
+Track operative-fact retrieval, stale-fact rank, and abstention together. Keep the metric definition stable while sweeping top-k. Add paraphrases and larger distractor stores to test whether success relies on exact substrings or tiny collections.
+
+### Pair with
+
+[statemembench](statemembench.en.md) · [longmemeval](longmemeval.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `map_delta=early_signal`, bound to `memory-update-and-staleness`. The corrected metrics make the suite useful as a component diagnostic, but **60 related hand-written probes, one author, and a small store** are not enough to establish a durable field shift. Broader evidence is needed before update-aware evaluation becomes a required coordinate of long-term-memory benchmarking.

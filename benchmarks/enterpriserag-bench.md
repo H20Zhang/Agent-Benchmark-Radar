@@ -23,3 +23,27 @@ combined score 支持在 synthetic company ontology、chunking/indexing 与 judg
 ## 下一步评测坐标
 
 下一步应加入真实 authorization、versioned artifacts 与 write operations，验证冲突解决后系统是否会更新或污染共享知识状态。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合在统一企业式语料中研究噪声、重复、冲突和缺失信息。连贯的合成公司比互不关联文档更利于交叉推理，但组织权限与真实业务语义仍不是自动获得的；高分不能直接解释为企业部署可靠性。
+
+### 一个具体任务长什么样
+
+示意任务：项目决定分散在文档、消息与其他企业来源中，其中有重复版本和相互冲突的描述。系统需要识别有效证据并回答完整范围；找出一个支持片段并不代表已经处理了冲突。
+
+### 最有判别力的实验
+
+固定语料快照与切块方式，分别测来源受限、冲突、完整性和无答案问题。加入正确文档集合给定条件，再按语料规模扩展，检验收益来自跨来源推理、索引覆盖还是对合成公司的适配。
+
+### 建议搭配
+
+[gatemem](gatemem.md) · [mudabench](mudabench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

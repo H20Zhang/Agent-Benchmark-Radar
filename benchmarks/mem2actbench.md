@@ -32,6 +32,30 @@ Mem2ActBench 测的是长期 memory 能不能被 **主动转化为 tool use**：
 
 加入 oracle-retrieval 与 oracle-planning 对照。若 oracle memory 仍无法显著提升 tool success，瓶颈在 action grounding；若大幅补齐差距，则 write/retrieval policy 才是主要研究对象。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究记忆如何进入工具选择与参数填写，测量位置比普通历史问答更靠近行动。但正确工具调用仍只是行动链的一环；执行后的状态正确性、权限和长期后果需要另外检查。
+
+### 一个具体任务长什么样
+
+示意任务：用户此前说明了偏好的服务与必要参数，当前只发出简短操作请求。系统需找到相关偏好，选择工具并填对参数；记忆中的事实即使能被复述，也可能没有正确转成调用。
+
+### 最有判别力的实验
+
+把检索到的记忆和最终工具调用分别评分，再加入正确记忆直接给定条件。如果检索正确而参数错误，应优先改进记忆到动作的映射；另测旧偏好已被更新的情形，防止准确执行了过时要求。
+
+### 建议搭配
+
+[memoryarena](memoryarena.md) · [gatemem](gatemem.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `memory QA → memory-conditioned decision → memory-grounded tool action`

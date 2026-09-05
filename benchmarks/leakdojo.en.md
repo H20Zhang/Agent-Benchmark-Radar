@@ -23,3 +23,27 @@ Align corpus/chunking, attack implementation, query budget, generator, model, re
 ## Next evaluation coordinate
 
 The next step combines extraction with authorization boundaries, sensitive-field severity, and production consequences instead of weighting all chunks equally.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LeakDojo to compare corpus-extraction risk and defenses under controlled RAG configurations. Recovered text depends on query budget and chunking. It does not replace cross-tenant authorization or production-incident evaluation, nor should one attack's maximum leakage summarize the system.
+
+### What a concrete task looks like
+
+Illustrative task: an attacker uses bounded queries to recover restricted corpus content while a defense preserves legitimate QA. Repeating the same text and recovering new chunks create different cumulative exposure, requiring distinct accounting.
+
+### Most discriminating experiment
+
+Fix corpus, chunking, retriever, and query budget, reporting unique recovered chunks alongside benign QA quality. Cross attacks with models to test whether a defense reduces inappropriate evidence exposure rather than suppressing one output style.
+
+### Pair with
+
+[gatemem](gatemem.en.md) · [injecmem](injecmem.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

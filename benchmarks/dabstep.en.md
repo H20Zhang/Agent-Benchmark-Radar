@@ -32,6 +32,30 @@ Production financial analytics includes live schemas, permissions, PII, governan
 
 Add deterministic intermediate checkpoints for source selection, joins/mappings, and computed quantities before the final answer. This would retain objective grading while locating where multi-step workflows fail.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DABstep to test whether documented business rules survive multi-step data analysis. A focused payments domain enables diagnosis but does not establish cross-industry competence. Rule selection and intermediate transformations explain failures better than final string matching alone.
+
+### What a concrete task looks like
+
+Illustrative task: an agent combines transaction files with policy documents, applies exceptions, and computes an exact answer. Missing one exception can make the result wrong even when every code step executes successfully.
+
+### Most discriminating experiment
+
+Pin the dataset release and step budget and compare original documentation, structured rules, and supplied-intermediate tables. Slice by difficulty and rule composition, separating formatting from numerical errors to distinguish rule understanding from output compliance.
+
+### Pair with
+
+[warehouse-reliability-bench](warehouse-reliability-bench.en.md) · [dataspace](dataspace.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `single-table analysis → heterogeneous documented workspace → objectively graded multi-step data agent`

@@ -91,6 +91,30 @@ BEIR 本质上仍是 **static retriever-only benchmark**。它没有完整测量
 
 如果一个复杂 agent 在最终 QA 上变好，却在 BEIR-style first-hop retrieval 上更差，就需要解释增益来自哪里，而不是把所有提升归功于“更强搜索”。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合回答检索器能否跨领域工作，而不是只适配一个训练分布。对系统研究，BM25 是有实际意义的比较基线；平均排序分数之外，最差领域、索引代价和查询延迟往往会改变方案排序。
+
+### 一个具体任务长什么样
+
+示意任务：同一个检索器不为每个领域重新训练，就要处理词汇、文档长度与相关性标准不同的查询。一个模型在熟悉领域表现好，可能在术语密集或分布不同的领域输给词法检索。
+
+### 最有判别力的实验
+
+固定各数据集版本与统一超参数选择规则，比较 BM25、向量检索和混合检索，逐数据集报告而非只报均值。把每个领域单独调参的结果与零样本结果分开，并在相同延迟或成本约束下重新比较。
+
+### 建议搭配
+
+[bright](bright.md) · [commercial-tax](commercial-tax.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single-domain retrieval → heterogeneous zero-shot retrieval → reasoning-intensive retrieval → iterative / agentic evidence search`

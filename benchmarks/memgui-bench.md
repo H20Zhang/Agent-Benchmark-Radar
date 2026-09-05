@@ -32,6 +32,30 @@ task success 与 repeated-attempt 指标反映的是 **GUI perception × memory 
 
 设计完全相同初始 UI state 下的 fresh-agent vs experienced-agent paired run，并加入 oracle-memory injection，直接估计 retained experience 相比 generic GUI competence 的边际贡献。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究跨应用与跨尝试的经验是否改善移动界面操作。重试次数本身会增加成功机会，因此应区分记忆带来的迁移与单纯多试几次；界面识别错误也不能全部归到记忆模块。
+
+### 一个具体任务长什么样
+
+示意任务：一次界面操作暴露了路径或失败原因，后续镜像任务在相关场景中再次出现。系统需要复用有效经验并识别当前界面差异，而不是原样重放旧点击序列。
+
+### 最有判别力的实验
+
+固定设备快照、视觉骨干和尝试总数，比较无记忆、原始轨迹与提炼经验。除 pass@k 外报告首次成功和每次尝试成本，再按跨步骤、跨应用与跨会话拆分，检查收益发生在哪种迁移距离。
+
+### 建议搭配
+
+[memoryarena](memoryarena.md) · [mem2actbench](mem2actbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single-session GUI grounding → cross-step retention → cross-session experience reuse`

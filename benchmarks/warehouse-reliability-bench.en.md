@@ -32,6 +32,30 @@ The evidence base is narrow: two synthetic domains, one seed, one model family, 
 
 Run the same semantic/rule scaffold over the larger baseline model on a fresh unseen warehouse family, then ablate semantic resolution and post-execution checks separately. That is the experiment needed for causal attribution.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use WarehouseReliabilityBench for false successes where executable SQL violates business semantics, and for clarification, abstention, or refusal. The target is semantic reliability rather than syntax and execution alone. Rule-layer quality must be separated from model contribution.
+
+### What a concrete task looks like
+
+Illustrative task: a requested business metric admits several definitions under the schema or lacks necessary data. The agent can generate executable SQL with a result even when the correct behavior is to clarify the definition or explain unanswerability.
+
+### Most discriminating experiment
+
+Fix business rules and databases, separate answerable tasks from non-answer behavior, and report business correctness and false success. Cross rule layers with models to test whether gains primarily come from hand-authored rules rather than autonomous semantic understanding.
+
+### Pair with
+
+[livesqlbench](livesqlbench.en.md) · [dabstep](dabstep.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `SQL execution correctness → semantic business truth → reliability-aware analytics agent`

@@ -32,6 +32,30 @@ business value、causal validity、checklist 外 novelty 与 stakeholder relevan
 
 混合 planted verifiable insight 与真正 unlabeled dataset，再由 blinded domain expert 评 novelty。关键是区分 agent 会不会寻找 important unknown，而不是只会找回 benchmark 作者预埋的 checklist item。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究只给目标实体和数据元信息时，系统是否知道什么值得调查。它比回答指定查询更接近自主研究，但检查清单只能代表部分可验证发现；更多文字和更多工具调用都不等于更有价值的洞察。
+
+### 一个具体任务长什么样
+
+示意任务：系统拿到一个实体后自主建立假设、查询相关数据、检验异常并形成报告。何时停止也是任务的一部分；找到一个看似异常的数值后，应继续验证而不是立即编写结论。
+
+### 最有判别力的实验
+
+在相同实体与预算下比较自主目标设定和人工研究问题给定，分别统计已验证发现与无支持主张。固定终止规则或单列自终止成本，并复核检查器漏掉的有效发现，避免只优化预设清单。
+
+### 建议搭配
+
+[insightbench](insightbench.md) · [dataclawbench](dataclawbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `answer a specified query → choose analytical subgoals → autonomous data investigation`

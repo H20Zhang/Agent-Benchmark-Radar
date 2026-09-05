@@ -32,6 +32,30 @@ benchmark 覆盖 multi-hop reasoning、knowledge update、term ambiguity、user-
 
 加入 oracle speaker-aware retrieval，在相同 answer model 下比较 raw-message、per-user、thread、graph memory，判断主要损失发生在 write 阶段，还是已经取对 social state 后的 reasoning 阶段。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究多人交流中的发言者、信念和受众条件。把全部聊天当成一个统一用户的记忆库会抹掉最重要的变量；回答内容真实，也可能因归属错误或使用了错误角色的术语而失败。
+
+### 一个具体任务长什么样
+
+示意任务：不同成员对同一计划持有不同观点，某个术语在不同团队中也有不同含义。当前提问者的身份决定应如何解释问题；系统需要把内容与说话者、回复关系和目标受众一起检索。
+
+### 最有判别力的实验
+
+在相同对话文本上保留、隐藏或打乱角色与回复结构，按提问者分别评分。若正确元数据给定后仍失败，再检查信念推理；若只有人工角色标签有效，则不能直接宣称系统能自主建立群体记忆。
+
+### 建议搭配
+
+[gatemem](gatemem.md) · [came-bench](came-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single-user memory → speaker-grounded group memory → socially governed shared state`

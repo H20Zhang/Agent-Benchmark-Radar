@@ -23,3 +23,27 @@ Lock the dataset/history version, reader or answerer, retrieval budget, and grad
 ## Next evaluation coordinate
 
 LongMemEval still terminates in QA over history. LongMemEval-V2 later moves to agent-environment trajectories, workflow knowledge, and latency; the next stronger target is whether remembered experience improves future actions directly.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LongMemEval for persistent-assistant failures such as recalling a fact but using its superseded version. Its value lies in separating updates, temporal reasoning, and abstention. Category-level reporting is more diagnostic than treating one overall accuracy as a complete account of memory.
+
+### What a concrete task looks like
+
+Illustrative task: a user states a preference, explicitly revises it several sessions later, and then asks which arrangement now applies. The system must resolve the revision rather than pick between similar passages, and avoid guessing when the history provides insufficient evidence.
+
+### Most discriminating experiment
+
+Place both old and new facts in retrieved context and compare against a condition containing only the operative fact. Persistent failure with both facts available points beyond recall to conflict resolution or temporal interpretation. Report unanswerable questions separately so always-answer policies cannot hide their cost.
+
+### Pair with
+
+[statemembench](statemembench.en.md) · [scale-qa](scale-qa.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

@@ -32,6 +32,30 @@ OpenAI 自己也指出短答案分布和真实 open-ended user query 的相关�
 
 给题目增加 evidence-set scoring，并固定 search budget，区分“靠 prior/运气猜到答案”和“高效找到了足够 supporting evidence”。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究持续搜索和难找证据的发现能力。短答案让终点容易判断，却不能覆盖完整研究报告质量；成绩同时受搜索后端、工具接口、模型已有知识和调用预算影响，不能只按模型名称归因。
+
+### 一个具体任务长什么样
+
+示意任务：问题给出多个间接约束，系统需要反复改写查询、筛除候选并追到一个可验证答案。正确停止和证据核对与搜索次数同样重要；更多调用不保证找到真正支持答案的来源。
+
+### 最有判别力的实验
+
+在相同搜索后端、抓取接口和总预算下比较策略，并加入闭卷条件和来源移除诊断。报告准确率、调用数与失败轨迹；若闭卷已能答对，应谨慎解释该样本对搜索能力的区分度。
+
+### 建议搭配
+
+[browsecomp-plus](browsecomp-plus.md) · [livebrowsecomp](livebrowsecomp.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `factual QA → persistent web search → evidence-aware research agents`

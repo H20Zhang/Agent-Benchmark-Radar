@@ -32,6 +32,30 @@ The tasks are synthesized around benchmark tool schemas rather than long-running
 
 Introduce oracle-retrieval and oracle-planning controls. If oracle memory barely improves tool success, the bottleneck is action grounding; if it closes most of the gap, retrieval/write policy is the dominant research target.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use Mem2ActBench to study how memory informs tool selection and parameter grounding, placing the readout closer to action than historical QA. A correct call is still only one part of an action chain; resulting state, authorization, and long-term consequences require separate checks.
+
+### What a concrete task looks like
+
+Illustrative task: a user previously specified a preferred service and required parameters, then issues a terse action request. The agent must retrieve the preference, choose a tool, and ground its arguments. Being able to restate a fact does not guarantee using it in a call.
+
+### Most discriminating experiment
+
+Score retrieved memories and final tool calls separately, adding a supplied-correct-memory control. Correct retrieval with wrong arguments points to the memory-to-action mapping. Include updated-preference cases to catch accurate execution of obsolete requirements.
+
+### Pair with
+
+[memoryarena](memoryarena.en.md) · [gatemem](gatemem.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `memory QA → memory-conditioned decision → memory-grounded tool action`

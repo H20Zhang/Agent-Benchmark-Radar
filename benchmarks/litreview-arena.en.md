@@ -28,6 +28,30 @@ The benchmark is valuable because it moves deep-research evaluation from “does
 
 The main gaps are domain-specific norms, living-review updates, citation verification, cost matching, and genuinely held-out judge validation. The highest-leverage question is whether LitJudge's stronger correlation transfers across domains, new topic distributions, and unseen system families instead of primarily fitting the current expert-preference distribution.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LitReview Arena to test alignment between automatic literature-review assessment and domain experts. Expert calibration improves relevance, while pairwise wins still depend on generation budgets, sources, and style. They do not score an internal retrieval component in isolation.
+
+### What a concrete task looks like
+
+Illustrative task: experts compare anonymized reviews of the same topic along organization, argument, and support dimensions, then their judgments calibrate an automatic evaluator. Better flow need not imply more complete literature or a more defensible research gap.
+
+### Most discriminating experiment
+
+Validate on topics and experts held out from calibration, controlling report length, source pool, and generation budget. Report citation verification separately from expert preference and test ranking stability across disciplines and evaluators rather than only the calibration set.
+
+### Pair with
+
+[das-bench](das-bench.en.md) · [deepresearch-bench](deepresearch-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 The work moves deep-research evaluation from static result rubrics toward expert-preference calibration; `map_delta=early_signal`. It becomes a durable evaluator shift only if independent benchmarks repeatedly show systematic divergence between generic LLM judges and expert research utility.

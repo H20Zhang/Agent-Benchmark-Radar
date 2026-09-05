@@ -23,3 +23,27 @@ LoCoMo 把 multi-session 对话拉到约 16K tokens；BEAM 把同类问题推进
 ## 下一步评测坐标
 
 BEAM 仍以 synthetic coherent conversation + QA 为主。下一步需要把同样的 million-token pressure 放到真实 agent trajectories、持续写入/更新以及未来 action success 上。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验记忆质量如何随历史长度退化。超长历史是压力变量，不应自动解释为更接近真实部署；应同时问新增内容是有效经历、重复内容还是干扰，以及系统为处理这些内容支付了多少写入成本。
+
+### 一个具体任务长什么样
+
+示意任务：一条跨很长时间的连贯对话中，少量早期事件决定当前答案，大量后续交流与之弱相关。把历史拉长后仍找到关键词不够，系统还需要保留事件关系与时间位置。
+
+### 最有判别力的实验
+
+对同一问题与支持事实构造多个历史长度，固定查询阶段的上下文预算，并把写入成本单列。比较原始检索、摘要记忆与分层记忆的退化斜率；不要把题目变难和历史变长混在一次横向对比中。
+
+### 建议搭配
+
+[longmemeval](longmemeval.md) · [scale-qa](scale-qa.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

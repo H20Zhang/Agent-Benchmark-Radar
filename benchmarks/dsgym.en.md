@@ -32,6 +32,30 @@ Standardization trades away some messy production reality: enterprise semantics,
 
 Track performance before and after shortcut filtering for each benchmark source and publish the delta. This quantifies how much apparent data-agent progress was actually benchmark leakage or task solvability without data.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DSGym for comparable training and evaluation through a common executable interface, particularly with no-data shortcut checks. Standardization reduces environment variation, while remapped source benchmarks retain different difficulty and semantics. A concatenated total is insufficient.
+
+### What a concrete task looks like
+
+Illustrative task: an agent accesses read-only data in an isolated container with a stateful notebook and writes analysis artifacts to its workspace. Success should depend on reading the data; tasks solvable from prompt knowledge or leaked answers weaken the evaluation.
+
+### Most discriminating experiment
+
+Fix containers and the agent interface, report source-dataset and analysis slices, and repeat no-data controls. Compare transfer with matched training volume on held-out datasets and domain extensions, separating adapter familiarity from general improvement.
+
+### Pair with
+
+[datascibench](datascibench.en.md) · [dsaeval](dsaeval.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `fragmented data-science benchmarks → grounded standardized gym → execution-verified agent training/evaluation`

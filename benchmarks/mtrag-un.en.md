@@ -23,3 +23,27 @@ Align conversation version, query-rewriting policy, corpus, retriever, answerer,
 ## Next evaluation coordinate
 
 The next step lets clarification actually change dialogue state and retrieval queries, measuring whether one question reduces later search cost and error.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MTRAG-UN for ellipsis, ambiguity, and unanswerability in multi-turn RAG. A turn may not be a standalone query: retrieving its raw text can fail, while an incorrect rewrite can introduce assumptions the user never made.
+
+### What a concrete task looks like
+
+Illustrative task: after discussing an object, a user asks about an alternative case without restating the scope. The history may not uniquely determine the intended question. The system should resolve context and clarify remaining uncertainty rather than invent the request.
+
+### Most discriminating experiment
+
+Compare raw-turn retrieval, automatic rewriting, and supplied-correct-standalone-question conditions. Measure retrieval, answering, and clarification separately across answerable, unanswerable, and underspecified tasks so blanket rewriting or abstention cannot hide failures.
+
+### Pair with
+
+[rgb](rgb.en.md) · [longmemeval](longmemeval.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

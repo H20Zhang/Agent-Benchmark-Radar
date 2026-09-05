@@ -33,3 +33,27 @@ DeepSurveyBench 等评测通常依赖固定 rubric 或自动 judge，缺少大�
 它把 deep-research 评价从结果 rubric 推进到专家偏好校准；`map_delta=early_signal`。如果后续多个独立 benchmark 都证明 generic LLM judge 与专家 research utility 存在系统性偏差，这条线才值得升级为 durable evaluator shift。
 
 Primary: https://arxiv.org/abs/2608.21374
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验自动文献综述评价是否与领域专家判断一致。专家校准提高了评价的实际意义，但模型之间的配对胜率仍会受生成预算、来源与文本风格影响；它不等于某个内部检索组件的分数。
+
+### 一个具体任务长什么样
+
+示意任务：同一主题下两份匿名综述由专家比较，分别考虑组织、论证、支持关系等维度，再用这些判断校准自动评价器。文章读起来更顺并不必然意味着文献更完整或研究缺口更可靠。
+
+### 最有判别力的实验
+
+在未参与校准的主题与专家上验证评价器，并控制报告长度、来源池和生成预算。将引用核验与专家偏好分开报告，检查模型排名是否在不同学科和评价器下保持，而非只符合校准集偏好。
+
+### 建议搭配
+
+[das-bench](das-bench.md) · [deepresearch-bench](deepresearch-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

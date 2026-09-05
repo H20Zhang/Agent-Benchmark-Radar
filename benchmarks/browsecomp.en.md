@@ -32,6 +32,30 @@ OpenAI explicitly notes the short-answer distribution may correlate poorly with 
 
 Pair BrowseComp questions with evidence-set scoring and controlled search budgets. This would distinguish “found the answer by luck/priors” from efficient discovery of sufficient supporting evidence.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use BrowseComp for persistent search and discovery of hard-to-find evidence. Short answers simplify endpoint evaluation but do not cover full research-report quality. Scores depend on search backend, tools, prior model knowledge, and budget, not only the model name.
+
+### What a concrete task looks like
+
+Illustrative task: indirect constraints require repeated query reformulation, candidate elimination, and pursuit of a verifiable answer. Stopping and evidence checking matter as much as search volume; more calls do not guarantee supporting sources.
+
+### Most discriminating experiment
+
+Compare policies under the same search backend, fetch interface, and total budget, with closed-book and answer-source-removal diagnostics. Report accuracy, calls, and failed trajectories. Closed-book-solvable examples provide weaker discrimination of evidence-discovery ability.
+
+### Pair with
+
+[browsecomp-plus](browsecomp-plus.en.md) · [livebrowsecomp](livebrowsecomp.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `factual QA → persistent web search → evidence-aware research agents`

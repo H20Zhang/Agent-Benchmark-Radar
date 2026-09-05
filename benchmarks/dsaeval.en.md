@@ -32,6 +32,30 @@ Long projects can span weeks, involve stakeholder feedback, data updates, versio
 
 Inject controlled mistakes early in a project and measure downstream recovery versus error propagation. This would test whether agents maintain trustworthy analytical state, not merely accumulate conversation context.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DSAEval for multimodal data science in cumulative multi-query projects rather than independent questions. Earlier state affects later answers. Falling scores may reflect propagated errors rather than intrinsic difficulty of later queries.
+
+### What a concrete task looks like
+
+Illustrative task: an agent explores tabular, image, or text data and then models and interprets it over successive requests. An early cleaning or interpretation error can persist through the notebook and surface only in the final report.
+
+### Most discriminating experiment
+
+Compare cumulative autonomous execution with supplied-correct-prior-state controls each round, scoring reasoning, code, and results. Pin GPU, notebook environment, and evaluator; slice by modality and query position to isolate cross-turn state management.
+
+### Pair with
+
+[dsagentbench](dsagentbench.en.md) · [agenticdatabench](agenticdatabench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `one-shot data analysis → cumulative multimodal project → persistent analytical state`

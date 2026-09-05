@@ -23,3 +23,27 @@ final accuracy 与 intermediate-fact coverage 支持在当前 document release�
 ## 下一步评测坐标
 
 下一步应评价 evidence completeness 的置信度与 missing-document detection：系统何时知道自己的 collection 不完整，而不是只输出一个数字。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究跨大量文档的抽取与聚合，而不只是找到几篇相关材料。分析型问题需要覆盖应纳入计算的整个集合；高 top-k 相关性可能仍漏掉改变汇总结果的文档。
+
+### 一个具体任务长什么样
+
+示意任务：需要从多份财务报告提取同口径数字，按实体与时期对齐后做计算。单篇报告抽取正确还不够，漏掉一个范围内对象或混入不同口径，就可能得到貌似精确的错误结果。
+
+### 最有判别力的实验
+
+把文档覆盖、字段抽取和最终聚合分别评分，加入完整文档集合给定与正确中间表给定条件。核对标注修订及 PDF 解析版本，判断瓶颈是在发现、解析还是运算，而不是统称为推理失败。
+
+### 建议搭配
+
+[t2-ragbench](t2-ragbench.md) · [dataspace](dataspace.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

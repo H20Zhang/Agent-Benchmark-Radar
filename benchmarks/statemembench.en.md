@@ -28,6 +28,30 @@ StateMemBench is useful for evaluating **state stores, versioned memory, depende
 
 The main gaps are latent relation discovery, real user/environment drift, privacy governance, and whether better state tracking improves later closed-loop action. The highest-leverage next step is to remove explicit dependency annotations, require the agent to infer which natural-language facts supersede or constrain others, and connect state correctness to downstream tool/action success.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use StateMemBench to separate stale-state use from other answer errors, particularly for state maintenance and dependency updates. Its value is interpretable error typing. Collapsing all failures into incorrect answers discards the main advantage over ordinary QA.
+
+### What a concrete task looks like
+
+Illustrative task: a value in a plan is revised and dependent arrangements must change accordingly. After retrieving an old plan and a new event, the system must recover operative state rather than choose the most frequently mentioned description.
+
+### Most discriminating experiment
+
+Use the same event stream with full-evidence and supplied-operative-state controls, reporting stale-state and other errors separately. Vary revision-dependency depth while fixing text length to distinguish propagation difficulty from long-context interference.
+
+### Pair with
+
+[longmemeval](longmemeval.en.md) · [membench-staleness](membench-staleness.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `map_delta=early_signal`. The benchmark advances update evaluation from “are both old and new facts stored?” to “**what is the operative state now?**” This coordinate complements staleness and applicability evaluation, but independent natural-data evidence is still missing, so the durable Benchmark Map should not yet change.

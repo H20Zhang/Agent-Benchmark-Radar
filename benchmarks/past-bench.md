@@ -33,3 +33,27 @@ generated tasks 与 closely related graders 可能产生 model-family template f
 ## 放进演化图怎么看
 
 `map_delta=early_signal`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合为‘跨任务持久状态带来收益’提供配对因果证据。重点不是系统能保存文件，而是相同后续任务在保留与不保留先前状态时是否改变结果；生成任务上的结论仍需受任务分布限制。
+
+### 一个具体任务长什么样
+
+示意任务：前一回合产生可复用经验，新智能体会话处理相关任务。两组拥有相同提示、种子和评分器，唯一关键区别是是否能读取先前状态，因此可以直接观察持久化的净效果。
+
+### 最有判别力的实验
+
+保留持久状态开关的配对设计，再加入等长度无关状态与原始轨迹两组。报告配对差值、任务族分布和全周期成本；只有在控制额外文本与计算后仍有效，才支持经验内容本身的贡献。
+
+### 建议搭配
+
+[memoryarena](memoryarena.md) · [agent-memory-bench-coding](agent-memory-bench-coding.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

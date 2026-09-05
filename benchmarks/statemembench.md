@@ -33,3 +33,27 @@ StateMemBench 适合测试 **state store、versioned memory、dependency-aware u
 `map_delta=early_signal`。它把 update evaluation 从“新旧事实是否都存着”推进到“**当前 operative state 是什么**”。这个 coordinate 与 staleness、applicability 互补，但目前仍缺少独立自然数据证据，因此 durable Benchmark Map 暂不改。
 
 Primary: https://arxiv.org/abs/2608.19652
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合把‘用了旧状态’从一般回答错误中拆出来，尤其适合状态维护和依赖更新研究。它的核心价值在于错误类型可解释；若所有错误都汇总为不正确，就丢掉了这一设计相对普通问答的增量。
+
+### 一个具体任务长什么样
+
+示意任务：一个计划中的数值被修订，依赖该数值的后续安排也需要同步改变。系统检索到旧计划和新事件后，必须恢复当前有效状态，而不是只选择出现次数最多的描述。
+
+### 最有判别力的实验
+
+使用相同事件流，加入完整证据可见与正确当前状态给定的对照，分别统计旧状态错误和其他错误。改变修订依赖的深度时固定文本长度，从而区分依赖传播难度与长上下文干扰。
+
+### 建议搭配
+
+[longmemeval](longmemeval.md) · [membench-staleness](membench-staleness.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
