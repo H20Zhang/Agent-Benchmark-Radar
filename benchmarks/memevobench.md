@@ -32,6 +32,30 @@ benchmark 包含覆盖 7 个领域、36 类风险的 QA 任务，以及由 20 �
 
 把 lifecycle 拆成 admission、consolidation、retrieval、use，并在同一证据上逐阶段注入 corruption。最高杠杆的问题是：长期鲁棒性主要应该靠写入过滤，还是靠使用时的验证与信任校准。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究记忆连续更新时的安全退化，而不是只测一次提示注入是否成功。核心问题是错误经验能否通过反复写回累积影响；如果只记录最后一次攻击成功率，就会丢掉退化路径和修复代价。
+
+### 一个具体任务长什么样
+
+示意任务：系统完成正常任务后把反馈写入记忆，其中少量反馈具有误导性。多轮之后，后续决策逐渐偏离原先规则；评价应追踪何时写入了错误、何时被调出以及是否可以纠正。
+
+### 最有判别力的实验
+
+固定正常任务流，逐轮对照干净反馈、噪声反馈与误导反馈，记录安全性和正常任务效用两条曲线。让修复仅删除相关记录，再比较全量重置，才能判断系统是否具备有选择的恢复能力。
+
+### 建议搭配
+
+[injecmem](injecmem.md) · [utility-under-attack](utility-under-attack.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `memory utility → memory update dynamics → adversarial memory evolution`

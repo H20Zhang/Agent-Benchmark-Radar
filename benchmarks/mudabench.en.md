@@ -23,3 +23,27 @@ Align PDF corpus, annotation version, extraction pipeline, retrieval budget, age
 ## Next evaluation coordinate
 
 The next step measures confidence in evidence completeness and missing-document detection: can the system recognize when its collection is incomplete rather than simply produce a number?
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MuDABench for extraction and aggregation across large document collections, not merely finding a few relevant sources. Analytical questions require coverage of the set that should enter the calculation. High top-k relevance can still miss documents that change the aggregate.
+
+### What a concrete task looks like
+
+Illustrative task: extract comparable values from financial reports, align entities and periods, and aggregate them. Correct extraction from one report is insufficient: missing an in-scope entity or mixing definitions can produce a precise-looking but wrong result.
+
+### Most discriminating experiment
+
+Score document coverage, field extraction, and final aggregation separately, with supplied-complete-document-set and supplied-correct-intermediate-table controls. Pin annotation revisions and PDF parsing to locate discovery, extraction, or computation bottlenecks rather than labeling all failures reasoning errors.
+
+### Pair with
+
+[t2-ragbench](t2-ragbench.en.md) · [dataspace](dataspace.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

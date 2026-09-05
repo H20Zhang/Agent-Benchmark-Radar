@@ -33,3 +33,27 @@ Snowflake verifier fix without rerun 意味着修复前 leaderboard 不能直接
 ## 放进演化图怎么看
 
 `map_delta=early_signal`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究仓库级 dbt 转换的实现与修复。隐藏逐行验证比只看 SQL 编译更接近正确产物，但后端环境和验证器版本会改变成绩；修复验证器之后，旧排行榜不能自动视为已重新核验。
+
+### 一个具体任务长什么样
+
+示意任务：系统修改转换项目，使模型在目标数据库运行并产生与要求一致的行级输出。DuckDB 与 Snowflake 的方言、类型和运行环境差异，可能让同一修改在两个后端表现不同。
+
+### 最有判别力的实验
+
+固定项目、后端与隐藏验证器提交，对同一补丁跨后端重跑，区分执行失败与结果差异。验证器发生修订时重算全部被比较方法，保留原版本结果，不把环境修复收益归因给智能体。
+
+### 建议搭配
+
+[spider-2](spider-2.md) · [dacomp](dacomp.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

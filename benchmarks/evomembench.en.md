@@ -23,3 +23,27 @@ Align source benchmark versions, preprocessing, backbone, agent harness, and lon
 ## Next evaluation coordinate
 
 A stronger benchmark creates all four forms of memory demand inside one controlled environment, enabling genuinely matched component comparisons.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use EvoMemBench to place memory systems on shared axes: within versus across episodes, and knowledge versus execution. It is a composite evaluation framework, not one task with identical conditions for every method. Inspect where gains occur before interpreting an aggregate.
+
+### What a concrete task looks like
+
+Illustrative task: one setting retains evidence within a long task, while another transfers experience from earlier tasks. Both involve memory, but write timing, accessible history, and outputs differ. One retrieval score cannot substitute for both.
+
+### Most discriminating experiment
+
+Match backbone, tools, and budgets within each of the four cells and report cell-level quality and cost. Add no-persistence controls for cross-episode tasks and full-context controls for within-episode tasks. Do not let source-dataset size silently determine the weight of the conclusion.
+
+### Pair with
+
+[memoryagentbench](memoryagentbench.en.md) · [memoryarena](memoryarena.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

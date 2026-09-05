@@ -32,6 +32,30 @@ benchmark 有 1,305 个自动构造实例，覆盖多个 domain，并与主流 b
 
 人工给一部分题标注多个等价 solution graph，检查 diagnostic conclusion 在 alternative path 下是否仍成立，从而验证“wrong chain”是真推理错误，而不是路径不同。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合定位多跳 RAG 在哪一步丢失证据或分配错误步骤。标准轨迹使诊断更细，但它不一定是唯一正确路径；偏离标注步骤与最终无法完成任务，应作为两种不同现象分析。
+
+### 一个具体任务长什么样
+
+示意任务：系统把一个问题拆成多跳子问题，每一跳都有对应证据与中间答案。前一跳实体选错会连锁影响后续检索，因此只看最后答案无法判断应修检索器还是子问题规划。
+
+### 最有判别力的实验
+
+逐跳替换为正确中间答案或证据，观察后续恢复程度，并保留原始自主轨迹作为对照。对另一条同样有证据支持的路径进行复核，避免用严格轨迹一致性惩罚有效搜索策略。
+
+### 建议搭配
+
+[multihop-rag](multihop-rag.md) · [searchauditbench](searchauditbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `multi-hop final answer → hop-level trace → causal diagnosis of search allocation`

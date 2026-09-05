@@ -32,6 +32,30 @@ Real personal data is sparse, contradictory, private, and often lacks objective 
 
 Pair inferred habits/procedures with future decisions and explicit user corrections. The crucial question is whether a memory system can both infer latent patterns and revise them when the user changes behavior.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LifeBench for habits and procedural knowledge inferred from distributed behavior, not only explicitly stated facts. Emphasize cross-source inference. A correct profile in simulated life histories does not establish understanding of real users or realized personalization utility.
+
+### What a concrete task looks like
+
+Illustrative task: several sources record repeated behavior under different circumstances, and a later question asks for the usual procedure rather than restating an individual record. The system must aggregate experience without promoting a one-off event into a stable habit.
+
+### Most discriminating experiment
+
+Compare single-source input, complete multi-source input, and shuffled source identities with the same reasoner and memory budget. Report explicit facts, inferred habits, and procedural knowledge separately. Gains restricted to fixed source patterns call for generator-prior checks before claims of general user understanding.
+
+### Pair with
+
+[dynamicmem](dynamicmem.en.md) · [memfusebench](memfusebench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `explicit conversational facts → multi-source life traces → inferred habitual/procedural memory`

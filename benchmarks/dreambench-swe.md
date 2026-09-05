@@ -33,3 +33,27 @@ v2 的每个完整 condition 包含 **60 traps × 3 seeds = 180 个 S3 cells**�
 它把“过去记忆是否帮助后续行动”继续拆成：retained evidence 是否仍然 **current、scoped、authorized / relevant，以及何时应该被抑制**；`map_delta=early_signal`。这是从 memory QA 走向 action-grounded lifecycle evaluation 的一个重要但仍待外部复现的坐标。
 
 Primary: https://arxiv.org/abs/2608.20664
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检查多会话编码记忆的作用域、权威性、过期处理与错误经验拒绝。它的价值不只是任务成功，而是用不可从当前仓库推断的历史证据和隐藏检查器检验记忆是否必要；构造场景仍限制外推。
+
+### 一个具体任务长什么样
+
+示意任务：早期会话确定一个有效规则，之后出现冲突或作用域不同的经验，最终编码任务要求采用正确的那条。保存全部内容并不够，系统必须判断哪项记忆有权影响当前修改。
+
+### 最有判别力的实验
+
+保留无记忆与确定性原样记忆两种强对照，按陷阱类型报告结果和无记忆余量。对于无记忆也能完成的类型，不应声称测出了记忆收益；按任务而非单次随机运行聚类估计不确定性。
+
+### 建议搭配
+
+[agent-memory-bench-coding](agent-memory-bench-coding.md) · [memtrapbench](memtrapbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

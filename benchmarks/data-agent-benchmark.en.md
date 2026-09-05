@@ -32,6 +32,30 @@ The suite is small and read-oriented. Production agents face permissions, writes
 
 Annotate each query with a ground-truth integration/semantic plan and score intermediate relation resolution before final execution. That would reveal whether heterogeneous data access or business semantics is the dominant bottleneck.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use the Data Agent Benchmark for discovery, transformation, and analysis across database systems rather than single-query SQL. On a small task set, hints, tuning, repeated trials, and grader versions materially affect rankings. Treat original-paper scores as historical evidence, not current ceilings.
+
+### What a concrete task looks like
+
+Illustrative task: an analysis reads several database systems, normalizes formats, joins records, and converts semi-structured content into computable fields. Connecting to the databases is only the beginning; field semantics and result validation determine success.
+
+### Most discriminating experiment
+
+Pin data and validator versions, disclose hints and task-specific tuning, and report repeated runs using the official aggregation. Retain missing, failed, and contaminated trials in the denominator. Compare raw access, static derived representations, and online updates to distinguish representation gains from answer or query caching.
+
+### Pair with
+
+[dataspace](dataspace.en.md) · [spider-2](spider-2.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `single-database text-to-SQL → cross-database integration → enterprise data agent`

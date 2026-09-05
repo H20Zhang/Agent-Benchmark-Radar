@@ -32,6 +32,30 @@ conversation-memory benchmark 通常把显式事实放在一个对话流里。Dy
 
 加入带明确 revocation time 的 counterfactual update，并设计只有使用最新状态才能做对的 downstream decision，把 profile maintenance 直接连接到 action utility 与 stale-memory harm。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究多应用行为怎样变成会更新的用户画像。关键是从分散证据推断当前属性，而非简单抽取明确陈述；画像恢复和个性化服务应分开评价，避免把更多属性记忆误当作更好的帮助。
+
+### 一个具体任务长什么样
+
+示意任务：用户在多个应用中的行为逐月变化，过去的惯常选择不再代表当前偏好。系统在检查点需要更新画像，并用它处理服务请求；对旧习惯的准确回忆可能导致错误推荐。
+
+### 最有判别力的实验
+
+比较固定画像、滑动窗口画像与持续更新画像，保持历史信息访问权限一致。按时间检查点同时报告状态恢复和服务质量，并增加生活变化前后的分项，判断系统是在积累信息还是确实适应变化。
+
+### 建议搭配
+
+[lifebench](lifebench.md) · [memprobe](memprobe.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `event recall → personal profile extraction → temporally evolving user state`

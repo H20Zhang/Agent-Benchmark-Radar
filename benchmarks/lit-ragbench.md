@@ -23,3 +23,27 @@ category-wise accuracy 支持 generator 在 supplied-context contract 下的 con
 ## 下一步评测坐标
 
 下一步应把这些 generator diagnostics 接回真实 retrieval loop，验证识别到 integration/abstention failure 后能否主动补搜或修正 context。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合在不混入检索器差异的条件下诊断证据整合、表格、逻辑与弃答。其范围是给定上下文中的生成能力；较高分不能支持索引、检索或多步工具调度的改进主张。
+
+### 一个具体任务长什么样
+
+示意任务：给定文本与表格片段，模型需要联合条件推出答案，或在信息不够时拒绝猜测。每个片段都可见并不保证模型能执行跨片段逻辑，正是这一点使生成器诊断有意义。
+
+### 最有判别力的实验
+
+在相同上下文上独立改变片段顺序、干扰比例与语言，保持评分器一致。逐能力报告并复核语言版本差异；若研究目标是 RAG 系统，应再连接真实检索结果，检验局部优势是否保留。
+
+### 建议搭配
+
+[rgb](rgb.md) · [t2-ragbench](t2-ragbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

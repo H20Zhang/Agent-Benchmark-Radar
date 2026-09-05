@@ -32,6 +32,30 @@ Real EHR data includes missing records, coding artifacts, provider disagreement,
 
 Build stage-level saturation curves for write compression, retrieval, and reasoning, with oracle retrieval at each checkpoint. This would identify whether longer clinical memory primarily fails because the right evidence is lost, not found, or misused.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MedMemoryBench for streaming state maintenance and memory saturation, not as clinical deployment validation. Its research value is locating when errors emerge as histories accumulate. Synthetic medical-dialogue QA and real clinical outcomes are different levels of evidence.
+
+### What a concrete task looks like
+
+Illustrative task: a simulated user's state is revised over many sessions, with questions at repeated checkpoints. Relevant earlier facts may be displaced by noise, while newer state may fail to supersede old records. Diagnose these failures over time.
+
+### Most discriminating experiment
+
+Evaluate historical-fact and current-state questions on the same stream, plotting checkpoint quality and cumulative ingestion cost. Add a supplied-current-state control to separate updating failures from domain reasoning, and keep conclusions scoped to the simulated setting.
+
+### Pair with
+
+[memoryagentbench](memoryagentbench.en.md) · [statemembench](statemembench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `long conversation memory → streaming clinical state → saturation-aware high-stakes memory`

@@ -23,3 +23,27 @@ Align snapshot, generation/filter models, judge, language, search provider, and 
 ## Next evaluation coordinate
 
 The key next step is cross-generation calibration: prove that a new release is fresher rather than merely harder, easier, or stylistically closer to the generator.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use EvoBrowseComp to explore refreshable bilingual search evaluation, while distinguishing a regeneration pipeline from a single public snapshot. Long-term contamination resistance requires cross-version operation and difficulty calibration. Regenerability does not make scores directly comparable across versions.
+
+### What a concrete task looks like
+
+Illustrative task: a generation pipeline builds complex questions from live pages, and agents search in Chinese and English before returning short answers. Language versions may access different sources or reflect generator style, so inspect language slices rather than only a bilingual average.
+
+### Most discriminating experiment
+
+Compare systems on one fixed release, then retain auditable anchor tasks across refreshes to separate model change from task change. Vary generators and filtering models to test ranking stability, and inspect whether evidence difficulty is aligned across languages.
+
+### Pair with
+
+[livebrowsecomp](livebrowsecomp.en.md) · [gisa](gisa.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

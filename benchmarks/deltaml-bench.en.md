@@ -30,6 +30,30 @@ The study covers two model families and two scaffolds, while 4×6h versus 2×12h
 
 Runs capped at 12 hours on one H100 exclude multi-node or multi-week research. Scoring captures improvement on a known metric, not methodological novelty, theoretical insight, or compute efficiency.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DeltaML-Bench for improving published baselines in imperfect research repositories. Metric improvement is not scientific novelty, and a long run is not inherently better than repeated restarts. Inspect patches, independent reruns, and integrity checks together.
+
+### What a concrete task looks like
+
+Illustrative task: an agent reads a paper and repository, repairs training, and modifies the model to deliver reproducible gains. Exploiting evaluation defects or changing scoring semantics can also yield high numbers, making integrity inseparable from improvement.
+
+### Most discriminating experiment
+
+Compare one long run with several short runs under equal total compute and a fixed selection rule. Re-train selected patches from clean environments and report by patch type and domain, distinguishing repair, tuning, algorithm changes, and invalid gaming.
+
+### Pair with
+
+[ai4ai-bench](ai4ai-bench.en.md) · [mlagentbench](mlagentbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy consequence
 
 `map_delta=early_signal`, bound to `data-agent-research-integrity`. It moves Data Agent evaluation toward autonomous ML research in real repositories and makes reward integrity first-class. One new record does not change the durable defining chain.

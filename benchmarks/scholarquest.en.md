@@ -23,3 +23,27 @@ Align intent slice, corpus/citation graph, gold-set version, search budget, and 
 ## Next evaluation coordinate
 
 The next step measures marginal evidence utility: does each additional paper cover a new claim or aspect rather than simply hit another item in the reference set?
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use ScholarQuest for iterative paper collection conditioned on research intent, not merely title similarity. Answers are sets: missing a research branch differs from adding near-duplicates. Evaluate efficiency together with coverage.
+
+### What a concrete task looks like
+
+Illustrative task: an agent searches a topic, expands through citations, and adjusts scope to the research intent. An introductory overview and a comprehensive related-work search on the same topic can require different set boundaries and stopping rules.
+
+### Most discriminating experiment
+
+Fix the paper backend and call budget and compare keyword search, citation expansion, and intent-conditioned policies with per-intent recall. Review valid out-of-gold papers and track deduplicated coverage growth so incomplete gold sets and repeated results do not distort evaluation.
+
+### Pair with
+
+[sage](sage.en.md) · [autoresearchbench](autoresearchbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

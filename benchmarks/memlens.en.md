@@ -32,6 +32,30 @@ Contexts stop at 256K, below years of personal media. The benchmark is QA-centri
 
 Build hybrid systems that retain selectively chosen raw visual evidence while compressing the rest, then trace accuracy versus retained bytes and context length. This directly tests the architecture suggested by the benchmark's failure modes.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MEMLENS to distinguish length degradation in long-context vision-language models from visual information lost by external-memory compression. The systems may be evaluated on different subsets. Align samples, visual input, and budgets before claiming memory outperforms long context.
+
+### What a concrete task looks like
+
+Illustrative task: a multimodal history grows across sessions and later questions require old visual details or state updates. Failure while original images remain accessible differs from losing the decisive information during compression.
+
+### Most discriminating experiment
+
+Compare long context and external memory on their common question subset. Supply original images and correct textual evidence as diagnostic controls. Hold questions fixed during length sweeps and account separately for compression, retrieval, and answering rather than only final-context tokens.
+
+### Pair with
+
+[memeye](memeye.en.md) · [mem-gallery](mem-gallery.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `long-context multimodal QA ↔ external memory agents → hybrid selective visual retention`

@@ -33,3 +33,27 @@ RAG Collapse 不是在测一次检索是否找到了相关文档，而是在测�
 它把 corpus provenance 与反馈动态变成 RAG validity coordinate；当前 `map_delta=reinforces`。它补强的是“语料随 agent 运行而变化时，静态 benchmark score 不够”的方向，而不是替代传统 retrieval relevance 评测。
 
 Primary: https://arxiv.org/abs/2608.22118
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究模型自产内容回流语料后的递归反馈，而不是模型参数训练造成的退化。关键变量是独立证据是否被逐步挤出；质量下降可能同时涉及来源同质化、检索偏好和生成风格，不能只归因于一个环节。
+
+### 一个具体任务长什么样
+
+示意任务：系统检索材料生成回答，随后这些回答又成为下一轮可检索来源。多轮后，系统可能越来越依赖自己的说法；表面上有更多文档和引用，独立证据的数量却可能减少。
+
+### 最有判别力的实验
+
+固定模型和问题，对照独立来源、同模型生成来源与跨模型生成来源，独立改变回流比例和检索策略。逐轮报告事实质量、来源多样性和独立证据占比，避免用同一模型的风格偏好充当退化判据。
+
+### 建议搭配
+
+[snapshot-compatibility-audit](snapshot-compatibility-audit.md) · [kbgym](kbgym.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

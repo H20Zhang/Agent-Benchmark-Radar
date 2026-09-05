@@ -33,3 +33,27 @@ generation backbone 与 main judge coupling、closed-system native configs 意�
 ## 放进演化图怎么看
 
 `map_delta=early_signal`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合评估学术综述作为完整成品的质量，包括文献组织、论点、引用和呈现。多维指标比单一文风偏好更丰富，但生成模型与评分模型相同或相近时，评价器自偏好仍需要独立检验。
+
+### 一个具体任务长什么样
+
+示意任务：给定一个研究主题与论文池，系统构建分类体系、组织论证并生成可阅读的综述。文献覆盖全面但分类不合理，或文章美观却引文不支持论点，都属于不同的成品缺陷。
+
+### 最有判别力的实验
+
+固定论文池与生成预算，先做匿名人工配对评价，再检查自动指标能否保持同样排序。对渲染质量与论证质量分别评分，并跨评价模型复测，避免把对某种写作风格的偏好当成研究内容质量。
+
+### 建议搭配
+
+[litreview-arena](litreview-arena.md) · [claimprobe](claimprobe.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

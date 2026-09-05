@@ -33,3 +33,27 @@ Stable-RAG / Con-RAG 一类工作通常控制固定证据扰动；这里使用 n
 它把 corpus version 本身纳入 RAG regression contract；`map_delta=reinforces`。这条线补的是传统静态 benchmark 很少测量的 **deployment compatibility**，不是替代常规 answer quality。
 
 Primary: https://arxiv.org/abs/2608.22856
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究语料增长是否在总体准确率稳定时仍改变具体答案。跨快照不一致既可能是正确更新，也可能是错误翻转；只有减去同快照随机波动并检查答案方向，才能讨论真实版本兼容性。
+
+### 一个具体任务长什么样
+
+示意任务：同一问题在旧语料和包含更多文档的新语料上重复回答，总体正确率差不多，但部分样本稳定地改成另一个答案。系统需要判断变化是新证据纠正旧错，还是新增干扰造成退化。
+
+### 最有判别力的实验
+
+在每个快照内重复采样，并把跨快照翻转拆为正确到错误、错误到正确和其他变化。固定生成参数与检索预算，再移除新增的可疑文档，定位语料变化的实际原因，而不只报告不一致比例。
+
+### 建议搭配
+
+[crag](crag.md) · [rag-collapse](rag-collapse.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

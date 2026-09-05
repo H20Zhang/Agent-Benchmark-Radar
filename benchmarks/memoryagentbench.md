@@ -23,3 +23,27 @@ LoCoMo/LongMemEval 主要把长期历史作为 QA 输入；MemoryAgentBench 明�
 ## 下一步评测坐标
 
 四能力分解仍主要以回答问题为结果。下一步应直接测 memory 是否改善之后的 planning/action，并记录 write、consolidation、forgetting 的成本与错误传播。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究增量写入、更新和选择性遗忘，而不是只评估一个静态向量库。关键实验单位应是持续吸收信息的记忆系统；一次性把全部历史重新建立索引，会改变所要证明的在线能力。
+
+### 一个具体任务长什么样
+
+示意任务：信息按多轮输入逐步到达，系统先保存事实，再遇到修订或需要遗忘的内容，之后回答依赖当前记忆的问题。观察点既包括最终答案，也包括历史信息进入、保留与退出记忆的过程。
+
+### 最有判别力的实验
+
+保留相同输入顺序，对比增量维护与每轮全量重建，并计入两者全部写入计算。再在固定回答模型下替换写入或遗忘机制，检查收益是否跨四类能力保持，而不是以遗忘能力下降换取检索分数。
+
+### 建议搭配
+
+[longmemeval](longmemeval.md) · [memevobench](memevobench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

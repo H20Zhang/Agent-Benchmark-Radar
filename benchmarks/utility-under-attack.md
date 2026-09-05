@@ -33,3 +33,27 @@ MPBench 建立了 persistent poisoning 的宽攻击 taxonomy，但主要关注�
 它把 memory attack 评价从攻击成功率推进到安全—效用共同测量；`map_delta=reinforces`。与 MPBench / InjecMEM 配合，它让 memory security 开始覆盖 **write exposure、retrieval exposure、generation success 和 benign utility** 四个不同坐标。
 
 Primary: https://arxiv.org/abs/2608.21230
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合评价记忆防御是否在抗污染的同时保住正常任务效用。单纯让模型拒绝更多问题也能降低攻击成功率，但这不是可用的防御收益；必须沿安全—效用曲线比较具体工作点。
+
+### 一个具体任务长什么样
+
+示意任务：正常历史中混入少量虚假记忆，检索结果既可能被污染内容占据，也可能被防御过度过滤。最终答案变差有两种相反原因，需要区分污染影响与防御造成的证据缺失。
+
+### 最有判别力的实验
+
+在相同干净与污染查询对上扫描筛查阈值或来源排序权重，同时报告正常正确率、污染伤害和检索占位。再增加可适应防御的污染设置，检查当前工作点是否仅适配固定攻击样本。
+
+### 建议搭配
+
+[injecmem](injecmem.md) · [memevobench](memevobench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

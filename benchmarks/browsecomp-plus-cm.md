@@ -33,3 +33,27 @@ BrowseComp 把深度搜索放到实时网页上，但搜索 API、网页漂移�
 ## 放进演化图怎么看
 
 `map_delta=revises`，绑定 `retrieval-harness-validity`。它以 matched corpus swap 直接限定 BrowseComp-Plus 的持久主张：固定语料是控制 drift 与 attribution 的必要条件，但 query-conditioned construction、规模和 qrels 仍是 load-bearing variables。地图只增加这一最小限定，不把单一投影写成新的普遍趋势。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验固定问题进入独立大语料后，证据发现难度如何改变。语料规模变大不只增加干扰，也可能改变证据覆盖；投影筛选和闭卷可解性限制了它对一般网页搜索的外推。
+
+### 一个具体任务长什么样
+
+示意任务：保留同一个问题和搜索智能体，把候选文档集合换成更大的独立语料。系统既可能需要排除更多干扰，也可能找不到原语料中的同一证据，因此必须同时核对问题和相关性标注。
+
+### 最有判别力的实验
+
+固定问题、智能体、搜索 API 与预算，仅替换语料，并把证据覆盖变化单独列出。对投影保留题做闭卷检查，按已知与未知答案分项报告，避免参数记忆掩盖真实大规模检索失败。
+
+### 建议搭配
+
+[browsecomp-plus](browsecomp-plus.md) · [livebrowsecomp](livebrowsecomp.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

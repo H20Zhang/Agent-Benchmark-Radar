@@ -23,3 +23,27 @@ progress/final/efficiency 支持当前 milestone annotations、records 与 time 
 ## 下一步评测坐标
 
 下一步应允许 multiple valid workflows，并用 counterfactual intervention 判断哪些 milestone 真正决定 final success。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究在先验提示很少、原始数据有噪声时的自主探索。里程碑进度可以区分有效调查与无目的调用，但命中里程碑并不必然意味着最终结论正确；领域与时间范围也限制外推。
+
+### 一个具体任务长什么样
+
+示意任务：系统进入陌生金融数据环境，自主发现表、文档和相关政策，再逐步形成可验证结论。探索过程中可能找到正确来源，却误解字段或过早停止，需同时观察中间进度和终点。
+
+### 最有判别力的实验
+
+固定工具、网页访问政策和时间预算，比较完全自主、正确来源提示与正确模式提示。联合报告里程碑进度、最终正确性和时间，并复核高进度低正确率样本，定位探索与推理之间的断点。
+
+### 建议搭配
+
+[kramabench](kramabench.md) · [ddr-bench](ddr-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

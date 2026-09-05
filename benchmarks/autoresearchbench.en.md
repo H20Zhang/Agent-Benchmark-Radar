@@ -85,6 +85,30 @@ A high-value extension is **marginal-value stopping**. After every search step, 
 
 This yields a coverage–cost curve instead of a single terminal recall. A stronger research agent should not only find more, but know **when another search is worth doing and when the evidence is already sufficient**.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use AutoResearchBench to distinguish locating a target paper from collecting an unknown-sized relevant set. Stopping and set completeness matter beyond ranking one paper. Results over a static computer-science corpus do not establish comprehensive literature research across disciplines.
+
+### What a concrete task looks like
+
+Illustrative task: a deep-search task follows clues to one work, while a wide-search task collects a qualifying paper set and decides when to stop. The same loop may find its first hit quickly yet miss another research branch.
+
+### Most discriminating experiment
+
+Fix corpus and budget and track first target discovery, set recall, and set IoU against calls. Review missing papers at stopping time to distinguish incomplete gold sets from search omissions, and test whether citation expansion over-concentrates on one research cluster.
+
+### Pair with
+
+[sage](sage.en.md) · [scholarquest](scholarquest.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Evolution position
 
 `known-item scholarly retrieval → unknown-size literature discovery → value-aware, live, cost-sensitive research search`

@@ -32,6 +32,30 @@ Capability decomposition may miss emergent coordination effects, and benchmark m
 
 Intervene on one weak capability while holding the rest of the agent fixed, then test whether predicted end-to-end failures decrease. That is the needed step from correlation to causal diagnostic value.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use RAGCap-Bench to isolate intermediate capabilities in agentic RAG. Their practical value depends on predicting behavior in real workflows. Higher scores on decomposed tasks should not be presented as better end-to-end search without a transfer check.
+
+### What a concrete task looks like
+
+Illustrative task: a system solves a local retrieval-planning, intermediate-reasoning, or evidence-assessment problem rather than an entire user request. Such tasks improve diagnosis but may remove error accumulation and state dependence present in the full workflow.
+
+### Most discriminating experiment
+
+Hold a complete system fixed and replace only a component improved on one local capability. Test whether local and end-to-end scores move together. Evaluate on system-generated intermediate states as well as reference states to expose sensitivity to upstream errors.
+
+### Pair with
+
+[agenticragtracer](agenticragtracer.en.md) · [browsecomp-plus](browsecomp-plus.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `final RAG score → capability decomposition → intervention-based agent diagnosis`

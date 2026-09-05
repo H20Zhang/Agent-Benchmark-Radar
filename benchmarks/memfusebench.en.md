@@ -33,3 +33,27 @@ Synthetic construction and model-guided verification have no human ceiling or de
 ## Where It Fits in the Map
 
 `map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MemFuseBench for linking, conflict resolution, and provenance across memory sources. A longer context alone is not a sufficient control. Compare whether the same evidence supports correct conclusions with source relationships retained or removed.
+
+### What a concrete task looks like
+
+Illustrative task: one source records an event, another explains its cause, and a third revises the information. The agent must align records and justify the operative version. Concatenation can conflate separate events or different authority levels.
+
+### Most discriminating experiment
+
+Compare identical events without source tags, with source tags, and with explicit cross-source links. Report linking, fusion, arbitration, and provenance separately. Add conflicting but textually similar sources to test use of source structure rather than generator style.
+
+### Pair with
+
+[lifebench](lifebench.en.md) · [gatemem](gatemem.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

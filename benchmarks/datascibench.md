@@ -32,6 +32,30 @@ long-horizon project state、repository maintenance、data discovery、business 
 
 检查 TFC category 是否能预测更长 agent trajectory 的 failure：end-to-end project 做错后，benchmark 能不能正确指出缺的是哪种 primitive capability。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合评价多种数据科学任务的可执行产物，而不是只评价代码文本。任务特定评分扩大了覆盖，也让指标之间难以直接比较；分析结果时应先看任务类别和验证函数是否真正对应用户目标。
+
+### 一个具体任务长什么样
+
+示意任务：一个自然语言请求要求清洗数据、计算结果或生成指定分析产物，系统需要把目标拆成可执行步骤。输出形式满足要求却计算口径错误，可能无法被只检查文件存在的验证方式发现。
+
+### 最有判别力的实验
+
+固定运行环境与任务函数，按分析、建模和产物类型分别报告。加入正确任务分解或正确中间数据给定条件，检查失败来自计划、代码还是评价函数；对评分边界样本进行独立复核。
+
+### 建议搭配
+
+[da-code](da-code.md) · [dsgym](dsgym.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single code task → multi-step data-science prompt → decomposable execution evaluation`

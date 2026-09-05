@@ -32,6 +32,30 @@ RealMem 能支持对 evolving project history 的 retrieval/reasoning 能力判�
 
 在每个 checkpoint 附加 executable project task，例如更新计划、修改 artifact、选择下一步行动，并检查是否与当前 project state 一致。这样才能验证 memory 是否真正减少协作错误，而不只是提高 QA。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究长期项目中的目标、产物和进度状态，而不是只记住用户静态属性。选型关键是后续问题是否依赖项目状态演化；同名项目的旧安排被正确召回却错误采用，也应视为记忆失败。
+
+### 一个具体任务长什么样
+
+示意任务：用户先确定项目方向，随后调整交付物和优先级，再询问下一步。系统需要区分已经完成、已经取消和仍然有效的事项，而不是把所有曾出现过的要求拼成一份清单。
+
+### 最有判别力的实验
+
+让相同项目经历不同修订顺序，比较原始日志检索、状态摘要与显式状态维护。单独评分已取消要求是否重新出现，并在新项目上测试；只在同一项目模板上改进，无法证明跨项目泛化。
+
+### 建议搭配
+
+[longmemeval](longmemeval.md) · [statemembench](statemembench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `casual conversation memory → cross-session project state → persistent work context`

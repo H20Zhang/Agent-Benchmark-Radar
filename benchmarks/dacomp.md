@@ -32,6 +32,30 @@ DE 的 execution-based result 对 repository/workflow correctness 证据较强�
 
 把 DE 与 DA 串起来：先要求 agent build/repair transformation pipeline，再从其产出回答 business question，直接测试真实 data lifecycle 中的 error propagation。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合在同一研究中同时覆盖数据工程与开放式分析，但两条轨道不宜用未经解释的均分合并。仓库转换主要依赖可执行验证，分析报告更依赖评分标准；不同评价机制决定了结论的不确定性。
+
+### 一个具体任务长什么样
+
+示意任务：工程任务要求修改数据管道并产生正确输出，分析任务则要求探索业务问题并形成报告。前者测试状态与代码变化，后者还涉及选择分析角度和解释证据，失败模式不能互换。
+
+### 最有判别力的实验
+
+分别固定工程测试环境与报告评分器，按轨道展示质量、时间和调用代价。对工程任务给定正确修改位置，对分析任务给定正确中间结果，诊断发现与推理瓶颈；跨轨道优势应分别成立再讨论通用性。
+
+### 建议搭配
+
+[data-eng-bench](data-eng-bench.md) · [insightbench](insightbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `local code/SQL → repository data engineering + open-ended analysis → integrated data-intelligence lifecycle`

@@ -23,3 +23,27 @@ ACL 2026 版本显示在该 fixed-corpus protocol 下，Search-R1+BM25 仅 3.86%
 ## 下一步评测坐标
 
 固定语料提升 attribution，却去掉 freshness 与真实 provider interface。BrowseComp-Plus_CM 进一步指出 query-conditioned small corpus 会低估 evidence-discovery difficulty，因此 corpus construction 本身仍需成为可见变量。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合在固定语料中比较深度搜索策略与检索基础设施，比实时网页更有利于归因。控制语料带来了可复现性，也去掉了部分网页漂移与接口复杂性；因此它应与实时搜索互补，而不是替代后者。
+
+### 一个具体任务长什么样
+
+示意任务：系统在一个固定文档集合中多轮搜索，逐步满足问题的间接约束并找到答案。检索器能否找出关键材料与智能体能否正确追问，可以在共同语料和接口下分别观察。
+
+### 最有判别力的实验
+
+交叉替换检索器与智能体，固定可见文档、top-k 和总调用预算，联合报告证据召回、答案与成本。再扩大干扰语料或换独立语料，检查收益是否只在精心构建的候选集合中成立。
+
+### 建议搭配
+
+[browsecomp](browsecomp.md) · [browsecomp-plus-cm](browsecomp-plus-cm.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

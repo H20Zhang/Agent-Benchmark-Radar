@@ -32,6 +32,30 @@ The final task is still context-gathering QA rather than closed-loop future task
 
 Convert the five knowledge categories into future executable tasks and compare equal-cost passive retrieval, compiled runbooks, and agentic reacquisition. The key systems trade-off is what experience should be retained versus cheaply rediscovered.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LongMemEval-V2 for environment knowledge accumulated from extensive web interaction, including workflows and operational pitfalls. Its key distinction from dialogue memory is the source and object of experience. The readout remains QA, so retrieval quality should not be presented as web-action competence.
+
+### What a concrete task looks like
+
+Illustrative task: past trajectories show that an operation requires a particular page state, and the current question asks how to complete that workflow. The system must recover reusable steps from distributed visual and tool records, not merely remember text on one page.
+
+### Most discriminating experiment
+
+Hold out environments rather than randomly splitting trajectories from the same site. Compare access to prior experience against no-history and supplied-evidence conditions, measure retrieval latency, and add an execution check. Report accessibility, transfer, and action utility as distinct outcomes.
+
+### Pair with
+
+[ama-bench](ama-bench.en.md) · [memoryarena](memoryarena.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `long chat history → agent trajectory archive → compressed reusable environment knowledge`

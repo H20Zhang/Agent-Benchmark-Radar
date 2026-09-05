@@ -23,3 +23,27 @@ exact-paper/weighted-recall 支持在给定 corpus snapshot、index 与 retrieva
 ## 下一步评测坐标
 
 下一步应接入 citation graph、full text 与动态 scholarly databases，同时明确 completeness ceiling 和 search cost。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合区分科学文献检索中的目标论文定位与开放式证据收集。两者对漏检的容忍度不同：找到一篇正确论文不能证明完成了领域覆盖；复现还取决于完整语料和搜索环境是否实际可得。
+
+### 一个具体任务长什么样
+
+示意任务：一类查询用若干线索找出特定论文，另一类要求搜集支持某个研究主题的多篇相关工作。相同检索器可能擅长精确定位，却在宽覆盖收集时反复返回同一研究簇。
+
+### 最有判别力的实验
+
+在同一论文语料上固定搜索接口与预算，分别比较目标命中和加权覆盖。记录论文去重、元数据与全文访问条件，并把完整环境缺失与算法失败区分，避免用不一致索引产生的差异评价检索策略。
+
+### 建议搭配
+
+[autoresearchbench](autoresearchbench.md) · [scholarquest](scholarquest.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

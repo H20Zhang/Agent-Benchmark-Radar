@@ -32,6 +32,30 @@ Real personal data has missingness, contradictory devices/accounts, explicit use
 
 Add counterfactual update events with known revocation times and downstream decisions whose correctness depends on using the newest state. This would connect profile maintenance directly to action utility and stale-memory harm.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DynamicMem for evolving user profiles inferred from multi-application behavior. The challenge is reconstructing operative attributes from distributed evidence rather than extracting explicit statements. Score profile recovery and personalized service separately so more profiling is not mistaken for better assistance.
+
+### What a concrete task looks like
+
+Illustrative task: behavior across applications changes over months, making an old routine unrepresentative of current preferences. At a checkpoint, the system must update the profile and use it for a service request. Accurate recall of an old habit may lead to a wrong choice.
+
+### Most discriminating experiment
+
+Compare frozen, sliding-window, and continuously updated profiles under equal history access. At each checkpoint, report both state recovery and service quality, including slices before and after life changes. This distinguishes accumulation from genuine adaptation.
+
+### Pair with
+
+[lifebench](lifebench.en.md) · [memprobe](memprobe.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `event recall → personal profile extraction → temporally evolving user state`

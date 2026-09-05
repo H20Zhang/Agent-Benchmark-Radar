@@ -33,3 +33,27 @@ KBGym 对 **self-improving representation / learned retrieval state** 很有价�
 KBGym 让 corpus 从静态输入变成可训练且可冻结审计的状态对象；`map_delta=early_signal`。它更接近“representation can learn from query history”的 benchmark，而不是普通 RAG retrieval leaderboard。
 
 Primary: https://arxiv.org/abs/2608.21829
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究优化对象从模型参数转向可编辑知识库时，收益究竟发生在哪些覆盖范围。最关键的不是修改后总体分数提高，而是未见问题、未覆盖键和新结构上是否仍有收益；训练答案写回需要显式防泄漏。
+
+### 一个具体任务长什么样
+
+示意任务：整理者根据训练期问题与反馈编辑持久文档库，之后冻结该库，由固定读者回答测试问题。新增表征可能加速访问，也可能只把训练答案提前保存，两种机制需要不同对照。
+
+### 最有判别力的实验
+
+按问题、实体键和关系结构分别留出测试，比较原库、答案缓存、等预算结构改写与随机编辑。冻结读者，计入整理成本并测试跨读者迁移；只有覆盖外收益才支持超越答案缓存的表征改进。
+
+### 建议搭配
+
+[structmemeval](structmemeval.md) · [snapshot-compatibility-audit](snapshot-compatibility-audit.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

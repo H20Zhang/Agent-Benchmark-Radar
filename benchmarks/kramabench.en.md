@@ -23,3 +23,27 @@ Align file corpus, source connectors, tool set, subtask definitions, agent budge
 ## Next evaluation coordinate
 
 The next step adds access control, schema drift, incremental updates, and derived-artifact lineage to resemble a persistent production data lake.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use KramaBench for discovery and pipeline construction from messy heterogeneous file lakes. Full, trimmed, and oracle inputs impose different discovery demands. Gains with relevant files already selected do not establish better understanding of a real data lake.
+
+### What a concrete task looks like
+
+Illustrative task: an answer requires finding relevant files, cleaning and joining them, then constructing an analytical pipeline. Correct code for a subtask cannot rescue the workflow if file selection or column interpretation is wrong.
+
+### Most discriminating experiment
+
+Compare full lakes, supplied-correct-file sets, and supplied-intermediate tables for the same tasks, recording subtask artifacts. Match model and budgets and account for discovery cost and amortization across repeated queries to test the practical value of prebuilt representations.
+
+### Pair with
+
+[dataspace](dataspace.en.md) · [data-exploration-benchmark](data-exploration-benchmark.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

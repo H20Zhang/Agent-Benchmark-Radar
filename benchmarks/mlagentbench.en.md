@@ -32,6 +32,30 @@ Thirteen tasks provide limited coverage, and benchmark success is not equivalent
 
 Use hidden post-cutoff repositories and hold compute fixed while varying only planning/recovery mechanisms. This would better separate research-agent competence from pretrained familiarity and brute-force experimentation.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MLAgentBench for execution-feedback-driven ML experimentation, closer to research practice than one-shot code generation. Success on a small task set does not establish scientific novelty. Distinguish environment repair, tuning known workflows, and effective methodological changes.
+
+### What a concrete task looks like
+
+Illustrative task: an agent edits training code, runs experiments, inspects results, and revises its plan. Logs and validation metrics provide feedback, but repeated selection on the same feedback set can overfit, requiring an independent final evaluation.
+
+### Most discriminating experiment
+
+Match compute and experiment counts across one-shot generation, memoryless iteration, and experience-aware iteration, reporting valid-run rate and model quality separately. Re-run the selected solution from a clean environment to exclude transient state and validation overfitting.
+
+### Pair with
+
+[mle-bench](mle-bench.en.md) · [deltaml-bench](deltaml-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `one-shot ML code → iterative experiment loop → autonomous research engineering`

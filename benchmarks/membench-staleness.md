@@ -35,3 +35,27 @@
 ## 谱系位置
 
 `map_delta=early_signal`，绑定 `memory-update-and-staleness`。修正后的指标适合作为 component diagnostic，但 **60 个相关手写 probe + 单作者 + 小 store** 还不足以构成持久领域迁移；需要更广泛证据证明 update-aware evaluation 是长期 memory benchmark 的必需坐标。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合给记忆存储做过期事实的快速回归测试，不宜承担通用记忆性能主结论。它关注当前事实能否排在被替代事实之前；小规模精确匹配探针的通过，不等于复杂历史中的状态理解已经可靠。
+
+### 一个具体任务长什么样
+
+示意任务：同一实体的一项事实先写入，之后被否定或替代，当前查询应优先返回有效值而避开禁止的旧值。全部不返回虽然能减少旧事实出现，却并未完成正常检索任务。
+
+### 最有判别力的实验
+
+在相同探针上同时记录当前事实命中、旧事实排位和弃答；扫描 top-k 时保持指标定义不变。再加入近义改写与更大干扰库，检查通过是否依赖精确子串和小存储规模。
+
+### 建议搭配
+
+[statemembench](statemembench.md) · [longmemeval](longmemeval.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

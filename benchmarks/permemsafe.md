@@ -32,6 +32,30 @@ benchmark 不可能覆盖所有医疗/法律/物理风险与真实 user consent�
 
 重点测 calibration：什么时候应该基于记忆风险直接行动，什么时候应该 clarification，什么时候应该把它判为 stale。frontier 不只是“记住 safety context”，而是管理 personalized risk belief 的 confidence 与 lifecycle。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验单看当前请求很正常、结合个人历史却需要谨慎处理的情形。个性化安全不仅要记住风险，还要在风险解除或条件变化后更新；永久沿用旧风险也会降低帮助质量。
+
+### 一个具体任务长什么样
+
+示意任务：早期历史表达了一项与服务选择相关的个体限制，之后该限制被明确修订。系统面对类似的新请求时，需要应用当前有效状态，而不是机械地沿用最早的安全判断。
+
+### 最有判别力的实验
+
+构造风险有效、风险已解除和无相关风险三组配对历史，固定当前请求。分别检查漏用相关记忆与过度沿用旧风险，并联合报告安全和帮助质量，才能评价更新策略而不是一律保守的回答倾向。
+
+### 建议搭配
+
+[longmemeval](longmemeval.md) · [memtrapbench](memtrapbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `generic safety → personalized memory → evolving personalized risk state`

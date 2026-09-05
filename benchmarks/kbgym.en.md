@@ -28,6 +28,30 @@ KBGym is particularly useful for **self-improving representations and learned re
 
 The main gaps are cross-model transfer, multiple seeds, natural corpora, and online/prequential evaluation. The highest-leverage question is whether trained knowledge structures still improve the **neither-key** region when curator and reader come from different model families, documents are natural rather than synthetic atomic facts, and the query distribution evolves over time.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use KBGym to study where gains arise when optimization targets an editable knowledge store rather than model weights. Overall improvement is less informative than performance on unseen questions, uncovered keys, and new structures. Writeback of training answers requires explicit leakage controls.
+
+### What a concrete task looks like
+
+Illustrative task: a curator edits a persistent document store using training questions and feedback, then the store is frozen for a fixed reader. New representations may improve access or merely cache training answers; different controls distinguish these mechanisms.
+
+### Most discriminating experiment
+
+Hold out questions, entity keys, and relation structures separately. Compare the original store, answer caching, budget-matched structural edits, and random edits with a frozen reader. Charge curation cost and test reader transfer; out-of-coverage gains are needed for claims beyond caching.
+
+### Pair with
+
+[structmemeval](structmemeval.en.md) · [snapshot-compatibility-audit](snapshot-compatibility-audit.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 KBGym makes the corpus a trainable and auditable frozen state object; `map_delta=early_signal`. It is closer to a benchmark for representations that learn from query history than to a conventional RAG retrieval leaderboard.

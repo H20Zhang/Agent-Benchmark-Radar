@@ -32,6 +32,30 @@ LoCoMo 一类 benchmark 主要测对历史对话的回忆与推理。MemoryArena
 
 在同一批 trajectory 上加入 oracle-write、oracle-retrieve、oracle-use 三类 counterfactual。这样才能把“系统做不好”进一步定位到 memory lifecycle 的具体断点。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合把记忆的研究主张从‘能回答历史问题’推进到‘能改善后续行动’。关键证据来自前后任务的依赖关系与无记忆对照；如果后续任务可以独立完成，较高成功率就不足以说明经验复用有效。
+
+### 一个具体任务长什么样
+
+示意任务：前一会话中的尝试暴露了环境规则或用户选择，下一会话需要据此更快完成相关操作。记忆应改变搜索顺序或行动参数；把旧轨迹全部复制进上下文并不自动等于有效经验提炼。
+
+### 最有判别力的实验
+
+用相同起始环境与随机种子配对有记忆、无记忆和原始轨迹回放条件，比较成功率及行动成本。再加入不相关经验，检查负迁移；这样才能区别有效记忆提炼、额外上下文和更多计算带来的收益。
+
+### 建议搭配
+
+[past-bench](past-bench.md) · [mem2actbench](mem2actbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `conversation recall → trajectory memory → experience-conditioned action`

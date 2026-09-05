@@ -32,6 +32,30 @@ Task-local data avoids longitudinal enterprise changes, permissions, writes, col
 
 Construct matched single-source and heterogeneous versions of the same analytical question and intervene on source routing. This would quantify the marginal difficulty created by cross-source integration rather than generic reasoning complexity.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use FDABench for analytical workflows across structured, document, and multimodal sources. Combining discovery, tools, and reporting improves breadth, but an aggregate across heterogeneous tasks can hide failure location. Preserve correctness, report quality, and resource-cost readouts.
+
+### What a concrete task looks like
+
+Illustrative task: an analysis needs tables, documents, and media, requiring an access plan and a synthesized conclusion. Missing a source type can produce a one-sided report, while a complete-looking report can still contain unsupported calculations or claims.
+
+### Most discriminating experiment
+
+Fix tools and backbone, slice by source combination and task type, and supply correct source sets to diagnose discovery. Keep choice, report, and trajectory scores separate and charge multimodal parsing costs so expensive preprocessing does not create an opaque advantage.
+
+### Pair with
+
+[dataspace](dataspace.en.md) · [kramabench](kramabench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `single-source analytics → heterogeneous evidence workflows → multi-source data-agent orchestration`

@@ -32,6 +32,30 @@ LifeBench 能支持系统整体是否会重建和推理长期生活模式，但�
 
 把 inferred habit/procedure 连接到未来 decision，再加入用户显式 correction，测试系统能否既推断 latent pattern，又在行为变化时及时撤销旧判断。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究分散行为中的习惯和程序性知识，而不是把记忆限定为明确说过的事实。选用时应强调跨来源推断；合成生活轨迹上的正确画像，尚不能证明系统理解真实用户或拥有实际个性化效用。
+
+### 一个具体任务长什么样
+
+示意任务：多个来源分别记录用户在不同情境下的重复行为，之后的问题不直接复述某一条记录，而要求归纳惯常做法。系统需要聚合经历，同时避免把一次偶然行为升级为稳定习惯。
+
+### 最有判别力的实验
+
+比较单来源、完整多来源和来源标识被打乱的输入，固定推理模型与记忆预算。按显式事实、习惯推断和程序知识分项报告；如果只在来源模式固定时有效，应优先检验生成器先验，而非宣称通用用户理解。
+
+### 建议搭配
+
+[dynamicmem](dynamicmem.md) · [memfusebench](memfusebench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `explicit conversational facts → multi-source life traces → inferred habitual/procedural memory`

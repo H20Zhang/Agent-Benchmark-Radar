@@ -33,3 +33,27 @@ unmatched stacks、shared fetch backend、web drift 与 LLM judge 使结果只�
 ## 放进演化图怎么看
 
 `map_delta=reinforces`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合评价开放网页上既要搜得广、又要为每条记录补足字段的研究任务。逐条可验证有利于减少穷举金标依赖，但记录有效不代表集合完整；发现数量、有效性和补全质量必须分开理解。
+
+### 一个具体任务长什么样
+
+示意任务：系统寻找满足条件的一批对象，并为每个对象提供字段、来源页面和支持摘录。抓到许多名字但字段不可靠，与少量高质量记录但覆盖不足，是两种不同的任务失败。
+
+### 最有判别力的实验
+
+固定请求规模、搜索工具与抓取预算，分别报告去重后发现量、记录有效率和字段补全。缓存用于评分的来源快照，并复核失效页面，避免把网页变化或评分抓取器失败误当成研究智能体错误。
+
+### 建议搭配
+
+[gisa](gisa.md) · [autoresearchbench](autoresearchbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

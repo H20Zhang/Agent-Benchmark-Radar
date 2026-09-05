@@ -32,6 +32,30 @@ The benchmark remains finite and task-scoped. Policy governance, deletion rights
 
 Run oracle interventions at each lifecycle stage and measure how much final task success is recovered. The resulting error budget—write versus maintain versus retrieve versus use—would directly guide systems research investment.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use WorldMemArena to locate failures in writing, maintenance, retrieval, or use of multimodal memory. Stage metrics are more diagnostic than one aggregate score, but stages depend on one another. A local gain does not automatically establish improved end-to-end action.
+
+### What a concrete task looks like
+
+Illustrative task: observations and actions change world state, and checkpoint questions require the operative state plus relevant visual evidence. An old observation may be faithfully retained but obsolete, so retrieval hits and memory freshness need separate evaluation.
+
+### Most discriminating experiment
+
+Replace writing, maintenance, or retrieval outputs with correct intermediate artifacts one stage at a time and measure the downstream effect. Fix the visual backbone, budgets, and sample set to identify which stage actually limits the system rather than only comparing local metrics.
+
+### Pair with
+
+[memeye](memeye.en.md) · [memprobe](memprobe.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `static history QA → mutable multimodal state → lifecycle-diagnostic memory`

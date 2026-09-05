@@ -32,6 +32,30 @@ symbolic causal benchmark 常缺真实 data analysis，data-science benchmark �
 
 把 synthetic scene 与 assumption 故意不完整的真实 dataset 配对，测试 agent 会不会主动询问缺失 identification assumption，而不是自己编出来，连接 causal correctness 与 scientific judgment。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究数据智能体是否知道哪些因果结论可以从给定信息中识别。预测准确不等于因果推断正确；合理弃答和不确定性表达是能力的一部分，不应被一律作答的高覆盖率掩盖。
+
+### 一个具体任务长什么样
+
+示意任务：系统获得带领域故事的观测数据，需要判断能否估计某项干预效果或反事实。相关关系可被准确计算，但缺少识别条件时，给出精确因果数字仍是错误行为。
+
+### 最有判别力的实验
+
+按预测、干预和反事实层级分别报告，把正确图或识别假设给定作为诊断。比较可识别与不可识别的配对场景，联合评分估计误差、区间和弃答；不要以合成数据上的表现替代真实干预验证。
+
+### 建议搭配
+
+[statabench](statabench.md) · [insightbench](insightbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `symbolic causality ↔ data-science execution → agentic causal analysis with abstention`

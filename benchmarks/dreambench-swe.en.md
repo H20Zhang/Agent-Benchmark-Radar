@@ -28,6 +28,30 @@ The benchmark is useful for three separate coding-agent-memory claims: whether r
 
 The main gaps are production-scale real repositories, cross-model and cross-harness transfer, and limited B0 headroom in C9/C10, which prevents broad rejection/abstention claims. The highest-value next study would transplant the same memory-hygiene protocol into real repository continuations and compare coding harnesses under matched evidence access, separating benchmark-trap effects from harness-specific effects.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DreamBench-SWE for scope, authority, staleness, and spurious-lesson rejection in multi-session coding memory. Non-inferable historical evidence and hidden oracles test memory necessity, not only task success. Constructed scenarios still limit external validity.
+
+### What a concrete task looks like
+
+Illustrative task: an early session establishes a valid rule, later experience conflicts with it or has a different scope, and the final coding task requires the applicable rule. Retention alone is insufficient; the agent must determine which memory has authority over the current edit.
+
+### Most discriminating experiment
+
+Retain no-memory and deterministic verbatim-memory controls, reporting trap-level results and no-memory headroom. Types solvable without memory do not establish memory benefits. Estimate uncertainty clustered by task rather than treating random runs as independent tasks.
+
+### Pair with
+
+[agent-memory-bench-coding](agent-memory-bench-coding.en.md) · [memtrapbench](memtrapbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 The benchmark decomposes “does past experience help later action?” into whether retained evidence remains **current, scoped, authorized/relevant, and correctly suppressed when it should not be used**; `map_delta=early_signal`. It is an important action-grounded lifecycle coordinate beyond memory QA, but still needs independent external validation.

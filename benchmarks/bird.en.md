@@ -32,6 +32,30 @@ Business semantics, permissions, schema drift, multiple database systems, write 
 
 Measure whether a BIRD-tuned system transfers to Spider 2.0 and LiveSQLBench without changing its schema/value retrieval strategy. This tests whether value grounding is a reusable capability or benchmark-specific engineering.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use BIRD to study the effect of database values, dirty content, and external knowledge on SQL correctness. Interpret efficiency conditional on correct results: executing a semantically wrong query faster is not a useful improvement in database QA.
+
+### What a concrete task looks like
+
+Illustrative task: business language does not directly match stored values, requiring data inspection and supplied knowledge to determine filters and joins. Schema-only reasoning may miss abbreviations, missing values, or encoding differences.
+
+### Most discriminating experiment
+
+Fix external knowledge, database contents, and execution budget; compare schema-only access, value retrieval, and supplied-correct-value controls. Measure cost for correct queries separately and review disputed gold SQL so annotation or cache differences are not attributed to method quality.
+
+### Pair with
+
+[spider](spider.en.md) · [livesqlbench](livesqlbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `unseen schema → database-value grounding → enterprise metadata/workflow reasoning`

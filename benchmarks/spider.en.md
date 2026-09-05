@@ -32,6 +32,30 @@ Schemas are small compared with enterprise warehouses, database contents are not
 
 Treat Spider as the schema-generalization rung and measure the same agent on BIRD, Spider 2.0, and reliability-oriented warehouse tasks. The degradation across rungs is more informative than one Spider leaderboard number.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use Spider for SQL generalization across schemas, while recognizing that static question-to-query mapping does not cover enterprise analysis. Distinguish SQL generation from business-semantic understanding, and structural matching from result equivalence.
+
+### What a concrete task looks like
+
+Illustrative task: a query requires several joins over an unseen schema, with nested operations or aggregation. Executable SQL can still be wrong because of join direction, aggregation scope, or duplicated rows.
+
+### Most discriminating experiment
+
+Preserve database-level splits and compare schema-linking and query-generation strategies under one backbone. Supplement structural matching with execution-equivalence checks and supplied-relevant-table controls. Do not describe tuning on test schemas as zero-shot generalization.
+
+### Pair with
+
+[bird](bird.en.md) · [spider-2](spider-2.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `single-table SQL → unseen multi-table schema → enterprise SQL workflow`

@@ -32,6 +32,30 @@ The benchmark does not directly score whether recovered memory improves future a
 
 Pair each hidden-state dimension with downstream tasks and privacy labels. Then measure a Pareto frontier among recoverability, future utility, storage cost, and minimization instead of maximizing raw retention alone.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MEMPROBE to inspect what survives writing and whether stored information is retrievable. The memory artifact itself becomes the audit object. Recovering more user information is not inherently better: necessity, consent, and task utility are separate questions.
+
+### What a concrete task looks like
+
+Illustrative task: after ordinary assistance, an auditor receives only the final memory artifact and attempts to reconstruct user state. Success with full-store access but failure through top-k retrieval indicates retained information with an inadequate access path.
+
+### Most discriminating experiment
+
+Evaluate the same artifact with full-store access and constrained retrieval under a fixed reconstruction model. Report their gap, then test the usefulness of recovered attributes on downstream tasks. This avoids optimizing unnecessary profiling as an end in itself.
+
+### Pair with
+
+[dynamicmem](dynamicmem.en.md) · [gatemem](gatemem.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `task success → persistent-memory artifact → representation coverage audit`

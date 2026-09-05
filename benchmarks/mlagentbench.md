@@ -32,6 +32,30 @@ benchmark 支持固定 repository/task 下 end-to-end experimentation 能力，�
 
 使用隐藏的 post-cutoff repository，在相同 compute 下只改变 planning/recovery mechanism，更好地区分 research-agent competence、pretraining familiarity 与 brute-force experimentation。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究执行反馈驱动的机器学习实验迭代，比一次性代码生成更接近研究工作。但少量任务上的成功并不证明科研创新；需要区分修好环境、调好已知流程和提出有效新方法。
+
+### 一个具体任务长什么样
+
+示意任务：系统修改训练代码、执行实验、查看结果再调整方案。失败日志和验证指标是反馈来源，但反复在同一反馈集上选择方案也可能过拟合，最终评测必须保留独立性。
+
+### 最有判别力的实验
+
+固定计算资源与实验次数，比较一次生成、无记忆迭代和有经验记忆迭代，分别报告有效运行率与模型质量。最终从干净环境复跑选定方案，避免把偶然运行状态或验证集过拟合当作改进。
+
+### 建议搭配
+
+[mle-bench](mle-bench.md) · [deltaml-bench](deltaml-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `one-shot ML code → iterative experiment loop → autonomous research engineering`

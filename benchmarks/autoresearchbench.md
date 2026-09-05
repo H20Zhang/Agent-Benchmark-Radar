@@ -85,6 +85,30 @@ AutoResearchBench 还没有完整测量：
 
 这样可以形成 coverage–cost curve，而不是只有最终 recall。更强的 agent 应该不仅搜得多，还能知道 **什么时候继续搜值得、什么时候已经足够**。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合区分找一篇目标论文与搜齐未知数量相关论文。宽检索中的停止条件和集合完整性往往比某一篇的排序更重要；静态计算机科学语料上的结果，不应扩展为所有学科的完整文献调研能力。
+
+### 一个具体任务长什么样
+
+示意任务：深查任务沿线索定位一篇工作，广搜任务则要求搜集满足条件的一组论文并判断何时足够。相同搜索循环可能很快找到首个命中，却迟迟发现不了另一个研究分支。
+
+### 最有判别力的实验
+
+固定语料和总预算，分别记录首次目标命中、集合召回及集合交并比随调用数的曲线。对停止时遗漏的论文做人工复核，区分金标不完整与系统漏查，并检查引用扩展是否导致单一研究簇偏置。
+
+### 建议搭配
+
+[sage](sage.md) · [scholarquest](scholarquest.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `known-item scholarly retrieval → unknown-size literature discovery → value-aware, live, cost-sensitive research search`

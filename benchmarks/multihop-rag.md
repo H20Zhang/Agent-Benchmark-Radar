@@ -32,6 +32,30 @@ retrieval metric 支持 evidence discovery 判断，answer metric 支持 retriev
 
 在固定 retrieval/token budget 下允许 iterative search，对比 one-shot top-k 与 hop-by-hop adaptive retrieval。真正的问题是 adaptive control 能否减少 evidence volume，而不是仅靠更多调用换分数。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合在可控语料上研究多跳证据发现与组合。它比只给定上下文的问答更接近 RAG，但仍不同于实时网页搜索；检索链设计与回答推理的贡献需要通过证据给定条件拆开。
+
+### 一个具体任务长什么样
+
+示意任务：几篇新闻分别提供事件、人物与时间信息，答案需要连接多处证据。先找到主题相关报道只是起点，后续检索还需要追踪缺失关系，而不是重复返回相似新闻。
+
+### 最有判别力的实验
+
+在同一语料与相同总检索预算下比较单次与迭代检索，按推理跳数分别报告完整支持链覆盖。给定全部支持事实后再测回答，判断主要瓶颈是缺证据还是不能组合证据。
+
+### 建议搭配
+
+[hotpotqa](hotpotqa.md) · [agenticragtracer](agenticragtracer.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single-hop relevance → multi-evidence retrieval → adaptive multi-step search`

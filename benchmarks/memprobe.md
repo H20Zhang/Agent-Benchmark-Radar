@@ -32,6 +32,30 @@ recovery score 能说明 **哪些信息真正进入了可查询的持久 memory 
 
 给每个 hidden-state dimension 同时标注 downstream utility 与 privacy requirement，测 recoverability、未来任务收益、存储成本、data minimization 的 Pareto frontier，而不是单纯最大化 retention。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检查写入后究竟留下了什么，以及留下的信息能否被检索访问。它把记忆产物本身变成审计对象；恢复更多用户信息并不天然更好，还要另问这些信息是否必要、获准保存且对任务有用。
+
+### 一个具体任务长什么样
+
+示意任务：普通协助结束后，只给审计者最终记忆文件，要求恢复其中隐含的用户状态。全量读取可以成功而 top-k 检索失败，意味着信息尚在，但访问路径没有把它带到当前问题。
+
+### 最有判别力的实验
+
+对同一记忆产物分别使用全库读取和受限检索，固定恢复模型，报告两者差距。再以实际下游任务检验被恢复属性的效用，避免把不必要的画像收集优化成主要目标。
+
+### 建议搭配
+
+[dynamicmem](dynamicmem.md) · [gatemem](gatemem.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `task success → persistent-memory artifact → representation coverage audit`

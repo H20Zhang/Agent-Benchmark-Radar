@@ -23,3 +23,27 @@ Align workbook release, exploration JSON schema, token/tool budget, downstream a
 ## Next evaluation coordinate
 
 The next step scales to multi-source catalogs, permissions, and schema drift and tests whether exploration artifacts can be maintained incrementally rather than generated once.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use the Data Exploration Benchmark for intermediate data understanding, especially logical tables, keys, and column semantics in messy workbooks. Its small spreadsheet-specific scope makes it a mechanism diagnostic. A comprehensive-looking exploration artifact is not proof of downstream value.
+
+### What a concrete task looks like
+
+Illustrative task: a workbook contains several logical tables, merged headers, and implicit relationships. The agent constructs structured understanding before analysis. Mistaking a presentation region for a data table can invalidate later computations even if they execute correctly.
+
+### Most discriminating experiment
+
+Retain raw-data, self-generated-exploration, and oracle-exploration conditions with a fixed downstream analyst. Inspect keys, relationships, and quality issues and test on other workbooks. Charge exploration cost to determine when a reusable representation justifies preprocessing.
+
+### Pair with
+
+[kramabench](kramabench.en.md) · [dataspace](dataspace.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

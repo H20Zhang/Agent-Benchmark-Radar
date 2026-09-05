@@ -33,3 +33,27 @@ Explicit consent labels and exact-string leakage miss inference, re-identificati
 ## Where It Fits in the Map
 
 `map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use SP-Mem to trade off privacy authorization and personalization within one experiment. Absence of exact-value repetition does not rule out inference. Treat it as a diagnostic of consent handling and direct disclosure, not a complete privacy guarantee.
+
+### What a concrete task looks like
+
+Illustrative task: a store contains an ordinary preference and information requiring authorization, but a service request needs only part of it. Appropriate behavior may use permitted information, request consent, or avoid disclosure rather than always answer or always refuse.
+
+### Most discriminating experiment
+
+Switch consent state for matched profiles while keeping service queries fixed, and jointly report utility and disclosure risk. Add semantic-paraphrase checks beyond exact-string leakage. Track unnecessary permission requests so privacy gains obtained through excessive friction remain visible.
+
+### Pair with
+
+[gatemem](gatemem.en.md) · [permemsafe](permemsafe.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

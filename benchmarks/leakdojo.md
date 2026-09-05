@@ -23,3 +23,27 @@ recovered text/chunks 支持在指定 attack budget、chunking、query generator
 ## 下一步评测坐标
 
 下一步应把 content extraction 与 authorization boundary、sensitive-field severity 和 production consequence 联合评价，而非所有 chunk 等权。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合在受控 RAG 配置下比较知识库内容泄露风险与防御。恢复多少文本取决于查询预算和切块方式；它不能替代跨租户权限或真实生产事故评估，也不能只看一次攻击的最高泄露率。
+
+### 一个具体任务长什么样
+
+示意任务：攻击者通过有限查询试图恢复本不应公开的检索库内容，防御则限制暴露同时保留正常问答。相同内容被重复吐出与不断恢复新的片段，代表不同的累积泄露风险。
+
+### 最有判别力的实验
+
+固定语料、切块、检索器和查询预算，同时报告唯一片段恢复与正常问答质量。按不同攻击与模型交叉比较，检验防御是否只是抑制某种输出样式，而非真正减少不当证据暴露。
+
+### 建议搭配
+
+[gatemem](gatemem.md) · [injecmem](injecmem.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

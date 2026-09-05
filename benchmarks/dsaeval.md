@@ -32,6 +32,30 @@ benchmark 支持 cumulative project competence，并暴露 quality–efficiency�
 
 在早期分析里人为注入可控错误，测后续 recovery 与 error propagation，验证 agent 是否维护可信 analytical state，而不只是累积 conversation context。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究累积多问题项目中的多模态数据科学，而不只是独立单题。前面步骤产生的状态会影响后面回答；总分下降可能来自早期错误传播，而不是后续问题自身更难。
+
+### 一个具体任务长什么样
+
+示意任务：系统在同一项目中先探索表格、图像或文本数据，再根据连续请求建模和解释结果。若早期清洗或理解错误，后续笔记本可能继续沿用错误状态，直到最终报告才暴露问题。
+
+### 最有判别力的实验
+
+比较连续自主执行与每轮给定正确前序状态，分别评推理、代码和结果。固定 GPU、笔记本环境与评价器，按模态和问题位置拆分，识别跨轮状态管理是否真正改善了后续任务。
+
+### 建议搭配
+
+[dsagentbench](dsagentbench.md) · [agenticdatabench](agenticdatabench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `one-shot data analysis → cumulative multimodal project → persistent analytical state`

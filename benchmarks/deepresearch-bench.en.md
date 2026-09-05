@@ -32,6 +32,30 @@ One hundred high-cost tasks limit statistical resolution. Long-form reference/ju
 
 Add claim-level evidence graphs and controlled retrieval-budget sweeps. Then measure whether report quality improves because the agent found better evidence or simply generated better prose from the same evidence set.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DeepResearch Bench for citation-rich long-form research deliverables rather than single-fact lookup. Report quality, citation correctness, and coverage can diverge. Length and fluency can obscure weak evidence, making holistic preference alone insufficient.
+
+### What a concrete task looks like
+
+Illustrative task: an agent decomposes a research question, gathers sources, and writes a structured report with claims and citations. It may miss sources, misread evidence, or overstate conclusions during writing. Final report quality alone cannot localize these causes.
+
+### Most discriminating experiment
+
+First compare writers over fixed evidence, then compare retrieval policies with a fixed writer, controlling report length and research budget. Add claim-level support review to test whether holistic-score gains reflect evidence rather than formatting, style, or evaluator preferences.
+
+### Pair with
+
+[claimprobe](claimprobe.en.md) · [litreview-arena](litreview-arena.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `hard web answer finding → citation-grounded report generation → auditable research workflow`

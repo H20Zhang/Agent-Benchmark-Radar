@@ -32,6 +32,30 @@ schema 相比 enterprise warehouse 仍小，database content 也不是主要难�
 
 把 Spider 当 schema-generalization rung，同一 agent 继续跑 BIRD、Spider 2.0 与 reliability-oriented warehouse task。不同 rung 上的退化曲线比单个 Spider leaderboard 数字更有信息量。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验跨数据库模式的 SQL 泛化，但静态问题到查询的映射并不覆盖完整企业分析。必须区分生成 SQL 与真正理解业务语义；形式匹配与结果等价也不是同一个正确性定义。
+
+### 一个具体任务长什么样
+
+示意任务：用户的问题需要连接几张表，系统在未见数据库模式中判断键关系并生成嵌套或聚合查询。即使 SQL 能执行，连接方向、聚合范围或重复行处理仍可能使答案错误。
+
+### 最有判别力的实验
+
+保持数据库切分，比较相同骨干下的模式链接与查询生成策略，并用执行等价检查补充形式匹配。加入正确相关表给定条件，区分模式发现与查询构造；不要使用测试模式调参后仍称零样本泛化。
+
+### 建议搭配
+
+[bird](bird.md) · [spider-2](spider-2.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single-table SQL → unseen multi-table schema → enterprise SQL workflow`
