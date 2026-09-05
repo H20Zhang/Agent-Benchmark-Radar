@@ -6,7 +6,7 @@
 <p><strong>Not a benchmark list: a research map of agent evaluation.</strong></p>
 
 <p>Covering <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
-126 benchmarks organized by <b>what is measured → what a fair comparison requires → what a score supports → what remains unmeasured</b>.</p>
+131 benchmarks organized by <b>what is measured → what a fair comparison requires → what a score supports → what remains unmeasured</b>.</p>
 
 <p><a href="README.md">中文</a> · <strong>English</strong> · <a href="https://h20zhang.github.io/Agent-Benchmark-Radar/en/">Website</a></p>
 
@@ -88,12 +88,12 @@ An effective evaluation suite starts from the **claim** your paper or system nee
 <!-- FRONTIER-SIGNALS:START -->
 | Area | What actually changed | Representative benchmarks |
 |---|---|---|
-| **Agent Memory** | Safety evaluation now reaches beyond “was the right content remembered?” to **integrity across the persistent-memory lifecycle**. InjecMEM traces malicious writes into later retrieval and generation; Utility Under Attack measures benign utility lost to defenses; The Compaction Cliff tests whether rules still govern behavior after repeated compression. | [InjecMEM](https://arxiv.org/abs/2608.23471) · [Utility Under Attack](https://arxiv.org/abs/2608.21230) · [The Compaction Cliff](https://arxiv.org/abs/2608.22752) |
+| **Agent Memory** | The newest signal moves beyond whether memory content is safe to **whether memory preserves authorization/source authority and whether bad memory changes actions**. EAL-Bench separates false-authority formation from unauthorized-action propagation; The Memory Trust Gap makes stale-memory conflict with current authoritative evidence a capability-controlled experiment. | [EAL-Bench](https://arxiv.org/abs/2609.01836) · [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) · [AuthMem-Bench](https://arxiv.org/abs/2608.01679) |
 | **RAG / Agentic Retrieval** | The corpus is becoming **trainable, versioned state that can form feedback loops**. KBGym freezes and coverage-audits a curator-edited store; Snapshot Compatibility Audit measures stable answer flips from corpus growth; RAG Collapse isolates recursive feedback from self-authored sources. | [KBGym](https://arxiv.org/abs/2608.21829) · [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) · [RAG Collapse](https://arxiv.org/abs/2608.22118) |
 | **Data Agents** | The target keeps moving beyond “does SQL/code run?” toward **long-horizon ML improvement in real repositories with tighter score attribution**. AI4AI-Bench isolates algorithm changes through proxy exploration → source patch → clean-start final run; DeltaML-Bench joins published-baseline improvement with anti-gaming audits. | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
-Last updated: **2026-09-02**
+Last updated: **2026-09-05**
 
 ### Current Result Tracking
 
@@ -116,6 +116,8 @@ The repository now maintains source-verified structured result tracks for 12 ben
 
 | Time | Area | Benchmark | What it measures |
 |---|---|---|---|
+| 2026-09-01 | Agent Memory | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | Tests preservation of evolving authorization state and propagation of false permissions into unauthorized actions. |
+| 2026-09-01 | Agent Memory | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | Tests capability-dependent over-trust in stale memory against current authoritative evidence. |
 | 2026-08-26 | Agent Memory | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | Reconstructing the earlier episode that actually constrains a later task in flat mixed-topic threads without session/topic boundaries, rather than merely exposing or retrieving relevant evidence. |
 | 2026-08-24 | Agent Memory | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | Exact safety-constraint survival, scope coverage, and downstream compliance across repeated compaction, decomposition, and retrieval. |
 | 2026-08-24 | RAG | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | Stable answer flips caused by corpus growth after subtracting within-snapshot stochastic disagreement. |
@@ -372,6 +374,8 @@ Citation counts are from Semantic Scholar, last refreshed **2026-09-03**; `—` 
 | 🔭 Frontier | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | [1](https://www.semanticscholar.org/paper/09e4e85b7fadc40990563e1cf2847356d7c9fd23) | 2026-08-24 | Retrieval, conditional generation, and joint attack success after one unprivileged memory-writing interaction. |
 | 🔭 Frontier | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | [0](https://www.semanticscholar.org/paper/68cebfa9bff38539f6dbd114310629168e7d6960) | 2026-08-24 | Exact safety-constraint survival and downstream compliance across compaction, decomposition, and retrieval. |
 | 🔭 Frontier | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | [0](https://www.semanticscholar.org/paper/c73b59d446d064835acc4f499b12ae0b33c647de) | 2026-08-26 | Operative-episode reconstruction, state overwrite, long-range bridging, and local-constraint resolution in interleaved long conversations without explicit boundaries. |
+| 🔭 Frontier | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | — | 2026-09-01 | Formation of false authority in persistent memory and propagation into unauthorized downstream actions. |
+| 🔭 Frontier | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | — | 2026-09-01 | Capability-dependent over-trust of stale memory against current authoritative tool evidence. |
 <!-- TABLE-FIRST:AREA:agent-memory:END -->
 
 <a id="registry-rag"></a>

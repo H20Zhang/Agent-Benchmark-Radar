@@ -11,6 +11,8 @@ Start with time to see what recently became measurable, then use area timelines 
 
 | Time | Benchmark | Area | Role | What changed |
 |---:|---|---|---|---|
+| 2026-09-01 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | Agent Memory | 🔭 Frontier | Separates false-authority formation in persistent memory from propagation into unauthorized downstream actions. |
+| 2026-09-01 | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | Agent Memory | 🔭 Frontier | Turns stale-memory conflict with current authoritative evidence into a controlled capability-dependent evaluation. |
 | 2026-08-26 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | Agent Memory | 🔭 Frontier | Removes session/topic boundaries so recovering the episode that actually governs the current task becomes an explicit evaluation object. |
 | 2026-08-24 | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | Agent Memory | 🔭 Frontier | Connects one ordinary malicious write to post-drift retrieval and targeted generation. |
 | 2026-08-24 | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | RAG / Agentic Retrieval | 🔭 Frontier | Turns corpus-snapshot upgrades into compatibility regressions after subtracting sampling noise. |
@@ -198,6 +200,8 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | 2026-08-24 | Retrieval, conditional generation, and joint attack success after one unprivileged memory-writing interaction. | Makes write→drift→retrieve→generate an end-to-end attack trajectory. |
 | 🔭 Frontier | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | 2026-08-24 | Exact safety-constraint survival and downstream compliance across compaction, decomposition, and retrieval. | Binds exact safety-rule preservation to three context operators and behavior. |
 | 🔭 Frontier | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | 2026-08-26 | Reconstructing the operative episode and dormant local constraints in interleaved long conversations without explicit boundaries. | Moves beyond LongMemEval-style structured sessions to mixed threads where episode boundaries are latent, with exact evidence traces separating visibility from episode integrity. |
+| 🔭 Frontier | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | 2026-09-01 | Preservation of evolving authorization state, false-authority formation, and propagation into unauthorized action. | Moves memory safety from content correctness to whether authority is faithfully preserved and operationalized. |
+| 🔭 Frontier | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | 2026-09-01 | Over-trust of stale memory against current authoritative evidence, including model-scale effects. | Turns memory conflict from a single-model failure into a capability-dependent controlled comparison. |
 <!-- COMPLETE-MAP:agent-memory:END -->
 
 [Continue to Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar)

@@ -6,7 +6,7 @@
 <p><strong>不是 Benchmark 清单，而是一张 Agent Evaluation 的研究地图。</strong></p>
 
 <p>覆盖 <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
-从 <b>测什么 → 怎么公平比较 → 分数能证明什么 → 下一步还该测什么</b> 组织 126 个 Benchmark。</p>
+从 <b>测什么 → 怎么公平比较 → 分数能证明什么 → 下一步还该测什么</b> 组织 131 个 Benchmark。</p>
 
 <p><strong>中文</strong> · <a href="README.en.md">English</a> · <a href="https://h20zhang.github.io/Agent-Benchmark-Radar/zh/">Website</a></p>
 
@@ -88,12 +88,12 @@ _Registry 以可复用 benchmark / evaluation contribution 为收录单元；完
 <!-- FRONTIER-SIGNALS:START -->
 | 方向 | 真正变化 | 代表 Benchmark |
 |---|---|---|
-| **Agent Memory** | 安全评价从“是否记住正确内容”扩展到**持久记忆整个生命周期的完整性**：InjecMEM 测恶意写入到后续检索与生成，Utility Under Attack 同时计算防御造成的良性 utility 损失，The Compaction Cliff 则测规则在反复压缩后是否仍能约束行动。 | [InjecMEM](https://arxiv.org/abs/2608.23471) · [Utility Under Attack](https://arxiv.org/abs/2608.21230) · [The Compaction Cliff](https://arxiv.org/abs/2608.22752) |
+| **Agent Memory** | 最新信号从“记忆内容是否安全”继续推进到**记忆是否保留授权与来源权威，以及错误记忆是否真正改变行动**。EAL-Bench 把虚假权限形成与越权传播拆开；The Memory Trust Gap 则把过期记忆与当前权威证据冲突做成能力规模受控实验。 | [EAL-Bench](https://arxiv.org/abs/2609.01836) · [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) · [AuthMem-Bench](https://arxiv.org/abs/2608.01679) |
 | **RAG / Agentic Retrieval** | 语料成为**可训练、可版本化且会形成反馈回路的状态对象**。KBGym 冻结并按 coverage 审计被 curator 修改的 store；Snapshot Compatibility Audit 测 corpus growth 引发的稳定答案翻转；RAG Collapse 则隔离 self-authored source 的递归反馈。 | [KBGym](https://arxiv.org/abs/2608.21829) · [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) · [RAG Collapse](https://arxiv.org/abs/2608.22118) |
 | **Data Agents** | 评价对象继续从“SQL / code 能跑”推到**真实仓库中的长时程 ML 改进，同时收紧分数归因**。AI4AI-Bench 用 proxy exploration → source patch → clean-start final run 隔离学习算法修改；DeltaML-Bench 则把 published-baseline improvement 与 anti-gaming audit 放进同一执行协议。 | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) · [DeltaML-Bench](https://arxiv.org/abs/2608.19653) · [data-eng-bench](https://github.com/Snowflake-Labs/data-eng-bench) |
 <!-- FRONTIER-SIGNALS:END -->
 
-最后更新：**2026-09-02**
+最后更新：**2026-09-05**
 
 ### 当前成绩追踪
 
@@ -116,6 +116,8 @@ _Registry 以可复用 benchmark / evaluation contribution 为收录单元；完
 
 | 时间 | 方向 | Benchmark | 考察内容 |
 |---|---|---|---|
+| 2026-09-01 | Agent Memory | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | 测持久记忆能否忠实保存持续变化的授权状态，以及错误权限是否会传播成真实越权行动。 |
+| 2026-09-01 | Agent Memory | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | 测过期记忆与当前权威证据冲突时的过度信任，并显式比较这种失败如何随模型能力变化。 |
 | 2026-08-26 | Agent Memory | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | 在无 session/topic 边界的混合长对话中，测系统能否重建真正约束当前任务的早期 episode，而非只看到或检索到相关证据。 |
 | 2026-08-24 | Agent Memory | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | 在反复压缩、分解与检索中测安全约束的精确保留、作用域覆盖及下游行动遵从。 |
 | 2026-08-24 | RAG | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | 在减去同 snapshot 随机差异后，测 corpus 增长是否造成稳定答案翻转。 |
@@ -311,7 +313,7 @@ flowchart TB
 <a id="all-benchmarks"></a>
 ## 按领域查看全部 Benchmark
 
-以下是 registry 中的全部 129 个基准。README 保留完整表格作为一等阅读界面。
+以下是 registry 中的全部 131 个基准。README 保留完整表格作为一等阅读界面。
 
 <!-- CITATION-META:START -->
 引用数来自 Semantic Scholar，最后刷新 **2026-09-03**；`—` 标记以代码或数据为主要入口、论文匹配仍在核验的记录。引用数呈现影响力背景，阶段由测量演进判断。
@@ -372,6 +374,8 @@ flowchart TB
 | 🔭 前沿 | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | [1](https://www.semanticscholar.org/paper/09e4e85b7fadc40990563e1cf2847356d7c9fd23) | 2026-08-24 | 单次无特权交互写入后，恶意记忆的检索成功、条件生成与端到端攻击成功。 |
 | 🔭 前沿 | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | [0](https://www.semanticscholar.org/paper/68cebfa9bff38539f6dbd114310629168e7d6960) | 2026-08-24 | 反复压缩、分解与检索中的安全约束精确保留及下游行动遵从。 |
 | 🔭 前沿 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | [0](https://www.semanticscholar.org/paper/c73b59d446d064835acc4f499b12ae0b33c647de) | 2026-08-26 | 无显式边界的交错长对话中，对当前任务有效的 episode、状态覆盖、跨段桥接与局部约束能否被正确重建。 |
+| 🔭 前沿 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | — | 2026-09-01 | 测持久记忆中的虚假权限形成，以及错误授权向下游越权行动的传播。 |
+| 🔭 前沿 | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | — | 2026-09-01 | 测过期记忆与当前权威工具证据冲突时的过度信任，以及模型规模对该失败的影响。 |
 <!-- TABLE-FIRST:AREA:agent-memory:END -->
 
 <a id="registry-rag"></a>

@@ -6,7 +6,9 @@ import SiteFooter from "../../../components/SiteFooter.astro";
 import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
 import { loadRegistry } from "../../../lib/registry.mjs";
 import { loadResearchModel, localize } from "../../../lib/research-model.mjs";
-import { getProgressPoint, loadAllResultSets } from "../../../lib/results.mjs";
+import { loadAllResultSets } from "../../../lib/results.mjs";
+import { readFileSync } from "node:fs";
+import { fromRepositoryRoot } from "../../../lib/repository-path.mjs";
 import { absoluteUrl, localePath, sitePath } from "../../../lib/site.mjs";
 
 export function getStaticPaths() { return LOCALES.map((lang) => ({ params: { lang }, props: { lang } })); }
@@ -17,15 +19,11 @@ const items = [...loadRegistry()];
 const byId = new Map(items.map((item) => [item.id, item]));
 const research = loadResearchModel();
 const resultSets = loadAllResultSets();
-const progressPoints: any[] = [];
-for (const resultSet of resultSets.values()) {
-  const item = byId.get(resultSet.benchmark_id);
-  if (!item) continue;
-  const point = getProgressPoint(item, resultSet, new Date("2026-09-01T00:00:00Z"));
-  if (point.headroom !== undefined) progressPoints.push({ item, resultSet, point });
-}
-const maxAge = Math.max(...progressPoints.map((entry) => entry.point.ageDays), 1);
-const plot: any[] = progressPoints.map((entry) => ({ ...entry, x: 8 + (entry.point.ageDays / maxAge) * 84, y: 88 - Math.min(80, entry.point.headroom) }));
+const freshness = JSON.parse(readFileSync(fromRepositoryRoot("data", "freshness.json"), "utf8"));
+const scanDate = new Date(`${freshness.discovery_scan_at}T00:00:00Z`);
+const cutoff = new Date(scanDate.getTime() - freshness.window_days * 86_400_000);
+const asDate = (released: string) => new Date(`${released.length === 7 ? `${released}-01` : released}T00:00:00Z`);
+const recentItems = items.filter((item) => item.status === "active" && asDate(item.released) >= cutoff).sort((a,b) => b.released.localeCompare(a.released) || a.name.localeCompare(b.name));
 const canonicalPath = localePath(lang, "frontier/");
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", "frontier/");
 const title = lang === "zh" ? "Agent Evaluation Frontier｜追踪 Benchmark、成绩与研究进展" : "Agent Evaluation Frontier | Track Benchmarks, Results, and Research Progress";
@@ -40,16 +38,18 @@ const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", na
 
     <section class="frontier-progress">
       <div class="shell">
-        <header class="frontier-section-heading"><div><p class="eyebrow">Benchmark progress map</p><h2>{lang === "zh" ? "新鲜度 × 参考空间" : "Freshness × reference headroom"}</h2></div><p>{lang === "zh" ? "横轴从较早发布走向较新发布；纵轴越高，表示当前最佳分数到明确参考目标仍有更大空间。" : "The x-axis moves from older to newer releases; higher points indicate more room between the current best and an explicit reference target."}</p></header>
-        <div class="progress-map">
-          <svg viewBox="0 0 100 100" role="img" aria-label={lang === "zh" ? "Benchmark 新鲜度和参考空间散点图" : "Benchmark freshness and reference headroom scatter plot"}>
-            <path class="progress-map__grid" d="M8 8V88H96M8 28H96M8 48H96M8 68H96M30 8V88M52 8V88M74 8V88" />
-            {plot.map(({ item, point, x, y }) => <a href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}><circle class={`progress-map__point progress-map__point--${item.area}`} cx={x} cy={y} r={Math.min(3.6, 1.5 + point.activity * 0.25)}><title>{item.name} · {point.best} · {point.headroom}% headroom</title></circle></a>)}
-          </svg>
-          <div class="progress-map__x"><span>{lang === "zh" ? "较早发布" : "Older"}</span><span>{lang === "zh" ? "最近发布" : "Newer"}</span></div>
-          <div class="progress-map__legend">{Object.entries(copy.areas).map(([area, value]: any) => <span data-area={area}><i></i>{value.label}</span>)}</div>
+        <header class="frontier-section-heading"><div><p class="eyebrow">Frontier watchlist</p><h2>{lang === "zh" ? "最近 30 天：全部新收录 Benchmark" : "Last 30 days: every newly released benchmark in scope"}</h2></div><p>{lang === "zh" ? "这里不再做跨指标的伪归一化散点图。选入规则是客观的：在最近一次新基准扫描前 30 天内发布、属于三条 Radar 主线、且 canonical registry 中状态为 active 的全部 Benchmark，一个不抽样。" : "This replaces the cross-metric scatter plot. The inclusion rule is objective: every active canonical benchmark in the three Radar areas released within 30 days before the latest discovery scan—no sampling."}</p></header>
+        <div class="frontier-freshness-summary">
+          <strong>{lang === "zh" ? `新基准最近核验：${freshness.discovery_scan_at}` : `Discovery last verified: ${freshness.discovery_scan_at}`}</strong>
+          <span>{lang === "zh" ? `最近 ${freshness.window_days} 天共 ${recentItems.length} 个` : `${recentItems.length} in the last ${freshness.window_days} days`}</span>
+          <span>{lang === "zh" ? `Registry：${items.length} 个` : `Registry: ${items.length}`}</span>
+          <span>{lang === "zh" ? `结构化成绩轨道：${resultSets.size} 个` : `Structured result tracks: ${resultSets.size}`}</span>
         </div>
-        <div class="progress-list">{[...plot].sort((a, b) => b.point.headroom - a.point.headroom).slice(0, 6).map(({ item, point }) => <a href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}><span>{copy.areas[item.area].label}</span><strong>{item.name}</strong><b>{point.headroom}% <small>{lang === "zh" ? "参考空间" : "headroom"}</small></b><time datetime={point.lastResultDate}>{point.lastResultDate}</time></a>)}</div>
+        <div class="frontier-watchlist" role="table" aria-label={lang === "zh" ? "最近三十天 Benchmark 观察表" : "30-day benchmark watchlist"}>
+          <div class="frontier-watchlist__row frontier-watchlist__head" role="row"><b>{lang === "zh" ? "发布日期" : "Released"}</b><b>Benchmark</b><b>{lang === "zh" ? "方向" : "Area"}</b><b>{lang === "zh" ? "条目核验" : "Registry verified"}</b><b>{lang === "zh" ? "成绩轨道" : "Result track"}</b></div>
+          {recentItems.map((item) => { const rs = resultSets.get(item.id); return <a class="frontier-watchlist__row" role="row" href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}><time datetime={item.released}>{item.released}</time><strong>{item.name}</strong><span>{copy.areas[item.area].label}</span><time datetime={item.last_verified}>{item.last_verified}</time><span>{rs ? (lang === "zh" ? `已核验至 ${rs.verified_at}` : `verified ${rs.verified_at}`) : (lang === "zh" ? "尚未建立" : "not tracked yet")}</span></a>; })}
+        </div>
+        <p class="frontier-selection-note">{lang === "zh" ? "为什么这些 Benchmark 在这里？因为它们满足时间窗口与收录范围，而不是因为人工挑选了“看起来强”的点。真正的前沿判断放在下面的 Frontier shifts：每条判断都必须说明测量边界发生了什么变化。" : "Why these benchmarks? They satisfy the time window and scope rather than being hand-picked as visually impressive points. Actual frontier judgments live in Frontier shifts below, where each entry must state what changed in the measurement boundary."}</p>
       </div>
     </section>
 

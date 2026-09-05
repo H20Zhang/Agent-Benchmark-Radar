@@ -1,0 +1,16 @@
+{
+  "discovery_scan_at": "2026-09-05",
+  "window_days": 30,
+  "scope": [
+    "agent-memory",
+    "rag",
+    "data-agent"
+  ],
+  "sources": [
+    "arXiv recent/search",
+    "ACL Anthology",
+    "public benchmark repositories and leaderboards"
+  ],
+  "inclusion_rule": "Reusable benchmark or evaluation contribution with a public primary source and a measurement object inside the Radar scope. Methods without a distinct evaluation contribution are excluded.",
+  "note": "Benchmark discovery freshness is tracked separately from citation refresh and structured result-track verification."
+}

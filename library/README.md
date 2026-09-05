@@ -11,6 +11,8 @@
 
 | 时间 | Benchmark | 领域 | 角色 | 这次改变了什么 |
 |---:|---|---|---|---|
+| 2026-09-01 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | Agent Memory | 🔭 前沿 | 把持久记忆中的授权错误拆成“虚假权限形成”与“错误权限向真实行动传播”两阶段。 |
+| 2026-09-01 | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | Agent Memory | 🔭 前沿 | 把过期记忆与当前权威证据冲突做成受控实验，并显式测量失败如何随模型能力变化。 |
 | 2026-08-26 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | Agent Memory | 🔭 前沿 | 去掉 session/topic 边界，把“恢复真正约束当前任务的 episode”从隐含假设变成直接评测对象。 |
 | 2026-08-24 | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | Agent Memory | 🔭 前沿 | 把一次普通交互的恶意写入连到漂移后的检索与定向生成。 |
 | 2026-08-24 | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | RAG / Agentic Retrieval | 🔭 前沿 | 把 corpus snapshot 升级变成减去采样噪声的 compatibility regression。 |
@@ -198,6 +200,8 @@
 | 🔭 前沿 | [InjecMEM](https://arxiv.org/abs/2608.23471) <!-- benchmark-id:injecmem --> | 2026-08-24 | 单次无特权交互写入后，恶意记忆的检索成功、条件生成与端到端攻击成功。 | 把 write→drift→retrieve→generate 做成端到端攻击轨迹。 |
 | 🔭 前沿 | [The Compaction Cliff](https://arxiv.org/abs/2608.22752) <!-- benchmark-id:compaction-cliff --> | 2026-08-24 | 反复压缩、分解与检索中的安全约束精确保留及下游行动遵从。 | 把安全规则的 exact preservation 绑定到三类 context operator 和行为。 |
 | 🔭 前沿 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | 2026-08-26 | 无显式边界的交错长对话中重建当前任务真正绑定的 episode 与局部约束。 | 从 LongMemEval 的结构化跨 session 记忆推进到 episode boundary 本身未知的混合线程，并用精确 evidence trace 区分可见性与 episode integrity。 |
+| 🔭 前沿 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | 2026-09-01 | 持久记忆中的授权状态保持、虚假权限形成与越权行动传播。 | 把记忆安全从“内容是否正确”推进到“权限是否被忠实保持并影响行动”。 |
+| 🔭 前沿 | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | 2026-09-01 | 过期记忆与当前权威证据冲突时的过度信任，以及模型规模效应。 | 把记忆冲突失败从单一模型现象推进到能力依赖的受控比较。 |
 <!-- COMPLETE-MAP:agent-memory:END -->
 
 [进入 Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar)

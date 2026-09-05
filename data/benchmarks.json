@@ -6694,5 +6694,94 @@
       "updated_at": "2026-09-05",
       "status": "unmatched"
     }
+  },
+  {
+    "id": "eal-bench",
+    "name": "EAL-Bench",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-09-01",
+    "importance": 5,
+    "status": "active",
+    "summary": "Tests whether persistent agent memory preserves evolving authorization state and whether false permissions propagate into unauthorized downstream actions.",
+    "capabilities": [
+      "authorization-state-tracking",
+      "memory-update",
+      "provenance-preservation",
+      "downstream-action-safety"
+    ],
+    "environment": [
+      "persistent-agent-memory",
+      "tool-using-agent"
+    ],
+    "protocol": [
+      "memory-writer-executor",
+      "canonical-authorization-ledger",
+      "action-scoring"
+    ],
+    "scale": "Evaluates five LLMs as memory writers and two as executors across procurement, cybersecurity, and finance.",
+    "measurement_strength": "Separates formation of false authority in memory from propagation into executable unauthorized actions, making provenance and authorization state first-class memory-evaluation objects.",
+    "coverage_gap": "Does not yet establish behavior across broader agent stacks, long deployment histories, or heterogeneous real enterprise authorization systems.",
+    "confounders": [
+      "writer-model",
+      "executor-model",
+      "memory-update-format",
+      "authorization-policy-construction"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.01836"
+    },
+    "last_verified": "2026-09-05",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-05",
+      "status": "unmatched"
+    }
+  },
+  {
+    "id": "memory-trust-gap",
+    "name": "The Memory Trust Gap",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-09-01",
+    "importance": 4,
+    "status": "active",
+    "summary": "Measures when persistent-memory agents over-trust stale stored facts over current authoritative evidence and how that failure changes with model capability.",
+    "capabilities": [
+      "stale-memory-conflict",
+      "source-authority",
+      "recency-reasoning",
+      "memory-safety"
+    ],
+    "environment": [
+      "persistent-agent-memory",
+      "authoritative-tool-evidence"
+    ],
+    "protocol": [
+      "frozen-closed-set",
+      "action-scoring",
+      "factorial-intervention",
+      "model-scale-series"
+    ],
+    "scale": "Uses Benefit and Safety suites plus a 2×2×2×2 factorial over memory cues, evaluated across Qwen3 model sizes with replication on Llama-Instruct and external datasets.",
+    "measurement_strength": "Turns stale-memory over-trust into a controlled causal evaluation by separating useful-memory cases from cases where an authoritative tool contradicts memory.",
+    "coverage_gap": "Closed-set controlled tasks do not yet show how trust failures behave in long-lived open-world agents with multiple tools, writers, and changing source policies.",
+    "confounders": [
+      "model-scale",
+      "memory-framing",
+      "source-presentation",
+      "closed-set-task-design"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.01852"
+    },
+    "last_verified": "2026-09-05",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-05",
+      "status": "unmatched"
+    }
   }
 ]
