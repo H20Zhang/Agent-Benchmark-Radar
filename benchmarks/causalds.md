@@ -16,7 +16,7 @@ symbolic causal benchmark 常缺真实 data analysis，data-science benchmark �
 
 论文的 100-task exam 评估 6 个 contemporary agent：symbolic causal reasoning 相对接近解决，而 abstention、uncertainty quantification 与 coding/tool-use efficiency 仍明显拉开模型差距。不可回答问题也被作为一等 scored outcome，而不是 evaluator exception。
 
-## 这个分数能证明什么
+## 结论边界：这个分数能证明什么
 
 它对 causal reasoning + tool-grounded analysis 提供非常干净的 ground truth；但 scene 是 synthetic，因此对 algorithmic competence 的证据比对真实 messy observational science 的 ecological validity 更强。
 

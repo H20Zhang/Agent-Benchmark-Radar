@@ -26,7 +26,7 @@ Across 103 dbt tasks on DuckDB and Snowflake, hidden row-level verifiers inspect
 
 The Snowflake verifier fix without a rerun means pre-fix leaderboard results are not directly comparable with the repaired environment. The load-bearing confounders are backend-environment-drift, verifier-defects, missing-post-fix-rerun.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 The August verifier repair has no published post-fix leaderboard rerun, so earlier Snowflake results require qualification.
 

@@ -16,7 +16,7 @@ end-task success 会掩盖弱 memory：强模型可能仅靠当前 context 就�
 
 benchmark 包含 50 个模拟用户、每个 31 个隐藏维度，共 1,550 个 recovery target，并比较 5 种代表性 memory 条件/系统。即使 memoryless 条件下 assistance 也接近饱和，而 memory 的 category-balanced recovery 仍大约只有 0.6，并且在 top-k access 下进一步下降。核心结论是：**看起来会做事，不等于长期状态真的被保存好了**。
 
-## 这个分数能证明什么
+## 结论边界：这个分数能证明什么
 
 recovery score 能说明 **哪些信息真正进入了可查询的持久 memory representation**，尤其适合定位 write/compression loss。但它不意味着“保留得越多越好”：privacy、data minimization 与 task relevance 都可能让主动不保存成为正确策略。
 

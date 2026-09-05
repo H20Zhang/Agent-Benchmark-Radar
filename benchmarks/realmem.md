@@ -16,7 +16,7 @@ casual conversation / task dialogue 可以把 session 看成个人事实集合�
 
 benchmark 包含 11 类项目场景、超过 2,000 段 cross-session dialogue。合成 pipeline 结合 project foundation construction、multi-agent dialogue generation、memory/schedule management，使 project state 真正随时间变化。实验显示当前 memory system 在动态 context dependency 与长期 project state 管理上仍明显困难。
 
-## 这个分数能证明什么
+## 结论边界：这个分数能证明什么
 
 RealMem 能支持对 evolving project history 的 retrieval/reasoning 能力判断；但最终仍以 query answering 为主，因此只能间接说明 memory 会不会改善真正的项目执行、排程或 artifact delivery。
 

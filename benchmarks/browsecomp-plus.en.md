@@ -20,7 +20,7 @@ The ACL 2026 version reports Search-R1+BM25 at 3.86%, the GPT-5 benchmark agent 
 
 Align corpus/qrels, the 830-query subset, context cap, judge, search budget, and retriever. Different query-conditioned corpus construction or corpus scale requires a separate track.
 
-## Next evaluation coordinate
+## Score boundary and next evaluation coordinate
 
 Fixed corpora improve attribution but remove freshness and provider interfaces. BrowseComp-Plus_CM later shows that query-conditioned small corpora can underestimate evidence-discovery difficulty, making corpus construction itself a visible variable.
 

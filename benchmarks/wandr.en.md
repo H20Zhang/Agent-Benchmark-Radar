@@ -6,7 +6,7 @@
 
 Extends answer search to open-set discovery, hierarchical enrichment, and record-level refetch verification.
 
-## What It Follows
+## Genealogy: What It Follows
 
 Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
 
@@ -26,11 +26,11 @@ Five hundred Harbor task packages use required-volume denominators and URL/excer
 
 Unmatched stacks, a shared fetch backend, web drift, and an LLM judge make the results system-level evidence only. The load-bearing confounders are unmatched-system-stacks, shared-fetch-backend, web-drift, llm-judge.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 Live pages drift, the grader uses an LLM and fetch backend, and system providers, models, search tools, and harnesses are unmatched.
 
-## Where It Fits in the Map
+## Genealogy: Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
 

@@ -6,7 +6,7 @@
 
 Audits the proxy assumption that higher recall is better using downstream executable outcomes.
 
-## What It Follows
+## Genealogy: What It Follows
 
 Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
 
@@ -26,11 +26,11 @@ Paired fixed-pack evaluation with official Docker grading shows that higher reca
 
 The compound dedup treatment changes breadth, depth, rank, position, tokens, and distractors together; the causal result is limited to fixed slots. The load-bearing confounders are compound-packing-treatment, fixed-slot-context, single-shot-no-tools-harness.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 The dedup flag changes breadth, depth, rank, position, token count, and distractors together in a single-shot no-tools harness.
 
-## Where It Fits in the Map
+## Genealogy: Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
 

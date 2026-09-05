@@ -6,7 +6,7 @@
 
 Rebinds a raw retrieval number to license, query format, index construction, and recurring cost.
 
-## What It Follows
+## Genealogy: What It Follows
 
 Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
 
@@ -26,11 +26,11 @@ Thirteen embedders with paired bootstrap, license provenance, and separated cons
 
 Uneven format tuning, hosted drift, and a single corpus limit portability across models, systems, and time. The load-bearing confounders are uneven-query-format-search, hosted-endpoint-drift, single-corpus.
 
-## What It Still Does Not Measure
+## Remaining Gap: What It Still Does Not Measure
 
 Uneven query-format tuning, drifting hosted endpoints, and a single main corpus limit generality to raw exact-search retrieval.
 
-## Where It Fits in the Map
+## Genealogy: Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
 

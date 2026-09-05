@@ -26,7 +26,7 @@ For the same GPT-5.6 Sol agent, evidence recall falls from 84.3% to 21.4% and me
 
 The 57 questions are a projection-survivor subset, and GPT-5.6 Sol already answers 70.2% of them closed-book. Hop decomposition, support judgments, and qrel expansion also use GPT-5.5 / Claude Opus 5 judgments, while the released comparison exposes only a BM25 interface. The current Hugging Face card also says both that `qrels` has 6,695 rows and that duplicate expansion should produce 12,140 rows; the downloadable size and reproduction guide point to 6,695, so the expansion version is unresolved. The corpus-swap result is strong, but cross-retriever, cross-model, and contamination generalization remains limited.
 
-## What remains uncovered
+## Remaining Gap: What remains uncovered
 
 The result needs replication on larger independently authored question sets, more retrieval interfaces, and protocols that require explicit citations—especially to separate evidence exposure, evidence use, and parametric recall.
 
