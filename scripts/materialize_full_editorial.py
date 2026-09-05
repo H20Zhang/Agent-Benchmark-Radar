@@ -19,6 +19,24 @@ if missing:
 rewrite_onboarding(ROOT / "README.md", "zh")
 rewrite_onboarding(ROOT / "README.en.md", "en")
 
+# Preserve the repository's explicit publication boundary. This temporary
+# materializer rewrites onboarding, but it must not silently declare the WIP
+# website authoritative before the durable publication workflow does so.
+def preserve_wip_marker(path: Path, marker: str) -> None:
+    text = path.read_text()
+    if marker in text:
+        return
+    badge_end = "</p>\n"
+    badge_pos = text.find(badge_end, text.find("actions/workflows/validate.yml"))
+    if badge_pos < 0:
+        raise SystemExit(f"could not locate README badge paragraph in {path}")
+    insert_at = badge_pos + len(badge_end)
+    text = text[:insert_at] + f"<p><strong>{marker}</strong></p>\n" + text[insert_at:]
+    path.write_text(text)
+
+preserve_wip_marker(ROOT / "README.md", "网站待完善；当前内容以本 README 为准。")
+preserve_wip_marker(ROOT / "README.en.md", "Website under improvement; this README is the source of truth for now.")
+
 # All 126 pages are now explicitly authored. Remove runtime-generated generic padding:
 # a rendered page should be exactly the reviewed source Markdown.
 deep = ROOT / "web/src/lib/deep-reads.mjs"
@@ -38,7 +56,6 @@ v = validator.read_text()
 needle = 'MIN_NOTE_CHARS = 450'
 if needle in v and 'RESEARCH-DECISION:START' not in v:
     v = v.replace(needle, needle + '\nDECISION_MARKER = "<!-- RESEARCH-DECISION:START -->"')
-    # Insert marker validation immediately after markdown is read wherever possible.
     marker = 'text = path.read_text'
     if marker in v:
         v = v.replace(marker, marker, 1)
