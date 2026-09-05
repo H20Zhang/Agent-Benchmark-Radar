@@ -32,18 +32,19 @@ class WebPublicationContractTest(unittest.TestCase):
         self.assertIn("npm run check", text)
         self.assertIn("npm run build", text)
 
-    def test_readmes_keep_the_wip_website_hidden(self):
+    def test_readmes_publish_the_website_as_a_first_class_surface(self):
         markers = {
-            "README.md": "网站待完善；当前内容以本 README 为准。",
-            "README.en.md": "Website under improvement; this README is the source of truth for now.",
+            "README.md": "https://h20zhang.github.io/Agent-Benchmark-Radar/zh/",
+            "README.en.md": "https://h20zhang.github.io/Agent-Benchmark-Radar/en/",
         }
         for filename, marker in markers.items():
             text = (ROOT / filename).read_text(encoding="utf-8")
             with self.subTest(filename=filename):
-                self.assertNotIn(SITE_URL, text)
-                self.assertIn(marker, text[:5000])
+                self.assertIn(marker, text[:6000])
+                self.assertNotIn("网站待完善；当前内容以本 README 为准。", text[:6000])
+                self.assertNotIn("Website under improvement; this README is the source of truth for now.", text[:6000])
 
-    def test_public_web_source_uses_positive_fields_and_research_tool_ui(self):
+    def test_public_web_source_is_content_first_and_indexable(self):
         public_paths = [
             ROOT / "web" / "src" / "components",
             ROOT / "web" / "src" / "layouts",
@@ -56,13 +57,19 @@ class WebPublicationContractTest(unittest.TestCase):
             for path in directory.rglob("*")
             if path.is_file()
         )
+        home = (ROOT / "web" / "src" / "pages" / "[lang]" / "index.astro").read_text(
+            encoding="utf-8"
+        )
 
         self.assertNotIn("coverage_gap", source)
         self.assertNotIn("```mermaid", source)
         self.assertIn("data-filter-form", source)
-        self.assertIn("wip-shell", source)
-        self.assertIn("Website under improvement", source)
-        self.assertIn('robots="noindex,nofollow"', source)
+        self.assertIn('robots="index,follow"', home)
+        self.assertIn("Latest releases", home)
+        self.assertIn("Research signals", home)
+        self.assertIn("content-home__table", home)
+        self.assertNotIn("wip-shell", home)
+        self.assertNotIn("Website under improvement", home)
         self.assertIn("benchmark-at-a-glance", source)
         self.assertIn("data-suite-builder", source)
         self.assertNotIn("evaluation-loop", source)
