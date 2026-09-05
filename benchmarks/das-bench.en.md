@@ -33,3 +33,27 @@ The generation method is not yet public, and the shared generation backbone is a
 ## Where It Fits in the Map
 
 `map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DAS-Bench and DAS-Eval for academic surveys as complete artifacts, including literature organization, claims, citations, and presentation. Multiple criteria are richer than stylistic preference, but shared or related generation and grading models require independent bias checks.
+
+### What a concrete task looks like
+
+Illustrative task: from a topic and paper pool, a system builds a taxonomy, organizes arguments, and produces a readable survey. Broad coverage with a poor taxonomy and polished presentation with unsupported claims are different artifact failures.
+
+### Most discriminating experiment
+
+Fix the paper pool and generation budget, obtain blinded human pairwise judgments, and test whether automatic metrics preserve the ranking. Score rendering and argument quality separately and repeat across evaluators to distinguish style preference from research quality.
+
+### Pair with
+
+[litreview-arena](litreview-arena.en.md) · [claimprobe](claimprobe.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

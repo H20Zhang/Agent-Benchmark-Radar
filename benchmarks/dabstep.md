@@ -32,6 +32,30 @@ DABstep 对 bounded financial workspace 下 end-to-end analytical execution 证�
 
 在 source selection、join/mapping、computed quantity 等中间步骤加入 deterministic checkpoint，既保留 objective grading，又能定位 multi-step workflow 到底在哪一步失败。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验文档中的业务规则能否贯穿多步数据分析。单一支付领域有利于深入诊断，但不应当作通用行业能力；精确答案背后的规则选择和中间转换，比最终字符串匹配更能解释失败。
+
+### 一个具体任务长什么样
+
+示意任务：系统从交易文件和规则文档中确定计算口径，处理例外条件并汇总成一个精确答案。漏掉一个规则例外，可能让所有代码都成功执行但结果整体偏离。
+
+### 最有判别力的实验
+
+固定公开数据版本和步骤预算，比较原文档、结构化规则与正确中间表给定。按任务难度与规则组合分项，记录格式错误和数值错误，判断方法是在读懂规则还是仅改善输出规范。
+
+### 建议搭配
+
+[warehouse-reliability-bench](warehouse-reliability-bench.md) · [dataspace](dataspace.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single-table analysis → heterogeneous documented workspace → objectively graded multi-step data agent`

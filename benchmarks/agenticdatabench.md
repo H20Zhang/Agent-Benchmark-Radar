@@ -98,6 +98,30 @@ AgenticDataBench 已经提升了 coverage transparency，但仍没有完整测�
 
 进一步还可以构建一个 `skill × harness × backbone` 矩阵，检查所谓 skill weakness 是否跨系统稳定。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究数据工作流中技能覆盖与组合，而不只看几个热门任务的平均成功率。技能分类本身也是建模选择；生成任务覆盖了某个标签，并不意味着已覆盖真实业务中该技能的全部难点。
+
+### 一个具体任务长什么样
+
+示意任务：一个业务分析请求同时需要发现数据、转换格式、执行计算和解释结果。系统可能每个孤立技能都能完成，却在组合时丢失状态或采用错误中间假设，因此需要检查技能依赖。
+
+### 最有判别力的实验
+
+将相同技能的单独任务与组合任务配对，按领域留出测试，并固定工具与骨干。分开报告真实业务任务和生成覆盖任务，检查收益是否在新技能组合中保持，而不是只适配既定分类与模板。
+
+### 建议搭配
+
+[datascibench](datascibench.md) · [dsaeval](dsaeval.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `end-to-end data tasks → skill-labeled coverage → causal capability diagnosis → capability-targeted improvement`

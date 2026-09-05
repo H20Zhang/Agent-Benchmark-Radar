@@ -28,6 +28,30 @@ Constraint construction and evaluation are load-bearing. Ambiguous constraints c
 
 Real preference drift/conflict, action-level constraint application, permissions/authority/revocation, downstream harm from stale constraints, and matched retrieval/state-reconstruction cost remain open.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LoCoMo-Plus when a new query does not explicitly cue the relevant historical constraint. The useful control is whether the same latent constraint remains effective under both direct and semantically distant cues, rather than another explicit-fact recall test.
+
+### What a concrete task looks like
+
+Illustrative task: a user previously expressed a persistent constraint and later asks a choice question using different language. The response should apply the constraint without another reminder, while avoiding unjustified application to unrelated questions.
+
+### Most discriminating experiment
+
+Construct direct-cue, indirect-cue, and explicitly inapplicable queries for the same history under one answerer. Measure constraint retrieval, correct application, and over-application separately. Consistency alone can hide inappropriate use of obsolete or irrelevant constraints.
+
+### Pair with
+
+[inmind](inmind.en.md) · [memtrapbench](memtrapbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy consequence
 
 `multi-session factual recall → temporal/update reasoning → latent user-state constraint → future memory-guided action`

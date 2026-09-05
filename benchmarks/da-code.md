@@ -32,6 +32,30 @@ repository-scale engineering、heterogeneous documentation、business semantics�
 
 构造 paired task：同一目标分别要求 one monolithic program 与 multi-step inspect-and-repair workflow，直接测 agentic iteration 相比更强 code generation 的额外价值。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究面向真实数据的规划与可执行代码，而不是只评语言形式。清洗、探索和建模的结果类型不同；一个总体正确率不足以说明方法改善的是数据理解、代码生成还是故障恢复。
+
+### 一个具体任务长什么样
+
+示意任务：系统根据任务数据构造处理流程，可能先修正类型或缺失值，再进行分析或训练。代码能运行却悄悄丢弃关键行，仍可能使最终结果偏离要求。
+
+### 最有判别力的实验
+
+固定数据与运行环境，按清洗、探索和机器学习分别报告，并加入正确数据摘要给定条件。限制并对齐调试次数，单独记录代码成功执行和结果正确，防止把运行率当作分析质量。
+
+### 建议搭配
+
+[ds-1000](ds-1000.md) · [datascibench](datascibench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `library-level code → grounded multi-operation analysis code → iterative data-analysis agent`

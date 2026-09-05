@@ -32,6 +32,30 @@ Real group spaces include permissions, private threads, changing membership, mod
 
 Add oracle speaker-aware retrieval and compare raw-message, per-user, thread, and graph memory under the same answer model. This would reveal whether the main loss happens when memories are written or when the model reasons over correctly retrieved social state.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use GroupMemBench for speaker identity, beliefs, and audience conditioning in multi-party interaction. Flattening a group log into one user's memory removes the central variables. A true statement can still fail through incorrect attribution or role-specific terminology.
+
+### What a concrete task looks like
+
+Illustrative task: participants hold different beliefs about a plan, and a term has different meanings across teams. The asker's identity changes the appropriate interpretation. Retrieval must retain speakers, reply relations, and audience context together with content.
+
+### Most discriminating experiment
+
+Keep dialogue text fixed while retaining, hiding, or shuffling roles and reply structure, and score by asker. Failure with correct metadata points to belief reasoning. Benefits restricted to human-provided role labels do not establish autonomous group-memory construction.
+
+### Pair with
+
+[gatemem](gatemem.en.md) · [came-bench](came-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `single-user memory → speaker-grounded group memory → socially governed shared state`

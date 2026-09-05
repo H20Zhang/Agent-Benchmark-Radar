@@ -33,3 +33,27 @@ explicit consent labels 与 exact-string leakage proxy 没有覆盖 inference、
 ## 放进演化图怎么看
 
 `map_delta=early_signal`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合把隐私授权与个性化效用放在同一实验里权衡。精确值没有被复述并不代表信息无法被推断；因此它更适合作为同意处理和直接披露的诊断，而不是完整隐私安全证明。
+
+### 一个具体任务长什么样
+
+示意任务：系统保存了一项个人偏好与一项需要授权的信息，当前服务请求只需使用其中一部分。正确行为可能是利用获准内容、询问授权或避免披露，而不是在所有情形下统一回答或统一拒绝。
+
+### 最有判别力的实验
+
+对相同用户画像切换授权状态，并固定服务问题，联合绘制任务质量与披露风险。除精确字符串泄露外增加语义复述检查；把不必要的授权询问单列，避免用大量摩擦换取表面的隐私分数。
+
+### 建议搭配
+
+[gatemem](gatemem.md) · [permemsafe](permemsafe.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

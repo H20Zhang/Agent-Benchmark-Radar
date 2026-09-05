@@ -32,6 +32,30 @@ DSGym 清洗既有任务，并新增 DSBio 与 DSPredict，覆盖 bioinformatics
 
 对每个 benchmark source 公布 shortcut filtering 前后的 performance delta，直接量化过去看似的 data-agent progress 有多少其实来自 benchmark leakage 或“不用数据也能答”。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合在统一可执行接口中比较和训练数据科学智能体，尤其需要排除不看数据也能作答的捷径。接口统一减少环境差异，但重映射的来源基准仍有不同难度与语义，不能只看拼接总分。
+
+### 一个具体任务长什么样
+
+示意任务：智能体在隔离容器与有状态笔记本中访问只读数据，并在可写工作区进行分析。题目应该要求实际读取数据；仅凭题干常识或泄露答案就能完成的任务会削弱评价。
+
+### 最有判别力的实验
+
+固定容器和智能体接口，按来源数据集与分析类型报告，并重跑无数据对照。比较相同训练量下的跨任务迁移，在未见数据集和容器扩展上检查收益，避免把标准化适配当作通用能力提升。
+
+### 建议搭配
+
+[datascibench](datascibench.md) · [dsaeval](dsaeval.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `fragmented data-science benchmarks → grounded standardized gym → execution-verified agent training/evaluation`

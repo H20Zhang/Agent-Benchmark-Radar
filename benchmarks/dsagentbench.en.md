@@ -28,6 +28,30 @@ Harness and computer-use stack are tightly coupled with model capability. Cross-
 
 Persistent multi-session project state, enterprise business semantics, clarification/approval, deployment monitoring, authority/permissions, irreversible actions, and full lifecycle cost remain outside the core protocol.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DSAgentBench for complete data-science work in real computer environments, from tool orchestration to artifact validation. Real interfaces add realism and fragility. Failures can arise from operating systems or tool versions rather than data reasoning alone.
+
+### What a concrete task looks like
+
+Illustrative task: an agent moves among terminals, notebooks, browsers, and databases to clean, model, visualize, and deliver validated artifacts. Correct code can still fail if it was not run in the target environment or saved correctly.
+
+### Most discriminating experiment
+
+Pin environment images, tool versions, and budgets, reporting infrastructure failures without dropping them from the denominator. Compare direct tool interfaces with GUI operation to separate data competence from interface execution. Grade artifacts independently of how smooth the trajectory appears.
+
+### Pair with
+
+[dsaeval](dsaeval.en.md) · [dsgym](dsgym.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy consequence
 
 `executable code → workflow-oriented data-agent evaluation → real-computer end-to-end execution`

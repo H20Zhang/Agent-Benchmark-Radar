@@ -32,6 +32,30 @@ The benchmark is small and intentionally adversarial to direct similarity. Real 
 
 Measure how often indirect relevance occurs in real personal-agent logs and compare three interfaces under equal cost: query expansion, world-knowledge-conditioned retrieval, and agentic search. The systems question is whether a cheap trigger can detect when ordinary similarity retrieval is unsafe.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use InMind when relevance depends on a world-knowledge bridge rather than semantic similarity. It challenges the assumption that similarity retrieval suffices. Failure on an indirect query may also reflect missing bridge knowledge in the backbone, so controls are needed before blaming retrieval.
+
+### What a concrete task looks like
+
+Illustrative task: a personal fact is stored in history, while a new query uses different concepts whose relation requires world knowledge. Direct recall may succeed without the system knowing when to retrieve the fact proactively.
+
+### Most discriminating experiment
+
+Pair direct and indirect queries for each fact and add an in-context-fact condition. First test whether the backbone can make the bridge with evidence supplied, then evaluate retrieval routing. Add lexically similar but irrelevant distractors to check whether a method merely broadens recall.
+
+### Pair with
+
+[locomo-plus](locomo-plus.en.md) · [came-bench](came-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `semantic recall → query-conditioned retrieval → knowledge-mediated relevance discovery`

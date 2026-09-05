@@ -23,3 +23,27 @@ Align dataset revision, answerer, embedding/retrieval model, memory harness, ing
 ## Next evaluation coordinate
 
 The four-way decomposition is useful, but the final outcome is still mostly question answering. The next coordinate is whether memory improves later planning and action while exposing the cost and failure propagation of writing, consolidation, and forgetting.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MemoryAgentBench for incremental ingestion, updating, and selective forgetting rather than merely a static vector store. The experimental object is a memory system that continually absorbs information. Re-indexing the complete history at once changes the online capability being tested.
+
+### What a concrete task looks like
+
+Illustrative task: information arrives over multiple turns, facts are stored, revisions or forgetting requirements follow, and later questions depend on the resulting memory. Inspect not only answers but also how information enters, persists in, and leaves the store.
+
+### Most discriminating experiment
+
+Keep the input order fixed, compare incremental maintenance with rebuilding each round, and charge all write-side computation. Then replace the write or forgetting mechanism under a fixed answerer. Check whether gains hold across the four competencies rather than trading forgetting quality for retrieval accuracy.
+
+### Pair with
+
+[longmemeval](longmemeval.en.md) · [memevobench](memevobench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

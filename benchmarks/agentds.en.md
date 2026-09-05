@@ -76,6 +76,30 @@ The highest-value extension is not simply more static challenges, but a **longit
 
 That would separate “agents score better on benchmarks” from “agents actually reduce data-team workload.”
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use AgentDS to study domain expertise and human–AI collaboration in predictive tasks. Team performance combines expertise, time, and tooling, so it is not a direct autonomous-agent baseline. Specify whether the comparison concerns systems, teams, or collaboration modes.
+
+### What a concrete task looks like
+
+Illustrative task: industry data combines structured fields, time series, or context, and participants select features and models for prediction. Experts may benefit from understanding business processes and metrics, distinct from coding competence alone.
+
+### Most discriminating experiment
+
+Compare autonomous agents, humans, and human–AI teams on matched tasks with controlled time, compute, and information access, documenting expertise. Report industry and metric slices rather than compressing different levels of human intervention into an AI-capability score.
+
+### Pair with
+
+[tml-bench](tml-bench.en.md) · [mle-bench](mle-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Evolution position
 
 `isolated data task → end-to-end data-science agent → human–AI team effectiveness`

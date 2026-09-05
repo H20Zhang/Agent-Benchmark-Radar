@@ -33,3 +33,27 @@ Generated questions, similarity selection, one ICLR-style domain, and model-vali
 ## Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MAPLE to test whether a paper is consistently discoverable through motivation, method, and result aspects. Any-aspect success differs from all-aspect success. Average recall can hide a representation that encodes only the most salient aspect.
+
+### What a concrete task looks like
+
+Illustrative task: several information needs target the same paper through its motivation, method structure, or experimental finding. Retrieval should identify the work across these expressions, not only when the query resembles its title.
+
+### Most discriminating experiment
+
+Pair evaluations by paper and report any-aspect, all-aspect, and per-aspect coverage under a fixed representation budget. Compare one summary, multi-aspect representations, and full-text indexing, reviewing hard negatives to avoid inflated differences from false-negative labels.
+
+### Pair with
+
+[bright-pro](bright-pro.en.md) · [sage](sage.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

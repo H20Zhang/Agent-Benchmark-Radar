@@ -28,6 +28,30 @@ If a memory method claims long-term security or resistance to prompt injection, 
 
 The main gaps are additional backbones, fully executable delivery channels, natural memory drift, and explicit security–utility curves. The experiment most likely to change the conclusion would compare multiple memory stores under the same backbone, attack set, and benign workload instead of comparing two packaged agents with different surrounding systems.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MPBench for cross-session memory poisoning across write channels. Unlike same-session prompt injection, it requires evidence of persistence before later effects are measured. Differences in channels and write policies should not be interpreted directly as differences in model safety.
+
+### What a concrete task looks like
+
+Illustrative task: external context or tool feedback enters a write session, then a fresh query session performs a benign task. Reappearance there establishes a cross-session path; merely continuing the original context does not provide that control.
+
+### Most discriminating experiment
+
+Match content and budgets across channels and measure write admission, later retrieval, and final deviation, including a persistence-disabled control. Report benign utility with security metrics to distinguish safe writing from apparent safety achieved by not using memory.
+
+### Pair with
+
+[injecmem](injecmem.en.md) · [gatemem](gatemem.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 MPBench creates the key transition from benign memory fidelity to persistent poisoning; `map_delta=splits`. It adds a distinct safety coordinate to memory evaluation: **can memory be maliciously written, and can that state be reactivated later?**

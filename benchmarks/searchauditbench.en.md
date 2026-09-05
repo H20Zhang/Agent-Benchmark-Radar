@@ -23,3 +23,27 @@ Align trajectory corpus, failure sampling, cause taxonomy, repair execution/judg
 ## Next evaluation coordinate
 
 The next step places the auditor online and tests whether early intervention actually reduces final failures rather than merely explaining them after the fact.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use SearchAuditBench for post-hoc localization, attribution, and repair of search failures, not general success of the original search agent. Failure-only sampling changes the distribution. A strong failure auditor may still over-correct successful trajectories.
+
+### What a concrete task looks like
+
+Illustrative task: an auditor receives a long failed search trace and must locate the decisive deviation, explain its cause, and propose an executable repair. The wrong final answer may be a symptom of an earlier incorrect assumption rather than the root cause.
+
+### Most discriminating experiment
+
+Evaluate localization, cause classification, and post-repair execution separately, adding successful traces to measure false alarms. Fix the original agent and remaining budget and compare audit-guided repair with restarting, ensuring gains do not merely come from more search compute.
+
+### Pair with
+
+[agenticragtracer](agenticragtracer.en.md) · [deepresearch-bench](deepresearch-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

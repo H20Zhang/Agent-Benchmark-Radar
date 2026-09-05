@@ -98,6 +98,30 @@ If the intervention primarily improves the predicted slice while leaving unrelat
 
 A further extension is a `skill × harness × backbone` matrix to test whether observed skill weaknesses remain stable across system choices.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use AgenticDataBench for skill coverage and composition in data workflows rather than averages over a few popular tasks. The skill taxonomy is itself a modeling choice. Generated tasks carrying a label do not establish coverage of all real business difficulties associated with it.
+
+### What a concrete task looks like
+
+Illustrative task: a business request combines discovery, transformation, computation, and interpretation. A system may solve each skill in isolation yet lose state or adopt wrong intermediate assumptions when composing them, motivating dependency-level inspection.
+
+### Most discriminating experiment
+
+Pair isolated and composed tasks for the same skills, hold out domains, and fix tools and backbone. Report real business and generated-coverage tasks separately and test new skill compositions rather than only fitting the taxonomy and templates.
+
+### Pair with
+
+[datascibench](datascibench.en.md) · [dsaeval](dsaeval.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `end-to-end data tasks → skill-labeled coverage → causal capability diagnosis → capability-targeted improvement`

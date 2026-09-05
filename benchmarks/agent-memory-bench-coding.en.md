@@ -32,6 +32,30 @@ The most transferable idea is **proof-of-treatment + executable outcome + cost a
 
 The largest gaps are statistical power, cross-backbone/harness transfer, and independence from an author-built treatment. The highest-leverage next study would expand the number of real repository tasks, run the same neutral-feed protocol across multiple coding agents, and preregister both intention-to-treat and treatment-on-treated estimands. That would preserve integration failures while still answering whether memory helps when it is genuinely used.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use Agent Memory Bench for coding agents to verify actual use of prior-task memory, not merely integration of a memory service. Proof that the treatment took effect is important, while a small survivor-selected pilot cannot establish broad product superiority.
+
+### What a concrete task looks like
+
+Illustrative task: a precursor session contains experience not inferable from the current repository, a later coding task can use it, and a hidden executable oracle grades the outcome. Neutral feeds prevent memory systems from receiving differently informative inputs.
+
+### Most discriminating experiment
+
+Keep neutral feeds and treatment-admission checks, but report both all assigned cases and conditional results on admitted cases. Compare no memory and raw-transcript retrieval, including ingestion, query, and coding-session costs, so survivor selection cannot inflate net benefit.
+
+### Pair with
+
+[past-bench](past-bench.en.md) · [dreambench-swe](dreambench-swe.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `map_delta=reinforces`, bound to `memory-action-utility`. It independently strengthens the causal-treatment direction represented by PAST-Bench, while the current null result does not alter the defining chain. The benchmark contract worth carrying forward is: **verify that memory was used before claiming a causal memory benefit**.

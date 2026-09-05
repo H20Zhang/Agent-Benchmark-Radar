@@ -32,6 +32,30 @@ business semantics、permission、schema drift、多数据库系统、write oper
 
 让同一套 BIRD-optimized schema/value retrieval 不改配置地迁移到 Spider 2.0 与 LiveSQLBench，检查 value grounding 是通用能力还是 benchmark-specific engineering。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究数据库值、脏数据与外部知识对 SQL 正确性的影响。查询效率应在结果正确的前提下解释；更快执行一条语义错误的查询，不构成数据库问答系统的有效改进。
+
+### 一个具体任务长什么样
+
+示意任务：问题中的业务描述与数据库字段值不直接一致，系统需要查看数据并使用给定知识确定筛选和连接条件。只读模式定义可能无法处理缩写、缺失值或编码差异。
+
+### 最有判别力的实验
+
+固定外部知识、数据库内容与执行预算，比较只看模式、允许值检索和正确值给定。对正确查询单独测运行代价，并复核金标查询争议，避免把标注问题或缓存差异算作方法能力。
+
+### 建议搭配
+
+[spider](spider.md) · [livesqlbench](livesqlbench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `unseen schema → database-value grounding → enterprise metadata/workflow reasoning`

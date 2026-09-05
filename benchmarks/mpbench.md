@@ -35,3 +35,27 @@ MPBench 的 headline score 描述的是 **system + harness 的 persistent-poison
 MPBench 补上了 memory safety 从良性 fidelity 到 persistent poisoning 的关键过渡；`map_delta=splits`。它把“记忆是否正确”拆成新的安全坐标：**记忆能否被恶意写入，以及未来是否会被重新激活。**
 
 Primary: https://arxiv.org/abs/2606.04329
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究不同写入渠道中的跨会话记忆污染。它与同一会话的提示注入不同，必须先证明内容进入持久记忆，再观察后续任务；渠道和写入策略不同的系统不应被直接解释为模型安全性差异。
+
+### 一个具体任务长什么样
+
+示意任务：外部上下文或工具反馈进入写入会话，查询会话则重新启动并处理正常任务。记录在后一个会话中再次出现，才说明影响跨越了会话边界；同一上下文的延续不能替代这个控制。
+
+### 最有判别力的实验
+
+对不同渠道采用相同内容与预算，分别统计写入接受、后续检索和最终偏移，并增加持久记忆关闭条件。正常任务效用必须和安全指标一起报告，才能分清安全写入策略与不使用记忆造成的表面优势。
+
+### 建议搭配
+
+[injecmem](injecmem.md) · [gatemem](gatemem.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

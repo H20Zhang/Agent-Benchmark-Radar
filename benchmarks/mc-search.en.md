@@ -23,3 +23,27 @@ Align knowledge-base artifact, multimodal backbone, hop budget, judge, and traje
 ## Next evaluation coordinate
 
 The next step allows multiple valid trajectories and jointly evaluates modality choice, real latency/cost, and final evidence sufficiency.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MC-Search to diagnose modality selection, missing evidence, and planning errors in multimodal search chains. Hop annotations provide localization, not necessarily a unique valid path. Differences between paper-scale and released corpora can also change the reproduced task.
+
+### What a concrete task looks like
+
+Illustrative task: textual evidence points to an image, whose detail determines the next search target. The agent must switch between text and vision. Text-only retrieval or final-answer-only grading can conceal modality-selection failures.
+
+### Most discriminating experiment
+
+Fix the released corpus version and separately supply correct modalities, intermediate evidence, and subquestions to measure recovery. Review evidence-supported alternative paths and report paper-scale and public-subset results separately rather than attributing resource differences to policy.
+
+### Pair with
+
+[merrin](merrin.en.md) · [visdocagentbench](visdocagentbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

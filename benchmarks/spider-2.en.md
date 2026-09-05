@@ -32,6 +32,30 @@ Business definitions, ambiguous stakeholder intent, governance, permission, prod
 
 Decompose performance into metadata discovery, semantic/schema resolution, workflow planning, query execution, and repair using oracle interventions. This would tell whether the 17% bottleneck is mostly retrieval/context or SQL/program synthesis.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use Spider 2.0 for metadata search, dialects, and repository navigation in enterprise SQL workflows, but identify the track first. The original paper setting, Snow, Lite, and DBT are not one task set. Track and version matter more than the umbrella name when interpreting difficulty or scores.
+
+### What a concrete task looks like
+
+Illustrative task: an agent inspects metadata and project documentation, runs several queries or modifies a transformation project, and delivers a result artifact. Correctness depends on schema, execution environment, and deliverable requirements rather than plausible-looking SQL alone.
+
+### Most discriminating experiment
+
+Report track, environment version, accessible metadata, and execution budget separately. Keep oracle-table conditions outside ordinary discovery rankings. Under a fixed backbone, compare metadata retrieval and workflow policies to locate discovery, generation, and execution gains.
+
+### Pair with
+
+[livesqlbench](livesqlbench.en.md) · [data-eng-bench](data-eng-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `single query → complex unseen schema → large enterprise SQL workflow`

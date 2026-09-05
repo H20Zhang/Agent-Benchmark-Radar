@@ -23,3 +23,27 @@ Mem-Gallery 用 multi-session visual-text conversations，在统一框架下比�
 ## 下一步评测坐标
 
 下一步应把 visual memory 接到真实环境 action，并验证细粒度 visual evidence 是否改变后续 tool choice 或 state update。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究视觉信息在长期对话中的保留与知识管理。必须先验证视觉确实参与解题：如果文本转述已包含答案，更高分可能来自语言推理，而非多模态记忆保存得更好。
+
+### 一个具体任务长什么样
+
+示意任务：早期会话展示一张图片，后续只用语言询问其中的细节或与另一张图的差异。系统应能追溯原始视觉证据；仅保留笼统图像描述可能丢掉决定答案的细粒度属性。
+
+### 最有判别力的实验
+
+固定视觉语言骨干，比较原图可访问、仅描述文本与压缩视觉记忆，并分开统计确实依赖图像的问题。记录写入后的信息损失和检索失败，避免把视觉编码能力与记忆机制的收益混为一谈。
+
+### 建议搭配
+
+[memeye](memeye.md) · [memlens](memlens.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

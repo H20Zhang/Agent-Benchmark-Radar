@@ -33,3 +33,27 @@ Live pages drift, the grader uses an LLM and fetch backend, and system providers
 ## Where It Fits in the Map
 
 `map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use WANDR for open-web research requiring broad discovery and deep enrichment of each record. Record-level verification reduces dependence on exhaustive gold sets, but valid records do not establish completeness. Distinguish discovery volume, validity, and enrichment quality.
+
+### What a concrete task looks like
+
+Illustrative task: an agent finds qualifying objects and supplies fields, source pages, and supporting excerpts for each. Many names with unreliable fields and a few excellent records with poor coverage are different failures.
+
+### Most discriminating experiment
+
+Fix requested volume, search tools, and fetch budget. Report deduplicated discovery, record validity, and field enrichment separately. Cache grading-time source snapshots and inspect unavailable pages so web drift or grader-fetch failures are not attributed to the research agent.
+
+### Pair with
+
+[gisa](gisa.en.md) · [autoresearchbench](autoresearchbench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

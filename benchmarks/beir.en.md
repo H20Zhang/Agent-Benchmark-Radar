@@ -91,6 +91,30 @@ For modern agentic retrieval, the highest-value use of BEIR is not to discard it
 
 If a complex agent improves final QA while weakening BEIR-style first-hop retrieval, the system should explain where the gain comes from rather than attributing everything to “better search.”
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use BEIR to ask whether a retriever generalizes across domains rather than fits one training distribution. BM25 is a meaningful systems baseline. Worst-domain performance, indexing cost, and query latency can change the ranking of approaches beyond average retrieval quality.
+
+### What a concrete task looks like
+
+Illustrative task: one retriever handles domains with different vocabulary, document lengths, and relevance definitions without retraining for each. A model strong on familiar text may lose to lexical retrieval in terminology-heavy or shifted domains.
+
+### Most discriminating experiment
+
+Fix dataset versions and the hyperparameter-selection rule; compare BM25, dense, and hybrid retrieval with per-dataset results. Separate per-domain tuning from zero-shot evaluation and repeat the comparison under matched latency or cost constraints.
+
+### Pair with
+
+[bright](bright.en.md) · [commercial-tax](commercial-tax.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Evolution position
 
 `single-domain retrieval → heterogeneous zero-shot retrieval → reasoning-intensive retrieval → iterative / agentic evidence search`

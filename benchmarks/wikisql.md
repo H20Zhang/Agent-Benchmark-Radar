@@ -32,6 +32,30 @@ WikiSQL 证明的是：模型能否把问题映射成一张已知 table 上的�
 
 今天更适合把 WikiSQL 当作一条 scaling curve 的低阶基线：single table → unseen multi-table schema → large dirty database → enterprise workflow，而不是 frontier endpoint。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合作为可执行自然语言数据库查询的历史参照，不宜作为复杂数据智能体的主要终点。单表查询的正确性与跨表关系、业务口径或端到端分析是不同层级的能力；今天使用它应说明其低阶控制组角色。
+
+### 一个具体任务长什么样
+
+示意任务：问题指定一张表中的筛选条件与聚合目标，系统生成 SQL 并执行。它可以检验条件和值是否映射正确，但无需在多个数据库中发现来源或推断业务关系。
+
+### 最有判别力的实验
+
+固定表、问题切分与执行环境，分别报告逻辑形式和执行结果，并区分是否使用执行反馈。把同一方法放到多表与未见模式任务中，观察优势是否保留，而不是把单表提升直接推广为数据库推理进步。
+
+### 建议搭配
+
+[spider](spider.md) · [bird](bird.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `natural-language database query → executable single-table SQL → cross-domain schema generalization`

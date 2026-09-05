@@ -35,3 +35,27 @@ PAST-Bench 等工作已经推动 memory 从 QA 走向 future action；这里进�
 ## 谱系位置
 
 `map_delta=reinforces`，绑定 `memory-action-utility`。它独立加强了 PAST-Bench 所代表的因果 treatment 评测方向，但目前零结果本身不修改 defining chain。真正值得推广的是“**验证 memory 被用过，再谈 memory 带来的因果收益**”这一 benchmark contract。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验编码智能体是否真的使用了前序任务记忆，而不是只把记忆服务接进系统。处理组实际生效的证据尤其重要；低样本量试验和存活样本筛选，仍不足以证明某种产品普遍优于其他方案。
+
+### 一个具体任务长什么样
+
+示意任务：前序会话中存在无法仅从当前仓库推出的任务经验，后续编码任务需要利用它，最终由隐藏可执行检查器评分。中性输入控制保证不同记忆系统不是先拿到了不同质量的提示。
+
+### 最有判别力的实验
+
+除遵守中性输入和处理生效检查外，报告所有分配样本的结果，以及只在处理生效样本上的条件结果。比较无记忆和原始记录检索，并纳入写入、查询与编码会话成本，避免存活筛选夸大净收益。
+
+### 建议搭配
+
+[past-bench](past-bench.md) · [dreambench-swe](dreambench-swe.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

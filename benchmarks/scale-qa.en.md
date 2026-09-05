@@ -10,3 +10,27 @@
 
 Primary: https://arxiv.org/abs/2608.25655
 Code/data: https://github.com/LordTARN1SHED/SCALE-QA
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use SCALE-QA for episode reconstruction in interleaved history, not a reduction of long-context memory to evidence recall. All evidence may be visible while the wrong context or constraint is applied. Treat it as a diagnostic of task binding rather than a generic retrieval leaderboard.
+
+### What a concrete task looks like
+
+Illustrative task: several projects interleave in a long thread without explicit boundaries, with recurring entities. A current query is governed by a local constraint from an earlier project. After retrieving entity-related snippets, the system must determine their episode membership.
+
+### Most discriminating experiment
+
+Keep questions and supporting evidence fixed while supplying interleaved history, correct episode boundaries, or operative state. Vary distractor length to separate episode identification from state reasoning. A reported full-context-model score is a historical baseline for that configuration, not the current best for the benchmark.
+
+### Pair with
+
+[came-bench](came-bench.en.md) · [statemembench](statemembench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

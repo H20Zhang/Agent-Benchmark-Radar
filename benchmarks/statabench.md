@@ -23,3 +23,27 @@ closed/practical/open scores 支持当前 topic mix、toolkit 与 competitions �
 ## 下一步评测坐标
 
 下一步应加强 assumption checking、uncertainty communication 和 causal/statistical model criticism，而不仅是选对函数。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合把统计知识、工具调用和完整建模报告放在同一评测设计中。闭合题和开放报告的证据强度不同；漂亮报告不保证统计方法正确，工具名称正确也不保证参数和适用前提正确。
+
+### 一个具体任务长什么样
+
+示意任务：系统根据数据和研究问题选择统计方法、执行工具并解释结果。若分布或独立性假设不成立，软件仍可能返回显著结果，因此应审查方法适用性而不只检查调用成功。
+
+### 最有判别力的实验
+
+分开报告知识题、工具参数和开放报告，固定工具集及评价器。增加违反统计前提的对照数据，检查系统是否改用合适方法或保留判断；开放报告还应进行独立方法学复核。
+
+### 建议搭配
+
+[causalds](causalds.md) · [dare-bench](dare-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

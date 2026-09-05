@@ -32,6 +32,30 @@ Repository-scale engineering, heterogeneous documentation, business semantics, l
 
 Construct paired tasks where the same target requires either one monolithic program or a multi-step inspect-and-repair workflow. This isolates the value of agentic iteration beyond stronger code generation.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DA-Code for grounded planning and executable code over real data rather than linguistic form. Wrangling, exploration, and modeling produce different outputs. Overall accuracy alone does not show whether gains arise from data understanding, generation, or recovery.
+
+### What a concrete task looks like
+
+Illustrative task: an agent builds a pipeline grounded in task data, correcting types or missing values before analysis or training. Executable code can silently discard important rows and produce a semantically wrong result.
+
+### Most discriminating experiment
+
+Pin data and runtime, report wrangling, exploration, and ML slices, and add supplied-correct-data-summary controls. Match debugging attempts and distinguish executable runs from correct outputs so execution rate is not mistaken for analysis quality.
+
+### Pair with
+
+[ds-1000](ds-1000.en.md) · [datascibench](datascibench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `library-level code → grounded multi-operation analysis code → iterative data-analysis agent`

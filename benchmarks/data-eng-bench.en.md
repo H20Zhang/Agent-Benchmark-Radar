@@ -33,3 +33,27 @@ The August verifier repair has no published post-fix leaderboard rerun, so earli
 ## Where It Fits in the Map
 
 `map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use data-eng-bench for repository-level dbt transformation and repair. Hidden row-level verification is stronger than compilation alone, but backend and verifier versions affect scores. A verifier fix does not automatically validate an older leaderboard.
+
+### What a concrete task looks like
+
+Illustrative task: an agent edits a transformation project so models execute on a target database and produce correct rows. Dialect, type, and runtime differences between DuckDB and Snowflake can make the same change behave differently.
+
+### Most discriminating experiment
+
+Pin project, backend, and hidden-verifier commits and re-run the same patch across backends, separating execution failures from output differences. Recompute all compared methods after verifier changes and retain versioned old results rather than attributing environment repairs to agents.
+
+### Pair with
+
+[spider-2](spider-2.en.md) · [dacomp](dacomp.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

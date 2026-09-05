@@ -32,6 +32,30 @@ Real business insight depends on stakeholder objectives, causal validity, opport
 
 Add blinded domain-expert scoring of unseen insights and downstream decision tasks. The key test is whether an agent finds something worth acting on, not only whether it rediscovers what benchmark designers planted.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use InsightBench for autonomous question formulation and insight extraction rather than only answering specified queries. Planted insights provide checkable targets, but recovering them differs from discovering real business value. Persuasiveness alone is not a measure of recommendation quality.
+
+### What a concrete task looks like
+
+Illustrative task: an agent receives business data, chooses changes worth examining, explores them, and recommends action. Finding an association does not provide evidence for causation; moving from an observation to an intervention requires additional justification.
+
+### Most discriminating experiment
+
+Measure insight coverage, factual accuracy, and actionable recommendations separately, using data without planted patterns to detect spurious discovery. Fix analysis budgets and compare supplied questions with autonomous question formulation to isolate goal selection from execution.
+
+### Pair with
+
+[ddr-bench](ddr-bench.en.md) · [causalds](causalds.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `answer a data query → discover a set of insights → decision-oriented business analysis`

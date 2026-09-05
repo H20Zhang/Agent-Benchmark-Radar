@@ -32,6 +32,30 @@ The suite does not establish durable learning across long real-world time spans,
 
 Cross a fixed model with no external memory, explicit episodic retrieval, procedural summaries, and learned skill representations while keeping the test prompt identical. The key question is which representation improves first-action transfer without increasing harmful persistence.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use ImplicitMemBench to diagnose whether experience changes the first behavior without an explicit recall request. The focus is automatic enactment rather than factual reproduction. Behavior after a short learning episode does not establish durable cross-session external memory.
+
+### What a concrete task looks like
+
+Illustrative task: a learning phase demonstrates an operating convention, interference follows, and a related situation tests whether the first response follows that convention. Allowing repeated correction changes the object being measured, so first-attempt and retry success must remain separate.
+
+### Most discriminating experiment
+
+Keep the learning episode fixed and test within the same context, in a new session with external memory, and without memory. Increase interference distance to distinguish recency, persistence, and response bias. Same-session gains alone do not establish long-term memory.
+
+### Pair with
+
+[evomembench](evomembench.en.md) · [past-bench](past-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `explicit recall → retained experience → automatic behavior change`

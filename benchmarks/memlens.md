@@ -32,6 +32,30 @@ MEMLENS 有 789 个问题、4 档 context length。对 evidence 包含图片的 
 
 构建 selective hybrid：只保留少量高价值 raw visual evidence，其余压缩，并同时画 accuracy–retained bytes–context length 曲线，直接验证 benchmark 暗示的架构方向。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合区分长上下文视觉模型的长度退化与外部记忆压缩造成的视觉损失。两类系统未必测试相同题集；比较前先对齐样本、视觉输入与预算，否则‘记忆胜过长上下文’容易成为混合条件的结论。
+
+### 一个具体任务长什么样
+
+示意任务：跨会话的图文历史逐步增长，后续问题要求恢复旧图中的信息或识别状态更新。原图仍可见时答错，与压缩阶段已丢掉关键像素，是不同的失败环节。
+
+### 最有判别力的实验
+
+只在共同问题子集上比较原始长上下文与外部记忆，分别给定原图和正确文字证据形成上界诊断。扫描历史长度时固定题目，并记录压缩、检索与回答阶段的成本，避免仅比较最终 token 数。
+
+### 建议搭配
+
+[memeye](memeye.md) · [mem-gallery](mem-gallery.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `long-context multimodal QA ↔ external memory agents → hybrid selective visual retention`

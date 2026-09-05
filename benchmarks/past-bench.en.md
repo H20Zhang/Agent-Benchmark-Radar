@@ -33,3 +33,27 @@ Generated tasks and graders may favor related frontier coding-model templates, a
 ## Where It Fits in the Map
 
 `map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use PAST-Bench for paired causal evidence that persistent state benefits later tasks. Saving files is not the target; the question is whether the same later task changes when earlier state is retained. Conclusions remain bounded by the generated task distribution.
+
+### What a concrete task looks like
+
+Illustrative task: an earlier episode produces reusable experience and a fresh agent session handles a related task. Prompts, seeds, and graders are matched, with access to prior state as the key difference, enabling measurement of the net persistence effect.
+
+### Most discriminating experiment
+
+Retain paired persistence-on/off runs and add length-matched irrelevant state and raw trajectories. Report paired differences, task-family slices, and full-cycle cost. Benefits that survive controls for extra text and computation support a contribution from experience content itself.
+
+### Pair with
+
+[memoryarena](memoryarena.en.md) · [agent-memory-bench-coding](agent-memory-bench-coding.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

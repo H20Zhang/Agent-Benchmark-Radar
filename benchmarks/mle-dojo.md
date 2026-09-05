@@ -33,3 +33,27 @@ MLE-Dojo 的结果支持 model + scaffold 在 **带真实 score feedback、有�
 在 MLE-bench 之后，MLE-Dojo 把终局评分推进到可训练的交互轨迹；`map_delta=reinforces`。它和后续 DeltaML / AI4AI 一起推动 Data Agent evaluation 从“交一个结果”走向“评估完整研究/工程循环”。
 
 Primary: https://arxiv.org/abs/2505.07782
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究带迭代评分反馈的机器学习工程轨迹与训练。在线得到的评分越接近最终目标，越需要防止对反馈集过拟合；它与只在终点查看隐藏结果的评测不是相同信息条件。
+
+### 一个具体任务长什么样
+
+示意任务：智能体每轮修改方案并收到评分，据此继续探索，最终选择一个提交。多轮过程使学习信号可见，也可能让系统围绕固定评分器试错，而不是获得可迁移的建模经验。
+
+### 最有判别力的实验
+
+在相同总预算下比较有反馈、延迟反馈与独立验证反馈，固定最终隐藏集。训练任务和评测竞赛分开，并分别报告最优尝试与首次尝试，避免 best-of-k 和反馈可见性共同夸大提升。
+
+### 建议搭配
+
+[mle-bench](mle-bench.md) · [dsgym](dsgym.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

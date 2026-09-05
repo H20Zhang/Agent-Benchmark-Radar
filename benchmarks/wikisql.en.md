@@ -32,6 +32,30 @@ The benchmark does not test generalization to complex unseen multi-table schemas
 
 Use WikiSQL mainly as a controlled lower rung in a scaling curve—single table → unseen multi-table schema → large dirty database → enterprise workflow—rather than as a frontier endpoint.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use WikiSQL as a historical anchor for executable natural-language database queries, not as the main endpoint for complex data agents. Single-table correctness differs from relational integration, business semantics, and end-to-end analysis. Make its role as a lower-complexity control explicit.
+
+### What a concrete task looks like
+
+Illustrative task: a question specifies filters and an aggregate over one table, and the system generates and executes SQL. This tests condition and value mapping without requiring multi-database discovery or business-relationship inference.
+
+### Most discriminating experiment
+
+Fix tables, splits, and execution environment; report logical-form and execution accuracy separately and disclose execution feedback. Test the same method on multi-table and unseen-schema tasks before generalizing single-table gains to database reasoning.
+
+### Pair with
+
+[spider](spider.en.md) · [bird](bird.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `natural-language database query → executable single-table SQL → cross-domain schema generalization`

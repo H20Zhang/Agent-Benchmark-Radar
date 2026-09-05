@@ -32,6 +32,30 @@ The task suite is intentionally narrow and uses human-interpretable structures. 
 
 Hide structure identity, introduce tasks with multiple plausible organizations, and measure adaptation when query distributions shift. The key question is not whether an agent can use a ledger, but whether it knows when a ledger is the right representation.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use StructMemEval to test whether explicit memory organization affects task completion, particularly for tables, lists, and trees. Distinguish operating a prescribed structure from discovering a suitable structure autonomously. Scores with structure hints do not establish the latter.
+
+### What a concrete task looks like
+
+Illustrative task: a stream adds, retracts, and revises items, requiring a queryable operative state. An append-only transcript preserves all utterances but may not support later operations as directly as a ledger or tree.
+
+### Most discriminating experiment
+
+Separate no-hint, autonomous-structure-selection, and supplied-correct-structure conditions. Hold the input constant while changing later query types, then test whether the representation adapts. Include migration cost and repair of incorrect state when assessing adaptation.
+
+### Pair with
+
+[memoryagentbench](memoryagentbench.en.md) · [kbgym](kbgym.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `retrieve facts → maintain structured state → autonomously choose memory representation`

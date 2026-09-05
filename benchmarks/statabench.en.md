@@ -23,3 +23,27 @@ Align Stat-Closed/Practical/Open track, toolkit version, data split, runtime, mo
 ## Next evaluation coordinate
 
 The next step strengthens assumption checking, uncertainty communication, and causal/statistical model criticism rather than only selecting the right function.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use StatABench to connect statistical knowledge, tool use, and complete modeling reports. Closed questions and open reports provide different evidence. A polished report does not establish sound methodology, and choosing a tool name does not establish correct parameters or assumptions.
+
+### What a concrete task looks like
+
+Illustrative task: an agent chooses a statistical method, executes tools, and interprets results. Software can return significant-looking outputs despite violated distributional or independence assumptions, so methodological applicability matters beyond successful calls.
+
+### Most discriminating experiment
+
+Report knowledge, tool parameterization, and open reports separately with a fixed toolkit and evaluator. Add data violating statistical assumptions to test whether the agent adapts or withholds a conclusion. Independently review methodology in open reports.
+
+### Pair with
+
+[causalds](causalds.en.md) · [dare-bench](dare-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

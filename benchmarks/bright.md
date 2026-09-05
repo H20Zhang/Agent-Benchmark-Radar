@@ -104,6 +104,30 @@ BRIGHT 本质上仍是 **static ranking benchmark**。它没有完整测量：
 
 这样可以比较：一个系统是因为 first-hop retriever 更强，还是因为它更会发现自己第一次没搜对并进行修正。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合检验相关性本身需要推理的检索任务。它比普通语义相似检索更能区分查询理解能力，但查询改写、长推理与重排都增加计算；只有在相同资源约束下比较，才能判断方案是否更有效率。
+
+### 一个具体任务长什么样
+
+示意任务：查询描述一个现象，真正有用的文档解释背后的原理，却没有重复查询词语。系统需要推断信息需求；检索到许多主题相同但不能解释现象的文档，并不构成有效证据。
+
+### 最有判别力的实验
+
+固定语料与相关性标注，对比原查询、模型改写查询、重排与混合检索，并分别计入改写和重排成本。再按领域与推理类型分析，区分更好表示、更多计算和参数知识提供的收益。
+
+### 建议搭配
+
+[beir](beir.md) · [bright-pro](bright-pro.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `semantic similarity retrieval → reasoning-aware relevance → iterative reasoning-controlled evidence search`

@@ -76,6 +76,30 @@ AgentDS 已经把“人是否还重要”带进 benchmark，但还没有完整�
 
 这样才能区分“agent 在 benchmark 上变强”和“agent 真正减少 data-team 工作量”。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究行业知识与人机协作如何影响预测任务表现。人类团队的成绩同时包含经验、投入时间与工具选择，不能直接当成自治智能体基线；需要明确比较的是系统、团队还是协作方式。
+
+### 一个具体任务长什么样
+
+示意任务：行业数据包含结构化字段、时间序列或额外上下文，参与者选择特征和模型完成预测。领域专家可能通过理解指标与业务过程获得优势，这与纯模型代码能力不同。
+
+### 最有判别力的实验
+
+对相同任务比较自治智能体、人类单独和人机协作，控制时间、计算及可用资料，并报告人员经验。逐行业和任务指标展示结果，避免把不同比例的人工干预压缩成一个‘AI能力’分数。
+
+### 建议搭配
+
+[tml-bench](tml-bench.md) · [mle-bench](mle-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `单项 data task → 端到端 data-science agent → human–AI team effectiveness`

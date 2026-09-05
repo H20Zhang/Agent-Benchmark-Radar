@@ -33,3 +33,27 @@ Sonnet `/compact` 的约束保留率在五轮后从 **0.53 降到 0.10**；TypeC
 它与 MPBench、InjecMEM、Utility Under Attack 一起把 memory safety 拆到写入、检索、压缩等生命周期阶段；`map_delta=reinforces`。它增加的关键坐标是 **retention policy must depend on information type**，而不只是“压缩后 QA 还答不答得出来”。
 
 Primary: https://arxiv.org/abs/2608.22752
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究上下文压缩是否保住必须持续生效的约束。约束保留率和行动遵从应联合解释；保留更多 token 自然可能更安全，因此等保留预算是判断结构化压缩贡献的关键对照。
+
+### 一个具体任务长什么样
+
+示意任务：多轮摘要与检索后，系统仍需遵守一条早期规则及其适用范围。规则中的否定、例外或作用域被压缩掉，可能让文本看起来语义接近，却导致后续动作违反原约束。
+
+### 最有判别力的实验
+
+在相同原始上下文与保留 token 预算下比较压缩策略，逐轮测约束内容、作用域和行动结果。再单独替换约束识别器，区分类型识别错误与压缩机制错误，不把人工正确分类的收益归给自动系统。
+
+### 建议搭配
+
+[memoryagentbench](memoryagentbench.md) · [gatemem](gatemem.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

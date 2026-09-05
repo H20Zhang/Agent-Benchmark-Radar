@@ -30,6 +30,30 @@ Learning-side submissions are observationally selected: stronger systems reach t
 
 Ten B300-scale tasks are expensive, there is no human baseline, and the common score encodes heterogeneous task utility. The repository supports self-hosted final evaluation but currently operates no blind service, so third parties cannot reproduce the official hidden-boundary enforcement.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use AI4AI-Bench for learning-algorithm modification rather than unrestricted score optimization. Source patches and clean-start formal training help isolate durable changes, while independence between proxy feedback and formal evaluation still needs scrutiny. A small expensive task set limits statistical confidence.
+
+### What a concrete task looks like
+
+Illustrative task: an agent diagnoses training and edits code in a proxy environment, then hands off only source patches for fresh formal training. Temporary files and trained state cannot substitute for code changes without changing the evaluation object.
+
+### Most discriminating experiment
+
+Match proxy and formal-training budgets, pin baseline reruns and patch boundaries, and verify multiple seeds. Treat patch categories as descriptive rather than causal. Algorithmic mechanism claims still require targeted ablations and transfer to independent tasks.
+
+### Pair with
+
+[deltaml-bench](deltaml-bench.en.md) · [mle-bench](mle-bench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy consequence
 
 `map_delta=early_signal`, bound to `data-agent-research-integrity`. It isolates learning-algorithm design more tightly than broad ML-agent suites, but one record does not change the durable defining chain.

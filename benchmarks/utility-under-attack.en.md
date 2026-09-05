@@ -28,6 +28,30 @@ The benchmark is useful for detecting defenses that merely become more aggressiv
 
 The main gaps are adaptive attacks, realistic provenance distributions, additional memory stacks, and the proposed occupancy gate. The highest-value next study would compare defenses under the same benign workload and adaptive attacker and determine whether any method genuinely dominates the baseline Pareto frontier rather than moving along the same trade-off.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use Utility Under Attack to assess whether a memory defense preserves legitimate utility while resisting poisoning. More refusal can reduce attack success without producing a useful defense. Compare operating points on the safety–utility trade-off rather than one security number.
+
+### What a concrete task looks like
+
+Illustrative task: a small amount of false memory enters a benign history. Retrieval can be occupied by poisoned records or stripped of legitimate evidence by over-filtering. Worse answers can arise from opposite mechanisms: poisoning or defensive evidence removal.
+
+### Most discriminating experiment
+
+Sweep screening thresholds or provenance-ranking weights on matched clean and poisoned queries, tracking clean accuracy, poisoning harm, and retrieval occupancy. Add defense-adaptive poisoning to test whether an operating point fits only a fixed attack set.
+
+### Pair with
+
+[injecmem](injecmem.en.md) · [memevobench](memevobench.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 The benchmark advances memory-attack evaluation from attack success to joint security–utility measurement; `map_delta=reinforces`. Together with MPBench and InjecMEM, it separates **write exposure, retrieval exposure, generation success, and benign utility** into distinct memory-security coordinates.

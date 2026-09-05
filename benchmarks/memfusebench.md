@@ -33,3 +33,27 @@ synthetic generation 与 model-guided verification 仍缺 human ceiling，不能
 ## 放进演化图怎么看
 
 `map_delta=early_signal`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究多来源记忆之间的连接、冲突处理与溯源。更长的上下文不是充分基线：真正需要比较的是同样证据在保留或丢失来源关系时，能否支持正确的跨来源结论。
+
+### 一个具体任务长什么样
+
+示意任务：一个来源记录事件发生，另一个解释原因，第三个给出修订信息。系统需要把记录对齐并说明为何采用某一版本；简单拼接来源可能把不同事件或权威层级混在一起。
+
+### 最有判别力的实验
+
+对相同事件集合比较无来源标识、带来源标识和显式跨来源关系，并逐类报告连接、融合、裁决和溯源结果。增加来源间矛盾但文本相似的对照，检验方法是否真正使用来源结构而非依赖生成文本风格。
+
+### 建议搭配
+
+[lifebench](lifebench.md) · [gatemem](gatemem.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

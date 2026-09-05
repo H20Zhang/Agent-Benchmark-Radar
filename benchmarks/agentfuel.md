@@ -89,6 +89,30 @@ AgentFuel 目前还没有充分回答：
 
 如果 structured state 在 freshness challenge 下仍优于 raw history / cache，才能更有力地证明“representation 本身”而不仅是“多保留一点上下文”带来了增益。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究面向特定领域的时序查询评价，尤其是状态与事件解释。公开查询数据和可定制生成框架不是同一交付物；使用前应确认实际可得的是数据、环境还是生成器，不把论文设计当成可直接运行的工具。
+
+### 一个具体任务长什么样
+
+示意任务：系统需要依据时序记录回答某个状态何时发生变化，或事件期间指标如何变化。单次聚合查询无法替代带状态转换的分析，加载数据时的时间语义也可能决定答案。
+
+### 最有判别力的实验
+
+固定原始时序数据和时间处理规则，分别比较无状态、状态型与事件型查询。让不同连接器读取相同校验后的数据，先排除加载语义差异，再评价智能体；生成任务另需未见领域验证。
+
+### 建议搭配
+
+[irts-toolbench](irts-toolbench.md) · [dabstep](dabstep.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `独立 data query → 跨 query state reuse → 可更新、可忘记的长期 analytic state`

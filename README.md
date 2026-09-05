@@ -3,45 +3,37 @@
 
 <h1>Agent Benchmark Radar</h1>
 
-<p><strong>从 Benchmark 看见当前能力、成绩空间与下一步研究。</strong></p>
+<p><strong>不是 Benchmark 清单，而是一张 Agent Evaluation 的研究地图。</strong></p>
 
-<p>
-覆盖 <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
-沿着 <b>Benchmark → Results → Opportunity → Frontier</b> 追踪评测版图：找到最新 Repo，查看当前方法成绩，组合研究评测，并发现下一坐标。
-</p>
+<p>覆盖 <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
+从 <b>测什么 → 怎么公平比较 → 分数能证明什么 → 下一步还该测什么</b> 组织 126 个 Benchmark。</p>
 
 <p><strong>中文</strong> · <a href="README.en.md">English</a></p>
 
+<p><a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml/badge.svg"></a> <a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/H20Zhang/Agent-Benchmark-Radar?style=flat"></a> <img alt="Last commit" src="https://img.shields.io/github/last-commit/H20Zhang/Agent-Benchmark-Radar?style=flat"></p>
 <p><strong>网站待完善；当前内容以本 README 为准。</strong></p>
-
-<p>
-<a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml/badge.svg"></a>
-<a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/H20Zhang/Agent-Benchmark-Radar?style=flat"></a>
-<img alt="Last commit" src="https://img.shields.io/github/last-commit/H20Zhang/Agent-Benchmark-Radar?style=flat">
-</p>
-
 </div>
 
-## 从这里开始
+## 先做研究判断，再选 Benchmark
 
-| 研究动作 | README 入口 | 直接获得 |
+| 你现在要回答的问题 | 入口 | 你应该带走什么 |
 |---|---|---|
-| **Pick** | [Benchmark Library](#all-benchmarks) | 浏览完整 Benchmark 列表，并结合能力演化、发布时间和当前成绩选择评测。 |
-| **Build** | [Evaluation Recipes](#evaluation-recipes) | 从研究 claim 组合 Core / Complement，并形成可复用的评测方案。 |
-| **Discover** | [下一阶段关键评测方向](#evaluation-frontiers) | 从当前证据进入下一测量坐标和可执行评测设计。 |
-| **Track** | [近 30 天与当前成绩](#frontier-signals) | 联合查看新发布、结构化成绩、参考空间、前沿变化与 Benchmark 谱系。 |
+| **最近评测范式变了什么？** | [近 30 天信号](#frontier-signals) | 哪些变化会改变实验设计，而不是只多了一个数据集。 |
+| **我的 claim 应该用什么测？** | [Evaluation Recipes](#evaluation-recipes) | Core + Complement + 下一项判别实验。 |
+| **某个 Benchmark 的分数到底说明什么？** | [完整 Benchmark Library](#all-benchmarks) | 进入详情页看 protocol、claim boundary、混杂因素和研究决策卡。 |
+| **哪里还有真正的评测空白？** | [下一阶段关键评测方向](#evaluation-frontiers) | 从已有证据走向尚未被测量的坐标。 |
 
-**先选你的研究方向。** 每个方向都提供独立的演化脉络、Evaluation Recipes 和完整 Benchmark 列表。
+### 三条主线
 
-| 方向 | 研究主张 | 先看脉络 | 配一套评测 | 查看列表 |
+| 方向 | 现在真正难的是什么 | 能力地图 | 评测组合 | 完整列表 |
 |---|---|---|---|---|
-| **Agent Memory** | 长期记忆的正确召回、在线更新、行动效用、多模态能力、安全和治理。 | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [Memory Benchmark](#registry-memory) |
-| **RAG / Agentic Retrieval** | 正确证据、复杂搜索，以及动态语料和长轨迹下的持续可靠性。 | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [Retrieval Benchmark](#registry-rag) |
-| **Data Agents** | SQL、分析、数据科学与 ML engineering 的端到端可核验交付。 | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [Data Agent Benchmark](#registry-data) |
+| **Agent Memory** | 从“能召回”走向状态更新、经验迁移、多模态与安全生命周期。 | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [Memory Benchmarks](#registry-memory) |
+| **RAG / Agentic Retrieval** | 从静态相关性走向长程搜索、动态语料、轨迹诊断与可验证研究交付。 | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [Retrieval Benchmarks](#registry-rag) |
+| **Data Agents** | 从 SQL/code 正确走向数据发现、业务语义、完整工作流与可执行交付。 | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [Data Agent Benchmarks](#registry-data) |
 
-**跨领域探索：** [按 claim 配一套 Evaluation Recipe](#evaluation-recipes) · [看近 30 天的变化](#frontier-signals) · [看最近半年新 Benchmark](#release-timeline)
+> **本 Radar 的默认证据纪律：** “论文报告过的最好结果”不等于“当前 SOTA”；“距满分还有多少”不等于“可实现 headroom”；不同 protocol cell 的分数不直接比较。详情页优先告诉你 **compared to what、so what、what could fool us**。
 
-_收录标准：Registry 以可复用的 benchmark / evaluation contribution 为收录单元。详见 [Curation](CURATION.md)。_
+_Registry 以可复用 benchmark / evaluation contribution 为收录单元；完整规则见 [Curation](CURATION.md)。_
 
 ---
 <!-- ONBOARDING:END -->
@@ -105,9 +97,9 @@ _收录标准：Registry 以可复用的 benchmark / evaluation contribution 为
 
 ### 当前成绩追踪
 
-当前已为 12 个 Benchmark 建立来源核验的结构化结果轨道；每项成绩都绑定 task、split、protocol、metric、方向、日期与原始来源。
+当前为 12 个 Benchmark 建立来源核验的结构化结果轨道。这里展示的是 **已收录、可追溯的 protocol cell**，不是在没有完整排行榜核验时宣称 current SOTA；每项结果绑定 task、split、protocol、metric、方向、日期与原始来源。
 
-| Benchmark | 当前已核验坐标 | 当前最佳 | 研究判断 |
+| Benchmark | 已核验 protocol cell | 已收录结果 | 如何读这个结果 |
 |---|---|---:|---|
 | **SCALE-QA** | 128K Full Context accuracy | 29.8% | 70.2% 参考空间 |
 | **StateMemBench** | Same-backbone state-maintenance score | 36.3% | 方法对比 |

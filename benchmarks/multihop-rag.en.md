@@ -32,6 +32,30 @@ The corpus is static news and the protocol does not require iterative query refo
 
 Allow iterative search under a fixed retrieval/token budget and compare one-shot top-k against adaptive hop-by-hop retrieval. The key question is when adaptive control reduces evidence volume rather than merely spending more calls.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use MultiHop-RAG for multi-hop evidence discovery and composition over a controlled corpus. It is closer to RAG than supplied-context QA, but differs from live web search. Supplied-evidence controls are needed to separate search-chain design from answer reasoning.
+
+### What a concrete task looks like
+
+Illustrative task: several news reports separately provide event, person, and time information, and the answer requires their combination. Finding a topically relevant article is only the first step; later retrieval must recover missing relations rather than repeat similar reports.
+
+### Most discriminating experiment
+
+Compare single-shot and iterative retrieval on the same corpus with an equal total search budget. Report complete supporting-chain coverage by hop count, then evaluate answering with all supporting facts supplied to locate discovery versus composition bottlenecks.
+
+### Pair with
+
+[hotpotqa](hotpotqa.en.md) · [agenticragtracer](agenticragtracer.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `single-hop relevance → multi-evidence retrieval → adaptive multi-step search`

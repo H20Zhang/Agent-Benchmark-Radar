@@ -32,6 +32,30 @@ benchmark 包含 400 个 multi-session multimodal task，并比较 long-context�
 
 对四个 lifecycle stage 分别注入 oracle intervention，测每个阶段修正后能恢复多少最终 task success，从而形成 write / maintain / retrieve / use 的 error budget，直接指导系统研究投入。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合定位多模态记忆在写入、维护、检索还是使用阶段失败。阶段指标比一个总分更接近系统诊断，但阶段之间存在依赖；不能把某个局部指标改善直接解释为端到端行动收益。
+
+### 一个具体任务长什么样
+
+示意任务：世界状态在观察与行动后变化，检查点问题要求恢复当前状态并使用相关视觉证据。旧观察可能被正确保存却已不再有效；检索命中与记忆新鲜度因此需要分别评价。
+
+### 最有判别力的实验
+
+逐段用正确中间产物替换写入、维护或检索结果，观察最终答案变化，而不是只比较局部指标。固定视觉骨干与预算，并同时使用统一样本集，才能识别哪个环节真正限制系统性能。
+
+### 建议搭配
+
+[memeye](memeye.md) · [memprobe](memprobe.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `static history QA → mutable multimodal state → lifecycle-diagnostic memory`

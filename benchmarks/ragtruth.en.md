@@ -23,3 +23,27 @@ Align the response set, annotation policy, severity definition, and detector inp
 ## Next evaluation coordinate
 
 The next step is closed-loop correction: once an unsupported claim is detected, can an agent find missing evidence, revise the answer, and retain a citation-level audit trace?
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use RAGTruth for localized hallucination detection and faithfulness assessment. Fine-grained labels expose error locations, but detecting an error does not establish that the original system can prevent or repair it. Keep detection and generation claims distinct.
+
+### What a concrete task looks like
+
+Illustrative task: most of an answer is supported, but a sentence or a few words overstate the evidence. A superficially correct answer still needs localized annotation; a single whole-answer truth label loses that diagnostic information.
+
+### Most discriminating experiment
+
+Test detection on held-out generators and domains, separating span localization from response-level classification. Use detections for repair and evaluate both support and completeness afterward, so deleting substantial content cannot masquerade as improved faithfulness.
+
+### Pair with
+
+[ragbench](ragbench.en.md) · [claimprobe](claimprobe.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

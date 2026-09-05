@@ -3,45 +3,37 @@
 
 <h1>Agent Benchmark Radar</h1>
 
-<p><strong>Use benchmarks to see current capability, result headroom, and the next research move.</strong></p>
+<p><strong>Not a benchmark list: a research map of agent evaluation.</strong></p>
 
-<p>
-Covers <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
-Follow the <b>Benchmark → Results → Opportunity → Frontier</b> loop: find the latest repositories, inspect current scores, assemble research suites, and discover the next coordinate.
-</p>
+<p>Covering <b>Agent Memory</b> · <b>RAG / Agentic Retrieval</b> · <b>Data Agents</b><br/>
+126 benchmarks organized by <b>what is measured → what a fair comparison requires → what a score supports → what remains unmeasured</b>.</p>
 
 <p><a href="README.md">中文</a> · <strong>English</strong></p>
 
+<p><a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml/badge.svg"></a> <a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/H20Zhang/Agent-Benchmark-Radar?style=flat"></a> <img alt="Last commit" src="https://img.shields.io/github/last-commit/H20Zhang/Agent-Benchmark-Radar?style=flat"></p>
 <p><strong>Website under improvement; this README is the source of truth for now.</strong></p>
-
-<p>
-<a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/H20Zhang/Agent-Benchmark-Radar/actions/workflows/validate.yml/badge.svg"></a>
-<a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/H20Zhang/Agent-Benchmark-Radar?style=flat"></a>
-<img alt="Last commit" src="https://img.shields.io/github/last-commit/H20Zhang/Agent-Benchmark-Radar?style=flat">
-</p>
-
 </div>
 
-## Start Here
+## Make the research decision before picking a benchmark
 
-| Research action | README entry | Immediate value |
+| Question you need to answer | Start here | What you should take away |
 |---|---|---|
-| **Pick** | [Benchmark Library](#all-benchmarks) | Browse the full registry and choose evaluations using capability evolution, release time, and current results. |
-| **Build** | [Evaluation Recipes](#evaluation-recipes) | Assemble Core / Complement benchmarks from a research claim into a reusable evaluation suite. |
-| **Discover** | [Next Evaluation Frontiers](#evaluation-frontiers) | Move from current evidence to the next coordinate and an executable evaluation design. |
-| **Track** | [Last 30 days + current results](#frontier-signals) | See recent releases, structured results, reference headroom, frontier shifts, and benchmark lineages together. |
+| **What changed in evaluation recently?** | [30-day signals](#frontier-signals) | Changes that alter experimental design, not merely another dataset. |
+| **What should measure my claim?** | [Evaluation Recipes](#evaluation-recipes) | Core + Complement + the next discriminating experiment. |
+| **What does a benchmark score actually establish?** | [Complete Benchmark Library](#all-benchmarks) | Open a detail page for protocol, claim boundary, confounders, and its research decision card. |
+| **Where is the real evaluation gap?** | [Evaluation frontiers](#evaluation-frontiers) | Move from current evidence to a genuinely unmeasured coordinate. |
 
-**Choose your research area first.** Each area provides its own evolution map, evaluation recipes, and complete benchmark registry.
+### Three research lines
 
-| Area | Research claim | Understand the lineage | Build an evaluation | Browse |
+| Area | What is hard now | Capability map | Evaluation suite | Full registry |
 |---|---|---|---|---|
-| **Agent Memory** | Correct recall, online updates, action utility, multimodal capability, safety, and governance. | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [Memory Benchmarks](#registry-memory) |
-| **RAG / Agentic Retrieval** | Correct evidence, complex search, and sustained reliability under dynamic corpora and long trajectories. | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [Retrieval Benchmarks](#registry-rag) |
-| **Data Agents** | End-to-end, verifiable delivery across SQL, analytics, data science, and ML engineering. | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [Data Agent Benchmarks](#registry-data) |
+| **Agent Memory** | From recall to state updates, experience transfer, multimodality, and lifecycle safety. | [Memory Map](#benchmark-memory) | [Memory Recipes](#recipe-memory) | [Memory Benchmarks](#registry-memory) |
+| **RAG / Agentic Retrieval** | From static relevance to long-horizon search, dynamic corpora, trace diagnosis, and verifiable research deliverables. | [Retrieval Map](#benchmark-rag) | [Retrieval Recipes](#recipe-rag) | [Retrieval Benchmarks](#registry-rag) |
+| **Data Agents** | From SQL/code correctness to discovery, business semantics, complete workflows, and executable deliverables. | [Data Agent Map](#benchmark-data) | [Data Agent Recipes](#recipe-data) | [Data Agent Benchmarks](#registry-data) |
 
-**Cross-area exploration:** [build an Evaluation Recipe from your claim](#evaluation-recipes) · [see the last 30 days of change](#frontier-signals) · [scan new benchmarks from the last six months](#release-timeline)
+> **Default evidence discipline:** “best result reported in a paper” is not “current SOTA”; distance to 100% is not realizable research headroom; scores from different protocol cells are not directly comparable. Detail pages prioritize **compared to what, so what, and what could fool us**.
 
-_Scope: the registry uses reusable benchmark / evaluation contributions as its unit of inclusion. See [Curation](CURATION.md)._
+_The Registry tracks reusable benchmark / evaluation contributions. See [Curation](CURATION.md) for the full policy._
 
 ---
 <!-- ONBOARDING:END -->

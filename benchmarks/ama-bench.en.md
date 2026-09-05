@@ -32,6 +32,30 @@ The benchmark only indirectly tests whether remembering a trajectory improves la
 
 Take the same trajectories and evaluate a paired future task whose optimal action depends on the remembered causal/state information. This would connect trajectory QA to the more consequential criterion: behavior improvement.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use AMA-Bench for memory of agent execution trajectories rather than only personal facts in dialogue. Causal relations among tool outputs and environment states matter. Answering questions about a stored trajectory still does not establish better action on a new task.
+
+### What a concrete task looks like
+
+Illustrative task: an agent invokes a tool, observes a state change, and adjusts its next action; a later question asks why the state arose. The memory must connect action, feedback, and consequence rather than retrieve only the final state description.
+
+### Most discriminating experiment
+
+Compare full trajectories, observations alone, and preserved action–feedback pairs on the same questions. Then use the memory in related executable tasks and report action gains separately. This separates trajectory understanding from experience transfer.
+
+### Pair with
+
+[longmemeval-v2](longmemeval-v2.en.md) · [memoryarena](memoryarena.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `conversation history → agent trajectory → causal/state memory of experience`

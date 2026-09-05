@@ -32,6 +32,30 @@ enterprise analytics 还包括 semantic definition、permission、lineage、clar
 
 为 schema/business rule 更新前后构造 paired task，测 update latency：agent 多快能停止使用 obsolete semantics，同时保留不该变化的稳定知识。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究工业规模模式、知识规则变化与数据库管理操作。持续发布有助于减少静态题集局限，但新版本改变了任务与环境；应在同一发布和轨道内比较，不能把版本间分数差直接解释为模型进步。
+
+### 一个具体任务长什么样
+
+示意任务：智能体需要理解大型模式与分层业务知识，执行查询或管理操作，并在规则变化后调整行为。SQL语法正确不保证状态修改符合要求，管理类任务需要独立测试后置条件。
+
+### 最有判别力的实验
+
+固定数据库发布、知识库和轨道，区分模型基础能力与完整智能体设置。分别测查询等价、管理后置条件和规则变化适应，记录失败恢复与成本；旧规则缓存带来的错误应单独归类。
+
+### 建议搭配
+
+[spider-2](spider-2.md) · [warehouse-reliability-bench](warehouse-reliability-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `static text-to-SQL → industrial-scale schema → continuously evolving data environment`

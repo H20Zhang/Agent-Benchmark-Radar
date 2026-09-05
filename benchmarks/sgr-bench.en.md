@@ -32,6 +32,30 @@ The setting is narrower than general deep research and is sensitive to public-si
 
 Expose a canonical structured API for the same data and compare it with browser interaction. The gap would quantify how much failure comes from semantic query planning versus GUI/interface grounding.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use SGR-Bench for stateful retrieval where finding the website is not enough to expose the correct view. It separates source discovery from configuring filters, hierarchy, or scope within that source. Static page recall is not a substitute for task completion.
+
+### What a concrete task looks like
+
+Illustrative task: an agent reaches the correct data portal but must configure time, geography, and hierarchy to expose the requested records. Data from a wrong view may be true and citable while failing the requested scope.
+
+### Most discriminating experiment
+
+Supply the correct site, retrieval state, and complete target evidence in separate controls. Fix browser tools and site snapshot or verification date, then report item- and row-level quality to locate gains in source discovery, state control, or extraction.
+
+### Pair with
+
+[gisa](gisa.en.md) · [data-exploration-benchmark](data-exploration-benchmark.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `find the source → configure retrieval state → execute semantic data query`

@@ -36,6 +36,30 @@ ClaimProbe is useful as a **failure-layer attribution benchmark** for agentic re
 
 Two gaps have the highest leverage: improve claim-support evaluation to stronger human agreement and validate shortlist recall; then test on a much larger held-out set whether local faithfulness improvements consistently translate into expert report preference. If they do not, future benchmarks should preserve factual faithfulness and research usefulness as separate coordinates.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use ClaimProbe to distinguish unsupported claims, misattribution, and omissions in research reports, particularly for writer-side improvements under fixed evidence. Failure to find support can arise from generation or from the auditor's source shortlist, requiring separate checks.
+
+### What a concrete task looks like
+
+Illustrative task: a claim is supported by one retrieved source but cites another that does not support it, while a different claim has no support anywhere in the evidence set. Both reduce trust but require different repairs.
+
+### Most discriminating experiment
+
+Compare writers over a fixed evidence set and manually review all sources for a sample of claims labeled unsupported to estimate shortlist misses. Jointly report necessary-fact coverage, support, and readability so writing less or excessive claim fragmentation cannot game faithfulness.
+
+### Pair with
+
+[deepresearch-bench](deepresearch-bench.en.md) · [ragtruth](ragtruth.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `map_delta=early_signal`. ClaimProbe adds an independent `retrieved evidence → written claim → cited source` layer but one paper does not change the durable Benchmark Map. Its broader implication is that Deep Research evaluation may need to evolve from scoring one final artifact to **layered evaluation of retrieval, materialization, attribution, and utility**.

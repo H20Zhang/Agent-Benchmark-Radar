@@ -23,3 +23,27 @@ RAGTruth 收集近 18K 条自然生成的 RAG responses，并由人工在 case �
 ## 下一步评测坐标
 
 下一步要从事后 detector 推进到闭环 correction：检测到 unsupported claim 后，agent 是否能找到缺失证据、修订答案并保留 citation-level trace。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究回答中的局部幻觉检测与忠实性评价。细粒度标注让错误位置可见，但检测器能指出错误，不代表原系统会自动避免或修复错误；检测与生成应保持不同的研究主张。
+
+### 一个具体任务长什么样
+
+示意任务：回答的大部分内容有来源支持，只有一句话或几个词扩大了证据中的结论。整体看起来正确的回答仍需被局部标记；将整段答案只打一个真伪标签会失去这种诊断信息。
+
+### 最有判别力的实验
+
+按未见过的生成模型和领域划分检测测试，分别报告定位与整条回答判别。随后用检测信号驱动修复，并验证修复后的支持关系与内容完整性，防止删除大量内容获得表面更高的忠实性。
+
+### 建议搭配
+
+[ragbench](ragbench.md) · [claimprobe](claimprobe.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

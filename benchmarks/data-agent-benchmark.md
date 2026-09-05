@@ -32,6 +32,30 @@ benchmark 有 54 个 query、12 个 dataset、9 个 domain、4 类 DBMS，设计
 
 给每题增加 ground-truth integration/semantic plan，在最终 execution 之前单独评分 relation resolution，区分主要瓶颈到底是 heterogeneous access 还是 business semantics。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究多数据库之间的发现、转换与分析，而不只是单条 SQL。小题集上的排名很容易受提示、调参、重复次数和评分版本影响；旧论文成绩应保留为历史证据，不能当作当前能力上限。
+
+### 一个具体任务长什么样
+
+示意任务：同一分析问题需要跨不同数据库读取数据，统一格式后连接，并把半结构化内容转换成可计算字段。数据库连接成功只是起点；字段语义和结果验证才决定问题是否完成。
+
+### 最有判别力的实验
+
+固定数据和验证器版本，明确是否使用提示及任务特定调参，按官方聚合规则报告多次运行。对缺失、失败和污染运行保留分母，再比较无派生表示、静态派生表示与在线更新，检验收益是否超越答案或查询缓存。
+
+### 建议搭配
+
+[dataspace](dataspace.md) · [spider-2](spider-2.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `single-database text-to-SQL → cross-database integration → enterprise data agent`

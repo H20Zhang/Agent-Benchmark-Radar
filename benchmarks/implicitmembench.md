@@ -32,6 +32,30 @@ ImplicitMemBench 测 **implicit / non-declarative memory**：过去的学习、p
 
 在同一个模型上比较 no-memory、episodic retrieval、procedural summary、learned skill representation，并保持 test prompt 完全一致。真正的问题是：哪种 representation 能提升 first-action transfer，同时又不引入有害的过度持久化。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合诊断经历是否在没有显式回忆要求时改变首次行为。它强调自动使用而非事实复述；短学习片段中的行为变化不能直接当作跨会话、长期持久的外部记忆能力。
+
+### 一个具体任务长什么样
+
+示意任务：学习阶段展示一种操作惯例，插入干扰内容后出现相关场景，测试系统的第一反应是否遵循所学规则。允许多次修正会改变测量对象，因此首次尝试与重试后成功应分开。
+
+### 最有判别力的实验
+
+保持学习内容相同，分别在同一上下文、新会话加外部记忆和完全无记忆条件下测试。再增加干扰距离，判断效果来自最近上下文、持久记忆还是响应偏置；不要用同一会话成绩声称长期记忆已成立。
+
+### 建议搭配
+
+[evomembench](evomembench.md) · [past-bench](past-bench.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `explicit recall → retained experience → automatic behavior change`

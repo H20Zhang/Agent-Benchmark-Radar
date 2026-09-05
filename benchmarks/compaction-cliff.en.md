@@ -28,6 +28,30 @@ The benchmark is useful for studying **information-type-aware policies for agent
 
 The main gaps are online constraint identification, realistic enterprise/interaction distributions, shared memory across agents, and strictly token-matched behavior. The highest-value test is to compare TypeCompact with generic compactors under the same token budget, unseen constraint types, and real downstream actions and verify that higher retention actually reduces behavioral violations.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use The Compaction Cliff to study whether context management preserves constraints that must remain operative. Interpret constraint retention together with action compliance. Retaining more tokens can independently help, making matched retained budgets central to attribution.
+
+### What a concrete task looks like
+
+Illustrative task: after repeated summarization and retrieval, an agent must still obey an early rule within its intended scope. Losing a negation, exception, or scope marker can preserve superficial similarity while changing later action constraints.
+
+### Most discriminating experiment
+
+Compare compression policies at matched input and retained-token budgets, measuring constraint content, scope, and action outcomes each round. Replace the constraint classifier separately to distinguish typing errors from compression errors, avoiding attribution of oracle labels to the automatic system.
+
+### Pair with
+
+[memoryagentbench](memoryagentbench.en.md) · [gatemem](gatemem.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 Together with MPBench, InjecMEM, and Utility Under Attack, the benchmark decomposes memory safety across write, retrieval, and compaction lifecycle stages; `map_delta=reinforces`. Its key added coordinate is that **retention policy may need to depend on information type**, not merely whether QA remains answerable after compression.

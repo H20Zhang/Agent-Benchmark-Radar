@@ -104,6 +104,30 @@ A high-value extension is to turn BRIGHT from one ranking pass into a **reasonin
 
 This would separate systems with stronger first-hop retrieval from systems that are better at recognizing a bad first search and correcting it.
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use BRIGHT when relevance itself requires reasoning. It probes query understanding beyond ordinary semantic similarity, but query expansion, long reasoning, and reranking all add computation. Resource-matched comparisons are necessary for efficiency claims.
+
+### What a concrete task looks like
+
+Illustrative task: a query describes a phenomenon, while the useful document explains its underlying principle without repeating the query's vocabulary. The retriever must infer the information need; many topically similar documents may provide no usable explanation.
+
+### Most discriminating experiment
+
+Fix the corpus and relevance judgments and compare raw queries, model-expanded queries, reranking, and hybrid retrieval. Charge expansion and reranking costs separately and slice by domain and reasoning type to distinguish representation quality, extra compute, and parametric knowledge.
+
+### Pair with
+
+[beir](beir.en.md) · [bright-pro](bright-pro.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Evolution position
 
 `semantic-similarity retrieval → reasoning-aware relevance → iterative reasoning-controlled evidence search`

@@ -33,3 +33,27 @@ InjecMEM 适合检验声称具备 memory security 的系统是否只在 write-ti
 它把 memory security 从“恶意内容是否能写进去”推进到 **write → drift → retrieve → generate** 的端到端轨迹；`map_delta=reinforces`。与 MPBench 配合时，MPBench 提供宽攻击面，InjecMEM 提供更细的 targeted-generation attribution。
 
 Primary: https://arxiv.org/abs/2608.23471
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合诊断一次低权限交互如何通过持久记忆影响后续回答。写入成功、被检索到和最终行为被改变是不同事件；只报告被检索之后的条件攻击成功率，会高估真实端到端风险。
+
+### 一个具体任务长什么样
+
+示意任务：一条外来记录试图把来源中的指令混入长期记忆，之后正常查询再次触发它。防御需要维持内容与指令的信任边界，同时不能阻止合法事实被正常写入和调用。
+
+### 最有判别力的实验
+
+分别记录写入、检索、条件行为偏移与联合成功率，并对同一防御报告正常任务阻断。更换写入模型、回答模型和摘要策略检验迁移，避免把白盒优化下的一组结果当作所有部署的风险上界。
+
+### 建议搭配
+
+[mpbench](mpbench.md) · [utility-under-attack](utility-under-attack.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

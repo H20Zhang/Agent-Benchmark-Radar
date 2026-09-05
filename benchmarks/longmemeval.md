@@ -23,3 +23,27 @@ LoCoMo 已证明很长的多 session 对话会让模型失效；LongMemEval 的�
 ## 下一步评测坐标
 
 LongMemEval 仍以历史 QA 为终点。LongMemEval-V2 随后把对象推进到 agent-environment trajectories、workflow knowledge 与 latency；更进一步还要直接测 remembered experience 是否改善未来行动。
+
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究‘记得住但用错版本’这类长期助手问题。它的价值在于把更新、时间推理和弃答拆开，而非用一个总体准确率替代所有记忆能力；报告分项通常比再加一个平均分更有诊断价值。
+
+### 一个具体任务长什么样
+
+示意任务：用户先给出旧偏好，数次会话后明确修改，随后询问当前应采用哪项安排。系统必须识别更新关系，而不是在两个相似片段中挑一个；没有充分历史证据时还应避免猜测。
+
+### 最有判别力的实验
+
+让旧事实和新事实都进入检索结果，再与仅给当前有效事实的条件比较。若前者仍失败，瓶颈已不只是召回率，而是冲突消解或时态解释；另报没有答案的问题，防止通过一律作答抬高部分题型成绩。
+
+### 建议搭配
+
+[statemembench](statemembench.md) · [scale-qa](scale-qa.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->

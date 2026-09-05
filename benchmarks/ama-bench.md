@@ -32,6 +32,30 @@ benchmark 能证明系统是否会对 stored trajectory 做 memory reasoning，�
 
 在同一批 trajectory 后追加 paired future task，让最优 action 必须依赖刚才的 causal/state memory，从而把 trajectory QA 真正连接到 behavior improvement。
 
+<!-- RESEARCH-DECISION:START -->
+
+## 研究决策卡
+
+### 什么时候值得用
+
+适合研究智能体执行轨迹的记忆，而不只是人机对话的个人事实。轨迹中工具输出和环境状态的因果关系更重要；但对过去轨迹回答得好，仍不等于能在新任务中采取更好的行动。
+
+### 一个具体任务长什么样
+
+示意任务：智能体先运行工具，看到状态变化，再修改后续操作；稍后询问某个状态为何出现。系统需要把行动、反馈与结果对应起来，不能仅检索最后一次状态描述。
+
+### 最有判别力的实验
+
+在完整轨迹、只保留观察结果、保留行动—反馈配对三种记忆条件下比较同一组问题。随后把记忆用于相邻的可执行任务，单独报告行动收益；这样才能区分轨迹理解与经验迁移。
+
+### 建议搭配
+
+[longmemeval-v2](longmemeval-v2.md) · [memoryarena](memoryarena.md)
+
+> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+
+<!-- RESEARCH-DECISION:END -->
+
 ## 演化位置
 
 `conversation history → agent trajectory → causal/state memory of experience`

@@ -23,3 +23,27 @@ Comparisons must align the LoCoMo question/version, answerer or reader, retrieva
 ## Next evaluation coordinate
 
 LoCoMo mostly asks what happened in the past. The next step is to test whether remembered experience changes future actions and planning, while separating update, forgetting, conflict handling, and maintenance cost from end-to-end QA accuracy.
+
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use LoCoMo as an entry point for long-term conversational memory, not as sole evidence that an agent improves through experience. Separate accessibility of historical information from its effect on future behavior; this benchmark primarily informs the former.
+
+### What a concrete task looks like
+
+Illustrative task: an early conversation describes a move, a later session updates work plans, and the current question asks how the events relate in time. The system must retain the person, chronology, and event links; retrieving a sentence with matching keywords may still be insufficient.
+
+### Most discriminating experiment
+
+Hold the answerer and question set fixed; compare full history, budget-matched retrieved snippets, and supplied supporting evidence. Report both evidence recall and answer quality. A retrieval-to-supplied-evidence gap motivates work on memory access; failure in both conditions instead directs attention to reading and temporal reasoning.
+
+### Pair with
+
+[longmemeval](longmemeval.en.md) · [memoryarena](memoryarena.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->

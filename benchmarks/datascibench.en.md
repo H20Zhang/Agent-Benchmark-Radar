@@ -32,6 +32,30 @@ Long-horizon project state, repository maintenance, data discovery, business sem
 
 Measure whether TFC categories predict failure in longer agent trajectories: when an end-to-end project fails, can the benchmark correctly identify the missing primitive capability?
 
+<!-- RESEARCH-DECISION:START -->
+
+## Research decision card
+
+### When to use it
+
+Use DataSciBench to evaluate executable outputs across diverse data-science tasks rather than code text alone. Task-specific scoring broadens coverage but complicates aggregation. Inspect task categories and whether validation functions capture the user's objective before interpreting totals.
+
+### What a concrete task looks like
+
+Illustrative task: a natural-language request asks for cleaning, computation, or an analysis artifact, requiring executable decomposition. An output can have the expected format but the wrong semantics, which file-existence checks alone would miss.
+
+### Most discriminating experiment
+
+Fix runtime and task functions, report analysis, modeling, and artifact slices, and add supplied-task-decomposition or intermediate-data controls. Distinguish planning, code, and evaluator failures, reviewing borderline scores independently.
+
+### Pair with
+
+[da-code](da-code.en.md) · [dsgym](dsgym.en.md)
+
+> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+
+<!-- RESEARCH-DECISION:END -->
+
 ## Genealogy
 
 `single code task → multi-step data-science prompt → decomposable execution evaluation`
