@@ -5,6 +5,7 @@ on:
       - chatgpt/frontier-freshness-language-20260905
     paths:
       - scripts/repair_frontier_freshness_language_20260905.py
+      - scripts/repair_library_freshness_20260905.py
       - .github/workflows/frontier-freshness-language-20260905.yml
 permissions:
   contents: write
@@ -22,7 +23,9 @@ jobs:
         with:
           node-version: '24'
       - name: Apply repair
-        run: python scripts/repair_frontier_freshness_language_20260905.py
+        run: |
+          python scripts/repair_frontier_freshness_language_20260905.py
+          python scripts/repair_library_freshness_20260905.py
       - name: Validate repository and web
         run: |
           python -m unittest discover -s tests -v
@@ -38,6 +41,7 @@ jobs:
         run: |
           rm .github/workflows/frontier-freshness-language-20260905.yml
           rm scripts/repair_frontier_freshness_language_20260905.py
+          rm scripts/repair_library_freshness_20260905.py
           git config user.name 'Hao Zhang'
           git config user.email 'zhanghaowuda12@gmail.com'
           git add -A
