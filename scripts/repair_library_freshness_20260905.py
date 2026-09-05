@@ -45,7 +45,18 @@ def update_signal(path: Path, lang: str):
     path.write_text(text, encoding="utf-8")
 
 
+def update_web_contract():
+    path = ROOT / "web/tests/generated-pages.test.mjs"
+    text = path.read_text(encoding="utf-8")
+    old = 'for (const token of ["frontierShifts", "getProgressPoint", "genealogy", "Evaluation frontier"]) assert.ok(frontier.includes(token), token);'
+    new = 'for (const token of ["frontierShifts", "recentItems", "freshness.discovery_scan_at", "genealogy", "Evaluation frontier"]) assert.ok(frontier.includes(token), token);'
+    if old not in text:
+        raise RuntimeError("frontier web contract shape changed unexpectedly")
+    path.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+
 update_library(ROOT / "library/README.md", "zh")
 update_library(ROOT / "library/README.en.md", "en")
 update_signal(ROOT / "README.md", "zh")
 update_signal(ROOT / "README.en.md", "en")
+update_web_contract()
