@@ -13,7 +13,7 @@ NOTES = ROOT / "benchmarks"
 
 WITNESSES = {
     "measurement": (
-        r"测什么|到底测什么|measurement|what it (?:actually )?measures|evaluation object",
+        r"测什么|到底测什么|测量对象|measurement|what it (?:actually )?measures|measurement object|measurement target|evaluation object",
         2,
     ),
     "delta": (
@@ -21,7 +21,7 @@ WITNESSES = {
         1,
     ),
     "protocol": (
-        r"评测|协议|protocol|evaluation setup|how .*evaluat|实际怎样评测|公平比较|fair comparison",
+        r"评测|协议|protocol|evaluation setup|how .*evaluat|实际怎样评测|公平比较|fair comparison|comparison contract",
         2,
     ),
     "evidence": (
@@ -29,11 +29,11 @@ WITNESSES = {
         2,
     ),
     "validity": (
-        r"边界|混杂|限制|不能|局限|confound|limitation|cannot|does not establish|score boundary",
+        r"边界|混杂|混淆|限制|不能|局限|结论上限|confound|limitation|cannot|does not establish|score boundary|score ceiling|what (?:this|the) score supports",
         2,
     ),
     "gap": (
-        r"还没有|没有覆盖|下一步|缺口|next|unmeasured|coverage gap|remaining",
+        r"还没有|没有覆盖|还没有测什么|未覆盖|下一步|缺口|next|unmeasured|coverage gap|remaining gap",
         2,
     ),
 }
