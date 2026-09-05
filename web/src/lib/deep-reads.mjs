@@ -62,12 +62,12 @@ export function renderDeepReadMarkdown(markdown) {
 }
 
 const DEPTH_WITNESSES = [
-  /测什么|what it (?:actually )?measures|measurement object/i,
-  /相比|前身|前驱|compared|relative to|what changed/i,
-  /评测|协议|protocol|evaluation setup|fair comparison|公平比较/i,
+  /测什么|测量对象|what it (?:actually )?measures|measurement object|measurement target/i,
+  /相比|前身|前驱|compared|relative to|what changed|genealogy|谱系|演化/i,
+  /评测|协议|protocol|evaluation setup|fair comparison|公平比较|comparison contract/i,
   /证据|结果|分数|evidence|result|score|leaderboard/i,
-  /边界|混杂|限制|不能|confound|limitation|cannot|does not establish/i,
-  /下一步|没有覆盖|缺口|next|unmeasured|coverage gap/i,
+  /边界|混杂|混淆|限制|不能|局限|结论上限|confound|limitation|cannot|does not establish|score boundary|score ceiling|what (?:this|the) score supports/i,
+  /下一步|没有覆盖|还没有测什么|未覆盖|缺口|next|unmeasured|coverage gap|remaining gap/i,
 ];
 
 function semanticDepth(markdown) {
