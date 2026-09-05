@@ -2,24 +2,95 @@
 
 [中文](agentfuel.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2603.12483)
+[Paper](https://arxiv.org/abs/2603.12483) · **Area: Data Agent / Stateful Analysis**
 
-## What it measures
+AgentFuel asks a narrow but important question: **when a data agent receives a sequence of related analytical queries, does carrying forward analytical state actually help?** Instead of treating memory as an implementation detail, it turns cross-query state reuse into an explicit experimental variable.
 
-AgentFuel currently contains 72 queries across three time-series domains, 24 per domain with 12 stateless and 12 stateful or incident-oriented queries, over about 13.5MB of generated data. It compares agents starting fresh with agents retaining analytical state across queries.
+## What it actually measures
+
+AgentFuel currently contains **72 queries across three time-series domains**, 24 per domain with 12 stateless and 12 stateful or incident-oriented queries, over about 13.5 MB of generated data.
+
+It compares two modes:
+
+- each query starts from scratch;
+- the agent can retain notebook state, context, intermediate findings, or other analytical state for later queries.
+
+The target is therefore not single-query competence, but whether **state reuse reduces repeated exploration and improves later incident analysis**.
 
 ## Compared with what
 
-Most benchmarks run each task independently. AgentFuel makes persistence an experimental variable and asks whether notebook, context, or memory state reduces repeated exploration and improves later incident analysis.
+Most data-agent benchmarks treat each task as an independent episode. Even when a system internally uses memory, aggregate task scores rarely reveal whether that memory caused the improvement.
 
-## Score boundary
+AgentFuel moves toward a cleaner comparison by evaluating matched stateless/stateful conditions and elevating persistence from an implementation choice to a measurable factor.
 
-A stateful advantage supports reusable analysis state under the current synthetic time-series generation and query order. Missing full public generator implementation limits reproduction, and gains may come from simple caching rather than deeper semantic memory.
+It is particularly useful for asking whether:
 
-## Fair comparison conditions
+- intermediate findings from one query help the next;
+- state avoids repeated data exploration;
+- gains come from remembering results versus remembering process;
+- incident analysis improves as useful history accumulates.
 
-Align query order, persistence policy, data generator, scaffold, model, budget, and evaluator, and report matched stateless/stateful pairs.
+## How the evaluation works
 
-## Next evaluation coordinate
+An interpretable result must record query order, persistence policy, data generator, agent scaffold, model, token/tool budget, and evaluator.
 
-The next step separates cache, structured semantic state, and learned workflow experience and tests whether stale state hurts after data changes.
+**Query order is part of the protocol.** If later queries depend strongly on earlier ones, ordering changes the value of state. Conversely, if an agent can preserve the full history verbatim, the gain may collapse to simple context carry-over rather than a more structured memory mechanism.
+
+Matched stateless/stateful pairs are therefore more informative than one aggregate headline score.
+
+## What a score supports
+
+If the stateful condition consistently beats the stateless condition, the supported claim is: under the current synthetic time-series distribution, query sequence, and harness, **retaining analytical state has practical value**.
+
+That does not yet prove the system learned semantic memory or workflow experience. The gain may come from:
+
+- cached computed values;
+- preserved notebook cells;
+- copied prior natural-language outputs;
+- genuinely abstracted reusable semantics or analysis strategies.
+
+These mechanisms have very different research significance, and the final score alone cannot separate them.
+
+## Main confounders
+
+The first is **cache versus memory**. Avoiding recomputation demonstrates reuse, but not necessarily a stronger long-term representation.
+
+The second is **state freshness**. Production analysis includes data updates, hypothesis reversals, and closed incidents; stale state can become actively harmful.
+
+The third is reproducibility: incomplete public generation or environment details can shift task difficulty across implementations.
+
+## Fair comparison contract
+
+At minimum, align:
+
+- query sequence and matched pairs;
+- what state may persist across queries;
+- state capacity, compression, and deletion rules;
+- data snapshot or generator;
+- model, harness, and tools;
+- retry, token, and execution budgets;
+- evaluator and failure handling.
+
+Methods with full-history access and methods restricted to structured state should not be merged into one track.
+
+## What is still missing
+
+AgentFuel does not yet fully separate:
+
+- cache, structured semantic state, and learned workflow experience;
+- robustness to stale state after data changes;
+- long-horizon state growth, contamination, and contradiction;
+- when the agent should forget or rebuild state;
+- whether latency/token/storage savings justify state-maintenance cost.
+
+## Most discriminating next test
+
+A high-value extension is a **state intervention matrix**: run the same sequential queries with only raw cache, structured semantic state, workflow summaries, or full history, then inject data updates or hypothesis reversals.
+
+If structured state remains better than raw history or cache under freshness stress, that provides much stronger evidence that the representation itself—not merely retaining more context—creates value.
+
+## Evolution position
+
+`independent data query → cross-query state reuse → updateable and forgettable long-term analytical state`
+
+AgentFuel occupies the middle step: it makes statefulness measurable, but does not yet fully evaluate dynamic, long-lived, self-correcting analytical memory.
