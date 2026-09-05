@@ -20,6 +20,20 @@ jobs:
           node-version: '24'
       - name: Materialize all 126 bilingual decision guides
         run: python scripts/materialize_full_editorial.py
+      - name: Preserve publication-status contract
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          patches = {
+            'README.md': '<p><strong>网站待完善；当前内容以本 README 为准。</strong></p>',
+            'README.en.md': '<p><strong>Website under improvement; this README is the source of truth for now.</strong></p>',
+          }
+          for name, marker in patches.items():
+              p=Path(name); t=p.read_text()
+              if marker.strip('<p>').strip('</p>') not in t:
+                  t=t.replace('</div>', marker+'\n\n</div>', 1)
+              p.write_text(t)
+          PY
       - name: Assert authored coverage
         run: |
           python - <<'PY'
