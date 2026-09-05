@@ -19,7 +19,9 @@ jobs:
         with:
           node-version: '24'
       - name: Apply verified freshness backfill
-        run: python scripts/refresh_radar_20260905.py
+        run: |
+          mkdir -p reports/weekly
+          python scripts/refresh_radar_20260905.py
       - name: Validate repository
         run: |
           python -m unittest discover -s tests -v
