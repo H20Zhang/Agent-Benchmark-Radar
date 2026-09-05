@@ -13,33 +13,44 @@ export function getStaticPaths() {
 }
 
 interface Props { lang: "zh" | "en"; }
+type AreaId = "agent-memory" | "rag" | "data-agent";
+type AreaCard = { id: AreaId; name: string; thesis: string };
+type FrontierShift = {
+  area: AreaId;
+  title: { zh: string; en: string };
+  delta: { zh: string; en: string };
+  consequence: { zh: string; en: string };
+  benchmarks: string[];
+};
+
 const { lang } = Astro.props;
 const canonicalPath = localePath(lang);
 const alternatePath = localePath(lang === "zh" ? "en" : "zh");
 const registry = [...loadRegistry()];
 const summaries = loadChineseSummaries();
 const research = loadResearchModel();
+const frontierShifts = research.frontierShifts as FrontierShift[];
 const recent = registry.slice(0, 12);
 const latestVerified = registry.map((item) => item.last_verified || "").filter(Boolean).sort().at(-1) || "—";
-const counts = {
+const counts: Record<AreaId, number> = {
   "agent-memory": registry.filter((item) => item.area === "agent-memory").length,
   rag: registry.filter((item) => item.area === "rag").length,
   "data-agent": registry.filter((item) => item.area === "data-agent").length,
 };
-const areas = [
+const areas: AreaCard[] = [
   {
     id: "agent-memory",
-    name: lang === "zh" ? "Agent Memory" : "Agent Memory",
+    name: "Agent Memory",
     thesis: lang === "zh" ? "从召回走向状态更新、经验迁移、多模态与完整 memory lifecycle。" : "From recall to state updates, experience transfer, multimodality, and the full memory lifecycle.",
   },
   {
     id: "rag",
-    name: lang === "zh" ? "RAG / Agentic Retrieval" : "RAG / Agentic Retrieval",
+    name: "RAG / Agentic Retrieval",
     thesis: lang === "zh" ? "从静态相关性走向长程搜索、动态语料、轨迹诊断与可验证研究交付。" : "From static relevance to long-horizon search, dynamic corpora, trace diagnosis, and verifiable research deliverables.",
   },
   {
     id: "data-agent",
-    name: lang === "zh" ? "Data Agents" : "Data Agents",
+    name: "Data Agents",
     thesis: lang === "zh" ? "从 SQL / code 正确走向数据发现、业务语义、完整工作流与可执行交付。" : "From SQL and code correctness to discovery, business semantics, complete workflows, and executable deliverables.",
   },
 ];
@@ -110,14 +121,14 @@ const description = lang === "zh"
         </div>
       </div>
       <div class="content-home__signals">
-        {research.frontierShifts.slice(0, 6).map((shift) => (
+        {frontierShifts.slice(0, 6).map((shift: FrontierShift) => (
           <article>
             <p>{shift.area === "agent-memory" ? "Memory" : shift.area === "rag" ? "Retrieval" : "Data"}</p>
             <h3>{localize(shift.title, lang)}</h3>
             <div><strong>{lang === "zh" ? "变化：" : "Delta: "}</strong>{localize(shift.delta, lang)}</div>
             <div><strong>{lang === "zh" ? "为什么重要：" : "Why it matters: "}</strong>{localize(shift.consequence, lang)}</div>
             <p class="content-home__bench-links">
-              {shift.benchmarks.map((id) => {
+              {shift.benchmarks.map((id: string) => {
                 const item = registry.find((entry) => entry.id === id);
                 return item ? <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{item.name}</a> : null;
               })}
@@ -130,7 +141,7 @@ const description = lang === "zh"
     <section class="content-home__section shell" aria-labelledby="areas-heading">
       <div class="content-home__section-head"><div><p class="content-home__label">{lang === "zh" ? "三条主线" : "Three research lines"}</p><h2 id="areas-heading">{lang === "zh" ? "按研究问题进入，而不是按页面功能进入" : "Enter by research question, not by product feature"}</h2></div></div>
       <div class="content-home__areas">
-        {areas.map((area) => (
+        {areas.map((area: AreaCard) => (
           <article>
             <div><span>{counts[area.id]}</span> {lang === "zh" ? "个基准" : "benchmarks"}</div>
             <h3>{area.name}</h3>
