@@ -7,42 +7,25 @@ SITE_URL = "https://h20zhang.github.io/Agent-Benchmark-Radar/"
 
 
 class WebPublicationContractTest(unittest.TestCase):
-    def test_pages_workflow_has_minimum_permissions_and_official_actions(self):
-        text = (ROOT / ".github" / "workflows" / "pages.yml").read_text(
-            encoding="utf-8"
-        )
-
-        self.assertIn("contents: read", text)
-        self.assertIn("pages: write", text)
-        self.assertIn("id-token: write", text)
-        self.assertIn("withastro/action@v6", text)
-        self.assertIn("actions/deploy-pages@v5", text)
-        self.assertNotIn("contents: write", text)
-
-    def test_validation_workflow_runs_web_logic_check_and_build(self):
-        text = (ROOT / ".github" / "workflows" / "validate.yml").read_text(
-            encoding="utf-8"
-        )
-
-        self.assertIn("actions/checkout@v7", text)
-        self.assertIn("actions/setup-node@v7", text)
-        self.assertIn("node-version: 24", text)
-        self.assertIn("npm install --no-audit --no-fund", text)
-        self.assertIn("npm test", text)
-        self.assertIn("npm run check", text)
-        self.assertIn("npm run build", text)
-
-    def test_readmes_publish_the_website_as_a_first_class_surface(self):
-        markers = {
-            "README.md": "https://h20zhang.github.io/Agent-Benchmark-Radar/zh/",
-            "README.en.md": "https://h20zhang.github.io/Agent-Benchmark-Radar/en/",
-        }
-        for filename, marker in markers.items():
-            text = (ROOT / filename).read_text(encoding="utf-8")
-            with self.subTest(filename=filename):
-                self.assertIn(marker, text[:6000])
-                self.assertNotIn("网站待完善；当前内容以本 README 为准。", text[:6000])
-                self.assertNotIn("Website under improvement; this README is the source of truth for now.", text[:6000])
+    def test_pages_workflow_cannot_republish_the_app(self):
+        text=(ROOT/'.github/workflows/pages.yml').read_text()
+        self.assertIn('workflow_dispatch', text)
+        for forbidden in ('  push:', 'withastro/action', 'actions/deploy-pages', 'pages: write', 'contents: write'):
+            self.assertNotIn(forbidden, text)
+    def test_validation_prioritizes_readme_without_a_website_build(self):
+        text=(ROOT/'.github/workflows/validate.yml').read_text()
+        self.assertIn('node scripts/render-readme.mjs --check',text)
+        self.assertIn('python scripts/validate_reading.py',text)
+        self.assertNotIn('npm run build',text)
+        self.assertNotIn('smoke-live.py',text)
+    def test_readmes_are_self_contained_primary_reading_surfaces(self):
+        for suffix in ('','.en'):
+            text=(ROOT/f'README{suffix}.md').read_text()
+            self.assertNotIn(SITE_URL,text)
+            for area in ('agent-memory','rag','data-agent'):
+                self.assertIn(f'TABLE-FIRST:AREA:{area}:START',text)
+            self.assertIn(f'benchmarks/locomo{suffix}.md',text)
+            self.assertIn('https://github.com/snap-research/locomo',text)
 
     def test_public_web_source_is_content_first_indexable_and_timeline_first(self):
         public_paths = [

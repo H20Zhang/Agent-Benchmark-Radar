@@ -207,16 +207,9 @@ def validate_benchmark_aliases(zh: str, en: str) -> list[str]:
                     )
 
         order = (
-            "timeline",
-            "frontier",
-            "periods",
-            "changes",
-            "evolution",
-            "field-map",
-            "benchmark-memory",
-            "benchmark-rag",
-            "benchmark-data",
-            "reading-paths",
+            "timeline", "periods", "field-map", "benchmark-memory",
+            "benchmark-rag", "benchmark-data", "reading-paths",
+            "frontier", "changes", "evolution",
         )
         order_positions: list[int] = []
         for anchor in order:
@@ -1427,166 +1420,10 @@ def check_links(path: Path, errors: list[str]) -> None:
 
 
 
-def validate_public_readme(
-    zh: str,
-    en: str,
-    records: list[dict[str, object]],
-) -> list[str]:
-    """Validate the compact v3 reader projection without the retired deep/period layers."""
-
-    errors: list[str] = []
-    record_ids = {str(record.get("id")) for record in records}
-    cases = (
-        ("README.md", zh, "zh"),
-        ("README.en.md", en, "en"),
-    )
-    banned = (
-        "## 最新条目深读",
-        "## 7 天 / 30 天：评价对象发生了什么变化",
-        "## 三个方向的演化",
-        "## 7 days / 30 days: What Changed in the Evaluation Object",
-        "## Three Areas",
-    )
-
-    for language, text, site_locale in cases:
-        for phrase in banned:
-            if phrase in text:
-                errors.append(f"{language}: retired reader surface returned: {phrase}")
-
-        onboarding_start = text.find("<!-- ONBOARDING:START -->")
-        onboarding_end = text.find("<!-- ONBOARDING:END -->")
-        recipe_start = text.find("<!-- EVALUATION-RECIPES:START -->")
-        recipe_end = text.find("<!-- EVALUATION-RECIPES:END -->")
-        recipe_anchor = text.find('<a id="evaluation-recipes"></a>')
-        frontier = text.find('<a id="frontier-signals"></a>')
-        release = text.find('<a id="release-timeline"></a>')
-        field_map = text.find('<a id="field-map"></a>')
-        if min(onboarding_start, onboarding_end, recipe_start, recipe_end, recipe_anchor, frontier) < 0:
-            errors.append(f"{language}: missing onboarding or Evaluation Recipes surface")
-        elif not (onboarding_start < onboarding_end < release < recipe_start <= recipe_anchor < recipe_end < frontier < field_map):
-            errors.append(f"{language}: intent routing / recipe / frontier ordering drift")
-        else:
-            onboarding = text[onboarding_start:onboarding_end]
-            required_routes = (
-                "#benchmark-memory", "#recipe-memory", "#registry-memory",
-                "#benchmark-rag", "#recipe-rag", "#registry-rag",
-                "#benchmark-data", "#recipe-data", "#registry-data",
-            )
-            for route in required_routes:
-                if route not in onboarding:
-                    errors.append(f"{language}: onboarding is missing area route {route}")
-            recipe_block = text[recipe_start:recipe_end]
-            recipe_sections = (("recipe-memory", "recipe-rag"), ("recipe-rag", "recipe-data"), ("recipe-data", None))
-            for anchor, next_anchor in recipe_sections:
-                start_at = recipe_block.find(f'<a id="{anchor}"></a>')
-                end_at = recipe_block.find(f'<a id="{next_anchor}"></a>', start_at + 1) if next_anchor else len(recipe_block)
-                if start_at < 0 or end_at <= start_at:
-                    errors.append(f"{language}: missing recipe section {anchor}")
-                    continue
-                section = recipe_block[start_at:end_at]
-                rows = [line for line in section.splitlines() if line.startswith("| **")]
-                if not 3 <= len(rows) <= 5:
-                    errors.append(f"{language}: {anchor} must contain 3–5 bounded recipes")
-                for row in rows:
-                    if len(re.findall(r"\]\((?:https?://)[^)]+\)", row)) < 2:
-                        errors.append(f"{language}: {anchor} recipe row needs Core and Complement links")
-        for registry_anchor in ("registry-memory", "registry-rag", "registry-data"):
-            if text.count(f'<a id="{registry_anchor}"></a>') != 1:
-                errors.append(f"{language}: expected exactly one stable {registry_anchor} anchor")
-        if release < 0 or field_map < 0 or release >= field_map:
-            errors.append(f"{language}: release timeline must precede Benchmark Map")
-        elif "<details" in text[release:field_map].lower():
-            errors.append(f"{language}: per-item deep reads returned to the main README")
-
-        for label in (
-            "TABLE-FIRST:RECENT",
-            "TABLE-FIRST:AREA:agent-memory",
-            "TABLE-FIRST:AREA:rag",
-            "TABLE-FIRST:AREA:data-agent",
-        ):
-            start_marker = f"<!-- {label}:START -->"
-            end_marker = f"<!-- {label}:END -->"
-            if text.count(start_marker) != 1 or text.count(end_marker) != 1:
-                errors.append(f"{language}: expected exactly one {label} block")
-                continue
-            block = text.split(start_marker, 1)[1].split(end_marker, 1)[0]
-            expected_columns = 4 if label == "TABLE-FIRST:RECENT" else 5
-            for line in block.splitlines():
-                visible = strip_html_comments(line).strip()
-                if visible.startswith("|") and visible.endswith("|"):
-                    cells = visible.split("|")[1:-1]
-                    if len(cells) != expected_columns:
-                        errors.append(
-                            f"{language}: {label} must have exactly {expected_columns} visible columns"
-                        )
-                        break
-            for forbidden in ("相较以往", "带来的变化", "What changed", "Why it changed the question"):
-                if forbidden in block:
-                    errors.append(f"{language}: {label} still exposes parallel change column {forbidden}")
-
-        sections = (
-            ("agent-memory", "benchmark-memory", "benchmark-rag"),
-            ("rag", "benchmark-rag", "benchmark-data"),
-            ("data-agent", "benchmark-data", "all-benchmarks"),
-        )
-        for area, anchor, next_anchor in sections:
-            start = text.find(f'<a id="{anchor}"></a>')
-            end = text.find(f'<a id="{next_anchor}"></a>', start + 1)
-            if start < 0 or end < 0:
-                errors.append(f"{language}: missing Benchmark Map section {anchor}")
-                continue
-            section = text[start:end]
-            start_marker = f"<!-- CAPABILITY-MAP:{area}:START -->"
-            end_marker = f"<!-- CAPABILITY-MAP:{area}:END -->"
-            if section.count(start_marker) != 1 or section.count(end_marker) != 1:
-                errors.append(f"{language}: {anchor} needs one stable capability map block")
-                continue
-            diagram = section.split(start_marker, 1)[1].split(end_marker, 1)[0]
-            if diagram.count("```mermaid") != 1:
-                errors.append(f"{language}: {anchor} needs exactly one Mermaid diagram")
-            if diagram.count("flowchart TB") != 1:
-                errors.append(f"{language}: {anchor} capability map must use flowchart TB")
-            for accessibility_token in ("accTitle:", "accDescr:"):
-                if accessibility_token not in diagram:
-                    errors.append(
-                        f"{language}: {anchor} capability map needs {accessibility_token}"
-                    )
-            for stage in ("Foundation", "Transition", "Frontier"):
-                if stage not in diagram:
-                    errors.append(
-                        f"{language}: {anchor} capability map is missing {stage}"
-                    )
-            for retired_label in ("**主干：**", "**Defining chain:**"):
-                if retired_label in section:
-                    errors.append(f"{language}: {anchor} still exposes {retired_label}")
-
-        for label in ("TABLE-FIRST:AREA:agent-memory", "TABLE-FIRST:AREA:rag", "TABLE-FIRST:AREA:data-agent"):
-            block = text.split(f"<!-- {label}:START -->", 1)[1].split(f"<!-- {label}:END -->", 1)[0]
-            for identity in BENCHMARK_ID_RE.findall(block):
-                if identity not in record_ids:
-                    errors.append(f"{language}: unknown benchmark identity {identity} in {label}")
-
-    def _recipe_external_links(value: str) -> list[str]:
-        try:
-            block = value.split("<!-- EVALUATION-RECIPES:START -->", 1)[1].split(
-                "<!-- EVALUATION-RECIPES:END -->", 1
-            )[0]
-        except IndexError:
-            return []
-        return re.findall(r"\]\((https?://[^)]+)\)", block)
-
-    if _recipe_external_links(zh) != _recipe_external_links(en):
-        errors.append("Chinese/English Evaluation Recipes benchmark-link drift")
-
-    try:
-        zh_recent = BENCHMARK_ID_RE.findall(zh.split("<!-- TABLE-FIRST:RECENT:START -->", 1)[1].split("<!-- TABLE-FIRST:RECENT:END -->", 1)[0])
-        en_recent = BENCHMARK_ID_RE.findall(en.split("<!-- TABLE-FIRST:RECENT:START -->", 1)[1].split("<!-- TABLE-FIRST:RECENT:END -->", 1)[0])
-        if zh_recent != en_recent:
-            errors.append("Chinese/English recent release table identity or order drift")
-    except IndexError:
-        pass
-
-    return errors
+def validate_public_readme(zh: str, en: str, records: list[dict[str, object]]) -> list[str]:
+    """The primary reading surface is the chronology and complete bilingual registry."""
+    from readme_contract import validate
+    return validate(zh, en, records)
 
 
 def main() -> int:

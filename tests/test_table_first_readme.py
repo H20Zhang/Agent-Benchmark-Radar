@@ -59,9 +59,11 @@ class TableFirstReadmeContractTest(unittest.TestCase):
         sections = (
             ("agent-memory", "benchmark-memory", "benchmark-rag"),
             ("rag", "benchmark-rag", "benchmark-data"),
-            ("data-agent", "benchmark-data", "all-benchmarks"),
+            ("data-agent", "benchmark-data", "evaluation-frontiers"),
         )
-        for filename, text in self.readmes.items():
+        for filename in self.readmes:
+            suffix = ".en" if filename == "README.en.md" else ""
+            text = (ROOT / f"docs/reading-guide{suffix}.md").read_text()
             for area, start_anchor, end_anchor in sections:
                 with self.subTest(filename=filename, area=area):
                     start = text.index(f'<a id="{start_anchor}"></a>')

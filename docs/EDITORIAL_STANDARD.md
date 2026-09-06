@@ -1,5 +1,6 @@
 # Research Radar Editorial Standard
 
+
 This is the prose contract for reader-facing Agent Benchmark Radar content.
 
 ## Benchmark reasoning before prose
@@ -32,8 +33,8 @@ Chinese sentences should still have a Chinese grammatical spine: use Chinese ver
 - Treat scale as novelty only when scale fixes a known validity problem.
 - Use numbers only when they change interpretation.
 - Keep the strongest confounder visible near the claim it weakens.
-- Treat README as a data-rich research navigator: put the dated benchmark timeline first, then offer bounded claim-to-benchmark recipes and explicitly editorial observations. Keep complete tables and direct sources ahead of long-form framing prose.
-- Layer-level attention navigation is `compact area router → release timeline → Evaluation Recipes → frontier signal → Benchmark Map → complete area tables → Reading Paths → Library`; routing and recipes help the reader choose, while each research layer answers a different question without repeating the previous one.
+- Treat README as a data-rich research navigator: put the dated benchmark timeline first, then all three complete area tables. Put recipes, result indexes and editorial observations in linked Markdown guides.
+- Layer-level attention navigation is `month/area links → release timeline → complete area tables → optional reading guides`. No narrative or tooling layer interrupts the lists.
 - Keep the same information contract across table rows, but vary the syntax. Repeating `相比 X，把 A 推进到 B` in every row is not a style guide.
 - Emoji are allowed when they carry a stable meaning, such as evolution roles; do not use them as decoration.
 

@@ -96,11 +96,10 @@ class CapabilityMapSurfaceTest(unittest.TestCase):
             [], validate_public_readme(self.zh, self.en, self.records)
         )
 
-    def test_map_direction_is_validated_without_requiring_a_site_route(self):
-        mutated = self.en.replace("flowchart TB", "flowchart LR", 1)
+    def test_wrong_reading_link_is_rejected_without_requiring_a_site_route(self):
+        mutated = self.en.replace("benchmarks/eal-bench.en.md", "benchmarks/eal-bench.md", 1)
         errors = validate_public_readme(self.zh, mutated, self.records)
-
-        self.assertTrue(any("flowchart TB" in error for error in errors), errors)
+        self.assertTrue(any("direct reading note" in error for error in errors), errors)
         self.assertFalse(any("interactive site route" in error for error in errors), errors)
 
 
@@ -111,11 +110,12 @@ class AttentionNavigationTest(unittest.TestCase):
         for text in (zh, en):
             positions = [
                 text.index('<a id="release-timeline"></a>'),
-                text.index('<a id="frontier-signals"></a>'),
                 text.index('<a id="timeline"></a>'),
                 text.index('<a id="periods"></a>'),
                 text.index('<a id="field-map"></a>'),
+                text.index('<a id="all-benchmarks"></a>'),
                 text.index('<a id="reading-paths"></a>'),
+                text.index('<a id="frontier-signals"></a>'),
                 text.index('<a id="library"></a>'),
             ]
             self.assertEqual(sorted(positions), positions)

@@ -1,79 +1,10 @@
-name: Retire website — README handoff only
-
+name: Website retired — README is primary
 on:
-  push:
-    branches: [main]
-    paths: [.github/workflows/pages.yml]
   workflow_dispatch:
-
-# The Astro application is retained as source, never built or deployed here.
-# README edits do not trigger Pages. Existing URLs only hand off to GitHub.
-concurrency:
-  group: pages
-  cancel-in-progress: false
 permissions:
   contents: read
-
 jobs:
-  retirement:
+  notice:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Prepare retirement notice, not the website
-        run: |
-          mkdir -p retired/zh retired/en
-          python3 - <<'PY'
-          from pathlib import Path
-          template = '''<!doctype html>
-          <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="radar-surface" content="readme-only"><title>Agent Benchmark Radar — README</title><link rel="canonical" href="{target}"><meta http-equiv="refresh" content="1;url={target}"></head>
-          <body><main><h1>Agent Benchmark Radar</h1><p>网站已停用，请在 GitHub README 阅读与查找基准。</p><p>The website is retired. Read and browse benchmarks in the GitHub README.</p><p><a id="destination" href="{target}">打开 README / Open README</a></p><p><a href="https://github.com/H20Zhang/Agent-Benchmark-Radar#readme">中文</a> · <a href="https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/main/README.en.md">English</a></p></main>
-          <script>
-          const repo = 'https://github.com/H20Zhang/Agent-Benchmark-Radar';
-          const path = location.pathname;
-          const en = /\/en(?:\/|$)/.test(path);
-          let target = en ? repo + '/blob/main/README.en.md' : repo + '#readme';
-          const note = path.match(/\/benchmarks\/([a-z0-9-]+)\/?$/);
-          const area = path.match(/\/areas\/(agent-memory|rag|data-agent)\/?$/);
-          if (note) target = repo + '/blob/main/benchmarks/' + note[1] + (en ? '.en' : '') + '.md';
-          else if (area) target = (en ? repo + '/blob/main/README.en.md' : repo) + '#registry-' + ({'agent-memory':'memory','rag':'rag','data-agent':'data'}[area[1]]);
-          else if (/\/timeline\/?$/.test(path)) target = (en ? repo + '/blob/main/README.en.md' : repo) + '#release-timeline';
-          document.getElementById('destination').href = target;
-          location.replace(target);
-          </script></body></html>'''
-          repo = 'https://github.com/H20Zhang/Agent-Benchmark-Radar'
-          for file, lang in [('index.html','zh'),('404.html','zh'),('zh/index.html','zh'),('en/index.html','en')]:
-              target = repo + ('/blob/main/README.en.md' if lang == 'en' else '#readme')
-              Path('retired',file).write_text(template.replace('{lang}',lang).replace('{target}',target), encoding='utf-8')
-          Path('retired/.nojekyll').touch()
-          assert len(list(Path('retired').rglob('*.html'))) == 4
-          PY
-      - uses: actions/upload-pages-artifact@v4
-        with:
-          path: retired
-      - name: Remove previous app deployment by publishing the README handoff
-        id: deployment
-        uses: actions/deploy-pages@v5
-      - name: Verify public retirement content
-        run: |
-          python3 - <<'PY'
-          import time, urllib.request
-          url = 'https://h20zhang.github.io/Agent-Benchmark-Radar/zh/'
-          for attempt in range(18):
-              try:
-                  req = urllib.request.Request(url + '?retired=' + str(attempt), headers={'Cache-Control':'no-cache'})
-                  text = urllib.request.urlopen(req, timeout=15).read().decode()
-                  if 'content="readme-only"' in text and 'location.replace(target)' in text:
-                      print('Verified: public site contains only the README handoff.')
-                      break
-              except OSError:
-                  pass
-              time.sleep(5)
-          else:
-              raise SystemExit('Public retirement content not yet verified')
-          PY
+      - run: echo 'Website publication is disabled. Existing URLs only redirect to the GitHub README. See docs/README_PUBLICATION.md.'

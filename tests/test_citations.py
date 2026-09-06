@@ -53,10 +53,10 @@ class CitationProjectionTest(unittest.TestCase):
                         self.assertEqual(5, len(cells))
                         citation = self.by_id[identity]["citations"]
                         if citation["status"] == "ok":
-                            self.assertIn(f"{citation['count']:,}", cells[2])
-                            self.assertIn(citation["url"], cells[2])
+                            self.assertIn(f"{citation['count']:,}", cells[4])
+                            self.assertIn(citation["url"], cells[4])
                         else:
-                            self.assertEqual("—", cells[2])
+                            self.assertEqual("—", cells[4])
 
 
 if __name__ == "__main__":

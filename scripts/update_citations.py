@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import subprocess
 import argparse
 import html
 import json
@@ -456,10 +457,9 @@ def main() -> int:
     changed = _refresh_citations(records, args.date)
     if changed:
         REGISTRY.write_text(json.dumps(records, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    changed = _patch_readme(README_ZH, records, "zh", args.date) or changed
-    changed = _patch_readme(README_EN, records, "en", args.date) or changed
+    subprocess.run(["node", str(ROOT / "scripts/render-readme.mjs")], check=True)
     if args.migrate:
-        changed = _migrate_contract() or changed
+        print("Legacy --migrate is retired; README-first generation is already active.")
 
     print("citation refresh changed files" if changed else "citation refresh: no changes")
     return 0
