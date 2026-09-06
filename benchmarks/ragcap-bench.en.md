@@ -6,7 +6,7 @@
 
 ## What it actually measures
 
-RAGCap-Bench evaluates **intermediate tasks and capabilities** that recur inside agentic RAG workflows rather than scoring only the final answer. The benchmark taxonomy is derived from observed system outputs, recurring tasks, and typical failure patterns.
+RAGCap-Bench evaluates intermediate tasks inside agentic RAG rather than only the final answer: planning, evidence extraction, grounded reasoning, and noise robustness. Its multiple-choice questions come from system trajectories and recurring failure patterns, making an end-to-end failure easier to diagnose.
 
 ## What changed relative to prior evaluation
 
@@ -14,7 +14,9 @@ End-to-end RAG scores turn planning, retrieval, reasoning, and intermediate deci
 
 ## Decisive evidence
 
-The paper reports that slow-thinking models with stronger RAGCap performance also achieve better end-to-end agentic-RAG outcomes. This correlation is evidence that the chosen intermediate tasks capture useful competencies rather than arbitrary micro-benchmarks.
+Under the paper v2 informative-prompt protocol (Table 3), DeepSeek-R1 records the highest Overall F1 in the reported comparison, 81.05%. Strict exact match tells a different story: evidence extraction reaches 42.02% with Gemini-3.1-Pro, while grounded reasoning reaches 57.23% with Qwen3-235B-A22B. Aggregate F1 above 80% therefore does not mean that a model completes intermediate steps without errors.
+
+The reported correlation with end-to-end agentic RAG supports diagnostic relevance, not a causal guarantee that improving one micro-task improves the deployed system. [Versioned source: Table 3](https://arxiv.org/html/2510.13910v2#S4.T3).
 
 ## What the score supports
 
@@ -22,7 +24,7 @@ Capability scores can diagnose likely weaknesses and compare models under standa
 
 ## Fair comparison contract
 
-Fix prompt/harness, backbone version, tool descriptions, and per-task budget. When relating RAGCap to end-to-end performance, use matched systems and resource budgets; otherwise a larger agent scaffold can create both higher micro-scores and higher final scores.
+Fix prompts, evaluation version, and run count. Paper v2 Table 3 uses informative prompts and averages three runs; bare prompts are a different setting. When relating these capabilities to end-to-end performance, also align the agent framework, tools, and resource budget. A larger scaffold can otherwise improve both scores without establishing component-level causality.
 
 ## What remains unmeasured
 

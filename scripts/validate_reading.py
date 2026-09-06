@@ -1463,7 +1463,7 @@ def validate_public_readme(
         field_map = text.find('<a id="field-map"></a>')
         if min(onboarding_start, onboarding_end, recipe_start, recipe_end, recipe_anchor, frontier) < 0:
             errors.append(f"{language}: missing onboarding or Evaluation Recipes surface")
-        elif not (onboarding_start < onboarding_end < recipe_start <= recipe_anchor < recipe_end < frontier < release):
+        elif not (onboarding_start < onboarding_end < release < recipe_start <= recipe_anchor < recipe_end < frontier < field_map):
             errors.append(f"{language}: intent routing / recipe / frontier ordering drift")
         else:
             onboarding = text[onboarding_start:onboarding_end]

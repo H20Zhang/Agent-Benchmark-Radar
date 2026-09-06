@@ -1,116 +1,22 @@
 ---
-import { localizeChineseProse } from "../lib/chinese-localization.mjs";
-import { localize } from "../lib/research-model.mjs";
-import { summarizeTrack } from "../lib/results.mjs";
-
-interface Props {
-  lang: "zh" | "en";
-  resultSet: any;
-}
-
-const { lang, resultSet } = Astro.props;
-const labels = lang === "zh" ? {
-  eyebrow: "结果证据",
-  title: "各自 protocol cell 内报告了什么",
-  verified: "结果最后核验",
-  task: "任务",
-  split: "数据切分",
-  protocol: "评测协议",
-  method: "方法 / 系统",
-  score: "分数",
-  date: "结果日期",
-  source: "来源",
-  best: "该轨道报告最佳",
-  headroom: "到来源支持参考目标的归一化距离",
-  direction: "优化方向",
-  higher: "越高越好",
-  lower: "越低越好",
-} : {
-  eyebrow: "Result evidence",
-  title: "What is reported inside each protocol cell",
-  verified: "Result last verified",
-  task: "Task",
-  split: "Split",
-  protocol: "Protocol",
-  method: "Method / system",
-  score: "Score",
-  date: "Result date",
-  source: "Source",
-  best: "Reported best on this track",
-  headroom: "Normalized distance to a source-backed reference target",
-  direction: "Direction",
-  higher: "Higher is better",
-  lower: "Lower is better",
-};
-const zhTrackingLabels: Record<string, string> = {
-  live: "动态追踪",
-  "paper-snapshot": "论文快照",
-  "verified-snapshot": "核验快照",
-};
-const enTrackingLabels: Record<string, string> = {
-  live: "Live tracking",
-  "paper-snapshot": "Paper snapshot",
-  "verified-snapshot": "Verified snapshot",
-};
-const statusLabel = lang === "zh"
-  ? (zhTrackingLabels[resultSet.tracking_status] || "来源快照")
-  : (enTrackingLabels[resultSet.tracking_status] || "Source snapshot");
+import { presentResult } from '../lib/results.mjs';
+import { localize } from '../lib/research-model.mjs';
+interface Props { lang:'zh'|'en'; resultSet:any; }
+const {lang,resultSet}=Astro.props;
+const zh=lang==='zh';
 ---
-
-<section id="results" class="results-panel" aria-labelledby="results-heading">
-  <div class="results-panel__heading">
-    <div><p class="eyebrow">{labels.eyebrow}</p><h2 id="results-heading">{labels.title}</h2><p>{lang === "zh" ? "不同轨道、任务、数据切分或协议版本之间的数值不自动可比。" : "Values from different tracks, tasks, splits, or protocol versions are not automatically comparable."}</p></div>
-    <div class="results-panel__status"><span>{statusLabel}</span><time datetime={resultSet.verified_at}>{labels.verified} · {resultSet.verified_at}</time></div>
-  </div>
-
-  <div class="result-tracks">
-    {resultSet.tracks.map((track: any, trackIndex: number) => {
-      const summary = summarizeTrack(track);
-      const metric = track.metric;
-      const sorted = [...track.entries].sort(metric.direction === "lower" ? (a, b) => a.score - b.score : (a, b) => b.score - a.score);
-      const range = metric.range || [Math.min(...track.entries.map((entry: any) => entry.score)), Math.max(...track.entries.map((entry: any) => entry.score))];
-      const span = Math.max(0.0001, range[1] - range[0]);
-      return (
-        <article class="result-track">
-          <header>
-            <div><span>{String(trackIndex + 1).padStart(2, "0")}</span><h3>{localize(track.label, lang)}</h3></div>
-            <div class="result-track__best"><small>{labels.best}</small><strong>{summary.best.score}<em>{metric.unit}</em></strong><span>{summary.best.method}</span></div>
-          </header>
-
-          <dl class="result-contract">
-            <div><dt>{labels.task}</dt><dd>{localizeChineseProse(localize(track.task, lang), lang)}</dd></div>
-            <div><dt>{labels.split}</dt><dd>{localizeChineseProse(localize(track.split, lang), lang)}</dd></div>
-            <div><dt>{labels.protocol}</dt><dd>{track.protocol_version}</dd></div>
-            <div><dt>{labels.direction}</dt><dd>{metric.direction === "higher" ? labels.higher : labels.lower}</dd></div>
-          </dl>
-
-          <div class="score-bars" aria-hidden="true">
-            {sorted.map((entry: any, index: number) => (
-              <div class="score-bar" style={`--score-width:${Math.max(3, (entry.score - range[0]) / span * 100)}%`}>
-                <span>{String(index + 1).padStart(2, "0")}</span><i></i><b>{entry.score}{metric.unit}</b>
-              </div>
-            ))}
-          </div>
-
-          <div class="result-table-wrap">
-            <table class="result-table">
-              <thead><tr><th>{labels.method}</th><th>{labels.score}</th><th>{labels.date}</th><th>{labels.source}</th></tr></thead>
-              <tbody>
-                {sorted.map((entry: any, index: number) => (
-                  <tr class={index === 0 ? "is-best" : undefined}>
-                    <td><strong>{entry.method}</strong>{entry.model && entry.model !== entry.method && <small>{entry.model}</small>}</td>
-                    <td>{entry.score} {metric.unit}</td>
-                    <td><time datetime={entry.date}>{entry.date}</time></td>
-                    <td><a href={entry.source} rel="noreferrer">{lang === "zh" ? "核验来源" : "Verify source"} ↗</a></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {summary.headroom !== undefined && <p class="result-track__headroom"><span>{labels.headroom}</span><strong>{summary.headroom}%</strong></p>}
-        </article>
-      );
-    })}
-  </div>
+<section id="results" class="results-panel page-section" aria-labelledby="results-heading">
+  <div class="section-heading"><div><p class="eyebrow">{zh?'结果证据':'Result evidence'}</p><h2 id="results-heading">{zh?'已收录的结果记录':'Recorded results'}</h2></div><p>{zh?'结果核验':'Result verified'} <time datetime={resultSet.verified_at}>{resultSet.verified_at}</time></p></div>
+  <p class="content-note">{zh?'这些记录是来源快照，不保证覆盖全部方法。任务、数据切分、模型、预算或评判器不一致时，不据此归因组件优劣。':'These source snapshots may not cover every method. Different tasks, splits, models, budgets, or evaluators do not establish component-level superiority.'}</p>
+  {resultSet.tracks.map((track:any)=>{
+    const view=presentResult(resultSet,lang,track);
+    if(!view) throw new Error(`Empty result track: ${track.track_id}`);
+    const sorted=[...track.entries].sort(track.metric.direction==='lower'?(a,b)=>a.score-b.score:(a,b)=>b.score-a.score);
+    return <article class="result-track">
+      <header><h3>{localize(track.label,lang)}</h3><p><strong>{view.label}: {view.score}{view.unit}</strong> · {view.status}</p><p class="content-note">{view.scope}</p></header>
+      <dl class="result-contract"><div><dt>{zh?'任务':'Task'}</dt><dd lang={zh&&typeof track.task==='string'?'en':undefined}>{localize(track.task,lang)}</dd></div><div><dt>{zh?'数据切分':'Split'}</dt><dd lang={zh&&typeof track.split==='string'?'en':undefined}>{localize(track.split,lang)}</dd></div><div><dt>{zh?'协议':'Protocol'}</dt><dd>{track.protocol_version}</dd></div><div><dt>{zh?'指标':'Metric'}</dt><dd>{track.metric.label} · {track.metric.direction==='higher'?(zh?'越高越好':'Higher is better'):(zh?'越低越好':'Lower is better')}</dd></div></dl>
+      <div class="table-scroll" role="region" tabindex="0" aria-label={localize(track.label,lang)}><table class="result-table"><caption>{localize(track.label,lang)}</caption><thead><tr><th scope="col">{zh?'方法 / 模型':'Method / model'}</th><th scope="col">{zh?'条件 / 预算（来源原文）':'Conditions / budget'}</th><th scope="col">{zh?'分数':'Score'}</th><th scope="col">{zh?'结果日期':'Reported'}</th><th scope="col">{zh?'来源':'Source'}</th></tr></thead><tbody>{sorted.map(entry=><tr><td><strong>{entry.method}</strong>{entry.model&&entry.model!==entry.method&&<small>{entry.model}</small>}</td><td class="result-conditions">{!entry.model&&<small>{zh?'模型未单独报告':'Model not separately reported'}</small>}{entry.context&&<p lang={zh?'en':undefined}>{entry.context}</p>}{entry.budget?<p lang={zh?'en':undefined}>{entry.budget}</p>:<small>{zh?'预算未在本记录中报告':'Budget not reported in this record'}</small>}</td><td>{entry.score}{track.metric.unit}</td><td><time datetime={entry.date}>{entry.date}</time></td><td><a href={entry.source}>{zh?'原始来源 ↗':'Primary source ↗'}</a></td></tr>)}</tbody></table></div>
+      {track.metric.reference_target&&<details class="reference-target"><summary>{zh?'参考目标定义（不是研究机会估计）':'Reference target definition (not research headroom)'}</summary><p>{track.metric.reference_target.value}{track.metric.unit} · {track.metric.reference_target.type} · <a href={track.metric.reference_target.source}>{zh?'目标来源':'Target source'}</a></p><p>{zh?'理论满分与可实现的提升不是同一个概念。本数值不参与基准筛选或研究机会排序。':'A theoretical ceiling is not an attainable improvement estimate. This value is not used to filter benchmarks or rank research opportunities.'}</p></details>}
+    </article>;
+  })}
 </section>

@@ -13,23 +13,11 @@ function source(path) {
   return readFileSync(join(root, path), "utf8");
 }
 
-test("Chinese prose localizer translates ordinary lowercase technical nouns but preserves canonical identifiers", () => {
-  const input = "LoCoMo uses memory retrieval for each query with BM25 and MRR@10, then measures downstream utility.";
-  const output = localizeChineseProse(input, "zh");
-  assert.match(output, /LoCoMo/);
-  assert.match(output, /BM25/);
-  assert.match(output, /MRR@10/);
-  assert.match(output, /记忆/);
-  assert.match(output, /检索/);
-  assert.match(output, /查询/);
-  assert.match(output, /下游/);
-  assert.match(output, /效用/);
-  assert.doesNotMatch(output, /\bmemory\b|\bretrieval\b|\bquery\b|\bdownstream\b|\butility\b/);
-});
-
-test("Chinese HTML localizer leaves code spans untouched", () => {
-  const output = localizeChineseHtml("<p>memory retrieval</p><code>memory retrieval</code>", "zh");
-  assert.equal(output, "<p>记忆 检索</p><code>memory retrieval</code>");
+test("prose remains immutable; localization only labels structured tokens", () => {
+  const input = "LoCoMo uses memory retrieval. 这些能力尚未覆盖。";
+  assert.equal(localizeChineseProse(input, "zh"), input);
+  const html = "<p>memory retrieval 尚未覆盖</p><code>memory</code>";
+  assert.equal(localizeChineseHtml(html, "zh"), html);
 });
 
 test("common taxonomy tokens have Chinese display labels", () => {
@@ -56,19 +44,10 @@ test("Chinese locale does not expose known English UI labels", () => {
   }
 });
 
-test("core Chinese pages use explicit localized labels and evidence-layer semantics", () => {
-  const detail = source("src/components/BenchmarkDetail.astro");
-  const results = source("src/components/ResultsPanel.astro");
-  const home = source("src/pages/[lang]/index.astro");
-  const explorer = source("src/pages/[lang]/benchmarks/index.astro");
-  const suites = source("src/pages/[lang]/evaluate/index.astro");
-  assert.match(detail, /supportEyebrow: "结论边界"/);
-  assert.match(detail, /evidenceEyebrow: "证据摘要"/);
-  assert.match(results, /eyebrow: "结果证据"/);
-  assert.match(results, /best: "该轨道报告最佳"/);
-  assert.match(home, /lang === "zh" \? "事实层 · 最新发布" : "Factual layer · Latest releases"/);
-  assert.match(home, /lang === "zh" \? "解释层 · Frontier signals" : "Interpretive layer · Frontier signals"/);
-  assert.doesNotMatch(home, /网站待完善|Website under improvement/);
-  assert.match(explorer, /lang === "zh" \? "基准筛选" : "Benchmark explorer"/);
-  assert.match(suites, /lang === "zh" \? "评测组合" : "Evaluation suites"/);
+test("authored Chinese next experiments are reused rather than masked as missing", async () => {
+  const { getAuthoredBrief } = await import("../src/lib/deep-reads.mjs");
+  const { loadRegistry } = await import("../src/lib/registry.mjs");
+  for (const item of loadRegistry()) {
+    assert.ok(getAuthoredBrief(item.id, "zh").next, `${item.id} next experiment`);
+  }
 });

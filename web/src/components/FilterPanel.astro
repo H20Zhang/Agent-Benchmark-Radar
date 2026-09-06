@@ -62,26 +62,19 @@ const counts = { tracked: resultSets.size, untracked: items.length - resultSets.
 
   <details class="refine-panel refine-panel--tool">
     <summary>
-      <span><b>{lang === "zh" ? "更多筛选维度" : "More filters"}</b><small>{lang === "zh" ? "参考空间、指标、能力、环境、评测协议与角色" : "Headroom, metric, capability, environment, protocol, and role"}</small></span>
+      <span><b>{lang === "zh" ? "更多筛选维度" : "More filters"}</b><small>{lang === "zh" ? "指标、能力、环境、协议与编辑角色" : "Metric, capability, environment, protocol, and editorial role"}</small></span>
       <span aria-hidden="true">＋</span>
     </summary>
     <div class="refine-panel__body">
-      <fieldset class="filter-group">
-        <legend>{copy.filters.headroom}</legend>
-        <div class="chip-control">
-          <label><input type="checkbox" name="headroom" value="wide" /><span>{copy.filters.headroomWide}</span></label>
-          <label><input type="checkbox" name="headroom" value="moderate" /><span>{copy.filters.headroomModerate}</span></label>
-          <label><input type="checkbox" name="headroom" value="limited" /><span>{copy.filters.headroomLimited}</span></label>
-        </div>
-      </fieldset>
 
+      <fieldset class="filter-group"><legend>{lang === "zh" ? "结果来源类型" : "Result source type"}</legend><div class="chip-control">{[["paper-snapshot", lang === "zh" ? "论文快照" : "Paper snapshot"], ["verified-snapshot", lang === "zh" ? "核验快照" : "Verified snapshot"], ["live", lang === "zh" ? "排行榜追踪" : "Leaderboard tracking"]].map(([value, label]) => <label><input type="checkbox" name="source" value={value} /><span>{label}</span></label>)}</div></fieldset>
       {metricFamilies.length > 0 && <fieldset class="filter-group"><legend>{copy.filters.metric}</legend><div class="chip-control">{metricFamilies.map((metric) => <label><input type="checkbox" name="metric" value={metric} /><span>{metric}</span></label>)}</div></fieldset>}
 
       {stableFacets.map((facet) => (
         <details class="facet-disclosure" data-facet-area={facet.area || ""}>
           <summary><span>{localize(facet.label, lang)}</span><small>{facet.options.length}</small></summary>
           <div class="chip-control chip-control--counts">
-            {facet.options.map((option: any) => <label><input type="checkbox" name="facet" value={option.id} /><span>{localize(option.label, lang)}<small>{option.count}</small></span></label>)}
+            {facet.options.map((option: any) => <label><input type="checkbox" name="facet" value={option.key} data-option-id={option.id} data-facet-id={facet.id} /><span>{localize(option.label, lang)}<small>{option.count}</small></span></label>)}
           </div>
         </details>
       ))}
@@ -97,6 +90,7 @@ const counts = { tracked: resultSets.size, untracked: items.length - resultSets.
     </div>
   </details>
 
+  <p class="content-note">{lang === "zh" ? "同一维度内取并集，不同维度间取交集。能力标签为编辑索引，其中含待复核的历史自动映射。" : "OR within a dimension; AND across dimensions. Editorial facets include imported heuristic assignments pending review."}</p>
   <div class="filter-panel__bottomline">
     <div class="active-filters" data-active-filters aria-live="polite"></div>
     <small>{lang === "zh" ? "筛选即时生效 · 当前链接可直接分享" : "Filters apply instantly · the current URL is shareable"}</small>

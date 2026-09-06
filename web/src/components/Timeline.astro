@@ -1,0 +1,50 @@
+---
+import { loadRegistry } from '../lib/registry.mjs';
+import { loadChineseSummaries } from '../lib/readme-localization.mjs';
+import { copyFor, AREAS } from '../lib/i18n.mjs';
+import { chronological, releaseDate, releaseLabel, isPublishedRecord, inReleaseWindow, isoDay } from '../lib/release-time.mjs';
+import { publicationWindow } from '../lib/publication.mjs';
+import { localePath, sitePath } from '../lib/site.mjs';
+interface Props { lang: 'zh' | 'en'; }
+const { lang } = Astro.props;
+const zh = lang === 'zh';
+const copy = copyFor(lang);
+const items = chronological(loadRegistry().filter(isPublishedRecord));
+const summaries = loadChineseSummaries();
+const period = publicationWindow();
+const months = [...new Set(items.map(item => releaseDate(item).date.slice(0,7)))];
+const visible = items.filter(item => inReleaseWindow(item, period.recent));
+---
+<section id="timeline" class="timeline shell" data-timeline data-as-of={period.asOf} data-lang={lang}>
+  <form class="timeline-controls" data-timeline-form>
+    <label class="timeline-search"><span>{zh ? '搜索名称或考察内容' : 'Search names or measurement targets'}</span><input type="search" name="q" placeholder={zh ? '例如：长期记忆、数据分析' : 'Memory, retrieval, data analysis'} /></label>
+    <label><span>{zh ? '领域' : 'Area'}</span><select name="area"><option value="">{zh ? '全部领域' : 'All areas'}</option>{AREAS.map(area => <option value={area}>{copy.areas[area].label}</option>)}</select></label>
+    <label><span>{zh ? '时间范围' : 'Time range'}</span><select name="window"><option value="recent">{zh ? '最近六个月' : 'Last six months'}</option><option value="all">{zh ? '全部历史' : 'All history'}</option></select></label>
+    <label><span>{zh ? '定位月份' : 'Jump to month'}</span><select name="month"><option value="">{zh ? '所有月份' : 'All months'}</option>{months.map(month => <option value={month}>{month}</option>)}</select></label>
+    <button type="reset">{zh ? '重置' : 'Reset'}</button>
+  </form>
+  <div class="timeline-status"><p><strong data-timeline-count aria-live="polite">{visible.length}</strong> / {items.length} {zh ? '个基准' : 'benchmarks'} <span data-timeline-range>{isoDay(period.recent.start)} — {period.asOf}</span></p><a href={sitePath(localePath(lang, 'benchmarks/'))}>{zh ? '更多筛选维度 →' : 'More filters →'}</a></div>
+  <details class="timeline-date-note"><summary>{zh ? '日期口径与精度' : 'Date provenance and precision'}</summary><p>{zh ? '区分最早已核验公开版本、正式发表与数据开放。未分类的历史日期不会被当成首发；月份精度按区间重叠纳入窗口，不补造具体日期。日期旁可直接打开来源。' : 'Earliest verified public versions, publications, and data releases are distinct. Unclassified historical dates are not claimed as first releases. Month-precision records use interval overlap without an invented day. Open each date source directly.'}</p><p>{zh ? '发现扫描截至' : 'Discovery scanned through'} <time>{period.asOf}</time> · {zh ? '这不是所有条目均在此日重新核验的声明。' : 'This is not a claim that every record was reverified on that date.'}</p></details>
+  <div data-timeline-groups>
+    {months.map(month => {
+      const entries = items.filter(item => releaseDate(item).date.startsWith(month));
+      return <section class="timeline-month" data-timeline-month={month} hidden={!entries.some(item => inReleaseWindow(item, period.recent))}>
+        <h2 id={`month-${month}`}>{month}</h2>
+        <div>{entries.map(item => {
+          const release = releaseDate(item);
+          return <article class="timeline-row" data-timeline-record data-id={item.id} data-released={release.date} data-area={item.area} data-search={`${item.name} ${summaries.get(item.id)} ${item.summary}`.toLocaleLowerCase()} hidden={!inReleaseWindow(item, period.recent)}>
+            <div class="timeline-date"><time datetime={release.date}>{release.date}</time><span>{releaseLabel(release, lang)}</span>{release.precision === 'month' && <small>{zh ? '仅精确到月' : 'Month precision'}</small>}<a href={release.source || item.artifacts.paper || item.artifacts.code}>{zh ? '日期来源 ↗' : 'Date source ↗'}</a></div>
+            <div class="timeline-row__main"><div class="area-label" data-area={item.area}>{copy.areas[item.area].label}</div><h3><a href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}>{item.name}</a></h3><p>{zh ? summaries.get(item.id) : item.summary}</p></div>
+            <div class="timeline-row__resources">{['paper','code','data'].filter(key => item.artifacts[key]).map(key => <a href={item.artifacts[key]}>{copy.artifacts[key]} ↗</a>)}<a href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}>{zh ? '详情 →' : 'Detail →'}</a></div>
+          </article>;
+        })}</div>
+      </section>;
+    })}
+  </div>
+  <p class="empty-state" data-timeline-empty hidden>{zh ? '没有匹配记录。试试全部历史或清除搜索条件。' : 'No matches. Try all history or clear the search.'}</p>
+  <noscript><p>{zh ? '启用 JavaScript 可交互筛选；完整目录也可直接阅读。' : 'Enable JavaScript for filtering, or read the full library.'} <a href={sitePath(localePath(lang,'benchmarks/'))}>{zh ? '完整目录' : 'Full library'}</a></p></noscript>
+</section>
+<script>
+  import { initTimelines } from '../scripts/timeline.mjs';
+  initTimelines();
+</script>

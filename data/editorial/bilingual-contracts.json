@@ -1,0 +1,63 @@
+{
+  "ragcap-bench": {
+    "source": "https://arxiv.org/html/2510.13910v2",
+    "shared": [
+      "81.05",
+      "42.02",
+      "57.23",
+      "DeepSeek-R1",
+      "Gemini-3.1-Pro",
+      "Qwen3-235B-A22B",
+      "informative prompt"
+    ]
+  },
+  "sgr-bench": {
+    "source": "https://arxiv.org/html/2605.22219v1",
+    "shared": [
+      "66.18",
+      "43.37",
+      "GPT-5.5",
+      "37.2",
+      "27.6",
+      "10.3",
+      "CLI"
+    ]
+  },
+  "bright-pro": {
+    "source": "https://aclanthology.org/2026.acl-long.1705.pdf",
+    "shared": [
+      "739",
+      "175",
+      "68.0",
+      "4.31",
+      "GPT-5-mini",
+      "Qwen3.5-122B-A10B",
+      "AER"
+    ]
+  },
+  "evobrowsecomp": {
+    "source": "https://arxiv.org/html/2606.13120v1",
+    "shared": [
+      "BrowseComp",
+      "44.8",
+      "36.8",
+      "6.3",
+      "10.3",
+      "128K",
+      "40",
+      "GLM-5-Chat"
+    ]
+  },
+  "searchauditbench": {
+    "source": "https://arxiv.org/html/2608.05212v1",
+    "shared": [
+      "26.55",
+      "32.26",
+      "44.89",
+      "18.91",
+      "24.62",
+      "DeepSeek-V4-Flash",
+      "FPS"
+    ]
+  }
+}

@@ -7,7 +7,7 @@ import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
 import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
 import { loadRegistry } from "../../../lib/registry.mjs";
 import { loadResearchModel, localize } from "../../../lib/research-model.mjs";
-import { loadAllResultSets, summarizeTrack } from "../../../lib/results.mjs";
+import { loadAllResultSets, summarizeTrack, presentResult } from "../../../lib/results.mjs";
 import { absoluteUrl, localePath } from "../../../lib/site.mjs";
 
 export function getStaticPaths() { return LOCALES.map((lang) => ({ params: { lang }, props: { lang } })); }
@@ -23,13 +23,16 @@ const comparisonData = items.map((item) => {
   const resultSet = resultSets.get(item.id);
   const track = resultSet && (resultSet.tracks.find((entry: any) => entry.primary) || resultSet.tracks[0]);
   const result = track ? summarizeTrack(track) : undefined;
+  const presentation = presentResult(resultSet, lang, track);
   return {
     id: item.id, name: item.name, area: copy.areas[item.area].label, released: item.released,
     summary: lang === "zh" ? summaries.get(item.id) || item.summary : item.summary,
     scale: item.scale, capabilities: item.capabilities, environment: item.environment, protocol: item.protocol,
     scoreSupports: localize(editorial.score_supports, lang), suiteRole: localize(editorial.suite_role, lang),
     comparison_controls: editorial.comparison_controls.map((control: any) => localize(control, lang)),
-    result: result && {
+    result: result && presentation && {
+      label: presentation.label, model: presentation.model, source: presentation.source, scope: presentation.scope,
+      budget: result.best.budget || "", context: result.best.context || "", reportedAt: result.best.date,
       score: result.best.score,
       method: result.best.method,
       metric: localize(track.label, lang),
@@ -48,14 +51,14 @@ const serializedData = JSON.stringify(comparisonData).replaceAll("<", "\\u003c")
 const canonicalPath = localePath(lang, "compare/");
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", "compare/");
 const title = lang === "zh" ? "Agent Benchmark 对比工作台｜先对齐协议，再看成绩" : "Agent Benchmark Comparison Workspace | Align Protocols Before Scores";
-const description = lang === "zh" ? "并排比较最多三个 Benchmark 的测量对象、环境、协议与规模。只有结果轨道属于同一 protocol cell 时，分数才标记为可直接比较。" : "Compare up to three benchmarks across measurement target, environment, protocol, and scale. Scores are marked directly comparable only when their result tracks share the same protocol cell.";
+const description = lang === "zh" ? "完整保留所选基准，对齐测量对象、环境、协议与规模。这里比较评测设计，不做跨基准成绩排名。" : "Preserve every selected benchmark and compare measurement targets, environments, protocols, and scale—not scores across datasets.";
 const jsonLd = { "@context": "https://schema.org", "@type": "WebApplication", name: title, description, url: absoluteUrl(canonicalPath), applicationCategory: "ResearchApplication", inLanguage: copy.langTag };
 ---
 
 <BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="radar-page compare-page">
   <Header {lang} alternatePath={alternatePath} />
   <main id="main-content" data-compare-workspace data-lang={lang}>
-    <section class="tool-hero shell"><p class="eyebrow">{lang === "zh" ? "比较工作台 · 解释层" : "Comparison workspace · interpretive layer"}</p><h1>{lang === "zh" ? "先判断是否可比，再并排看分数" : "Decide comparability before reading scores side by side"}</h1><p>{description}</p></section>
+    <section class="tool-hero shell"><p class="eyebrow">{lang === "zh" ? "比较工作台 · 解释层" : "Comparison workspace · interpretive layer"}</p><h1>{lang === "zh" ? "对照基准的测量设计" : "Compare benchmark designs"}</h1><p>{description}</p></section>
     <section class="compare-workspace shell">
       <div class="compare-controls" data-compare-controls></div>
       <div class="compare-table" data-compare-table aria-live="polite"></div>

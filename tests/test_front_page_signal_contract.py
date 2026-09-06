@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class FrontPageSignalContractTest(unittest.TestCase):
-    def test_signal_table_is_first_research_surface(self):
+    def test_timeline_precedes_editorial_signals(self):
         cases = (
             (
                 "README.md",
@@ -23,7 +23,8 @@ class FrontPageSignalContractTest(unittest.TestCase):
             with self.subTest(filename=filename):
                 text = (ROOT / filename).read_text(encoding="utf-8")
                 release = text.index('<a id="release-timeline"></a>')
-                prefix = text[:release]
+                prefix = text[release:]
+                self.assertLess(release, text.index("<!-- FRONTIER-SIGNALS:START -->"))
                 self.assertIn(heading, prefix)
                 self.assertEqual(1, prefix.count("<!-- FRONTIER-SIGNALS:START -->"))
                 self.assertEqual(1, prefix.count("<!-- FRONTIER-SIGNALS:END -->"))

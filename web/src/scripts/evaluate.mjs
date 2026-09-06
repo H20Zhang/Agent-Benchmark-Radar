@@ -1,68 +1,196 @@
-function json(value) { try { return JSON.parse(value || "[]"); } catch { return []; } }
-
+import { suiteState, suiteParams } from "../lib/suite-state.mjs";
+import { writePageState } from "./page-state.mjs";
+function parse(value) {
+  try {
+    return JSON.parse(value || "[]");
+  } catch {
+    return [];
+  }
+}
 function initBuilder(root) {
   const lang = root.dataset.lang || "en";
-  const recipes = [...root.querySelectorAll("[data-recipe]")];
+  const zh = lang === "zh";
+  const buttons = [...root.querySelectorAll("[data-recipe]")];
   const inputs = [...root.querySelectorAll('input[name="benchmark"]')];
+  const names = new Map(
+    inputs.map((input) => [
+      input.value,
+      input.closest("label").querySelector("strong").textContent,
+    ]),
+  );
+  const recipes = new Map(
+    buttons.map((button) => [
+      button.dataset.recipe,
+      {
+        id: button.dataset.recipe,
+        core: parse(button.dataset.core),
+        complement: parse(button.dataset.complement),
+        title: button.querySelector("strong").textContent,
+        boundary: button.dataset.boundary,
+        next: button.dataset.next,
+        area: button.closest("[data-area]").dataset.area,
+      },
+    ]),
+  );
   const selected = new Set();
-  let activeRecipe;
-  const params = new URLSearchParams(window.location.search);
-
-  const render = () => {
+  let recipe, area;
+  const title = root.querySelector("[data-suite-title]");
+  const boundary = root.querySelector("[data-suite-boundary]");
+  const next = root.querySelector("[data-suite-next]");
+  const copy = root.querySelector("[data-copy-suite]");
+  const compare = root.querySelector("[data-compare-suite]");
+  const compareBase = compare.getAttribute("href").split("?")[0];
+  const feedback = root.querySelector("[data-suite-feedback]");
+  let state;
+  function render(mode = "replace", updateUrl = true) {
+    state = suiteState(selected, recipe);
     for (const input of inputs) input.checked = selected.has(input.value);
-    const names = new Map(inputs.map((input) => [input.value, input.closest("label")?.querySelector("strong")?.textContent || input.value]));
-    root.querySelector("[data-suite-count]").textContent = String(selected.size);
-    const list = root.querySelector("[data-suite-selection]");
-    list.replaceChildren(...[...selected].map((id) => {
-      const item = document.createElement("li");
-      const removeLabel = lang === "zh" ? `移除 ${names.get(id)}` : `Remove ${names.get(id)}`;
-      item.innerHTML = `<span>${names.get(id)}</span><button type="button" data-remove="${id}" aria-label="${removeLabel}">×</button>`;
-      return item;
-    }));
-    const query = new URLSearchParams();
-    if (activeRecipe) query.set("recipe", activeRecipe.dataset.recipe);
-    for (const id of selected) query.append("benchmark", id);
-    history.replaceState({}, "", `${window.location.pathname}${query.size ? `?${query}` : ""}`);
-    const compare = root.querySelector("[data-compare-suite]");
-    const compareQuery = [...selected].slice(0, 3).map((id) => `benchmark=${encodeURIComponent(id)}`).join("&");
-    compare.href = `${compare.getAttribute("href").split("?")[0]}${compareQuery ? `?${compareQuery}` : ""}`;
-  };
-
-  const chooseRecipe = (button) => {
-    activeRecipe = button;
-    for (const recipe of recipes) recipe.classList.toggle("is-active", recipe === button);
+    for (const button of buttons) {
+      const active = state.matches && button.dataset.recipe === recipe?.id;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    }
+    title.textContent = state.matches
+      ? recipe.title
+      : zh
+        ? state.empty
+          ? "尚未选择基准"
+          : "自定义评测草稿"
+        : state.empty
+          ? "No benchmarks selected"
+          : "Custom evaluation draft";
+    boundary.textContent = state.matches
+      ? recipe.boundary
+      : zh
+        ? "当前集合不再对应预设组合，原研究主张不适用。请逐项确认测量对象和证据边界。"
+        : "This selection does not match a preset. Its original claim no longer applies; validate the scope of each selected benchmark.";
+    next.textContent = state.matches
+      ? recipe.next
+      : zh
+        ? "确认核心评测、补充维度、模型与资源约束后，再形成研究主张。"
+        : "Define core measurements, complementary evidence, model and resource controls before asserting a research claim.";
+    root.querySelector("[data-suite-count]").textContent = String(
+      state.ids.length,
+    );
+    root.querySelector("[data-suite-selection]").replaceChildren(
+      ...state.ids.map((id) => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = `../benchmarks/${id}/`;
+        link.textContent = names.get(id);
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.dataset.remove = id;
+        remove.textContent = "×";
+        remove.setAttribute(
+          "aria-label",
+          `${zh ? "移除" : "Remove"} ${names.get(id)}`,
+        );
+        const role = document.createElement("small");
+        role.className = "suite-role";
+        role.textContent = state.matches ? (recipe.core.includes(id) ? (zh ? "核心评测" : "Core") : (zh ? "补充评测" : "Complement")) : (zh ? "角色待确认" : "Role unverified");
+        li.append(link, role, remove);
+        return li;
+      }),
+    );
+    copy.disabled = state.empty;
+    compare.setAttribute("aria-disabled", String(state.empty));
+    if (state.empty) {
+      compare.removeAttribute("href");
+      compare.tabIndex = -1;
+    } else {
+      const query = new URLSearchParams();
+      for (const id of state.ids) query.append("benchmark", id);
+      compare.href = `${compareBase}?${query}`;
+      compare.tabIndex = 0;
+    }
+    feedback.textContent = "";
+    root.querySelector("[data-copy-fallback]")?.remove();
+    if (updateUrl) writePageState(suiteParams(state, recipe?.id, area), mode);
+  }
+  function restore() {
+    const params = new URLSearchParams(location.search);
+    area = params.get("area");
+    recipe = recipes.get(params.get("recipe"));
+    const requested = params.getAll("benchmark");
     selected.clear();
-    for (const id of [...json(button.dataset.core), ...json(button.dataset.complement)]) selected.add(id);
-    root.querySelector("[data-suite-title]").textContent = button.querySelector("strong")?.textContent || "";
-    root.querySelector("[data-suite-boundary]").textContent = button.dataset.boundary || "";
-    root.querySelector("[data-suite-next]").textContent = button.dataset.next || "";
-    render();
-  };
-
-  for (const button of recipes) button.addEventListener("click", () => chooseRecipe(button));
-  for (const input of inputs) input.addEventListener("change", () => { input.checked ? selected.add(input.value) : selected.delete(input.value); render(); });
-  root.querySelector("[data-suite-selection]")?.addEventListener("click", (event) => { const button = event.target.closest("[data-remove]"); if (button) { selected.delete(button.dataset.remove); render(); } });
-  root.querySelector("[data-suite-search]")?.addEventListener("input", (event) => { const query = event.target.value.trim().toLowerCase(); for (const item of root.querySelectorAll("[data-suite-item]")) item.hidden = query && !item.dataset.search.includes(query); });
-  root.querySelector("[data-copy-suite]")?.addEventListener("click", async () => {
-    const title = root.querySelector("[data-suite-title]").textContent;
-    const boundary = root.querySelector("[data-suite-boundary]").textContent;
-    const next = root.querySelector("[data-suite-next]").textContent;
-    const names = [...root.querySelectorAll("[data-suite-selection] span")].map((node) => `- ${node.textContent}`).join("\n");
-    const benchmarkHeading = lang === "zh" ? "基准" : "Benchmarks";
-    const nextHeading = lang === "zh" ? "下一步验证" : "Next validation";
-    const Markdown = `## ${title}\n\n${boundary}\n\n### ${benchmarkHeading}\n\n${names}\n\n### ${nextHeading}\n\n${next}`;
-    await navigator.clipboard.writeText(Markdown);
-    root.querySelector("[data-suite-feedback]").textContent = lang === "zh" ? "Markdown 已复制" : "Markdown copied";
+    if (requested.length || params.has("custom")) {
+      for (const id of requested) if (names.has(id)) selected.add(id);
+    } else {
+      recipe ||=
+        [...recipes.values()].find((r) => r.area === area) ||
+        [...recipes.values()][0];
+      if (recipe)
+        for (const id of [...recipe.core, ...recipe.complement])
+          selected.add(id);
+    }
+    render("replace");
+  }
+  for (const button of buttons)
+    button.addEventListener("click", () => {
+      recipe = recipes.get(button.dataset.recipe);
+      area = recipe.area;
+      selected.clear();
+      for (const id of [...recipe.core, ...recipe.complement]) selected.add(id);
+      render("push");
+    });
+  for (const input of inputs)
+    input.addEventListener("change", () => {
+      input.checked ? selected.add(input.value) : selected.delete(input.value);
+      render("push");
+    });
+  root
+    .querySelector("[data-suite-selection]")
+    .addEventListener("click", (event) => {
+      const button = event.target.closest("[data-remove]");
+      if (button) {
+        selected.delete(button.dataset.remove);
+        render("push");
+      }
+    });
+  root
+    .querySelector("[data-suite-search]")
+    .addEventListener("input", (event) => {
+      const query = event.target.value.trim().toLocaleLowerCase();
+      for (const item of root.querySelectorAll("[data-suite-item]"))
+        item.hidden = Boolean(query && !item.dataset.search.includes(query));
+    });
+  copy.addEventListener("click", async () => {
+    if (state.empty) return;
+    const list = state.ids
+      .map(
+        (id) =>
+          `- ${state.matches ? (recipe.core.includes(id) ? (zh ? "核心评测" : "Core") : (zh ? "补充评测" : "Complement")) : (zh ? "角色待确认" : "Role unverified")}: [${names.get(id)}](${new URL(`../benchmarks/${id}/`, location.href).href})`,
+      )
+      .join("\n");
+    const Markdown = `## ${title.textContent}\n\n${boundary.textContent}\n\n${list}\n\n### ${zh ? "下一步验证" : "Next validation"}\n\n${next.textContent}\n\n${location.href}`;
+    try {
+      await navigator.clipboard.writeText(Markdown);
+      feedback.textContent = zh ? "Markdown 已复制。" : "Markdown copied.";
+    } catch {
+      feedback.textContent = zh
+        ? "无法访问剪贴板，请从下方文本框复制。"
+        : "Clipboard unavailable. Copy from the text field below.";
+      let field = root.querySelector("[data-copy-fallback]");
+      if (!field) {
+        field = document.createElement("textarea");
+        field.dataset.copyFallback = "";
+        field.readOnly = true;
+        field.setAttribute(
+          "aria-label",
+          zh ? "评测组合 Markdown" : "Suite Markdown",
+        );
+        feedback.after(field);
+      }
+      field.value = Markdown;
+      field.focus();
+      field.select();
+    }
   });
-
-  const requestedRecipe = params.get("recipe");
-  const requestedArea = params.get("area");
-  const requestedBenchmarks = params.getAll("benchmark");
-  const preset = recipes.find((button) => button.dataset.recipe === requestedRecipe)
-    || recipes.find((button) => requestedArea && button.closest("[data-area]")?.dataset.area === requestedArea)
-    || recipes[0];
-  if (preset) chooseRecipe(preset);
-  if (requestedBenchmarks.length) { selected.clear(); for (const id of requestedBenchmarks) if (inputs.some((input) => input.value === id)) selected.add(id); render(); }
+  window.addEventListener("popstate", restore);
+  restore();
 }
-
-export function initSuiteBuilders() { for (const root of document.querySelectorAll("[data-suite-builder]")) initBuilder(root); }
+export function initSuiteBuilders() {
+  for (const root of document.querySelectorAll("[data-suite-builder]"))
+    initBuilder(root);
+}

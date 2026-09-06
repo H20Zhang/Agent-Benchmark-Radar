@@ -110,8 +110,8 @@ class AttentionNavigationTest(unittest.TestCase):
         en = (ROOT / "README.en.md").read_text(encoding="utf-8")
         for text in (zh, en):
             positions = [
-                text.index('<a id="frontier-signals"></a>'),
                 text.index('<a id="release-timeline"></a>'),
+                text.index('<a id="frontier-signals"></a>'),
                 text.index('<a id="timeline"></a>'),
                 text.index('<a id="periods"></a>'),
                 text.index('<a id="field-map"></a>'),

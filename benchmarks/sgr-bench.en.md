@@ -14,7 +14,9 @@ Web benchmarks often count reaching a relevant source as substantial progress. S
 
 ## Decisive evidence
 
-The benchmark has 100 expert-curated tasks across six source families and 12 public data ecosystems, with paired constraint-guided and goal-oriented formulations. The strongest evaluated system reaches 66.18% item-level F1 while row-level F1 remains much lower. In 156 analyzable failed CLI trajectories, retrieval-scope drift accounts for 37.2% and criterion mismatch 27.6%; final answer composition is only 10.3%.
+The benchmark has 100 expert-curated tasks across six source families and 12 public data ecosystems, with paired constraint-guided and goal-oriented formulations. In the reported CLI evaluation, GPT-5.5 obtains 66.18% Item-F1 but only 43.37% Row-F1: recovering individual fields is not the same as preserving complete, correctly scoped rows. The evaluated commercial systems use their own product interfaces, not the same CLI harness.
+
+Among 156 analyzable failed CLI trajectories, retrieval-scope drift accounts for 37.2%, criterion mismatch for 27.6%, and final answer composition for 10.3%. These percentages describe the audited failure subset, not all tasks or commercial systems. [Paper v1, main results and Appendix E](https://arxiv.org/html/2605.22219v1#S4).
 
 ## What the score supports
 
@@ -22,7 +24,7 @@ This is strong evidence that source discovery and retrieval-state control are di
 
 ## Fair comparison contract
 
-Fix site snapshot/time, browser/tool interface, agent model, action budget, and task formulation. Report item-level and row-level F1 and preserve constraint-guided versus goal-oriented variants; explicit filters in the prompt materially change the planning burden.
+Fix the site snapshot or collection time, task formulation, retrieval tools, model, and action budget. Report Item-F1 and Row-F1 separately and retain the constraint-guided / goal-oriented split. CLI agents and manually operated commercial products belong to different system configurations; these results are not model-only rankings.
 
 ## What remains unmeasured
 

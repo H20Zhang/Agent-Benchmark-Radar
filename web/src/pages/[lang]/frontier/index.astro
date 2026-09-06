@@ -1,69 +1,28 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import Header from "../../../components/Header.astro";
-import SiteFooter from "../../../components/SiteFooter.astro";
-
-import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
-import { loadRegistry } from "../../../lib/registry.mjs";
-import { loadResearchModel, localize } from "../../../lib/research-model.mjs";
-import { loadAllResultSets } from "../../../lib/results.mjs";
-import { readFileSync } from "node:fs";
-import { fromRepositoryRoot } from "../../../lib/repository-path.mjs";
-import { absoluteUrl, localePath, sitePath } from "../../../lib/site.mjs";
-
-export function getStaticPaths() { return LOCALES.map((lang) => ({ params: { lang }, props: { lang } })); }
-interface Props { lang: "zh" | "en"; }
-const { lang } = Astro.props;
-const copy = copyFor(lang);
-const items = [...loadRegistry()];
-const byId = new Map(items.map((item) => [item.id, item]));
-const research = loadResearchModel();
-const resultSets = loadAllResultSets();
-const freshness = JSON.parse(readFileSync(fromRepositoryRoot("data", "freshness.json"), "utf8"));
-const scanDate = new Date(`${freshness.discovery_scan_at}T00:00:00Z`);
-const cutoff = new Date(scanDate.getTime() - freshness.window_days * 86_400_000);
-const asDate = (released: string) => new Date(`${released.length === 7 ? `${released}-01` : released}T00:00:00Z`);
-const recentItems = items.filter((item) => item.status === "active" && asDate(item.released) >= cutoff).sort((a,b) => b.released.localeCompare(a.released) || a.name.localeCompare(b.name));
-const canonicalPath = localePath(lang, "frontier/");
-const alternatePath = localePath(lang === "zh" ? "en" : "zh", "frontier/");
-const title = lang === "zh" ? "Agent Evaluation Frontier｜基于可信时间轴的前沿解释" : "Agent Evaluation Frontier | Interpretation over the Canonical Timeline";
-const description = lang === "zh" ? "近期发布列表是时间轴的事实窗口；Frontier shifts 与谱系是基于这些事实与评测设计做出的解释，不与发布时间事实等价。" : "The recent-release watchlist is a factual window over the canonical timeline; frontier shifts and genealogy are interpretations built on those facts and evaluation designs.";
-const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: title, description, url: absoluteUrl(canonicalPath), inLanguage: copy.langTag };
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import PageHero from '../../../components/PageHero.astro';
+import { LOCALES, copyFor } from '../../../lib/i18n.mjs';
+import { loadRegistry } from '../../../lib/registry.mjs';
+import { loadResearchModel, localize } from '../../../lib/research-model.mjs';
+import { publicationWindow } from '../../../lib/publication.mjs';
+import { inReleaseWindow, isPublishedRecord, releaseDate, releaseLabel, isoDay } from '../../../lib/release-time.mjs';
+import { localePath, sitePath } from '../../../lib/site.mjs';
+export function getStaticPaths(){return LOCALES.map(lang=>({params:{lang},props:{lang}}));}
+interface Props{lang:'zh'|'en';}
+const {lang}=Astro.props,zh=lang==='zh',copy=copyFor(lang),period=publicationWindow(),research=loadResearchModel();
+const items=loadRegistry(),byId=new Map(items.map(item=>[item.id,item]));
+const recentItems=items.filter(item=>isPublishedRecord(item)&&inReleaseWindow(item,period.frontier));
+const canonicalPath=localePath(lang,'frontier/'),alternatePath=localePath(zh?'en':'zh','frontier/');
+const title=zh?'前沿解读 | Agent Benchmark Radar':'Frontier interpretation | Agent Benchmark Radar';
+const description=zh?'先查看近期公开记录，再阅读有明确证据锚点的研究观察。':'Start with recent dated records, then explore research observations anchored in specific benchmarks.';
 ---
-
-<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="radar-page frontier-page">
-  <Header {lang} alternatePath={alternatePath} />
-  <main id="main-content">
-    <section class="tool-hero shell"><p class="eyebrow">{lang === "zh" ? "Frontier · 解释层" : "Frontier · interpretive layer"}</p><h1>{lang === "zh" ? "先以时间轴确认事实，再解释前沿怎样移动" : "Anchor facts in the timeline, then interpret how the frontier moves"}</h1><p>{description}</p><p><a href={sitePath(localePath(lang, "timeline/"))}>{lang === "zh" ? "打开完整可信时间轴 →" : "Open the canonical timeline →"}</a></p></section>
-
-    <section class="frontier-progress">
-      <div class="shell">
-        <header class="frontier-section-heading"><div><p class="eyebrow">{lang === "zh" ? "事实窗口 · 最近发布" : "Factual window · recent releases"}</p><h2>{lang === "zh" ? "最近 30 天：时间轴内全部新 Benchmark" : "Last 30 days: every new benchmark on the timeline"}</h2></div><p>{lang === "zh" ? "这一段只执行客观筛选：最近一次 discovery scan 前窗口期内发布、属于三条 Radar 主线且状态为 active 的全部 Benchmark。这里不使用 Frontier、重要性或成绩判断做筛选。" : "This section applies only objective inclusion rules: every active benchmark in scope released within the window before the latest discovery scan. Frontier, importance, and score judgments do not affect inclusion."}</p></header>
-        <div class="frontier-freshness-summary">
-          <strong>{lang === "zh" ? `新基准最近扫描：${freshness.discovery_scan_at}` : `Discovery last scanned: ${freshness.discovery_scan_at}`}</strong>
-          <span>{lang === "zh" ? `最近 ${freshness.window_days} 天共 ${recentItems.length} 个` : `${recentItems.length} in the last ${freshness.window_days} days`}</span>
-          <span>{lang === "zh" ? `Registry：${items.length} 个` : `Registry: ${items.length}`}</span>
-          <span>{lang === "zh" ? `结构化结果集：${resultSets.size} 个` : `Structured result sets: ${resultSets.size}`}</span>
-        </div>
-        <div class="frontier-watchlist" role="table" aria-label={lang === "zh" ? "最近三十天 Benchmark 观察表" : "30-day benchmark watchlist"}>
-          <div class="frontier-watchlist__row frontier-watchlist__head" role="row"><b>{lang === "zh" ? "发布日期" : "Released"}</b><b>Benchmark</b><b>{lang === "zh" ? "方向" : "Area"}</b><b>{lang === "zh" ? "条目核验" : "Registry verified"}</b><b>{lang === "zh" ? "结果轨道" : "Result track"}</b></div>
-          {recentItems.map((item) => { const rs = resultSets.get(item.id); return <a class="frontier-watchlist__row" role="row" href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}><time datetime={item.released}>{item.released}</time><strong>{item.name}</strong><span>{copy.areas[item.area].label}</span><time datetime={item.last_verified}>{item.last_verified}</time><span>{rs ? (lang === "zh" ? `结果核验 ${rs.verified_at}` : `result verified ${rs.verified_at}`) : (lang === "zh" ? "尚未结构化" : "not structured yet")}</span></a>; })}
-        </div>
-        <p class="frontier-selection-note">{lang === "zh" ? "这张表属于事实层的窗口视图；完整事实序列以 Benchmark 时间轴为准。下面开始进入解释层。" : "This table is a window over the factual layer; the complete chronology lives on the Benchmark Timeline. The sections below are interpretive."}</p>
-      </div>
+<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={zh?canonicalPath:alternatePath} enPath={zh?alternatePath:canonicalPath} bodyClass="radar-page frontier-page">
+  <Header {lang} {alternatePath}/><main id="main-content"><PageHero title={zh?'近期记录与前沿解读':'Recent records and frontier interpretation'} {description}/>
+    <section class="shell page-section"><div class="section-heading"><h2>{zh?'最近 30 天的公开记录':'Dated records in the last 30 days'}</h2><a href={sitePath(localePath(lang,'timeline/'))}>{zh?'完整时间轴':'Full timeline'} →</a></div><p class="content-note">{isoDay(period.frontier.start)} — {period.asOf} · {recentItems.length} {zh?'项；月份精度按区间重叠纳入，历史日期保留事件类型待复核标记。':'records. Month precision uses interval overlap; unclassified historical dates retain that label.'}</p>
+      <div class="table-scroll frontier-records" role="region" tabindex="0" aria-label={zh?'近 30 天记录，可横向滚动':'Recent records, horizontally scrollable'}><table><caption>{zh?'近 30 天公开记录':'30-day public-record window'}</caption><thead><tr><th>{zh?'日期':'Date'}</th><th>Benchmark</th><th>{zh?'日期类型 / 来源':'Date type / source'}</th></tr></thead><tbody>{recentItems.map(item=>{const date=releaseDate(item);return <tr><td>{date.date}</td><td><a href={sitePath(localePath(lang,`benchmarks/${item.id}/`))}>{item.name}</a></td><td><a href={date.source}>{releaseLabel(date,lang)} ↗</a></td></tr>})}</tbody></table></div>
     </section>
-
-    <section class="frontier-shifts shell">
-      <header class="frontier-section-heading"><div><p class="eyebrow">{lang === "zh" ? "解释层 · Frontier shifts" : "Interpretive layer · Frontier shifts"}</p><h2>{lang === "zh" ? "我们认为哪些进展改变了测量边界" : "Which developments we interpret as changing the measurement boundary"}</h2></div><p>{lang === "zh" ? "这些条目是研究判断，不是发布时间事实；每条判断都用具体 Benchmark 作为证据锚点。" : "These entries are research judgments rather than release facts; each judgment is anchored to concrete benchmarks."}</p></header>
-      <div class="frontier-shift-list">{research.frontierShifts.map((shift: any, index: number) => <article data-area={shift.area}><span>{String(index + 1).padStart(2, "0")} · {shift.period}</span><div><p class="eyebrow">{copy.areas[shift.area].label}</p><h3>{localize(shift.title, lang)}</h3></div><p>{localize(shift.delta, lang)}</p><strong>{localize(shift.consequence, lang)}</strong><div class="frontier-shift-list__benchmarks">{shift.benchmarks.map((id: string) => <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{byId.get(id)?.name}</a>)}</div></article>)}</div>
-    </section>
-
-    <section class="frontier-genealogy">
-      <div class="shell">
-        <header class="frontier-section-heading"><div><p class="eyebrow">{lang === "zh" ? "解释层 · Benchmark 谱系" : "Interpretive layer · Benchmark genealogy"}</p><h2>{lang === "zh" ? "三个领域的一种测量演进解释" : "One interpretation of measurement evolution across three fields"}</h2></div><p>{lang === "zh" ? "谱系帮助定位研究脉络，但 stage/role 是编辑判断；原始发布时间请回到时间轴。" : "Genealogy helps locate research lineage, but stages and roles are editorial judgments; use the timeline for release chronology."}</p></header>
-        <div class="frontier-genealogy__areas">{research.genealogy.areas.map((genealogy: any) => <section data-area={genealogy.id}><header><span>{copy.areas[genealogy.id].label}</span><p>{localize(genealogy.thesis, lang)}</p></header><div>{genealogy.stages.map((stage: any, index: number) => <article><b>{String(index + 1).padStart(2, "0")}</b><h3>{localize(stage.label, lang)}</h3><div>{stage.benchmarks.map((id: string) => <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{byId.get(id)?.name}</a>)}</div></article>)}</div></section>)}</div>
-      </div>
-    </section>
-  </main>
-  <SiteFooter {lang} />
+    <section class="shell page-section"><h2>{zh?'哪些测量边界可能正在改变':'Which measurement boundaries may be changing'}</h2><p class="content-note">{zh?'编辑观察，不代表已确立趋势。下面列出每个判断所依赖的具体基准，供进一步复核。':'Editorial observations, not established trends. Each hypothesis names the benchmarks supporting further scrutiny.'}</p><div class="frontier-shift-list">{research.frontierShifts.map((shift:any)=><article><p class="eyebrow">{copy.areas[shift.area].label} · {shift.period}</p><h3>{localize(shift.title,lang)}</h3><p>{localize(shift.delta,lang)}</p><p><strong>{zh?'研究含义：':'Implication: '}</strong>{localize(shift.consequence,lang)}</p><div class="action-links">{shift.benchmarks.map((id:string)=><a href={sitePath(localePath(lang,`benchmarks/${id}/`))}>{byId.get(id)?.name} →</a>)}</div></article>)}</div></section>
+  </main><SiteFooter {lang}/>
 </BaseLayout>

@@ -1,7 +1,5 @@
 ---
-import "../styles/global.css";
-import "../styles/research-tool.css";
-import "../styles/core-tool-ui.css";
+import "../styles/site.css";
 
 import { absoluteUrl, sitePath } from "../lib/site.mjs";
 
@@ -46,7 +44,8 @@ const json = jsonLd
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#f4f1e8" />
+    <meta name="radar-build" content={process.env.GITHUB_SHA || "local"} />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="robots" content={robots} />
     <title>{title}</title>
     <meta name="description" content={description} />

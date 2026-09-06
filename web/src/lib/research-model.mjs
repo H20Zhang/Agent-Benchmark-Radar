@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import { loadChineseSummaries } from "./readme-localization.mjs";
+import { getAuthoredBrief } from "./deep-reads.mjs";
 import { loadRegistry } from "./registry.mjs";
 import { fromRepositoryRoot } from "./repository-path.mjs";
 
@@ -17,20 +18,24 @@ const DATA_FILES = {
 let researchCache;
 
 function readJson(...segments) {
-  return JSON.parse(readFileSync(fromRepositoryRoot("data", ...segments), "utf8"));
+  return JSON.parse(
+    readFileSync(fromRepositoryRoot("data", ...segments), "utf8"),
+  );
 }
 
 function assertLocalized(value, field) {
   if (!value || typeof value.zh !== "string" || typeof value.en !== "string") {
     throw new Error(`${field} must contain zh and en strings`);
   }
-  if (!value.zh.trim() || !value.en.trim()) throw new Error(`${field} cannot be empty`);
+  if (!value.zh.trim() || !value.en.trim())
+    throw new Error(`${field} cannot be empty`);
 }
 
 function assertUnique(items, label) {
   const ids = new Set();
   for (const item of items) {
-    if (!item.id || ids.has(item.id)) throw new Error(`${label} has invalid or duplicate id: ${item.id}`);
+    if (!item.id || ids.has(item.id))
+      throw new Error(`${label} has invalid or duplicate id: ${item.id}`);
     ids.add(item.id);
   }
 }
@@ -40,75 +45,34 @@ function humanizeToken(value) {
 }
 
 function defaultEditorial(item, chineseSummary) {
-  const areaValidation = {
-    "agent-memory": {
-      zh: "建议结合行动、长期用户状态与生命周期评测，形成覆盖完整的 Memory 证据链。",
-      en: "Pair with action, long-term user-state, and lifecycle evaluation to complete the memory evidence chain.",
-    },
-    rag: {
-      zh: "建议结合实时证据、搜索轨迹与语料变化评测，形成覆盖完整的 Retrieval 证据链。",
-      en: "Pair with live evidence, search-trajectory, and corpus-change evaluation to complete the retrieval evidence chain.",
-    },
-    "data-agent": {
-      zh: "建议结合完整工作流、业务语义与执行质量评测，形成覆盖完整的 Data Agent 证据链。",
-      en: "Pair with complete-workflow, business-semantic, and execution-quality evaluation to complete the data-agent evidence chain.",
-    },
-  }[item.area];
-  const role = {
-    precursor: { zh: "历史参照", en: "Historical reference" },
-    foundation: { zh: "基础能力锚点", en: "Foundation anchor" },
-    transition: { zh: "演进转折点", en: "Transition benchmark" },
-    frontier: { zh: "前沿测量坐标", en: "Frontier measurement coordinate" },
-  }[item.evolution_role];
-
-  const measurementEn = item.measurement_strength || item.summary;
-  const measurementZh = chineseSummary;
-  const inferenceBoundaryEn = item.coverage_gap || areaValidation.en;
-  const inferenceBoundaryZh = item.coverage_gap
-    ? "该条目的 coverage gap 尚未提供规范中文版本；请以英文规范记录为准。"
-    : areaValidation.zh;
-  const confounders = (item.confounders || []).map(humanizeToken).filter(Boolean);
-  const confounderText = confounders.join(", ");
-  const confounderTextZh = confounders.join("、");
-  const benchmarkSpecificControl = confounders.length
-    ? {
-        zh: `这项评测尤其需要固定或完整报告这些关键条件：${confounderTextZh}。否则分数差异只能视为系统级证据。`,
-        en: `This benchmark is especially sensitive to these load-bearing conditions: ${confounderText}. If they differ, score gaps are system-level evidence rather than component attribution.`,
-      }
-    : {
-        zh: "完整报告模型、工具、harness、预算与 evaluator；存在差异时只做系统级比较。",
-        en: "Report model, tools, harness, budget, and evaluator completely; treat mismatches as system-level comparisons only.",
-      };
-
+  const zh = getAuthoredBrief(item.id, "zh");
+  const en = getAuthoredBrief(item.id, "en");
+  // Authored notes own interpretation. The registry still owns measurement_strength,
+  // item.coverage_gap and item.confounders; missing translations are not manufactured.
+  const genericZh =
+    "这是系统级评测证据；组件归因仍需要固定模型、工具、预算和评判器后进行消融。";
+  const genericEn =
+    "This is system-level evidence; component attribution requires controlled ablations with matched models, tools, budgets, and evaluators.";
   return {
     id: item.id,
     score_supports: {
-      zh: `这个分数首先支持对该测量对象的判断：${measurementZh} 只有在模型、工具、资源预算和协议充分对齐后，才适合比较系统差异；分数本身不能识别收益来自哪个内部组件。`,
-      en: `The score first supports a claim about this measurement object: ${measurementEn} Under sufficiently matched model, tools, resource budget, and protocol, it can compare systems; by itself it does not identify which internal component caused a gain.`,
+      zh: zh.supports || genericZh,
+      en: en.supports || genericEn,
     },
-    suite_role: role,
+    suite_role: { zh: "按测量对象选择", en: "Select by measurement target" },
     next_validation: {
-      zh: item.coverage_gap
-        ? "当前记录存在下一评测坐标，但尚未提供规范中文表述；请核对英文规范记录后再据此设计实验。"
-        : areaValidation.zh,
-      en: item.coverage_gap
-        ? `The next discriminating evaluation coordinate is: ${item.coverage_gap}`
-        : areaValidation.en,
+      zh: zh.next || "具体实验建议见下方研究解读。",
+      en:
+        en.next ||
+        "See the authored research interpretation for the next experiment.",
     },
     evidence_brief: {
-      zh: `这项 benchmark 的核心测量增量是：${measurementZh} 当前推断边界是：${inferenceBoundaryZh}${confounders.length ? ` 公平比较最敏感的条件包括 ${confounderTextZh}。` : ""}`,
-      en: `The benchmark's core measurement advance is: ${measurementEn} Its current inference boundary is: ${inferenceBoundaryEn}${confounders.length ? ` Fair comparison is especially sensitive to ${confounderText}.` : ""}`,
+      zh: zh.why || chineseSummary,
+      en: en.why || item.summary,
     },
+    example: { zh: zh.example, en: en.example },
     comparison_controls: [
-      {
-        zh: "对齐模型版本、可访问状态、工具接口、提示方式、重试/停止规则与资源预算。",
-        en: "Align model version, accessible state, tool interface, prompting, retry/stopping rules, and resource budget.",
-      },
-      benchmarkSpecificControl,
-      {
-        zh: "使用相同任务切分、评测协议、指标定义、evaluator 与环境版本；若任一项变化，单独报告。",
-        en: "Use the same task split, evaluation protocol, metric definition, evaluator, and environment version; report any mismatch separately.",
-      },
+      { zh: zh.controls || genericZh, en: en.controls || genericEn },
     ],
     evaluation_contract: {
       target: { zh: chineseSummary, en: item.summary },
@@ -123,8 +87,12 @@ function mergeEditorial(base, overlay) {
   return {
     ...base,
     ...overlay,
-    evaluation_contract: { ...base.evaluation_contract, ...(overlay.evaluation_contract || {}) },
-    comparison_controls: overlay.comparison_controls || base.comparison_controls,
+    evaluation_contract: {
+      ...base.evaluation_contract,
+      ...(overlay.evaluation_contract || {}),
+    },
+    comparison_controls:
+      overlay.comparison_controls || base.comparison_controls,
   };
 }
 
@@ -133,8 +101,12 @@ function loadEditorial(registry) {
   const directory = fromRepositoryRoot("data", "editorial", "benchmarks");
   const overlays = new Map();
   if (existsSync(directory)) {
-    for (const filename of readdirSync(directory).filter((name) => name.endsWith(".json")).sort()) {
-      const record = JSON.parse(readFileSync(join(directory, filename), "utf8"));
+    for (const filename of readdirSync(directory)
+      .filter((name) => name.endsWith(".json"))
+      .sort()) {
+      const record = JSON.parse(
+        readFileSync(join(directory, filename), "utf8"),
+      );
       overlays.set(record.id, record);
     }
   }
@@ -143,7 +115,12 @@ function loadEditorial(registry) {
     registry.map((item) => {
       const base = defaultEditorial(item, chinese.get(item.id) || item.summary);
       const editorial = mergeEditorial(base, overlays.get(item.id) || {});
-      for (const field of ["score_supports", "suite_role", "next_validation", "evidence_brief"]) {
+      for (const field of [
+        "score_supports",
+        "suite_role",
+        "next_validation",
+        "evidence_brief",
+      ]) {
         assertLocalized(editorial[field], `${item.id}.${field}`);
       }
       for (const [index, control] of editorial.comparison_controls.entries()) {
@@ -157,33 +134,64 @@ function loadEditorial(registry) {
 function validateReferences(model, registry) {
   const benchmarkIds = new Set(registry.map((item) => item.id));
   const check = (id, owner) => {
-    if (!benchmarkIds.has(id)) throw new Error(`${owner} references unknown benchmark ${id}`);
+    if (!benchmarkIds.has(id))
+      throw new Error(`${owner} references unknown benchmark ${id}`);
   };
 
   assertUnique(model.taxonomy.facets, "taxonomy facets");
+  const facetIds = new Map(
+    model.taxonomy.facets.map((f) => [
+      f.id,
+      new Set(f.options.map((o) => o.id)),
+    ]),
+  );
+  for (const facet of model.taxonomy.facets)
+    assertUnique(facet.options, `${facet.id} options`);
+  for (const item of registry)
+    for (const [facet, options] of Object.entries(
+      item.facet_assignments || {},
+    )) {
+      if (
+        !facetIds.has(facet) ||
+        options.some((option) => !facetIds.get(facet).has(option))
+      )
+        throw new Error(`Invalid facet assignment: ${item.id}/${facet}`);
+    }
   assertUnique(model.recipes, "recipes");
   assertUnique(model.opportunities, "opportunities");
   assertUnique(model.frontierShifts, "frontier shifts");
 
   for (const recipe of model.recipes) {
-    if (!AREAS.has(recipe.area)) throw new Error(`${recipe.id} has invalid area`);
-    for (const field of ["claim", "claim_boundary", "next_validation"]) assertLocalized(recipe[field], `${recipe.id}.${field}`);
-    for (const id of [...recipe.core, ...recipe.complement]) check(id, recipe.id);
+    if (!AREAS.has(recipe.area))
+      throw new Error(`${recipe.id} has invalid area`);
+    for (const field of ["claim", "claim_boundary", "next_validation"])
+      assertLocalized(recipe[field], `${recipe.id}.${field}`);
+    for (const id of [...recipe.core, ...recipe.complement])
+      check(id, recipe.id);
   }
   for (const opportunity of model.opportunities) {
-    if (!AREAS.has(opportunity.area)) throw new Error(`${opportunity.id} has invalid area`);
-    for (const field of ["title", "why_it_matters", "current_coverage", "next_coordinate", "candidate_evaluation"]) {
+    if (!AREAS.has(opportunity.area))
+      throw new Error(`${opportunity.id} has invalid area`);
+    for (const field of [
+      "title",
+      "why_it_matters",
+      "current_coverage",
+      "next_coordinate",
+      "candidate_evaluation",
+    ]) {
       assertLocalized(opportunity[field], `${opportunity.id}.${field}`);
     }
     for (const id of opportunity.benchmarks) check(id, opportunity.id);
   }
   for (const shift of model.frontierShifts) {
     if (!AREAS.has(shift.area)) throw new Error(`${shift.id} has invalid area`);
-    for (const field of ["title", "delta", "consequence"]) assertLocalized(shift[field], `${shift.id}.${field}`);
+    for (const field of ["title", "delta", "consequence"])
+      assertLocalized(shift[field], `${shift.id}.${field}`);
     for (const id of shift.benchmarks) check(id, shift.id);
   }
   for (const area of model.genealogy.areas) {
-    if (!AREAS.has(area.id)) throw new Error(`genealogy has invalid area ${area.id}`);
+    if (!AREAS.has(area.id))
+      throw new Error(`genealogy has invalid area ${area.id}`);
     assertLocalized(area.thesis, `${area.id}.thesis`);
     assertUnique(area.stages, `${area.id} stages`);
     for (const stage of area.stages) {
@@ -201,7 +209,12 @@ export function localize(value, lang) {
 export function loadResearchModel() {
   if (researchCache) return researchCache;
   const registry = loadRegistry();
-  const raw = Object.fromEntries(Object.entries(DATA_FILES).map(([key, filename]) => [key, readJson(filename)]));
+  const raw = Object.fromEntries(
+    Object.entries(DATA_FILES).map(([key, filename]) => [
+      key,
+      readJson(filename),
+    ]),
+  );
   const model = {
     ...raw,
     benchmarkEditorial: loadEditorial(registry),
@@ -220,22 +233,13 @@ export function getBenchmarkResearch(id, lang = "en") {
     suiteRole: localize(editorial.suite_role, lang),
     nextValidation: localize(editorial.next_validation, lang),
     evidenceBrief: localize(editorial.evidence_brief, lang),
-    comparisonControls: editorial.comparison_controls.map((item) => localize(item, lang)),
+    comparisonControls: editorial.comparison_controls.map((item) =>
+      localize(item, lang),
+    ),
   };
 }
 
-function searchableText(item) {
-  return [
-    item.name,
-    item.summary,
-    item.measurement_strength,
-    item.scale,
-    ...(item.capabilities || []),
-    ...(item.environment || []),
-    ...(item.protocol || []),
-  ].join(" ").toLocaleLowerCase();
-}
-
+/** Explicit facet membership: prose edits must not silently change classifications. */
 export function getStableFacets(items) {
   const taxonomy = loadResearchModel().taxonomy;
   return taxonomy.facets.map((facet) => ({
@@ -243,22 +247,16 @@ export function getStableFacets(items) {
     options: facet.options
       .map((option) => ({
         ...option,
-        count: items.filter((item) => {
-          if (facet.area && item.area !== facet.area) return false;
-          const text = searchableText(item);
-          return option.match.some((token) => text.includes(token.toLocaleLowerCase()));
-        }).length,
+        key: `${facet.id}:${option.id}`,
+        count: items.filter((item) =>
+          item.facet_assignments?.[facet.id]?.includes(option.id),
+        ).length,
       }))
       .filter((option) => option.count > 0),
   }));
 }
-
 export function getStableFacetValues(item) {
-  const text = searchableText(item);
-  return loadResearchModel().taxonomy.facets.flatMap((facet) => {
-    if (facet.area && facet.area !== item.area) return [];
-    return facet.options
-      .filter((option) => option.match.some((token) => text.includes(token.toLocaleLowerCase())))
-      .map((option) => option.id);
-  });
+  return Object.entries(item.facet_assignments || {}).flatMap(
+    ([facet, options]) => options.map((option) => `${facet}:${option}`),
+  );
 }

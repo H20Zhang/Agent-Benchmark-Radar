@@ -9,11 +9,18 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "sync:publication": "node scripts/sync-publication.mjs",
+    "check:publication": "node scripts/sync-publication.mjs --check",
+    "test:browser": "python scripts/verify-site.py"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
-    "astro": "7.2.10"
+    "astro": "7.2.10",
+    "satteri": "0.10.5",
+    "mdast-util-to-hast": "13.2.1",
+    "hast-util-to-html": "9.0.5",
+    "github-slugger": "2.0.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",

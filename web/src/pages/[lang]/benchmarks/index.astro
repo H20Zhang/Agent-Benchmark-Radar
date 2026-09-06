@@ -27,8 +27,8 @@ const canonicalPath = localePath(lang, "benchmarks/");
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", "benchmarks/");
 const title = lang === "zh" ? "Agent 基准筛选｜按领域、能力与成绩找评测" : "Agent Benchmark Explorer | Filter by Area, Capability, and Results";
 const description = lang === "zh"
-  ? `从 ${items.length} 个 Agent 基准中按领域、时间、能力、环境、结果覆盖与参考空间快速筛选，并直接打开详情页。`
-  : "Filter the benchmark registry by area, time, capability, environment, result coverage, and reference headroom, then open any benchmark detail page.";
+  ? `从 ${items.length} 个 Agent 基准中按领域、时间、能力、环境与结果覆盖快速筛选，并直接打开详情页。`
+  : "Filter the benchmark registry by area, time, capability, environment, and result coverage, then open any benchmark detail page.";
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",

@@ -6,19 +6,25 @@
 
 ## What it measures
 
-SearchAuditBench collects 1,243 failed trajectories from eight open-weight models on five deep-search benchmarks, averaging 73.1 messages and 65.1K tokens. Experts annotate critical steps, a six-way root-cause taxonomy, and executable repairs, enabling localization, cause, diagnosis, and repair-pass metrics.
+SearchAuditBench collects 1,243 failed trajectories from eight open-weight models on five deep-search benchmarks, averaging 73.1 messages and 65.1K tokens. Experts annotate critical steps, a six-way root-cause taxonomy, and actionable repair directives, enabling localization, cause, diagnosis, and rubric-pass metrics.
 
 ## Compared with what
 
-Most benchmarks collapse failure to zero reward. SearchAuditBench makes the post-hoc auditor an evaluation object: can it find the earliest critical error, attribute the cause, and propose a repair that restores the trajectory?
+Most benchmarks collapse failure to zero reward. SearchAuditBench makes the post-hoc auditor an evaluation object: can it find the earliest critical error, attribute the cause, and propose a repair that satisfies the reference rubrics?
+
+## What the reported results show
+
+With GPT-5.5 held fixed as the auditor backbone, the strongest baseline’s Fully-Passed Score (FPS) is 26.55%, versus 32.26% for SearchAuditor; strict critical-step localization is 44.89%. SearchAuditor’s FPS is 18.91% with Gemini 3.1 Pro and 24.62% with Claude Opus 4.8. Backbone changes cannot be attributed to the auditing framework.
+
+FPS combines correct diagnosis with passing all expert-written repair rubrics. DeepSeek-V4-Flash judges the proposed repair; this score does not measure successful re-execution of the original search. [Paper v1, §5.1 and Table 2](https://arxiv.org/html/2608.05212v1#S5.SS1).
 
 ## Score boundary
 
-High diagnosis or repair scores support auditing on the failures-only mixture. They do not establish stronger original search agents or proactive prevention. Source-model, harness, and benchmark mixtures shape the failure distribution.
+High scores support post-hoc diagnosis and rubric-satisfying repair suggestions on this failures-only mixture. They do not establish restored execution success, a stronger original search agent, or effective online intervention. Source models, harnesses, and the benchmark mixture determine the failure distribution.
 
 ## Fair comparison conditions
 
-Align trajectory corpus, failure sampling, cause taxonomy, repair execution/judge, and localization tolerance. Auditor scores from different failure mixtures are not directly comparable.
+Align the failed-trajectory corpus, sampling, root-cause taxonomy, localization tolerance, expert repair rubrics, grader, and auditor backbone. Comparing a GPT-5.5 framework with a Gemini 3.1 Pro framework does not isolate the framework. Actual re-execution is a separate next experiment, not the current FPS evaluator.
 
 ## Next evaluation coordinate
 
@@ -34,7 +40,7 @@ Use SearchAuditBench for post-hoc localization, attribution, and repair of searc
 
 ### What a concrete task looks like
 
-Illustrative task: an auditor receives a long failed search trace and must locate the decisive deviation, explain its cause, and propose an executable repair. The wrong final answer may be a symptom of an earlier incorrect assumption rather than the root cause.
+Illustrative task: an auditor receives a long failed search trace and must locate the decisive deviation, explain its cause, and propose an actionable repair directive. The wrong final answer may be a symptom of an earlier incorrect assumption rather than the root cause.
 
 ### Most discriminating experiment
 

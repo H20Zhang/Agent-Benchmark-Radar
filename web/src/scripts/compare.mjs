@@ -1,60 +1,102 @@
-function escapeHtml(value = "") { return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;"); }
-
-function sameProtocolCell(items) {
-  if (items.length < 2 || items.some((item) => !item.result)) return false;
-  const first = items[0].result;
-  return items.every((item) =>
-    item.result.metricFamily === first.metricFamily &&
-    item.result.direction === first.direction &&
-    item.result.unit === first.unit &&
-    item.result.protocolVersion === first.protocolVersion &&
-    item.result.task === first.task &&
-    item.result.split === first.split,
-  );
-}
-
+import { escapeHtml } from "../lib/site.mjs";
+import { writePageState } from "./page-state.mjs";
+/** This is a benchmark-selection workspace, not a cross-dataset leaderboard. */
 function initCompare(root) {
-  const lang = root.dataset.lang || "en";
-  const data = JSON.parse(root.querySelector("#compare-data")?.textContent || "[]");
+  const zh = root.dataset.lang === "zh";
+  const data = JSON.parse(
+    root.querySelector("#compare-data").textContent || "[]",
+  );
   const byId = new Map(data.map((item) => [item.id, item]));
   const controls = root.querySelector("[data-compare-controls]");
   const output = root.querySelector("[data-compare-table]");
-  const requested = new URLSearchParams(window.location.search).getAll("benchmark").filter((id) => byId.has(id)).slice(0, 3);
-  const selected = [...requested];
-  while (selected.length < 3) selected.push("");
-
-  const optionHtml = (active) => [`<option value="">${lang === "zh" ? "选择 Benchmark" : "Choose benchmark"}</option>`, ...data.map((item) => `<option value="${escapeHtml(item.id)}" ${item.id === active ? "selected" : ""}>${escapeHtml(item.name)} · ${escapeHtml(item.area)}</option>`)].join("");
-  controls.innerHTML = selected.map((id, index) => `<label><span>0${index + 1}</span><select data-compare-select>${optionHtml(id)}</select></label>`).join("");
-
-  const render = () => {
-    const ids = [...controls.querySelectorAll("select")].map((select) => select.value).filter(Boolean);
-    const items = ids.map((id) => byId.get(id));
+  let ids = [];
+  const optionHtml = (active) =>
+    `<option value="">${zh ? "添加基准" : "Add benchmark"}</option>` +
+    data
+      .filter((item) => item.id === active || !ids.includes(item.id))
+      .map(
+        (item) =>
+          `<option value="${escapeHtml(item.id)}" ${item.id === active ? "selected" : ""}>${escapeHtml(item.name)}</option>`,
+      )
+      .join("");
+  function render(mode = "replace") {
+    controls.innerHTML = [...ids, ""]
+      .map(
+        (id, index) =>
+          `<label><span>${zh ? "基准" : "Benchmark"} ${index + 1}</span><select data-compare-select data-slot="${index}" aria-label="${zh ? "选择基准" : "Choose benchmark"} ${index + 1}">${optionHtml(id)}</select></label>`,
+      )
+      .join("");
     const params = new URLSearchParams();
     for (const id of ids) params.append("benchmark", id);
-    history.replaceState({}, "", `${window.location.pathname}${params.size ? `?${params}` : ""}`);
-    if (!items.length) { output.innerHTML = `<p>${lang === "zh" ? "选择 Benchmark 后开始比较。这里不会默认挑三个分数制造伪可比。" : "Choose benchmarks to begin. This workspace does not preselect scores and imply false comparability."}</p>`; return; }
-
-    const comparable = sameProtocolCell(items);
-    const comparability = comparable
-      ? (lang === "zh" ? "这些成绩属于同一 protocol cell，可直接比较。" : "These result tracks share the same protocol cell and are directly comparable.")
-      : (lang === "zh" ? "这些成绩不属于同一 protocol cell。下面的数值只作为各自来源内的 reported result 展示，不能据此排序系统优劣。" : "These results do not share one protocol cell. Scores below are source-local reported results, not a basis for ranking systems against each other.");
-
+    writePageState(params, mode);
+    if (!ids.length) {
+      output.innerHTML = `<p class="empty-state">${zh ? "添加基准，比较它们测什么、如何验证，以及需要控制哪些条件。" : "Add benchmarks to compare their measurement targets, protocols, and controls."}</p>`;
+      return;
+    }
+    const items = ids.map((id) => byId.get(id));
     const rows = [
-      [lang === "zh" ? "定位" : "Position", (item) => `${item.area} · ${item.released}`],
-      [lang === "zh" ? "测量对象" : "Measurement target", (item) => item.summary],
-      [lang === "zh" ? "分数支持" : "Score supports", (item) => item.scoreSupports],
-      [lang === "zh" ? "规模" : "Scale", (item) => item.scale],
-      [lang === "zh" ? "能力" : "Capabilities", (item) => item.capabilities.join(" · ")],
-      [lang === "zh" ? "环境" : "Environment", (item) => item.environment.join(" · ")],
-      [lang === "zh" ? "协议" : "Protocol", (item) => item.protocol.join(" · ")],
-      [lang === "zh" ? "公平比较" : "Fair comparison", (item) => item.comparison_controls.join(" ")],
-      [lang === "zh" ? "结果轨道" : "Result track", (item) => item.result ? `${item.result.task} · ${item.result.split} · ${item.result.protocolVersion}` : (lang === "zh" ? "结果待结构化" : "Result awaiting structuring")],
-      [comparable ? (lang === "zh" ? "可直接比较成绩" : "Directly comparable score") : (lang === "zh" ? "各自来源报告成绩" : "Source-local reported score"), (item) => item.result ? `${item.result.score}${item.result.unit} · ${item.result.method} · ${item.result.metric} · verified ${item.result.verifiedAt}` : (lang === "zh" ? "结果待结构化" : "Result awaiting structuring")],
+      [
+        zh ? "领域 / 公开记录" : "Area / recorded date",
+        (item) => `${item.area} · ${item.released}`,
+      ],
+      [zh ? "测量对象" : "Measurement target", (item) => item.summary],
+      [zh ? "结论边界" : "Claim boundary", (item) => item.scoreSupports],
+      [zh ? "规模（来源原文）" : "Scale", (item) => item.scale],
+      [zh ? "能力" : "Capabilities", (item) => item.capabilities.join(" · ")],
+      [zh ? "环境" : "Environment", (item) => item.environment.join(" · ")],
+      [zh ? "协议" : "Protocol", (item) => item.protocol.join(" · ")],
+      [
+        zh ? "公平比较条件" : "Controls",
+        (item) => item.comparison_controls.join(" "),
+      ],
+      [
+        zh ? "各自设置的选录结果" : "Recorded result in its own setting",
+        (item) =>
+          item.result
+            ? `${item.result.label}: ${item.result.score}${item.result.unit} · ${item.result.model} · ${item.result.method} · ${item.result.metric} · ${item.result.scope}`
+            : zh
+              ? "尚未收录结构化结果；见一手来源。"
+              : "No structured result recorded; consult primary sources.",
+      ],
+      [zh ? "结果任务" : "Result task", item => item.result?.task],
+      [zh ? "结果数据切分" : "Result split", item => item.result?.split],
+      [zh ? "结果协议版本" : "Result protocol version", item => item.result?.protocolVersion],
+      [zh ? "上下文条件（来源原文）" : "Context conditions", item => item.result?.context || (zh ? "未在本记录中报告" : "Not reported in this record")],
+      [zh ? "资源预算（来源原文）" : "Resource budget", item => item.result?.budget || (zh ? "未在本记录中报告" : "Not reported in this record")],
+      [zh ? "结果报告日期" : "Result reported", item => item.result?.reportedAt],
+      [
+        zh ? "结果核验日期" : "Result verified",
+        (item) => item.result?.verifiedAt || "—",
+      ],
     ];
-    output.innerHTML = `<div class="compare-contract ${comparable ? "is-comparable" : "is-not-comparable"}"><strong>${lang === "zh" ? "可比性判断" : "Comparability judgment"}</strong><p>${escapeHtml(comparability)}</p></div><table><thead><tr><th>${lang === "zh" ? "比较维度" : "Dimension"}</th>${items.map((item) => `<th><a href="../benchmarks/${escapeHtml(item.id)}/">${escapeHtml(item.name)}</a></th>`).join("")}</tr></thead><tbody>${rows.map(([label, value]) => `<tr><th>${label}</th>${items.map((item) => `<td>${escapeHtml(value(item))}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
-  };
-  controls.addEventListener("change", render);
-  render();
+    const resultLinks = items
+      .map(
+        (item) =>
+          `<td>${item.result ? `<a href="${escapeHtml(item.result.source)}">${zh ? "结果原始来源" : "Original result source"}</a>` : "—"}</td>`,
+      )
+      .join("");
+    output.innerHTML = `<p class="content-note">${zh ? `完整保留 ${ids.length} 个基准。不同基准的分数不可据此排列系统优劣；横向滚动查看全部列。` : `All ${ids.length} selected benchmarks are preserved. Scores from different benchmarks are not a basis for ranking systems. Scroll horizontally to see every column.`}</p><div class="table-scroll" role="region" tabindex="0" aria-label="${zh ? "全部基准对照表" : "All selected benchmarks"}"><table><caption>${zh ? "基准测量设计对照" : "Benchmark measurement design comparison"}</caption><thead><tr><th scope="col">${zh ? "比较维度" : "Dimension"}</th>${items.map((item) => `<th scope="col"><a href="../benchmarks/${escapeHtml(item.id)}/">${escapeHtml(item.name)}</a></th>`).join("")}</tr></thead><tbody>${rows.map(([label, value]) => `<tr><th scope="row">${label}</th>${items.map((item) => `<td>${escapeHtml(value(item) || "—")}</td>`).join("")}</tr>`).join("")}<tr><th scope="row">${zh ? "来源" : "Sources"}</th>${resultLinks}</tr></tbody></table></div>`;
+  }
+  function restore() {
+    ids = [
+      ...new Set(new URLSearchParams(location.search).getAll("benchmark")),
+    ].filter((id) => byId.has(id));
+    render();
+  }
+  controls.addEventListener("change", (event) => {
+    const select = event.target.closest("[data-compare-select]");
+    if (!select) return;
+    const slot = Number(select.dataset.slot);
+    const values = [...ids];
+    values[slot] = select.value;
+    ids = [...new Set(values.filter(Boolean))];
+    render("push");
+    controls.querySelector(`[data-slot="${Math.min(slot, ids.length)}"]`)?.focus();
+  });
+  window.addEventListener("popstate", restore);
+  restore();
 }
-
-export function initCompareWorkspaces() { for (const root of document.querySelectorAll("[data-compare-workspace]")) initCompare(root); }
+export function initCompareWorkspaces() {
+  for (const root of document.querySelectorAll("[data-compare-workspace]"))
+    initCompare(root);
+}

@@ -8,11 +8,11 @@ class FreshnessLanguageContract(unittest.TestCase):
         self.assertIn(f'{n} benchmarks organized by',(ROOT/'README.en.md').read_text())
     def test_frontier_separates_factual_watchlist_from_interpretation(self):
         t=(ROOT/'web/src/pages/[lang]/frontier/index.astro').read_text()
-        self.assertIn('Factual window',t)
-        self.assertIn('objective inclusion rules',t)
-        self.assertIn('Interpretive layer',t)
+        self.assertIn('publicationWindow',t)
+        self.assertIn('inReleaseWindow',t)
+        self.assertIn('Editorial observations',t)
         self.assertIn('timeline/',t)
-        self.assertIn('freshness.discovery_scan_at',t)
+        self.assertIn('period.asOf',t)
         self.assertNotIn('progress-map__point',t)
         self.assertNotIn('getProgressPoint',t)
     def test_scale_qa_chinese_avoids_unnecessary_english_prose(self):

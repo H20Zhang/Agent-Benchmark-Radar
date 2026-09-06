@@ -1,137 +1,33 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import BenchmarkCard from "../../../components/BenchmarkCard.astro";
-import Header from "../../../components/Header.astro";
-import SiteFooter from "../../../components/SiteFooter.astro";
-
-import { AREAS, copyFor, LOCALES } from "../../../lib/i18n.mjs";
-import { sortBenchmarks } from "../../../lib/filters.mjs";
-import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
-import { loadRegistry } from "../../../lib/registry.mjs";
-import { loadResearchModel, localize } from "../../../lib/research-model.mjs";
-import { loadAllResultSets, summarizeTrack } from "../../../lib/results.mjs";
-import { absoluteUrl, localePath, sitePath } from "../../../lib/site.mjs";
-
-export function getStaticPaths() {
-  return LOCALES.flatMap((lang) =>
-    AREAS.map((area) => ({ params: { lang, area }, props: { lang, area } })),
-  );
-}
-
-interface Props {
-  lang: "zh" | "en";
-  area: "agent-memory" | "rag" | "data-agent";
-}
-
-const { lang, area } = Astro.props;
-const copy = copyFor(lang);
-const allItems = [...loadRegistry()];
-const items = sortBenchmarks(allItems.filter((item) => item.area === area), "newest");
-const summaries = loadChineseSummaries();
-const research = loadResearchModel();
-const resultSets = loadAllResultSets();
-const genealogy = research.genealogy.areas.find((entry: any) => entry.id === area);
-const opportunities = research.opportunities.filter((entry: any) => entry.area === area);
-const frontierShifts = research.frontierShifts.filter((entry: any) => entry.area === area);
-const resultHighlights = items
-  .filter((item) => resultSets.has(item.id))
-  .map((item) => {
-    const resultSet = resultSets.get(item.id);
-    const track = resultSet.tracks.find((entry: any) => entry.primary) || resultSet.tracks[0];
-    return { item, track, resultSet, result: summarizeTrack(track) };
-  })
-  .sort((a, b) => b.resultSet.verified_at.localeCompare(a.resultSet.verified_at) || b.item.released.localeCompare(a.item.released))
-  .slice(0, 4);
-const canonicalPath = localePath(lang, `areas/${area}/`);
-const alternatePath = localePath(lang === "zh" ? "en" : "zh", `areas/${area}/`);
-const title = `${copy.areas[area].label} Benchmark Radar | Agent Benchmark Radar`;
-const description = copy.areas[area].intro;
-const roleCounts = Object.fromEntries(
-  Object.keys(copy.roles).map((role) => [
-    role,
-    items.filter((item) => item.evolution_role === role).length,
-  ]),
-);
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  name: title,
-  description,
-  url: absoluteUrl(canonicalPath),
-  inLanguage: copy.langTag,
-  mainEntity: {
-    "@type": "ItemList",
-    numberOfItems: items.length,
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.name,
-      url: absoluteUrl(localePath(lang, `benchmarks/${item.id}/`)),
-    })),
-  },
-};
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import PageHero from '../../../components/PageHero.astro';
+import BenchmarkCard from '../../../components/BenchmarkCard.astro';
+import { AREAS, LOCALES, copyFor } from '../../../lib/i18n.mjs';
+import { loadRegistry } from '../../../lib/registry.mjs';
+import { loadChineseSummaries } from '../../../lib/readme-localization.mjs';
+import { loadAllResultSets } from '../../../lib/results.mjs';
+import { loadResearchModel, localize } from '../../../lib/research-model.mjs';
+import { localePath, sitePath, absoluteUrl } from '../../../lib/site.mjs';
+export function getStaticPaths(){return LOCALES.flatMap(lang=>AREAS.map(area=>({params:{lang,area},props:{lang,area}})));}
+interface Props{lang:'zh'|'en';area:'agent-memory'|'rag'|'data-agent';}
+const {lang,area}=Astro.props,zh=lang==='zh',copy=copyFor(lang);
+const items=loadRegistry().filter(item=>item.area===area),summaries=loadChineseSummaries(),results=loadAllResultSets(),research=loadResearchModel();
+const genealogy=research.genealogy.areas.find((entry:any)=>entry.id===area);
+const byId=new Map(loadRegistry().map(item=>[item.id,item]));
+const canonicalPath=localePath(lang,`areas/${area}/`),alternatePath=localePath(zh?'en':'zh',`areas/${area}/`);
+const title=`${copy.areas[area].label} | Agent Benchmark Radar`;
+const description=zh?`${items.length} 个基准，先浏览测量对象与公开记录，再查看领域解读。`:`${items.length} benchmarks. Browse measurement targets and public records before exploring editorial analysis.`;
+const jsonLd={'@context':'https://schema.org','@type':'CollectionPage',name:title,url:absoluteUrl(canonicalPath)};
 ---
-
-<BaseLayout
-  {lang}
-  {title}
-  {description}
-  {canonicalPath}
-  zhPath={lang === "zh" ? canonicalPath : alternatePath}
-  enPath={lang === "en" ? canonicalPath : alternatePath}
-  {jsonLd}
-  bodyClass="area-page"
->
-  <Header {lang} alternatePath={alternatePath} />
-  <main id="main-content">
-    <section class="area-hero shell" data-area={area}>
-      <div class="area-hero__index">{String(AREAS.indexOf(area) + 1).padStart(2, "0")}</div>
-      <div class="area-hero__copy">
-        <p class="eyebrow">{copy.areas[area].short}</p>
-        <h1>{copy.areas[area].label}</h1>
-        <p>{copy.areas[area].intro}</p>
-        <a class="button button--primary" href={sitePath(`${localePath(lang, "timeline/")}`)}>
-          {lang === "zh" ? "先看完整时间轴" : "Start from the canonical timeline"} <span aria-hidden="true">↗</span>
-        </a>
-      </div>
-      <dl class="area-hero__roles">
-        {Object.entries(copy.roles).map(([role, label]) => (
-          <div><dt>{label}</dt><dd>{roleCounts[role]}</dd></div>
-        ))}
-      </dl>
+<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={zh?canonicalPath:alternatePath} enPath={zh?alternatePath:canonicalPath} {jsonLd} bodyClass="radar-page area-page">
+  <Header {lang} {alternatePath}/><main id="main-content">
+    <PageHero title={copy.areas[area].label} {description}><div class="action-links"><a href={sitePath(localePath(lang,`timeline/?area=${area}&window=all`))}>{zh?'按月份浏览':'Browse by month'} →</a><a href={sitePath(localePath(lang,`benchmarks/?area=${area}`))}>{zh?'筛选本领域':'Filter this area'} →</a><a href={sitePath(localePath(lang,`evaluate/?area=${area}`))}>{zh?'选择评测组合':'Choose a suite'} →</a></div></PageHero>
+    <section class="shell page-section area-registry"><h2>{zh?'完整基准目录':'Complete benchmark library'}</h2><div class="benchmark-grid">{items.map(item=><BenchmarkCard {lang} {item} summary={zh?summaries.get(item.id):item.summary} resultSet={results.get(item.id)}/>)}</div></section>
+    <section class="shell page-section"><h2>{zh?'领域解读':'Area interpretation'}</h2><p class="content-note">{zh?'以下谱系和研究机会是编辑判断，不参与上方的时间排序。':'The following genealogy and opportunities are editorial judgments; they do not determine the chronology above.'}</p>
+      {genealogy&&<details class="editorial-section"><summary>{zh?'测量能力的演进脉络':'Measurement genealogy'}</summary><p>{localize(genealogy.thesis,lang)}</p><div class="genealogy-rail">{genealogy.stages.map((stage:any)=><article><h3>{localize(stage.label,lang)}</h3>{stage.benchmarks.map((id:string)=><a href={sitePath(localePath(lang,`benchmarks/${id}/`))}>{byId.get(id)?.name}</a>)}</article>)}</div></details>}
+      <div class="related-recipes">{research.opportunities.filter((entry:any)=>entry.area===area).map((entry:any)=><a href={sitePath(localePath(lang,`opportunities/${entry.id}/`))}><strong>{localize(entry.title,lang)}</strong><span>{zh?'待验证研究假设':'Research hypothesis'} →</span></a>)}</div>
     </section>
-
-    <section class="area-intelligence shell" data-area={area}>
-      <div class="area-intelligence__genealogy">
-        <header><p class="eyebrow">{lang === "zh" ? "解释层 · Benchmark 谱系" : "Interpretive layer · Benchmark genealogy"}</p><h2>{lang === "zh" ? "对时间轴的一种演进解释" : "One interpretation of how measurement evolved"}</h2><p>{localize(genealogy.thesis, lang)}</p></header>
-        <div>{genealogy.stages.map((stage: any, index: number) => <article><span>{String(index + 1).padStart(2, "0")}</span><h3>{localize(stage.label, lang)}</h3><div>{stage.benchmarks.map((id: string) => { const benchmark = allItems.find((entry) => entry.id === id); return benchmark && <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{benchmark.name}</a>; })}</div></article>)}</div>
-      </div>
-
-      {resultHighlights.length > 0 && <div class="area-intelligence__results"><header><p class="eyebrow">{lang === "zh" ? "结果快照 · 非跨基准排名" : "Result snapshots · not a cross-benchmark ranking"}</p><h2>{lang === "zh" ? "最近核验的结果轨道" : "Most recently verified result tracks"}</h2><p>{lang === "zh" ? "按结果核验日期排序。不同 Benchmark / protocol cell 的分数不直接比较。" : "Ordered by result verification date. Scores across different benchmarks or protocol cells are not directly comparable."}</p></header><div>{resultHighlights.map(({ item, track, resultSet, result }: any) => <a href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}><span>{item.name}</span><strong>{result.best.score}<small>{track.metric.unit}</small></strong><p>{result.best.method} · {localize(track.label, lang)}</p><time datetime={resultSet.verified_at}>{lang === "zh" ? "结果核验 " : "Result verified "}{resultSet.verified_at}</time></a>)}</div></div>}
-
-      <div class="area-intelligence__opportunities"><header><p class="eyebrow">{lang === "zh" ? "解释层 · 研究机会" : "Interpretive layer · Research opportunities"}</p><h2>{lang === "zh" ? "哪些下一坐标值得验证" : "Which next coordinates are worth validating"}</h2></header><div>{opportunities.map((opportunity: any) => <a href={sitePath(localePath(lang, `opportunities/${opportunity.id}/`))}><h3>{localize(opportunity.title, lang)}</h3><p>{localize(opportunity.next_coordinate, lang)}</p><span>{lang === "zh" ? "查看证据与推断边界" : "Inspect evidence and inference boundary"} ↗</span></a>)}</div></div>
-
-      {frontierShifts.map((shift: any) => <aside class="area-intelligence__shift"><p class="eyebrow">{lang === "zh" ? "解释层 · Frontier shift" : "Interpretive layer · Frontier shift"} · {shift.period}</p><h2>{localize(shift.title, lang)}</h2><p>{localize(shift.delta, lang)}</p><strong>{localize(shift.consequence, lang)}</strong></aside>)}
-    </section>
-
-    <section class="area-registry">
-      <div class="shell">
-        <div class="section-heading">
-          <div><p class="eyebrow">{lang === "zh" ? "本领域完整目录" : "Complete area registry"}</p><h2>{items.length} Benchmarks</h2></div>
-          <p>{lang === "zh" ? "按发布时间排列；发布日期事实以时间轴与规范记录为准。" : "Ordered by release time; release facts are anchored in the timeline and canonical registry."}</p>
-        </div>
-        <div class="benchmark-grid benchmark-grid--area">
-          {items.map((item) => (
-            <BenchmarkCard
-              {lang}
-              {item}
-              summary={lang === "zh" ? summaries.get(item.id) || item.summary : item.summary}
-              resultSet={resultSets.get(item.id)}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  </main>
-  <SiteFooter {lang} />
+  </main><SiteFooter {lang}/>
 </BaseLayout>

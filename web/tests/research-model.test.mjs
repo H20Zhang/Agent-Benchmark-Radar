@@ -34,8 +34,8 @@ test("stable facet values map registry records to low-cardinality research contr
   const item = loadRegistry().find((entry) => entry.id === "locomo");
   const values = getStableFacetValues(item);
 
-  assert.ok(values.includes("memory-recall"));
-  assert.ok(values.includes("conversation"));
+  assert.ok(values.some(value => value.endsWith(":memory-recall")));
+  assert.ok(values.some(value => value.endsWith(":conversation")));
   assert.equal(values.length, new Set(values).size);
 });
 

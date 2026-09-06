@@ -1,40 +1,26 @@
 ---
-import { copyFor } from "../lib/i18n.mjs";
-import { localePath, REPOSITORY_URL, sitePath } from "../lib/site.mjs";
-
-interface Props {
-  lang: "zh" | "en";
-  alternatePath?: string;
-}
-
-const { lang, alternatePath = localePath(lang === "zh" ? "en" : "zh") } = Astro.props;
-const copy = copyFor(lang);
-const path = Astro.url.pathname;
+import { localePath, sitePath } from '../lib/site.mjs';
+interface Props { lang: 'zh' | 'en'; alternatePath?: string; }
+const { lang, alternatePath = localePath(lang === 'zh' ? 'en' : 'zh') } = Astro.props;
 const navItems = [
-  { href: sitePath(localePath(lang, "timeline/")), label: lang === "zh" ? "Benchmark 时间轴" : "Timeline", key: "/timeline/" },
-  { href: sitePath(localePath(lang, "benchmarks/")), label: lang === "zh" ? "Benchmark Library" : "Library", key: "/benchmarks/" },
-  { href: sitePath(localePath(lang, "evaluate/")), label: lang === "zh" ? "评测组合" : "Suites", key: "/evaluate/" },
-  { href: sitePath(localePath(lang, "opportunities/")), label: lang === "zh" ? "研究机会" : "Opportunities", key: "/opportunities/" },
-  { href: sitePath(localePath(lang, "methodology/")), label: lang === "zh" ? "方法" : "Methodology", key: "/methodology/" },
+  ['timeline/', '时间轴', 'Timeline'], ['benchmarks/', '筛选基准', 'Library'],
+  ['evaluate/', '评测组合', 'Suites'], ['frontier/', '前沿解读', 'Frontier'],
+  ['opportunities/', '研究机会', 'Opportunities'], ['methodology/', '方法', 'Methodology'],
 ];
+const path = Astro.url.pathname;
 ---
-
-<header class="site-header site-header--tool">
-  <div class="site-header__inner">
-    <a class="site-brand" href={sitePath(localePath(lang))} aria-label={copy.siteName}>
-      <span class="site-brand__mark" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="site-brand__name">Agent Benchmark Radar</span>
-    </a>
-    <nav class="site-nav" aria-label={lang === "zh" ? "主导航" : "Primary navigation"}>
-      <div class="site-nav__primary">
-        {navItems.map((item) => (
-          <a href={item.href} aria-current={path.includes(item.key) ? "page" : undefined}>{item.label}</a>
-        ))}
-      </div>
-      <div class="site-nav__utility">
-        <a href={REPOSITORY_URL} rel="noreferrer" aria-label={`${copy.nav.github} ↗`}>{copy.nav.github}<span aria-hidden="true">↗</span></a>
-      </div>
-      <a class="site-nav__language" href={sitePath(alternatePath)} hreflang={lang === "zh" ? "en" : "zh-CN"}>{copy.nav.language}</a>
+<header class="site-header">
+  <div class="site-header__inner shell">
+    <a class="site-brand" href={sitePath(localePath(lang))}>Agent Benchmark <strong>Radar</strong></a>
+    <nav class="site-nav" aria-label={lang === 'zh' ? '主导航' : 'Primary navigation'}>
+      {navItems.map(([suffix, zh, en]) => <a href={sitePath(localePath(lang, suffix))} aria-current={path.includes(`/${suffix}`) ? 'page' : undefined}>{lang === 'zh' ? zh : en}</a>)}
+      <a class="site-nav__language" data-language-path={sitePath(alternatePath)} href={sitePath(alternatePath)} hreflang={lang === 'zh' ? 'en' : 'zh-CN'}>{lang === 'zh' ? 'English' : '中文'}</a>
     </nav>
   </div>
 </header>
+<script>
+  import { syncLanguageLinks } from '../scripts/page-state.mjs';
+  syncLanguageLinks();
+  window.addEventListener('popstate', syncLanguageLinks);
+  window.addEventListener('hashchange', syncLanguageLinks);
+</script>

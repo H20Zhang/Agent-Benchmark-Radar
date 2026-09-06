@@ -8,11 +8,19 @@ const ALLOWED_ROLES = new Set([
 const ALLOWED_ARTIFACTS = new Set(["paper", "code", "data"]);
 const ALLOWED_SORTS = new Set(["newest", "oldest", "citations", "name"]);
 const ALLOWED_RESULT_STATUSES = new Set(["tracked", "untracked"]);
-const ALLOWED_HEADROOM_BANDS = new Set(["wide", "moderate", "limited", "unknown"]);
-const TAG_PATTERN = /^[\p{L}\p{N}][\p{L}\p{N}+._-]{0,99}$/u;
+const ALLOWED_SOURCE_TYPES = new Set(["live", "paper-snapshot", "verified-snapshot"]);
+const ALLOWED_HEADROOM_BANDS = new Set([
+  "wide",
+  "moderate",
+  "limited",
+  "unknown",
+]);
+const TAG_PATTERN = /^[\p{L}\p{N}][\p{L}\p{N}+:._-]{0,139}$/u;
 
 function uniqueSorted(values) {
-  return [...new Set(values)].sort((left, right) => left.localeCompare(right));
+  return [...new Set(values)].sort((left, right) =>
+    String(left).localeCompare(String(right)),
+  );
 }
 
 function allowedValues(params, key, allowed) {
@@ -53,7 +61,8 @@ export function parseFilterState(params) {
     protocols: tagValues(params, "protocol"),
     stableFacets: tagValues(params, "facet"),
     resultStatuses: allowedValues(params, "status", ALLOWED_RESULT_STATUSES),
-    headroomBands: allowedValues(params, "headroom", ALLOWED_HEADROOM_BANDS),
+    sourceTypes: uniqueSorted([...allowedValues(params, "source", ALLOWED_SOURCE_TYPES), ...allowedValues(params, "status", ALLOWED_SOURCE_TYPES)]),
+    headroomBands: [], // Retired: target distance is not a research-opportunity filter.
     metricFamilies: tagValues(params, "metric"),
     rawTags: tagValues(params, "tag"),
     years,
@@ -75,7 +84,7 @@ export function serializeFilterState(state) {
     ["protocol", state.protocols],
     ["facet", state.stableFacets],
     ["status", state.resultStatuses],
-    ["headroom", state.headroomBands],
+    ["source", state.sourceTypes],
     ["metric", state.metricFamilies],
     ["tag", state.rawTags],
     ["year", state.years],
@@ -90,11 +99,15 @@ export function serializeFilterState(state) {
 }
 
 function includesAny(actual = [], selected = []) {
-  return selected.length === 0 || selected.some((value) => actual.includes(value));
+  return (
+    selected.length === 0 || selected.some((value) => actual.includes(value))
+  );
 }
 
 function artifactKinds(item) {
-  return ["paper", "code", "data"].filter((key) => Boolean(item.artifacts?.[key]));
+  return ["paper", "code", "data"].filter((key) =>
+    Boolean(item.artifacts?.[key]),
+  );
 }
 
 function searchableText(item) {
@@ -110,6 +123,20 @@ function searchableText(item) {
     .filter(Boolean)
     .join(" ")
     .toLocaleLowerCase();
+}
+
+export function matchesFacetGroups(actual = [], selected = []) {
+  const groups = new Map();
+  for (const key of selected) {
+    const separator = key.indexOf(":");
+    // Legacy URL keys remain matchable only within their one explicit legacy group.
+    const group = separator < 0 ? "legacy" : key.slice(0, separator);
+    if (!groups.has(group)) groups.set(group, []);
+    groups.get(group).push(key);
+  }
+  return [...groups.values()].every((options) =>
+    options.some((value) => actual.includes(value)),
+  );
 }
 
 /**
@@ -129,12 +156,19 @@ export function filterBenchmarks(items, state) {
       includesAny(item.capabilities, state.capabilities) &&
       includesAny(item.environment, state.environments) &&
       includesAny(item.protocol, state.protocols) &&
-      includesAny(item.stableFacets, state.stableFacets) &&
+      matchesFacetGroups(item.stableFacets, state.stableFacets) &&
       includesAny([item.resultStatus], state.resultStatuses) &&
-      includesAny([item.headroomBand], state.headroomBands) &&
-      includesAny([item.metricFamily], state.metricFamilies) &&
+      includesAny([item.resultTrackingStatus], state.sourceTypes || []) &&
       includesAny(
-        [...(item.capabilities || []), ...(item.environment || []), ...(item.protocol || [])],
+        item.metricFamilies || [item.metricFamily],
+        state.metricFamilies,
+      ) &&
+      includesAny(
+        [
+          ...(item.capabilities || []),
+          ...(item.environment || []),
+          ...(item.protocol || []),
+        ],
         state.rawTags,
       ) &&
       includesAny([year], state.years)
@@ -185,4 +219,23 @@ export function buildFacetOptions(items, key) {
   return [...counts]
     .map(([value, count]) => ({ value, count }))
     .sort((left, right) => left.value.localeCompare(right.value));
+}
+
+/** Migrate only unambiguous historical aliases. An unresolved alias remains restrictive. */
+export function migrateFacetParams(params, knownKeys) {
+  const out = new URLSearchParams(params);
+  const keys = [...new Set(knownKeys)];
+  const selected = out.getAll("facet");
+  out.delete("facet");
+  for (const value of selected) {
+    const matches = keys.filter((key) => key.endsWith(`:${value}`));
+    out.append("facet", !value.includes(":") && matches.length === 1 ? matches[0] : value);
+  }
+  return out;
+}
+export function replaceFilterDimension(params, key, values) {
+  const out = new URLSearchParams(params);
+  out.delete(key);
+  for (const value of values) if (String(value).trim()) out.append(key, String(value));
+  return out;
 }

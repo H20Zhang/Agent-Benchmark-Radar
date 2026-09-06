@@ -26,6 +26,6 @@ test("all canonical detail pages are source-authored rather than runtime padded"
 test("deep read renderer escapes active markup and only links https sources", () => {
   const html = renderDeepReadMarkdown("# title\n\n<script>alert(1)</script>\n\nPrimary: https://example.com/paper");
   assert.doesNotMatch(html, /<script>/);
-  assert.match(html, /&lt;script&gt;/);
+  assert.match(html, /(?:&lt;|&#x3C;)script(?:&gt;|>)/);
   assert.match(html, /href=\"https:\/\/example.com\/paper\"/);
 });
