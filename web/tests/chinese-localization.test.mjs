@@ -56,7 +56,7 @@ test("Chinese locale does not expose known English UI labels", () => {
   }
 });
 
-test("core Chinese pages use explicit localized labels on the public content site", () => {
+test("core Chinese pages use explicit localized labels and evidence-layer semantics", () => {
   const detail = source("src/components/BenchmarkDetail.astro");
   const results = source("src/components/ResultsPanel.astro");
   const home = source("src/pages/[lang]/index.astro");
@@ -64,9 +64,10 @@ test("core Chinese pages use explicit localized labels on the public content sit
   const suites = source("src/pages/[lang]/evaluate/index.astro");
   assert.match(detail, /supportEyebrow: "结论边界"/);
   assert.match(detail, /evidenceEyebrow: "证据摘要"/);
-  assert.match(results, /eyebrow: "成绩进展"/);
-  assert.match(home, /lang === "zh" \? "最新发布" : "Latest releases"/);
-  assert.match(home, /lang === "zh" \? "研究信号" : "Research signals"/);
+  assert.match(results, /eyebrow: "结果证据"/);
+  assert.match(results, /best: "该轨道报告最佳"/);
+  assert.match(home, /lang === "zh" \? "事实层 · 最新发布" : "Factual layer · Latest releases"/);
+  assert.match(home, /lang === "zh" \? "解释层 · Frontier signals" : "Interpretive layer · Frontier signals"/);
   assert.doesNotMatch(home, /网站待完善|Website under improvement/);
   assert.match(explorer, /lang === "zh" \? "基准筛选" : "Benchmark explorer"/);
   assert.match(suites, /lang === "zh" \? "评测组合" : "Evaluation suites"/);
