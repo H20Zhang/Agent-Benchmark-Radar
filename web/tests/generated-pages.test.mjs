@@ -27,13 +27,29 @@ test("home is a public content-first research index", () => {
   }
 });
 
-test("primary navigation stays focused on the four repeat research actions", () => {
+test("primary navigation starts from the canonical timeline and exposes stable research surfaces", () => {
   const header = read("src/components/Header.astro");
-  for (const token of ["benchmarks/", "#timeline", "evaluate/", "#results"]) {
+  for (const token of ["timeline/", "benchmarks/", "evaluate/", "opportunities/", "methodology/"]) {
     assert.ok(header.includes(token), token);
   }
-  assert.ok(!header.includes('localePath(lang, "opportunities/")'));
-  assert.ok(!header.includes('localePath(lang, "frontier/")'));
+  for (const deadAnchor of ["#timeline", "#results"]) assert.ok(!header.includes(deadAnchor), deadAnchor);
+});
+
+test("canonical timeline is a factual release ledger rather than a frontier ranking", () => {
+  const page = read("src/pages/[lang]/timeline/index.astro");
+  for (const token of ["loadRegistry", "released", "last_verified", "Canonical release timeline", "Strictly by released"] ) {
+    assert.ok(page.includes(token), token);
+  }
+  assert.ok(page.includes("SOTA, importance, frontier, or opportunity judgments"));
+  assert.ok(!page.includes("loadAllResultSets"));
+  assert.ok(!page.includes("frontierShifts"));
+  assert.ok(!page.includes("research.opportunities"));
+});
+
+test("public layout is indexable unless a route explicitly opts out", () => {
+  const layout = read("src/layouts/BaseLayout.astro");
+  assert.ok(layout.includes('robots = "index,follow"'));
+  assert.ok(!layout.includes('robots = "noindex,nofollow"'));
 });
 
 test("benchmark route generates every locale and stable registry id", () => {
@@ -67,20 +83,25 @@ test("benchmark details expose a fast research judgment before deep reading", ()
   }
 });
 
-test("result panels bind visible scores to comparable tracks and primary sources", () => {
+test("result panels bind visible scores to protocol cells and primary sources", () => {
   const panel = read("src/components/ResultsPanel.astro");
-  for (const token of ["summarizeTrack", "track.task", "track.split", "protocol_version", "entry.source", "metric.direction"]) {
+  for (const token of ["summarizeTrack", "track.task", "track.split", "protocol_version", "entry.source", "metric.direction", "not automatically comparable"]) {
     assert.ok(panel.includes(token), token);
   }
+  assert.ok(panel.includes("Reported best on this track"));
 });
 
-test("area pages provide six stable editorial landing pages", () => {
+test("area pages explicitly separate factual chronology from interpretation", () => {
   const page = read("src/pages/[lang]/areas/[area].astro");
 
   assert.match(page, /LOCALES\.flatMap/);
   assert.match(page, /AREAS\.map/);
   assert.match(page, /CollectionPage/);
   assert.match(page, /BenchmarkCard/);
+  assert.ok(page.includes("timeline/"));
+  assert.ok(page.includes("Interpretive layer"));
+  assert.ok(page.includes("not a cross-benchmark ranking"));
+  assert.ok(page.includes("verified_at.localeCompare"));
 });
 
 test("methodology pages explain the measurement model in both languages", () => {
@@ -97,19 +118,22 @@ test("suite builder and comparison workspace expose reusable research decisions"
   const evaluatePage = read("src/pages/[lang]/evaluate/index.astro");
   const evaluateScript = read("src/scripts/evaluate.mjs");
   const comparePage = read("src/pages/[lang]/compare/index.astro");
+  const compareScript = read("src/scripts/compare.mjs");
 
   for (const token of ["research.recipes", "claim_boundary", "next_validation", "data-suite-builder"]) assert.ok(evaluatePage.includes(token), token);
-  for (const token of ["URLSearchParams", "recipe", "benchmark", "Markdown", "clipboard"]) assert.ok(evaluateScript.includes(token), token);
-  for (const token of ["comparison_controls", "data-compare-workspace", "loadAllResultSets"]) assert.ok(comparePage.includes(token), token);
+  for (const token of ["URLSearchParams", "recipe", "benchmark", "Markdown", "clipboard", "requestedArea"]) assert.ok(evaluateScript.includes(token), token);
+  for (const token of ["comparison_controls", "data-compare-workspace", "loadAllResultSets", "protocolVersion"]) assert.ok(comparePage.includes(token), token);
+  for (const token of ["sameProtocolCell", "metricFamily", "protocolVersion", "task", "split", "not a basis for ranking"]) assert.ok(compareScript.includes(token), token);
+  assert.ok(!compareScript.includes("data.filter((item) => item.result).slice(0, 3)"));
 });
 
-test("opportunity and frontier routes remain available as secondary research surfaces", () => {
+test("opportunity pages mark claims as interpretation and link back to factual evidence", () => {
   const opportunities = read("src/pages/[lang]/opportunities/index.astro");
   const opportunity = read("src/pages/[lang]/opportunities/[id].astro");
   const frontier = read("src/pages/[lang]/frontier/index.astro");
 
   for (const token of ["research.opportunities", "candidate_evaluation", "Opportunity map"]) assert.ok(opportunities.includes(token), token);
-  for (const token of ["why_it_matters", "current_coverage", "next_coordinate", "candidate_evaluation"]) assert.ok(opportunity.includes(token), token);
+  for (const token of ["why_it_matters", "current_coverage", "next_coordinate", "candidate_evaluation", "interpretive layer", "timeline/", "loadChineseSummaries"]) assert.ok(opportunity.includes(token), token);
   for (const token of ["frontierShifts", "recentItems", "freshness.discovery_scan_at", "genealogy", "Evaluation frontier"]) assert.ok(frontier.includes(token), token);
 });
 
