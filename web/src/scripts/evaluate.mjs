@@ -56,8 +56,11 @@ function initBuilder(root) {
   });
 
   const requestedRecipe = params.get("recipe");
+  const requestedArea = params.get("area");
   const requestedBenchmarks = params.getAll("benchmark");
-  const preset = recipes.find((button) => button.dataset.recipe === requestedRecipe) || recipes[0];
+  const preset = recipes.find((button) => button.dataset.recipe === requestedRecipe)
+    || recipes.find((button) => requestedArea && button.closest("[data-area]")?.dataset.area === requestedArea)
+    || recipes[0];
   if (preset) chooseRecipe(preset);
   if (requestedBenchmarks.length) { selected.clear(); for (const id of requestedBenchmarks) if (inputs.some((input) => input.value === id)) selected.add(id); render(); }
 }
