@@ -1,0 +1,115 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/Header.astro";
+import SiteFooter from "../../../components/SiteFooter.astro";
+
+import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
+import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
+import { loadRegistry } from "../../../lib/registry.mjs";
+import { absoluteUrl, localePath, sitePath } from "../../../lib/site.mjs";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+interface Props { lang: "zh" | "en"; }
+const { lang } = Astro.props;
+const copy = copyFor(lang);
+const summaries = loadChineseSummaries();
+const items = [...loadRegistry()].filter((item) => item.status === "active").sort((a, b) => b.released.localeCompare(a.released) || a.name.localeCompare(b.name));
+const years = [...new Set(items.map((item) => item.released.slice(0, 4)))].sort((a, b) => b.localeCompare(a));
+const canonicalPath = localePath(lang, "timeline/");
+const alternatePath = localePath(lang === "zh" ? "en" : "zh", "timeline/");
+const title = lang === "zh" ? "Agent Benchmark 时间轴｜按发布时间查看完整评测演进" : "Agent Benchmark Timeline | Complete release chronology";
+const description = lang === "zh"
+  ? `按一手来源公开时间排列 ${items.length} 个 active Benchmark。时间轴只表达可核验的发布事实，不把 Frontier、成绩或研究机会判断混入事实层。`
+  : `A chronology of ${items.length} active benchmarks ordered by source-backed public release time. The timeline carries verified release facts only; frontier, score, and opportunity judgments stay in separate interpretive layers.`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: absoluteUrl(canonicalPath),
+  inLanguage: copy.langTag,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(localePath(lang, `benchmarks/${item.id}/`)),
+    })),
+  },
+};
+---
+
+<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="radar-page timeline-page">
+  <Header {lang} alternatePath={alternatePath} />
+  <main id="main-content">
+    <section class="tool-hero shell timeline-hero">
+      <p class="eyebrow">{lang === "zh" ? "Canonical release timeline" : "Canonical release timeline"}</p>
+      <h1>{lang === "zh" ? "先看 Benchmark 什么时候出现，再谈前沿判断" : "Start from when benchmarks appeared, then interpret the frontier"}</h1>
+      <p>{description}</p>
+      <dl class="timeline-contract">
+        <div><dt>{lang === "zh" ? "事实单位" : "Fact unit"}</dt><dd>{lang === "zh" ? "Benchmark + 来源公开时间" : "Benchmark + source-backed release time"}</dd></div>
+        <div><dt>{lang === "zh" ? "排序" : "Ordering"}</dt><dd>{lang === "zh" ? "严格按 released 倒序" : "Strictly by released, newest first"}</dd></div>
+        <div><dt>{lang === "zh" ? "不在这里表达" : "Not encoded here"}</dt><dd>{lang === "zh" ? "SOTA、重要性、Frontier、研究机会" : "SOTA, importance, frontier, or opportunity judgments"}</dd></div>
+      </dl>
+    </section>
+
+    <section class="shell timeline-ledger" aria-label={lang === "zh" ? "Benchmark 发布时间轴" : "Benchmark release timeline"}>
+      {years.map((year) => (
+        <section class="timeline-year" aria-labelledby={`year-${year}`}>
+          <header><h2 id={`year-${year}`}>{year}</h2><span>{items.filter((item) => item.released.startsWith(year)).length} {lang === "zh" ? "个" : "benchmarks"}</span></header>
+          <div class="timeline-year__rows">
+            {items.filter((item) => item.released.startsWith(year)).map((item) => (
+              <article class="timeline-row" data-area={item.area}>
+                <time datetime={item.released}>{item.released}</time>
+                <div class="timeline-row__main">
+                  <div class="timeline-row__meta"><span>{copy.areas[item.area].label}</span><span>{copy.roles[item.evolution_role]}</span></div>
+                  <h3><a href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}>{item.name}</a></h3>
+                  <p>{lang === "zh" ? (summaries.get(item.id) || item.summary) : item.summary}</p>
+                </div>
+                <div class="timeline-row__audit">
+                  <span>{lang === "zh" ? "条目核验" : "Registry verified"}</span>
+                  <time datetime={item.last_verified}>{item.last_verified}</time>
+                  <a href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}>{lang === "zh" ? "查看证据" : "Inspect evidence"} ↗</a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+    </section>
+  </main>
+  <SiteFooter {lang} />
+
+  <style>
+    .timeline-hero { padding-bottom: 32px; }
+    .timeline-contract { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; margin:28px 0 0; background:#d9d7d0; border:1px solid #d9d7d0; }
+    .timeline-contract div { padding:16px 18px; background:#fff; }
+    .timeline-contract dt { font-size:12px; color:#686868; margin-bottom:6px; }
+    .timeline-contract dd { margin:0; font-size:14px; line-height:1.55; }
+    .timeline-ledger { padding-bottom:72px; }
+    .timeline-year { display:grid; grid-template-columns:120px 1fr; border-top:1px solid #bbb; }
+    .timeline-year > header { padding:28px 20px 28px 0; position:sticky; top:64px; align-self:start; }
+    .timeline-year > header h2 { margin:0; font-size:28px; }
+    .timeline-year > header span { color:#777; font-size:12px; }
+    .timeline-row { display:grid; grid-template-columns:120px minmax(0,1fr) 150px; gap:24px; padding:24px 0; border-bottom:1px solid #e6e4de; }
+    .timeline-row > time { font-variant-numeric:tabular-nums; color:#555; font-size:13px; }
+    .timeline-row__meta { display:flex; gap:10px; font-size:11px; color:#777; text-transform:uppercase; letter-spacing:.04em; }
+    .timeline-row h3 { margin:6px 0 8px; font-size:21px; }
+    .timeline-row h3 a { color:inherit; }
+    .timeline-row p { margin:0; color:#4d4d4d; line-height:1.65; }
+    .timeline-row__audit { display:flex; flex-direction:column; gap:5px; font-size:12px; color:#777; }
+    .timeline-row__audit a { margin-top:8px; color:#222; }
+    @media (max-width: 760px) {
+      .timeline-contract { grid-template-columns:1fr; }
+      .timeline-year { grid-template-columns:1fr; }
+      .timeline-year > header { position:static; padding-bottom:12px; }
+      .timeline-row { grid-template-columns:90px 1fr; }
+      .timeline-row__audit { grid-column:2; }
+    }
+  </style>
+</BaseLayout>
