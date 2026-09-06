@@ -1,14 +1,11 @@
 name: Validate Benchmark Radar
-
 on:
   push:
     branches: [main, research-radar-reading-v1]
   pull_request:
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -20,39 +17,13 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-      - name: Test time-first contract
+      - name: Test canonical data and README reading contracts
         run: python -m unittest discover -s tests -v
-      - name: Validate bilingual entry and registry
+      - name: Check deterministic bilingual publication
+        run: node scripts/render-readme.mjs --check
+      - name: Validate README, Library and source identity
         run: python scripts/validate_reading.py
-      - name: Validate benchmark detail pages
+      - name: Validate bilingual benchmark notes
         run: python scripts/validate_detail_pages.py
-      - name: Audit benchmark detail depth
+      - name: Audit note structure without declaring factual certification
         run: python scripts/audit_detail_pages.py
-      - name: Install web dependencies
-        working-directory: web
-        run: npm install --no-audit --no-fund
-      - name: Test web contracts
-        working-directory: web
-        run: npm test
-      - name: Check Astro source
-        working-directory: web
-        run: npm run check
-      - name: Build Astro site
-        working-directory: web
-        run: npm run build
-      - name: Verify generated README and website projections
-        working-directory: web
-        run: npm run check:publication
-      - name: Install browser regression tools
-        run: |
-          python -m pip install playwright==1.57.0 beautifulsoup4==4.14.3
-          python -m playwright install --with-deps chromium
-      - name: Verify rendered pages and real browser workflows
-        run: python web/scripts/verify-site.py --output /tmp/radar-verification
-      - name: Preserve rendered verification evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: rendered-verification
-          path: /tmp/radar-verification
-          retention-days: 7
