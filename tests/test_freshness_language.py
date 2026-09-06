@@ -4,8 +4,8 @@ ROOT=Path(__file__).resolve().parents[1]
 class FreshnessLanguageContract(unittest.TestCase):
     def test_readme_counts_follow_registry(self):
         n=len(json.loads((ROOT/'data/benchmarks.json').read_text()))
-        self.assertIn(f'组织 {n} 个 Benchmark',(ROOT/'README.md').read_text())
-        self.assertIn(f'{n} benchmarks organized by',(ROOT/'README.en.md').read_text())
+        self.assertIn(f'**{n} 个基准**',(ROOT/'README.md').read_text())
+        self.assertIn(f'**{n} benchmarks**',(ROOT/'README.en.md').read_text())
     def test_frontier_separates_factual_watchlist_from_interpretation(self):
         t=(ROOT/'web/src/pages/[lang]/frontier/index.astro').read_text()
         self.assertIn('publicationWindow',t)

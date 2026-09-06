@@ -6,36 +6,17 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class FrontPageSignalContractTest(unittest.TestCase):
-    def test_timeline_precedes_editorial_signals(self):
-        cases = (
-            (
-                "README.md",
-                "近 30 天：三个变化",
-                ("Agent Memory", "RAG / Agentic Retrieval", "Data Agents"),
-            ),
-            (
-                "README.en.md",
-                "Last 30 Days: Three Shifts",
-                ("Agent Memory", "RAG / Agentic Retrieval", "Data Agents"),
-            ),
-        )
-        for filename, heading, areas in cases:
-            with self.subTest(filename=filename):
-                text = (ROOT / filename).read_text(encoding="utf-8")
-                release = text.index('<a id="release-timeline"></a>')
-                prefix = text[release:]
-                self.assertLess(release, text.index("<!-- FRONTIER-SIGNALS:START -->"))
-                self.assertIn(heading, prefix)
-                self.assertEqual(1, prefix.count("<!-- FRONTIER-SIGNALS:START -->"))
-                self.assertEqual(1, prefix.count("<!-- FRONTIER-SIGNALS:END -->"))
-                block = prefix.split("<!-- FRONTIER-SIGNALS:START -->", 1)[1].split(
-                    "<!-- FRONTIER-SIGNALS:END -->", 1
-                )[0]
-                rows = [line for line in block.splitlines() if line.startswith("| **")]
-                self.assertEqual(3, len(rows))
-                for area in areas:
-                    self.assertIn(area, block)
-                self.assertGreaterEqual(len(re.findall(r"\]\(https?://", block)), 9)
+    def test_editorial_guide_is_secondary_to_complete_benchmark_tables(self):
+        for suffix in ("", ".en"):
+            main = (ROOT / f"README{suffix}.md").read_text()
+            guide = (ROOT / f"docs/reading-guide{suffix}.md").read_text()
+            self.assertLess(main.index('TABLE-FIRST:AREA:data-agent:END'), main.index('<a id="frontier-signals"></a>'))
+            self.assertNotIn('FRONTIER-SIGNALS:START', main)
+            block = guide.split('<!-- FRONTIER-SIGNALS:START -->')[1].split('<!-- FRONTIER-SIGNALS:END -->')[0]
+            self.assertEqual(3, len([x for x in block.splitlines() if x.startswith('| **')]))
+            for area in ('Agent Memory', 'RAG / Agentic Retrieval', 'Data Agents'):
+                self.assertIn(area, block)
+            self.assertGreaterEqual(len(re.findall(r"\]\(https?://", block)), 9)
 
     def test_mechanical_intro_does_not_return(self):
         banned = {

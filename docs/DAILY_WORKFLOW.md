@@ -1,12 +1,13 @@
 # Daily Benchmark Adapter
 
+
 This file adapts [Radar Agent Protocol v2](RADAR_AGENT_PROTOCOL.md) to Agent Benchmark Radar. The shared protocol governs roles, private candidate states, timestamps, atomic publication, bilingual projection, and retries. This adapter governs what counts as a reusable evaluation object and where Benchmark Radar writes it.
 
 ## Repository role
 
 Agent Benchmark Radar is the Research Radar family's default entry and horizontal evaluation layer. It explains how measurement targets change across Agent Memory, Agentic RAG, and Data Agents, then routes readers to each domain repository's `#field-map`. It does not duplicate their method and system surveys.
 
-The public README is intentionally **signal-first, then table-first**: lead with a compact 30-day evidence-backed shift table, then expose the recent release chronology and complete per-area benchmark maps without requiring card-by-card opening. Agent-maintenance provenance and deep audit metadata support that surface; they do not dictate its visual form.
+The public README is intentionally **timeline-first and table-first**: lead with the recent release chronology and complete per-area tables; keep interpretation in linked reading guides without requiring card-by-card opening. Agent-maintenance provenance and deep audit metadata support that surface; they do not dictate its visual form.
 
 ## Source lanes
 
@@ -48,7 +49,7 @@ If any load-bearing condition differs, a leaderboard gap is system-level evidenc
 1. Update `data/benchmarks.json` first, preserving canonical identity, aliases/version lineage, source release precision, area, role, capabilities, environment, protocol, scale, measurement strength, coverage gap, confounders, artifacts, citation metadata, verification time, and v2 provenance. Citation counts use Semantic Scholar and may be refreshed mechanically without changing editorial role/importance.
 2. Add or update `benchmarks/<id>.md` and `benchmarks/<id>.en.md` when a row is insufficient for controls, decisive evidence, caveats, or genealogy.
 3. Update `library/README.md` and `library/README.en.md` so every accepted identity remains in the complete release chronology and exactly one area table; then update genealogy and measurement-coordinate routes when they change.
-4. Derive the **public signal-first, table-first README pair** from canonical state: refresh the 30-day frontier-signal table, complete rolling six-month source-release table, and all three complete area tables before changing any compact synthesis around them.
+4. Derive the **public timeline-first README pair** from canonical state: regenerate the rolling six-month timeline and all three complete area tables. Update linked editorial guides separately when their evidence changes.
 5. Update the gated Field Map only when durable evaluation coordinates or defining chains change. Do not add per-item deep-read or rolling 7-day/30-day synthesis sections to the public README; audit detail belongs in canonical records, benchmark notes, and digests.
 6. Write an immutable closed-period digest when the shared protocol's boundary gate fires.
 7. Publish canonical data, both README languages, due digest, and gated map together in one atomic Git commit; never create a public operational or daily-run file.
@@ -76,35 +77,37 @@ For `reinforces`, name at least two independent accepted identities. For `revise
 
 ## Reader projection
 
-The public reader contract is **intent-first for navigation, then signal-first and table-first for research**:
+[README-first publication](README_PUBLICATION.md) is the active reader contract.
+The website is retired. The root README contains the rolling six-month timeline,
+month jumps, and every accepted benchmark in three complete area tables, newest
+first. One concise measurement description accompanies each entry. Names link to
+the authored language-matched note; original papers, code and datasets are directly
+accessible. Citation counts remain context, not a ranking or stage assignment.
 
-0. **Area router + Evaluation Recipes** — the compact onboarding layer routes readers independently into Agent Memory, RAG / Agentic Retrieval, or Data Agents. Each area exposes links to its Benchmark Map, recipe table, and complete registry. The recipe layer contains 3–5 common research claims per area, each with Core, Complement, and one explicit remaining inference gap. These layers are stable decision support; Daily publication preserves them rather than regenerating them from release order.
-1. **30-day frontier signal table** — the first visible **research-trend synthesis** after the navigation/selection layers. It has exactly three rows: Agent Memory, RAG / Agentic Retrieval, and Data Agents. Each row states one concrete research/evaluation shift supported by representative benchmark links from the current window. It is synthesis, not a list of new papers; say `no material shift` rather than manufacture a trend.
-2. **Recent release timeline table** — show every verified benchmark in the rolling six-month source-release window, reverse chronological by `released`, preserving day/month precision and the whole boundary month. No fixed item cap and no editorial sampling. The reader-facing columns are time, area, benchmark, and one concise `What it tests / 考察内容` field; do not add a parallel `what changed / 相较以往` column.
-3. **Benchmark Map** — for each of the three areas, keep one short evolution sentence plus one visible **Defining chain / 主干** of representative benchmarks. Do not add a separate “three areas” summary layer.
-4. **Complete area tables in README** — every canonical Agent Memory, RAG / Agentic Retrieval, and Data Agent record remains directly scannable in the main page. Each row has stage, benchmark, Semantic Scholar citation count, release time, and one concise `What it tests / 考察内容` description. Citation count is context only and must not drive stage ordering. Do not replace these tables with links to the Library.
-5. **Reading Paths and Library** — guide deeper study and provide the canonical alternate browse surface. The Library may retain richer genealogy and change-oriented explanation.
-
-Per-item `<details>` deep reads and rolling 7-day/30-day synthesis are not public README surfaces. Full audit metadata, acceptance provenance, confounder analysis, and closed-period synthesis belong in canonical records, benchmark notes, the Library, and digests. Compatibility anchors may remain invisible so old links continue to land near the release timeline or Benchmark Map.
-
-`radar_published_at` is maintenance provenance. It may support audit history, but it must **never** replace `released` as the ordering key of the public research timeline. Likewise, `last_verified`, scheduler execution time, and Git commit time must never be presented as paper release time.
-
-Chinese is the default surface and English is its full counterpart. Identity, source release time, decisive evidence, caveat, map status, and links are one judgment projected twice. Chinese prose keeps Chinese verbs, connectives, and descriptive phrases while retaining canonical English names and search terms where useful.
+Recipes, source-record indexes and editorial maps belong in linked Markdown guides
+after the complete tables. No score leaderboard, trend claim, or maintenance report
+may displace the main lists. Preserve compatibility anchors at meaningful sections.
+The date selector uses typed public/publication/data events with evidence, then
+explicitly marked legacy dates. Never substitute a scan, verification or commit
+time for the benchmark date. Preserve exact day/month precision.
 
 ## Publication validation
 
 Run from the repository root:
 
 ```bash
+node scripts/render-readme.mjs
+node scripts/render-readme.mjs --check
 python -m unittest discover -s tests -v
 python scripts/validate_reading.py
+python scripts/validate_detail_pages.py
 ```
 
-Both commands must succeed without warnings or errors before publication. Also inspect the diff for canonical/README drift, predecessor logic, unpaired links, public candidate state, fabricated time precision, and component claims that outrun matched controls.
-
-Validation must additionally guard the intent-first, signal-first, and table-first contract: both README languages must expose the same three area routes, one bounded Evaluation Recipes block with 3–5 recipes per area, and stable per-area registry anchors; the three-row 30-day frontier-signal table must remain the first research-trend synthesis and the rolling release table must follow it. The main README must contain no public per-item deep-read or rolling 7-day/30-day synthesis surface, keep one defining chain for each Benchmark Map area, keep one `What it tests / 考察内容` column rather than a parallel change column, retain all three complete area tables, and never move those tables exclusively into `library/`.
-
-The Library validation still proves that both Library languages contain the exact canonical release chronology and each record exactly once in its canonical area table, with visible canonical title, release precision, and primary link. A hidden identity comment cannot substitute for a visible row.
+The renderer does not require an Astro install or build. Commit both languages and
+the generated recipe/source indexes atomically with their inputs. Tests check exact
+membership, chronology, summaries, date types, direct sources and citation values;
+Library validation retains the complete canonical identity/area/source checks.
+An editorial rewrite must not advance factual verification or discovery timestamps.
 
 ## No public operational run logs
 

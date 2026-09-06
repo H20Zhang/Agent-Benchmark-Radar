@@ -48,7 +48,7 @@ class PublicProjectionV3Test(unittest.TestCase):
         self.assertTrue(any("retired reader surface" in e for e in errors), errors)
 
     def test_parallel_change_column_is_rejected(self):
-        for header in ("| Time | Area | Benchmark | What it tests |", "| Time | Area | Benchmark | What it measures |"):
+        for header in ("| Time | Benchmark | What it measures | Sources |",):
             if header in self.en:
                 mutated = self.en.replace(header, header[:-1] + " What changed |", 1)
                 break

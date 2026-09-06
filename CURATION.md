@@ -67,20 +67,27 @@ Treat these as first-class updates, not only brand-new benchmark papers:
 
 ## README contract
 
-README starts with a compact **onboarding layer** that routes readers by research area, followed by a small **Evaluation Recipes** decision-support layer, then the **signal-first, table-first research surface**. Onboarding and recipes are navigation/selection aids rather than research-trend synthesis. “Time-first” means that the newest research is easiest to scan; it does **not** mean that Radar-maintenance timestamps replace the research chronology or that one card is rendered per paper. Keep onboarding stable and short: title, one-sentence value proposition, language switch, lightweight status badges, and three area routes to each area’s map, recipes, and complete registry.
+The README is the primary reading surface; the website is retired. See
+[README-first publication](docs/README_PUBLICATION.md) for generation and validation.
 
-The main README must preserve three high-bandwidth scan surfaces:
+Lead with compact month/area navigation and the complete six-calendar-month date
+window. Follow it immediately with all accepted benchmarks in three complete area
+tables. Every row has a concise measurement description, language-matched reading
+note, direct primary resources, and an honest date. Citations belong in the area
+tables as context only. Keep older benchmarks; do not sample the registry or impose
+a fixed item cap. Do not hide the main tables in collapsible cards.
 
-- **Evaluation recipes:** maintain a compact decision table for each area that maps common research claims to one Core benchmark, complementary coverage, and one explicit remaining inference gap. Keep 3–5 recipes per area. Recipes are curated starting points, not rankings, exhaustive experimental suites, or substitutes for reading protocol/confounder metadata.
-- **Recent release timeline:** every verified in-scope benchmark in the rolling six-month release window, ordered by source `released` date/month in reverse chronology. Preserve honest month precision, retain the whole boundary month when necessary, impose no fixed item cap, and do not editorially sample the table.
-- **Complete area tables:** all accepted Agent Memory, RAG / Agentic Retrieval, and Data Agent benchmarks remain directly visible in README, with role, release time, and one concise measurement-object description. Do not add a parallel research-delta column. Table length is never a reason to move these rows only to the Library.
-- **Evolution / reading routes:** compact synthesis may sit around the tables, but it must route through the same canonical records rather than replace them.
+Recipes, source snapshots, capability maps and research observations are linked
+secondary Markdown documents. They do not interrupt chronology or imply a quality
+ranking. Date evidence must distinguish earliest verified public versions, formal
+publication, data releases and unclassified legacy records; do not invent days or
+use maintenance time to relaunch historical work as new research.
 
-`radar_published_at` remains first-class **publication provenance** for the autonomous maintainer: it records when the Radar accepted a native-v2 record and can support acceptance-window audits, period synthesis, and map-delta reasoning. It is not the reader-facing publication date and must never reorder the primary release timeline. Never infer it from `released`, `last_verified`, a scheduler run, or a later integration commit.
-
-Do not publish per-item `<details>` deep reads in the main README. Question, Evidence, Caveat, Map, predecessor, and genealogy detail belongs in canonical notes, the Benchmark Library, and closed-period digests. The Library remains the canonical complete backstop and alternate browse surface, not a dumping ground used to thin the README.
-
-Each accepted event also receives the `map_delta` status defined in `SCHEMA.md`. One work may be an `early_signal`; it cannot by itself establish a durable trend or silently rewrite a Field Map node.
+`radar_published_at` remains acceptance provenance, never a substitute for a
+benchmark release event. Per-item reasoning, counterexamples, decisive evidence
+and genealogy belong in authored notes and digests, not duplicated main-page
+columns. Accepted events retain `map_delta` as defined in `SCHEMA.md`; a single
+work cannot establish a durable trend by itself.
 
 ## Research synthesis
 
