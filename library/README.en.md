@@ -8,7 +8,6 @@ Start with time to see what recently became measurable, then use area timelines 
 
 <!-- COMPLETE-TIMELINE:START -->
 
-
 | Time | Benchmark | Area | Role | What changed |
 |---:|---|---|---|---|
 | 2026-09-01 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | Agent Memory | 🔭 Frontier | Separates false-authority formation in persistent memory from propagation into unauthorized downstream actions. |
@@ -53,8 +52,6 @@ Start with time to see what recently became measurable, then use area timelines 
 | 2026-07-09 | [CausalDS](https://arxiv.org/abs/2607.08093) <!-- benchmark-id:causalds --> | Data Agents | 🔭 Frontier | Extends data-agent evaluation beyond association and prediction to all Pearl rungs and recognition of unwarranted answers. |
 | 2026-07-01 | [LitReview Arena / LitReviewBench / LitJudge](https://arxiv.org/abs/2608.21374) <!-- benchmark-id:litreview-arena --> | RAG / Agentic Retrieval | 🔭 Frontier | Calibrates literature-review evaluation to topic-matched experts instead of generic LLM judges. |
 | 2026-07 | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | Data Agents | 🔭 Frontier | Makes data-science skill coverage itself explicit, enabling diagnosis beyond aggregate task success. |
-| 2026-07 | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | Agent Memory | 🔭 Frontier | Moves the target from remembering explicit facts to applying latent user state, goals, and values when the cue no longer restates them. |
-| 2026-07 | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | Agent Memory | 🔭 Frontier | Makes visual retention, multimodal reasoning, and memory organization first-class long-term-memory evaluation targets. |
 | 2026-07 | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | Agent Memory | 🔭 Frontier | Makes action-level memory utilization directly measurable instead of reading memory quality only through answers about past context. |
 | 2026-07 | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | Agent Memory | 🔭 Frontier | Extends user-state memory to evolving personalized safety while retaining helpfulness. |
 | 2026-06-23 | [MEMPROBE](https://arxiv.org/abs/2606.24595) <!-- benchmark-id:memprobe --> | Agent Memory | 🔭 Frontier | Moves from indirect downstream behavior to direct auditing of the stored memory artifact. |
@@ -93,6 +90,7 @@ Start with time to see what recently became measurable, then use area timelines 
 | 2026-02-26 | [MTRAG-UN](https://aclanthology.org/2026.findings-acl.503/) <!-- benchmark-id:mtrag-un --> | RAG / Agentic Retrieval | 🔭 Frontier | Adds four explicit conversational failure modes to reusable retrieval and generation evaluation. |
 | 2026-02-22 | [MC-Search](https://arxiv.org/abs/2603.00873) <!-- benchmark-id:mc-search --> | RAG / Agentic Retrieval | 🔭 Frontier | Adds structured multimodal search chains and process metrics beyond final-answer accuracy. |
 | 2026-02-18 | [MemoryArena](https://arxiv.org/abs/2602.16313) <!-- benchmark-id:memoryarena --> | Agent Memory | 🔭 Frontier | Directly couples long-term memorization with future action instead of evaluating recall and acting as separate abilities. |
+| 2026-02-11 | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | Agent Memory | 🔭 Frontier | Moves the target from remembering explicit facts to applying latent user state, goals, and values when the cue no longer restates them. |
 | 2026-02-06 | [GISA](https://arxiv.org/abs/2602.08543) <!-- benchmark-id:gisa --> | RAG / Agentic Retrieval | 🔭 Frontier | Combines human queries, stable and live subsets, deterministic scoring, and complete human search trajectories. |
 | 2026-02-05 | [SAGE](https://arxiv.org/abs/2602.05975) <!-- benchmark-id:sage --> | RAG / Agentic Retrieval | 🔭 Frontier | Separates exact-paper discovery from broad evidence collection and makes agent-retriever fit measurable. |
 | 2026-02-03 | [MemGUI-Bench](https://arxiv.org/abs/2602.06075) <!-- benchmark-id:memgui-bench --> | Agent Memory | 🔭 Frontier | Moves memory evaluation from conversational readout into executable mobile interaction and repeated-task learning. |
@@ -102,6 +100,7 @@ Start with time to see what recently became measurable, then use area timelines 
 | 2026-01-22 | [DSGym](https://arxiv.org/abs/2601.16344) <!-- benchmark-id:dsgym --> | Data Agents | 🔭 Frontier | Unifies fragmented benchmarks under one executable interface and explicitly audits whether tasks require the data. |
 | 2026-01-20 | [DSAEval](https://arxiv.org/abs/2601.13591) <!-- benchmark-id:dsaeval --> | Data Agents | 🔭 Frontier | Moves from single-query tabular tasks to multimodal project sequences whose context accumulates across queries. |
 | 2026-01-15 | [CAME-Bench](https://aclanthology.org/2026.findings-acl.584/) <!-- benchmark-id:came-bench --> | Agent Memory | 🔭 Frontier | Makes contextual interference and goal-mismatched retrieval explicit in long trajectories. |
+| 2026-01-07 | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | Agent Memory | 🔭 Frontier | Makes visual retention, multimodal reasoning, and memory organization first-class long-term-memory evaluation targets. |
 | 2026-01 | [RealMem](https://aclanthology.org/2026.findings-acl.703/) <!-- benchmark-id:realmem --> | Agent Memory | 🔭 Frontier | Moves long-term-memory evaluation from casual conversation toward persistent project state and evolving user goals. |
 | 2025-12 | [DAComp](https://arxiv.org/abs/2512.04324) <!-- benchmark-id:dacomp --> | Data Agents | 🔭 Frontier | Separates and jointly covers data engineering and analysis, moving evaluation toward the full data-intelligence lifecycle rather than isolated query or code tasks. |
 | 2025-11-30 | [DDR-Bench](https://arxiv.org/abs/2602.02039) <!-- benchmark-id:ddr-bench --> | Data Agents | 🔭 Frontier | Changes the object from completing an assigned analysis question to deciding what is worth investigating and substantiating the findings. |
@@ -125,11 +124,11 @@ Start with time to see what recently became measurable, then use area timelines 
 | 2024-10-09 | [MLE-bench](https://arxiv.org/abs/2410.07095) <!-- benchmark-id:mle-bench --> | Data Agents | 🧱 Foundation | Makes end-to-end ML engineering a 75-task, from-scratch, human-relative competition environment. |
 | 2024-10 | [DA-Code](https://aclanthology.org/2024.emnlp-main.748/) <!-- benchmark-id:da-code --> | Data Agents | ↗ Transition | Bridges static code generation and agent-style data work by requiring planning and executable grounding in task data. |
 | 2024-10 | [LongMemEval](https://arxiv.org/abs/2410.10813) <!-- benchmark-id:longmemeval --> | Agent Memory | 🧱 Foundation | Made update, temporal reasoning, and abstention explicit instead of collapsing long-term memory into factual recall. |
-| 2024-08 | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | Agent Memory | 🧱 Foundation | Established very-long-term conversational memory as a first-class evaluation target rather than a short-context dialogue property. |
 | 2024-07 | [BRIGHT](https://arxiv.org/abs/2407.12883) <!-- benchmark-id:bright --> | RAG / Agentic Retrieval | ↗ Transition | Shows that semantic similarity alone under-tests retrieval when relevance depends on reasoning about the query and candidate documents. |
 | 2024-07 | [InsightBench](https://arxiv.org/abs/2407.06423) <!-- benchmark-id:insightbench --> | Data Agents | ↗ Transition | Moves data-agent evaluation from answering a given query toward discovering and communicating useful analysis. |
 | 2024-07 | [RAGBench](https://arxiv.org/abs/2407.11005) <!-- benchmark-id:ragbench --> | RAG / Agentic Retrieval | ↗ Transition | Shifted attention from only benchmarking RAG systems to benchmarking the evaluators and actionable failure labels used to judge them. |
 | 2024-06 | [CRAG](https://arxiv.org/abs/2406.04744) <!-- benchmark-id:crag --> | RAG / Agentic Retrieval | ↗ Transition | Made freshness, popularity, and factual dynamism central to RAG evaluation and powered the KDD Cup 2024 challenge. |
+| 2024-02-27 | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | Agent Memory | 🧱 Foundation | Established very-long-term conversational memory as a first-class evaluation target rather than a short-context dialogue property. |
 | 2024-01 | [MultiHop-RAG](https://arxiv.org/abs/2401.15391) <!-- benchmark-id:multihop-rag --> | RAG / Agentic Retrieval | ↗ Transition | Made multi-hop retrieval failure visible inside a RAG pipeline instead of treating retrieval as single-shot relevance. |
 | 2024-01 | [RAGTruth](https://arxiv.org/abs/2401.00396) <!-- benchmark-id:ragtruth --> | RAG / Agentic Retrieval | ↗ Transition | Makes localized grounding failures in RAG outputs measurable instead of reducing faithfulness to one document- or answer-level label. |
 | 2023-10 | [MLAgentBench](https://arxiv.org/abs/2310.03302) <!-- benchmark-id:mlagentbench --> | Data Agents | ↗ Transition | Turns data-science coding into an iterative scientific-experimentation problem with feedback from executed results. |
@@ -142,6 +141,7 @@ Start with time to see what recently became measurable, then use area timelines 
 | 2018-10 | [HotpotQA](https://aclanthology.org/D18-1259/) <!-- benchmark-id:hotpotqa --> | RAG / Agentic Retrieval | 🌱 Precursor | Established multi-document evidence composition and explainable supporting facts as measurable retrieval-reasoning targets. |
 | 2018-10 | [Spider](https://aclanthology.org/D18-1425/) <!-- benchmark-id:spider --> | Data Agents | 🧱 Foundation | Made cross-schema generalization and complex SQL the canonical database-language benchmark rather than memorizing one schema. |
 | 2017-08 | [WikiSQL](https://arxiv.org/abs/1709.00103) <!-- benchmark-id:wikisql --> | Data Agents | 🌱 Precursor | Made executable natural-language database querying a large-scale benchmarkable task. |
+
 <!-- COMPLETE-TIMELINE:END -->
 
 ## Browse by Area — Complete Timelines
@@ -150,20 +150,21 @@ Start with time to see what recently became measurable, then use area timelines 
 
 <!-- COMPLETE-MAP:agent-memory:START -->
 
-
 | Benchmark | Role | Time | What changed |
 |---|---|---:|---|
 | 🌱 Precursor | [Beyond Goldfish Memory](https://aclanthology.org/2022.acl-long.356/) <!-- benchmark-id:beyond-goldfish-memory --> | 2022-05 | Benchmarks long-term open-domain conversation across multiple human-human chat sessions where partners must remember and remain consistent with prior interactions. | Established cross-session conversation as a distinct long-term-memory setting before modern memory-agent benchmarks. |
-| 🧱 Foundation | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | 2024-08 | Long-horizon conversational-memory benchmark spanning QA, event summarization, and multimodal dialogue generation over very long multi-session conversations. | Established very-long-term conversational memory as a first-class evaluation target rather than a short-context dialogue property. |
+| 🧱 Foundation | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | 2024-02-27 | Long-horizon conversational-memory benchmark spanning QA, event summarization, and multimodal dialogue generation over very long multi-session conversations. | Established very-long-term conversational memory as a first-class evaluation target rather than a short-context dialogue property. |
 | 🧱 Foundation | [LongMemEval](https://arxiv.org/abs/2410.10813) <!-- benchmark-id:longmemeval --> | 2024-10 | Evaluates sustained chat-assistant memory across extraction, multi-session reasoning, temporal reasoning, knowledge updates, and abstention. | Made update, temporal reasoning, and abstention explicit instead of collapsing long-term memory into factual recall. |
 | ↗ Transition | [MemBench](https://arxiv.org/abs/2506.21605) <!-- benchmark-id:membench --> | 2025-06 | Broadens memory evaluation across factual and reflective memory, participation and observation scenarios, and effectiveness, efficiency, and capacity. | Expanded evaluation from answer accuracy toward different memory levels, interaction roles, efficiency, and capacity. |
 | ↗ Transition | [MemoryAgentBench](https://arxiv.org/abs/2507.05257) <!-- benchmark-id:memoryagentbench --> | 2025-07 | Evaluates memory agents under incremental multi-turn interaction across retrieval, test-time learning, long-range understanding, and selective forgetting. | Shifted the object from a static long context to a memory agent that must incrementally absorb, update, use, and forget information. |
 | ↗ Transition | [BEAM](https://arxiv.org/abs/2510.27246) <!-- benchmark-id:beam --> | 2025-10 | Tests long-term memory on coherent conversations extending from million-token to multi-million-token horizons. | Made memory degradation with truly massive, coherent histories directly measurable. |
 | 🔭 Frontier | [RealMem](https://aclanthology.org/2026.findings-acl.703/) <!-- benchmark-id:realmem --> | 2026-01 | Evaluates long-term memory over project-oriented cross-session interactions whose goals, artifacts, and relevant state evolve over time. | Moves long-term-memory evaluation from casual conversation toward persistent project state and evolving user goals. |
+| 🔭 Frontier | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 2026-01-07 | Evaluates multimodal long-term conversational memory across extraction and test-time adaptation, reasoning, and memory knowledge management. | Makes visual retention, multimodal reasoning, and memory organization first-class long-term-memory evaluation targets. |
 | 🔭 Frontier | [CAME-Bench](https://aclanthology.org/2026.findings-acl.584/) <!-- benchmark-id:came-bench --> | 2026-01-15 | Intent-compatible retrieval when the same entities recur under different goals. | Makes contextual interference and goal-mismatched retrieval explicit in long trajectories. |
 | 🔭 Frontier | [AMA-Bench](https://arxiv.org/abs/2602.22769) <!-- benchmark-id:ama-bench --> | 2026-02 | Evaluates long-horizon memory over real and synthetic agent-environment trajectories rather than dialogue-only histories. | Moved agent memory from human-agent dialogue toward machine-generated agent-environment experience and causality. |
 | 🔭 Frontier | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | 2026-02 | Tests whether agents organize memory into task-appropriate structures such as ledgers, lists, and trees rather than only retrieving facts. | Makes memory structure itself observable as a capability. |
 | 🔭 Frontier | [MemGUI-Bench](https://arxiv.org/abs/2602.06075) <!-- benchmark-id:memgui-bench --> | 2026-02-03 | Cross-step retention, cross-app transfer, cross-session learning, and recovery in mobile GUI tasks. | Moves memory evaluation from conversational readout into executable mobile interaction and repeated-task learning. |
+| 🔭 Frontier | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | 2026-02-11 | Evaluates cognitive memory where agents must retain and apply latent user constraints even when later cues are semantically disconnected. | Moves the target from remembering explicit facts to applying latent user state, goals, and values when the cue no longer restates them. |
 | 🔭 Frontier | [MemoryArena](https://arxiv.org/abs/2602.16313) <!-- benchmark-id:memoryarena --> | 2026-02-18 | Evaluates memory inside multi-session Memory-Agent-Environment loops where earlier actions and feedback must be distilled and used to guide later actions. | Directly couples long-term memorization with future action instead of evaluating recall and acting as separate abilities. |
 | 🔭 Frontier | [LifeBench](https://arxiv.org/abs/2603.03781) <!-- benchmark-id:lifebench --> | 2026-03 | Evaluates long-horizon multi-source memory spanning declarative and non-declarative information such as habits and procedures. | Expands memory beyond explicit facts to inferred habitual and procedural knowledge across heterogeneous traces. |
 | 🔭 Frontier | [ImplicitMemBench](https://aclanthology.org/2026.acl-long.1301/) <!-- benchmark-id:implicitmembench --> | 2026-04-09 | First-attempt procedural learning, priming, and conditioning after an interference phase. | Moves from asking what an agent recalls to observing what experience automatically changes in its behavior. |
@@ -180,8 +181,6 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [GateMem](https://arxiv.org/abs/2606.18829) <!-- benchmark-id:gatemem --> | 2026-06-17 | Utility, access control, and active forgetting in multi-principal shared memory. | Extends private single-user memory to shared memory with authorization and deletion obligations. |
 | 🔭 Frontier | [DynamicMem](https://arxiv.org/abs/2606.22877) <!-- benchmark-id:dynamicmem --> | 2026-06-22 | Inference and updating of user attributes, habits, and preferences from fifteen months of multi-app behavior. | Moves user memory to multi-million-token histories, long-term drift, and implicit evidence distributed across applications. |
 | 🔭 Frontier | [MEMPROBE](https://arxiv.org/abs/2606.24595) <!-- benchmark-id:memprobe --> | 2026-06-23 | Recovery of hidden user state from the memory artifact left after ordinary assistance. | Moves from indirect downstream behavior to direct auditing of the stored memory artifact. |
-| 🔭 Frontier | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | 2026-07 | Evaluates cognitive memory where agents must retain and apply latent user constraints even when later cues are semantically disconnected. | Moves the target from remembering explicit facts to applying latent user state, goals, and values when the cue no longer restates them. |
-| 🔭 Frontier | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 2026-07 | Evaluates multimodal long-term conversational memory across extraction and test-time adaptation, reasoning, and memory knowledge management. | Makes visual retention, multimodal reasoning, and memory organization first-class long-term-memory evaluation targets. |
 | 🔭 Frontier | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | 2026-07 | Evaluates whether long-term memory is proactively used for tool selection and parameter grounding during tool-based assistant actions. | Makes action-level memory utilization directly measurable instead of reading memory quality only through answers about past context. |
 | 🔭 Frontier | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | 2026-07 | Recognition and updating of implicit personalized risk across long, noise-heavy histories. | Extends user-state memory to evolving personalized safety while retaining helpfulness. |
 | [PM-Bench](https://arxiv.org/abs/2607.12385) <!-- benchmark-id:pm-bench --> | 🔭 Frontier | 2026-07-14 | Prospective-memory benchmark testing whether agents maintain delayed user intentions and execute them at the correct future cue while continuing ongoing activities. |
@@ -202,6 +201,7 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | 2026-08-26 | Reconstructing the operative episode and dormant local constraints in interleaved long conversations without explicit boundaries. | Moves beyond LongMemEval-style structured sessions to mixed threads where episode boundaries are latent, with exact evidence traces separating visibility from episode integrity. |
 | 🔭 Frontier | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | 2026-09-01 | Preservation of evolving authorization state, false-authority formation, and propagation into unauthorized action. | Moves memory safety from content correctness to whether authority is faithfully preserved and operationalized. |
 | 🔭 Frontier | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | 2026-09-01 | Over-trust of stale memory against current authoritative evidence, including model-scale effects. | Turns memory conflict from a single-model failure into a capability-dependent controlled comparison. |
+
 <!-- COMPLETE-MAP:agent-memory:END -->
 
 [Continue to Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar)
@@ -209,7 +209,6 @@ Start with time to see what recently became measurable, then use area timelines 
 ### RAG / Agentic Retrieval
 
 <!-- COMPLETE-MAP:rag:START -->
-
 
 | Benchmark | Role | Time | What changed |
 |---|---|---:|---|
@@ -259,6 +258,7 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [KBGym / Training a Knowledge Base](https://arxiv.org/abs/2608.21829) <!-- benchmark-id:kbgym --> | 2026-08-22 | Frozen-store accuracy and action cost after supervised knowledge-base editing, stratified by answer-key coverage. | Turns a static corpus into a supervised-edited, frozen non-parametric model. |
 | 🔭 Frontier | [RAG Collapse](https://arxiv.org/abs/2608.22118) <!-- benchmark-id:rag-collapse --> | 2026-08-22 | Recursive feedback in which self-authored sources displace independent evidence. | Makes self-authored-source feedback an independent validity diagnostic. |
 | 🔭 Frontier | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | 2026-08-24 | Excess answer churn and stable flips induced by growing corpus snapshots. | Separates stable corpus-version answer flips from generation noise. |
+
 <!-- COMPLETE-MAP:rag:END -->
 
 [Continue to Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar)
@@ -266,7 +266,6 @@ Start with time to see what recently became measurable, then use area timelines 
 ### Data Agents
 
 <!-- COMPLETE-MAP:data-agent:START -->
-
 
 | Benchmark | Role | Time | What changed |
 |---|---|---:|---|
@@ -306,6 +305,7 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | 2026-08-17 | Structured dataset understanding before analysis, including logical tables, semantics, keys, relationships, and profiling signals. | Turns implicit data exploration from a prerequisite hidden behind final-answer accuracy into a directly scored artifact with measured downstream value. |
 | 🔭 Frontier | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | 2026-08-20 | Diagnosing and modifying learning algorithms in frozen training repositories, separated by proxy exploration, source-only handoff, and clean-start formal runs. | Observes algorithm design separately from run-side tuning and makes the source patch the boundary between exploration and final training. |
 | 🔭 Frontier | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 2026-08-20 | Training-pipeline repair, iterative ML experimentation, published-baseline improvement, and specification-gaming resistance in real repositories. | Places improvement over published ML baselines, repository realism, long compute budgets, and submission integrity in one executable object. |
+
 <!-- COMPLETE-MAP:data-agent:END -->
 
 [Continue to Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar)

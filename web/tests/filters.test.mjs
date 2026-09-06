@@ -150,12 +150,12 @@ test("research and result facets round-trip and combine with registry facets", (
 
   assert.deepEqual(state.stableFacets, ["database"]);
   assert.deepEqual(state.resultStatuses, ["tracked"]);
-  assert.deepEqual(state.headroomBands, ["limited"]);
+  assert.deepEqual(state.headroomBands, []);
   assert.deepEqual(state.metricFamilies, ["execution-accuracy"]);
   assert.deepEqual(state.rawTags, ["text-to-sql"]);
   assert.deepEqual(filterBenchmarks(fixtures, state).map((item) => item.id), ["spider"]);
   assert.equal(
     serializeFilterState(state),
-    "facet=database&status=tracked&headroom=limited&metric=execution-accuracy&tag=text-to-sql",
+    "facet=database&status=tracked&metric=execution-accuracy&tag=text-to-sql",
   );
 });

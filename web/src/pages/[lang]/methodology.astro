@@ -17,9 +17,9 @@ const canonicalPath = localePath(lang, "methodology/");
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", "methodology/");
 const content = lang === "zh"
   ? {
-      eyebrow: "Evidence & measurement methodology",
-      title: "把事实、结果证据和研究解释分层",
-      intro: "Radar 不把所有页面都当成同等可信的信息源。Benchmark 发布时间轴是最强事实主轴；结果只在明确 protocol cell 内解释；Frontier、谱系和研究机会属于带证据锚点的编辑判断。",
+      eyebrow: "日期、证据与比较",
+      title: "如何阅读与比较这些记录",
+      intro: "先查看带来源与精度的公开记录，再核对任务设置和结果。未分类日期不当首发，单项记录不当当前最佳；趋势、谱系和机会均作为编辑判断阅读。",
       principles: [
         ["时间轴优先", "Benchmark + 来源支持的公开时间构成事实主轴。重要性、Frontier role、成绩和研究机会都不参与时间轴排序。"],
         ["先定义可比单元", "直接比较分数前先对齐任务、数据切分、协议版本、指标方向与单位；模型、工具、harness、预算等条件也必须核对，未结构化时不能假装已控制。"],
@@ -28,16 +28,16 @@ const content = lang === "zh"
       sections: [
         ["三层证据模型", "事实层包含发布时间与规范记录；结果层包含来源支持的 result track；解释层包含 genealogy、Frontier 与 Opportunity。下层可以支撑上层，上层不能反过来改写事实层。"],
         ["纳入单位", "Registry 的基本单位是具有明确任务、环境或协议的 benchmark。版本显著改变测量目标时，它获得独立稳定 ID。"],
-        ["时间语义", "Released 保留来源公开时间的原始精度；last_verified 记录条目事实与链接最近一次复核日期；result verified_at 单独描述结果轨道的新鲜度。"],
-        ["结果语义", "页面展示的是某个 track 内来源报告的最佳结果，不自动等于跨系统当前 SOTA。只有同一 protocol cell 才允许直接数值比较；不同 cell 的数字只能分别陈述。"],
+        ["时间语义", "first_public_at、publication_at 与 data_release_at 分别记录最早已核验公开版本、正式发表与数据开放，日期带来源和精度。未分类历史记录不宣称首发。发现扫描、条目核验、结果核验分别展示。"],
+        ["结果语义", "单条基线明确标作基线；多条记录只称“已收录结果中的最佳”，不保证完整或最新。对照工具比较测量设计，不按不同基准分数排名；理论满分不代表可实现提升。"],
         ["当前结构化边界", "Result track 已显式保存 task、split、protocol version、metric 与来源；模型、提示词、工具、harness、预算等条件有些仍存在 method/source 文本中。因此 Radar 会提示这些比较控制条件，而不会声称所有 confounder 已被机器结构化。"],
         ["双语出版", "中英文应共享事实判断，但中文 prose 不允许静默回退为英文。缺少规范中文时应明确标注缺口，而不是通过词汇替换制造似乎完整的翻译。"],
       ],
     }
   : {
-      eyebrow: "Evidence & measurement methodology",
-      title: "Separate facts, result evidence, and research interpretation",
-      intro: "The Radar does not treat every surface as equally trustworthy. The benchmark release timeline is the strongest factual spine; results are interpreted only inside explicit protocol cells; frontier, genealogy, and opportunity views are evidence-anchored editorial judgments.",
+      eyebrow: "Evidence and measurement",
+      title: "How to read and compare these records",
+      intro: "Start with dated source records, then inspect the task settings and results. Unclassified dates are not first-release claims, single records are not current bests, and trends, genealogy, and opportunities remain editorial judgments.",
       principles: [
         ["Timeline first", "Benchmark + source-backed public release time form the factual spine. Importance, frontier role, scores, and opportunities do not affect timeline ordering."],
         ["Define the comparison cell first", "Before directly comparing scores, align task, split, protocol version, metric direction, and unit; model, tools, harness, budget, and other conditions must also be checked rather than assumed controlled."],
@@ -46,8 +46,8 @@ const content = lang === "zh"
       sections: [
         ["Three evidence layers", "The factual layer contains release chronology and canonical records; the result layer contains source-backed result tracks; the interpretive layer contains genealogy, frontier, and opportunity judgments. Lower layers can support higher layers, not the reverse."],
         ["Unit of inclusion", "The registry unit is a benchmark with a distinct task, environment, or protocol. A version receives a stable ID when it materially changes the measurement target."],
-        ["Time semantics", "Released preserves source publication precision; last_verified records the latest fact/link review; result verified_at separately describes result-track freshness."],
-        ["Result semantics", "The site shows the source-reported best result inside a track, not an automatic cross-system current SOTA. Direct numeric comparison is allowed only inside one protocol cell; values from different cells are stated separately."],
+        ["Time semantics", "first_public_at, publication_at, and data_release_at distinguish earliest verified public version, publication, and data release, each with source and precision. Unclassified historical dates are not claimed as first releases. Discovery scans, registry reviews, and result verification are separate events."],
+        ["Result semantics", "A single baseline is labeled as such; multiple records show only the best among recorded results, without completeness or recency claims. The comparison workspace compares measurement designs, not scores across datasets. A theoretical ceiling is not attainable improvement."],
         ["Current structuring boundary", "Result tracks explicitly store task, split, protocol version, metric, and source. Model, prompt, tools, harness, budget, and other conditions are still sometimes embedded in method/source text. The Radar therefore exposes comparison controls without pretending every confounder is machine-structured."],
         ["Bilingual publication", "Chinese and English share factual judgments, but Chinese prose must not silently fall back to English. Missing canonical Chinese text should be marked as a gap rather than disguised through token replacement."],
       ],
@@ -68,7 +68,7 @@ const jsonLd = {
 <BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="methodology-page">
   <Header {lang} alternatePath={alternatePath} />
   <main id="main-content" class="shell methodology">
-    <header class="methodology__hero"><p class="eyebrow">{content.eyebrow}</p><h1>{content.title}</h1><p>{content.intro}</p><p><a href={sitePath(localePath(lang, "timeline/"))}>{lang === "zh" ? "从可信时间轴开始 →" : "Start from the canonical timeline →"}</a></p></header>
+    <header class="methodology__hero"><p class="eyebrow">{content.eyebrow}</p><h1>{content.title}</h1><p>{content.intro}</p><p><a href={sitePath(localePath(lang, "timeline/"))}>{lang === "zh" ? "打开公开时间轴 →" : "Start from the canonical timeline →"}</a></p></header>
 
     <section class="method-principles" aria-label={lang === "zh" ? "核心原则" : "Core principles"}>
       {content.principles.map(([heading, text], index) => <article><span>0{index + 1}</span><h2>{heading}</h2><p>{text}</p></article>)}

@@ -1,208 +1,41 @@
 ---
-import ResultsPanel from "./ResultsPanel.astro";
-
-import { localizeChineseHtml, localizeChineseProse, localizeTechnicalToken } from "../lib/chinese-localization.mjs";
-import { copyFor } from "../lib/i18n.mjs";
-import { summarizeTrack } from "../lib/results.mjs";
-import { displayToken, localePath, REPOSITORY_URL, sitePath } from "../lib/site.mjs";
-import { localize } from "../lib/research-model.mjs";
-
-interface Props {
-  lang: "zh" | "en";
-  item: any;
-  summary: string;
-  research: any;
-  resultSet?: any;
-  deepRead?: any;
-  genealogy?: any;
-  recipes: any[];
-  benchmarkById: Map<string, any>;
-}
-
-const { lang, item, summary, research, resultSet, deepRead, genealogy, recipes, benchmarkById } = Astro.props;
-const copy = copyFor(lang);
-const citationCount = item.citations?.status === "ok" ? item.citations.count : undefined;
-const sources = Object.entries(item.artifacts || {}).filter(([, value]) => Boolean(value));
-const measurementText = localizeChineseProse(item.measurement_strength, lang);
-const sourceLabel = (key: string) => copy.artifacts[key] || displayToken(key);
-const tokenLabel = (value: string) => localizeTechnicalToken(value, lang, displayToken);
-const stageIndex = genealogy?.stages.findIndex((stage: any) => stage.benchmarks.includes(item.id)) ?? -1;
-const primaryTrack = resultSet ? (resultSet.tracks.find((track: any) => track.primary) || resultSet.tracks[0]) : undefined;
-const primarySummary = primaryTrack ? summarizeTrack(primaryTrack) : undefined;
-const labels = lang === "zh" ? {
-  why: "为什么值得看",
-  currentBest: "当前最好成绩",
-  headroom: "剩余参考空间",
-  noScore: "尚未整理成可比结果",
-  noHeadroom: "尚无可靠统一上限",
-  supports: "这个分数支持什么判断",
-  setup: "评测设置",
-  contract: "公平比较条件",
-  target: "测量对象",
-  next: "下一步最值得验证",
-  deep: "研究解读",
-  deepIntro: "继续查看决定性证据、限制、比较条件和谱系位置。",
-  fallbackDeep: "规范证据摘要",
-  fallbackDeepIntro: "以下内容直接由已核验的规范记录生成。",
-  resultsUnavailable: "当前没有规范化的可比结果轨道",
-  resultsUnavailableBody: "主论文或官方排行榜的结果尚未整理成可跨系统比较的统一轨道。这里不补造排行榜；需要具体数字时请查看一手来源。",
-  genealogy: "基准谱系",
-  genealogyIntro: "它位于这条评测演进路线的什么位置。",
-  recipes: "常见评测组合",
-  recipesIntro: "单个基准只覆盖一个评测坐标；组合评测可以支撑更完整的研究主张。",
-  core: "核心评测",
-  complement: "补充评测",
-  verified: "最后核验",
-  citations: "引用",
-  resultsEyebrow: "成绩",
-  supportEyebrow: "结论边界",
-  comparisonEyebrow: "比较条件",
-  nextEyebrow: "下一验证坐标",
-  evidenceEyebrow: "证据摘要",
-  evolutionEyebrow: "演化位置",
-  suitesEyebrow: "评测组合",
-  sourcesEyebrow: "来源",
-} : {
-  why: "Why it matters",
-  currentBest: "Current best",
-  headroom: "Reference headroom",
-  noScore: "No normalized score track yet",
-  noHeadroom: "No reliable shared ceiling yet",
-  supports: "What this score supports",
-  setup: "Evaluation setup",
-  contract: "Fair comparison conditions",
-  target: "Measurement target",
-  next: "Most useful next validation",
-  deep: "Research interpretation",
-  deepIntro: "Read on for decisive evidence, limitations, comparison controls, and genealogy.",
-  fallbackDeep: "Canonical evidence brief",
-  fallbackDeepIntro: "This brief is generated directly from the verified canonical record.",
-  resultsUnavailable: "No normalized comparable result track yet",
-  resultsUnavailableBody: "Results from the primary paper or official leaderboard have not yet been normalized into a cross-system comparison track. We do not fabricate a complete-looking leaderboard; use the primary source when exact scores are needed.",
-  genealogy: "Benchmark genealogy",
-  genealogyIntro: "See where it sits in the evolution of what the field can measure.",
-  recipes: "Common evaluation suites",
-  recipesIntro: "One benchmark measures one coordinate; a suite supports a fuller research claim.",
-  core: "Core",
-  complement: "Complement",
-  verified: "Last verified",
-  citations: "Citation context",
-  resultsEyebrow: "Results",
-  supportEyebrow: "Claim support",
-  comparisonEyebrow: "Comparison contract",
-  nextEyebrow: "Next coordinate",
-  evidenceEyebrow: "Evidence brief",
-  evolutionEyebrow: "Evolution map",
-  suitesEyebrow: "Evaluation suites",
-  sourcesEyebrow: "Sources",
-};
+import ResultsPanel from './ResultsPanel.astro';
+import { copyFor } from '../lib/i18n.mjs';
+import { presentResult } from '../lib/results.mjs';
+import { releaseDate, releaseLabel } from '../lib/release-time.mjs';
+import { localizeTechnicalToken } from '../lib/chinese-localization.mjs';
+import { displayToken, localePath, sitePath, REPOSITORY_URL } from '../lib/site.mjs';
+import { localize } from '../lib/research-model.mjs';
+interface Props {lang:'zh'|'en';item:any;summary:string;research:any;resultSet?:any;deepRead?:any;genealogy?:any;recipes:any[];benchmarkById:Map<string,any>;}
+const {lang,item,summary,research,resultSet,deepRead,genealogy,recipes,benchmarkById}=Astro.props;
+const zh=lang==='zh',copy=copyFor(lang),release=releaseDate(item),view=presentResult(resultSet,lang);
+const sources=Object.entries(item.artifacts).filter(([,value])=>value);
+const token=(value:string)=>localizeTechnicalToken(value,lang,displayToken);
+const example=localize(research.example,lang);
+const timeline=sitePath(localePath(lang,`timeline/?area=${item.area}&window=all&month=${release.date.slice(0,7)}`));
 ---
-
-<article class={`benchmark-detail benchmark-detail--${item.area} benchmark-detail--research-brief`}>
-  <nav class="breadcrumb" aria-label={lang === "zh" ? "面包屑" : "Breadcrumb"}>
-    <a href={sitePath(localePath(lang, "benchmarks/"))}>{copy.nav.benchmarks}</a><span aria-hidden="true">/</span>
-    <a href={sitePath(localePath(lang, `areas/${item.area}/`))}>{copy.areas[item.area].label}</a><span aria-hidden="true">/</span>
-    <span aria-current="page">{item.name}</span>
-  </nav>
-
-  <header class="detail-hero detail-hero--brief">
-    <div class="detail-hero__copy">
-      <div class="detail-hero__meta">
-        <span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span>
-        <span class={`role-label role-label--${item.evolution_role}`}>{copy.roles[item.evolution_role]}</span>
-        <time datetime={item.released}>{item.released}</time>
-      </div>
-      <h1>{item.name}</h1>
-      <p>{localizeChineseProse(summary, lang)}</p>
-      <div class="detail-hero__actions">{sources.slice(0, 3).map(([key, url]) => <a class="button button--secondary" href={url as string} rel="noreferrer">{sourceLabel(key)} <span aria-hidden="true">↗</span></a>)}</div>
-    </div>
-
-    <div class="benchmark-at-a-glance" aria-label={lang === "zh" ? "基准快速判断" : "Benchmark at a glance"}>
-      <section class="benchmark-glance__why">
-        <span>{labels.why}</span>
-        <p>{measurementText}</p>
-      </section>
-      <section>
-        <span>{labels.currentBest}</span>
-        {primarySummary && primaryTrack ? <><strong>{primarySummary.best.score}<small>{primaryTrack.metric.unit}</small></strong><p>{primarySummary.best.method} · {localize(primaryTrack.label, lang)}</p></> : <p class="benchmark-glance__empty">{labels.noScore}</p>}
-      </section>
-      <section>
-        <span>{labels.headroom}</span>
-        {primarySummary?.headroom !== undefined ? <><strong>{primarySummary.headroom}<small>%</small></strong><p>{lang === "zh" ? "相对已核验的参考目标" : "to a source-backed reference target"}</p></> : <p class="benchmark-glance__empty">{labels.noHeadroom}</p>}
-      </section>
-      <section>
-        <span>{labels.verified}</span>
-        <strong class="benchmark-glance__date">{item.last_verified}</strong>
-        <p>{labels.citations}: {citationCount ?? "—"}</p>
-      </section>
+<article class="benchmark-detail">
+  <nav class="breadcrumb" aria-label={zh?'面包屑':'Breadcrumb'}><a href={sitePath(localePath(lang,'benchmarks/'))}>{zh?'基准目录':'Library'}</a><span>/</span><a href={sitePath(localePath(lang,`areas/${item.area}/`))}>{copy.areas[item.area].label}</a><span>/</span><span aria-current="page">{item.name}</span></nav>
+  <header class="detail-hero">
+    <div class="record-meta"><span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span><a href={timeline}><time datetime={release.date}>{release.date}</time></a><span>{releaseLabel(release,lang)}</span><a href={release.source}>{zh?'日期来源 ↗':'Date source ↗'}</a></div>
+    <h1>{item.name}</h1><p class="detail-summary">{summary}</p>
+    <div class="action-links">{sources.map(([kind,url])=><a href={url as string}>{copy.artifacts[kind]||displayToken(kind)} ↗</a>)}</div>
+    <div class="benchmark-at-a-glance">
+      <p>{zh?'条目信息核验':'Registry verified'} <time datetime={item.last_verified}>{item.last_verified}</time>{item.citations?.status==='ok'&&<> · S2 {item.citations.count} <small>({item.citations.updated_at})</small></>}</p>
+      {view&&<div data-result-summary><strong>{view.label}：{view.score}{view.unit}</strong><span>{view.model} {view.model&&view.model!==view.method?'·':''} {view.model===view.method?'':view.method} · {view.trackLabel}</span><small>{view.status} · {zh?'结果核验':'Result verified'} {view.verifiedAt} · {view.scope}</small><a href={view.source}>{zh?'结果原始来源 ↗':'Original result source ↗'}</a></div>}
     </div>
   </header>
-
-  {resultSet ? <ResultsPanel {lang} {resultSet} /> : <section class="deep-read result-gap compact-result-gap" aria-label={labels.resultsUnavailable}>
-    <header><div><p class="eyebrow">{labels.resultsEyebrow}</p><h2>{labels.resultsUnavailable}</h2></div><p>{labels.resultsUnavailableBody}</p></header>
-  </section>}
-
-  <section class="benchmark-brief-grid" aria-label={lang === "zh" ? "基准评测摘要" : "Benchmark evaluation brief"}>
-    <article class="benchmark-brief-card benchmark-brief-card--wide">
-      <p class="eyebrow">{labels.supportEyebrow}</p>
-      <h2>{labels.supports}</h2>
-      <p>{localizeChineseProse(research.scoreSupports, lang)}</p>
-    </article>
-
-    <article class="benchmark-brief-card benchmark-setup-card">
-      <p class="eyebrow">{labels.setup}</p>
-      <h2>{lang === "zh" ? "它到底怎么测" : "What is actually evaluated"}</h2>
-      <dl class="benchmark-setup-list">
-        <div><dt>{labels.target}</dt><dd>{localizeChineseProse(localize(research.evaluation_contract.target, lang), lang)}</dd></div>
-        <div><dt>{copy.detail.scale}</dt><dd>{localizeChineseProse(research.evaluation_contract.scale, lang)}</dd></div>
-        <div><dt>{copy.detail.capabilities}</dt><dd>{(item.capabilities || []).map(tokenLabel).join(" · ")}</dd></div>
-        <div><dt>{copy.detail.environments}</dt><dd>{(research.evaluation_contract.environment || []).map(tokenLabel).join(" · ")}</dd></div>
-        <div><dt>{copy.detail.protocols}</dt><dd>{(research.evaluation_contract.protocol || []).map(tokenLabel).join(" · ")}</dd></div>
-      </dl>
-    </article>
-
-    <article class="benchmark-brief-card benchmark-comparison-card">
-      <p class="eyebrow">{labels.comparisonEyebrow}</p>
-      <h2>{labels.contract}</h2>
-      <ol>{research.comparisonControls.map((control: string) => <li>{localizeChineseProse(control, lang)}</li>)}</ol>
-    </article>
-
-    <article class="benchmark-brief-card benchmark-next-card">
-      <p class="eyebrow">{labels.nextEyebrow}</p>
-      <h2>{labels.next}</h2>
-      <p>{localizeChineseProse(research.nextValidation, lang)}</p>
-    </article>
+  <nav class="section-nav" aria-label={zh?'本文章节':'Article sections'}><a href="#setup">{zh?'测量设计':'Design'}</a><a href="#interpretation">{zh?'研究解读':'Interpretation'}</a><a href="#results">{zh?'结果记录':'Results'}</a><a href="#related">{zh?'相关评测':'Related'}</a></nav>
+  <section id="setup" class="page-section">
+    <h2>{zh?'测量设计':'Measurement design'}</h2>
+    <div class="brief-grid"><article><h3>{zh?'什么时候值得用':'When to use it'}</h3><p>{research.evidenceBrief}</p></article>{example&&<article><h3>{zh?'一个任务示例':'A concrete task'}</h3><p>{example}</p></article>}</div>
+    <dl class="benchmark-setup-list"><div><dt>{zh?'规模（来源原文）':'Scale'}</dt><dd lang="en">{research.evaluation_contract.scale}</dd></div><div><dt>{zh?'能力':'Capabilities'}</dt><dd>{item.capabilities.map(token).join(' · ')}</dd></div><div><dt>{zh?'环境':'Environment'}</dt><dd>{item.environment.map(token).join(' · ')}</dd></div><div><dt>{zh?'评测协议':'Protocol'}</dt><dd>{item.protocol.map(token).join(' · ')}</dd></div></dl>
+    <details class="record-provenance"><summary>{zh?'查看日期事件与来源':'Date events and provenance'}</summary><dl>{['first_public_at','publication_at','data_release_at'].map(field=><div><dt>{releaseLabel({field},lang)}</dt><dd>{item[field]?<><time datetime={item[field]}>{item[field]}</time> · <a href={item.release_date_evidence[field].source}>{zh?'一手来源':'Primary source'}</a> · {item.release_date_evidence[field].precision}</>:(zh?'尚无可核验记录':'No verified event recorded')}</dd></div>)}</dl></details>
   </section>
-
-  {deepRead && <section class="deep-read deep-read--research" aria-labelledby="deep-read-heading">
-    <header><div><p class="eyebrow">{labels.evidenceEyebrow}</p><h2 id="deep-read-heading">{labels.deep}</h2></div><p>{labels.deepIntro}</p></header>
-    <div class="deep-read__content" set:html={localizeChineseHtml(deepRead.html, lang)}></div>
-  </section>}
-
-  {!deepRead && <section class="deep-read deep-read--research" aria-labelledby="canonical-evidence-heading">
-    <header><div><p class="eyebrow">{labels.evidenceEyebrow}</p><h2 id="canonical-evidence-heading">{labels.fallbackDeep}</h2></div><p>{labels.fallbackDeepIntro}</p></header>
-    <div class="deep-read__content"><p>{localizeChineseProse(research.evidenceBrief, lang)}</p></div>
-  </section>}
-
-  {genealogy && <section class="genealogy-panel genealogy-panel--compact">
-    <header><div><p class="eyebrow">{labels.evolutionEyebrow}</p><h2>{labels.genealogy}</h2></div><p>{labels.genealogyIntro}</p></header>
-    <div class="genealogy-rail">
-      {genealogy.stages.map((stage: any, index: number) => <article class={index === stageIndex ? "is-current" : undefined}>
-        <span>{String(index + 1).padStart(2, "0")}</span><h3>{localizeChineseProse(localize(stage.label, lang), lang)}</h3>
-        <div>{stage.benchmarks.slice(0, 5).map((id: string) => { const related = benchmarkById.get(id); return related && <a class={id === item.id ? "is-active" : undefined} href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{related.name}</a>; })}</div>
-      </article>)}
-    </div>
-  </section>}
-
-  {recipes.length > 0 && <section class="related-recipes related-recipes--compact">
-    <header><div><p class="eyebrow">{labels.suitesEyebrow}</p><h2>{labels.recipes}</h2></div><p>{labels.recipesIntro}</p></header>
-    <div>{recipes.slice(0, 3).map((recipe: any) => <a href={sitePath(localePath(lang, `evaluate/?recipe=${recipe.id}`))}><span>{copy.areas[recipe.area].label}</span><h3>{localizeChineseProse(localize(recipe.claim, lang), lang)}</h3><p>{recipe.core.includes(item.id) ? labels.core : labels.complement} · {recipe.core.length + recipe.complement.length} {lang === "zh" ? "个基准" : "benchmarks"}</p><b>↗</b></a>)}</div>
-  </section>}
-
-  <section class="detail-section detail-section--sources detail-sources-v2 detail-sources--compact">
-    <p class="eyebrow">{labels.sourcesEyebrow}</p><h2>{copy.detail.sources}</h2>
-    <ul class="source-list">{sources.map(([key, url]) => <li><a href={url as string} rel="noreferrer"><span>{sourceLabel(key)}</span><span aria-hidden="true">↗</span></a></li>)}{item.citations?.url && <li><a href={item.citations.url} rel="noreferrer"><span>Semantic Scholar</span><span aria-hidden="true">↗</span></a></li>}</ul>
+  <section id="interpretation" class="page-section deep-read" aria-labelledby="interpretation-heading"><div class="section-heading"><h2 id="interpretation-heading">{zh?'研究解读':'Research interpretation'}</h2><span class="evidence-label">{zh?'编辑解读，不等同于发布事实':'Editorial interpretation'}</span></div>
+    {deepRead ? <><details class="article-toc"><summary>{zh?'解读目录':'Contents'}</summary><nav aria-label={zh?'解读目录':'Interpretation contents'}>{deepRead.headings.map((heading:{id:string,text:string})=><a href={`#${heading.id}`}>{heading.text}</a>)}</nav></details><div class="deep-read__content" set:html={deepRead.html}></div></>:<p>{research.evidenceBrief}</p>}
   </section>
-
-  <footer class="detail-footer"><a href={sitePath(localePath(lang, "benchmarks/"))}>← {copy.nav.benchmarks}</a><a href={`${REPOSITORY_URL}/blob/main/data/benchmarks.json`}>{copy.detail.registryRecord} ↗</a></footer>
+  {resultSet?<ResultsPanel {lang} {resultSet}/>:<section id="results" class="page-section compact-result-gap"><h2>{zh?'结果记录':'Result records'}</h2><p>{zh?'尚未收录结构化结果；可先阅读论文或官方项目中的实验。':'Structured results have not been recorded yet. Consult the paper or official project for experiments.'} <a href={item.artifacts.paper||item.artifacts.code}>{zh?'打开来源 ↗':'Open source ↗'}</a></p></section>}
+  <section id="related" class="page-section"><h2>{zh?'相关评测与组合':'Related benchmarks and suites'}</h2><div class="related-recipes">{recipes.map(recipe=><a href={sitePath(localePath(lang,`evaluate/?recipe=${recipe.id}`))}><strong>{localize(recipe.claim,lang)}</strong><span>{recipe.core.includes(item.id)?(zh?'核心评测':'Core'):(zh?'补充评测':'Complement')} · {recipe.core.length+recipe.complement.length} {zh?'个基准':'benchmarks'} →</span></a>)}</div>{genealogy&&<details class="editorial-section"><summary>{zh?'查看编辑谱系':'View editorial genealogy'}</summary><div class="genealogy-rail">{genealogy.stages.map((stage:any)=><article><h3>{localize(stage.label,lang)}</h3>{stage.benchmarks.map((id:string)=><a href={sitePath(localePath(lang,`benchmarks/${id}/`))}>{benchmarkById.get(id)?.name}</a>)}</article>)}</div></details>}</section>
+  <footer class="detail-footer"><a href={timeline}>{zh?'回到所在月份':'Back to its month'} →</a><a href={`${REPOSITORY_URL}/blob/main/benchmarks/${item.id}${zh?'':'.en'}.md`}>{zh?'编辑解读源文':'Authored source'} ↗</a></footer>
 </article>

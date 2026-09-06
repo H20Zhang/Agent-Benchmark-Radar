@@ -1,108 +1,20 @@
 ---
-import { localizeChineseProse, localizeTechnicalToken } from "../lib/chinese-localization.mjs";
-import { copyFor } from "../lib/i18n.mjs";
-import { getArtifactKinds } from "../lib/registry.mjs";
-import { getStableFacetValues } from "../lib/research-model.mjs";
-import { summarizeTrack } from "../lib/results.mjs";
-import { displayToken, localePath, sitePath } from "../lib/site.mjs";
-
-interface Props {
-  lang: "zh" | "en";
-  item: any;
-  summary: string;
-  resultSet?: any;
-}
-
-const { lang, item, summary, resultSet } = Astro.props;
-const copy = copyFor(lang);
-const artifactKinds = getArtifactKinds(item);
-const detailPath = sitePath(localePath(lang, `benchmarks/${item.id}/`));
-const citationCount = item.citations?.status === "ok" ? item.citations.count : undefined;
-const searchText = [
-  item.name,
-  summary,
-  item.summary,
-  item.measurement_strength,
-  ...(item.capabilities || []),
-  ...(item.environment || []),
-  ...(item.protocol || []),
-].join(" ");
-const stableFacets = getStableFacetValues(item);
-const primaryTrack = resultSet && (resultSet.tracks.find((track: any) => track.primary) || resultSet.tracks[0]);
-const resultSummary = primaryTrack ? summarizeTrack(primaryTrack) : undefined;
-const resultStatus = resultSet ? "tracked" : "untracked";
-const resultTrackingStatus = resultSet?.tracking_status || "untracked";
-const headroomBand = resultSummary?.headroom === undefined
-  ? "unknown"
-  : resultSummary.headroom >= 30
-    ? "wide"
-    : resultSummary.headroom >= 12
-      ? "moderate"
-      : "limited";
-const tokenLabel = (value: string) => localizeTechnicalToken(value, lang, displayToken);
+import { copyFor } from '../lib/i18n.mjs';
+import { getArtifactKinds } from '../lib/registry.mjs';
+import { getStableFacetValues } from '../lib/research-model.mjs';
+import { presentResult } from '../lib/results.mjs';
+import { releaseDate } from '../lib/release-time.mjs';
+import { localizeTechnicalToken } from '../lib/chinese-localization.mjs';
+import { displayToken, localePath, sitePath } from '../lib/site.mjs';
+interface Props { lang:'zh'|'en'; item:any; summary:string; resultSet?:any; }
+const {lang,item,summary,resultSet}=Astro.props;
+const copy=copyFor(lang), artifacts=getArtifactKinds(item), result=presentResult(resultSet,lang), release=releaseDate(item);
+const detail=sitePath(localePath(lang,`benchmarks/${item.id}/`));
+const search=[item.name,summary,item.summary,item.measurement_strength,item.scale,...item.capabilities,...item.environment,...item.protocol].join(' ');
 ---
-
-<article
-  class={`benchmark-card benchmark-card--${item.area}`}
-  data-benchmark-id={item.id}
-  data-area={item.area}
-  data-role={item.evolution_role}
-  data-year={item.released.slice(0, 4)}
-  data-released={item.released}
-  data-artifacts={JSON.stringify(artifactKinds)}
-  data-capabilities={JSON.stringify(item.capabilities || [])}
-  data-environments={JSON.stringify(item.environment || [])}
-  data-protocols={JSON.stringify(item.protocol || [])}
-  data-stable-facets={JSON.stringify(stableFacets)}
-  data-result-status={resultStatus}
-  data-result-tracking-status={resultTrackingStatus}
-  data-headroom-band={headroomBand}
-  data-metric-family={primaryTrack?.metric?.family || ""}
-  data-citations={citationCount ?? -1}
-  data-search={searchText}
->
-  <div class="benchmark-card__topline">
-    <span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span>
-    <span class={`role-label role-label--${item.evolution_role}`}>{copy.roles[item.evolution_role]}</span>
-    <time datetime={item.released}>{item.released}</time>
-  </div>
-  <div class="benchmark-card__main">
-    <h3><a href={detailPath}>{item.name}</a></h3>
-    <p class="benchmark-card__summary">{localizeChineseProse(summary || item.summary, lang)}</p>
-    <ul class="token-list" aria-label={copy.detail.capabilities}>
-      {(item.capabilities || []).slice(0, 3).map((capability: string) => (
-        <li>{tokenLabel(capability)}</li>
-      ))}
-    </ul>
-  </div>
-  <div class="benchmark-card__progress">
-    {primaryTrack && resultSummary ? (
-      <div class="benchmark-card__result">
-        <span>{lang === "zh" ? "该结果轨道报告最佳" : "Reported best on this track"}</span>
-        <strong>{resultSummary.best.score}<small>{primaryTrack.metric.unit}</small></strong>
-        <p>{resultSummary.best.method}</p>
-        <small>{primaryTrack.label?.[lang] || primaryTrack.label?.en}</small>
-        <em>{lang === "zh" ? `结果核验 ${resultSet.verified_at}` : `Result verified ${resultSet.verified_at}`}</em>
-        {resultSummary.headroom !== undefined && <em>{lang === "zh" ? `到参考目标的归一化距离 ${resultSummary.headroom}%` : `${resultSummary.headroom}% normalized distance to reference target`}</em>}
-      </div>
-    ) : (
-      <div class="benchmark-card__result benchmark-card__result--empty">
-        <span>{lang === "zh" ? "结果轨道" : "Result track"}</span>
-        <p>{lang === "zh" ? "尚未结构化" : "Not structured yet"}</p>
-      </div>
-    )}
-  </div>
-  <div class="benchmark-card__footer">
-    <div class="artifact-links" aria-label={copy.filters.artifact}>
-      {artifactKinds.map((kind) => (
-        <a href={item.artifacts[kind]} rel="noreferrer" aria-label={`${item.name} · ${copy.artifacts[kind]}`}>
-          {copy.artifacts[kind]}
-        </a>
-      ))}
-      {citationCount !== undefined && (
-        <span title={copy.card.citations}>S2 · {citationCount}</span>
-      )}
-    </div>
-    <a class="card-arrow" href={detailPath} aria-label={`${copy.card.openDetail}: ${item.name}`}>{lang === "zh" ? "详情" : "Detail"} ↗</a>
-  </div>
+<article class="benchmark-card" data-benchmark-id={item.id} data-area={item.area} data-role={item.evolution_role} data-released={release.date} data-artifacts={JSON.stringify(artifacts)} data-capabilities={JSON.stringify(item.capabilities)} data-environments={JSON.stringify(item.environment)} data-protocols={JSON.stringify(item.protocol)} data-stable-facets={JSON.stringify(getStableFacetValues(item))} data-result-status={resultSet?'tracked':'untracked'} data-result-tracking-status={resultSet?.tracking_status||'untracked'} data-metric-families={JSON.stringify([...new Set(resultSet?.tracks.map((t:any)=>t.metric.family)||[])])} data-citations={item.citations?.status==='ok'?item.citations.count:-1} data-search={search}>
+  <div class="benchmark-card__topline"><span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span><time datetime={release.date}>{release.date}</time></div>
+  <div class="benchmark-card__main"><h3><a href={detail}>{item.name}</a></h3><p class="benchmark-card__summary">{summary}</p><ul class="token-list">{item.capabilities.slice(0,3).map((token:string)=><li>{localizeTechnicalToken(token,lang,displayToken)}</li>)}</ul></div>
+  <div class="benchmark-card__result">{result ? <><span>{result.label}</span><strong>{result.score}<small>{result.unit}</small></strong><p>{result.model}{result.model&&result.model!==result.method?' · ':''}{result.model===result.method?'':result.method}</p><small>{result.trackLabel}</small><small>{result.status} · {result.verifiedAt}</small><a href={result.source}>{lang==='zh'?'结果来源 ↗':'Result source ↗'}</a></>:<p class="content-note">{lang==='zh'?'结果尚未结构化':'Results not yet structured'}</p>}</div>
+  <div class="benchmark-card__footer">{artifacts.map(kind=><a href={item.artifacts[kind]}>{copy.artifacts[kind]} ↗</a>)}<a href={detail}>{lang==='zh'?'详情 →':'Detail →'}</a></div>
 </article>

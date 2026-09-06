@@ -23,14 +23,14 @@ test("benchmark cards expose filter metadata and positive public fields", () => 
     "data-benchmark-id",
     "data-area",
     "data-role",
-    "data-year",
     "data-artifacts",
     "data-capabilities",
     "data-environments",
     "data-protocols",
     "data-stable-facets",
     "data-result-status",
-    "data-headroom-band",
+    "data-result-tracking-status",
+    "data-metric-families",
   ]) {
     assert.ok(card.includes(attribute), attribute);
   }
@@ -49,7 +49,6 @@ test("filter panel keeps primary controls compact and groups stable research fac
     "year",
     "facet",
     "status",
-    "headroom",
     "metric",
     "tag",
     "sort",
@@ -69,7 +68,7 @@ test("client controller keeps filter state in the URL and updates visible result
     "filterBenchmarks",
     "serializeFilterState",
     "sortBenchmarks",
-    "history.replaceState",
+    "writePageState",
     ".hidden",
   ]) {
     assert.ok(controller.includes(token), token);

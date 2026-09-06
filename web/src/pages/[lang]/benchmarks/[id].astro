@@ -54,7 +54,7 @@ const jsonLd = {
   description,
   url: absoluteUrl(canonicalPath),
   inLanguage: copy.langTag,
-  datePublished: item.released,
+  ...(item.first_public_at || item.publication_at ? {datePublished: item.first_public_at || item.publication_at} : {}),
   dateModified: item.last_verified,
   isPartOf: {
     "@type": "CollectionPage",

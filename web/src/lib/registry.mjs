@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 
+import { dateInterval, releaseDate } from "./release-time.mjs";
 import { fromRepositoryRoot } from "./repository-path.mjs";
 
 const REGISTRY_PATH = fromRepositoryRoot("data", "benchmarks.json");
@@ -56,6 +57,30 @@ export function loadRegistry() {
     assertString(item.summary, "summary", item.id);
     if (ids.has(item.id)) throw new Error(`Duplicate benchmark id: ${item.id}`);
     ids.add(item.id);
+    if (!["active", "verified", "archived", "retired"].includes(item.status))
+      throw new Error(`Unknown publication status: ${item.id}`);
+    dateInterval(item.released);
+    for (const field of [
+      "first_public_at",
+      "publication_at",
+      "data_release_at",
+    ]) {
+      if (item[field] != null) {
+        const interval = dateInterval(item[field]);
+        const evidence = item.release_date_evidence?.[field];
+        if (
+          !evidence ||
+          !/^https:\/\//.test(evidence.source || "") ||
+          evidence.precision !== interval.precision
+        )
+          throw new Error(`Unsourced or imprecise ${item.id}.${field}`);
+      }
+    }
+    if (
+      !item.release_date_evidence?.legacy_recorded_at &&
+      !item.first_public_at
+    )
+      throw new Error(`Unclassified date missing provenance: ${item.id}`);
   }
 
   registryCache = Object.freeze(
@@ -63,7 +88,7 @@ export function loadRegistry() {
       .map((item) => Object.freeze(item))
       .sort(
         (left, right) =>
-          right.released.localeCompare(left.released) ||
+          releaseDate(right).date.localeCompare(releaseDate(left).date) ||
           left.name.localeCompare(right.name),
       ),
   );

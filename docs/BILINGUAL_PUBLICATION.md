@@ -24,3 +24,20 @@ Keep benchmark/paper titles, dataset/model/metric/tool/protocol names, and stand
 Chinese should be natural technical Chinese rather than translated English syntax. Warn on repeated empty transitions and templates such as `真正重要的是…`, `关键不在于…而在于…`, `值得注意的是…` when they become house style.
 
 English follows the same Research Radar Editor standard: concrete language, predecessor/comparison before praise, explicit attribution boundaries, and no repetitive LLM sentence skeletons.
+
+## Canonical content and rendering
+
+`data/locales/zh/benchmarks.json` stores the Chinese one-sentence descriptions keyed
+by stable registry id. English descriptions stay in the canonical registry.
+The website does not parse README tables for its content. Both README variants
+are generated projections of those same descriptions, date events, result counts
+and evaluation recipes. Run `node web/scripts/sync-publication.mjs`, then its
+`--check` mode; CI rejects stale projections.
+
+Long-form `benchmarks/<id>.md` and `<id>.en.md` remain authored sources. A Markdown
+AST renderer preserves paragraphs, negation, lists, tables and code; it removes
+maintenance comments and resolves relative note links to their actual web routes.
+It never performs global term replacements or rewrites caveats as opportunities.
+The brief selects complete maintained sections from the appropriate language note.
+English-only scale/protocol metadata is labeled as source wording rather than
+presented as a pseudo-translated Chinese sentence.

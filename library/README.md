@@ -8,7 +8,6 @@
 
 <!-- COMPLETE-TIMELINE:START -->
 
-
 | 时间 | Benchmark | 领域 | 角色 | 这次改变了什么 |
 |---:|---|---|---|---|
 | 2026-09-01 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | Agent Memory | 🔭 前沿 | 把持久记忆中的授权错误拆成“虚假权限形成”与“错误权限向真实行动传播”两阶段。 |
@@ -53,8 +52,6 @@
 | 2026-07-09 | [CausalDS](https://arxiv.org/abs/2607.08093) <!-- benchmark-id:causalds --> | Data Agents | 🔭 前沿 | 把数据智能体评测从相关性和预测拓展到 Pearl 三阶因果推理及“无法作答”的识别。 |
 | 2026-07-01 | [LitReview Arena / LitReviewBench / LitJudge](https://arxiv.org/abs/2608.21374) <!-- benchmark-id:litreview-arena --> | RAG / Agentic Retrieval | 🔭 前沿 | 用 topic-matched 专家偏好校准文献综述评价，而非依赖通用 LLM judge。 |
 | 2026-07 | [AgenticDataBench](https://arxiv.org/abs/2607.01647) <!-- benchmark-id:agenticdatabench --> | Data Agents | 🔭 前沿 | 除了总成功率，还能审计这套基准覆盖了哪些技能。 |
-| 2026-07 | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | Agent Memory | 🔭 前沿 | 目标从显式事实召回转向用户目标、价值和约束的一致应用。 |
-| 2026-07 | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | Agent Memory | 🔭 前沿 | 视觉保留、多模态推理和记忆组织被放进同一套评测。 |
 | 2026-07 | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | Agent Memory | 🔭 前沿 | 记忆对行动的作用可以直接评分，而不再只通过问答间接判断。 |
 | 2026-07 | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | Agent Memory | 🔭 前沿 | 把用户状态记忆扩展到随时间变化的个性化安全与有用性权衡。 |
 | 2026-06-23 | [MEMPROBE](https://arxiv.org/abs/2606.24595) <!-- benchmark-id:memprobe --> | Agent Memory | 🔭 前沿 | 由下游回答间接推断记忆，转为直接审计记忆产物本身。 |
@@ -93,6 +90,7 @@
 | 2026-02-26 | [MTRAG-UN](https://aclanthology.org/2026.findings-acl.503/) <!-- benchmark-id:mtrag-un --> | RAG / Agentic Retrieval | 🔭 前沿 | 在常规多轮检索与生成之外，加入了四类可诊断的会话失败情形。 |
 | 2026-02-22 | [MC-Search](https://arxiv.org/abs/2603.00873) <!-- benchmark-id:mc-search --> | RAG / Agentic Retrieval | 🔭 前沿 | 从只看最终答案推进到带结构的多模态搜索链与逐步规划、检索诊断。 |
 | 2026-02-18 | [MemoryArena](https://arxiv.org/abs/2602.16313) <!-- benchmark-id:memoryarena --> | Agent Memory | 🔭 前沿 | 长期记忆与未来任务行动被放到同一项评测中。 |
+| 2026-02-11 | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | Agent Memory | 🔭 前沿 | 目标从显式事实召回转向用户目标、价值和约束的一致应用。 |
 | 2026-02-06 | [GISA](https://arxiv.org/abs/2602.08543) <!-- benchmark-id:gisa --> | RAG / Agentic Retrieval | 🔭 前沿 | 把人工问题、稳定与实时子集、确定性评分和完整人工搜索轨迹统一到一个基准中。 |
 | 2026-02-05 | [SAGE](https://arxiv.org/abs/2602.05975) <!-- benchmark-id:sage --> | RAG / Agentic Retrieval | 🔭 前沿 | 把科学检索拆成定向与开放式任务，并显式比较智能体与检索器的适配关系。 |
 | 2026-02-03 | [MemGUI-Bench](https://arxiv.org/abs/2602.06075) <!-- benchmark-id:memgui-bench --> | Agent Memory | 🔭 前沿 | 把记忆从对话问答带入可执行的移动 GUI 行为与重复任务学习。 |
@@ -102,6 +100,7 @@
 | 2026-01-22 | [DSGym](https://arxiv.org/abs/2601.16344) <!-- benchmark-id:dsgym --> | Data Agents | 🔭 前沿 | 把碎片化基准统一到同一执行接口，并显式检查任务是否真的需要使用数据。 |
 | 2026-01-20 | [DSAEval](https://arxiv.org/abs/2601.13591) <!-- benchmark-id:dsaeval --> | Data Agents | 🔭 前沿 | 从单轮表格任务推进到需要多模态感知和项目上下文累积的真实问题序列。 |
 | 2026-01-15 | [CAME-Bench](https://aclanthology.org/2026.findings-acl.584/) <!-- benchmark-id:came-bench --> | Agent Memory | 🔭 前沿 | 把长程检索中的语义相似干扰和目标上下文错配显式化。 |
+| 2026-01-07 | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | Agent Memory | 🔭 前沿 | 视觉保留、多模态推理和记忆组织被放进同一套评测。 |
 | 2026-01 | [RealMem](https://aclanthology.org/2026.findings-acl.703/) <!-- benchmark-id:realmem --> | Agent Memory | 🔭 前沿 | 评测由一般对话历史走向持续变化的项目状态与用户目标。 |
 | 2025-12 | [DAComp](https://arxiv.org/abs/2512.04324) <!-- benchmark-id:dacomp --> | Data Agents | 🔭 前沿 | 数据工程与分析被放进更完整的数据智能生命周期。 |
 | 2025-11-30 | [DDR-Bench](https://arxiv.org/abs/2602.02039) <!-- benchmark-id:ddr-bench --> | Data Agents | 🔭 前沿 | 把评价对象从“完成给定分析问题”改为“自己判断什么值得调查并证明发现”。 |
@@ -125,11 +124,11 @@
 | 2024-10-09 | [MLE-bench](https://arxiv.org/abs/2410.07095) <!-- benchmark-id:mle-bench --> | Data Agents | 🧱 基石 | 把 end-to-end ML engineering 做成 75 个 from-scratch、human-relative 的竞赛环境。 |
 | 2024-10 | [DA-Code](https://aclanthology.org/2024.emnlp-main.748/) <!-- benchmark-id:da-code --> | Data Agents | ↗ 过渡 | 在静态代码题与智能体式数据工作之间建立了可执行的过渡任务。 |
 | 2024-10 | [LongMemEval](https://arxiv.org/abs/2410.10813) <!-- benchmark-id:longmemeval --> | Agent Memory | 🧱 基石 | 将更新、时间推理和拒答从笼统的事实召回中拆分出来。 |
-| 2024-08 | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | Agent Memory | 🧱 基石 | 在 Beyond Goldfish Memory 的基础上，形成了可复用的超长对话多任务评测。 |
 | 2024-07 | [BRIGHT](https://arxiv.org/abs/2407.12883) <!-- benchmark-id:bright --> | RAG / Agentic Retrieval | ↗ 过渡 | 暴露仅靠语义相似度难以解决的检索任务。 |
 | 2024-07 | [InsightBench](https://arxiv.org/abs/2407.06423) <!-- benchmark-id:insightbench --> | Data Agents | ↗ 过渡 | 目标从完成指定代码任务扩展到发现并表达有用结论。 |
 | 2024-07 | [RAGBench](https://arxiv.org/abs/2407.11005) <!-- benchmark-id:ragbench --> | RAG / Agentic Retrieval | ↗ 过渡 | 评判器质量和可用于诊断的错误标签也成为评测对象。 |
 | 2024-06 | [CRAG](https://arxiv.org/abs/2406.04744) <!-- benchmark-id:crag --> | RAG / Agentic Retrieval | ↗ 过渡 | 新鲜度、事实变化和长尾知识进入 RAG 评测。 |
+| 2024-02-27 | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | Agent Memory | 🧱 基石 | 在 Beyond Goldfish Memory 的基础上，形成了可复用的超长对话多任务评测。 |
 | 2024-01 | [MultiHop-RAG](https://arxiv.org/abs/2401.15391) <!-- benchmark-id:multihop-rag --> | RAG / Agentic Retrieval | ↗ 过渡 | 多跳任务的错误可以落到检索或推理环节，而不只看最终答案。 |
 | 2024-01 | [RAGTruth](https://arxiv.org/abs/2401.00396) <!-- benchmark-id:ragtruth --> | RAG / Agentic Retrieval | ↗ 过渡 | 忠实度问题由整题标签细化到具体文本片段。 |
 | 2023-10 | [MLAgentBench](https://arxiv.org/abs/2310.03302) <!-- benchmark-id:mlagentbench --> | Data Agents | ↗ 过渡 | 一次性代码生成变成由执行反馈驱动的实验过程。 |
@@ -142,6 +141,7 @@
 | 2018-10 | [HotpotQA](https://aclanthology.org/D18-1259/) <!-- benchmark-id:hotpotqa --> | RAG / Agentic Retrieval | 🌱 前身 | 多文档证据组合和可解释支撑事实由此成为可测目标。 |
 | 2018-10 | [Spider](https://aclanthology.org/D18-1425/) <!-- benchmark-id:spider --> | Data Agents | 🧱 基石 | Text-to-SQL 从单表生成走向复杂查询和跨 schema 泛化。 |
 | 2017-08 | [WikiSQL](https://arxiv.org/abs/1709.00103) <!-- benchmark-id:wikisql --> | Data Agents | 🌱 前身 | 大规模、可执行的自然语言数据库访问由此成为标准任务。 |
+
 <!-- COMPLETE-TIMELINE:END -->
 
 ## 按领域浏览（全部）
@@ -150,20 +150,21 @@
 
 <!-- COMPLETE-MAP:agent-memory:START -->
 
-
 | Benchmark | 角色 | 时间 | 这次改变了什么 |
 |---|---|---:|---|
 | 🌱 前身 | [Beyond Goldfish Memory](https://aclanthology.org/2022.acl-long.356/) <!-- benchmark-id:beyond-goldfish-memory --> | 2022-05 | 多次真人聊天之间的开放域长期记忆与前后自洽。 | 跨会话的对话连续性由此成为独立评测问题。 |
-| 🧱 基石 | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | 2024-08 | 超长多会话对话中的 QA、事件总结和多模态对话生成。 | 在 Beyond Goldfish Memory 的基础上，形成了可复用的超长对话多任务评测。 |
+| 🧱 基石 | [LoCoMo](https://aclanthology.org/2024.acl-long.747/) <!-- benchmark-id:locomo --> | 2024-02-27 | 超长多会话对话中的 QA、事件总结和多模态对话生成。 | 在 Beyond Goldfish Memory 的基础上，形成了可复用的超长对话多任务评测。 |
 | 🧱 基石 | [LongMemEval](https://arxiv.org/abs/2410.10813) <!-- benchmark-id:longmemeval --> | 2024-10 | 长期助手历史中的信息抽取、跨会话推理、时间推理、知识更新和拒答。 | 将更新、时间推理和拒答从笼统的事实召回中拆分出来。 |
 | ↗ 过渡 | [MemBench](https://arxiv.org/abs/2506.21605) <!-- benchmark-id:membench --> | 2025-06 | 事实记忆与反思记忆、参与者与观察者场景，以及效果、效率和容量。 | 评测范围由答题准确率扩展到记忆层次、交互角色和资源开销。 |
 | ↗ 过渡 | [MemoryAgentBench](https://arxiv.org/abs/2507.05257) <!-- benchmark-id:memoryagentbench --> | 2025-07 | 增量多轮交互中的检索、测试时学习、长程理解和选择性遗忘。 | 记忆由读取静态历史，变成持续吸收、更新、使用和遗忘的在线过程。 |
 | ↗ 过渡 | [BEAM](https://arxiv.org/abs/2510.27246) <!-- benchmark-id:beam --> | 2025-10 | 百万到千万 token 的连贯对话记忆。 | 直接观察超大规模连续历史下的记忆退化。 |
 | 🔭 前沿 | [RealMem](https://aclanthology.org/2026.findings-acl.703/) <!-- benchmark-id:realmem --> | 2026-01 | 跨会话、目标和产物持续变化的项目型长期记忆。 | 评测由一般对话历史走向持续变化的项目状态与用户目标。 |
+| 🔭 前沿 | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 2026-01-07 | 多模态长期对话中的记忆抽取、适应、推理和知识管理。 | 视觉保留、多模态推理和记忆组织被放进同一套评测。 |
 | 🔭 前沿 | [CAME-Bench](https://aclanthology.org/2026.findings-acl.584/) <!-- benchmark-id:came-bench --> | 2026-01-15 | 相同实体在不同目标段反复出现时，能否找回与当前意图相符的证据。 | 把长程检索中的语义相似干扰和目标上下文错配显式化。 |
 | 🔭 前沿 | [AMA-Bench](https://arxiv.org/abs/2602.22769) <!-- benchmark-id:ama-bench --> | 2026-02 | 真实和可扩展合成的智能体—环境轨迹上的长程记忆。 | 记忆来源从对话扩展到带有因果结构的环境经历。 |
 | 🔭 前沿 | [StructMemEval](https://arxiv.org/abs/2602.11243) <!-- benchmark-id:structmemeval --> | 2026-02 | 智能体能否维护账本、列表、树等符合任务需要的记忆结构。 | 记忆的组织方式本身成为可观察能力。 |
 | 🔭 前沿 | [MemGUI-Bench](https://arxiv.org/abs/2602.06075) <!-- benchmark-id:memgui-bench --> | 2026-02-03 | 移动端操作中的跨步骤保持、跨应用迁移、跨会话学习和失败恢复。 | 把记忆从对话问答带入可执行的移动 GUI 行为与重复任务学习。 |
+| 🔭 前沿 | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | 2026-02-11 | 后续问题没有复述旧约束时，能否继续正确应用它。 | 目标从显式事实召回转向用户目标、价值和约束的一致应用。 |
 | 🔭 前沿 | [MemoryArena](https://arxiv.org/abs/2602.16313) <!-- benchmark-id:memoryarena --> | 2026-02-18 | 在跨会话的智能体—环境循环中，用早期行动与反馈指导后续行动。 | 长期记忆与未来任务行动被放到同一项评测中。 |
 | 🔭 前沿 | [LifeBench](https://arxiv.org/abs/2603.03781) <!-- benchmark-id:lifebench --> | 2026-03 | 多源长期轨迹中的事件、语义、习惯和程序性记忆。 | 评测不再局限于显式事实，也覆盖习惯和做事方法。 |
 | 🔭 前沿 | [ImplicitMemBench](https://aclanthology.org/2026.acl-long.1301/) <!-- benchmark-id:implicitmembench --> | 2026-04-09 | 干扰之后，模型能否在首次尝试中自动表现出已学程序、启动效应或条件联结。 | 由询问模型记得什么，转向观察经历是否会自动改变行为。 |
@@ -180,8 +181,6 @@
 | 🔭 前沿 | [GateMem](https://arxiv.org/abs/2606.18829) <!-- benchmark-id:gatemem --> | 2026-06-17 | 多人共享记忆能否同时保持可用、阻止越权泄露并执行删除请求。 | 长期记忆由单用户私有存储扩展到带权限和遗忘义务的共享治理。 |
 | 🔭 前沿 | [DynamicMem](https://arxiv.org/abs/2606.22877) <!-- benchmark-id:dynamicmem --> | 2026-06-22 | 从十五个月、多个应用的零散行为中推断并更新用户属性、习惯和偏好。 | 把用户记忆推进到百万 token、长期漂移和跨应用隐式证据。 |
 | 🔭 前沿 | [MEMPROBE](https://arxiv.org/abs/2606.24595) <!-- benchmark-id:memprobe --> | 2026-06-23 | 普通协助结束后，能否从智能体留下的记忆产物中恢复隐藏的用户状态。 | 由下游回答间接推断记忆，转为直接审计记忆产物本身。 |
-| 🔭 前沿 | [LoCoMo-Plus](https://aclanthology.org/2026.acl-long.1150/) <!-- benchmark-id:locomo-plus --> | 2026-07 | 后续问题没有复述旧约束时，能否继续正确应用它。 | 目标从显式事实召回转向用户目标、价值和约束的一致应用。 |
-| 🔭 前沿 | [Mem-Gallery](https://aclanthology.org/2026.acl-long.1892/) <!-- benchmark-id:mem-gallery --> | 2026-07 | 多模态长期对话中的记忆抽取、适应、推理和知识管理。 | 视觉保留、多模态推理和记忆组织被放进同一套评测。 |
 | 🔭 前沿 | [Mem2ActBench](https://aclanthology.org/2026.acl-long.370/) <!-- benchmark-id:mem2actbench --> | 2026-07 | 长期记忆是否会影响工具选择和参数填写。 | 记忆对行动的作用可以直接评分，而不再只通过问答间接判断。 |
 | 🔭 前沿 | [PerMemSafe](https://aclanthology.org/2026.findings-acl.320/) <!-- benchmark-id:permemsafe --> | 2026-07 | 能否从长期历史中识别隐含的个体风险，并在风险缓解后及时更新判断。 | 把用户状态记忆扩展到随时间变化的个性化安全与有用性权衡。 |
 | [PM-Bench](https://arxiv.org/abs/2607.12385) <!-- benchmark-id:pm-bench --> | 🔭 前沿 | 2026-07-14 | 在持续进行其他活动时，测智能体能否保留延迟意图，并在未来正确 cue 或状态出现时执行。 |
@@ -202,6 +201,7 @@
 | 🔭 前沿 | [SCALE-QA](https://arxiv.org/abs/2608.25655) <!-- benchmark-id:scale-qa --> | 2026-08-26 | 无显式边界的交错长对话中重建当前任务真正绑定的 episode 与局部约束。 | 从 LongMemEval 的结构化跨 session 记忆推进到 episode boundary 本身未知的混合线程，并用精确 evidence trace 区分可见性与 episode integrity。 |
 | 🔭 前沿 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | 2026-09-01 | 持久记忆中的授权状态保持、虚假权限形成与越权行动传播。 | 把记忆安全从“内容是否正确”推进到“权限是否被忠实保持并影响行动”。 |
 | 🔭 前沿 | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | 2026-09-01 | 过期记忆与当前权威证据冲突时的过度信任，以及模型规模效应。 | 把记忆冲突失败从单一模型现象推进到能力依赖的受控比较。 |
+
 <!-- COMPLETE-MAP:agent-memory:END -->
 
 [进入 Agent Memory Radar](https://github.com/H20Zhang/Agent-Memory-Radar)
@@ -209,7 +209,6 @@
 ### RAG / Agentic Retrieval
 
 <!-- COMPLETE-MAP:rag:START -->
-
 
 | Benchmark | 角色 | 时间 | 这次改变了什么 |
 |---|---|---:|---|
@@ -259,6 +258,7 @@
 | 🔭 前沿 | [KBGym / Training a Knowledge Base](https://arxiv.org/abs/2608.21829) <!-- benchmark-id:kbgym --> | 2026-08-22 | 监督式知识库编辑在冻结后对覆盖分层问题的准确率与行动成本。 | 把 static corpus 改成受监督编辑后冻结评测的 non-parametric model。 |
 | 🔭 前沿 | [RAG Collapse](https://arxiv.org/abs/2608.22118) <!-- benchmark-id:rag-collapse --> | 2026-08-22 | 递归检索中 self-authored sources 对独立来源的挤出与反馈崩塌。 | 把 self-authored source feedback 变成独立 validity diagnostic。 |
 | 🔭 前沿 | [Snapshot Compatibility Audit](https://arxiv.org/abs/2608.22856) <!-- benchmark-id:snapshot-compatibility-audit --> | 2026-08-24 | corpus snapshot 增长造成的超额答案 churn 与稳定翻转。 | 把 corpus 版本升级引发的稳定答案翻转从随机生成噪声中隔离。 |
+
 <!-- COMPLETE-MAP:rag:END -->
 
 [进入 Agentic RAG Radar](https://github.com/H20Zhang/Agentic-RAG-Radar)
@@ -266,7 +266,6 @@
 ### Data Agents
 
 <!-- COMPLETE-MAP:data-agent:START -->
-
 
 | Benchmark | 角色 | 时间 | 这次改变了什么 |
 |---|---|---:|---|
@@ -306,6 +305,7 @@
 | 🔭 前沿 | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | 2026-08-17 | 在下游分析前，构建包含逻辑表、列语义、键关系和质量信号的结构化数据理解产物。 | 把通常隐含的数据探索阶段从最终答案的前置假设变成可独立评分、可验证下游价值的对象。 |
 | 🔭 前沿 | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | 2026-08-20 | 在冻结训练仓库中诊断并修改学习算法，以 proxy 探索、源码交付和 clean-start 正式运行隔离成绩。 | 把 algorithm design 与 run-side tuning 分开观察，并以 source patch 作为探索和最终训练之间的边界。 |
 | 🔭 前沿 | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 2026-08-20 | 在真实研究仓库中修复训练管线、迭代机器学习实验、提高论文基线并抵抗 specification gaming。 | 把“改进已发表 ML 基线”与 repository realism、长算力预算和提交完整性放入同一执行对象。 |
+
 <!-- COMPLETE-MAP:data-agent:END -->
 
 [进入 Data Agent Radar](https://github.com/H20Zhang/Data-Agent-Radar)

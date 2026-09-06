@@ -75,3 +75,51 @@ Importance is not relevance. Use a 1–5 score based on whether the benchmark ma
 ## Comparison rule
 
 Never compare headline scores unless the relevant model, tool interface, accessible context, retries/trials, hints, judge, stopping rule, and cost budget are sufficiently matched. When they are not matched, describe the result as a system-level result rather than evidence for a specific component.
+
+## Publication-event contract (2026-09)
+
+Website chronology and generated README projections use typed events, never the
+conference month as a substitute for an earlier verified public version:
+
+- `first_public_at`: earliest verified public version, or null when not established.
+- `publication_at`: formal publication event, or null.
+- `data_release_at`: separately evidenced data-release event, or null.
+- `release_date_evidence`: each non-null event has a source URL, original date
+  precision (`day` or `month`), evidence kind, verification status and, where
+  established, verification date. Old values remain in `legacy_recorded_at`.
+
+An unclassified legacy date remains usable for browsing but is explicitly labeled
+as a recorded date whose event type needs review, **not** a verified first release.
+Native-v2 provenance is imported without claiming a new audit. Correcting a date
+retains its original value and its separately sourced publication event.
+`released` remains a compatibility projection of the selected typed date; it does
+not independently establish provenance. Unknown discovery times stay unknown.
+`published_at` in the existing v2 event bundle has its original event semantics;
+it is not the new formal-publication field `publication_at`.
+
+Both README and website use the discovery cutoff from `data/freshness.json`.
+The six-month window subtracts six calendar months; the 30-day window contains
+exactly 30 inclusive UTC dates. Month-only records use interval overlap and are
+labeled as month precision. A source audit does not silently refresh discovery,
+citation, or result verification timestamps.
+
+## Explicit facet membership
+
+`facet_assignments` maps each facet id to its option ids. Public URL values are
+`facet-id:option-id`; option identity is scoped to its facet. Membership is not
+recomputed from display prose. Selections combine with OR within a group and AND
+between groups. Imported assignments carry `facet_assignment_status=imported-heuristic`
+and remain editorial suggestions, not independently verified capability claims.
+A human correction changes these explicit assignments rather than editing prose
+until a substring matcher happens to produce the desired result.
+
+## Scope-bounded result presentation
+
+A result track is a collection of source records, not proof that all experimental
+controls match. `evidence_type=baseline` labels a baseline; a single entry is a
+single recorded result; multiple entries can expose only the best **among recorded
+results**. Always carry the method/model, source, result date and result verification
+date. `live` means a periodically curated tracking snapshot, not a real-time feed.
+The benchmark comparison tool compares designs and does not rank systems using
+scores from different datasets. Reference targets do not drive research-opportunity
+filters or implied attainable headroom.

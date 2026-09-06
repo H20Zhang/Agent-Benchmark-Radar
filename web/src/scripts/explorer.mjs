@@ -1,3 +1,4 @@
+import { writePageState } from "./page-state.mjs";
 import {
   filterBenchmarks,
   parseFilterState,
@@ -28,7 +29,8 @@ function modelFromCard(element) {
     protocol: parseArray(element.dataset.protocols),
     stableFacets: parseArray(element.dataset.stableFacets),
     resultStatus: element.dataset.resultStatus || "untracked",
-    headroomBand: element.dataset.headroomBand || "unknown",
+    resultTrackingStatus: element.dataset.resultTrackingStatus || "",
+    metricFamilies: parseArray(element.dataset.metricFamilies),
     metricFamily: element.dataset.metricFamily || "",
     artifacts: Object.fromEntries(
       parseArray(element.dataset.artifacts).map((kind) => [kind, true]),
@@ -49,7 +51,10 @@ function paramsFromForm(form) {
 
 function syncForm(form, params) {
   for (const control of form.elements) {
-    if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement)) {
+    if (!(
+      control instanceof HTMLInputElement ||
+      control instanceof HTMLSelectElement
+    )) {
       continue;
     }
     const selected = params.getAll(control.name);
@@ -71,16 +76,25 @@ function initExplorer(root) {
   const active = root.querySelector("[data-active-filters]");
   if (!(form instanceof HTMLFormElement) || !grid || !count || !empty) return;
 
-  const models = [...grid.querySelectorAll("[data-benchmark-id]")].map(modelFromCard);
+  const models = [...grid.querySelectorAll("[data-benchmark-id]")].map(
+    modelFromCard,
+  );
   syncForm(form, new URLSearchParams(window.location.search));
 
   const apply = () => {
     const state = parseFilterState(paramsFromForm(form));
     for (const facet of form.querySelectorAll("[data-facet-area]")) {
       const area = facet.dataset.facetArea;
-      facet.hidden = Boolean(area && state.areas.length && !state.areas.includes(area));
+      facet.hidden = Boolean(
+        area &&
+        state.areas.length &&
+        !state.areas.includes(area) &&
+        !facet.querySelector("input:checked"),
+      );
     }
-    const matches = new Set(filterBenchmarks(models, state).map((item) => item.id));
+    const matches = new Set(
+      filterBenchmarks(models, state).map((item) => item.id),
+    );
     const ordered = sortBenchmarks(models, state.sort);
 
     for (const model of ordered) {
@@ -94,15 +108,16 @@ function initExplorer(root) {
       const labels = [...new FormData(form).entries()]
         .filter(([key, value]) => key !== "sort" && String(value).trim())
         .map(([key, value]) => `${key}: ${value}`);
-      active.replaceChildren(...labels.slice(0, 8).map((label) => {
-        const chip = document.createElement("span");
-        chip.textContent = label;
-        return chip;
-      }));
+      active.replaceChildren(
+        ...labels.map((label) => {
+          const chip = document.createElement("span");
+          chip.textContent = label;
+          return chip;
+        }),
+      );
     }
     const query = serializeFilterState(state);
-    const next = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
-    history.replaceState({}, "", next);
+    writePageState(new URLSearchParams(query));
   };
 
   let frame;
@@ -124,6 +139,10 @@ function initExplorer(root) {
       apply();
     });
   }
+  window.addEventListener("popstate", () => {
+    syncForm(form, new URLSearchParams(location.search));
+    apply();
+  });
   apply();
 }
 
