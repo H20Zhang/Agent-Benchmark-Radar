@@ -3,7 +3,9 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Header from "../../../components/Header.astro";
 import SiteFooter from "../../../components/SiteFooter.astro";
 
+import { localizeChineseProse } from "../../../lib/chinese-localization.mjs";
 import { copyFor, LOCALES } from "../../../lib/i18n.mjs";
+import { loadChineseSummaries } from "../../../lib/readme-localization.mjs";
 import { loadRegistry } from "../../../lib/registry.mjs";
 import { loadResearchModel, localize } from "../../../lib/research-model.mjs";
 import { absoluteUrl, localePath, sitePath } from "../../../lib/site.mjs";
@@ -15,17 +17,19 @@ export function getStaticPaths() {
 interface Props { lang: "zh" | "en"; opportunity: any; }
 const { lang, opportunity } = Astro.props;
 const copy = copyFor(lang);
+const summaries = loadChineseSummaries();
 const byId = new Map(loadRegistry().map((item) => [item.id, item]));
+const benchmarkSummary = (item: any) => localizeChineseProse(lang === "zh" ? (summaries.get(item.id) || item.summary) : item.summary, lang);
 const canonicalPath = localePath(lang, `opportunities/${opportunity.id}/`);
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", `opportunities/${opportunity.id}/`);
 const title = `${localize(opportunity.title, lang)} | Agent Benchmark Radar`;
 const description = localize(opportunity.next_coordinate, lang);
 const jsonLd = { "@context": "https://schema.org", "@type": "Article", headline: title, description, url: absoluteUrl(canonicalPath), dateModified: opportunity.verified_at, inLanguage: copy.langTag };
 const sections = [
-  { index: "01", key: "why_it_matters", eyebrow: lang === "zh" ? "研究价值" : "Research value", title: lang === "zh" ? "为什么这个坐标重要" : "Why this coordinate matters" },
+  { index: "01", key: "why_it_matters", eyebrow: lang === "zh" ? "研究价值 · 推断" : "Research value · inference", title: lang === "zh" ? "为什么这个坐标可能重要" : "Why this coordinate may matter" },
   { index: "02", key: "current_coverage", eyebrow: lang === "zh" ? "当前证据" : "Current evidence", title: lang === "zh" ? "现有 Benchmark 已经测到哪里" : "What current benchmarks already measure" },
-  { index: "03", key: "next_coordinate", eyebrow: lang === "zh" ? "下一坐标" : "Next coordinate", title: lang === "zh" ? "可以把测量推进到哪里" : "Where measurement can move next" },
-  { index: "04", key: "candidate_evaluation", eyebrow: lang === "zh" ? "评测设计" : "Evaluation design", title: lang === "zh" ? "一个可执行的 Benchmark 起点" : "An executable benchmark starting point" },
+  { index: "03", key: "next_coordinate", eyebrow: lang === "zh" ? "下一坐标 · 推断" : "Next coordinate · inference", title: lang === "zh" ? "可以把测量推进到哪里" : "Where measurement could move next" },
+  { index: "04", key: "candidate_evaluation", eyebrow: lang === "zh" ? "候选设计 · 推断" : "Candidate design · inference", title: lang === "zh" ? "一个待验证的 Benchmark 起点" : "A benchmark starting point to validate" },
 ];
 ---
 
@@ -33,10 +37,10 @@ const sections = [
   <Header {lang} alternatePath={alternatePath} />
   <main id="main-content" class="shell opportunity-detail">
     <nav class="breadcrumb"><a href={sitePath(localePath(lang, "opportunities/"))}>{copy.nav.opportunities}</a><span>/</span><span>{localize(opportunity.title, lang)}</span></nav>
-    <header class="opportunity-detail__hero" data-area={opportunity.area}><p class="eyebrow">Evaluation opportunity · {copy.areas[opportunity.area].label}</p><h1>{localize(opportunity.title, lang)}</h1><p>{localize(opportunity.why_it_matters, lang)}</p><div><span>{opportunity.confidence === "high" ? (lang === "zh" ? "高置信信号" : "High-confidence signal") : (lang === "zh" ? "演进信号" : "Emerging signal")}</span><time datetime={opportunity.verified_at}>{opportunity.verified_at}</time></div></header>
+    <header class="opportunity-detail__hero" data-area={opportunity.area}><p class="eyebrow">{lang === "zh" ? "研究机会 · 解释层" : "Research opportunity · interpretive layer"} · {copy.areas[opportunity.area].label}</p><h1>{localize(opportunity.title, lang)}</h1><p>{localize(opportunity.why_it_matters, lang)}</p><div><span>{opportunity.confidence === "high" ? (lang === "zh" ? "高置信推断" : "High-confidence inference") : (lang === "zh" ? "演进信号" : "Emerging signal")}</span><time datetime={opportunity.verified_at}>{lang === "zh" ? "判断核验 " : "Judgment verified "}{opportunity.verified_at}</time></div></header>
     <div class="opportunity-detail__sections">{sections.map((section) => <section><span>{section.index}</span><div><p class="eyebrow">{section.eyebrow}</p><h2>{section.title}</h2></div><p>{localize(opportunity[section.key], lang)}</p></section>)}</div>
-    <section class="opportunity-evidence"><header><p class="eyebrow">Evidence anchors</p><h2>{lang === "zh" ? "支撑这个判断的 Benchmarks" : "Benchmarks anchoring this judgment"}</h2></header><div>{opportunity.benchmarks.map((id: string) => { const item = byId.get(id); return item && <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}><span>{copy.areas[item.area].label} · {item.released}</span><h3>{item.name}</h3><p>{item.summary}</p><b>↗</b></a>; })}</div></section>
-    <footer class="detail-footer"><a href={sitePath(localePath(lang, "opportunities/"))}>← {copy.nav.opportunities}</a><a href={sitePath(localePath(lang, `evaluate/?area=${opportunity.area}`))}>{lang === "zh" ? "配一组评测" : "Build a suite"} ↗</a></footer>
+    <section class="opportunity-evidence"><header><p class="eyebrow">{lang === "zh" ? "事实锚点" : "Evidence anchors"}</p><h2>{lang === "zh" ? "支撑这个推断的 Benchmarks" : "Benchmarks anchoring this inference"}</h2><p>{lang === "zh" ? "Benchmark 的发布时间与规范记录属于事实层；本页关于研究机会的结论属于解释层。" : "Benchmark release dates and canonical records are factual-layer evidence; the opportunity claim on this page is interpretive."}</p></header><div>{opportunity.benchmarks.map((id: string) => { const item = byId.get(id); return item && <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}><span>{copy.areas[item.area].label} · {item.released}</span><h3>{item.name}</h3><p>{benchmarkSummary(item)}</p><b>↗</b></a>; })}</div></section>
+    <footer class="detail-footer"><a href={sitePath(localePath(lang, "timeline/"))}>← {lang === "zh" ? "返回可信时间轴" : "Back to canonical timeline"}</a><a href={sitePath(localePath(lang, `evaluate/?area=${opportunity.area}`))}>{lang === "zh" ? "用本方向配一组评测" : "Build a suite for this area"} ↗</a></footer>
   </main>
   <SiteFooter {lang} />
 </BaseLayout>
