@@ -1,4 +1,5 @@
 ---
+import { loadChineseSummaries } from '../lib/readme-localization.mjs';
 import { copyFor } from '../lib/i18n.mjs';
 import { getArtifactKinds } from '../lib/registry.mjs';
 import { getStableFacetValues } from '../lib/research-model.mjs';
@@ -10,7 +11,7 @@ interface Props { lang:'zh'|'en'; item:any; summary:string; resultSet?:any; }
 const {lang,item,summary,resultSet}=Astro.props;
 const copy=copyFor(lang), artifacts=getArtifactKinds(item), result=presentResult(resultSet,lang), release=releaseDate(item);
 const detail=sitePath(localePath(lang,`benchmarks/${item.id}/`));
-const search=[item.name,summary,item.summary,item.measurement_strength,item.scale,...item.capabilities,...item.environment,...item.protocol].join(' ');
+const search=[item.name,loadChineseSummaries().get(item.id),item.summary,item.measurement_strength,item.scale,...item.capabilities,...item.environment,...item.protocol].join(' ');
 ---
 <article class="benchmark-card" data-benchmark-id={item.id} data-area={item.area} data-role={item.evolution_role} data-released={release.date} data-artifacts={JSON.stringify(artifacts)} data-capabilities={JSON.stringify(item.capabilities)} data-environments={JSON.stringify(item.environment)} data-protocols={JSON.stringify(item.protocol)} data-stable-facets={JSON.stringify(getStableFacetValues(item))} data-result-status={resultSet?'tracked':'untracked'} data-result-tracking-status={resultSet?.tracking_status||'untracked'} data-metric-families={JSON.stringify([...new Set(resultSet?.tracks.map((t:any)=>t.metric.family)||[])])} data-citations={item.citations?.status==='ok'?item.citations.count:-1} data-search={search}>
   <div class="benchmark-card__topline"><span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span><time datetime={release.date}>{release.date}</time></div>

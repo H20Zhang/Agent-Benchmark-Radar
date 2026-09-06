@@ -32,6 +32,7 @@ const comparisonData = items.map((item) => {
     comparison_controls: editorial.comparison_controls.map((control: any) => localize(control, lang)),
     result: result && presentation && {
       label: presentation.label, model: presentation.model, source: presentation.source, scope: presentation.scope,
+      budget: result.best.budget || "", context: result.best.context || "", reportedAt: result.best.date,
       score: result.best.score,
       method: result.best.method,
       metric: localize(track.label, lang),

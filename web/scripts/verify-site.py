@@ -48,6 +48,24 @@ def static_audit():
         library=parsed[f'{BASE}/{lang}/benchmarks/']
         assert {r['data-benchmark-id'] for r in library.select('[data-benchmark-id]')}=={r['id'] for r in registry}
         for item in registry:assert f'{BASE}/{lang}/benchmarks/{item["id"]}/' in parsed
+    sources=list((ROOT/'data/results').glob('*.json'))
+    budget_count=0
+    for file in sources:
+        record=json.loads(file.read_text())
+        for lang in ['zh','en']:
+            panel=parsed[f'{BASE}/{lang}/benchmarks/{record["benchmark_id"]}/'].select_one('#results')
+            assert panel is not None, f'{record["benchmark_id"]}: missing result panel'
+            rendered=panel.get_text(' ',strip=True)
+            for track in record['tracks']:
+                for entry in track['entries']:
+                    for key in ['budget','context']:
+                        if entry.get(key):
+                            assert entry[key] in rendered, f'{record["benchmark_id"]}/{lang}: dropped {key}'
+                            if key=='budget':budget_count+=1
+    zh_cards=parsed[f'{BASE}/zh/benchmarks/'].select('[data-benchmark-id]')
+    en_cards=parsed[f'{BASE}/en/benchmarks/'].select('[data-benchmark-id]')
+    assert {e['data-benchmark-id']:e['data-search'] for e in zh_cards}=={e['data-benchmark-id']:e['data-search'] for e in en_cards},'search corpus differs across languages'
+    print(f'Preserved {budget_count} bilingual entry budgets; bilingual search corpus identical.',flush=True)
     return {'html_pages':len(parsed),'benchmark_details':2*len(registry),'internal_links':'all targets and fragments resolved'},pages
 
 @functools.lru_cache(None)
@@ -187,7 +205,60 @@ async def browser_audit(args,pages,origin):
         await page.locator('#interpretation').scroll_into_view_if_needed()
         if args.output:await page.screenshot(path=str(args.output/'regression-prose-flow.png'))
         checks.append('authored negation preserved in normal document flow')
-        await page.close();await context.close();await browser.close()
+        if not args.offline:
+            # Use actual canonical URLs: set_content cannot validate URL hydration or history.
+            await page.goto(origin+BASE+'/zh/benchmarks/?capability=temporal-reasoning&year=2024&year=2026')
+            initial_ids=await page.locator('[data-benchmark-id]:visible').evaluate_all('(es)=>es.map(e=>e.dataset.benchmarkId).sort()')
+            assert initial_ids, 'legacy filter became empty unexpectedly'
+            await page.locator('select[name=sort]').select_option('name')
+            assert parse_qs(urlsplit(page.url).query)['capability']==['temporal-reasoning']
+            assert set(parse_qs(urlsplit(page.url).query)['year'])=={'2024','2026'}
+            assert initial_ids==await page.locator('[data-benchmark-id]:visible').evaluate_all('(es)=>es.map(e=>e.dataset.benchmarkId).sort()')
+            await page.reload()
+            assert initial_ids==await page.locator('[data-benchmark-id]:visible').evaluate_all('(es)=>es.map(e=>e.dataset.benchmarkId).sort()')
+            checks.append('legacy constraints and repeated years survive UI edits and reload')
+            await page.goto(origin+BASE+'/zh/benchmarks/?q=%E9%95%BF%E6%9C%9F')
+            query_ids=await page.locator('[data-benchmark-id]:visible').evaluate_all('(es)=>es.map(e=>e.dataset.benchmarkId).sort()')
+            assert len(query_ids)==7, query_ids
+            await page.locator('[data-language-path]').click()
+            assert query_ids==await page.locator('[data-benchmark-id]:visible').evaluate_all('(es)=>es.map(e=>e.dataset.benchmarkId).sort()')
+            await page.reload()
+            assert query_ids==await page.locator('[data-benchmark-id]:visible').evaluate_all('(es)=>es.map(e=>e.dataset.benchmarkId).sort()')
+            checks.append('Chinese query returns identical seven IDs across locales and reload')
+            resultsets=[json.loads(f.read_text()) for f in (ROOT/'data/results').glob('*.json')]
+            expected={r['benchmark_id'] for r in resultsets if r['tracking_status']=='paper-snapshot'}
+            await page.goto(origin+BASE+'/zh/benchmarks/?status=tracked&source=paper-snapshot')
+            assert set(await page.locator('[data-benchmark-id]:visible').evaluate_all('(es)=>es.map(e=>e.dataset.benchmarkId)'))==expected
+            if args.output:await page.screenshot(path=str(args.output/'regression-source-intersection.png'))
+            await page.goto(origin+BASE+'/zh/benchmarks/?status=untracked&source=paper-snapshot')
+            assert await page.locator('[data-benchmark-id]:visible').count()==0
+            await page.goto(origin+BASE+'/zh/benchmarks/?facet=retrieval-quality')
+            assert await page.locator('[data-benchmark-id]:visible').count()==0
+            assert '歧义' in await page.locator('[data-filter-form] [role=status]').inner_text()
+            checks.append('source type AND availability; ambiguous legacy facet is restrictive and explained')
+            await page.goto(origin+BASE+'/zh/benchmarks/structmemeval/#note-什么时候值得用')
+            await page.locator('[data-language-path]').click()
+            fragment=unquote(urlsplit(page.url).fragment)
+            assert fragment=='note-when-to-use-it',fragment
+            assert await page.locator('[id="'+fragment+'"]').count()==1
+            checks.append('translated note fragment resolves to paired section, not a broken anchor')
+            await page.goto(origin+BASE+'/zh/compare/?benchmark=deltaml-bench&benchmark=browsecomp-plus-cm')
+            comparison=await page.locator('[data-compare-table]').inner_text()
+            assert '4 runs' in comparison and '60.2' in comparison
+            assert '结果数据切分' in comparison and '结果协议版本' in comparison
+            if args.output:await page.screenshot(path=str(args.output/'regression-compare-conditions.png'),full_page=True)
+            checks.append('comparison exposes task, split, protocol, context and both original budgets')
+        await page.close()
+        for lang in ['zh','en']:
+            for slug in ['sgr-bench','searchauditbench','bright-pro','evobrowsecomp','ragcap-bench','deltaml-bench']:
+                page=await load(context,f'{lang}/benchmarks/{slug}/')
+                await page.locator('#interpretation').scroll_into_view_if_needed()
+                if args.output:await page.screenshot(path=str(args.output/f'review-{lang}-{slug}-prose.png'))
+                if slug=='deltaml-bench':
+                    await page.locator('#results').scroll_into_view_if_needed()
+                    if args.output:await page.screenshot(path=str(args.output/f'review-{lang}-{slug}-results.png'))
+                await page.close()
+        await context.close();await browser.close()
     assert not errors,'\n'.join(errors)
     return {'browser_mode':'offline build bytes; history captured, not navigated' if args.offline else 'real HTTP origin', 'rendered_views':len(metrics),'checks':checks,'page_errors':errors,'page_metrics':metrics}
 

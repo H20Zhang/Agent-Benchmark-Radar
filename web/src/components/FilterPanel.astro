@@ -62,12 +62,12 @@ const counts = { tracked: resultSets.size, untracked: items.length - resultSets.
 
   <details class="refine-panel refine-panel--tool">
     <summary>
-      <span><b>{lang === "zh" ? "更多筛选维度" : "More filters"}</b><small>{lang === "zh" ? "指标、能力、环境与评测协议" : "Metric, capability, environment, protocol, and editorial role"}</small></span>
+      <span><b>{lang === "zh" ? "更多筛选维度" : "More filters"}</b><small>{lang === "zh" ? "指标、能力、环境、协议与编辑角色" : "Metric, capability, environment, protocol, and editorial role"}</small></span>
       <span aria-hidden="true">＋</span>
     </summary>
     <div class="refine-panel__body">
 
-      <fieldset class="filter-group"><legend>{lang === "zh" ? "结果来源类型" : "Result source type"}</legend><div class="chip-control">{[["paper-snapshot", lang === "zh" ? "论文快照" : "Paper snapshot"], ["verified-snapshot", lang === "zh" ? "核验快照" : "Verified snapshot"], ["live", lang === "zh" ? "排行榜追踪" : "Leaderboard tracking"]].map(([value, label]) => <label><input type="checkbox" name="status" value={value} /><span>{label}</span></label>)}</div></fieldset>
+      <fieldset class="filter-group"><legend>{lang === "zh" ? "结果来源类型" : "Result source type"}</legend><div class="chip-control">{[["paper-snapshot", lang === "zh" ? "论文快照" : "Paper snapshot"], ["verified-snapshot", lang === "zh" ? "核验快照" : "Verified snapshot"], ["live", lang === "zh" ? "排行榜追踪" : "Leaderboard tracking"]].map(([value, label]) => <label><input type="checkbox" name="source" value={value} /><span>{label}</span></label>)}</div></fieldset>
       {metricFamilies.length > 0 && <fieldset class="filter-group"><legend>{copy.filters.metric}</legend><div class="chip-control">{metricFamilies.map((metric) => <label><input type="checkbox" name="metric" value={metric} /><span>{metric}</span></label>)}</div></fieldset>}
 
       {stableFacets.map((facet) => (

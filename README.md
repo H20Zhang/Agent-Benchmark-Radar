@@ -61,7 +61,7 @@
 | 2026-08-10<br><sub>最早已核验公开版本 · [来源](https://arxiv.org/abs/2608.14838)</sub> | RAG / Agentic Retrieval | [The Recall Trap](https://arxiv.org/abs/2608.14838) <!-- benchmark-id:recall-trap --> | 在固定检索槽位的代码检索协议下，审计更高文件召回率是否反而降低下游修复成功率。 |
 | 2026-08-10<br><sub>历史记录 · 事件类型待复核 · [来源](https://arxiv.org/abs/2608.09254)</sub> | Data Agents | [WarehouseReliabilityBench](https://arxiv.org/abs/2608.09254) <!-- benchmark-id:warehouse-reliability-bench --> | 面对语义歧义、不可回答、模式漂移和对抗输入时，返回业务真值或正确地澄清、弃答、拒答。 |
 | 2026-08-07<br><sub>最早已核验公开版本 · [来源](https://arxiv.org/abs/2608.18034)</sub> | RAG / Agentic Retrieval | [DAS-Bench / DAS-Eval](https://arxiv.org/abs/2608.18034) <!-- benchmark-id:das-bench --> | 评估学术综述的文献覆盖、分类体系、论断、引用、论述组织和最终呈现质量。 |
-| 2026-08-05<br><sub>历史记录 · 事件类型待复核 · [来源](https://arxiv.org/abs/2608.05212)</sub> | RAG / Agentic Retrieval | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | 考察审计模型能否在超长搜索轨迹中定位错误、归因根因并生成可执行修复。 |
+| 2026-08-05<br><sub>历史记录 · 事件类型待复核 · [来源](https://arxiv.org/abs/2608.05212)</sub> | RAG / Agentic Retrieval | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | 考察审计模型能否在超长失败搜索轨迹中定位错误、归因根因，并提出通过专家准则判分的修复建议；不等同于重跑搜索成功。 |
 | 2026-08-04<br><sub>最早已核验公开版本 · [来源](https://arxiv.org/abs/2608.15624)</sub> | RAG / Agentic Retrieval | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | 针对同一篇论文，按动机、方法、结果等不同研究视角发起查询，评测能否持续将它检索出来。 |
 | 2026-08-04<br><sub>最早已核验公开版本 · [来源](https://arxiv.org/abs/2608.04003)</sub> | Agent Memory | [PAST-Bench](https://arxiv.org/abs/2608.04003) <!-- benchmark-id:past-bench --> | 通过配对的持久状态控制，检验跨任务经验是否因果改善后续可执行工作。 |
 | 2026-08-03<br><sub>历史记录 · 事件类型待复核 · [来源](https://arxiv.org/abs/2608.01679)</sub> | Agent Memory | [AuthMem-Bench](https://arxiv.org/abs/2608.01679) <!-- benchmark-id:authmem-bench --> | 固定记忆内容、只改变来源权威，测持久记忆整合是否把低权限内容变成可复用的用户事实或指令。 |
@@ -180,12 +180,12 @@
 
 | Benchmark | 记录范围 | 结果 | 结果核验 | 来源 |
 |---|---|---:|---|---|
+| [SearchAuditBench](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/searchauditbench/#results) | 已收录结果中的最佳 · 论文快照 · GPT-5.5 审计骨干 · 端到端 FPS | 32.26% | 2026-09-06 | [原始记录](https://arxiv.org/abs/2608.05212) |
 | [AutoResearchBench](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/autoresearchbench/#results) | 已收录结果中的最佳 · 论文快照 · 统一 ReAct + DeepXiv · Deep Research 准确率 | 9.39% | 2026-09-04 | [原始记录](https://arxiv.org/abs/2604.25256) |
 | [DeepResearch Bench](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/deepresearch-bench/#results) | 已收录结果中的最佳 · 论文快照 · 深度研究智能体 · RACE 总分 | 48.88points | 2026-09-04 | [原始记录](https://arxiv.org/abs/2506.11763) |
 | [AMA-Bench](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/ama-bench/#results) | 已收录结果中的最佳 · 论文快照 · 论文 v4 · 真实轨迹 · 固定 Qwen3-32B 骨干模型 | 57.22% | 2026-09-03 | [原始记录](https://arxiv.org/abs/2602.22769) |
 | [Bright-Pro](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/bright-pro/#results) | 已收录结果中的最佳 · 论文快照 · 静态检索 · Overall α-nDCG@25 | 68% | 2026-09-03 | [原始记录](https://arxiv.org/abs/2605.04018) |
 | [EvoBrowseComp](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/evobrowsecomp/#results) | 已收录结果中的最佳 · 论文快照 · 英文 · 使用网页工具 · Accuracy | 44.8% | 2026-09-03 | [原始记录](https://arxiv.org/abs/2606.13120) |
-| [KILT](https://h20zhang.github.io/Agent-Benchmark-Radar/zh/benchmarks/kilt/#results) | 已收录结果中的最佳 · 论文快照 · KILT · Natural Questions · KILT-EM | 40.44% | 2026-09-03 | [原始记录](https://aclanthology.org/2024.findings-eacl.27/) |
 
 <!-- RESULT-SNAPSHOTS:END -->
 
@@ -404,7 +404,7 @@ flowchart TB
 | 🔭 前沿 | [Agent Retrieval Bench](https://arxiv.org/abs/2607.24882) <!-- benchmark-id:agent-retrieval-bench --> | — | 2026-07-27 | 在固定版本的真实代码仓库上，测编码智能体能否找到下一步真正需要的文件，或在缺少本地证据时正确弃答。 |
 | 🔭 前沿 | [VAKRA](https://arxiv.org/abs/2608.12282) <!-- benchmark-id:vakra --> | [0](https://www.semanticscholar.org/paper/550f6ebd4d60d5e5bb1be68330362c4314971dcd) | 2026-08 | 组合调用 API、检索文档、完成多跳推理，并遵守工具策略。 |
 | 🔭 前沿 | [MAPLE](https://arxiv.org/abs/2608.15624) <!-- benchmark-id:maple --> | [0](https://www.semanticscholar.org/paper/d28f6919624b960ad5def90e854a522c55e0af51) | 2026-08-04 | 针对同一篇论文，按动机、方法、结果等不同研究视角发起查询，评测能否持续将它检索出来。 |
-| 🔭 前沿 | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | [0](https://www.semanticscholar.org/paper/b1c420e524ff84330896886bf30bb369c8239c0b) | 2026-08-05 | 考察审计模型能否在超长搜索轨迹中定位错误、归因根因并生成可执行修复。 |
+| 🔭 前沿 | [SearchAuditBench](https://arxiv.org/abs/2608.05212) <!-- benchmark-id:searchauditbench --> | [0](https://www.semanticscholar.org/paper/b1c420e524ff84330896886bf30bb369c8239c0b) | 2026-08-05 | 考察审计模型能否在超长失败搜索轨迹中定位错误、归因根因，并提出通过专家准则判分的修复建议；不等同于重跑搜索成功。 |
 | 🔭 前沿 | [DAS-Bench / DAS-Eval](https://arxiv.org/abs/2608.18034) <!-- benchmark-id:das-bench --> | [0](https://www.semanticscholar.org/paper/7501a0a02474c5bff9be48510878ed1560ad4ca8) | 2026-08-07 | 评估学术综述的文献覆盖、分类体系、论断、引用、论述组织和最终呈现质量。 |
 | 🔭 前沿 | [The Recall Trap](https://arxiv.org/abs/2608.14838) <!-- benchmark-id:recall-trap --> | [0](https://www.semanticscholar.org/paper/c52dfaa3162a810616024f6fa153c5bd3de28d0d) | 2026-08-10 | 在固定检索槽位的代码检索协议下，审计更高文件召回率是否反而降低下游修复成功率。 |
 | 🔭 前沿 | [ClaimProbe](https://arxiv.org/abs/2608.28643) <!-- benchmark-id:claimprobe --> | [0](https://www.semanticscholar.org/paper/8e5a72a020b385eafdf54a2d5806f660d2a3862c) | 2026-08-12 | 固定检索证据，逐项核对论断与来源，审计无依据论断、引用错配、漏引支持和必要事实覆盖。 |

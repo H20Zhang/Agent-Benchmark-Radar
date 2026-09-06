@@ -1032,6 +1032,7 @@
         "retrieval-robustness"
       ],
       "environment": [
+        "documents",
         "multi-source"
       ],
       "objective": [
@@ -1042,7 +1043,15 @@
         "deterministic"
       ]
     },
-    "facet_assignment_status": "imported-heuristic"
+    "facet_assignment_status": "imported-heuristic",
+    "facet_review": {
+      "reviewed_at": "2026-09-06",
+      "reviewed_dimensions": [
+        "environment"
+      ],
+      "source": "https://arxiv.org/abs/2104.08663",
+      "note": "Targeted correction of inherited substring matches; other dimensions remain editorial assignments, not verified measurement facts."
+    }
   },
   {
     "id": "multihop-rag",
@@ -1607,12 +1616,11 @@
     },
     "facet_assignments": {
       "rag-capability": [
-        "retrieval-quality"
+        "retrieval-quality",
+        "agentic-search"
       ],
       "environment": [
-        "web",
-        "code-workspace",
-        "multimodal-gui"
+        "web"
       ],
       "objective": [
         "answer-quality",
@@ -1623,7 +1631,16 @@
         "human"
       ]
     },
-    "facet_assignment_status": "imported-heuristic"
+    "facet_assignment_status": "imported-heuristic",
+    "facet_review": {
+      "reviewed_at": "2026-09-06",
+      "reviewed_dimensions": [
+        "environment",
+        "rag-capability"
+      ],
+      "source": "https://arxiv.org/abs/2605.22219",
+      "note": "Targeted correction of inherited substring matches; other dimensions remain editorial assignments, not verified measurement facts."
+    }
   },
   {
     "id": "vakra",
@@ -3231,7 +3248,6 @@
       ],
       "environment": [
         "documents",
-        "code-workspace",
         "multi-source"
       ],
       "objective": [
@@ -3239,7 +3255,15 @@
       ],
       "evaluator": []
     },
-    "facet_assignment_status": "imported-heuristic"
+    "facet_assignment_status": "imported-heuristic",
+    "facet_review": {
+      "reviewed_at": "2026-09-06",
+      "reviewed_dimensions": [
+        "environment"
+      ],
+      "source": "https://arxiv.org/abs/2407.12883",
+      "note": "Targeted correction of inherited substring matches; other dimensions remain editorial assignments, not verified measurement facts."
+    }
   },
   {
     "id": "browsecomp-plus",
@@ -7256,7 +7280,7 @@
     "importance": 4,
     "status": "active",
     "evolution_role": "frontier",
-    "summary": "Evaluates auditors that localize, attribute, and repair failures in long deep-search trajectories collected from multiple agents and benchmarks.",
+    "summary": "Expert-annotated failed search trajectories for critical-step localization, root-cause diagnosis, and repair suggestions graded against expert rubrics, not search re-execution.",
     "capabilities": [
       "failure-localization",
       "root-cause-attribution",
@@ -7273,7 +7297,7 @@
       "critical-step-loose",
       "root-cause-accuracy",
       "diagnosis-score",
-      "repair-pass-rate",
+      "repair-rubric-pass-rate",
       "end-to-end-pass"
     ],
     "scale": "1,243 failed trajectories from eight open-weight models on five deep-search benchmarks, averaging 73.1 messages and 65.1K tokens, with expert critical-step, cause, and repair annotations.",
@@ -7290,7 +7314,7 @@
       "paper": "https://arxiv.org/abs/2608.05212",
       "code": "https://github.com/lzzzx666/SearchAuditor"
     },
-    "last_verified": "2026-08-20",
+    "last_verified": "2026-09-06",
     "citations": {
       "count": 0,
       "source": "semantic-scholar",
@@ -7315,20 +7339,28 @@
         "trajectory-audit"
       ],
       "environment": [
-        "database"
+        "offline-traces"
       ],
       "objective": [
-        "answer-quality",
-        "execution-success",
         "trajectory-quality"
       ],
       "evaluator": [
         "deterministic",
-        "executable",
+        "llm-judge",
         "human"
       ]
     },
-    "facet_assignment_status": "imported-heuristic"
+    "facet_assignment_status": "imported-heuristic",
+    "facet_review": {
+      "reviewed_at": "2026-09-06",
+      "reviewed_dimensions": [
+        "environment",
+        "objective",
+        "evaluator"
+      ],
+      "source": "https://arxiv.org/abs/2608.05212",
+      "note": "Targeted correction of inherited substring matches; other dimensions remain editorial assignments, not verified measurement facts."
+    }
   },
   {
     "id": "t2-ragbench",
@@ -9726,10 +9758,11 @@
       }
     },
     "facet_assignments": {
-      "rag-capability": [],
+      "rag-capability": [
+        "corpus-state"
+      ],
       "environment": [
-        "documents",
-        "database"
+        "documents"
       ],
       "objective": [
         "answer-quality",
@@ -9737,7 +9770,16 @@
       ],
       "evaluator": []
     },
-    "facet_assignment_status": "imported-heuristic"
+    "facet_assignment_status": "imported-heuristic",
+    "facet_review": {
+      "reviewed_at": "2026-09-06",
+      "reviewed_dimensions": [
+        "rag-capability",
+        "environment"
+      ],
+      "source": "https://arxiv.org/abs/2608.21829",
+      "note": "Targeted correction of inherited substring matches; other dimensions remain editorial assignments, not verified measurement facts."
+    }
   },
   {
     "id": "snapshot-compatibility-audit",
@@ -10533,7 +10575,7 @@
       "rag-capability": [
         "retrieval-quality",
         "agentic-search",
-        "live-retrieval"
+        "retrieval-robustness"
       ],
       "environment": [
         "documents",
@@ -10546,7 +10588,15 @@
       ],
       "evaluator": []
     },
-    "facet_assignment_status": "imported-heuristic"
+    "facet_assignment_status": "imported-heuristic",
+    "facet_review": {
+      "reviewed_at": "2026-09-06",
+      "reviewed_dimensions": [
+        "rag-capability"
+      ],
+      "source": "https://arxiv.org/abs/2607.24882",
+      "note": "Targeted correction of inherited substring matches; other dimensions remain editorial assignments, not verified measurement facts."
+    }
   },
   {
     "id": "pm-bench",

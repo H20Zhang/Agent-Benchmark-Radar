@@ -86,7 +86,10 @@ function initBuilder(root) {
           "aria-label",
           `${zh ? "移除" : "Remove"} ${names.get(id)}`,
         );
-        li.append(link, remove);
+        const role = document.createElement("small");
+        role.className = "suite-role";
+        role.textContent = state.matches ? (recipe.core.includes(id) ? (zh ? "核心评测" : "Core") : (zh ? "补充评测" : "Complement")) : (zh ? "角色待确认" : "Role unverified");
+        li.append(link, role, remove);
         return li;
       }),
     );
@@ -157,7 +160,7 @@ function initBuilder(root) {
     const list = state.ids
       .map(
         (id) =>
-          `- [${names.get(id)}](${new URL(`../benchmarks/${id}/`, location.href).href})`,
+          `- ${state.matches ? (recipe.core.includes(id) ? (zh ? "核心评测" : "Core") : (zh ? "补充评测" : "Complement")) : (zh ? "角色待确认" : "Role unverified")}: [${names.get(id)}](${new URL(`../benchmarks/${id}/`, location.href).href})`,
       )
       .join("\n");
     const Markdown = `## ${title.textContent}\n\n${boundary.textContent}\n\n${list}\n\n### ${zh ? "下一步验证" : "Next validation"}\n\n${next.textContent}\n\n${location.href}`;

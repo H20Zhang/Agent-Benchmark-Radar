@@ -6,7 +6,7 @@ import { posix } from "node:path";
 import { sitePath, localePath, REPOSITORY_URL } from "./site.mjs";
 
 export const textOf = (node) =>
-  node.value ?? node.children?.map(textOf).join("") ?? "";
+  node.value ?? node.children?.map(textOf).join(["root", "list", "listItem", "blockquote", "table", "tableRow"].includes(node.type) ? "\n" : "") ?? "";
 export const parseMarkdown = (source) =>
   markdownToMdast(source, {
     features: { gfm: true, frontmatter: false, smartPunctuation: false },

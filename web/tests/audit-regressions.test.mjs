@@ -150,7 +150,8 @@ test("namespaced facets and all source statuses round-trip; headroom is retired"
     state,
   );
   assert.deepEqual(state.headroomBands, []);
-  assert.equal(state.resultStatuses[0], "paper-snapshot");
+  assert.equal(state.sourceTypes[0], "paper-snapshot");
+  assert.deepEqual(state.resultStatuses, []);
 });
 test("editing a suite invalidates its preset claim and keeps all benchmark identities", () => {
   const r = { id: "safety", core: ["a"], complement: ["b", "c", "d"] };

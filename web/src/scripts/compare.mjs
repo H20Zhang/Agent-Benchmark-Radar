@@ -58,6 +58,12 @@ function initCompare(root) {
               ? "尚未收录结构化结果；见一手来源。"
               : "No structured result recorded; consult primary sources.",
       ],
+      [zh ? "结果任务" : "Result task", item => item.result?.task],
+      [zh ? "结果数据切分" : "Result split", item => item.result?.split],
+      [zh ? "结果协议版本" : "Result protocol version", item => item.result?.protocolVersion],
+      [zh ? "上下文条件（来源原文）" : "Context conditions", item => item.result?.context || (zh ? "未在本记录中报告" : "Not reported in this record")],
+      [zh ? "资源预算（来源原文）" : "Resource budget", item => item.result?.budget || (zh ? "未在本记录中报告" : "Not reported in this record")],
+      [zh ? "结果报告日期" : "Result reported", item => item.result?.reportedAt],
       [
         zh ? "结果核验日期" : "Result verified",
         (item) => item.result?.verifiedAt || "—",

@@ -64,7 +64,7 @@ const suiteGroups = AREAS.map((area) => ({ area, recipes: research.recipes.filte
           <summary><span>{lang === "zh" ? "需要自定义？按需增删基准" : "Need a custom suite? Add or remove benchmarks"}</span><b>＋</b></summary>
           <label class="suite-search"><span>{lang === "zh" ? "搜索基准目录" : "Search registry"}</span><input type="search" data-suite-search placeholder={lang === "zh" ? "名称、能力或环境" : "Name, capability, or environment"} /></label>
           <div class="suite-library__items">
-            {items.map((item) => <label data-suite-item data-search={`${item.name} ${itemSummary(item)} ${item.area} ${item.capabilities.join(" ")} ${item.environment.join(" ")}`.toLowerCase()}><input type="checkbox" name="benchmark" value={item.id} /><span><strong>{item.name}</strong><small>{copy.areas[item.area].label} · {item.released}</small><em>{itemSummary(item)}</em></span></label>)}
+            {items.map((item) => <label data-suite-item data-search={`${item.name} ${summaries.get(item.id) || ""} ${item.summary} ${item.area} ${item.capabilities.join(" ")} ${item.environment.join(" ")}`.toLowerCase()}><input type="checkbox" name="benchmark" value={item.id} /><span><strong>{item.name}</strong><small>{copy.areas[item.area].label} · {item.released}</small><em>{itemSummary(item)}</em></span></label>)}
           </div>
         </details>
       </div>

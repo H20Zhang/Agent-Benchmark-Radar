@@ -14,7 +14,7 @@ const token=(value:string)=>localizeTechnicalToken(value,lang,displayToken);
 const example=localize(research.example,lang);
 const timeline=sitePath(localePath(lang,`timeline/?area=${item.area}&window=all&month=${release.date.slice(0,7)}`));
 ---
-<article class="benchmark-detail">
+<article class="benchmark-detail" data-language-fragments={JSON.stringify(deepRead?.languageFragments || {})}>
   <nav class="breadcrumb" aria-label={zh?'面包屑':'Breadcrumb'}><a href={sitePath(localePath(lang,'benchmarks/'))}>{zh?'基准目录':'Library'}</a><span>/</span><a href={sitePath(localePath(lang,`areas/${item.area}/`))}>{copy.areas[item.area].label}</a><span>/</span><span aria-current="page">{item.name}</span></nav>
   <header class="detail-hero">
     <div class="record-meta"><span class="area-label" data-area={item.area}>{copy.areas[item.area].label}</span><a href={timeline}><time datetime={release.date}>{release.date}</time></a><span>{releaseLabel(release,lang)}</span><a href={release.source}>{zh?'日期来源 ↗':'Date source ↗'}</a></div>

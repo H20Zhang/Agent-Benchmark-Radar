@@ -665,8 +665,11 @@ h3[id] {
   gap: 6px;
   flex-wrap: wrap;
 }
-.active-filters span {
-  padding: 3px 6px;
+.active-filters .active-filter {
+  padding: 5px 9px;
+  min-height: 36px;
+  font-size: 12px;
+  text-align: left;
   background: var(--surface);
   overflow-wrap: anywhere;
 }
@@ -1539,4 +1542,27 @@ td small {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Keep evidence columns legible; the scroll region, not the entire page, owns overflow. */
+.frontier-records table {min-width: 650px; table-layout: fixed;}
+.frontier-records th:first-child, .frontier-records td:first-child {width: 120px; white-space: nowrap;}
+.frontier-records th:nth-child(3), .frontier-records td:nth-child(3) {width: 210px;}
+.result-table {min-width: 740px;}
+.result-conditions {min-width: 200px; max-width: 320px;}
+.result-conditions p {margin-bottom: 8px;}
+.suite-role {color: var(--muted); margin-inline-start: auto; white-space: nowrap;}
+@media (max-width: 600px) {
+  .filter-panel__heading .eyebrow, .explorer-hero dl {display: none;}
+  .filter-panel__heading h2 {font-size: 16px;}
+  .filter-panel__heading {margin-bottom: 12px;}
+  .filter-primary-grid {gap: 12px;}
+  .refine-panel > summary small {display: none;}
+  .filter-panel > .content-note {font-size: 12px; margin-block: 10px;}
+  .result-track {padding: 12px;}
+}
+.suite-selection li { align-items: center; gap: .5rem; }
+.suite-role { display: inline-block; padding-inline: .35rem; line-height: 1.7; }
+@media (max-width: 600px) {
+  .filter-panel__heading h2 { display: none; }
 }
