@@ -83,6 +83,13 @@ test("benchmark details expose a fast research judgment before deep reading", ()
   }
 });
 
+test("default Chinese editorial never silently substitutes English measurement prose", () => {
+  const model = read("src/lib/research-model.mjs");
+  assert.ok(model.includes("measurementZh = chineseSummary"));
+  assert.ok(model.includes("coverage gap 尚未提供规范中文版本"));
+  assert.ok(!model.includes("const inferenceBoundary = item.coverage_gap || areaValidation.en"));
+});
+
 test("result panels bind visible scores to protocol cells and primary sources", () => {
   const panel = read("src/components/ResultsPanel.astro");
   for (const token of ["summarizeTrack", "track.task", "track.split", "protocol_version", "entry.source", "metric.direction", "not automatically comparable"]) {
@@ -127,14 +134,20 @@ test("suite builder and comparison workspace expose reusable research decisions"
   assert.ok(!compareScript.includes("data.filter((item) => item.result).slice(0, 3)"));
 });
 
-test("opportunity pages mark claims as interpretation and link back to factual evidence", () => {
+test("frontier and opportunity pages explicitly label interpretation over factual anchors", () => {
   const opportunities = read("src/pages/[lang]/opportunities/index.astro");
   const opportunity = read("src/pages/[lang]/opportunities/[id].astro");
   const frontier = read("src/pages/[lang]/frontier/index.astro");
 
-  for (const token of ["research.opportunities", "candidate_evaluation", "Opportunity map"]) assert.ok(opportunities.includes(token), token);
+  for (const token of ["research.opportunities", "candidate_evaluation", "interpretive layer", "timeline/"]) assert.ok(opportunities.includes(token), token);
   for (const token of ["why_it_matters", "current_coverage", "next_coordinate", "candidate_evaluation", "interpretive layer", "timeline/", "loadChineseSummaries"]) assert.ok(opportunity.includes(token), token);
-  for (const token of ["frontierShifts", "recentItems", "freshness.discovery_scan_at", "genealogy", "Evaluation frontier"]) assert.ok(frontier.includes(token), token);
+  for (const token of ["frontierShifts", "recentItems", "freshness.discovery_scan_at", "genealogy", "Factual window", "Interpretive layer", "timeline/"]) assert.ok(frontier.includes(token), token);
+});
+
+test("filter URL status contract only admits states actually rendered by benchmark cards", () => {
+  const filters = read("src/lib/filters.mjs");
+  assert.ok(filters.includes('new Set(["tracked", "untracked"])'));
+  assert.ok(!filters.includes('"live", "snapshot"'));
 });
 
 test("area pages inherit genealogy, results, opportunities, and frontier shifts", () => {
