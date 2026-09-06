@@ -61,14 +61,18 @@ function defaultEditorial(item, chineseSummary) {
     frontier: { zh: "前沿测量坐标", en: "Frontier measurement coordinate" },
   }[item.evolution_role];
 
-  const measurement = item.measurement_strength || item.summary;
-  const inferenceBoundary = item.coverage_gap || areaValidation.en;
+  const measurementEn = item.measurement_strength || item.summary;
+  const measurementZh = chineseSummary;
+  const inferenceBoundaryEn = item.coverage_gap || areaValidation.en;
+  const inferenceBoundaryZh = item.coverage_gap
+    ? "该条目的 coverage gap 尚未提供规范中文版本；请以英文规范记录为准。"
+    : areaValidation.zh;
   const confounders = (item.confounders || []).map(humanizeToken).filter(Boolean);
   const confounderText = confounders.join(", ");
   const confounderTextZh = confounders.join("、");
   const benchmarkSpecificControl = confounders.length
     ? {
-        zh: `这项评测尤其需要固定或完整报告这些 load-bearing 条件：${confounderTextZh}。否则分数差异只能视为 system-level evidence。`,
+        zh: `这项评测尤其需要固定或完整报告这些关键条件：${confounderTextZh}。否则分数差异只能视为系统级证据。`,
         en: `This benchmark is especially sensitive to these load-bearing conditions: ${confounderText}. If they differ, score gaps are system-level evidence rather than component attribution.`,
       }
     : {
@@ -79,21 +83,21 @@ function defaultEditorial(item, chineseSummary) {
   return {
     id: item.id,
     score_supports: {
-      zh: `这个分数首先支持对该测量对象的判断：${measurement} 只有在模型、工具、资源预算和协议充分对齐后，才适合比较系统差异；分数本身不能识别收益来自哪个内部组件。`,
-      en: `The score first supports a claim about this measurement object: ${measurement} Under sufficiently matched model, tools, resource budget, and protocol, it can compare systems; by itself it does not identify which internal component caused a gain.`,
+      zh: `这个分数首先支持对该测量对象的判断：${measurementZh} 只有在模型、工具、资源预算和协议充分对齐后，才适合比较系统差异；分数本身不能识别收益来自哪个内部组件。`,
+      en: `The score first supports a claim about this measurement object: ${measurementEn} Under sufficiently matched model, tools, resource budget, and protocol, it can compare systems; by itself it does not identify which internal component caused a gain.`,
     },
     suite_role: role,
     next_validation: {
       zh: item.coverage_gap
-        ? `当前最有判别力的下一评测坐标是：${item.coverage_gap}`
+        ? "当前记录存在下一评测坐标，但尚未提供规范中文表述；请核对英文规范记录后再据此设计实验。"
         : areaValidation.zh,
       en: item.coverage_gap
         ? `The next discriminating evaluation coordinate is: ${item.coverage_gap}`
         : areaValidation.en,
     },
     evidence_brief: {
-      zh: `这项 benchmark 的核心测量增量是：${measurement} 当前推断边界是：${inferenceBoundary}${confounders.length ? ` 公平比较最敏感的条件包括 ${confounderTextZh}。` : ""}`,
-      en: `The benchmark's core measurement advance is: ${measurement} Its current inference boundary is: ${inferenceBoundary}${confounders.length ? ` Fair comparison is especially sensitive to ${confounderText}.` : ""}`,
+      zh: `这项 benchmark 的核心测量增量是：${measurementZh} 当前推断边界是：${inferenceBoundaryZh}${confounders.length ? ` 公平比较最敏感的条件包括 ${confounderTextZh}。` : ""}`,
+      en: `The benchmark's core measurement advance is: ${measurementEn} Its current inference boundary is: ${inferenceBoundaryEn}${confounders.length ? ` Fair comparison is especially sensitive to ${confounderText}.` : ""}`,
     },
     comparison_controls: [
       {
