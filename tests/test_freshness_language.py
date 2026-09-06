@@ -6,10 +6,13 @@ class FreshnessLanguageContract(unittest.TestCase):
         n=len(json.loads((ROOT/'data/benchmarks.json').read_text()))
         self.assertIn(f'组织 {n} 个 Benchmark',(ROOT/'README.md').read_text())
         self.assertIn(f'{n} benchmarks organized by',(ROOT/'README.en.md').read_text())
-    def test_frontier_has_explicit_selection_not_opaque_scatter(self):
+    def test_frontier_separates_factual_watchlist_from_interpretation(self):
         t=(ROOT/'web/src/pages/[lang]/frontier/index.astro').read_text()
-        self.assertIn('every active canonical benchmark',t)
-        self.assertIn('Discovery last verified',t)
+        self.assertIn('Factual window',t)
+        self.assertIn('objective inclusion rules',t)
+        self.assertIn('Interpretive layer',t)
+        self.assertIn('timeline/',t)
+        self.assertIn('freshness.discovery_scan_at',t)
         self.assertNotIn('progress-map__point',t)
         self.assertNotIn('getProgressPoint',t)
     def test_scale_qa_chinese_avoids_unnecessary_english_prose(self):

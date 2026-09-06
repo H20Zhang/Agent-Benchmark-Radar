@@ -14,27 +14,27 @@ const copy = copyFor(lang);
 const research = loadResearchModel();
 const canonicalPath = localePath(lang, "opportunities/");
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", "opportunities/");
-const title = lang === "zh" ? "Agent Benchmark 评测机会地图｜发现下一步研究坐标" : "Agent Benchmark Opportunity Map | Discover the Next Evaluation Coordinate";
-const description = lang === "zh" ? "从研究重要性、当前证据、下一坐标和可执行评测设计发现值得补充的 Agent Benchmark。" : "Discover agent benchmark opportunities through research importance, current evidence, next coordinates, and executable evaluation designs.";
+const title = lang === "zh" ? "Agent Benchmark 研究机会｜基于现有证据的待验证假设" : "Agent Benchmark Opportunities | Hypotheses to Validate from Current Evidence";
+const description = lang === "zh" ? "研究机会是基于现有 Benchmark 证据边界提出的解释与候选评测设计，不属于与发布时间轴同等级的事实。" : "Research opportunities are interpretations and candidate evaluation designs inferred from current benchmark evidence, not facts at the same confidence level as release chronology.";
 const jsonLd = { "@context": "https://schema.org", "@type": "CollectionPage", name: title, description, url: absoluteUrl(canonicalPath), inLanguage: copy.langTag, numberOfItems: research.opportunities.length };
 ---
 
 <BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} {jsonLd} bodyClass="radar-page opportunities-page">
   <Header {lang} alternatePath={alternatePath} />
   <main id="main-content">
-    <section class="tool-hero shell"><p class="eyebrow">Opportunity map</p><h1>{lang === "zh" ? "找到下一步值得建立的评测坐标" : "Find the next evaluation coordinate worth building"}</h1><p>{description}</p></section>
+    <section class="tool-hero shell"><p class="eyebrow">{lang === "zh" ? "研究机会 · 解释层" : "Research opportunities · interpretive layer"}</p><h1>{lang === "zh" ? "把当前证据边界转成下一步待验证假设" : "Turn current evidence boundaries into hypotheses to validate next"}</h1><p>{description}</p><p><a href={sitePath(localePath(lang, "timeline/"))}>{lang === "zh" ? "先查看可信 Benchmark 时间轴 →" : "Start from the canonical benchmark timeline →"}</a></p></section>
     <section class="opportunity-map shell" data-opportunity-map>
-      <div class="opportunity-map__controls"><button class="is-active" type="button" data-opportunity-area="all">{lang === "zh" ? "全部机会" : "All opportunities"}</button>{AREAS.map((area) => <button type="button" data-opportunity-area={area}>{copy.areas[area].label}</button>)}</div>
-      <div class="opportunity-map__axis"><span>{lang === "zh" ? "已有证据" : "Current evidence"}</span><i></i><span>{lang === "zh" ? "下一坐标" : "Next coordinate"}</span><i></i><span>{lang === "zh" ? "可执行设计" : "Executable design"}</span></div>
+      <div class="opportunity-map__controls"><button class="is-active" type="button" data-opportunity-area="all">{lang === "zh" ? "全部假设" : "All hypotheses"}</button>{AREAS.map((area) => <button type="button" data-opportunity-area={area}>{copy.areas[area].label}</button>)}</div>
+      <div class="opportunity-map__axis"><span>{lang === "zh" ? "事实证据" : "Evidence"}</span><i></i><span>{lang === "zh" ? "推断坐标" : "Inferred coordinate"}</span><i></i><span>{lang === "zh" ? "候选实验" : "Candidate experiment"}</span></div>
       <div class="opportunity-map__grid">
         {research.opportunities.map((opportunity: any, index: number) => (
           <article data-opportunity-card data-area={opportunity.area}>
-            <div class="opportunity-map__meta"><span>{String(index + 1).padStart(2, "0")} · {copy.areas[opportunity.area].label}</span><small>{opportunity.confidence === "high" ? (lang === "zh" ? "高置信信号" : "High-confidence signal") : (lang === "zh" ? "演进信号" : "Emerging signal")}</small></div>
+            <div class="opportunity-map__meta"><span>{String(index + 1).padStart(2, "0")} · {copy.areas[opportunity.area].label}</span><small>{opportunity.confidence === "high" ? (lang === "zh" ? "高置信推断" : "High-confidence inference") : (lang === "zh" ? "探索性推断" : "Emerging inference")}</small></div>
             <h2><a href={sitePath(localePath(lang, `opportunities/${opportunity.id}/`))}>{localize(opportunity.title, lang)}</a></h2>
-            <div class="opportunity-map__evidence"><span>{lang === "zh" ? "为什么重要" : "Why it matters"}</span><p>{localize(opportunity.why_it_matters, lang)}</p></div>
-            <div class="opportunity-map__next"><span>{lang === "zh" ? "下一坐标" : "Next coordinate"}</span><p>{localize(opportunity.next_coordinate, lang)}</p></div>
-            <div class="opportunity-map__design"><span>{lang === "zh" ? "评测起点" : "Evaluation start"}</span><p>{localize(opportunity.candidate_evaluation, lang)}</p></div>
-            <a class="opportunity-map__action" href={sitePath(localePath(lang, `opportunities/${opportunity.id}/`))}>{lang === "zh" ? "查看证据与评测协议" : "Inspect evidence and protocol"} ↗</a>
+            <div class="opportunity-map__evidence"><span>{lang === "zh" ? "为什么可能重要" : "Why it may matter"}</span><p>{localize(opportunity.why_it_matters, lang)}</p></div>
+            <div class="opportunity-map__next"><span>{lang === "zh" ? "推断的下一坐标" : "Inferred next coordinate"}</span><p>{localize(opportunity.next_coordinate, lang)}</p></div>
+            <div class="opportunity-map__design"><span>{lang === "zh" ? "候选评测起点" : "Candidate evaluation start"}</span><p>{localize(opportunity.candidate_evaluation, lang)}</p></div>
+            <a class="opportunity-map__action" href={sitePath(localePath(lang, `opportunities/${opportunity.id}/`))}>{lang === "zh" ? "查看证据、置信度与推断边界" : "Inspect evidence, confidence, and inference boundary"} ↗</a>
           </article>
         ))}
       </div>

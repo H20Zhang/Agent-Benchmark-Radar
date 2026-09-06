@@ -20,6 +20,7 @@ const detailPath = sitePath(localePath(lang, `benchmarks/${item.id}/`));
 const citationCount = item.citations?.status === "ok" ? item.citations.count : undefined;
 const searchText = [
   item.name,
+  summary,
   item.summary,
   item.measurement_strength,
   ...(item.capabilities || []),
@@ -30,6 +31,7 @@ const stableFacets = getStableFacetValues(item);
 const primaryTrack = resultSet && (resultSet.tracks.find((track: any) => track.primary) || resultSet.tracks[0]);
 const resultSummary = primaryTrack ? summarizeTrack(primaryTrack) : undefined;
 const resultStatus = resultSet ? "tracked" : "untracked";
+const resultTrackingStatus = resultSet?.tracking_status || "untracked";
 const headroomBand = resultSummary?.headroom === undefined
   ? "unknown"
   : resultSummary.headroom >= 30
@@ -53,6 +55,7 @@ const tokenLabel = (value: string) => localizeTechnicalToken(value, lang, displa
   data-protocols={JSON.stringify(item.protocol || [])}
   data-stable-facets={JSON.stringify(stableFacets)}
   data-result-status={resultStatus}
+  data-result-tracking-status={resultTrackingStatus}
   data-headroom-band={headroomBand}
   data-metric-family={primaryTrack?.metric?.family || ""}
   data-citations={citationCount ?? -1}
@@ -75,15 +78,16 @@ const tokenLabel = (value: string) => localizeTechnicalToken(value, lang, displa
   <div class="benchmark-card__progress">
     {primaryTrack && resultSummary ? (
       <div class="benchmark-card__result">
-        <span>{lang === "zh" ? "当前最好" : "Current best"}</span>
+        <span>{lang === "zh" ? "该结果轨道报告最佳" : "Reported best on this track"}</span>
         <strong>{resultSummary.best.score}<small>{primaryTrack.metric.unit}</small></strong>
         <p>{resultSummary.best.method}</p>
         <small>{primaryTrack.label?.[lang] || primaryTrack.label?.en}</small>
-        <em>{resultSummary.headroom !== undefined ? (lang === "zh" ? `参考空间 ${resultSummary.headroom}%` : `${resultSummary.headroom}% reference headroom`) : (lang === "zh" ? "无统一上限" : "No shared ceiling")}</em>
+        <em>{lang === "zh" ? `结果核验 ${resultSet.verified_at}` : `Result verified ${resultSet.verified_at}`}</em>
+        {resultSummary.headroom !== undefined && <em>{lang === "zh" ? `到参考目标的归一化距离 ${resultSummary.headroom}%` : `${resultSummary.headroom}% normalized distance to reference target`}</em>}
       </div>
     ) : (
       <div class="benchmark-card__result benchmark-card__result--empty">
-        <span>{lang === "zh" ? "当前成绩" : "Current result"}</span>
+        <span>{lang === "zh" ? "结果轨道" : "Result track"}</span>
         <p>{lang === "zh" ? "尚未结构化" : "Not structured yet"}</p>
       </div>
     )}

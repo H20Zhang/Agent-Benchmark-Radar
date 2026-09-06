@@ -11,11 +11,10 @@ const copy = copyFor(lang);
 ---
 
 <footer class="site-footer">
-  <div class="site-footer__signal" aria-hidden="true">
-    <span></span><span></span><span></span><span></span>
-  </div>
-  <p class="site-footer__statement">{copy.footer.statement}</p>
+  <div class="site-footer__signal" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+  <p class="site-footer__statement">{lang === "zh" ? "先用时间轴确认 Benchmark 事实，再进入结果证据与研究解释。" : "Anchor benchmark facts in the timeline before moving to result evidence and research interpretation."}</p>
   <div class="site-footer__links">
+    <a href={sitePath(localePath(lang, "timeline/"))}>{lang === "zh" ? "Benchmark 时间轴" : "Timeline"}</a>
     <a href={sitePath(localePath(lang, "benchmarks/"))}>{copy.nav.benchmarks}</a>
     <a href={sitePath(localePath(lang, "opportunities/"))}>{copy.nav.opportunities}</a>
     <a href={sitePath(localePath(lang, "frontier/"))}>{copy.nav.frontier}</a>

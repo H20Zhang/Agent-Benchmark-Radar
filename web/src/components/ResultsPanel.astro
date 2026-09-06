@@ -10,9 +10,9 @@ interface Props {
 
 const { lang, resultSet } = Astro.props;
 const labels = lang === "zh" ? {
-  eyebrow: "成绩进展",
-  title: "当前方法做到什么程度",
-  verified: "最后核验",
+  eyebrow: "结果证据",
+  title: "各自 protocol cell 内报告了什么",
+  verified: "结果最后核验",
   task: "任务",
   split: "数据切分",
   protocol: "评测协议",
@@ -20,15 +20,15 @@ const labels = lang === "zh" ? {
   score: "分数",
   date: "结果日期",
   source: "来源",
-  best: "当前最佳",
-  headroom: "到参考目标的归一化空间",
+  best: "该轨道报告最佳",
+  headroom: "到来源支持参考目标的归一化距离",
   direction: "优化方向",
   higher: "越高越好",
   lower: "越低越好",
 } : {
-  eyebrow: "Measured progress",
-  title: "How far current methods have progressed",
-  verified: "Last verified",
+  eyebrow: "Result evidence",
+  title: "What is reported inside each protocol cell",
+  verified: "Result last verified",
   task: "Task",
   split: "Split",
   protocol: "Protocol",
@@ -36,8 +36,8 @@ const labels = lang === "zh" ? {
   score: "Score",
   date: "Result date",
   source: "Source",
-  best: "Current best",
-  headroom: "Normalized headroom to reference target",
+  best: "Reported best on this track",
+  headroom: "Normalized distance to a source-backed reference target",
   direction: "Direction",
   higher: "Higher is better",
   lower: "Lower is better",
@@ -59,7 +59,7 @@ const statusLabel = lang === "zh"
 
 <section id="results" class="results-panel" aria-labelledby="results-heading">
   <div class="results-panel__heading">
-    <div><p class="eyebrow">{labels.eyebrow}</p><h2 id="results-heading">{labels.title}</h2></div>
+    <div><p class="eyebrow">{labels.eyebrow}</p><h2 id="results-heading">{labels.title}</h2><p>{lang === "zh" ? "不同轨道、任务、数据切分或协议版本之间的数值不自动可比。" : "Values from different tracks, tasks, splits, or protocol versions are not automatically comparable."}</p></div>
     <div class="results-panel__status"><span>{statusLabel}</span><time datetime={resultSet.verified_at}>{labels.verified} · {resultSet.verified_at}</time></div>
   </div>
 

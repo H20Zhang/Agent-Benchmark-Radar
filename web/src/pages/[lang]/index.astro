@@ -38,131 +38,66 @@ const counts: Record<AreaId, number> = {
   "data-agent": registry.filter((item) => item.area === "data-agent").length,
 };
 const areas: AreaCard[] = [
-  {
-    id: "agent-memory",
-    name: "Agent Memory",
-    thesis: lang === "zh" ? "从召回走向状态更新、经验迁移、多模态与完整 memory lifecycle。" : "From recall to state updates, experience transfer, multimodality, and the full memory lifecycle.",
-  },
-  {
-    id: "rag",
-    name: "RAG / Agentic Retrieval",
-    thesis: lang === "zh" ? "从静态相关性走向长程搜索、动态语料、轨迹诊断与可验证研究交付。" : "From static relevance to long-horizon search, dynamic corpora, trace diagnosis, and verifiable research deliverables.",
-  },
-  {
-    id: "data-agent",
-    name: "Data Agents",
-    thesis: lang === "zh" ? "从 SQL / code 正确走向数据发现、业务语义、完整工作流与可执行交付。" : "From SQL and code correctness to discovery, business semantics, complete workflows, and executable deliverables.",
-  },
+  { id: "agent-memory", name: "Agent Memory", thesis: lang === "zh" ? "从召回走向状态更新、经验迁移、多模态与完整 memory lifecycle。" : "From recall to state updates, experience transfer, multimodality, and the full memory lifecycle." },
+  { id: "rag", name: "RAG / Agentic Retrieval", thesis: lang === "zh" ? "从静态相关性走向长程搜索、动态语料、轨迹诊断与可验证研究交付。" : "From static relevance to long-horizon search, dynamic corpora, trace diagnosis, and verifiable research deliverables." },
+  { id: "data-agent", name: "Data Agents", thesis: lang === "zh" ? "从 SQL / code 正确走向数据发现、业务语义、完整工作流与可执行交付。" : "From SQL and code correctness to discovery, business semantics, complete workflows, and executable deliverables." },
 ];
-const title = lang === "zh" ? "Agent Benchmark Radar｜Agent 评测研究地图" : "Agent Benchmark Radar | Research Map for Agent Evaluation";
+const title = lang === "zh" ? "Agent Benchmark Radar｜以可信时间轴为主轴的 Agent 评测地图" : "Agent Benchmark Radar | Agent evaluation anchored in a canonical timeline";
 const description = lang === "zh"
-  ? `持续维护 ${registry.length} 个 Agent Memory、Agentic Retrieval 与 Data Agent Benchmark：最新发布、评测协议、结果边界、研究缺口与详情页。`
-  : `A maintained research map of ${registry.length} Agent Memory, Agentic Retrieval, and Data Agent benchmarks: releases, protocols, score boundaries, gaps, and deep reads.`;
+  ? `持续维护 ${registry.length} 个 Agent Memory、Agentic Retrieval 与 Data Agent Benchmark。发布事实以时间轴为主轴；成绩、Frontier 与研究机会作为带边界的解释层。`
+  : `A maintained map of ${registry.length} Agent Memory, Agentic Retrieval, and Data Agent benchmarks. Release facts are anchored in the canonical timeline; results, frontier judgments, and opportunities are bounded interpretive layers.`;
 ---
 
-<BaseLayout
-  {lang}
-  {title}
-  {description}
-  {canonicalPath}
-  zhPath={lang === "zh" ? canonicalPath : alternatePath}
-  enPath={lang === "en" ? canonicalPath : alternatePath}
-  robots="index,follow"
-  bodyClass="radar-page content-home"
->
+<BaseLayout {lang} {title} {description} {canonicalPath} zhPath={lang === "zh" ? canonicalPath : alternatePath} enPath={lang === "en" ? canonicalPath : alternatePath} robots="index,follow" bodyClass="radar-page content-home">
   <Header {lang} alternatePath={alternatePath} />
   <main id="main-content" class="content-home__main">
     <section class="content-home__intro shell">
-      <p class="content-home__kicker">Agent Benchmark Radar</p>
-      <h1>{lang === "zh" ? "先看评测发生了什么，再决定用哪个 Benchmark" : "See what evaluation changed before choosing a benchmark"}</h1>
+      <p class="content-home__kicker">Agent Benchmark Radar · Canonical timeline first</p>
+      <h1>{lang === "zh" ? "先用时间轴确认发生了什么，再讨论评测前沿" : "Establish what happened on the timeline before interpreting the frontier"}</h1>
       <p class="content-home__lede">{description}</p>
       <div class="content-home__status" aria-label={lang === "zh" ? "内容状态" : "Content status"}>
         <span><strong>{registry.length}</strong> {lang === "zh" ? "个 Benchmark" : "benchmarks"}</span>
-        <span><strong>{latestVerified}</strong> {lang === "zh" ? "最近核验" : "latest verification"}</span>
-        <a href={sitePath(localePath(lang, "benchmarks/"))}>{lang === "zh" ? "搜索完整 Library →" : "Search the full library →"}</a>
+        <span><strong>{latestVerified}</strong> {lang === "zh" ? "最近条目核验" : "latest registry verification"}</span>
+        <a href={sitePath(localePath(lang, "timeline/"))}>{lang === "zh" ? "打开完整可信时间轴 →" : "Open the canonical timeline →"}</a>
+        <a href={sitePath(localePath(lang, "benchmarks/"))}>{lang === "zh" ? "搜索 Library →" : "Search the library →"}</a>
       </div>
     </section>
 
-    <section class="content-home__section shell" aria-labelledby="recent-heading">
+    <section id="timeline" class="content-home__section shell" aria-labelledby="recent-heading">
       <div class="content-home__section-head">
         <div>
-          <p class="content-home__label">{lang === "zh" ? "最新发布" : "Latest releases"}</p>
-          <h2 id="recent-heading">{lang === "zh" ? "最近进入评测视野的 Benchmark" : "Benchmarks most recently entering the evaluation landscape"}</h2>
+          <p class="content-home__label">{lang === "zh" ? "事实层 · 最新发布" : "Factual layer · Latest releases"}</p>
+          <h2 id="recent-heading">{lang === "zh" ? "最近进入时间轴的 Benchmark" : "Benchmarks most recently entering the timeline"}</h2>
         </div>
-        <a href={sitePath(localePath(lang, "frontier/"))}>{lang === "zh" ? "看 Frontier 判断 →" : "Read frontier analysis →"}</a>
+        <a href={sitePath(localePath(lang, "timeline/"))}>{lang === "zh" ? "查看完整时间轴 →" : "View the full timeline →"}</a>
       </div>
       <div class="content-home__table-wrap">
         <table class="content-home__table">
-          <thead><tr>
-            <th>{lang === "zh" ? "时间" : "Release"}</th>
-            <th>Benchmark</th>
-            <th>{lang === "zh" ? "方向" : "Area"}</th>
-            <th>{lang === "zh" ? "它测什么" : "What it measures"}</th>
-          </tr></thead>
+          <thead><tr><th>{lang === "zh" ? "发布时间" : "Release"}</th><th>Benchmark</th><th>{lang === "zh" ? "方向" : "Area"}</th><th>{lang === "zh" ? "它测什么" : "What it measures"}</th></tr></thead>
           <tbody>
-            {recent.map((item) => (
-              <tr>
-                <td><time>{item.released}</time></td>
-                <td><a href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}>{item.name}</a></td>
-                <td>{item.area === "agent-memory" ? "Memory" : item.area === "rag" ? "Retrieval" : "Data"}</td>
-                <td>{lang === "zh" ? (summaries.get(item.id) || item.summary) : item.summary}</td>
-              </tr>
-            ))}
+            {recent.map((item) => <tr><td><time>{item.released}</time></td><td><a href={sitePath(localePath(lang, `benchmarks/${item.id}/`))}>{item.name}</a></td><td>{item.area === "agent-memory" ? "Memory" : item.area === "rag" ? "Retrieval" : "Data"}</td><td>{lang === "zh" ? (summaries.get(item.id) || item.summary) : item.summary}</td></tr>)}
           </tbody>
         </table>
       </div>
     </section>
 
     <section class="content-home__section shell" aria-labelledby="signals-heading">
-      <div class="content-home__section-head">
-        <div>
-          <p class="content-home__label">{lang === "zh" ? "研究信号" : "Research signals"}</p>
-          <h2 id="signals-heading">{lang === "zh" ? "哪些变化会真的改变实验设计" : "Changes that actually alter experimental design"}</h2>
-        </div>
-      </div>
+      <div class="content-home__section-head"><div><p class="content-home__label">{lang === "zh" ? "解释层 · Frontier signals" : "Interpretive layer · Frontier signals"}</p><h2 id="signals-heading">{lang === "zh" ? "基于事实时间轴，我们如何解释测量边界变化" : "How we interpret changes in the measurement boundary"}</h2></div><a href={sitePath(localePath(lang, "frontier/"))}>{lang === "zh" ? "查看完整解释 →" : "Read the full interpretation →"}</a></div>
       <div class="content-home__signals">
-        {frontierShifts.slice(0, 6).map((shift: FrontierShift) => (
-          <article>
-            <p>{shift.area === "agent-memory" ? "Memory" : shift.area === "rag" ? "Retrieval" : "Data"}</p>
-            <h3>{localize(shift.title, lang)}</h3>
-            <div><strong>{lang === "zh" ? "变化：" : "Delta: "}</strong>{localize(shift.delta, lang)}</div>
-            <div><strong>{lang === "zh" ? "为什么重要：" : "Why it matters: "}</strong>{localize(shift.consequence, lang)}</div>
-            <p class="content-home__bench-links">
-              {shift.benchmarks.map((id: string) => {
-                const item = registry.find((entry) => entry.id === id);
-                return item ? <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{item.name}</a> : null;
-              })}
-            </p>
-          </article>
-        ))}
+        {frontierShifts.slice(0, 6).map((shift: FrontierShift) => <article><p>{shift.area === "agent-memory" ? "Memory" : shift.area === "rag" ? "Retrieval" : "Data"}</p><h3>{localize(shift.title, lang)}</h3><div><strong>{lang === "zh" ? "观察：" : "Observed delta: "}</strong>{localize(shift.delta, lang)}</div><div><strong>{lang === "zh" ? "解释：" : "Interpretation: "}</strong>{localize(shift.consequence, lang)}</div><p class="content-home__bench-links">{shift.benchmarks.map((id: string) => { const item = registry.find((entry) => entry.id === id); return item ? <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{item.name}</a> : null; })}</p></article>)}
       </div>
     </section>
 
     <section class="content-home__section shell" aria-labelledby="areas-heading">
-      <div class="content-home__section-head"><div><p class="content-home__label">{lang === "zh" ? "三条主线" : "Three research lines"}</p><h2 id="areas-heading">{lang === "zh" ? "按研究问题进入，而不是按页面功能进入" : "Enter by research question, not by product feature"}</h2></div></div>
-      <div class="content-home__areas">
-        {areas.map((area: AreaCard) => (
-          <article>
-            <div><span>{counts[area.id]}</span> {lang === "zh" ? "个基准" : "benchmarks"}</div>
-            <h3>{area.name}</h3>
-            <p>{area.thesis}</p>
-            <p><a href={sitePath(localePath(lang, `areas/${area.id}/`))}>{lang === "zh" ? "看能力地图与完整列表 →" : "Capability map and full list →"}</a></p>
-          </article>
-        ))}
-      </div>
+      <div class="content-home__section-head"><div><p class="content-home__label">{lang === "zh" ? "三条研究主线" : "Three research lines"}</p><h2 id="areas-heading">{lang === "zh" ? "从时间轴进入事实，再按研究问题进入解释" : "Use the timeline for facts, then enter interpretation by research question"}</h2></div></div>
+      <div class="content-home__areas">{areas.map((area: AreaCard) => <article><div><span>{counts[area.id]}</span> {lang === "zh" ? "个基准" : "benchmarks"}</div><h3>{area.name}</h3><p>{area.thesis}</p><p><a href={sitePath(localePath(lang, `areas/${area.id}/`))}>{lang === "zh" ? "看领域地图与完整列表 →" : "Area map and full list →"}</a></p></article>)}</div>
     </section>
 
-    <section class="content-home__section shell content-home__methods" aria-labelledby="method-heading">
-      <p class="content-home__label">{lang === "zh" ? "读分数之前" : "Before reading scores"}</p>
+    <section id="results" class="content-home__section shell content-home__methods" aria-labelledby="method-heading">
+      <p class="content-home__label">{lang === "zh" ? "结果证据纪律" : "Result evidence discipline"}</p>
       <h2 id="method-heading">{lang === "zh" ? "不同 protocol cell 的分数，不直接比较" : "Scores from different protocol cells are not directly comparable"}</h2>
-      <p>{lang === "zh"
-        ? "Radar 把模型版本、harness、工具接口、预算、停止 / 重试规则、环境与 evaluator 当成一等元数据。论文报告过的最好结果不自动等于当前 SOTA，距满分也不等于可实现 research headroom。"
-        : "Radar treats model version, harness, tools, budget, stopping/retry rules, environment, and evaluator as first-class metadata. A paper's best reported result is not automatically current SOTA, and distance to 100% is not realizable research headroom."}</p>
-      <div class="content-home__method-links">
-        <a href={sitePath(localePath(lang, "evaluate/"))}>{lang === "zh" ? "按 claim 组评测 →" : "Build an evaluation suite →"}</a>
-        <a href={sitePath(localePath(lang, "methodology/"))}>{lang === "zh" ? "方法与证据纪律 →" : "Methodology and evidence discipline →"}</a>
-        <a href={sitePath(localePath(lang, "opportunities/"))}>{lang === "zh" ? "真正还没测到什么 →" : "What remains unmeasured →"}</a>
-      </div>
+      <p>{lang === "zh" ? "时间轴负责回答“Benchmark 何时出现”这一强事实问题。结果页只报告各自 protocol cell 内的来源支持数字；Frontier 与 Opportunity 属于进一步解释，不与发布时间事实混为一层。" : "The timeline answers the high-confidence factual question of when a benchmark appeared. Result pages report source-backed values inside their own protocol cells; frontier and opportunity pages add interpretation rather than competing with release chronology as facts."}</p>
+      <div class="content-home__method-links"><a href={sitePath(localePath(lang, "evaluate/"))}>{lang === "zh" ? "按 claim 组评测 →" : "Build an evaluation suite →"}</a><a href={sitePath(localePath(lang, "methodology/"))}>{lang === "zh" ? "方法与证据纪律 →" : "Methodology and evidence discipline →"}</a><a href={sitePath(localePath(lang, "opportunities/"))}>{lang === "zh" ? "查看研究机会推断 →" : "Inspect opportunity hypotheses →"}</a></div>
     </section>
   </main>
   <SiteFooter {lang} />
@@ -203,13 +138,6 @@ const description = lang === "zh"
     .content-home__areas p { color: #444; font: 14px/1.65 ui-sans-serif, system-ui, sans-serif; }
     .content-home__methods > p:not(.content-home__label) { max-width: 900px; color: #444; font: 16px/1.7 ui-sans-serif, system-ui, sans-serif; }
     .content-home__method-links { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 20px; font: 600 14px/1.5 ui-sans-serif, system-ui, sans-serif; }
-    @media (max-width: 760px) {
-      .shell { width: min(100% - 28px, 1120px); }
-      .content-home__intro { padding-top: 48px; }
-      .content-home__section-head { display: block; }
-      .content-home__section-head > a { display: inline-block; margin-top: 14px; }
-      .content-home__signals, .content-home__areas { grid-template-columns: 1fr; }
-      .content-home__signals article, .content-home__signals article:nth-child(even) { padding: 22px 0; border-right: 0; }
-    }
+    @media (max-width: 760px) { .shell { width: min(100% - 28px, 1120px); } .content-home__intro { padding-top: 48px; } .content-home__section-head { display: block; } .content-home__section-head > a { display: inline-block; margin-top: 14px; } .content-home__signals, .content-home__areas { grid-template-columns: 1fr; } .content-home__signals article, .content-home__signals article:nth-child(even) { padding: 22px 0; border-right: 0; } }
   </style>
 </BaseLayout>

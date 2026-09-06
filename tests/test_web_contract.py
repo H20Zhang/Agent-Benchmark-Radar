@@ -44,7 +44,7 @@ class WebPublicationContractTest(unittest.TestCase):
                 self.assertNotIn("网站待完善；当前内容以本 README 为准。", text[:6000])
                 self.assertNotIn("Website under improvement; this README is the source of truth for now.", text[:6000])
 
-    def test_public_web_source_is_content_first_and_indexable(self):
+    def test_public_web_source_is_content_first_indexable_and_timeline_first(self):
         public_paths = [
             ROOT / "web" / "src" / "components",
             ROOT / "web" / "src" / "layouts",
@@ -60,14 +60,21 @@ class WebPublicationContractTest(unittest.TestCase):
         home = (ROOT / "web" / "src" / "pages" / "[lang]" / "index.astro").read_text(
             encoding="utf-8"
         )
+        timeline = (ROOT / "web" / "src" / "pages" / "[lang]" / "timeline" / "index.astro").read_text(
+            encoding="utf-8"
+        )
 
         self.assertNotIn("coverage_gap", source)
         self.assertNotIn("```mermaid", source)
         self.assertIn("data-filter-form", source)
         self.assertIn('robots="index,follow"', home)
         self.assertIn("Latest releases", home)
-        self.assertIn("Research signals", home)
+        self.assertIn("Canonical timeline first", home)
+        self.assertIn("Interpretive layer", home)
         self.assertIn("content-home__table", home)
+        self.assertIn("Strictly by released", timeline)
+        self.assertNotIn("loadAllResultSets", timeline)
+        self.assertNotIn("frontierShifts", timeline)
         self.assertNotIn("wip-shell", home)
         self.assertNotIn("Website under improvement", home)
         self.assertIn("benchmark-at-a-glance", source)

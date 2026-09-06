@@ -10,25 +10,25 @@ interface Props {
 const { lang, alternatePath = localePath(lang === "zh" ? "en" : "zh") } = Astro.props;
 const copy = copyFor(lang);
 const path = Astro.url.pathname;
-const homePath = sitePath(localePath(lang));
 const navItems = [
-  { href: sitePath(localePath(lang, "benchmarks/")), label: lang === "zh" ? "筛选 Benchmark" : "Browse", key: "/benchmarks/" },
-  { href: `${homePath}#timeline`, label: lang === "zh" ? "时间轴" : "Timeline", key: "#timeline" },
+  { href: sitePath(localePath(lang, "timeline/")), label: lang === "zh" ? "Benchmark 时间轴" : "Timeline", key: "/timeline/" },
+  { href: sitePath(localePath(lang, "benchmarks/")), label: lang === "zh" ? "Benchmark Library" : "Library", key: "/benchmarks/" },
   { href: sitePath(localePath(lang, "evaluate/")), label: lang === "zh" ? "评测组合" : "Suites", key: "/evaluate/" },
-  { href: `${homePath}#results`, label: lang === "zh" ? "当前成绩" : "Results", key: "#results" },
+  { href: sitePath(localePath(lang, "opportunities/")), label: lang === "zh" ? "研究机会" : "Opportunities", key: "/opportunities/" },
+  { href: sitePath(localePath(lang, "methodology/")), label: lang === "zh" ? "方法" : "Methodology", key: "/methodology/" },
 ];
 ---
 
 <header class="site-header site-header--tool">
   <div class="site-header__inner">
-    <a class="site-brand" href={homePath} aria-label={copy.siteName}>
+    <a class="site-brand" href={sitePath(localePath(lang))} aria-label={copy.siteName}>
       <span class="site-brand__mark" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="site-brand__name">Agent Benchmark Radar</span>
     </a>
     <nav class="site-nav" aria-label={lang === "zh" ? "主导航" : "Primary navigation"}>
       <div class="site-nav__primary">
         {navItems.map((item) => (
-          <a href={item.href} aria-current={item.key.startsWith("/") && path.includes(item.key) ? "page" : undefined}>{item.label}</a>
+          <a href={item.href} aria-current={path.includes(item.key) ? "page" : undefined}>{item.label}</a>
         ))}
       </div>
       <div class="site-nav__utility">
