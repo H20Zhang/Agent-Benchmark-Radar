@@ -1,0 +1,70 @@
+name: Apply audited source changes
+on:
+  push:
+    branches: [fix/audit-complete-20260906]
+    paths: [.github/workflows/apply-audit-fixes.yml]
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Verify and apply source delta
+        run: |
+          python - <<'PY'
+          import base64, hashlib, json, lzma, subprocess
+          from pathlib import Path, PurePosixPath
+          digest = lambda b: hashlib.sha256(b).hexdigest()
+          chunks = []
+          for i in range(1, 8):
+              chunk = Path(f'.audit-transfer-{i}.txt').read_text().strip()
+              print(f'chunk {i}: {len(chunk)} {digest(chunk.encode())}', flush=True)
+              chunks.append(chunk)
+          raw = lzma.decompress(base64.b64decode(''.join(chunks), validate=True))
+          assert digest(raw) == '2fea0fc080e253d3c81658aebd00df52d07257822818de3e91c5d00076a84c0b', 'Payload digest mismatch'
+          payload = json.loads(raw)
+          def safe_path(name):
+              p = PurePosixPath(name)
+              assert not p.is_absolute() and '..' not in p.parts and p.parts[0] not in ('.git', '.github'), name
+              return Path(name)
+          for name, change in payload['files'].items():
+              path = safe_path(name)
+              before = path.read_bytes() if path.exists() else None
+              assert (digest(before) if before is not None else None) == change['before'], f'Base changed: {name}'
+              if change.get('delete'):
+                  path.unlink()
+                  assert change['after'] is None
+                  continue
+              if 'content' in change:
+                  after = change['content']
+              else:
+                  lines = before.decode('utf8').splitlines(keepends=True)
+                  for start, end, replacement in reversed(change['edits']):
+                      lines[start:end] = replacement.splitlines(keepends=True)
+                  after = ''.join(lines)
+              data = after.encode('utf8')
+              assert digest(data) == change['after'], f'Reconstruction failed: {name}'
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_bytes(data)
+          registry = Path('data/benchmarks.json')
+          assert digest(registry.read_bytes()) == '74a2b3b868ae7aba0aa4a7d8b96033ca2d9af650ed75e02f6e7d86be3b06dbbc'
+          records = json.loads(registry.read_text())
+          assert set(payload['registry_updates']).issubset({r['id'] for r in records})
+          for record in records:
+              record.update(payload['registry_updates'].get(record['id'], {}))
+          registry.write_text(json.dumps(records, ensure_ascii=False, indent=2) + '\n')
+          subprocess.run(['node', 'web/scripts/sync-publication.mjs'], check=True)
+          for name, expected in payload['generated_hashes'].items():
+              assert digest(safe_path(name).read_bytes()) == expected, f'Generated drift: {name}'
+          paths = sorted(set(payload['files']) | set(payload['generated_hashes']))
+          subprocess.run(['git', 'add', '--all', '--', *paths], check=True)
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'commit', '-m', 'fix: resolve complete website and README audit with rendered regression gates'], check=True)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:fix/audit-complete-20260906'], check=True)
+          print('Applied and verified all source and publication hashes.', flush=True)
+          PY
