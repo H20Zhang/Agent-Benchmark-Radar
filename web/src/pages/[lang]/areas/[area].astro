@@ -33,11 +33,15 @@ const resultSets = loadAllResultSets();
 const genealogy = research.genealogy.areas.find((entry: any) => entry.id === area);
 const opportunities = research.opportunities.filter((entry: any) => entry.area === area);
 const frontierShifts = research.frontierShifts.filter((entry: any) => entry.area === area);
-const resultHighlights = items.filter((item) => resultSets.has(item.id)).slice(0, 4).map((item) => {
-  const resultSet = resultSets.get(item.id);
-  const track = resultSet.tracks.find((entry: any) => entry.primary) || resultSet.tracks[0];
-  return { item, track, resultSet, result: summarizeTrack(track) };
-});
+const resultHighlights = items
+  .filter((item) => resultSets.has(item.id))
+  .map((item) => {
+    const resultSet = resultSets.get(item.id);
+    const track = resultSet.tracks.find((entry: any) => entry.primary) || resultSet.tracks[0];
+    return { item, track, resultSet, result: summarizeTrack(track) };
+  })
+  .sort((a, b) => b.resultSet.verified_at.localeCompare(a.resultSet.verified_at) || b.item.released.localeCompare(a.item.released))
+  .slice(0, 4);
 const canonicalPath = localePath(lang, `areas/${area}/`);
 const alternatePath = localePath(lang === "zh" ? "en" : "zh", `areas/${area}/`);
 const title = `${copy.areas[area].label} Benchmark Radar | Agent Benchmark Radar`;
@@ -86,8 +90,8 @@ const jsonLd = {
         <p class="eyebrow">{copy.areas[area].short}</p>
         <h1>{copy.areas[area].label}</h1>
         <p>{copy.areas[area].intro}</p>
-        <a class="button button--primary" href={sitePath(`${localePath(lang, "benchmarks/")}?area=${area}`)}>
-          {copy.hero.primaryAction} <span aria-hidden="true">↗</span>
+        <a class="button button--primary" href={sitePath(`${localePath(lang, "timeline/")}`)}>
+          {lang === "zh" ? "先看完整时间轴" : "Start from the canonical timeline"} <span aria-hidden="true">↗</span>
         </a>
       </div>
       <dl class="area-hero__roles">
@@ -99,22 +103,22 @@ const jsonLd = {
 
     <section class="area-intelligence shell" data-area={area}>
       <div class="area-intelligence__genealogy">
-        <header><p class="eyebrow">Benchmark genealogy</p><h2>{lang === "zh" ? "测量能力怎样演进" : "How measurement evolved"}</h2><p>{localize(genealogy.thesis, lang)}</p></header>
+        <header><p class="eyebrow">{lang === "zh" ? "解释层 · Benchmark 谱系" : "Interpretive layer · Benchmark genealogy"}</p><h2>{lang === "zh" ? "对时间轴的一种演进解释" : "One interpretation of how measurement evolved"}</h2><p>{localize(genealogy.thesis, lang)}</p></header>
         <div>{genealogy.stages.map((stage: any, index: number) => <article><span>{String(index + 1).padStart(2, "0")}</span><h3>{localize(stage.label, lang)}</h3><div>{stage.benchmarks.map((id: string) => { const benchmark = allItems.find((entry) => entry.id === id); return benchmark && <a href={sitePath(localePath(lang, `benchmarks/${id}/`))}>{benchmark.name}</a>; })}</div></article>)}</div>
       </div>
 
-      {resultHighlights.length > 0 && <div class="area-intelligence__results"><header><p class="eyebrow">Measured progress</p><h2>{lang === "zh" ? "当前方法做到什么程度" : "How far current methods have progressed"}</h2></header><div>{resultHighlights.map(({ item, track, resultSet, result }: any) => <a href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}><span>{item.name}</span><strong>{result.best.score}<small>{track.metric.unit}</small></strong><p>{result.best.method} · {localize(track.label, lang)}</p><time datetime={resultSet.verified_at}>{resultSet.verified_at}</time></a>)}</div></div>}
+      {resultHighlights.length > 0 && <div class="area-intelligence__results"><header><p class="eyebrow">{lang === "zh" ? "结果快照 · 非跨基准排名" : "Result snapshots · not a cross-benchmark ranking"}</p><h2>{lang === "zh" ? "最近核验的结果轨道" : "Most recently verified result tracks"}</h2><p>{lang === "zh" ? "按结果核验日期排序。不同 Benchmark / protocol cell 的分数不直接比较。" : "Ordered by result verification date. Scores across different benchmarks or protocol cells are not directly comparable."}</p></header><div>{resultHighlights.map(({ item, track, resultSet, result }: any) => <a href={sitePath(localePath(lang, `benchmarks/${item.id}/#results`))}><span>{item.name}</span><strong>{result.best.score}<small>{track.metric.unit}</small></strong><p>{result.best.method} · {localize(track.label, lang)}</p><time datetime={resultSet.verified_at}>{lang === "zh" ? "结果核验 " : "Result verified "}{resultSet.verified_at}</time></a>)}</div></div>}
 
-      <div class="area-intelligence__opportunities"><header><p class="eyebrow">Next coordinates</p><h2>{lang === "zh" ? "下一步值得建立什么" : "What is worth building next"}</h2></header><div>{opportunities.map((opportunity: any) => <a href={sitePath(localePath(lang, `opportunities/${opportunity.id}/`))}><h3>{localize(opportunity.title, lang)}</h3><p>{localize(opportunity.next_coordinate, lang)}</p><span>{lang === "zh" ? "查看评测设计" : "Inspect evaluation design"} ↗</span></a>)}</div></div>
+      <div class="area-intelligence__opportunities"><header><p class="eyebrow">{lang === "zh" ? "解释层 · 研究机会" : "Interpretive layer · Research opportunities"}</p><h2>{lang === "zh" ? "哪些下一坐标值得验证" : "Which next coordinates are worth validating"}</h2></header><div>{opportunities.map((opportunity: any) => <a href={sitePath(localePath(lang, `opportunities/${opportunity.id}/`))}><h3>{localize(opportunity.title, lang)}</h3><p>{localize(opportunity.next_coordinate, lang)}</p><span>{lang === "zh" ? "查看证据与推断边界" : "Inspect evidence and inference boundary"} ↗</span></a>)}</div></div>
 
-      {frontierShifts.map((shift: any) => <aside class="area-intelligence__shift"><p class="eyebrow">Latest frontier shift · {shift.period}</p><h2>{localize(shift.title, lang)}</h2><p>{localize(shift.delta, lang)}</p><strong>{localize(shift.consequence, lang)}</strong></aside>)}
+      {frontierShifts.map((shift: any) => <aside class="area-intelligence__shift"><p class="eyebrow">{lang === "zh" ? "解释层 · Frontier shift" : "Interpretive layer · Frontier shift"} · {shift.period}</p><h2>{localize(shift.title, lang)}</h2><p>{localize(shift.delta, lang)}</p><strong>{localize(shift.consequence, lang)}</strong></aside>)}
     </section>
 
     <section class="area-registry">
       <div class="shell">
         <div class="section-heading">
-          <div><p class="eyebrow">Complete area registry</p><h2>{items.length} Benchmarks</h2></div>
-          <p>{lang === "zh" ? "按最近发布时间排列，直接进入每个评测的测量设计。" : "Ordered by latest release, with a direct path into each measurement design."}</p>
+          <div><p class="eyebrow">{lang === "zh" ? "本领域完整目录" : "Complete area registry"}</p><h2>{items.length} Benchmarks</h2></div>
+          <p>{lang === "zh" ? "按发布时间排列；发布日期事实以时间轴与规范记录为准。" : "Ordered by release time; release facts are anchored in the timeline and canonical registry."}</p>
         </div>
         <div class="benchmark-grid benchmark-grid--area">
           {items.map((item) => (
