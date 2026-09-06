@@ -12,7 +12,7 @@ test("home is a public content-first research index", () => {
     "loadResearchModel",
     "content-home__table",
     "Latest releases",
-    "Research signals",
+    "Canonical timeline first",
     'robots="index,follow"',
   ]) {
     assert.ok(page.includes(token), token);
