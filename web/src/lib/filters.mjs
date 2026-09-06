@@ -7,7 +7,7 @@ const ALLOWED_ROLES = new Set([
 ]);
 const ALLOWED_ARTIFACTS = new Set(["paper", "code", "data"]);
 const ALLOWED_SORTS = new Set(["newest", "oldest", "citations", "name"]);
-const ALLOWED_RESULT_STATUSES = new Set(["tracked", "untracked", "live", "snapshot"]);
+const ALLOWED_RESULT_STATUSES = new Set(["tracked", "untracked"]);
 const ALLOWED_HEADROOM_BANDS = new Set(["wide", "moderate", "limited", "unknown"]);
 const TAG_PATTERN = /^[\p{L}\p{N}][\p{L}\p{N}+._-]{0,99}$/u;
 
