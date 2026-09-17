@@ -438,6 +438,8 @@ def validate_record_time_contract(record: dict[str, object]) -> list[str]:
             "of unique lowercase stable tokens"
         )
     present = {field for field in V2_FIELDS if field in record}
+    if "published_at_precision" in record:
+        present.add("published_at_precision")
     if not present:
         if direction_keys_present:
             errors.append(
@@ -463,6 +465,8 @@ def validate_record_time_contract(record: dict[str, object]) -> list[str]:
 
     provenance = record.get("time_provenance")
     if provenance == "legacy_unknown":
+        if "published_at_precision" in record:
+            errors.append(f"canonical record {identity}: published_at_precision is native-v2 metadata, not legacy metadata")
         if direction_keys_present:
             errors.append(
                 f"canonical record {identity}: direction_keys is native-v2 support "
@@ -502,6 +506,33 @@ def validate_record_time_contract(record: dict[str, object]) -> list[str]:
     parsed_times: list[datetime] = []
     for field in ("published_at", "first_seen_at", "radar_published_at"):
         parsed = _strict_utc(record.get(field))
+        if field == "published_at" and "published_at_precision" in record:
+            # A calendar interval is not a fabricated midnight event timestamp.
+            # Its lower bound is used only to reject impossible event ordering.
+            parsed = None
+            precision = record.get("published_at_precision")
+            value = record.get(field)
+            evidence = record.get("release_date_evidence")
+            evidence = evidence.get("first_public_at", {}) if isinstance(evidence, dict) else {}
+            pattern = {"day": r"\d{4}-\d{2}-\d{2}", "month": r"\d{4}-\d{2}"}.get(precision) if isinstance(precision, str) else None
+            if (
+                pattern and isinstance(value, str) and re.fullmatch(pattern, value)
+                and value == record.get("first_public_at")
+                and isinstance(evidence, dict) and evidence.get("precision") == precision
+                and evidence.get("status") == "checked"
+                and isinstance(evidence.get("source"), str)
+                and evidence["source"].startswith("https://")
+            ):
+                try:
+                    day = date.fromisoformat(value if precision == "day" else value + "-01")
+                    parsed = datetime(day.year, day.month, day.day, tzinfo=timezone.utc)
+                except ValueError:
+                    pass
+            if parsed is None:
+                errors.append(f"canonical record {identity}: published_at_precision requires a valid day/month and matching checked first-public evidence")
+            else:
+                parsed_times.append(parsed)
+            continue
         if parsed is None:
             errors.append(
                 f"canonical record {identity}: native_v2 {field} must be a strict UTC "

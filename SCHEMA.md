@@ -23,13 +23,29 @@ This schema follows [Radar Agent Protocol v2](docs/RADAR_AGENT_PROTOCOL.md). The
 
 Untouched legacy records with none of these fields remain valid. Once any v2 field is present, the record must contain the complete explicit-legacy or native-v2 combination:
 
-- `published_at`: earliest public version of the work or protocol event; strict UTC for native-v2, or the exact honest `released` month/day value for explicit legacy;
+- `published_at`: earliest public version of the work or protocol event; strict UTC by default for native-v2 (explicit source precision is allowed below), or the exact honest `released` month/day value for explicit legacy;
 - `first_seen_at`: first observation of the canonical identity by this Radar; strict UTC for native-v2 and null for explicit legacy;
 - `radar_published_at`: first accepted public publication in this Radar; strict UTC for native-v2 and null for explicit legacy;
 - `time_provenance`: `native_v2` or `legacy_unknown`;
 - `map_delta`: `none`, `early_signal`, `reinforces`, `revises`, `splits`, or `retires`.
 
-Native-v2 timestamps use `YYYY-MM-DDTHH:MM:SSZ` and must satisfy `published_at <= first_seen_at <= radar_published_at`. The three events must not be copied from one another without evidence. Existing `released` values, including honest `YYYY-MM` precision, remain valid for untouched legacy records. Only the approved Timeline compatibility set is explicitly migrated with `published_at=released`, null discovery/Radar times, `time_provenance=legacy_unknown`, and `map_delta=early_signal`. A backfill preserves its historical publication time and uses the actual Radar acceptance time; a correction preserves original times and adds version/protocol history rather than overwriting them.
+Native-v2 observation timestamps use `YYYY-MM-DDTHH:MM:SSZ`; source timestamps use it when established. Exact events must satisfy `published_at <= first_seen_at <= radar_published_at`. Source-only calendar intervals follow the explicit precision rule below. The three events must not be copied from one another without evidence. Existing `released` values, including honest `YYYY-MM` precision, remain valid for untouched legacy records. Only the approved Timeline compatibility set is explicitly migrated with `published_at=released`, null discovery/Radar times, `time_provenance=legacy_unknown`, and `map_delta=early_signal`. A backfill preserves its historical publication time and uses the actual Radar acceptance time; a correction preserves original times and adds version/protocol history rather than overwriting them.
+
+### Source dates without an exact public timestamp
+
+For a newly accepted work whose primary source establishes only a calendar day or
+month, use `published_at_precision: day | month` and preserve that exact
+`published_at` string. It must match `first_public_at` and its checked,
+HTTPS-sourced `release_date_evidence` precision. This optional field triggers the
+complete native-v2 bundle; it cannot be used on legacy records. Without it,
+`published_at` still requires strict UTC. `first_seen_at` and `radar_published_at`
+always require strict UTC and their normal ordering.
+
+A day/month is an interval, not an event at invented midnight. Validation uses
+only the interval lower bound to reject a source wholly after discovery; it does
+not certify a precise within-interval ordering. Preserve conflicting primary
+source dates in evidence notes, choose only their supported common precision,
+and never move an older work into a new month because its paper appeared later.
 
 Native-v2 records used as rolling-period supports also declare `direction_keys`, a non-empty list of unique lowercase stable tokens. A support cited by a direction block with key `K` must carry `K` in `direction_keys`; two records count as same-direction reinforcement only when both carry the block's exact key. `direction_keys` by itself triggers the complete native-v2 time bundle. Native-v2 records not used as period supports may omit this adapter field. Explicit or implicit legacy records do not carry it, so this support binding does not trigger a bulk legacy rewrite.
 

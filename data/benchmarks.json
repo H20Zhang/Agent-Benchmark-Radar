@@ -10814,5 +10814,697 @@
       "evaluator": []
     },
     "facet_assignment_status": "imported-heuristic"
+  },
+  {
+    "id": "q2d-web",
+    "name": "Q2D-Web",
+    "area": "rag",
+    "released": "2026-09-08",
+    "importance": 4,
+    "summary": "Tests document retrieval for agent-rewritten queries against a large production-derived corpus, with citation, production-ranking, and pooled relevance labels.",
+    "capabilities": [
+      "agent-query-retrieval",
+      "multilingual-retrieval",
+      "evidence-recall"
+    ],
+    "environment": [
+      "production-derived-web-corpus",
+      "private-corpus"
+    ],
+    "protocol": [
+      "recall-at-k",
+      "ndcg-at-10",
+      "pooled-relevance-labels"
+    ],
+    "scale": "69,721 rewritten queries in ten languages over about 190 million documents; related queries originate from roughly 23,000 searches.",
+    "confounders": [
+      "production-selection",
+      "pooled-labels",
+      "llm-judge",
+      "document-truncation",
+      "related-queries"
+    ],
+    "evolution_role": "frontier",
+    "status": "active",
+    "measurement_strength": "Shifts retrieval evaluation toward the distribution of queries actually emitted by search agents; it is not an end-to-end agent benchmark.",
+    "coverage_gap": "Private inputs limit independent auditing; retrieval scores do not measure whether an agent uses the evidence correctly.",
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.08887",
+      "leaderboard": "https://huggingface.co/spaces/perplexity-ai/q2d-web-leaderboard"
+    },
+    "last_verified": "2026-09-17",
+    "published_at": "2026-09-08T15:26:05Z",
+    "first_seen_at": "2026-09-17T14:53:32Z",
+    "radar_published_at": "2026-09-17T15:26:02Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-08",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.08887v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-09-17",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Hosted evaluation; corpus, queries and qrels are not public.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.08887v1",
+      "checked_at": "2026-09-17",
+      "score_ceiling": "Production-selected documents and LLM/pooling judgments can privilege familiar retrieval patterns. Ranking preservation on existing models is not a guarantee for a new retriever or a different corpus.",
+      "next_control": "Use a downloadable control such as BrowseComp-Plus alongside this hosted test. Hold the answerer and evidence budget fixed before asking whether retrieval gains improve task success.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-17",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
+  },
+  {
+    "id": "hybrid-deep-research",
+    "name": "HybridDeepResearch",
+    "area": "data-agent",
+    "released": "2026-06",
+    "importance": 4,
+    "summary": "Tests whether agents preserve entities, filters and candidate sets while composing SQL database queries with web evidence.",
+    "capabilities": [
+      "sql-querying",
+      "web-search",
+      "cross-modal-constraint-transfer",
+      "result-set-fusion"
+    ],
+    "environment": [
+      "public-sqlite",
+      "live-web",
+      "frozen-web-corpus",
+      "governed-snowflake"
+    ],
+    "protocol": [
+      "end-to-end-binary-grading",
+      "execution-match",
+      "llm-answer-judge",
+      "eight-trials"
+    ],
+    "scale": "380 tasks: 203 SQL2S, 58 S2SQL and 119 parallel-fusion tasks; a deliberately hard 120-task subset is reported separately.",
+    "confounders": [
+      "preview-release-drift",
+      "hints",
+      "tool-backend",
+      "trials",
+      "llm-judge",
+      "hard-subset-selection"
+    ],
+    "evolution_role": "frontier",
+    "status": "active",
+    "measurement_strength": "Adds directional SQL-to-search, search-to-SQL and parallel-fusion handoffs rather than grading SQL and search independently.",
+    "coverage_gap": "Public SQLite development and governed Snowflake evaluation are different environments; scores do not isolate the cross-source handoff mechanism.",
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.09410",
+      "code": "https://github.com/Snowflake-AI-Research/HybridDeepResearch",
+      "data": "https://huggingface.co/datasets/Snowflake/HybridDeepResearch"
+    },
+    "last_verified": "2026-09-17",
+    "published_at": "2026-06",
+    "first_seen_at": "2026-09-17T14:53:32Z",
+    "radar_published_at": "2026-09-17T15:26:02Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-06",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://www.snowflake.com/en/blog/engineering/hybrid-deep-research-benchmark/",
+        "precision": "month",
+        "kind": "official-announcement-conflicting-days",
+        "verified_at": "2026-09-17",
+        "status": "checked",
+        "note": "Official blog: 2026-06-03; official repository README: 2026-06-02. Only their common month is established without assuming a timezone explanation."
+      }
+    },
+    "artifact_access": "Public task data and evaluator; paper preview and revised release must be distinguished.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.09410v1",
+      "checked_at": "2026-09-17",
+      "score_ceiling": "The official blog dates the introduction June 3 while the README says June 2. Retain June precision until reconciled; the September 8 paper is a later event, not the benchmark launch. Judge, hints, search backend and retry budget remain confounders.",
+      "next_control": "Compare no bridge hint, oracle bridge entity and full reference handoff under the same model and budget. This separates entity transfer from failures inside either SQL or search.",
+      "publication_type": "historical-backfill"
+    },
+    "published_at_precision": "month",
+    "version_events": [
+      {
+        "date": "2026-08",
+        "kind": "public-repository-preview",
+        "source": "https://github.com/Snowflake-AI-Research/HybridDeepResearch"
+      },
+      {
+        "date": "2026-09-08",
+        "kind": "paper-v1",
+        "source": "https://arxiv.org/abs/2609.09410v1"
+      },
+      {
+        "date": null,
+        "kind": "revised-public-release",
+        "observed_at": "2026-09-17",
+        "source": "https://github.com/Snowflake-AI-Research/HybridDeepResearch",
+        "note": "88 revised questions; exact release date not established."
+      }
+    ],
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-17",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
+  },
+  {
+    "id": "di-bench-data-intelligence",
+    "name": "DI-Bench (Data Intelligence)",
+    "area": "data-agent",
+    "released": "2026-09-04",
+    "importance": 4,
+    "summary": "Tests analytical computation with retrieved business rules using executable ground truth and a graph-based benchmark-generation protocol.",
+    "capabilities": [
+      "business-rule-grounding",
+      "analytical-computation",
+      "knowledge-retrieval"
+    ],
+    "environment": [
+      "two-public-databases",
+      "synthetic-business-documents",
+      "artifact-linkage-graph"
+    ],
+    "protocol": [
+      "executed-ground-truth",
+      "exact-answer-grading",
+      "oracle-rule-control",
+      "twenty-turn-budget"
+    ],
+    "scale": "731 generated tasks across two public source datasets: 449 Olist tasks and 282 Czech banking tasks, spanning nine analysis types.",
+    "confounders": [
+      "synthetic-business-rules",
+      "full-schema-access",
+      "two-domains",
+      "task-admission-judge"
+    ],
+    "evolution_role": "frontier",
+    "status": "active",
+    "measurement_strength": "Compared with SQL correctness alone, makes business-rule application and in-domain task generation explicit evaluation targets.",
+    "coverage_gap": "Two domains with constructed business documents do not establish generalization to real enterprise governance or undocumented rules.",
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.05776"
+    },
+    "last_verified": "2026-09-17",
+    "published_at": "2026-09-04",
+    "first_seen_at": "2026-09-17T14:53:32Z",
+    "radar_published_at": "2026-09-17T15:26:02Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-04",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.05776v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-09-17",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Paper protocol verified; standalone task package not independently located.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.05776v1",
+      "checked_at": "2026-09-17",
+      "score_ceiling": "This is the data-intelligence DI-Bench, not the similarly named dependency-inference benchmark. The public paper defines a reusable construction/evaluation protocol; an independently runnable task-package download was not verified in this review.",
+      "next_control": "Keep matched rule/no-rule questions and audit the executed computation against a rule trace. Add genuine enterprise documentation before claiming realistic organizational transfer.",
+      "publication_type": "historical-backfill"
+    },
+    "published_at_precision": "day",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-17",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
+  },
+  {
+    "id": "icm-bench",
+    "name": "ICM-Bench",
+    "area": "agent-memory",
+    "released": "2026-09-03",
+    "importance": 4,
+    "summary": "Tests person-linked recall, cross-episode identity retrieval and long-term profile inference over a synthetic multimodal life album.",
+    "capabilities": [
+      "person-linked-recall",
+      "cross-episode-identity",
+      "profile-inference"
+    ],
+    "environment": [
+      "synthetic-life-album",
+      "video-audio",
+      "timeline-prefix"
+    ],
+    "protocol": [
+      "open-answer-judge",
+      "before-clip-cutoff",
+      "full-timeline-profile",
+      "calibration-clip"
+    ],
+    "scale": "839 synthetic clips including calibration, about 141 minutes, six recurring adults, and 1,217 questions (400 recall, 500 retrieval, 317 profile).",
+    "confounders": [
+      "perception-frontends",
+      "answerer-model",
+      "synthetic-single-cast",
+      "caption-baseline-not-released"
+    ],
+    "evolution_role": "frontier",
+    "status": "active",
+    "measurement_strength": "Beyond general multimodal recall, isolates recurring-person linkage and profile evidence across an extended timeline.",
+    "coverage_gap": "A single synthetic cast does not establish robustness to diverse real people, long-term appearance changes, or downstream action.",
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.04438",
+      "code": "https://github.com/Shidu-Ren/ICM-Bench",
+      "data": "https://huggingface.co/datasets/ryanren0330/ICM-Bench"
+    },
+    "last_verified": "2026-09-17",
+    "published_at": "2026-09-03T19:58:51Z",
+    "first_seen_at": "2026-09-17T14:53:32Z",
+    "radar_published_at": "2026-09-17T15:26:02Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-03",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.04438v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-09-17",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Public data and integrations; direct caption-memory baseline implementation excluded.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.04438v2",
+      "checked_at": "2026-09-17",
+      "score_ceiling": "Video sampling, transcription, captioning and answerer configurations differ across systems. Their aggregate gap is not an isolated memory-architecture effect. A small separate generation pilot is not a second evaluated test domain.",
+      "next_control": "Freeze perception and the answering model, then compare full caption history with explicit person-event relations. Test identity swaps and evidence removal without exposing gold labels.",
+      "publication_type": "historical-backfill"
+    },
+    "version_events": [
+      {
+        "date": "2026-09-08",
+        "kind": "paper-v2",
+        "source": "https://arxiv.org/abs/2609.04438v2"
+      }
+    ],
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-17",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
+  },
+  {
+    "id": "memsecbench",
+    "name": "MemSecBench",
+    "area": "agent-memory",
+    "released": "2026-07-29",
+    "importance": 4,
+    "summary": "Tracks malicious memory from task-mediated writing through persistence and external consequences to selective repair with benign-memory preservation.",
+    "capabilities": [
+      "memory-poisoning",
+      "persistence",
+      "downstream-consequences",
+      "selective-repair",
+      "benign-retention"
+    ],
+    "environment": [
+      "isolated-agent-runtime",
+      "memory-backend",
+      "controlled-task-artifacts"
+    ],
+    "protocol": [
+      "write-execute-forget",
+      "forked-post-write-state",
+      "seven-evidence-checkpoints"
+    ],
+    "scale": "310 linked cases from 48 contexts; 24 configurations combine two harnesses, four memory stacks and three served LLMs.",
+    "confounders": [
+      "harness-adapter",
+      "served-model",
+      "judge-model",
+      "conditional-denominators",
+      "fixed-attack-cues"
+    ],
+    "evolution_role": "frontier",
+    "status": "active",
+    "measurement_strength": "Compared with poisoning or utility tests alone, links consequence and repair to the same verified post-write state.",
+    "coverage_gap": "Conditional lifecycle risk after attacker content enters a supported carrier is not an estimate of real-world compromise frequency.",
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2607.27080"
+    },
+    "last_verified": "2026-09-17",
+    "published_at": "2026-07-29T16:06:54Z",
+    "first_seen_at": "2026-09-17T14:53:32Z",
+    "radar_published_at": "2026-09-17T15:26:02Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-07-29",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2607.27080v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-09-17",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Full paper and reusable lifecycle protocol; standalone package not independently located.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2607.27080v1",
+      "checked_at": "2026-09-17",
+      "score_ceiling": "The backend treatment includes its adapter and active settings. Matched comparisons support differences between evaluated stacks, not a universal ranking of pure storage mechanisms. Public protocol details are verified; a downloadable implementation was not independently located.",
+      "next_control": "Fix harness, model and initialization, then report unconditional harm plus conditional repair and retained benign utility. Add a no-attack control to expose destructive defenses.",
+      "publication_type": "historical-backfill"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-17",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
+  },
+  {
+    "id": "crossmodalqa",
+    "name": "CrossModalQA",
+    "area": "rag",
+    "released": "2026-08-31",
+    "importance": 3,
+    "summary": "Tests text-question answering that requires multi-hop transitions between textual and visual evidence, with retrieval and answer metrics.",
+    "capabilities": [
+      "cross-modal-retrieval",
+      "multi-hop-evidence-composition"
+    ],
+    "environment": [
+      "wikipedia",
+      "wikimedia-images",
+      "multimodal-knowledge-graph"
+    ],
+    "protocol": [
+      "retrieval-at-k",
+      "atomic-answer-f1",
+      "exact-match",
+      "oracle-evidence-ablations"
+    ],
+    "scale": "1,863 questions over 4,987 Wikipedia articles and 4,431 Commons images, with five evidence-path types.",
+    "confounders": [
+      "synthetic-question-paths",
+      "generator-family",
+      "small-fixed-corpus",
+      "restricted-baseline-adaptations"
+    ],
+    "evolution_role": "frontier",
+    "status": "active",
+    "measurement_strength": "Adds explicit cross-modal evidence paths rather than treating the presence of an image as proof of multimodal reasoning.",
+    "coverage_gap": "Gold-document hit does not establish recovery of the complete evidence chain; the benchmark is not an open-web interactive agent test.",
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.05518"
+    },
+    "last_verified": "2026-09-17",
+    "published_at": "2026-08-31T16:00:59Z",
+    "first_seen_at": "2026-09-17T14:53:32Z",
+    "radar_published_at": "2026-09-17T15:26:02Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-08-31",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.05518v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-09-17",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Paper protocol verified; standalone dataset endpoint not independently confirmed.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.05518v1",
+      "checked_at": "2026-09-17",
+      "score_ceiling": "Constructed paths, question-generation checks and a small fixed corpus can favor the intended traversal. The paper protocol was verified; a standalone public dataset endpoint was not independently confirmed.",
+      "next_control": "Pair complete-chain recall with answer accuracy under fixed evidence length. Test wrong-bridge negatives and modality removal against an equally strong text-only control.",
+      "publication_type": "historical-backfill"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-17",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
+  },
+  {
+    "id": "muses-citeroots",
+    "name": "MUSES / CiteRoots",
+    "area": "rag",
+    "released": "2026-08-31",
+    "importance": 4,
+    "summary": "Tests prospective literature retrieval from an author’s prior work, separating later citations, unfamiliar sources, rhetorical roots and author-endorsed inspiration.",
+    "capabilities": [
+      "prospective-literature-retrieval",
+      "author-context",
+      "unfamiliar-source-discovery"
+    ],
+    "environment": [
+      "fixed-paper-corpus",
+      "author-history",
+      "time-restricted-inputs"
+    ],
+    "protocol": [
+      "author-disjoint-split",
+      "citation-tiers",
+      "rhetorical-root-labels",
+      "author-endorsement"
+    ],
+    "scale": "About 1.04 million author-conditioned instances over 2.33 million papers; 1,518 collected author-endorsed pairs are not all retrieval-evaluable.",
+    "confounders": [
+      "retrospective-endorsement",
+      "sparse-gold-labels",
+      "cohort-selection",
+      "pretraining-contamination"
+    ],
+    "evolution_role": "frontier",
+    "status": "active",
+    "measurement_strength": "Makes future-use retrieval and the distinction between citation role and actual author endorsement explicit, instead of treating citation as a single relevance label.",
+    "coverage_gap": "Time-safe retrieval inputs do not make retrospective endorsement labels prospective experimental evidence of scientific impact.",
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.00313"
+    },
+    "last_verified": "2026-09-17",
+    "published_at": "2026-08-31",
+    "first_seen_at": "2026-09-17T14:53:32Z",
+    "radar_published_at": "2026-09-17T15:26:02Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-08-31",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.00313v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-09-17",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Paper and target definitions verified; a concrete downloadable release was not independently located.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.00313v1",
+      "checked_at": "2026-09-17",
+      "score_ceiling": "Agreement with citation rhetoric is not agreement with author-endorsed inspiration. Avoid causal claims about creativity from retrieval scores. Release claims are present in the paper, but a specific downloadable package was not independently verified.",
+      "next_control": "Keep the multi-centroid baseline, match cohorts and positive-label counts, and blind the endorsement audit. Evaluate whether retrieved unfamiliar work changes a later research decision, rather than only recovering retrospective labels.",
+      "publication_type": "historical-backfill"
+    },
+    "published_at_precision": "day",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-17",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
+  },
+  {
+    "id": "ontologybench",
+    "name": "OntologyBench",
+    "area": "rag",
+    "released": "2026-09-08",
+    "importance": 3,
+    "summary": "Tests whether dense retrieval satisfies ontology-defined concepts, relations and conjunctive phenotype constraints rather than semantic similarity alone.",
+    "capabilities": [
+      "concept-grounding",
+      "relation-retrieval",
+      "conjunctive-constraints"
+    ],
+    "environment": [
+      "biomedical-ontologies",
+      "fixed-checksummed-tasks"
+    ],
+    "protocol": [
+      "binary-qrels",
+      "ndcg-at-10",
+      "mrr",
+      "recall-at-k",
+      "transductive-split"
+    ],
+    "scale": "Eight tasks; the released evaluator lists 36,285 queries. The paper’s 471,854 training and 125,744 evaluation counts denote positive query-document pairs, not distinct queries.",
+    "confounders": [
+      "shared-entities",
+      "inverse-relation-overlap",
+      "candidate-recall",
+      "upstream-ontology-version"
+    ],
+    "evolution_role": "frontier",
+    "status": "active",
+    "measurement_strength": "Adds structured compatibility targets and ontology-aware diagnostic baselines to text retrieval evaluation.",
+    "coverage_gap": "Shared ontology vocabulary and allowed cross-task overlap do not establish unseen-entity induction or clinical diagnostic validity.",
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.08174",
+      "code": "https://github.com/cindyzhangxy/OntologyBench",
+      "data": "https://huggingface.co/datasets/cxyzhang/OntologyBench"
+    },
+    "last_verified": "2026-09-17",
+    "published_at": "2026-09-08",
+    "first_seen_at": "2026-09-17T14:53:32Z",
+    "radar_published_at": "2026-09-17T15:26:02Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-08",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.08174v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-09-17",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Public checksummed task artifacts, evaluators and result provenance; training checkpoints are not distributed.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.08174v1",
+      "checked_at": "2026-09-17",
+      "score_ceiling": "Task-wise directed-pair separation is not entity-disjoint or inverse-relation-disjoint evaluation. Report the split explicitly; do not call these results inductive generalization or medical performance.",
+      "next_control": "Add entity- and inverse-edge-disjoint controls and an oracle candidate pool. Separate missing candidates from ranking failures and unsatisfied conjunctions.",
+      "publication_type": "recent-discovery"
+    },
+    "published_at_precision": "day",
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-17",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
+  },
+  {
+    "id": "mr-lhdr",
+    "name": "Mr.LHDR",
+    "area": "rag",
+    "released": "2026-09-10",
+    "importance": 4,
+    "summary": "Tests long-horizon multimodal research with final-answer accuracy and explicitly dependency-conditioned intermediate-conclusion coverage.",
+    "capabilities": [
+      "long-horizon-search",
+      "multimodal-evidence",
+      "dependency-consistent-synthesis"
+    ],
+    "environment": [
+      "live-web",
+      "multimodal-artifacts",
+      "hidden-checklist-dag"
+    ],
+    "protocol": [
+      "overall-accuracy",
+      "strict-accuracy",
+      "checklist-score",
+      "dependency-aware-checklist-score"
+    ],
+    "scale": "102 questions across eight categories, with 1,231 annotated intermediate conclusions; average checklist length 12.1 and dependency depth 10.4.",
+    "confounders": [
+      "system-harness",
+      "tool-access",
+      "web-drift",
+      "response-style",
+      "llm-judge",
+      "small-sample"
+    ],
+    "evolution_role": "frontier",
+    "status": "active",
+    "measurement_strength": "Compared with answer-only deep-research grading, makes prerequisite-consistent partial progress a scored object.",
+    "coverage_gap": "An annotated checklist evaluates expressed evidence and conclusions, not hidden reasoning; alternative valid solution paths may be under-credited.",
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.11318",
+      "code": "https://github.com/minghaoguo20/Mr-LHDR",
+      "data": "https://huggingface.co/datasets/Henryeahhh/Mr-LHDR"
+    },
+    "last_verified": "2026-09-17",
+    "published_at": "2026-09-10T09:47:44Z",
+    "first_seen_at": "2026-09-17T14:53:32Z",
+    "radar_published_at": "2026-09-17T15:26:02Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-10",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.11318v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-09-17",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Public dataset and run/judge/score tools; main-result judge differs from quick-start example.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.11318v2",
+      "checked_at": "2026-09-17",
+      "score_ceiling": "The README identifies Qwen3-VL-235B for main results, while quick-start examples use another judge. Pin the judge and tool access before reproducing numbers. Heterogeneous systems and live evidence prevent simple component-level attribution.",
+      "next_control": "Freeze evidence snapshots and one agent; compare short-answer and explicit-evidence outputs, then allow independently validated alternative dependency graphs. Bootstrap uncertainty before interpreting adjacent ranks.",
+      "publication_type": "recent-discovery"
+    },
+    "version_events": [
+      {
+        "date": "2026-09-11",
+        "kind": "paper-v2",
+        "source": "https://arxiv.org/abs/2609.11318v2"
+      }
+    ],
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-17",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
   }
 ]

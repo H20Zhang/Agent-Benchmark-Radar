@@ -1,5 +1,5 @@
 {
-  "discovery_scan_at": "2026-09-05",
+  "discovery_scan_at": "2026-09-17",
   "window_days": 30,
   "scope": [
     "agent-memory",
@@ -7,10 +7,10 @@
     "data-agent"
   ],
   "sources": [
-    "arXiv recent/search",
-    "ACL Anthology",
-    "public benchmark repositories and leaderboards"
+    "arXiv paper search and full-text protocols",
+    "official benchmark repositories and linked releases",
+    "bounded predecessor backfill"
   ],
   "inclusion_rule": "Reusable benchmark or evaluation contribution with a public primary source and a measurement object inside the Radar scope. Methods without a distinct evaluation contribution are excluded.",
-  "note": "Benchmark discovery freshness is tracked separately from citation refresh and structured result-track verification."
+  "note": "Discovery reviewed through 2026-09-17, with bounded historical backfill. Intermittent source-access failures mean this is not an exhaustive census. Unverified candidates stay outside public inventory. Citation and result verification remain separate; existing snapshots are unchanged."
 }

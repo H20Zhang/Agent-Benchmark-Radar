@@ -5,9 +5,9 @@
 
 Find agent benchmarks by date and research area, with direct links to papers, code, and evaluation notes.
 
-[中文](README.md) · **English** · **131 benchmarks** · Discovery scan **2026-09-05**
+[中文](README.md) · **English** · **140 benchmarks** · Discovery scan **2026-09-17**
 
-[Recent timeline](#release-timeline) · [Agent Memory (49)](#registry-memory) · [RAG / Agentic Retrieval (46)](#registry-rag) · [Data Agents (36)](#registry-data)
+[Recent timeline](#release-timeline) · [Agent Memory (51)](#registry-memory) · [RAG / Agentic Retrieval (51)](#registry-rag) · [Data Agents (38)](#registry-data)
 
 Names open reading notes; papers, code, and data are directly accessible.
 
@@ -17,7 +17,7 @@ Names open reading notes; papers, code, and data are directly accessible.
 <a id="timeline"></a><a id="latest"></a><a id="periods"></a>
 ## Last six months
 
-**2026-03-05 — 2026-09-05** · 76 records; month-only boundary records are included by interval overlap.
+**2026-03-17 — 2026-09-17** · 83 records; month-only boundary records are included by interval overlap.
 
 [2026-09](#month-2026-09) · [2026-08](#month-2026-08) · [2026-07](#month-2026-07) · [2026-06](#month-2026-06) · [2026-05](#month-2026-05) · [2026-04](#month-2026-04) · [2026-03](#month-2026-03)
 
@@ -26,18 +26,25 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 <!-- TABLE-FIRST:RECENT:START -->
 
 <a id="month-2026-09"></a>
-### 2026-09 · 2 records
+### 2026-09 · 7 records
 
 | Time | Benchmark | What it measures | Sources |
 |---|---|---|---|
+| [2026-09-10](https://arxiv.org/abs/2609.11318v1) | [Mr.LHDR](benchmarks/mr-lhdr.en.md) <!-- benchmark-id:mr-lhdr --><br><sub>Retrieval</sub> | Tests long-horizon multimodal research with final-answer accuracy and explicitly dependency-conditioned intermediate-conclusion coverage. | [Paper](https://arxiv.org/abs/2609.11318) · [Code](https://github.com/minghaoguo20/Mr-LHDR) · [Data](https://huggingface.co/datasets/Henryeahhh/Mr-LHDR) |
+| [2026-09-08](https://arxiv.org/abs/2609.08174v1) | [OntologyBench](benchmarks/ontologybench.en.md) <!-- benchmark-id:ontologybench --><br><sub>Retrieval</sub> | Tests whether dense retrieval satisfies ontology-defined concepts, relations and conjunctive phenotype constraints rather than semantic similarity alone. | [Paper](https://arxiv.org/abs/2609.08174) · [Code](https://github.com/cindyzhangxy/OntologyBench) · [Data](https://huggingface.co/datasets/cxyzhang/OntologyBench) |
+| [2026-09-08](https://arxiv.org/abs/2609.08887v1) | [Q2D-Web](benchmarks/q2d-web.en.md) <!-- benchmark-id:q2d-web --><br><sub>Retrieval</sub> | Tests document retrieval for agent-rewritten queries against a large production-derived corpus, with citation, production-ranking, and pooled relevance labels. | [Paper](https://arxiv.org/abs/2609.08887) · [Board](https://huggingface.co/spaces/perplexity-ai/q2d-web-leaderboard) |
+| [2026-09-04](https://arxiv.org/abs/2609.05776v1) | [DI-Bench (Data Intelligence)](benchmarks/di-bench-data-intelligence.en.md) <!-- benchmark-id:di-bench-data-intelligence --><br><sub>Data</sub> | Tests analytical computation with retrieved business rules using executable ground truth and a graph-based benchmark-generation protocol. | [Paper](https://arxiv.org/abs/2609.05776) |
+| [2026-09-03](https://arxiv.org/abs/2609.04438v1) | [ICM-Bench](benchmarks/icm-bench.en.md) <!-- benchmark-id:icm-bench --><br><sub>Memory</sub> | Tests person-linked recall, cross-episode identity retrieval and long-term profile inference over a synthetic multimodal life album. | [Paper](https://arxiv.org/abs/2609.04438) · [Code](https://github.com/Shidu-Ren/ICM-Bench) · [Data](https://huggingface.co/datasets/ryanren0330/ICM-Bench) |
 | [2026-09-01†](https://arxiv.org/abs/2609.01836) | [EAL-Bench](benchmarks/eal-bench.en.md) <!-- benchmark-id:eal-bench --><br><sub>Memory</sub> | Tests whether persistent agent memory preserves evolving authorization state and whether false permissions propagate into unauthorized downstream actions. | [Paper](https://arxiv.org/abs/2609.01836) |
 | [2026-09-01†](https://arxiv.org/abs/2609.01852) | [The Memory Trust Gap](benchmarks/memory-trust-gap.en.md) <!-- benchmark-id:memory-trust-gap --><br><sub>Memory</sub> | Measures when persistent-memory agents over-trust stale stored facts over current authoritative evidence and how that failure changes with model capability. | [Paper](https://arxiv.org/abs/2609.01852) |
 
 <a id="month-2026-08"></a>
-### 2026-08 · 31 records
+### 2026-08 · 33 records
 
 | Time | Benchmark | What it measures | Sources |
 |---|---|---|---|
+| [2026-08-31](https://arxiv.org/abs/2609.05518v1) | [CrossModalQA](benchmarks/crossmodalqa.en.md) <!-- benchmark-id:crossmodalqa --><br><sub>Retrieval</sub> | Tests text-question answering that requires multi-hop transitions between textual and visual evidence, with retrieval and answer metrics. | [Paper](https://arxiv.org/abs/2609.05518) |
+| [2026-08-31](https://arxiv.org/abs/2609.00313v1) | [MUSES / CiteRoots](benchmarks/muses-citeroots.en.md) <!-- benchmark-id:muses-citeroots --><br><sub>Retrieval</sub> | Tests prospective literature retrieval from an author’s prior work, separating later citations, unfamiliar sources, rhetorical roots and author-endorsed inspiration. | [Paper](https://arxiv.org/abs/2609.00313) |
 | [2026-08-26](https://arxiv.org/abs/2608.25655) | [SCALE-QA](benchmarks/scale-qa.en.md) <!-- benchmark-id:scale-qa --><br><sub>Memory</sub> | Evaluates whether memory systems reconstruct the causally relevant earlier episode from flat, unsegmented, mixed-topic conversational threads when a later task decision depends on dormant local constraints. | [Paper](https://arxiv.org/abs/2608.25655) · [Code](https://github.com/LordTARN1SHED/SCALE-QA) |
 | [2026-08-24](https://arxiv.org/abs/2608.23471) | [InjecMEM](benchmarks/injecmem.en.md) <!-- benchmark-id:injecmem --><br><sub>Memory</sub> | Benchmarks whether one unprivileged interaction can persistently steer later topic-related answers through memory injection. | [Paper](https://arxiv.org/abs/2608.23471) · [Code](https://github.com/BlueBlood6/InjecMEM) |
 | [2026-08-24](https://arxiv.org/abs/2608.22856) | [Snapshot Compatibility Audit](benchmarks/snapshot-compatibility-audit.en.md) <!-- benchmark-id:snapshot-compatibility-audit --><br><sub>Retrieval</sub> | Audits answer compatibility across nested corpus snapshots while subtracting within-snapshot stochastic disagreement. | [Paper](https://arxiv.org/abs/2608.22856) |
@@ -71,11 +78,12 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 | [2026-08†](https://arxiv.org/abs/2608.12282) | [VAKRA](benchmarks/vakra.en.md) <!-- benchmark-id:vakra --><br><sub>Retrieval</sub> | Evaluates agents that must compose executable APIs, document retrieval, multi-hop reasoning, and natural-language tool-use policies. | [Paper](https://arxiv.org/abs/2608.12282) · [Code](https://github.com/IBM/VAKRA) · [Data](https://huggingface.co/datasets/ibm-research/VAKRA) |
 
 <a id="month-2026-07"></a>
-### 2026-07 · 11 records
+### 2026-07 · 12 records
 
 | Time | Benchmark | What it measures | Sources |
 |---|---|---|---|
 | [2026-07-29](https://github.com/Snowflake-Labs/data-eng-bench) | [data-eng-bench](benchmarks/data-eng-bench.en.md) <!-- benchmark-id:data-eng-bench --><br><sub>Data</sub> | Executable data-engineering benchmark for repository-scale dbt transformations with hidden row-level verification on DuckDB and Snowflake. | [Repo](https://github.com/Snowflake-Labs/data-eng-bench) |
+| [2026-07-29](https://arxiv.org/abs/2607.27080v1) | [MemSecBench](benchmarks/memsecbench.en.md) <!-- benchmark-id:memsecbench --><br><sub>Memory</sub> | Tracks malicious memory from task-mediated writing through persistence and external consequences to selective repair with benign-memory preservation. | [Paper](https://arxiv.org/abs/2607.27080) |
 | [2026-07-27†](https://arxiv.org/abs/2607.24882) | [Agent Retrieval Bench](benchmarks/agent-retrieval-bench.en.md) <!-- benchmark-id:agent-retrieval-bench --><br><sub>Retrieval</sub> | File-level context-acquisition benchmark for coding agents, where relevance is defined by the repository context an agent needs next rather than direct query–file semantic similarity. | [Paper](https://arxiv.org/abs/2607.24882) · [Code](https://github.com/eyuansu62/agent-retrieval-bench) |
 | [2026-07-27†](https://arxiv.org/abs/2607.24368) | [InMind](benchmarks/inmind.en.md) <!-- benchmark-id:inmind --><br><sub>Memory</sub> | Tests whether an agent retrieves a personal fact when its relevance to a later query is mediated by world knowledge rather than semantic similarity. | [Paper](https://arxiv.org/abs/2607.24368) · [Code](https://github.com/imlrz/InMind) |
 | [2026-07-21](https://arxiv.org/abs/2608.18704) | [MemFuseBench](benchmarks/memfusebench.en.md) <!-- benchmark-id:memfusebench --><br><sub>Memory</sub> | Cross-source memory benchmark for linking, causal fusion, conflict arbitration, and provenance over heterogeneous event streams. | [Paper](https://arxiv.org/abs/2608.18704) · [Data](https://github.com/Darwin-Agent/Mi-Memory/tree/master/MemFuse/MemFuseBench) |
@@ -88,7 +96,7 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 | [2026-07†](https://aclanthology.org/2026.findings-acl.320/) | [PerMemSafe](benchmarks/permemsafe.en.md) <!-- benchmark-id:permemsafe --><br><sub>Memory</sub> | Evaluates whether evolving user memory makes an agent recognize implicit personalized risks and correctly track when those risks change or resolve. | [Paper](https://aclanthology.org/2026.findings-acl.320/) · [Code](https://github.com/Greysahy/permemsafe) |
 
 <a id="month-2026-06"></a>
-### 2026-06 · 9 records
+### 2026-06 · 10 records
 
 | Time | Benchmark | What it measures | Sources |
 |---|---|---|---|
@@ -100,6 +108,7 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 | [2026-06-11†](https://arxiv.org/abs/2606.13120) | [EvoBrowseComp](benchmarks/evobrowsecomp.en.md) <!-- benchmark-id:evobrowsecomp --><br><sub>Retrieval</sub> | Provides bilingual live-web search questions generated by an automated multi-agent pipeline intended for periodic refresh against evolving knowledge. | [Paper](https://arxiv.org/abs/2606.13120) · [Data](https://huggingface.co/datasets/Krystalan/EvoBrowseComp) |
 | [2026-06-11†](https://arxiv.org/abs/2606.12837) | [LoHoSearch](benchmarks/lohosearch.en.md) <!-- benchmark-id:lohosearch --><br><sub>Retrieval</sub> | Evaluates long-horizon web search on questions constructed to have large candidate spaces and structurally complex constraint graphs. | [Paper](https://arxiv.org/abs/2606.12837) · [Data](https://huggingface.co/datasets/meituan-longcat/LoHoSearch) |
 | [2026-06-03](https://arxiv.org/abs/2606.04329) | [MPBench](benchmarks/mpbench.en.md) <!-- benchmark-id:mpbench --><br><sub>Memory</sub> | Benchmarks six persistent-memory poisoning classes across write channels and later-session retrieval behavior. | [Paper](https://arxiv.org/abs/2606.04329) |
+| [2026-06](https://www.snowflake.com/en/blog/engineering/hybrid-deep-research-benchmark/) | [HybridDeepResearch](benchmarks/hybrid-deep-research.en.md) <!-- benchmark-id:hybrid-deep-research --><br><sub>Data</sub> | Tests whether agents preserve entities, filters and candidate sets while composing SQL database queries with web evidence. | [Paper](https://arxiv.org/abs/2609.09410) · [Code](https://github.com/Snowflake-AI-Research/HybridDeepResearch) · [Data](https://huggingface.co/datasets/Snowflake/HybridDeepResearch) |
 | [2026-06†](https://arxiv.org/abs/2606.04660) | [LifeSide](benchmarks/lifeside.en.md) <!-- benchmark-id:lifeside --><br><sub>Memory</sub> | Benchmarks lifelong digital companions through multi-session memory, user understanding, privacy control, and emotional-environment dynamics. | [Paper](https://arxiv.org/abs/2606.04660) |
 
 <a id="month-2026-05"></a>
@@ -134,12 +143,10 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 | [2026-04-01†](https://arxiv.org/abs/2604.25256) | [AutoResearchBench](benchmarks/autoresearchbench.en.md) <!-- benchmark-id:autoresearchbench --><br><sub>Retrieval</sub> | Evaluates autonomous scientific literature discovery through targeted paper finding and exhaustive set collection in a controlled full-text corpus. | [Paper](https://arxiv.org/abs/2604.25256) · [Code](https://github.com/CherYou/AutoResearchBench) · [Data](https://huggingface.co/datasets/Lk123/AutoResearchBench) |
 
 <a id="month-2026-03"></a>
-### 2026-03 · 4 records
+### 2026-03 · 2 records
 
 | Time | Benchmark | What it measures | Sources |
 |---|---|---|---|
-| [2026-03-12†](https://arxiv.org/abs/2603.12483) | [AgentFuel](benchmarks/agentfuel.en.md) <!-- benchmark-id:agentfuel --><br><sub>Data</sub> | Introduces customizable end-to-end functional evaluations for conversational time-series agents, emphasizing domain-specific, stateful, and incident-specific queries. | [Paper](https://arxiv.org/abs/2603.12483) · [Data](https://huggingface.co/datasets/RockfishData/TimeSeriesAgentEvals) |
-| [2026-03-05†](https://arxiv.org/abs/2603.05764) | [TML-Bench](benchmarks/tml-bench.en.md) <!-- benchmark-id:tml-bench --><br><sub>Data</sub> | Evaluates whether coding agents can reliably produce valid, competitive tabular-ML submissions under fixed wall-clock budgets and hidden labels. | [Paper](https://arxiv.org/abs/2603.05764) · [Code](https://github.com/MykolaPinchuk/TML-bench) |
 | [2026-03†](https://arxiv.org/abs/2603.20576) | [Data Agent Benchmark (DAB)](benchmarks/data-agent-benchmark.en.md) <!-- benchmark-id:data-agent-benchmark --><br><sub>Data</sub> | Evaluates enterprise data agents on questions requiring integration, transformation, and analysis across multiple heterogeneous database systems. | [Paper](https://arxiv.org/abs/2603.20576) · [Code](https://github.com/ucbepic/DataAgentBench) |
 | [2026-03†](https://arxiv.org/abs/2603.03781) | [LifeBench](benchmarks/lifebench.en.md) <!-- benchmark-id:lifebench --><br><sub>Memory</sub> | Evaluates long-horizon multi-source memory spanning declarative and non-declarative information such as habits and procedures. | [Paper](https://arxiv.org/abs/2603.03781) · [Code](https://github.com/1754955896/LifeBench) |
 
@@ -150,7 +157,7 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 <a id="field-map"></a><a id="all-benchmarks"></a>
 ## All benchmarks by area
 
-All 131 benchmarks remain on this page, newest first. Older benchmarks are retained.
+All 140 benchmarks remain on this page, newest first. Older benchmarks are retained.
 
 <!-- CITATION-META:START -->
 
@@ -159,12 +166,13 @@ Citations come from Semantic Scholar; matched records were checked **2026-09-03*
 <!-- CITATION-META:END -->
 
 <a id="benchmark-memory"></a><a id="registry-memory"></a>
-### Agent Memory · 49
+### Agent Memory · 51
 
 <!-- TABLE-FIRST:AREA:agent-memory:START -->
 
 | Time | Benchmark | What it measures | Sources | Citations (S2) |
 |---|---|---|---|---:|
+| [2026-09-03](https://arxiv.org/abs/2609.04438v1) | [ICM-Bench](benchmarks/icm-bench.en.md) <!-- benchmark-id:icm-bench --> | Tests person-linked recall, cross-episode identity retrieval and long-term profile inference over a synthetic multimodal life album. | [Paper](https://arxiv.org/abs/2609.04438) · [Code](https://github.com/Shidu-Ren/ICM-Bench) · [Data](https://huggingface.co/datasets/ryanren0330/ICM-Bench) | — |
 | [2026-09-01†](https://arxiv.org/abs/2609.01836) | [EAL-Bench](benchmarks/eal-bench.en.md) <!-- benchmark-id:eal-bench --> | Tests whether persistent agent memory preserves evolving authorization state and whether false permissions propagate into unauthorized downstream actions. | [Paper](https://arxiv.org/abs/2609.01836) | — |
 | [2026-09-01†](https://arxiv.org/abs/2609.01852) | [The Memory Trust Gap](benchmarks/memory-trust-gap.en.md) <!-- benchmark-id:memory-trust-gap --> | Measures when persistent-memory agents over-trust stale stored facts over current authoritative evidence and how that failure changes with model capability. | [Paper](https://arxiv.org/abs/2609.01852) | — |
 | [2026-08-26](https://arxiv.org/abs/2608.25655) | [SCALE-QA](benchmarks/scale-qa.en.md) <!-- benchmark-id:scale-qa --> | Evaluates whether memory systems reconstruct the causally relevant earlier episode from flat, unsegmented, mixed-topic conversational threads when a later task decision depends on dormant local constraints. | [Paper](https://arxiv.org/abs/2608.25655) · [Code](https://github.com/LordTARN1SHED/SCALE-QA) | [0](https://www.semanticscholar.org/paper/c73b59d446d064835acc4f499b12ae0b33c647de) |
@@ -180,6 +188,7 @@ Citations come from Semantic Scholar; matched records were checked **2026-09-03*
 | [2026-08-17](https://arxiv.org/abs/2608.16551) | [SP-Mem Privacy-Aware Memory Benchmark](benchmarks/sp-mem.en.md) <!-- benchmark-id:sp-mem --> | Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost. | [Paper](https://arxiv.org/abs/2608.16551) · [Code](https://github.com/Jensassss/SP-Mem) | [0](https://www.semanticscholar.org/paper/5e223c2c94b112dda6df62c7a869d48cddd0e9f0) |
 | [2026-08-04](https://arxiv.org/abs/2608.04003) | [PAST-Bench](benchmarks/past-bench.en.md) <!-- benchmark-id:past-bench --> | Paired persistent-state benchmark that tests whether retained cross-episode experience causally improves later executable work. | [Paper](https://arxiv.org/abs/2608.04003) · [Code](https://github.com/Gen-Verse/PAST-Bench) | [2](https://www.semanticscholar.org/paper/86174fa6cbc829c87d1dae781e1282a751e9f6b5) |
 | [2026-08-03†](https://arxiv.org/abs/2608.01679) | [AuthMem-Bench](benchmarks/authmem-bench.en.md) <!-- benchmark-id:authmem-bench --> | Paired evaluation of whether persistent-memory consolidation preserves source authority rather than laundering low-authority content into reusable instructions or user facts. | [Paper](https://arxiv.org/abs/2608.01679) | — |
+| [2026-07-29](https://arxiv.org/abs/2607.27080v1) | [MemSecBench](benchmarks/memsecbench.en.md) <!-- benchmark-id:memsecbench --> | Tracks malicious memory from task-mediated writing through persistence and external consequences to selective repair with benign-memory preservation. | [Paper](https://arxiv.org/abs/2607.27080) | — |
 | [2026-07-27†](https://arxiv.org/abs/2607.24368) | [InMind](benchmarks/inmind.en.md) <!-- benchmark-id:inmind --> | Tests whether an agent retrieves a personal fact when its relevance to a later query is mediated by world knowledge rather than semantic similarity. | [Paper](https://arxiv.org/abs/2607.24368) · [Code](https://github.com/imlrz/InMind) | [0](https://www.semanticscholar.org/paper/1654c6adad236d9cb98d8b2d76264a3c82962515) |
 | [2026-07-21](https://arxiv.org/abs/2608.18704) | [MemFuseBench](benchmarks/memfusebench.en.md) <!-- benchmark-id:memfusebench --> | Cross-source memory benchmark for linking, causal fusion, conflict arbitration, and provenance over heterogeneous event streams. | [Paper](https://arxiv.org/abs/2608.18704) · [Data](https://github.com/Darwin-Agent/Mi-Memory/tree/master/MemFuse/MemFuseBench) | [0](https://www.semanticscholar.org/paper/660441819b931d4b953873222bdc9c34c7641a9b) |
 | [2026-07-14†](https://arxiv.org/abs/2607.12385) | [PM-Bench](benchmarks/pm-bench.en.md) <!-- benchmark-id:pm-bench --> | Prospective-memory benchmark testing whether agents maintain delayed user intentions and execute them at the correct future cue while continuing ongoing activities. | [Paper](https://arxiv.org/abs/2607.12385) | — |
@@ -220,12 +229,17 @@ Citations come from Semantic Scholar; matched records were checked **2026-09-03*
 [Back to top](#top)
 
 <a id="benchmark-rag"></a><a id="registry-rag"></a>
-### RAG / Agentic Retrieval · 46
+### RAG / Agentic Retrieval · 51
 
 <!-- TABLE-FIRST:AREA:rag:START -->
 
 | Time | Benchmark | What it measures | Sources | Citations (S2) |
 |---|---|---|---|---:|
+| [2026-09-10](https://arxiv.org/abs/2609.11318v1) | [Mr.LHDR](benchmarks/mr-lhdr.en.md) <!-- benchmark-id:mr-lhdr --> | Tests long-horizon multimodal research with final-answer accuracy and explicitly dependency-conditioned intermediate-conclusion coverage. | [Paper](https://arxiv.org/abs/2609.11318) · [Code](https://github.com/minghaoguo20/Mr-LHDR) · [Data](https://huggingface.co/datasets/Henryeahhh/Mr-LHDR) | — |
+| [2026-09-08](https://arxiv.org/abs/2609.08174v1) | [OntologyBench](benchmarks/ontologybench.en.md) <!-- benchmark-id:ontologybench --> | Tests whether dense retrieval satisfies ontology-defined concepts, relations and conjunctive phenotype constraints rather than semantic similarity alone. | [Paper](https://arxiv.org/abs/2609.08174) · [Code](https://github.com/cindyzhangxy/OntologyBench) · [Data](https://huggingface.co/datasets/cxyzhang/OntologyBench) | — |
+| [2026-09-08](https://arxiv.org/abs/2609.08887v1) | [Q2D-Web](benchmarks/q2d-web.en.md) <!-- benchmark-id:q2d-web --> | Tests document retrieval for agent-rewritten queries against a large production-derived corpus, with citation, production-ranking, and pooled relevance labels. | [Paper](https://arxiv.org/abs/2609.08887) · [Board](https://huggingface.co/spaces/perplexity-ai/q2d-web-leaderboard) | — |
+| [2026-08-31](https://arxiv.org/abs/2609.05518v1) | [CrossModalQA](benchmarks/crossmodalqa.en.md) <!-- benchmark-id:crossmodalqa --> | Tests text-question answering that requires multi-hop transitions between textual and visual evidence, with retrieval and answer metrics. | [Paper](https://arxiv.org/abs/2609.05518) | — |
+| [2026-08-31](https://arxiv.org/abs/2609.00313v1) | [MUSES / CiteRoots](benchmarks/muses-citeroots.en.md) <!-- benchmark-id:muses-citeroots --> | Tests prospective literature retrieval from an author’s prior work, separating later citations, unfamiliar sources, rhetorical roots and author-endorsed inspiration. | [Paper](https://arxiv.org/abs/2609.00313) | — |
 | [2026-08-24](https://arxiv.org/abs/2608.22856) | [Snapshot Compatibility Audit](benchmarks/snapshot-compatibility-audit.en.md) <!-- benchmark-id:snapshot-compatibility-audit --> | Audits answer compatibility across nested corpus snapshots while subtracting within-snapshot stochastic disagreement. | [Paper](https://arxiv.org/abs/2608.22856) | [0](https://www.semanticscholar.org/paper/b57acad4dcfb773ba69da1f92b72cdb595b36f03) |
 | [2026-08-22](https://arxiv.org/abs/2608.21829) | [KBGym / Training a Knowledge Base](benchmarks/kbgym.en.md) <!-- benchmark-id:kbgym --> | Evaluates a supervised curator that edits a persistent document store before a frozen reader is tested on coverage-stratified questions. | [Paper](https://arxiv.org/abs/2608.21829) | [0](https://www.semanticscholar.org/paper/bdbd0b93dfc71b7bee33381d78350cc841877643) |
 | [2026-08-22](https://arxiv.org/abs/2608.22118) | [RAG Collapse](benchmarks/rag-collapse.en.md) <!-- benchmark-id:rag-collapse --> | Diagnoses recursive retrieval feedback when model-authored sources displace independent evidence across rounds. | [Paper](https://arxiv.org/abs/2608.22118) | [0](https://www.semanticscholar.org/paper/eba9ce0d2a0c0accc93c7518ead27c857f6ee44a) |
@@ -278,12 +292,13 @@ Citations come from Semantic Scholar; matched records were checked **2026-09-03*
 [Back to top](#top)
 
 <a id="benchmark-data"></a><a id="registry-data"></a>
-### Data Agents · 36
+### Data Agents · 38
 
 <!-- TABLE-FIRST:AREA:data-agent:START -->
 
 | Time | Benchmark | What it measures | Sources | Citations (S2) |
 |---|---|---|---|---:|
+| [2026-09-04](https://arxiv.org/abs/2609.05776v1) | [DI-Bench (Data Intelligence)](benchmarks/di-bench-data-intelligence.en.md) <!-- benchmark-id:di-bench-data-intelligence --> | Tests analytical computation with retrieved business rules using executable ground truth and a graph-based benchmark-generation protocol. | [Paper](https://arxiv.org/abs/2609.05776) | — |
 | [2026-08-20](https://arxiv.org/abs/2608.20318) | [AI4AI-Bench](benchmarks/ai4ai-bench.en.md) <!-- benchmark-id:ai4ai-bench --> | Evaluates agents that diagnose and modify learning algorithms inside frozen research repositories, with proxy-only exploration and a clean-start formal run behind a source-patch boundary. | [Paper](https://arxiv.org/abs/2608.20318) · [Code](https://github.com/Einsia/AI4AI-Bench) · [Data](https://lab.einsia.ai/ai4ai/trajectories/) | [3](https://www.semanticscholar.org/paper/3a779ef95d25521f2859c5710184e96f473a3352) |
 | [2026-08-20](https://arxiv.org/abs/2608.19653) | [DeltaML-Bench](benchmarks/deltaml-bench.en.md) <!-- benchmark-id:deltaml-bench --> | Evaluates machine-learning agents that must improve published baselines inside imperfect research repositories under long compute budgets and explicit anti-gaming checks. | [Paper](https://arxiv.org/abs/2608.19653) · [Code](https://github.com/AlgorithmicResearchGroup/deltaml-bench-vivaria) | [0](https://www.semanticscholar.org/paper/99baa4801ba4f9018a98382c1d6a154ac66ea6a9) |
 | [2026-08-17†](https://arxiv.org/abs/2608.16045) | [Data Exploration Benchmark](benchmarks/data-exploration-benchmark.en.md) <!-- benchmark-id:data-exploration-benchmark --> | Evaluates whether an agent can first construct a structured, source-grounded understanding of a complex workbook before attempting downstream analysis. | [Paper](https://arxiv.org/abs/2608.16045) · [Code](https://github.com/coconut0621/walk-before-you-run) | [0](https://www.semanticscholar.org/paper/31ee11d6693100b69dba5b38e1e9d2af00bdca6f) |
@@ -295,6 +310,7 @@ Citations come from Semantic Scholar; matched records were checked **2026-09-03*
 | [2026-07†](https://arxiv.org/abs/2607.01647) | [AgenticDataBench](benchmarks/agenticdatabench.en.md) <!-- benchmark-id:agenticdatabench --> | Benchmarks data agents across realistic data-science workflows using a skill taxonomy to quantify fine-grained coverage. | [Paper](https://arxiv.org/abs/2607.01647) | [5](https://www.semanticscholar.org/paper/737422a2cb857d6f59da6d51036d7ec14fc73fe6) |
 | [2026-06-22†](https://arxiv.org/abs/2606.22977) | [StatABench](benchmarks/statabench.en.md) <!-- benchmark-id:statabench --> | Evaluates statistical knowledge, tool-grounded practical analysis, and end-to-end open statistical modeling and reporting in one suite. | [Paper](https://arxiv.org/abs/2606.22977) · [Code](https://github.com/youxin01/StatABench) | [0](https://www.semanticscholar.org/paper/237728a651e017c40279683f250603ee1329c8cd) |
 | [2026-06-13†](https://arxiv.org/abs/2606.15107) | [IRTS-ToolBench](benchmarks/irts-toolbench.en.md) <!-- benchmark-id:irts-toolbench --> | Evaluates tool-grounded question answering over irregularly sampled time series with asynchronous observations, informative observation gaps, and varying frequencies. | [Paper](https://arxiv.org/abs/2606.15107) · [Code](https://github.com/SanhornC/IRTS-ToolBench) | [0](https://www.semanticscholar.org/paper/db7f79b56c8dbb846510867063c07a20bdd29b23) |
+| [2026-06](https://www.snowflake.com/en/blog/engineering/hybrid-deep-research-benchmark/) | [HybridDeepResearch](benchmarks/hybrid-deep-research.en.md) <!-- benchmark-id:hybrid-deep-research --> | Tests whether agents preserve entities, filters and candidate sets while composing SQL database queries with web evidence. | [Paper](https://arxiv.org/abs/2609.09410) · [Code](https://github.com/Snowflake-AI-Research/HybridDeepResearch) · [Data](https://huggingface.co/datasets/Snowflake/HybridDeepResearch) | — |
 | [2026-05-04†](https://arxiv.org/abs/2605.02503) | [DataClawBench](benchmarks/dataclawbench.en.md) <!-- benchmark-id:dataclawbench --> | Evaluates exploratory financial analysis when agents receive little prior guidance and must find, understand, and reason across unfamiliar noisy data before producing verifiable conclusions. | [Paper](https://arxiv.org/abs/2605.02503) · [Code](https://github.com/GTML-LAB-sysu/DataClaw) · [Data](https://huggingface.co/datasets/GTML-LAB/DataClaw) | [0](https://www.semanticscholar.org/paper/52d44ba95a8044cfb8f1f798c63deabefef06855) |
 | [2026-03-12†](https://arxiv.org/abs/2603.12483) | [AgentFuel](benchmarks/agentfuel.en.md) <!-- benchmark-id:agentfuel --> | Introduces customizable end-to-end functional evaluations for conversational time-series agents, emphasizing domain-specific, stateful, and incident-specific queries. | [Paper](https://arxiv.org/abs/2603.12483) · [Data](https://huggingface.co/datasets/RockfishData/TimeSeriesAgentEvals) | [1](https://www.semanticscholar.org/paper/310cc57e018fec7b41ac9ffa95ef04fe7bea432b) |
 | [2026-03-05†](https://arxiv.org/abs/2603.05764) | [TML-Bench](benchmarks/tml-bench.en.md) <!-- benchmark-id:tml-bench --> | Evaluates whether coding agents can reliably produce valid, competitive tabular-ML submissions under fixed wall-clock budgets and hidden labels. | [Paper](https://arxiv.org/abs/2603.05764) · [Code](https://github.com/MykolaPinchuk/TML-bench) | [2](https://www.semanticscholar.org/paper/83d1649c2fb9e8ea0d8d6e2eb4071a6aeceb6163) |

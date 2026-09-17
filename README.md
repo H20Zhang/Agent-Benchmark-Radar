@@ -5,9 +5,9 @@
 
 按时间与领域查找 Agent 评测基准，直接进入论文、代码与评测解读。
 
-**中文** · [English](README.en.md) · **131 个基准** · 发现扫描 **2026-09-05**
+**中文** · [English](README.en.md) · **140 个基准** · 发现扫描 **2026-09-17**
 
-[近期时间轴](#release-timeline) · [Agent Memory (49)](#registry-memory) · [RAG / Agentic Retrieval (46)](#registry-rag) · [Data Agents (36)](#registry-data)
+[近期时间轴](#release-timeline) · [Agent Memory (51)](#registry-memory) · [RAG / Agentic Retrieval (51)](#registry-rag) · [Data Agents (38)](#registry-data)
 
 名称链接到解读；论文、代码和数据可直接访问。
 
@@ -17,7 +17,7 @@
 <a id="timeline"></a><a id="latest"></a><a id="periods"></a>
 ## 最近六个月
 
-**2026-03-05 — 2026-09-05** · 76 项；月份精度的边界记录按区间重叠纳入。
+**2026-03-17 — 2026-09-17** · 83 项；月份精度的边界记录按区间重叠纳入。
 
 [2026-09](#month-2026-09) · [2026-08](#month-2026-08) · [2026-07](#month-2026-07) · [2026-06](#month-2026-06) · [2026-05](#month-2026-05) · [2026-04](#month-2026-04) · [2026-03](#month-2026-03)
 
@@ -26,18 +26,25 @@
 <!-- TABLE-FIRST:RECENT:START -->
 
 <a id="month-2026-09"></a>
-### 2026-09 · 2 项
+### 2026-09 · 7 项
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 |
 |---|---|---|---|
+| [2026-09-10](https://arxiv.org/abs/2609.11318v1) | [Mr.LHDR](benchmarks/mr-lhdr.md) <!-- benchmark-id:mr-lhdr --><br><sub>检索</sub> | 测长程多模态研究的最终答案，以及受前置依赖约束的中间结论覆盖。 | [论&#8288;文](https://arxiv.org/abs/2609.11318) · [代&#8288;码](https://github.com/minghaoguo20/Mr-LHDR) · [数&#8288;据](https://huggingface.co/datasets/Henryeahhh/Mr-LHDR) |
+| [2026-09-08](https://arxiv.org/abs/2609.08174v1) | [OntologyBench](benchmarks/ontologybench.md) <!-- benchmark-id:ontologybench --><br><sub>检索</sub> | 测稠密检索能否满足本体定义的概念、关系及表型合取约束，而不只是找到语义相似文本。 | [论&#8288;文](https://arxiv.org/abs/2609.08174) · [代&#8288;码](https://github.com/cindyzhangxy/OntologyBench) · [数&#8288;据](https://huggingface.co/datasets/cxyzhang/OntologyBench) |
+| [2026-09-08](https://arxiv.org/abs/2609.08887v1) | [Q2D-Web](benchmarks/q2d-web.md) <!-- benchmark-id:q2d-web --><br><sub>检索</sub> | 在生产来源的大规模语料上，测智能体改写查询的文档检索，并区分引用、生产排序与联合标注。 | [论&#8288;文](https://arxiv.org/abs/2609.08887) · [榜&#8288;单](https://huggingface.co/spaces/perplexity-ai/q2d-web-leaderboard) |
+| [2026-09-04](https://arxiv.org/abs/2609.05776v1) | [DI-Bench (Data Intelligence)](benchmarks/di-bench-data-intelligence.md) <!-- benchmark-id:di-bench-data-intelligence --><br><sub>数据</sub> | 以可执行标准答案和关联图生成协议，测数据智能体能否把检索到的业务规则正确用于分析计算。 | [论&#8288;文](https://arxiv.org/abs/2609.05776) |
+| [2026-09-03](https://arxiv.org/abs/2609.04438v1) | [ICM-Bench](benchmarks/icm-bench.md) <!-- benchmark-id:icm-bench --><br><sub>记忆</sub> | 在合成多模态生活相册中，测围绕同一人物的记忆召回、跨片段身份关联与长期画像推断。 | [论&#8288;文](https://arxiv.org/abs/2609.04438) · [代&#8288;码](https://github.com/Shidu-Ren/ICM-Bench) · [数&#8288;据](https://huggingface.co/datasets/ryanren0330/ICM-Bench) |
 | [2026-09-01†](https://arxiv.org/abs/2609.01836) | [EAL-Bench](benchmarks/eal-bench.md) <!-- benchmark-id:eal-bench --><br><sub>记忆</sub> | 测持久记忆中的虚假权限形成，以及错误授权向下游越权行动的传播。 | [论&#8288;文](https://arxiv.org/abs/2609.01836) |
 | [2026-09-01†](https://arxiv.org/abs/2609.01852) | [The Memory Trust Gap](benchmarks/memory-trust-gap.md) <!-- benchmark-id:memory-trust-gap --><br><sub>记忆</sub> | 测过期记忆与当前权威工具证据冲突时的过度信任，以及模型规模对该失败的影响。 | [论&#8288;文](https://arxiv.org/abs/2609.01852) |
 
 <a id="month-2026-08"></a>
-### 2026-08 · 31 项
+### 2026-08 · 33 项
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 |
 |---|---|---|---|
+| [2026-08-31](https://arxiv.org/abs/2609.05518v1) | [CrossModalQA](benchmarks/crossmodalqa.md) <!-- benchmark-id:crossmodalqa --><br><sub>检索</sub> | 测文本问题能否通过文字与图像证据间的多跳衔接作答，同时区分检索与答案指标。 | [论&#8288;文](https://arxiv.org/abs/2609.05518) |
+| [2026-08-31](https://arxiv.org/abs/2609.00313v1) | [MUSES / CiteRoots](benchmarks/muses-citeroots.md) <!-- benchmark-id:muses-citeroots --><br><sub>检索</sub> | 从作者已有工作出发检索未来可能引用或受启发的文献，并区分引用、陌生来源、修辞性根源与作者认可的启发。 | [论&#8288;文](https://arxiv.org/abs/2609.00313) |
 | [2026-08-26](https://arxiv.org/abs/2608.25655) | [SCALE-QA](benchmarks/scale-qa.md) <!-- benchmark-id:scale-qa --><br><sub>记忆</sub> | 在无显式边界的交错长对话中，能否正确重建对当前任务有效的情节、状态覆盖、跨段联系和局部约束。 | [论&#8288;文](https://arxiv.org/abs/2608.25655) · [代&#8288;码](https://github.com/LordTARN1SHED/SCALE-QA) |
 | [2026-08-24](https://arxiv.org/abs/2608.23471) | [InjecMEM](benchmarks/injecmem.md) <!-- benchmark-id:injecmem --><br><sub>记忆</sub> | 单次无特权交互写入后，恶意记忆的检索成功、条件生成与端到端攻击成功。 | [论&#8288;文](https://arxiv.org/abs/2608.23471) · [代&#8288;码](https://github.com/BlueBlood6/InjecMEM) |
 | [2026-08-24](https://arxiv.org/abs/2608.22856) | [Snapshot Compatibility Audit](benchmarks/snapshot-compatibility-audit.md) <!-- benchmark-id:snapshot-compatibility-audit --><br><sub>检索</sub> | 语料快照增长时，在扣除同一快照内的随机分歧后，已有答案会发生多少额外翻转。 | [论&#8288;文](https://arxiv.org/abs/2608.22856) |
@@ -71,11 +78,12 @@
 | [2026-08†](https://arxiv.org/abs/2608.12282) | [VAKRA](benchmarks/vakra.md) <!-- benchmark-id:vakra --><br><sub>检索</sub> | 组合调用 API、检索文档、完成多跳推理，并遵守工具策略。 | [论&#8288;文](https://arxiv.org/abs/2608.12282) · [代&#8288;码](https://github.com/IBM/VAKRA) · [数&#8288;据](https://huggingface.co/datasets/ibm-research/VAKRA) |
 
 <a id="month-2026-07"></a>
-### 2026-07 · 11 项
+### 2026-07 · 12 项
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 |
 |---|---|---|---|
 | [2026-07-29](https://github.com/Snowflake-Labs/data-eng-bench) | [data-eng-bench](benchmarks/data-eng-bench.md) <!-- benchmark-id:data-eng-bench --><br><sub>数据</sub> | 面向仓库规模 dbt 转换的可执行数据工程基准，在 DuckDB 与 Snowflake 上做隐藏行级核验。 | [仓&#8288;库](https://github.com/Snowflake-Labs/data-eng-bench) |
+| [2026-07-29](https://arxiv.org/abs/2607.27080v1) | [MemSecBench](benchmarks/memsecbench.md) <!-- benchmark-id:memsecbench --><br><sub>记忆</sub> | 沿正常任务写入、持久化、外部后果及选择性修复，测恶意记忆传播，并同时检查正常记忆是否保留。 | [论&#8288;文](https://arxiv.org/abs/2607.27080) |
 | [2026-07-27†](https://arxiv.org/abs/2607.24882) | [Agent Retrieval Bench](benchmarks/agent-retrieval-bench.md) <!-- benchmark-id:agent-retrieval-bench --><br><sub>检索</sub> | 在固定版本的真实代码仓库上，测编码智能体能否找到下一步真正需要的文件，或在缺少本地证据时正确弃答。 | [论&#8288;文](https://arxiv.org/abs/2607.24882) · [代&#8288;码](https://github.com/eyuansu62/agent-retrieval-bench) |
 | [2026-07-27†](https://arxiv.org/abs/2607.24368) | [InMind](benchmarks/inmind.md) <!-- benchmark-id:inmind --><br><sub>记忆</sub> | 旧事实与新问题词义相远、只有借助常识才能建立联系时，记忆能否被正确调出并应用。 | [论&#8288;文](https://arxiv.org/abs/2607.24368) · [代&#8288;码](https://github.com/imlrz/InMind) |
 | [2026-07-21](https://arxiv.org/abs/2608.18704) | [MemFuseBench](benchmarks/memfusebench.md) <!-- benchmark-id:memfusebench --><br><sub>记忆</sub> | 跨异构事件流的来源连接、因果融合、冲突裁决与溯源记忆基准。 | [论&#8288;文](https://arxiv.org/abs/2608.18704) · [数&#8288;据](https://github.com/Darwin-Agent/Mi-Memory/tree/master/MemFuse/MemFuseBench) |
@@ -88,7 +96,7 @@
 | [2026-07†](https://aclanthology.org/2026.findings-acl.320/) | [PerMemSafe](benchmarks/permemsafe.md) <!-- benchmark-id:permemsafe --><br><sub>记忆</sub> | 能否从长期历史中识别隐含的个体风险，并在风险缓解后及时更新判断。 | [论&#8288;文](https://aclanthology.org/2026.findings-acl.320/) · [代&#8288;码](https://github.com/Greysahy/permemsafe) |
 
 <a id="month-2026-06"></a>
-### 2026-06 · 9 项
+### 2026-06 · 10 项
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 |
 |---|---|---|---|
@@ -100,6 +108,7 @@
 | [2026-06-11†](https://arxiv.org/abs/2606.13120) | [EvoBrowseComp](benchmarks/evobrowsecomp.md) <!-- benchmark-id:evobrowsecomp --><br><sub>检索</sub> | 考察英语和中文智能体对持续变化网络知识的广度搜索与多步推理。 | [论&#8288;文](https://arxiv.org/abs/2606.13120) · [数&#8288;据](https://huggingface.co/datasets/Krystalan/EvoBrowseComp) |
 | [2026-06-11†](https://arxiv.org/abs/2606.12837) | [LoHoSearch](benchmarks/lohosearch.md) <!-- benchmark-id:lohosearch --><br><sub>检索</sub> | 考察超大候选空间、复杂约束结构、长程搜索和上下文管理。 | [论&#8288;文](https://arxiv.org/abs/2606.12837) · [数&#8288;据](https://huggingface.co/datasets/meituan-longcat/LoHoSearch) |
 | [2026-06-03](https://arxiv.org/abs/2606.04329) | [MPBench](benchmarks/mpbench.md) <!-- benchmark-id:mpbench --><br><sub>记忆</sub> | 跨会话持久记忆投毒的写入成功率、条件检索成功率，以及防御强度与可用性的取舍。 | [论&#8288;文](https://arxiv.org/abs/2606.04329) |
+| [2026-06](https://www.snowflake.com/en/blog/engineering/hybrid-deep-research-benchmark/) | [HybridDeepResearch](benchmarks/hybrid-deep-research.md) <!-- benchmark-id:hybrid-deep-research --><br><sub>数据</sub> | 测智能体在 SQL 与网页证据之间传递实体、筛选条件和候选集合时，能否保持约束并完成端到端回答。 | [论&#8288;文](https://arxiv.org/abs/2609.09410) · [代&#8288;码](https://github.com/Snowflake-AI-Research/HybridDeepResearch) · [数&#8288;据](https://huggingface.co/datasets/Snowflake/HybridDeepResearch) |
 | [2026-06†](https://arxiv.org/abs/2606.04660) | [LifeSide](benchmarks/lifeside.md) <!-- benchmark-id:lifeside --><br><sub>记忆</sub> | 跨会话记忆、用户理解、隐私控制，以及情绪与环境的互动。 | [论&#8288;文](https://arxiv.org/abs/2606.04660) |
 
 <a id="month-2026-05"></a>
@@ -134,12 +143,10 @@
 | [2026-04-01†](https://arxiv.org/abs/2604.25256) | [AutoResearchBench](benchmarks/autoresearchbench.md) <!-- benchmark-id:autoresearchbench --><br><sub>检索</sub> | 考察科学文献中的目标论文追踪、条件约束、开放集合搜集和停止判断。 | [论&#8288;文](https://arxiv.org/abs/2604.25256) · [代&#8288;码](https://github.com/CherYou/AutoResearchBench) · [数&#8288;据](https://huggingface.co/datasets/Lk123/AutoResearchBench) |
 
 <a id="month-2026-03"></a>
-### 2026-03 · 4 项
+### 2026-03 · 2 项
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 |
 |---|---|---|---|
-| [2026-03-12†](https://arxiv.org/abs/2603.12483) | [AgentFuel](benchmarks/agentfuel.md) <!-- benchmark-id:agentfuel --><br><sub>数据</sub> | 面向具体领域的时序对话智能体功能测试，重点覆盖有状态与事故型查询。 | [论&#8288;文](https://arxiv.org/abs/2603.12483) · [数&#8288;据](https://huggingface.co/datasets/RockfishData/TimeSeriesAgentEvals) |
-| [2026-03-05†](https://arxiv.org/abs/2603.05764) | [TML-Bench](benchmarks/tml-bench.md) <!-- benchmark-id:tml-bench --><br><sub>数据</sub> | 在固定时间预算和隐藏标签下，产出有效且有竞争力的表格机器学习提交。 | [论&#8288;文](https://arxiv.org/abs/2603.05764) · [代&#8288;码](https://github.com/MykolaPinchuk/TML-bench) |
 | [2026-03†](https://arxiv.org/abs/2603.20576) | [Data Agent Benchmark (DAB)](benchmarks/data-agent-benchmark.md) <!-- benchmark-id:data-agent-benchmark --><br><sub>数据</sub> | 跨多个 DBMS 完成数据集成、转换、分析和可执行核验。 | [论&#8288;文](https://arxiv.org/abs/2603.20576) · [代&#8288;码](https://github.com/ucbepic/DataAgentBench) |
 | [2026-03†](https://arxiv.org/abs/2603.03781) | [LifeBench](benchmarks/lifebench.md) <!-- benchmark-id:lifebench --><br><sub>记忆</sub> | 多源长期轨迹中的事件、语义、习惯和程序性记忆。 | [论&#8288;文](https://arxiv.org/abs/2603.03781) · [代&#8288;码](https://github.com/1754955896/LifeBench) |
 
@@ -150,7 +157,7 @@
 <a id="field-map"></a><a id="all-benchmarks"></a>
 ## 按领域浏览全部基准
 
-全部 131 个基准均在本页，按日期倒序；旧基准不会因时间较早而被移除。
+全部 140 个基准均在本页，按日期倒序；旧基准不会因时间较早而被移除。
 
 <!-- CITATION-META:START -->
 
@@ -159,12 +166,13 @@
 <!-- CITATION-META:END -->
 
 <a id="benchmark-memory"></a><a id="registry-memory"></a>
-### Agent Memory · 49
+### Agent Memory · 51
 
 <!-- TABLE-FIRST:AREA:agent-memory:START -->
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 | 引用数 (S2) |
 |---|---|---|---|---:|
+| [2026-09-03](https://arxiv.org/abs/2609.04438v1) | [ICM-Bench](benchmarks/icm-bench.md) <!-- benchmark-id:icm-bench --> | 在合成多模态生活相册中，测围绕同一人物的记忆召回、跨片段身份关联与长期画像推断。 | [论&#8288;文](https://arxiv.org/abs/2609.04438) · [代&#8288;码](https://github.com/Shidu-Ren/ICM-Bench) · [数&#8288;据](https://huggingface.co/datasets/ryanren0330/ICM-Bench) | — |
 | [2026-09-01†](https://arxiv.org/abs/2609.01836) | [EAL-Bench](benchmarks/eal-bench.md) <!-- benchmark-id:eal-bench --> | 测持久记忆中的虚假权限形成，以及错误授权向下游越权行动的传播。 | [论&#8288;文](https://arxiv.org/abs/2609.01836) | — |
 | [2026-09-01†](https://arxiv.org/abs/2609.01852) | [The Memory Trust Gap](benchmarks/memory-trust-gap.md) <!-- benchmark-id:memory-trust-gap --> | 测过期记忆与当前权威工具证据冲突时的过度信任，以及模型规模对该失败的影响。 | [论&#8288;文](https://arxiv.org/abs/2609.01852) | — |
 | [2026-08-26](https://arxiv.org/abs/2608.25655) | [SCALE-QA](benchmarks/scale-qa.md) <!-- benchmark-id:scale-qa --> | 在无显式边界的交错长对话中，能否正确重建对当前任务有效的情节、状态覆盖、跨段联系和局部约束。 | [论&#8288;文](https://arxiv.org/abs/2608.25655) · [代&#8288;码](https://github.com/LordTARN1SHED/SCALE-QA) | [0](https://www.semanticscholar.org/paper/c73b59d446d064835acc4f499b12ae0b33c647de) |
@@ -180,6 +188,7 @@
 | [2026-08-17](https://arxiv.org/abs/2608.16551) | [SP-Mem Privacy-Aware Memory Benchmark](benchmarks/sp-mem.md) <!-- benchmark-id:sp-mem --> | 联合测量回答质量、个性化、同意处理、精确值暴露与成本的隐私感知记忆基准。 | [论&#8288;文](https://arxiv.org/abs/2608.16551) · [代&#8288;码](https://github.com/Jensassss/SP-Mem) | [0](https://www.semanticscholar.org/paper/5e223c2c94b112dda6df62c7a869d48cddd0e9f0) |
 | [2026-08-04](https://arxiv.org/abs/2608.04003) | [PAST-Bench](benchmarks/past-bench.md) <!-- benchmark-id:past-bench --> | 通过配对的持久状态控制，检验跨任务经验是否因果改善后续可执行工作。 | [论&#8288;文](https://arxiv.org/abs/2608.04003) · [代&#8288;码](https://github.com/Gen-Verse/PAST-Bench) | [2](https://www.semanticscholar.org/paper/86174fa6cbc829c87d1dae781e1282a751e9f6b5) |
 | [2026-08-03†](https://arxiv.org/abs/2608.01679) | [AuthMem-Bench](benchmarks/authmem-bench.md) <!-- benchmark-id:authmem-bench --> | 固定记忆内容、只改变来源权威，测持久记忆整合是否把低权限内容变成可复用的用户事实或指令。 | [论&#8288;文](https://arxiv.org/abs/2608.01679) | — |
+| [2026-07-29](https://arxiv.org/abs/2607.27080v1) | [MemSecBench](benchmarks/memsecbench.md) <!-- benchmark-id:memsecbench --> | 沿正常任务写入、持久化、外部后果及选择性修复，测恶意记忆传播，并同时检查正常记忆是否保留。 | [论&#8288;文](https://arxiv.org/abs/2607.27080) | — |
 | [2026-07-27†](https://arxiv.org/abs/2607.24368) | [InMind](benchmarks/inmind.md) <!-- benchmark-id:inmind --> | 旧事实与新问题词义相远、只有借助常识才能建立联系时，记忆能否被正确调出并应用。 | [论&#8288;文](https://arxiv.org/abs/2607.24368) · [代&#8288;码](https://github.com/imlrz/InMind) | [0](https://www.semanticscholar.org/paper/1654c6adad236d9cb98d8b2d76264a3c82962515) |
 | [2026-07-21](https://arxiv.org/abs/2608.18704) | [MemFuseBench](benchmarks/memfusebench.md) <!-- benchmark-id:memfusebench --> | 跨异构事件流的来源连接、因果融合、冲突裁决与溯源记忆基准。 | [论&#8288;文](https://arxiv.org/abs/2608.18704) · [数&#8288;据](https://github.com/Darwin-Agent/Mi-Memory/tree/master/MemFuse/MemFuseBench) | [0](https://www.semanticscholar.org/paper/660441819b931d4b953873222bdc9c34c7641a9b) |
 | [2026-07-14†](https://arxiv.org/abs/2607.12385) | [PM-Bench](benchmarks/pm-bench.md) <!-- benchmark-id:pm-bench --> | 在持续进行其他活动时，智能体能否保留延迟意图，并在正确线索或状态出现时执行。 | [论&#8288;文](https://arxiv.org/abs/2607.12385) | — |
@@ -220,12 +229,17 @@
 [回到顶部](#top)
 
 <a id="benchmark-rag"></a><a id="registry-rag"></a>
-### RAG / Agentic Retrieval · 46
+### RAG / Agentic Retrieval · 51
 
 <!-- TABLE-FIRST:AREA:rag:START -->
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 | 引用数 (S2) |
 |---|---|---|---|---:|
+| [2026-09-10](https://arxiv.org/abs/2609.11318v1) | [Mr.LHDR](benchmarks/mr-lhdr.md) <!-- benchmark-id:mr-lhdr --> | 测长程多模态研究的最终答案，以及受前置依赖约束的中间结论覆盖。 | [论&#8288;文](https://arxiv.org/abs/2609.11318) · [代&#8288;码](https://github.com/minghaoguo20/Mr-LHDR) · [数&#8288;据](https://huggingface.co/datasets/Henryeahhh/Mr-LHDR) | — |
+| [2026-09-08](https://arxiv.org/abs/2609.08174v1) | [OntologyBench](benchmarks/ontologybench.md) <!-- benchmark-id:ontologybench --> | 测稠密检索能否满足本体定义的概念、关系及表型合取约束，而不只是找到语义相似文本。 | [论&#8288;文](https://arxiv.org/abs/2609.08174) · [代&#8288;码](https://github.com/cindyzhangxy/OntologyBench) · [数&#8288;据](https://huggingface.co/datasets/cxyzhang/OntologyBench) | — |
+| [2026-09-08](https://arxiv.org/abs/2609.08887v1) | [Q2D-Web](benchmarks/q2d-web.md) <!-- benchmark-id:q2d-web --> | 在生产来源的大规模语料上，测智能体改写查询的文档检索，并区分引用、生产排序与联合标注。 | [论&#8288;文](https://arxiv.org/abs/2609.08887) · [榜&#8288;单](https://huggingface.co/spaces/perplexity-ai/q2d-web-leaderboard) | — |
+| [2026-08-31](https://arxiv.org/abs/2609.05518v1) | [CrossModalQA](benchmarks/crossmodalqa.md) <!-- benchmark-id:crossmodalqa --> | 测文本问题能否通过文字与图像证据间的多跳衔接作答，同时区分检索与答案指标。 | [论&#8288;文](https://arxiv.org/abs/2609.05518) | — |
+| [2026-08-31](https://arxiv.org/abs/2609.00313v1) | [MUSES / CiteRoots](benchmarks/muses-citeroots.md) <!-- benchmark-id:muses-citeroots --> | 从作者已有工作出发检索未来可能引用或受启发的文献，并区分引用、陌生来源、修辞性根源与作者认可的启发。 | [论&#8288;文](https://arxiv.org/abs/2609.00313) | — |
 | [2026-08-24](https://arxiv.org/abs/2608.22856) | [Snapshot Compatibility Audit](benchmarks/snapshot-compatibility-audit.md) <!-- benchmark-id:snapshot-compatibility-audit --> | 语料快照增长时，在扣除同一快照内的随机分歧后，已有答案会发生多少额外翻转。 | [论&#8288;文](https://arxiv.org/abs/2608.22856) | [0](https://www.semanticscholar.org/paper/b57acad4dcfb773ba69da1f92b72cdb595b36f03) |
 | [2026-08-22](https://arxiv.org/abs/2608.21829) | [KBGym / Training a Knowledge Base](benchmarks/kbgym.md) <!-- benchmark-id:kbgym --> | 监督式知识库编辑在冻结后对覆盖分层问题的准确率与行动成本。 | [论&#8288;文](https://arxiv.org/abs/2608.21829) | [0](https://www.semanticscholar.org/paper/bdbd0b93dfc71b7bee33381d78350cc841877643) |
 | [2026-08-22](https://arxiv.org/abs/2608.22118) | [RAG Collapse](benchmarks/rag-collapse.md) <!-- benchmark-id:rag-collapse --> | 在递归检索中，系统自产来源是否挤出独立证据，并形成自我强化的反馈。 | [论&#8288;文](https://arxiv.org/abs/2608.22118) | [0](https://www.semanticscholar.org/paper/eba9ce0d2a0c0accc93c7518ead27c857f6ee44a) |
@@ -278,12 +292,13 @@
 [回到顶部](#top)
 
 <a id="benchmark-data"></a><a id="registry-data"></a>
-### Data Agents · 36
+### Data Agents · 38
 
 <!-- TABLE-FIRST:AREA:data-agent:START -->
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 | 引用数 (S2) |
 |---|---|---|---|---:|
+| [2026-09-04](https://arxiv.org/abs/2609.05776v1) | [DI-Bench (Data Intelligence)](benchmarks/di-bench-data-intelligence.md) <!-- benchmark-id:di-bench-data-intelligence --> | 以可执行标准答案和关联图生成协议，测数据智能体能否把检索到的业务规则正确用于分析计算。 | [论&#8288;文](https://arxiv.org/abs/2609.05776) | — |
 | [2026-08-20](https://arxiv.org/abs/2608.20318) | [AI4AI-Bench](benchmarks/ai4ai-bench.md) <!-- benchmark-id:ai4ai-bench --> | 在冻结的训练仓库中诊断并修改学习算法，通过代理探索、源码交付与从干净状态启动的正式运行隔离成绩。 | [论&#8288;文](https://arxiv.org/abs/2608.20318) · [代&#8288;码](https://github.com/Einsia/AI4AI-Bench) · [数&#8288;据](https://lab.einsia.ai/ai4ai/trajectories/) | [3](https://www.semanticscholar.org/paper/3a779ef95d25521f2859c5710184e96f473a3352) |
 | [2026-08-20](https://arxiv.org/abs/2608.19653) | [DeltaML-Bench](benchmarks/deltaml-bench.md) <!-- benchmark-id:deltaml-bench --> | 在真实研究仓库中修复训练管线、迭代机器学习实验、提高论文基线，并检查是否利用评测规则漏洞取巧。 | [论&#8288;文](https://arxiv.org/abs/2608.19653) · [代&#8288;码](https://github.com/AlgorithmicResearchGroup/deltaml-bench-vivaria) | [0](https://www.semanticscholar.org/paper/99baa4801ba4f9018a98382c1d6a154ac66ea6a9) |
 | [2026-08-17†](https://arxiv.org/abs/2608.16045) | [Data Exploration Benchmark](benchmarks/data-exploration-benchmark.md) <!-- benchmark-id:data-exploration-benchmark --> | 在下游分析前，构建包含逻辑表、列语义、键关系和质量信号的结构化数据理解产物。 | [论&#8288;文](https://arxiv.org/abs/2608.16045) · [代&#8288;码](https://github.com/coconut0621/walk-before-you-run) | [0](https://www.semanticscholar.org/paper/31ee11d6693100b69dba5b38e1e9d2af00bdca6f) |
@@ -295,6 +310,7 @@
 | [2026-07†](https://arxiv.org/abs/2607.01647) | [AgenticDataBench](benchmarks/agenticdatabench.md) <!-- benchmark-id:agenticdatabench --> | 用细粒度技能分类检查真实数据科学工作流的覆盖情况。 | [论&#8288;文](https://arxiv.org/abs/2607.01647) | [5](https://www.semanticscholar.org/paper/737422a2cb857d6f59da6d51036d7ec14fc73fe6) |
 | [2026-06-22†](https://arxiv.org/abs/2606.22977) | [StatABench](benchmarks/statabench.md) <!-- benchmark-id:statabench --> | 同时评估统计知识、工具选择与参数设置，以及开放式建模和报告。 | [论&#8288;文](https://arxiv.org/abs/2606.22977) · [代&#8288;码](https://github.com/youxin01/StatABench) | [0](https://www.semanticscholar.org/paper/237728a651e017c40279683f250603ee1329c8cd) |
 | [2026-06-13†](https://arxiv.org/abs/2606.15107) | [IRTS-ToolBench](benchmarks/irts-toolbench.md) <!-- benchmark-id:irts-toolbench --> | 在异步、缺失且采样频率不一的非规则时间序列上选择工具并完成可核验问答。 | [论&#8288;文](https://arxiv.org/abs/2606.15107) · [代&#8288;码](https://github.com/SanhornC/IRTS-ToolBench) | [0](https://www.semanticscholar.org/paper/db7f79b56c8dbb846510867063c07a20bdd29b23) |
+| [2026-06](https://www.snowflake.com/en/blog/engineering/hybrid-deep-research-benchmark/) | [HybridDeepResearch](benchmarks/hybrid-deep-research.md) <!-- benchmark-id:hybrid-deep-research --> | 测智能体在 SQL 与网页证据之间传递实体、筛选条件和候选集合时，能否保持约束并完成端到端回答。 | [论&#8288;文](https://arxiv.org/abs/2609.09410) · [代&#8288;码](https://github.com/Snowflake-AI-Research/HybridDeepResearch) · [数&#8288;据](https://huggingface.co/datasets/Snowflake/HybridDeepResearch) | — |
 | [2026-05-04†](https://arxiv.org/abs/2605.02503) | [DataClawBench](benchmarks/dataclawbench.md) <!-- benchmark-id:dataclawbench --> | 在极少先验引导下，自主探索陌生、含噪、跨域金融数据并形成可验证结论。 | [论&#8288;文](https://arxiv.org/abs/2605.02503) · [代&#8288;码](https://github.com/GTML-LAB-sysu/DataClaw) · [数&#8288;据](https://huggingface.co/datasets/GTML-LAB/DataClaw) | [0](https://www.semanticscholar.org/paper/52d44ba95a8044cfb8f1f798c63deabefef06855) |
 | [2026-03-12†](https://arxiv.org/abs/2603.12483) | [AgentFuel](benchmarks/agentfuel.md) <!-- benchmark-id:agentfuel --> | 面向具体领域的时序对话智能体功能测试，重点覆盖有状态与事故型查询。 | [论&#8288;文](https://arxiv.org/abs/2603.12483) · [数&#8288;据](https://huggingface.co/datasets/RockfishData/TimeSeriesAgentEvals) | [1](https://www.semanticscholar.org/paper/310cc57e018fec7b41ac9ffa95ef04fe7bea432b) |
 | [2026-03-05†](https://arxiv.org/abs/2603.05764) | [TML-Bench](benchmarks/tml-bench.md) <!-- benchmark-id:tml-bench --> | 在固定时间预算和隐藏标签下，产出有效且有竞争力的表格机器学习提交。 | [论&#8288;文](https://arxiv.org/abs/2603.05764) · [代&#8288;码](https://github.com/MykolaPinchuk/TML-bench) | [2](https://www.semanticscholar.org/paper/83d1649c2fb9e8ea0d8d6e2eb4071a6aeceb6163) |

@@ -1,5 +1,6 @@
 from pathlib import Path
 import json, unittest
+from datetime import date
 ROOT=Path(__file__).resolve().parents[1]
 class FreshnessLanguageContract(unittest.TestCase):
     def test_readme_counts_follow_registry(self):
@@ -21,6 +22,9 @@ class FreshnessLanguageContract(unittest.TestCase):
             self.assertNotIn(phrase,t)
     def test_freshness_scan_is_current_and_separate(self):
         f=json.loads((ROOT/'data/freshness.json').read_text())
-        self.assertEqual('2026-09-05',f['discovery_scan_at'])
-        self.assertIn('separately',f['note'])
+        scan=f['discovery_scan_at']
+        self.assertEqual(scan,date.fromisoformat(scan).isoformat())
+        for filename in ('README.md','README.en.md'):
+            self.assertIn(f'**{scan}**',(ROOT/filename).read_text())
+        self.assertIn('separate',f['note'])
 if __name__=='__main__': unittest.main()

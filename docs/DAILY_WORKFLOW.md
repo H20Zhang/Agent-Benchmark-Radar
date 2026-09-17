@@ -54,7 +54,7 @@ If any load-bearing condition differs, a leaderboard gap is system-level evidenc
 6. Write an immutable closed-period digest when the shared protocol's boundary gate fires.
 7. Publish canonical data, both README languages, due digest, and gated map together in one atomic Git commit; never create a public operational or daily-run file.
 
-Legacy records keep honest `released` precision. New v2 records use strict UTC `published_at`, `first_seen_at`, and `radar_published_at` ordered by event time with `time_provenance=native_v2` and a valid map delta. A later merge, verification date, or scheduler run is not evidence of the original Radar acceptance timestamp. These provenance fields do not change the source release date shown to readers.
+Legacy records keep honest `released` precision. New v2 records keep `first_seen_at` and `radar_published_at` in strict UTC. `published_at` is strict UTC when known; a verified source-only day/month uses the explicit precision rule in [Benchmark Schema](../SCHEMA.md). Exact events remain ordered by event time with `time_provenance=native_v2` and a valid map delta. A later merge, verification date, or scheduler run is not evidence of the original Radar acceptance timestamp. These provenance fields do not change the source release date shown to readers.
 
 ## Notes and genealogy
 
