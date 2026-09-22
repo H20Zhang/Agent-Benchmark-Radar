@@ -14,7 +14,7 @@ LoCoMo 把长期对话记忆从短上下文问答拉到真正的多 session 历�
 
 ## 决定性证据与分数边界
 
-ACL 论文报告的核心现象是：long-context LLM 与 RAG 都能改善表现，但在理解长对话、长距离 temporal / causal dynamics 上仍明显落后于人类。这个结果支持“扩大 context window 并没有解决长期记忆”这一测量结论；它不能区分收益究竟来自写入、索引、检索、reader 还是 judge。当前站点只有在协议可对齐时才把系统分数放入独立 result track，第三方用不同 judge 或题集规模得到的 LoCoMo 排名不会混成一个榜单。
+ACL 论文报告的核心现象是：long-context LLM 与 RAG 都能改善表现，但在理解长对话、长距离 temporal / causal dynamics 上仍明显落后于人类。这个结果支持“扩大 context window 并没有解决长期记忆”这一测量结论；它不能区分收益究竟来自写入、索引、检索、reader 还是 judge。本仓库只有在协议可对齐时才把系统分数放入独立 result track，第三方用不同 judge 或题集规模得到的 LoCoMo 排名不会混成一个榜单。
 
 ## 公平比较条件
 
@@ -23,6 +23,16 @@ ACL 论文报告的核心现象是：long-context LLM 与 RAG 都能改善表现
 ## 下一步评测坐标
 
 LoCoMo 主要问“过去发生了什么”。下一步更重要的是验证 remembered experience 是否改变之后的行动、规划与长期用户状态维护，并把 update、forget、conflict 和成本从 end-to-end QA 分数中拆出来。
+
+## 后续对照：对话中的记忆调用与任务完成
+
+**LoCoMo-Conv（2026-09-03）**保留原 LoCoMo 的标准答案和证据 `dia_ids`，把查询改写为 dialog、implicit、counterfactual、composed 四种形式，同时测检索召回与自由文本回答质量。官方仓库提供 top-K、oracle、no-memory 等对照，以及 1,069 个双问题组合的多记忆簇。它让“查询已明确提示要找哪段记忆”这个混杂因素更容易被检查；但改写后的既有对话并不等于自然发生的长期用户交互。[论文](https://arxiv.org/abs/2609.03467) · [官方协议与代码](https://github.com/MiuLab/LoCoMo-Conv)
+
+**DolphinBench（2026-09-21）**的论文摘要描述了三个知识工作角色，每个角色约 500K tokens 的用户历史、200 个任务，并要求报告准确率、总成本和延迟。任务筛选要求指定智能体在有相关历史时成功、无相关历史时失败。这个对照检查的是在指定智能体与筛选协议下的历史依赖，不能推成所有模型都必须依赖记忆，也不能单凭任务成功率证明某个写入或检索组件更好。[论文摘要](https://arxiv.org/abs/2609.24971)
+
+**研究建议：** 保留 LoCoMo 作为显式历史问答基线，另设“未直接索取历史事实的对话”与“需要历史才能完成的任务”两类实验。固定回答模型、可见信息、重试和预算，分别报告证据召回、回答或行动结果，以及构建与查询成本；不要把三类总分混成一个排名。
+
+**证据边界：** LoCoMo-Conv 的上述设计已核对官方 README；DolphinBench 的上述信息仅核对论文摘要。这里是后续工作的对照说明，不代表完成了两项新基准的全文审计、正式入库或独立复现。
 
 <!-- RESEARCH-DECISION:START -->
 

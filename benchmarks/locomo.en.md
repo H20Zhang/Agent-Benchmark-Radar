@@ -24,6 +24,16 @@ Comparisons must align the LoCoMo question/version, answerer or reader, retrieva
 
 LoCoMo mostly asks what happened in the past. The next step is to test whether remembered experience changes future actions and planning, while separating update, forgetting, conflict handling, and maintenance cost from end-to-end QA accuracy.
 
+## Follow-up comparisons: conversational memory use and task completion
+
+**LoCoMo-Conv (2026-09-03)** preserves LoCoMo's gold answers and evidence `dia_ids` while recasting queries into dialog, implicit, counterfactual, and composed forms. It scores retrieval recall and free-form responses. Its official repository supplies top-K, oracle, and no-memory controls, including 1,069 paired-question memory clusters. This helps examine how much explicit query wording reveals the required memory; rewritten existing conversations are not naturally occurring longitudinal interaction. [Paper](https://arxiv.org/abs/2609.03467) · [Official protocol and code](https://github.com/MiuLab/LoCoMo-Conv)
+
+**DolphinBench (2026-09-21)** describes three knowledge-work personas, about 500K history tokens and 200 tasks per persona, with accuracy, total cost, and latency reporting. Task selection requires a specified agent to succeed with relevant history and fail without it. That establishes history dependence under the selection setup, not for every model, and does not isolate a writing or retrieval component. [Paper abstract](https://arxiv.org/abs/2609.24971)
+
+**Research recommendation:** retain explicit historical QA, then separately test conversational prompts that do not directly request historical facts and tasks whose completion needs history. Match the answerer, visible information, retries, and budgets. Report evidence recall, response or action outcomes, and construction versus query costs separately rather than pooling incompatible scores.
+
+**Evidence boundary:** the LoCoMo-Conv design above was checked against its official README; the DolphinBench description was checked only against its abstract. These comparisons do not claim completed full-text audits, new canonical entries, or independent reproduction.
+
 <!-- RESEARCH-DECISION:START -->
 
 ## Research decision card
