@@ -5,9 +5,9 @@
 
 按时间与领域查找 Agent 评测基准，直接进入论文、代码与评测解读。
 
-**中文** · [English](README.en.md) · **140 个基准** · 发现扫描 **2026-09-17**
+**中文** · [English](README.en.md) · **146 个基准** · 发现扫描 **2026-09-23**
 
-[近期时间轴](#release-timeline) · [Agent Memory (51)](#registry-memory) · [RAG / Agentic Retrieval (51)](#registry-rag) · [Data Agents (38)](#registry-data)
+[近期时间轴](#release-timeline) · [Agent Memory (54)](#registry-memory) · [RAG / Agentic Retrieval (53)](#registry-rag) · [Data Agents (39)](#registry-data)
 
 名称链接到解读；论文、代码和数据可直接访问。
 
@@ -17,7 +17,7 @@
 <a id="timeline"></a><a id="latest"></a><a id="periods"></a>
 ## 最近六个月
 
-**2026-03-17 — 2026-09-17** · 83 项；月份精度的边界记录按区间重叠纳入。
+**2026-03-23 — 2026-09-23** · 88 项；月份精度的边界记录按区间重叠纳入。
 
 [2026-09](#month-2026-09) · [2026-08](#month-2026-08) · [2026-07](#month-2026-07) · [2026-06](#month-2026-06) · [2026-05](#month-2026-05) · [2026-04](#month-2026-04) · [2026-03](#month-2026-03)
 
@@ -26,15 +26,20 @@
 <!-- TABLE-FIRST:RECENT:START -->
 
 <a id="month-2026-09"></a>
-### 2026-09 · 7 项
+### 2026-09 · 12 项
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 |
 |---|---|---|---|
+| [2026-09-21](https://arxiv.org/abs/2609.24971) | [DolphinBench](benchmarks/dolphinbench.md) <!-- benchmark-id:dolphinbench --><br><sub>记忆</sub> | 在模拟工作应用中，以冻结记忆、历史依赖对照和逐题状态重置，测任务行动、总成本与延迟。 | [论&#8288;文](https://arxiv.org/abs/2609.24971) · [代&#8288;码](https://github.com/mem0ai/dolphinbench) · [项&#8288;目](https://dolphinbench.ai) |
+| [2026-09-21](https://arxiv.org/abs/2609.24259) | [MemCalib](benchmarks/memcalib.md) <!-- benchmark-id:memcalib --><br><sub>记忆</sub> | 对上下文中每条记忆命题，测它是否按当前问题所需被忽略、局部使用或作为决定性约束。 | [论&#8288;文](https://arxiv.org/abs/2609.24259) · [数&#8288;据](https://huggingface.co/datasets/ZiLaotou/MemCalib) · [项&#8288;目](https://quark-medical.github.io/MemCalib-Project/) |
+| [2026-09-19](https://arxiv.org/abs/2609.23231) | [ChemCLIR-Bench](benchmarks/chemclir-bench.md) <!-- benchmark-id:chemclir-bench --><br><sub>检索</sub> | 在化学专利中，按查询与目标语言、原生或翻译查询及排名深度，诊断跨语言检索。 | [论&#8288;文](https://arxiv.org/abs/2609.23231) · [代&#8288;码](https://github.com/MohammadKhodadad/Multi-Lingual-QAC) · [数&#8288;据](https://huggingface.co/datasets/MehdiAstaraki/multilingual_GP) |
 | [2026-09-10](https://arxiv.org/abs/2609.11318v1) | [Mr.LHDR](benchmarks/mr-lhdr.md) <!-- benchmark-id:mr-lhdr --><br><sub>检索</sub> | 测长程多模态研究的最终答案，以及受前置依赖约束的中间结论覆盖。 | [论&#8288;文](https://arxiv.org/abs/2609.11318) · [代&#8288;码](https://github.com/minghaoguo20/Mr-LHDR) · [数&#8288;据](https://huggingface.co/datasets/Henryeahhh/Mr-LHDR) |
 | [2026-09-08](https://arxiv.org/abs/2609.08174v1) | [OntologyBench](benchmarks/ontologybench.md) <!-- benchmark-id:ontologybench --><br><sub>检索</sub> | 测稠密检索能否满足本体定义的概念、关系及表型合取约束，而不只是找到语义相似文本。 | [论&#8288;文](https://arxiv.org/abs/2609.08174) · [代&#8288;码](https://github.com/cindyzhangxy/OntologyBench) · [数&#8288;据](https://huggingface.co/datasets/cxyzhang/OntologyBench) |
 | [2026-09-08](https://arxiv.org/abs/2609.08887v1) | [Q2D-Web](benchmarks/q2d-web.md) <!-- benchmark-id:q2d-web --><br><sub>检索</sub> | 在生产来源的大规模语料上，测智能体改写查询的文档检索，并区分引用、生产排序与联合标注。 | [论&#8288;文](https://arxiv.org/abs/2609.08887) · [榜&#8288;单](https://huggingface.co/spaces/perplexity-ai/q2d-web-leaderboard) |
 | [2026-09-04](https://arxiv.org/abs/2609.05776v1) | [DI-Bench (Data Intelligence)](benchmarks/di-bench-data-intelligence.md) <!-- benchmark-id:di-bench-data-intelligence --><br><sub>数据</sub> | 以可执行标准答案和关联图生成协议，测数据智能体能否把检索到的业务规则正确用于分析计算。 | [论&#8288;文](https://arxiv.org/abs/2609.05776) |
 | [2026-09-03](https://arxiv.org/abs/2609.04438v1) | [ICM-Bench](benchmarks/icm-bench.md) <!-- benchmark-id:icm-bench --><br><sub>记忆</sub> | 在合成多模态生活相册中，测围绕同一人物的记忆召回、跨片段身份关联与长期画像推断。 | [论&#8288;文](https://arxiv.org/abs/2609.04438) · [代&#8288;码](https://github.com/Shidu-Ren/ICM-Bench) · [数&#8288;据](https://huggingface.co/datasets/ryanren0330/ICM-Bench) |
+| [2026-09-03](https://arxiv.org/abs/2609.03467) | [LoCoMo-Conv](benchmarks/locomo-conv.md) <!-- benchmark-id:locomo-conv --><br><sub>记忆</sub> | 保留 LoCoMo 的历史和证据，将问题改为对话、隐式、反事实及组合查询，分别测检索与回答。 | [论&#8288;文](https://arxiv.org/abs/2609.03467) · [代&#8288;码](https://github.com/MiuLab/LoCoMo-Conv) · [数&#8288;据](https://github.com/MiuLab/LoCoMo-Conv/tree/main/data) |
+| [2026-09-02](https://arxiv.org/abs/2609.01982) | [StatFormBench](benchmarks/statformbench.md) <!-- benchmark-id:statformbench --><br><sub>数据</sub> | 在执行分析之前，测统计问题的粗细类别选择、相关变量识别及变量角色分配。 | [论&#8288;文](https://arxiv.org/abs/2609.01982) · [代&#8288;码](https://github.com/THU-CongLab/StatFormBench) · [数&#8288;据](https://huggingface.co/datasets/THU-CongLab/StatFormBench) |
 | [2026-09-01†](https://arxiv.org/abs/2609.01836) | [EAL-Bench](benchmarks/eal-bench.md) <!-- benchmark-id:eal-bench --><br><sub>记忆</sub> | 测持久记忆中的虚假权限形成，以及错误授权向下游越权行动的传播。 | [论&#8288;文](https://arxiv.org/abs/2609.01836) |
 | [2026-09-01†](https://arxiv.org/abs/2609.01852) | [The Memory Trust Gap](benchmarks/memory-trust-gap.md) <!-- benchmark-id:memory-trust-gap --><br><sub>记忆</sub> | 测过期记忆与当前权威工具证据冲突时的过度信任，以及模型规模对该失败的影响。 | [论&#8288;文](https://arxiv.org/abs/2609.01852) |
 
@@ -157,7 +162,7 @@
 <a id="field-map"></a><a id="all-benchmarks"></a>
 ## 按领域浏览全部基准
 
-全部 140 个基准均在本页，按日期倒序；旧基准不会因时间较早而被移除。
+全部 146 个基准均在本页，按日期倒序；旧基准不会因时间较早而被移除。
 
 <!-- CITATION-META:START -->
 
@@ -166,13 +171,16 @@
 <!-- CITATION-META:END -->
 
 <a id="benchmark-memory"></a><a id="registry-memory"></a>
-### Agent Memory · 51
+### Agent Memory · 54
 
 <!-- TABLE-FIRST:AREA:agent-memory:START -->
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 | 引用数 (S2) |
 |---|---|---|---|---:|
+| [2026-09-21](https://arxiv.org/abs/2609.24971) | [DolphinBench](benchmarks/dolphinbench.md) <!-- benchmark-id:dolphinbench --> | 在模拟工作应用中，以冻结记忆、历史依赖对照和逐题状态重置，测任务行动、总成本与延迟。 | [论&#8288;文](https://arxiv.org/abs/2609.24971) · [代&#8288;码](https://github.com/mem0ai/dolphinbench) · [项&#8288;目](https://dolphinbench.ai) | — |
+| [2026-09-21](https://arxiv.org/abs/2609.24259) | [MemCalib](benchmarks/memcalib.md) <!-- benchmark-id:memcalib --> | 对上下文中每条记忆命题，测它是否按当前问题所需被忽略、局部使用或作为决定性约束。 | [论&#8288;文](https://arxiv.org/abs/2609.24259) · [数&#8288;据](https://huggingface.co/datasets/ZiLaotou/MemCalib) · [项&#8288;目](https://quark-medical.github.io/MemCalib-Project/) | — |
 | [2026-09-03](https://arxiv.org/abs/2609.04438v1) | [ICM-Bench](benchmarks/icm-bench.md) <!-- benchmark-id:icm-bench --> | 在合成多模态生活相册中，测围绕同一人物的记忆召回、跨片段身份关联与长期画像推断。 | [论&#8288;文](https://arxiv.org/abs/2609.04438) · [代&#8288;码](https://github.com/Shidu-Ren/ICM-Bench) · [数&#8288;据](https://huggingface.co/datasets/ryanren0330/ICM-Bench) | — |
+| [2026-09-03](https://arxiv.org/abs/2609.03467) | [LoCoMo-Conv](benchmarks/locomo-conv.md) <!-- benchmark-id:locomo-conv --> | 保留 LoCoMo 的历史和证据，将问题改为对话、隐式、反事实及组合查询，分别测检索与回答。 | [论&#8288;文](https://arxiv.org/abs/2609.03467) · [代&#8288;码](https://github.com/MiuLab/LoCoMo-Conv) · [数&#8288;据](https://github.com/MiuLab/LoCoMo-Conv/tree/main/data) | — |
 | [2026-09-01†](https://arxiv.org/abs/2609.01836) | [EAL-Bench](benchmarks/eal-bench.md) <!-- benchmark-id:eal-bench --> | 测持久记忆中的虚假权限形成，以及错误授权向下游越权行动的传播。 | [论&#8288;文](https://arxiv.org/abs/2609.01836) | — |
 | [2026-09-01†](https://arxiv.org/abs/2609.01852) | [The Memory Trust Gap](benchmarks/memory-trust-gap.md) <!-- benchmark-id:memory-trust-gap --> | 测过期记忆与当前权威工具证据冲突时的过度信任，以及模型规模对该失败的影响。 | [论&#8288;文](https://arxiv.org/abs/2609.01852) | — |
 | [2026-08-26](https://arxiv.org/abs/2608.25655) | [SCALE-QA](benchmarks/scale-qa.md) <!-- benchmark-id:scale-qa --> | 在无显式边界的交错长对话中，能否正确重建对当前任务有效的情节、状态覆盖、跨段联系和局部约束。 | [论&#8288;文](https://arxiv.org/abs/2608.25655) · [代&#8288;码](https://github.com/LordTARN1SHED/SCALE-QA) | [0](https://www.semanticscholar.org/paper/c73b59d446d064835acc4f499b12ae0b33c647de) |
@@ -229,12 +237,13 @@
 [回到顶部](#top)
 
 <a id="benchmark-rag"></a><a id="registry-rag"></a>
-### RAG / Agentic Retrieval · 51
+### RAG / Agentic Retrieval · 53
 
 <!-- TABLE-FIRST:AREA:rag:START -->
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 | 引用数 (S2) |
 |---|---|---|---|---:|
+| [2026-09-19](https://arxiv.org/abs/2609.23231) | [ChemCLIR-Bench](benchmarks/chemclir-bench.md) <!-- benchmark-id:chemclir-bench --> | 在化学专利中，按查询与目标语言、原生或翻译查询及排名深度，诊断跨语言检索。 | [论&#8288;文](https://arxiv.org/abs/2609.23231) · [代&#8288;码](https://github.com/MohammadKhodadad/Multi-Lingual-QAC) · [数&#8288;据](https://huggingface.co/datasets/MehdiAstaraki/multilingual_GP) | — |
 | [2026-09-10](https://arxiv.org/abs/2609.11318v1) | [Mr.LHDR](benchmarks/mr-lhdr.md) <!-- benchmark-id:mr-lhdr --> | 测长程多模态研究的最终答案，以及受前置依赖约束的中间结论覆盖。 | [论&#8288;文](https://arxiv.org/abs/2609.11318) · [代&#8288;码](https://github.com/minghaoguo20/Mr-LHDR) · [数&#8288;据](https://huggingface.co/datasets/Henryeahhh/Mr-LHDR) | — |
 | [2026-09-08](https://arxiv.org/abs/2609.08174v1) | [OntologyBench](benchmarks/ontologybench.md) <!-- benchmark-id:ontologybench --> | 测稠密检索能否满足本体定义的概念、关系及表型合取约束，而不只是找到语义相似文本。 | [论&#8288;文](https://arxiv.org/abs/2609.08174) · [代&#8288;码](https://github.com/cindyzhangxy/OntologyBench) · [数&#8288;据](https://huggingface.co/datasets/cxyzhang/OntologyBench) | — |
 | [2026-09-08](https://arxiv.org/abs/2609.08887v1) | [Q2D-Web](benchmarks/q2d-web.md) <!-- benchmark-id:q2d-web --> | 在生产来源的大规模语料上，测智能体改写查询的文档检索，并区分引用、生产排序与联合标注。 | [论&#8288;文](https://arxiv.org/abs/2609.08887) · [榜&#8288;单](https://huggingface.co/spaces/perplexity-ai/q2d-web-leaderboard) | — |
@@ -273,6 +282,7 @@
 | [2026-02†](https://arxiv.org/abs/2602.19127) | [AgenticRAGTracer](benchmarks/agenticragtracer.md) <!-- benchmark-id:agenticragtracer --> | 对多步检索与推理逐跳核验，并检查步骤分配。 | [论&#8288;文](https://arxiv.org/abs/2602.19127) · [代&#8288;码](https://github.com/YqjMartin/AgenticRAGTracer) | [2](https://www.semanticscholar.org/paper/7ed984c9a29d00ef01dc8311601c7df7b0055949) |
 | [2025-10-22†](https://arxiv.org/abs/2603.06198) | [LIT-RAGBench](benchmarks/lit-ragbench.md) <!-- benchmark-id:lit-ragbench --> | 在已给定检索上下文时，考察生成器的逻辑、整合、表格、推理与拒答能力。 | [论&#8288;文](https://arxiv.org/abs/2603.06198) · [代&#8288;码](https://github.com/Koki-Itai/LIT-RAGBench) · [数&#8288;据](https://huggingface.co/datasets/neoai-inc/LIT-RAGBench) | [0](https://www.semanticscholar.org/paper/27b75e7545e0addc766dd10464b1350846f4188d) |
 | [2025-10†](https://arxiv.org/abs/2510.13910) | [RAGCap-Bench](benchmarks/ragcap-bench.md) <!-- benchmark-id:ragcap-bench --> | 分别评测 Agentic RAG 中的规划、检索和中间推理能力。 | [论&#8288;文](https://arxiv.org/abs/2510.13910) | [5](https://www.semanticscholar.org/paper/b8aa4af01192f66c0757553dec657f457d455ab6) |
+| [2025-08-06](https://arxiv.org/abs/2508.04183) | [LiveDRBench](benchmarks/livedrbench.md) <!-- benchmark-id:livedrbench --> | 把广泛研究表示为结构化主张发现，以精确率、召回率和 F1 评分，而非评价长报告文风。 | [论&#8288;文](https://arxiv.org/abs/2508.04183) · [代&#8288;码](https://github.com/microsoft/LiveDRBench) · [数&#8288;据](https://huggingface.co/datasets/microsoft/LiveDRBench) | — |
 | [2025-08†](https://arxiv.org/abs/2508.06600) | [BrowseComp-Plus](benchmarks/browsecomp-plus.md) <!-- benchmark-id:browsecomp-plus --> | 在固定语料上进行深度研究，并分析检索贡献和答案准确率。 | [论&#8288;文](https://arxiv.org/abs/2508.06600) · [代&#8288;码](https://github.com/texttron/BrowseComp-Plus) | [175](https://www.semanticscholar.org/paper/a1b1590452727b80805cf9c90d4a181856267794) |
 | [2025-06†](https://arxiv.org/abs/2506.11763) | [DeepResearch Bench](benchmarks/deepresearch-bench.md) <!-- benchmark-id:deepresearch-bench --> | 多步网页研究、证据收集、引用质量和长篇报告生成。 | [论&#8288;文](https://arxiv.org/abs/2506.11763) · [代&#8288;码](https://github.com/Ayanami0730/deep_research_bench) | [223](https://www.semanticscholar.org/paper/cca73506ab839718879a49ccce389d33907aa053) |
 | [2025-05-14†](https://aclanthology.org/2026.eacl-long.8/) | [T²-RAGBench](benchmarks/t2-ragbench.md) <!-- benchmark-id:t2-ragbench --> | 考察真实财务报告中的文本与表格检索，以及检索后的数值推理。 | [论&#8288;文](https://aclanthology.org/2026.eacl-long.8/) · [代&#8288;码](https://github.com/uhh-hcds/g4kmu-paper) · [数&#8288;据](https://huggingface.co/datasets/G4KMU/t2-ragbench) | [0](https://www.semanticscholar.org/paper/ddaa0ae18f1c2ae8f1e6633848ab883cb200f43e) |
@@ -292,13 +302,14 @@
 [回到顶部](#top)
 
 <a id="benchmark-data"></a><a id="registry-data"></a>
-### Data Agents · 38
+### Data Agents · 39
 
 <!-- TABLE-FIRST:AREA:data-agent:START -->
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 | 引用数 (S2) |
 |---|---|---|---|---:|
 | [2026-09-04](https://arxiv.org/abs/2609.05776v1) | [DI-Bench (Data Intelligence)](benchmarks/di-bench-data-intelligence.md) <!-- benchmark-id:di-bench-data-intelligence --> | 以可执行标准答案和关联图生成协议，测数据智能体能否把检索到的业务规则正确用于分析计算。 | [论&#8288;文](https://arxiv.org/abs/2609.05776) | — |
+| [2026-09-02](https://arxiv.org/abs/2609.01982) | [StatFormBench](benchmarks/statformbench.md) <!-- benchmark-id:statformbench --> | 在执行分析之前，测统计问题的粗细类别选择、相关变量识别及变量角色分配。 | [论&#8288;文](https://arxiv.org/abs/2609.01982) · [代&#8288;码](https://github.com/THU-CongLab/StatFormBench) · [数&#8288;据](https://huggingface.co/datasets/THU-CongLab/StatFormBench) | — |
 | [2026-08-20](https://arxiv.org/abs/2608.20318) | [AI4AI-Bench](benchmarks/ai4ai-bench.md) <!-- benchmark-id:ai4ai-bench --> | 在冻结的训练仓库中诊断并修改学习算法，通过代理探索、源码交付与从干净状态启动的正式运行隔离成绩。 | [论&#8288;文](https://arxiv.org/abs/2608.20318) · [代&#8288;码](https://github.com/Einsia/AI4AI-Bench) · [数&#8288;据](https://lab.einsia.ai/ai4ai/trajectories/) | [3](https://www.semanticscholar.org/paper/3a779ef95d25521f2859c5710184e96f473a3352) |
 | [2026-08-20](https://arxiv.org/abs/2608.19653) | [DeltaML-Bench](benchmarks/deltaml-bench.md) <!-- benchmark-id:deltaml-bench --> | 在真实研究仓库中修复训练管线、迭代机器学习实验、提高论文基线，并检查是否利用评测规则漏洞取巧。 | [论&#8288;文](https://arxiv.org/abs/2608.19653) · [代&#8288;码](https://github.com/AlgorithmicResearchGroup/deltaml-bench-vivaria) | [0](https://www.semanticscholar.org/paper/99baa4801ba4f9018a98382c1d6a154ac66ea6a9) |
 | [2026-08-17†](https://arxiv.org/abs/2608.16045) | [Data Exploration Benchmark](benchmarks/data-exploration-benchmark.md) <!-- benchmark-id:data-exploration-benchmark --> | 在下游分析前，构建包含逻辑表、列语义、键关系和质量信号的结构化数据理解产物。 | [论&#8288;文](https://arxiv.org/abs/2608.16045) · [代&#8288;码](https://github.com/coconut0621/walk-before-you-run) | [0](https://www.semanticscholar.org/paper/31ee11d6693100b69dba5b38e1e9d2af00bdca6f) |

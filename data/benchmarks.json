@@ -2292,13 +2292,18 @@
       "model-version",
       "hints",
       "trials-per-query",
-      "agent-harness"
+      "agent-harness",
+      "benchmark-tuned-prompt",
+      "dataset-hints",
+      "dataset-macro-aggregation",
+      "validator-revision",
+      "missing-and-contaminated-trials"
     ],
     "artifacts": {
       "paper": "https://arxiv.org/abs/2603.20576",
       "code": "https://github.com/ucbepic/DataAgentBench"
     },
-    "last_verified": "2026-08-20",
+    "last_verified": "2026-09-23",
     "citations": {
       "count": 10,
       "source": "semantic-scholar",
@@ -2338,7 +2343,26 @@
         "executable"
       ]
     },
-    "facet_assignment_status": "imported-heuristic"
+    "facet_assignment_status": "imported-heuristic",
+    "review_evidence": {
+      "protocol_audit": {
+        "checked_at": "2026-09-23",
+        "source": "https://github.com/ucbepic/DataAgentBench/blob/main/README.md",
+        "source_blob_sha": "4551bce7c0614c3c6a544ed5d9cf68f4db0ed528",
+        "aggregation": "Mean over datasets of per-dataset mean per-query pass rate; not best-of-five.",
+        "known_validator_events": [
+          {
+            "date": "2026-06-12",
+            "detail": "Historical submissions rescored using current validators, including regenerated PATENTS ground truths."
+          },
+          {
+            "date": "2026-08-18",
+            "detail": "DEPS_DEV_V1 query 1 revised to accept any of 95 packages tied at fifth place; submission JSONs rescored."
+          }
+        ],
+        "comparison_boundary": "Record tuned-prompt and hints flags, trials, missing/contaminated-run handling, and validator revision. Do not treat the historical paper score as current headroom."
+      }
+    }
   },
   {
     "id": "agenticdatabench",
@@ -11505,6 +11529,524 @@
       "updated_at": "2026-09-17",
       "status": "unmatched",
       "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
+  },
+  {
+    "id": "dolphinbench",
+    "name": "DolphinBench",
+    "area": "agent-memory",
+    "released": "2026-09-21",
+    "published_at": "2026-09-21T17:54:35Z",
+    "importance": 4,
+    "evolution_role": "frontier",
+    "summary": "Tests history-dependent actions in simulated work apps with frozen memory checkpoints, paired history certification, and accuracy, total cost, and latency reporting.",
+    "capabilities": [
+      "history-conditioned-action",
+      "long-term-user-context",
+      "memory-utility-cost-tradeoff"
+    ],
+    "environment": [
+      "simulated-work-apps",
+      "three-personas",
+      "chronological-message-ingestion",
+      "frozen-memory-checkpoint"
+    ],
+    "protocol": [
+      "600-action-tests",
+      "paired-history-certification",
+      "per-test-app-reset",
+      "deterministic-and-semantic-grading",
+      "accuracy-cost-latency"
+    ],
+    "scale": "Three simulated personas, about 500,000 user-message tokens and 200 tasks each; 600 tasks overall.",
+    "measurement_strength": "Moves beyond explicit historical QA by checking recorded actions under a frozen memory checkpoint and requiring lifecycle cost and latency alongside accuracy.",
+    "coverage_gap": "Three simulated personas and selector-agent-dependent task certification do not establish natural-user generalization; frozen evaluation does not measure learning across test tasks or real provider-time aging.",
+    "confounders": [
+      "ingestion-agent-and-model",
+      "memory-provider-configuration",
+      "task-selection-agent",
+      "semantic-grader",
+      "provider-processing-completion",
+      "lifecycle-cost-accounting",
+      "test-state-isolation"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.24971",
+      "code": "https://github.com/mem0ai/dolphinbench",
+      "project": "https://dolphinbench.ai"
+    },
+    "artifact_access": "Public simulated environment, dataset, runner, graders and reference workflows. Official overview and canonical protocol were reviewed; no independent benchmark run was performed.",
+    "first_seen_at": "2026-09-22T15:14:30Z",
+    "status": "active",
+    "last_verified": "2026-09-23",
+    "radar_published_at": "2026-09-22T23:42:17Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-21",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.24971",
+        "precision": "day",
+        "kind": "preprint-initial-submission",
+        "verified_at": "2026-09-23",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "checked_at": "2026-09-23",
+      "evidence_level": "official-protocol-or-dataset-review",
+      "protocol_sources": [
+        "https://github.com/mem0ai/dolphinbench/blob/main/README.md",
+        "https://github.com/mem0ai/dolphinbench/blob/main/docs/CANONICAL_EVALUATION.md"
+      ],
+      "source_blob_shas": {},
+      "paper_access": "Initial submission metadata and abstract checked. Acceptance relies on the linked official protocol/implementation or detailed dataset description; no paper-PDF review is claimed.",
+      "observation_basis": "Earliest retained timestamped Radar mention: commit faa68df6831eee71fe8ec22349cc8ef323f4e7ea. Earlier unlogged discovery is not reconstructed.",
+      "score_ceiling": "Three simulated personas and selector-agent-dependent task certification do not establish natural-user generalization; frozen evaluation does not measure learning across test tasks or real provider-time aging.",
+      "next_control": "Hold the writer, executor, interfaces, and graders fixed; compare no memory, budget-matched retrieval, and supplied relevant history. Report action success, evidence access, and total cost separately. Treat test-time memory updates as a different protocol rather than pooling them with frozen-memory scores.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-23",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count was obtained for this addition. Unknown is not zero; existing citation snapshots are retained."
+    }
+  },
+  {
+    "id": "memcalib",
+    "name": "MemCalib",
+    "area": "agent-memory",
+    "released": "2026-09-21",
+    "published_at": "2026-09-21T08:22:21Z",
+    "importance": 4,
+    "evolution_role": "frontier",
+    "summary": "Tests whether each supplied memory proposition is ignored, used as bounded support, or allowed to control a response at its query-specific target level.",
+    "capabilities": [
+      "memory-use-calibration",
+      "over-use-detection",
+      "under-use-detection",
+      "query-conditioned-constraint-use"
+    ],
+    "environment": [
+      "supplied-composite-memory",
+      "health-assistance-coding",
+      "atom-level-targets-and-rubrics"
+    ],
+    "protocol": [
+      "ignore-bound-control-targets",
+      "held-out-test-set",
+      "sample-calibration-score",
+      "exact-calibration",
+      "directional-error-reporting"
+    ],
+    "scale": "15,000 examples with 234,220 atomic propositions: 13,500 training and 1,500 held-out test examples; 1,500 training examples are reserved for validation in the paper.",
+    "measurement_strength": "Separates too much memory influence from too little, rather than treating memory access or aggregate answer quality as calibrated use.",
+    "coverage_gap": "The evaluated object is use of already supplied context, not retrieval, writing, maintenance, or closed-loop task success; rubric and evaluator implementation affect the reported calibration.",
+    "confounders": [
+      "ideal-use-annotation",
+      "atom-decomposition",
+      "rubric-interpretation",
+      "evaluator-version",
+      "domain-mixture",
+      "training-test-separation"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.24259",
+      "project": "https://quark-medical.github.io/MemCalib-Project/",
+      "data": "https://huggingface.co/datasets/ZiLaotou/MemCalib"
+    },
+    "artifact_access": "Dataset and detailed official project description are public. The advertised code repository contained only a short README at verification; no executable evaluator was verified there.",
+    "status": "active",
+    "last_verified": "2026-09-23",
+    "first_seen_at": "2026-09-22T23:35:54Z",
+    "radar_published_at": "2026-09-22T23:42:17Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-21",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.24259",
+        "precision": "day",
+        "kind": "preprint-initial-submission",
+        "verified_at": "2026-09-23",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "checked_at": "2026-09-23",
+      "evidence_level": "official-protocol-or-dataset-review",
+      "protocol_sources": [
+        "https://github.com/Quark-Medical/MemCalib-Project/blob/main/index.html",
+        "https://huggingface.co/datasets/ZiLaotou/MemCalib",
+        "https://github.com/Quark-Medical/memcalib"
+      ],
+      "source_blob_shas": {
+        "https://github.com/Quark-Medical/MemCalib-Project/blob/main/index.html": "b3a4bc58d73b1164b0908a079d387149dc1de1da"
+      },
+      "paper_access": "Initial submission metadata and abstract checked. Acceptance relies on the linked official protocol/implementation or detailed dataset description; no paper-PDF review is claimed.",
+      "observation_basis": "First retained timestamp for resolved canonical intake in this run; earlier unlogged search leads are not reconstructed.",
+      "score_ceiling": "The evaluated object is use of already supplied context, not retrieval, writing, maintenance, or closed-loop task success; rubric and evaluator implementation affect the reported calibration.",
+      "next_control": "Keep the generator and supplied memories fixed; compare full memory, an oracle of relevant atoms, and removal of distractors. Report both error directions by A/B/C class and audit boundary cases with human and multiple-evaluator agreement. Until the scorer is released, clearly separate local rubric implementations from the paper's reported scores.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-23",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count was obtained for this addition. Unknown is not zero; existing citation snapshots are retained."
+    }
+  },
+  {
+    "id": "chemclir-bench",
+    "name": "ChemCLIR-Bench",
+    "area": "rag",
+    "released": "2026-09-19",
+    "published_at": "2026-09-19T22:18:58Z",
+    "importance": 3,
+    "evolution_role": "frontier",
+    "summary": "Tests chemical-patent retrieval across query and document languages, with language-pair, query-origin, ranking-depth, and recoverability diagnostics.",
+    "capabilities": [
+      "cross-lingual-retrieval",
+      "technical-domain-retrieval",
+      "ranking-depth-diagnosis"
+    ],
+    "environment": [
+      "google-patents-and-epo",
+      "multilingual-technical-text",
+      "generated-and-translated-queries"
+    ],
+    "protocol": [
+      "mteb-corpus-queries-qrels",
+      "recall-at-10",
+      "mrr-at-10",
+      "same-versus-cross-language",
+      "query-origin-stratification"
+    ],
+    "scale": "The paper evaluates eight embedding models across five languages; the public generation pipeline is configurable and supports additional translation languages, so its current configuration is not assumed identical to the paper cohort.",
+    "measurement_strength": "Extends heterogeneous retrieval evaluation to language-pair and retrieval-depth failures in industrial technical text.",
+    "coverage_gap": "Static retrieval quality does not establish answer correctness or agentic search utility; generated queries and uneven multilingual claim-text coverage constrain external validity.",
+    "confounders": [
+      "english-seeded-query-generation",
+      "synthetic-translation",
+      "patent-family-overlap",
+      "language-dependent-context-fields",
+      "qrel-construction",
+      "corpus-and-model-version"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.23231",
+      "code": "https://github.com/MohammadKhodadad/Multi-Lingual-QAC",
+      "data": "https://huggingface.co/datasets/MehdiAstaraki/multilingual_GP"
+    },
+    "artifact_access": "Public construction and MTEB evaluation pipeline; official README links both Google Patents and EPO dataset releases.",
+    "status": "active",
+    "last_verified": "2026-09-23",
+    "first_seen_at": "2026-09-22T23:35:54Z",
+    "radar_published_at": "2026-09-22T23:42:17Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-19",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.23231",
+        "precision": "day",
+        "kind": "preprint-initial-submission",
+        "verified_at": "2026-09-23",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "checked_at": "2026-09-23",
+      "evidence_level": "official-protocol-or-dataset-review",
+      "protocol_sources": [
+        "https://github.com/MohammadKhodadad/Multi-Lingual-QAC/blob/main/README.md",
+        "https://huggingface.co/datasets/MehdiAstaraki/multi-lingual-qac-epo"
+      ],
+      "source_blob_shas": {
+        "https://github.com/MohammadKhodadad/Multi-Lingual-QAC/blob/main/README.md": "50fdb5882456a34e7e51010f8ffc0b5a8f52858f"
+      },
+      "paper_access": "Initial submission metadata and abstract checked. Acceptance relies on the linked official protocol/implementation or detailed dataset description; no paper-PDF review is claimed.",
+      "observation_basis": "First retained timestamp for resolved canonical intake in this run; earlier unlogged search leads are not reconstructed.",
+      "score_ceiling": "Static retrieval quality does not establish answer correctness or agentic search utility; generated queries and uneven multilingual claim-text coverage constrain external validity.",
+      "next_control": "Fix document fields, patent-family splits, and qrels; compare multilingual dense retrieval, query translation plus BM25, and hybrid retrieval. Report Recall/MRR per language pair, separate original and translated queries, and match retrieval and reranking budgets.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-23",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count was obtained for this addition. Unknown is not zero; existing citation snapshots are retained."
+    }
+  },
+  {
+    "id": "locomo-conv",
+    "name": "LoCoMo-Conv",
+    "area": "agent-memory",
+    "released": "2026-09-03",
+    "published_at": "2026-09-03T07:24:33Z",
+    "importance": 4,
+    "evolution_role": "frontier",
+    "summary": "Recasts LoCoMo into dialog, implicit, counterfactual, and composed queries while separating source-evidence recall from conversational response quality.",
+    "capabilities": [
+      "implicit-memory-retrieval",
+      "composed-memory-use",
+      "counterfactual-memory-use",
+      "conversational-grounding"
+    ],
+    "environment": [
+      "locomo-conversations",
+      "rewritten-conversational-queries",
+      "source-dia-id-provenance"
+    ],
+    "protocol": [
+      "fixed-original-gold-evidence",
+      "four-query-styles",
+      "retrieval-recall-precision-f1",
+      "top-k-oracle-no-memory-controls",
+      "response-quality-judges"
+    ],
+    "scale": "Four conversational query styles over LoCoMo, including 1,069 composed clusters pairing two source questions; source histories are reused rather than newly collected longitudinal interactions.",
+    "measurement_strength": "Holds source histories and evidence fixed while exposing whether explicit QA wording was revealing what memory to retrieve.",
+    "coverage_gap": "Rewritten prompts do not establish natural conversational behavior or action success; evidence-ID attribution and response-judge criteria can favor different memory representations.",
+    "confounders": [
+      "query-rewriting",
+      "category-filtering",
+      "source-id-attribution",
+      "raw-versus-abstractive-memory",
+      "retrieval-budget",
+      "answerer-and-judge"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.03467",
+      "code": "https://github.com/MiuLab/LoCoMo-Conv",
+      "data": "https://github.com/MiuLab/LoCoMo-Conv/tree/main/data"
+    },
+    "artifact_access": "Public rewritten queries, composed clusters, retrieval and response evaluators, oracle controls, and variance-analysis scripts.",
+    "first_seen_at": "2026-09-22T15:14:30Z",
+    "status": "active",
+    "last_verified": "2026-09-23",
+    "radar_published_at": "2026-09-22T23:42:17Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-03",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.03467",
+        "precision": "day",
+        "kind": "preprint-initial-submission",
+        "verified_at": "2026-09-23",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "checked_at": "2026-09-23",
+      "evidence_level": "official-protocol-or-dataset-review",
+      "protocol_sources": [
+        "https://github.com/MiuLab/LoCoMo-Conv/blob/main/README.md",
+        "https://github.com/MiuLab/LoCoMo-Conv/blob/main/retrieval/compute_retrieval_metrics.py"
+      ],
+      "source_blob_shas": {
+        "https://github.com/MiuLab/LoCoMo-Conv/blob/main/README.md": "32dfd0ecb370437224061e1e48edd3e7c3d0ba7a",
+        "https://github.com/MiuLab/LoCoMo-Conv/blob/main/retrieval/compute_retrieval_metrics.py": "70fd7f3e930aca8a8a18a104feb0b2fe4bd409bc"
+      },
+      "paper_access": "Initial submission metadata and abstract checked. Acceptance relies on the linked official protocol/implementation or detailed dataset description; no paper-PDF review is claimed.",
+      "observation_basis": "Earliest retained timestamped Radar mention: commit faa68df6831eee71fe8ec22349cc8ef323f4e7ea. Earlier unlogged discovery is not reconstructed.",
+      "score_ceiling": "Rewritten prompts do not establish natural conversational behavior or action success; evidence-ID attribution and response-judge criteria can favor different memory representations.",
+      "next_control": "Pair explicit and implicit versions of the same source question and history, fixing embeddings, answerer, top-K, and token budget; then supply oracle evidence. Audit source recall, semantic preservation, fact use, and conversational appropriateness separately rather than collapsing all stages into one score.",
+      "publication_type": "missed-release-backfill"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-23",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count was obtained for this addition. Unknown is not zero; existing citation snapshots are retained."
+    }
+  },
+  {
+    "id": "statformbench",
+    "name": "StatFormBench",
+    "area": "data-agent",
+    "released": "2026-09-02",
+    "published_at": "2026-09-02T01:37:17Z",
+    "importance": 4,
+    "evolution_role": "frontier",
+    "summary": "Tests the upstream formulation of a statistical problem: selecting its coarse and fine task category, identifying variables, and assigning their roles.",
+    "capabilities": [
+      "statistical-task-formulation",
+      "method-classification",
+      "variable-identification",
+      "variable-role-assignment"
+    ],
+    "environment": [
+      "statistics-textbook-problems",
+      "data-science-cases",
+      "natural-language-analysis-goals"
+    ],
+    "protocol": [
+      "coarse-and-fine-classification-accuracy",
+      "variable-set-jaccard",
+      "variable-precision-and-recall",
+      "variable-role-consistency"
+    ],
+    "scale": "1,013 samples from five statistics textbooks and a data-science case library, spanning 20 coarse and 85 fine categories; the paper evaluates 14 models.",
+    "measurement_strength": "Makes formulation observable before execution instead of assuming that the analysis target and relevant variables have already been correctly specified.",
+    "coverage_gap": "Correct formulation is not an executed, statistically valid analysis; textbook category labels may underrepresent ambiguous business goals and multiple valid formulations.",
+    "confounders": [
+      "taxonomy-choice",
+      "textbook-exposure",
+      "variable-name-normalization",
+      "role-rubrics",
+      "prompt-and-model-version",
+      "evaluation-parsing"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.01982",
+      "code": "https://github.com/THU-CongLab/StatFormBench",
+      "data": "https://huggingface.co/datasets/THU-CongLab/StatFormBench"
+    },
+    "artifact_access": "Public dataset, prompts, model runner, evaluation modules and saved outputs. The English entry is lowercase readme.md.",
+    "status": "active",
+    "last_verified": "2026-09-23",
+    "first_seen_at": "2026-09-22T23:35:54Z",
+    "radar_published_at": "2026-09-22T23:42:17Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-02",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.01982",
+        "precision": "day",
+        "kind": "preprint-initial-submission",
+        "verified_at": "2026-09-23",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "checked_at": "2026-09-23",
+      "evidence_level": "official-protocol-or-dataset-review",
+      "protocol_sources": [
+        "https://github.com/THU-CongLab/StatFormBench/blob/main/readme.md",
+        "https://github.com/THU-CongLab/StatFormBench/blob/main/src/evaluation/variable_metrics.py"
+      ],
+      "source_blob_shas": {
+        "https://github.com/THU-CongLab/StatFormBench/blob/main/readme.md": "09300ae5f20bda2f1ac63a0fc2b14e108e11a073",
+        "https://github.com/THU-CongLab/StatFormBench/blob/main/src/evaluation/variable_metrics.py": "d6fef2ed6128d63442a9fdefb553cf3fedf10a19"
+      },
+      "paper_access": "Initial submission metadata and abstract checked. Acceptance relies on the linked official protocol/implementation or detailed dataset description; no paper-PDF review is claimed.",
+      "observation_basis": "First retained timestamp for resolved canonical intake in this run; earlier unlogged search leads are not reconstructed.",
+      "score_ceiling": "Correct formulation is not an executed, statistically valid analysis; textbook category labels may underrepresent ambiguous business goals and multiple valid formulations.",
+      "next_control": "Feed model-generated versus expert-supplied formulations to the same executor. Report formulation metrics and final numerical correctness separately, then blind-review cases with multiple valid formulations. If expert formulations remove most failures, prioritize problem definition rather than adding execution tools.",
+      "publication_type": "missed-release-backfill"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-23",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count was obtained for this addition. Unknown is not zero; existing citation snapshots are retained."
+    }
+  },
+  {
+    "id": "livedrbench",
+    "name": "LiveDRBench",
+    "area": "rag",
+    "released": "2025-08-06",
+    "published_at": "2025-08-06T08:09:28Z",
+    "importance": 4,
+    "evolution_role": "transition",
+    "map_delta": "none",
+    "summary": "Tests broad research as structured claim discovery, scoring precision, recall, and F1 separately from the writing quality of a long report.",
+    "capabilities": [
+      "broad-evidence-discovery",
+      "structured-claim-synthesis",
+      "reference-grounding"
+    ],
+    "environment": [
+      "public-web-research",
+      "scientific-and-event-search",
+      "structured-output-contract",
+      "encrypted-reference-answers"
+    ],
+    "protocol": [
+      "100-research-tasks",
+      "category-specific-claim-evaluators",
+      "precision-recall-f1",
+      "question-level-overall-average",
+      "test-only-release"
+    ],
+    "scale": "100 tasks in eight categories; the official v1-full release was collected in May-June 2025. Future refresh plans do not make that snapshot a live-changing test set.",
+    "measurement_strength": "Separates broad discovery of supported claims from report style and provides a missing predecessor for later checklist- and claim-oriented research evaluation.",
+    "coverage_gap": "A fixed reference claim set and judge can miss alternative valid evidence; coverage is concentrated in a few scientific and event domains and does not measure report writing quality.",
+    "confounders": [
+      "web-drift",
+      "reference-set-completeness",
+      "judge-model",
+      "output-schema",
+      "question-versus-category-aggregation",
+      "test-contamination"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2508.04183",
+      "code": "https://github.com/microsoft/LiveDRBench",
+      "data": "https://huggingface.co/datasets/microsoft/LiveDRBench"
+    },
+    "artifact_access": "Public test-only dataset and category-specific evaluation code; official evaluator defaults to a GPT-4o judge. Historical backfill, not a September 2026 release.",
+    "status": "active",
+    "last_verified": "2026-09-23",
+    "first_seen_at": "2026-09-22T23:35:54Z",
+    "radar_published_at": "2026-09-22T23:42:17Z",
+    "time_provenance": "native_v2",
+    "first_public_at": "2025-08-06",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2508.04183",
+        "precision": "day",
+        "kind": "preprint-initial-submission",
+        "verified_at": "2026-09-23",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "checked_at": "2026-09-23",
+      "evidence_level": "official-protocol-or-dataset-review",
+      "protocol_sources": [
+        "https://github.com/microsoft/LiveDRBench/blob/main/README.md",
+        "https://github.com/microsoft/LiveDRBench/blob/main/src/evaluate.py",
+        "https://proceedings.iclr.cc/paper_files/paper/2026/hash/114e1dc345fe31b8b9b0c6f7b55a0644-Abstract-Conference.html"
+      ],
+      "source_blob_shas": {
+        "https://github.com/microsoft/LiveDRBench/blob/main/README.md": "0f42baf1968b69a56ccf9a355ae4a025cc661c70",
+        "https://github.com/microsoft/LiveDRBench/blob/main/src/evaluate.py": "80f43eda40c265b73573954de69fa8db27a55e2e"
+      },
+      "paper_access": "Initial submission metadata and abstract checked. Acceptance relies on the linked official protocol/implementation or detailed dataset description; no paper-PDF review is claimed.",
+      "observation_basis": "First retained timestamp for resolved canonical intake in this run; earlier unlogged search leads are not reconstructed.",
+      "score_ceiling": "A fixed reference claim set and judge can miss alternative valid evidence; coverage is concentrated in a few scientific and event domains and does not measure report writing quality.",
+      "next_control": "Fix the model, evidence snapshot, and search budget; compare single-chain search with branching exploration. Retain unfinished tasks, aggregate per question, and independently validate correct discoveries outside the references. Score the report separately so prose quality cannot hide missing evidence.",
+      "publication_type": "historical-backfill"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-23",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count was obtained for this addition. Unknown is not zero; existing citation snapshots are retained."
     }
   }
 ]

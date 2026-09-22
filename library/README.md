@@ -10,11 +10,16 @@
 
 | 时间 | Benchmark | 领域 | 角色 | 这次改变了什么 |
 |---:|---|---|---|---|
+| 2026-09-21 | [DolphinBench](https://arxiv.org/abs/2609.24971) <!-- benchmark-id:dolphinbench --> | Agent Memory | 🔭 前沿 | 相较显式历史问答，把记忆效用落到应用中的实际动作，并要求联合报告生命周期成本与延迟。 |
+| 2026-09-21 | [MemCalib](https://arxiv.org/abs/2609.24259) <!-- benchmark-id:memcalib --> | Agent Memory | 🔭 前沿 | 把记忆影响不足与过度影响分开，形成命题级、依赖当前问题的记忆使用校准诊断。 |
+| 2026-09-19 | [ChemCLIR-Bench](https://arxiv.org/abs/2609.23231) <!-- benchmark-id:chemclir-bench --> | RAG / Agentic Retrieval | 🔭 前沿 | 在异构领域检索之外，把技术文献的语言对差异、翻译来源和相关文档排名深度显式化。 |
 | 2026-09-10 | [Mr.LHDR](https://arxiv.org/abs/2609.11318) <!-- benchmark-id:mr-lhdr --> | RAG / Agentic Retrieval | 🔭 前沿 | 相较只判最终答案的深度研究评测，将满足前置依赖的部分进展变成直接评分对象。 |
 | 2026-09-08 | [OntologyBench](https://arxiv.org/abs/2609.08174) <!-- benchmark-id:ontologybench --> | RAG / Agentic Retrieval | 🔭 前沿 | 在文本检索中加入结构化相容性目标和本体感知诊断基线。 |
 | 2026-09-08 | [Q2D-Web](https://arxiv.org/abs/2609.08887) <!-- benchmark-id:q2d-web --> | RAG / Agentic Retrieval | 🔭 前沿 | 相较 BEIR 与 BrowseComp-Plus，把智能体实际发出的查询作为检索对象，而不是把最终回答成绩归因给检索器。 |
 | 2026-09-04 | [DI-Bench (Data Intelligence)](https://arxiv.org/abs/2609.05776) <!-- benchmark-id:di-bench-data-intelligence --> | Data Agents | 🔭 前沿 | 相较只检查 SQL 正确性，将业务规则的实际应用与领域内评测任务生成变成独立测量对象。 |
 | 2026-09-03 | [ICM-Bench](https://arxiv.org/abs/2609.04438) <!-- benchmark-id:icm-bench --> | Agent Memory | 🔭 前沿 | 相较一般多模态召回，将长期时间线上的重复人物关联及画像证据单独考察。 |
+| 2026-09-03 | [LoCoMo-Conv](https://arxiv.org/abs/2609.03467) <!-- benchmark-id:locomo-conv --> | Agent Memory | 🔭 前沿 | 固定历史与标准证据，检查显式问答措辞是否泄露了应检索的记忆，并区分检索成功与回答落地。 |
+| 2026-09-02 | [StatFormBench](https://arxiv.org/abs/2609.01982) <!-- benchmark-id:statformbench --> | Data Agents | 🔭 前沿 | 把通常默认正确的分析目标与变量选择，提前拆成独立于代码执行的诊断对象。 |
 | 2026-09-01 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | Agent Memory | 🔭 前沿 | 把持久记忆中的授权错误拆成“虚假权限形成”与“错误权限向真实行动传播”两阶段。 |
 | 2026-09-01 | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | Agent Memory | 🔭 前沿 | 把过期记忆与当前权威证据冲突做成受控实验，并显式测量失败如何随模型能力变化。 |
 | 2026-08-31 | [CrossModalQA](https://arxiv.org/abs/2609.05518) <!-- benchmark-id:crossmodalqa --> | RAG / Agentic Retrieval | 🔭 前沿 | 相较仅包含图片的问答，显式规定跨模态证据路径，而不是用“有图”替代多模态推理测量。 |
@@ -118,6 +123,7 @@
 | 2025-10 | [BEAM](https://arxiv.org/abs/2510.27246) <!-- benchmark-id:beam --> | Agent Memory | ↗ 过渡 | 直接观察超大规模连续历史下的记忆退化。 |
 | 2025-10 | [RAGCap-Bench](https://arxiv.org/abs/2510.13910) <!-- benchmark-id:ragcap-bench --> | RAG / Agentic Retrieval | 🔭 前沿 | 中间能力可以独立诊断，不必只从最终答案倒推原因。 |
 | 2025-09 | [FDABench](https://arxiv.org/abs/2509.02473) <!-- benchmark-id:fdabench --> | Data Agents | 🔭 前沿 | 异构分析、推理过程、延迟和 token 成本可以同时观察。 |
+| 2025-08-06 | [LiveDRBench](https://arxiv.org/abs/2508.04183) <!-- benchmark-id:livedrbench --> | RAG / Agentic Retrieval | ↗ 过渡 | 把研究中的证据与主张发现同报告写作拆开，补齐后续清单式、主张式研究评测的历史参照。 |
 | 2025-08 | [BrowseComp-Plus](https://arxiv.org/abs/2508.06600) <!-- benchmark-id:browsecomp-plus --> | RAG / Agentic Retrieval | ↗ 过渡 | 固定且经过核验的语料降低了实时搜索带来的黑箱性和复现困难。 |
 | 2025-07 | [MemoryAgentBench](https://arxiv.org/abs/2507.05257) <!-- benchmark-id:memoryagentbench --> | Agent Memory | ↗ 过渡 | 记忆由读取静态历史，变成持续吸收、更新、使用和遗忘的在线过程。 |
 | 2025-06-30 | [DABstep](https://arxiv.org/abs/2506.23719) <!-- benchmark-id:dabstep --> | Data Agents | ↗ 过渡 | 从单表或单步问答转向跨数据与文档的长链推理，并保持结果精确可自动核验。 |
@@ -212,6 +218,9 @@
 | 🔭 前沿 | [EAL-Bench](https://arxiv.org/abs/2609.01836) <!-- benchmark-id:eal-bench --> | 2026-09-01 | 持久记忆中的授权状态保持、虚假权限形成与越权行动传播。 | 把记忆安全从“内容是否正确”推进到“权限是否被忠实保持并影响行动”。 |
 | 🔭 前沿 | [The Memory Trust Gap](https://arxiv.org/abs/2609.01852) <!-- benchmark-id:memory-trust-gap --> | 2026-09-01 | 过期记忆与当前权威证据冲突时的过度信任，以及模型规模效应。 | 把记忆冲突失败从单一模型现象推进到能力依赖的受控比较。 |
 | 🔭 前沿 | [ICM-Bench](https://arxiv.org/abs/2609.04438) <!-- benchmark-id:icm-bench --> | 2026-09-03 | 在合成多模态生活相册中，测围绕同一人物的记忆召回、跨片段身份关联与长期画像推断。 | 相较一般多模态召回，将长期时间线上的重复人物关联及画像证据单独考察。 |
+| 🔭 前沿 | [LoCoMo-Conv](https://arxiv.org/abs/2609.03467) <!-- benchmark-id:locomo-conv --> | 2026-09-03 | 保留 LoCoMo 的历史和证据，将问题改为对话、隐式、反事实及组合查询，分别测检索与回答。 | 固定历史与标准证据，检查显式问答措辞是否泄露了应检索的记忆，并区分检索成功与回答落地。 |
+| 🔭 前沿 | [DolphinBench](https://arxiv.org/abs/2609.24971) <!-- benchmark-id:dolphinbench --> | 2026-09-21 | 在模拟工作应用中，以冻结记忆、历史依赖对照和逐题状态重置，测任务行动、总成本与延迟。 | 相较显式历史问答，把记忆效用落到应用中的实际动作，并要求联合报告生命周期成本与延迟。 |
+| 🔭 前沿 | [MemCalib](https://arxiv.org/abs/2609.24259) <!-- benchmark-id:memcalib --> | 2026-09-21 | 对上下文中每条记忆命题，测它是否按当前问题所需被忽略、局部使用或作为决定性约束。 | 把记忆影响不足与过度影响分开，形成命题级、依赖当前问题的记忆使用校准诊断。 |
 
 <!-- COMPLETE-MAP:agent-memory:END -->
 
@@ -236,6 +245,7 @@
 | ↗ 过渡 | [T²-RAGBench](https://aclanthology.org/2026.eacl-long.8/) <!-- benchmark-id:t2-ragbench --> | 2025-05-14 | 考察真实财务报告中的文本与表格检索，以及检索后的数值推理。 | 去除原有问答数据的先验正确上下文，使检索和数值推理能够端到端联合评测。 |
 | ↗ 过渡 | [DeepResearch Bench](https://arxiv.org/abs/2506.11763) <!-- benchmark-id:deepresearch-bench --> | 2025-06 | 多步网页研究、证据收集、引用质量和长篇报告生成。 | 目标不再只是找到短答案，还要交付完整研究报告。 |
 | ↗ 过渡 | [BrowseComp-Plus](https://arxiv.org/abs/2508.06600) <!-- benchmark-id:browsecomp-plus --> | 2025-08 | 在固定语料上进行深度研究，并分析检索贡献和答案准确率。 | 固定且经过核验的语料降低了实时搜索带来的黑箱性和复现困难。 |
+| ↗ 过渡 | [LiveDRBench](https://arxiv.org/abs/2508.04183) <!-- benchmark-id:livedrbench --> | 2025-08-06 | 把广泛研究表示为结构化主张发现，以精确率、召回率和 F1 评分，而非评价长报告文风。 | 把研究中的证据与主张发现同报告写作拆开，补齐后续清单式、主张式研究评测的历史参照。 |
 | 🔭 前沿 | [RAGCap-Bench](https://arxiv.org/abs/2510.13910) <!-- benchmark-id:ragcap-bench --> | 2025-10 | 分别评测 Agentic RAG 中的规划、检索和中间推理能力。 | 中间能力可以独立诊断，不必只从最终答案倒推原因。 |
 | 🔭 前沿 | [LIT-RAGBench](https://arxiv.org/abs/2603.06198) <!-- benchmark-id:lit-ragbench --> | 2025-10-22 | 在已给定检索上下文时，考察生成器的逻辑、整合、表格、推理与拒答能力。 | 隔离检索质量影响，在统一双语协议下诊断五类 RAG 生成能力。 |
 | 🔭 前沿 | [AgenticRAGTracer](https://arxiv.org/abs/2602.19127) <!-- benchmark-id:agenticragtracer --> | 2026-02 | 对多步检索与推理逐跳核验，并检查步骤分配。 | 能够定位整条轨迹究竟在哪一步失败。 |
@@ -274,6 +284,7 @@
 | 🔭 前沿 | [OntologyBench](https://arxiv.org/abs/2609.08174) <!-- benchmark-id:ontologybench --> | 2026-09-08 | 测稠密检索能否满足本体定义的概念、关系及表型合取约束，而不只是找到语义相似文本。 | 在文本检索中加入结构化相容性目标和本体感知诊断基线。 |
 | 🔭 前沿 | [Q2D-Web](https://arxiv.org/abs/2609.08887) <!-- benchmark-id:q2d-web --> | 2026-09-08 | 在生产来源的大规模语料上，测智能体改写查询的文档检索，并区分引用、生产排序与联合标注。 | 相较 BEIR 与 BrowseComp-Plus，把智能体实际发出的查询作为检索对象，而不是把最终回答成绩归因给检索器。 |
 | 🔭 前沿 | [Mr.LHDR](https://arxiv.org/abs/2609.11318) <!-- benchmark-id:mr-lhdr --> | 2026-09-10 | 测长程多模态研究的最终答案，以及受前置依赖约束的中间结论覆盖。 | 相较只判最终答案的深度研究评测，将满足前置依赖的部分进展变成直接评分对象。 |
+| 🔭 前沿 | [ChemCLIR-Bench](https://arxiv.org/abs/2609.23231) <!-- benchmark-id:chemclir-bench --> | 2026-09-19 | 在化学专利中，按查询与目标语言、原生或翻译查询及排名深度，诊断跨语言检索。 | 在异构领域检索之外，把技术文献的语言对差异、翻译来源和相关文档排名深度显式化。 |
 
 <!-- COMPLETE-MAP:rag:END -->
 
@@ -322,6 +333,7 @@
 | 🔭 前沿 | [Data Exploration Benchmark](https://arxiv.org/abs/2608.16045) <!-- benchmark-id:data-exploration-benchmark --> | 2026-08-17 | 在下游分析前，构建包含逻辑表、列语义、键关系和质量信号的结构化数据理解产物。 | 把通常隐含的数据探索阶段从最终答案的前置假设变成可独立评分、可验证下游价值的对象。 |
 | 🔭 前沿 | [AI4AI-Bench](https://arxiv.org/abs/2608.20318) <!-- benchmark-id:ai4ai-bench --> | 2026-08-20 | 在冻结训练仓库中诊断并修改学习算法，以 proxy 探索、源码交付和 clean-start 正式运行隔离成绩。 | 把 algorithm design 与 run-side tuning 分开观察，并以 source patch 作为探索和最终训练之间的边界。 |
 | 🔭 前沿 | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 2026-08-20 | 在真实研究仓库中修复训练管线、迭代机器学习实验、提高论文基线并抵抗 specification gaming。 | 把“改进已发表 ML 基线”与 repository realism、长算力预算和提交完整性放入同一执行对象。 |
+| 🔭 前沿 | [StatFormBench](https://arxiv.org/abs/2609.01982) <!-- benchmark-id:statformbench --> | 2026-09-02 | 在执行分析之前，测统计问题的粗细类别选择、相关变量识别及变量角色分配。 | 把通常默认正确的分析目标与变量选择，提前拆成独立于代码执行的诊断对象。 |
 | 🔭 前沿 | [DI-Bench (Data Intelligence)](https://arxiv.org/abs/2609.05776) <!-- benchmark-id:di-bench-data-intelligence --> | 2026-09-04 | 以可执行标准答案和关联图生成协议，测数据智能体能否把检索到的业务规则正确用于分析计算。 | 相较只检查 SQL 正确性，将业务规则的实际应用与领域内评测任务生成变成独立测量对象。 |
 
 <!-- COMPLETE-MAP:data-agent:END -->

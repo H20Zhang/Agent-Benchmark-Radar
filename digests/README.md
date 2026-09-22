@@ -1,19 +1,17 @@
 # Research Compactions
 
-This directory stores closed-period benchmark synthesis rather than benchmark-by-benchmark summaries. The root README owns rolling, inclusive 7-day and 30-day windows; those sections may change on any material Daily Agent run and are not immutable digests.
+Closed-period digests synthesize changes in evaluation objects, protocols, and validity, rather than concatenate paper summaries. The root README presents the rolling six-calendar-month release timeline and the complete three-area registry; editorial interpretation remains in linked notes and guides.
 
-- `weekly/YYYY-Www.md`: new benchmark releases, protocol changes, validity findings, and the 1–3 evaluation shifts that matter that week.
-- `monthly/YYYY-MM.md`: which capabilities are becoming well measured, where benchmark families converge or conflict, and which apparent progress is mostly harness/model drift.
-- `yearly/YYYY.md`: durable changes in evaluation targets, field-defining benchmark families, weakened assumptions, and the most important remaining measurement gaps.
+The Daily Agent is the boundary writer. The first successful run after Monday 00:00 in UTC+8 closes the preceding ISO week; the first successful run of a month closes the preceding month. Existing closed digests are immutable. Monthly synthesis re-reads canonical records and notes rather than summarizing weekly prose. No incomplete current period is presented as a closed digest.
 
-Compactions should always re-ground load-bearing claims in the canonical registry and primary benchmark sources. A trend requires more than multiple papers using similar language.
+Every digest states its inclusive dates, synthesis time, accepted supporting identities, confidence, and research-design implications. Membership follows `radar_published_at`, not a paper's earlier release date. Missing historical acceptance timestamps remain unknown. Candidate and blocked work stays private. Publication is atomic with canonical data and bilingual reader surfaces, not a separate daily run log.
 
-The Daily Agent is the only boundary writer:
+## Published digests
 
-- on the first successful run after Monday 00:00 in the repository's configured local timezone, it creates the previous complete ISO-week digest if that period identity does not already exist;
-- on the first successful run of a new month, it creates the previous complete calendar-month digest if absent;
-- monthly synthesis re-reads canonical records and deep notes for the month and never summarizes weekly prose;
-- a retry uses the same period identity and cannot create a duplicate file;
-- an incomplete current week or month remains represented only by the rolling root windows.
-
-Each closed digest states its exact inclusive start/end dates, synthesis time, supporting accepted identities, confidence, and implications for research design. Candidate, blocked, deferred, rejected, and abstract-only work remains private. Separate weekly/monthly schedulers stay disabled so boundary publication is part of the Daily Agent's one atomic transaction.
+- **2026-W38:** [中文](weekly/2026-W38.md) · [English](weekly/2026-W38.en.md)
+- **2026-W37:** [中文](weekly/2026-W37.md) · [English](weekly/2026-W37.en.md)
+- **2026-W36:** [中文](weekly/2026-W36.md) · [English](weekly/2026-W36.en.md)
+- **2026-W35:** [中文](weekly/2026-W35.md) · [English](weekly/2026-W35.en.md)
+- **2026-W34:** [中文](weekly/2026-W34.md) · [English](weekly/2026-W34.en.md)
+- **2026-W33:** [中文](weekly/2026-W33.md) · [English](weekly/2026-W33.en.md)
+- **2026-08:** [中文](monthly/2026-08.md) · [English](monthly/2026-08.en.md)

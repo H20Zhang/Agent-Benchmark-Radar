@@ -32,6 +32,20 @@ The suite is small and read-oriented. Production agents face permissions, writes
 
 Annotate each query with a ground-truth integration/semantic plan and score intermediate relation resolution before final execution. That would reveal whether heterogeneous data access or business semantics is the dominant bottleneck.
 
+<!-- PROTOCOL-AUDIT-20260923:START -->
+
+## 2026-09-23 protocol audit: inspect denominators, hints, and validator versions
+
+Official Pass@1 first averages repeated-run pass rates per query, then within each dataset, and finally across datasets. It is **not success on at least one of five attempts**. Submissions require five runs per query and execution traces; missing, contaminated, or unsupported runs must not simply disappear from the denominator. [Official methodology and submission rules](https://github.com/ucbepic/DataAgentBench/blob/main/README.md)
+
+The leaderboard separates `Tuned prompt` and `Hints`. For example, the official table records Permute EQ at 0.9467 dated 2026-09-11 and Scout at 0.9062 dated 2026-09-08; both declare tuned prompts, hints, and five trials. These are conditional source snapshots, not isolated backbone effects, and should not be subtracted directly from the historical paper's 38% result.
+
+Validators changed materially. The official methodology records a 2026-06-12 rescore with updated validators and regenerated PATENTS references. On 2026-08-18, DEPS_DEV_V1 query 1 was corrected to accept any of 95 packages tied at fifth place rather than one package in the old reference. **A changed score can reflect repaired labels or validators rather than improved systems.** Preserve database and validator versions, complete per-query outputs, prompts, and traces before comparing results.
+
+This update preserves DAB's original release date and citation snapshot. The date 2026-09-23 identifies this Radar's protocol verification, not a new benchmark release. Official submissions were not independently rerun.
+
+<!-- PROTOCOL-AUDIT-20260923:END -->
+
 <!-- RESEARCH-DECISION:START -->
 
 ## Research decision card
