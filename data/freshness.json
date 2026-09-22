@@ -1,5 +1,5 @@
 {
-  "discovery_scan_at": "2026-09-17",
+  "discovery_scan_at": "2026-09-23",
   "window_days": 30,
   "scope": [
     "agent-memory",
@@ -7,10 +7,11 @@
     "data-agent"
   ],
   "sources": [
-    "arXiv paper search and full-text protocols",
-    "official benchmark repositories and linked releases",
-    "bounded predecessor backfill"
+    "arXiv initial-submission metadata and benchmark discovery searches",
+    "official benchmark protocols, implementation files and dataset descriptions",
+    "bounded predecessor and missed-release backfill",
+    "official leaderboard methodology and validator corrections"
   ],
   "inclusion_rule": "Reusable benchmark or evaluation contribution with a public primary source and a measurement object inside the Radar scope. Methods without a distinct evaluation contribution are excluded.",
-  "note": "Discovery reviewed through 2026-09-17, with bounded historical backfill. Intermittent source-access failures mean this is not an exhaustive census. Unverified candidates stay outside public inventory. Citation and result verification remain separate; existing snapshots are unchanged."
+  "note": "Discovery scanned across Agent Memory, RAG / Agentic Retrieval, and Data Agents through 2026-09-23 (UTC+8). This is a bounded review, not an exhaustive census. Intermittent paper access was supplemented by official protocol, implementation, or detailed dataset evidence; unverified candidates are not published. Existing citation and structured-result snapshots remain unchanged; DAB protocol verification is recorded separately."
 }

@@ -15,8 +15,8 @@ Citations are context, not rank. Unknown citation counts stay distinct from zero
 
 Optional selection guidance and research interpretation live in
 `library/evaluation-recipes*.md`, `library/results*.md` and
-`docs/reading-guide*.md`. They do not interrupt the main lists. All 131 current
-notes remain available; the number is not a fixed inclusion limit.
+`docs/reading-guide*.md`. They do not interrupt the main lists. All accepted benchmark
+notes remain available; there is no fixed inclusion limit.
 
 ## Update sources, then generate both languages
 

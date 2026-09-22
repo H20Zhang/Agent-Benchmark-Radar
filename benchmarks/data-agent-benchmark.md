@@ -14,7 +14,7 @@ Text-to-SQL 通常假设一个 database 和已知 schema。DAB 同时覆盖 Post
 
 ## 决定性证据
 
-benchmark 有 54 个 query、12 个 dataset、9 个 domain、4 类 DBMS，设计来自 6 个行业 enterprise workload 的 formative study。论文报告最好的 frontier model Gemini-3-Pro pass@1 也只有 38%，说明即使 query 数不大，跨系统整合仍远未解决。
+benchmark 有 54 个 query、12 个 dataset、9 个 domain、4 类 DBMS，设计来自 6 个行业 enterprise workload 的 formative study。论文初始实验报告 Gemini-3-Pro 的 pass@1 为 38%；这是当时模型与协议下的历史结果，不是当前能力上限。
 
 ## 这个分数能证明什么
 
@@ -31,6 +31,20 @@ benchmark 有 54 个 query、12 个 dataset、9 个 domain、4 类 DBMS，设计
 ## 下一步最有判别力的验证
 
 给每题增加 ground-truth integration/semantic plan，在最终 execution 之前单独评分 relation resolution，区分主要瓶颈到底是 heterogeneous access 还是 business semantics。
+
+<!-- PROTOCOL-AUDIT-20260923:START -->
+
+## 2026-09-23 协议核验：先看分母、提示和评分版本
+
+官方 Pass@1 是**先计算每题的重复运行通过率，再在数据集内平均，最后对数据集平均**，不是 5 次中成功一次就算成功。提交要求每题 5 次并提供轨迹；缺失、污染或无可验证推导的运行不能从分母中任意删除。[官方方法与提交规则](https://github.com/ucbepic/DataAgentBench/blob/main/README.md)
+
+榜单明确分开 `Tuned prompt` 与 `Hints`。例如官方表中 2026-09-11 的 Permute EQ 记录为 0.9467，2026-09-08 的 Scout 为 0.9062；两者都标注专门调过提示、使用 hints、5 次运行。这里只记录带条件的来源快照，不把系统差异归因给单个模型，也不将其与旧论文的 38% 直接相减。
+
+评分器也发生过实质修订：官方说明 2026-06-12 按更新的验证器及 PATENTS 标准答案重算旧提交；2026-08-18 又修正 DEPS_DEV_V1 第 1 题，接受第 5 名并列的 95 个 package，而不是只接受旧标准答案中的一个。**分数变化可以来自标签与验证器修正，而不是系统进步。** 应保存数据和验证器版本、完整逐题结果、提示与轨迹，才能公平比较。
+
+这次更新保持 DAB 原有首发日期和引用快照不变。上述 2026-09-23 是本 Radar 的协议核验日期，不是新基准发布日期；未独立复跑官方提交。
+
+<!-- PROTOCOL-AUDIT-20260923:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
