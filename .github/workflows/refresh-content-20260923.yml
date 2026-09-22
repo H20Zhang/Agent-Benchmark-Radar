@@ -1,0 +1,65 @@
+name: Validate accepted September radar update
+on:
+  push:
+    branches: [maintenance/refresh-2026-09-23]
+    paths:
+      - .github/workflows/refresh-content-20260923.yml
+      - scripts/apply-accepted-20260923.py
+      - benchmarks/**
+      - digests/**
+permissions:
+  contents: write
+concurrency:
+  group: radar-content-refresh-20260923
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Inspect canonical membership
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          records=json.loads(Path('data/benchmarks.json').read_text())
+          print('REGISTRY_COUNT', len(records))
+          for area in ['agent-memory','rag','data-agent']:
+              print(area, ', '.join(r['id'] for r in records if r['area']==area))
+          print('LATEST_RECORD', json.dumps(records[-1], ensure_ascii=False))
+          zh=json.loads(Path('data/locales/zh/benchmarks.json').read_text())
+          print('ZH_FORMAT', type(zh).__name__)
+          print('ZH_SAMPLE', json.dumps(next(iter(zh.items())) if isinstance(zh,dict) else zh[0],ensure_ascii=False))
+          print('DIGEST_FILES', [str(p) for p in Path('digests').rglob('*.md')])
+          PY
+      - name: Apply accepted evidence and regenerate publication
+        run: |
+          if [ -f scripts/apply-accepted-20260923.py ]; then
+            python scripts/apply-accepted-20260923.py
+            node scripts/render-readme.mjs
+          fi
+      - name: Validate complete publication
+        run: |
+          python -m unittest discover -s tests -v
+          node scripts/render-readme.mjs --check
+          python scripts/validate_reading.py
+          python scripts/validate_detail_pages.py
+          python scripts/audit_detail_pages.py
+          git diff --check
+      - name: Save validated projections on maintenance branch only
+        run: |
+          git add data README.md README.en.md library benchmarks digests docs
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Generate validated September radar content projections'
+          git push origin HEAD:maintenance/refresh-2026-09-23
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
