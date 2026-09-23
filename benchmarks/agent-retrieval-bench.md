@@ -1,5 +1,11 @@
 # Agent Retrieval Bench：coding agent 在写 patch 之前，先得找到真正该读的代码
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-07-27<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2607.24882)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](agent-retrieval-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2607.24882) · [代码与数据](https://github.com/eyuansu62/agent-retrieval-bench)

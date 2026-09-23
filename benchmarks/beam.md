@@ -1,5 +1,12 @@
 # BEAM：把长期记忆压力推到 10M-token coherent conversations
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2025-10 · 论文 v1<br>
+> **LIGHT / Llama-4-Maverick — Average @500K: 0.359**；**LIGHT / Llama-4-Maverick — Average @10M: 0.266**<br>
+> 表 1 对应长度下的十类能力均值最佳；500K 与 10M 是不同设置。 [原始来源](https://arxiv.org/html/2510.27246v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](beam.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2510.27246) · [代码](https://github.com/mohammadtavakoli78/BEAM)

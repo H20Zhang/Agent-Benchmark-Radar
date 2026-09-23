@@ -1,5 +1,12 @@
 # LiveBrowseComp: using low-salience facts from the previous 90 days to reduce “the model already knew it”
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-05 · paper v1<br>
+> **GPT-5.4 / search-augmented agent — LiveBrowseComp avg@4: 43.2%**<br>
+> Best LiveBrowseComp average accuracy in Tables 3 and 5; avg@4 is not success on any of four attempts (pass@4). [Original source](https://arxiv.org/html/2605.28721v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](livebrowsecomp.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2605.28721) · [Data](https://huggingface.co/datasets/Forival/LiveBrowseComp)

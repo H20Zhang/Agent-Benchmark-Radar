@@ -1,5 +1,12 @@
 # DataSpace: Verifiable Analytics over Heterogeneous Workspaces
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-08 · paper v1<br>
+> **Grok 4.5 / DataSpace-Agent — Task accuracy (272/410): 66.34%**<br>
+> Best of six backbones with DataSpace-Agent fixed in Table 3, on 410 tasks; not a maximum over arbitrary model/harness combinations. [Original source](https://arxiv.org/html/2608.03451v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](dataspace.md) | **English** · [Back to entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2608.03451) · **Area: Data Agent**

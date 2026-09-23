@@ -1,5 +1,12 @@
 # CRAG：在 freshness、long-tail 与 abstention 压力下评估 RAG
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2024-06 · 论文 v1<br>
+> **Copilot Pro — Human-eval Score_h (equal-weighted): 50.6**；**GPT-4 Turbo + Task-3 RAG — Auto-eval accuracy: 43.6%**<br>
+> 分别为表 6 商业系统人工评分最佳和表 5 Task-3 基线准确率最佳；两类评分及挑战赛分数不可互换。 [原始来源](https://arxiv.org/html/2406.04744v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](crag.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2406.04744) · [代码](https://github.com/facebookresearch/CRAG)

@@ -1,5 +1,12 @@
 # DeepResearch Bench：评估 evidence、citation 与最终研究报告
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时结果（历史参考，非最佳声明）** · 2025-06-13 · 论文 v1 快照<br>
+> **Gemini-2.5-Pro Deep Research — RACE Overall: 48.88** (深度研究智能体 · RACE 总分)；**Perplexity Deep Research — Citation Accuracy: 90.24%** (深度研究智能体 · 引用准确率)<br>
+> 保留原始轨道中的指定结果，不把不同指标、子集或系统拼成一个榜首。 [原始来源](https://arxiv.org/abs/2506.11763)<br>
+> 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](deepresearch-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2506.11763) · [项目页](https://deepresearch-bench.github.io/) · [代码](https://github.com/Ayanami0730/deep_research_bench)

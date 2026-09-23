@@ -1,5 +1,12 @@
 # InMind：真正相关的 memory 可能和 query 一点也不像
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时诊断结果（历史参考）** · 2026-07 · 论文 v1<br>
+> **Naive RAG / text-embedding-3-large / GPT-5-mini — Indirect application, Table 1: 16.0%**；**Always-in-state / GPT-5-mini — Indirect application, Table 2: 68.8%**<br>
+> 125 题；分别保留表 1 检索配置最佳和表 2 常驻状态诊断。84.0% 的 oracle 不当成正常检索成绩。 [原始来源](https://arxiv.org/html/2607.24368v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](inmind.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2607.24368) · [项目页](https://keep-it-inmind.github.io/) · [代码](https://github.com/imlrz/InMind)

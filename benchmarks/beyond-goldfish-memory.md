@@ -1,5 +1,11 @@
 # Beyond Goldfish Memory：multi-session conversation 的早期长期记忆坐标
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2022-05<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://aclanthology.org/2022.acl-long.356/)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](beyond-goldfish-memory.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://aclanthology.org/2022.acl-long.356/) · **领域：Agent Memory**

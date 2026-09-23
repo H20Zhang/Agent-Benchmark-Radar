@@ -1,5 +1,12 @@
 # Spider: generalizing text-to-SQL to unseen database schemas
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2018-09-24 · paper v1<br>
+> **Best model in v1 abstract (name not verified) — Database-split exact match: 14.3%**<br>
+> Best database-split score explicitly reported in the v1 abstract; model name unverified. The later 12.4% figure is not substituted. [Original source](https://arxiv.org/abs/1809.08887v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](spider.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/1809.08887) · [Project](https://yale-lily.github.io/spider)

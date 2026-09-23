@@ -1,5 +1,12 @@
 # DataSciBench：用程序化规则评估 multi-step data-science prompt
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2025-02 · 论文 v1<br>
+> **GPT-4o-2024-05-13 — Table 2 overall Score: 64.51**；**GPT-4o-2024-05-13 — Collected-prompts success: 19.82%**<br>
+> 分别是表 2 综合评分最佳与表 5 自采集问题成功率最佳；后者不是整个混合题集的准确率。 [原始来源](https://arxiv.org/html/2502.13897v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](datascibench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2502.13897) · [项目页](https://datascibench.github.io/) · [代码](https://github.com/THUDM/DataSciBench)

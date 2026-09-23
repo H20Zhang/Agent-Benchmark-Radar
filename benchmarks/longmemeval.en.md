@@ -1,5 +1,12 @@
 # LongMemEval: separating long-term memory into five capabilities
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2024-10-14 · paper v1<br>
+> **GPT-4o + round values / fact-expanded keys (top-10) — LongMemEval-M QA accuracy: 72.0%**<br>
+> Best end-to-end QA in the indexing-design experiment of Table 2; not LongMemEval-S, oracle retrieval, or a maximum across all budgets. [Original source](https://arxiv.org/html/2410.10813v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](longmemeval.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2410.10813) · [Code](https://github.com/xiaowu0162/LongMemEval)

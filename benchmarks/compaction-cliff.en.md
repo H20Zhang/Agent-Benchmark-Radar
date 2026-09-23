@@ -1,5 +1,12 @@
 # The Compaction Cliff
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release diagnostic (historical reference)** · 2026-08-24 · paper v1 snapshot<br>
+> **TypeCompact / Claude Sonnet — Constraint recall: 96%** (Constraint recall after five compaction rounds)<br>
+> Constraint retention after the named compaction protocol, not general task success. [Original source](https://arxiv.org/abs/2608.22752)<br>
+> From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 The Compaction Cliff measures **survival of safety constraints under bounded-context management**. When an agent repeatedly compacts, decomposes, or retrieves state, can explicit rules remain intact and continue to constrain later behavior? The benchmark asks a stricter question than generic memory retention: do different information types need different retention contracts, especially constraints that cannot safely be approximated away?

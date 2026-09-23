@@ -1,5 +1,12 @@
 # LoCoMo：把长期对话记忆变成可测量对象
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2024-02-27 · 论文 v1<br>
+> **GPT-3.5-turbo-16K + observation RAG (top-5) — QA overall F1: 41.4**；**GPT-3.5-turbo — Event-summary FactScore F1: 45.9**<br>
+> 分别为表 2–3 的自动 QA 最佳与表 4 的事件总结 F1 最佳；不含人类对照。 [原始来源](https://arxiv.org/html/2402.17753v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](locomo.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://aclanthology.org/2024.acl-long.747/) · [代码](https://github.com/snap-research/locomo)

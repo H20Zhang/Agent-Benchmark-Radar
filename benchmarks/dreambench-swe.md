@@ -1,5 +1,11 @@
 # DreamBench-SWE
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-08-21<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2608.20664)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 DreamBench-SWE 测的是 **跨会话软件工程中的 memory hygiene**：后续代码任务需要决定，早期会话留下、而且无法从当前 repository 状态重新推断的证据，现在是否仍然 current、scoped、authorized / relevant；该用时要正确利用，不该用时要抑制。最终修改由隐藏可执行 oracle 评分，因此 memory 的影响落到真实代码 action，而不是停留在 QA。

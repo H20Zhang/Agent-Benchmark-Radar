@@ -1,5 +1,12 @@
 # Data Agent Benchmark (DAB)：跨异构数据库回答企业数据问题
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-03-21 · 论文 v1<br>
+> **Gemini-3-Pro / paper ReAct agent — Pass@1: 38%**<br>
+> 表 3 五个通用模型基线最佳，每题 50 次、跨 12 数据集平均；不含 PromptQL 个案或后续验证器重算榜单。 [原始来源](https://arxiv.org/html/2603.20576v1)<br>
+> 仅为原论文口径的历史参考。后续验证器、hints 和专用提示变化后的成绩不直接对比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](data-agent-benchmark.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2603.20576) · [项目页](https://ucbepic.github.io/DataAgentBench/) · [代码](https://github.com/ucbepic/DataAgentBench)

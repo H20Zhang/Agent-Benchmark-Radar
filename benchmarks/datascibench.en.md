@@ -1,5 +1,12 @@
 # DataSciBench: programmatic evaluation for multi-step data-science prompts
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2025-02 · paper v1<br>
+> **GPT-4o-2024-05-13 — Table 2 overall Score: 64.51**; **GPT-4o-2024-05-13 — Collected-prompts success: 19.82%**<br>
+> Best overall Score in Table 2 and best success on collected prompts in Table 5; the latter is not whole-mixture accuracy. [Original source](https://arxiv.org/html/2502.13897v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](datascibench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2502.13897) · [Project](https://datascibench.github.io/) · [Code](https://github.com/THUDM/DataSciBench)

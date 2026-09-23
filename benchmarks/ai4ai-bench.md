@@ -1,5 +1,11 @@
 # AI4AI-Bench：用 source-patch 边界隔离学习算法设计
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-08-20<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2608.20318)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](ai4ai-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2608.20318) · [代码与任务](https://github.com/Einsia/AI4AI-Bench) · [已发布轨迹](https://lab.einsia.ai/ai4ai/trajectories/)

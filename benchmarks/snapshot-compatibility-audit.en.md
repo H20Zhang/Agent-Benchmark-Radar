@@ -1,5 +1,11 @@
 # Snapshot Compatibility Audit
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-24<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2608.22856)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 This audit does not ask only whether a larger corpus improves average accuracy. It asks whether **the same RAG agent changes answers to the same queries after a corpus-snapshot expansion by more than its own within-snapshot sampling variability**. Corpus version becomes an explicit deployment-regression variable: aggregate quality can stay nearly flat while many individual queries become behaviorally incompatible.

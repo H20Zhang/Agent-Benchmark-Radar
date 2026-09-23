@@ -1,5 +1,12 @@
 # MemBench：从“答对”扩到 memory 的 effectiveness、efficiency 与 capacity
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2025-06 · 论文 v1<br>
+> **RetrievalMemory / Qwen2.5-7B — Factual participation @100K accuracy: 83.3%**；**RetrievalMemory / Qwen2.5-7B — Factual observation @100K accuracy: 93.3%**<br>
+> 表 3、固定 Qwen2.5-7B 的两个 100K factual-memory 设置分别比较；不合成反思记忆总分。 [原始来源](https://arxiv.org/html/2506.21605v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](membench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2506.21605) · [代码](https://github.com/import-myself/Membench)

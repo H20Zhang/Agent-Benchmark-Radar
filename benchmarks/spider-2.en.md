@@ -1,5 +1,12 @@
 # Spider 2.0: enterprise text-to-SQL becomes an agent workflow
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release result (historical reference; not a best claim)** · 2024-11-12 · paper v1<br>
+> **o1-preview + paper code-agent framework — Task success: 17.0%**<br>
+> Code-agent result in the initial abstract on the original task collection; not later Lite, Snow, or revised sets. [Original source](https://arxiv.org/abs/2411.07763v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](spider-2.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2411.07763) · [Project](https://spider2-sql.github.io/)

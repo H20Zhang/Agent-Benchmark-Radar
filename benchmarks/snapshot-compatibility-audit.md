@@ -1,5 +1,11 @@
 # Snapshot Compatibility Audit
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-08-24<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2608.22856)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 这个 audit 测的不是“更大的 corpus 平均分是否更高”，而是 **RAG corpus snapshot 增长之后，同一个 agent 对同一问题的答案是否出现超出自身采样波动的稳定翻转**。因此它把部署中的 corpus version 当成一个显式 regression variable：即使 aggregate accuracy 几乎不变，个体 query 也可能发生大量不兼容变化。

@@ -1,5 +1,12 @@
 # Spider 2.0：enterprise text-to-SQL 已经变成 agent workflow
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时结果（历史参考，非最佳声明）** · 2024-11-12 · 论文 v1<br>
+> **o1-preview + paper code-agent framework — Task success: 17.0%**<br>
+> 首版摘要中的代码智能体结果，对应原版任务集合；不与后来的 Lite、Snow 或修改后的任务集混比。 [原始来源](https://arxiv.org/abs/2411.07763v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](spider-2.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2411.07763) · [项目页](https://spider2-sql.github.io/)

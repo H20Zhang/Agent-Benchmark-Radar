@@ -1,5 +1,12 @@
 # GroupMemBench: memory in multi-party conversations
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-05-14 · paper v1<br>
+> **Best memory system in v1 (name not verified) — Average accuracy: 46.0%**<br>
+> Best memory-system average explicitly reported by the v1 abstract; the matching system name remains unverified rather than guessed. [Original source](https://arxiv.org/abs/2605.14498v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](groupmembench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2605.14498)

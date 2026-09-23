@@ -1,5 +1,12 @@
 # GroupMemBench：多人对话中的 memory 不是把多个单人历史拼起来
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-05-14 · 论文 v1<br>
+> **Best memory system in v1 (name not verified) — Average accuracy: 46.0%**<br>
+> 首版摘要明确报告的最佳记忆系统平均分；尚未核验对应系统名称，不据此猜测模型。 [原始来源](https://arxiv.org/abs/2605.14498v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](groupmembench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2605.14498)

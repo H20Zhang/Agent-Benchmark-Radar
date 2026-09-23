@@ -1,5 +1,11 @@
 # KramaBench：真实 Data Agent 先要在 data lake 里找到、清理并整合数据
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2025-06-06<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2506.06541)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](kramabench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [项目页](https://kramabench.org/)

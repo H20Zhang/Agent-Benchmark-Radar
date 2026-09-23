@@ -100,7 +100,7 @@ def render_block(record: dict, lang: str) -> str:
     if lang not in ('zh', 'en'):
         raise ValueError('lang must be zh or en')
     label = LABELS[lang][record['status']]
-    lines = [START, f'> **{label}** · {record["period"][lang]}  ']
+    lines = [START, f'> **{label}** · {record["period"][lang]}<br>']
     if record['results']:
         parts = []
         for row in record['results']:
@@ -111,8 +111,8 @@ def render_block(record: dict, lang: str) -> str:
                 value += f' [{"来源" if lang == "zh" else "source"}]({row["source"]})'
             parts.append(value)
         separator = '；' if lang == 'zh' else '; '
-        lines.append('> ' + separator.join(parts) + '  ')
-    lines.append(f'> {record["scope"][lang]} [{"原始来源" if lang == "zh" else "Original source"}]({record["source"]})  ')
+        lines.append('> ' + separator.join(parts) + '<br>')
+    lines.append(f'> {record["scope"][lang]} [{"原始来源" if lang == "zh" else "Original source"}]({record["source"]})<br>')
     lines.append(f'> {record["caveat"][lang]}')
     lines.append(END)
     return '\n'.join(lines)

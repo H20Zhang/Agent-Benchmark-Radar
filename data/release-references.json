@@ -1,0 +1,3235 @@
+{
+  "schema_version": 1,
+  "purpose": "Frozen source-bounded historical references; never a current leaderboard.",
+  "benchmarks": {
+    "agent-memory-bakeoff": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-21",
+        "en": "Benchmark recorded date: 2026-08-21"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://github.com/JaysonRawlins/agent-memory-bakeoff",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "agent-memory-bench-coding": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-22",
+        "en": "Benchmark recorded date: 2026-08-22"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://github.com/GiulioDER/agent-memory-bench",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "agent-retrieval-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-07-27",
+        "en": "Benchmark recorded date: 2026-07-27"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2607.24882",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "agentds": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-10-18",
+        "en": "Benchmark recorded date: 2025-10-18"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2603.19005",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "agentfuel": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-03-12",
+        "en": "Benchmark recorded date: 2026-03-12"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2603.12483",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "agenticdatabench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-07",
+        "en": "Benchmark recorded date: 2026-07"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2607.01647",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "agenticragtracer": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02",
+        "en": "Benchmark recorded date: 2026-02"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2602.19127",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "ai4ai-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-20",
+        "en": "Benchmark recorded date: 2026-08-20"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.20318",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "ama-bench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-02 · 论文 v1",
+        "en": "2026-02 · paper v1"
+      },
+      "results": [
+        {
+          "system": "AMA-Agent",
+          "metric": "Average accuracy",
+          "score": "57.22%"
+        }
+      ],
+      "scope": {
+        "zh": "首版摘要报告的 AMA-Agent 平均准确率最佳；属于记忆问答协议，不是环境行动成功率。",
+        "en": "Best AMA-Agent average accuracy reported in the v1 abstract under the memory-QA protocol, not downstream action success."
+      },
+      "source": "https://arxiv.org/html/2602.22769v1",
+      "locator": "v1 abstract: AMA-Agent average accuracy.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best AMA-Agent average accuracy reported in the v1 abstract under the memory-QA protocol, not downstream action success."
+    },
+    "authmem-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-03",
+        "en": "Benchmark recorded date: 2026-08-03"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.01679",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "autoresearchbench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-04 · 论文 v1",
+        "en": "2026-04 · paper v1"
+      },
+      "results": [
+        {
+          "system": "Claude-Opus-4.6 / ReAct",
+          "metric": "Deep Research accuracy",
+          "score": "9.39%"
+        },
+        {
+          "system": "Gemini-3.1-Pro-Preview / ReAct",
+          "metric": "Wide Research IoU",
+          "score": "9.31%"
+        }
+      ],
+      "scope": {
+        "zh": "表 2 受控 ReAct 比较中的分项最佳；不混入只跑 50 题的端到端系统测试，也不把 IoU 当准确率。",
+        "en": "Subtask bests within the controlled ReAct comparison of Table 2; excludes 50-question end-to-end-system tests and distinguishes IoU from accuracy."
+      },
+      "source": "https://arxiv.org/html/2604.25256v1",
+      "locator": "Tables 2, 8 and 9, controlled ReAct evaluation.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Subtask bests within the controlled ReAct comparison of Table 2; excludes 50-question end-to-end-system tests and distinguishes IoU from accuracy."
+    },
+    "beam": {
+      "status": "release-best",
+      "period": {
+        "zh": "2025-10 · 论文 v1",
+        "en": "2025-10 · paper v1"
+      },
+      "results": [
+        {
+          "system": "LIGHT / Llama-4-Maverick",
+          "metric": "Average @500K",
+          "score": "0.359"
+        },
+        {
+          "system": "LIGHT / Llama-4-Maverick",
+          "metric": "Average @10M",
+          "score": "0.266"
+        }
+      ],
+      "scope": {
+        "zh": "表 1 对应长度下的十类能力均值最佳；500K 与 10M 是不同设置。",
+        "en": "Best ten-ability averages at the selected lengths in Table 1; 500K and 10M are different settings."
+      },
+      "source": "https://arxiv.org/html/2510.27246v1",
+      "locator": "Table 1, LIGHT with Llama-4-Maverick.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best ten-ability averages at the selected lengths in Table 1; 500K and 10M are different settings."
+    },
+    "beir": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2021-04",
+        "en": "Benchmark recorded date: 2021-04"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2104.08663",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "beyond-goldfish-memory": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2022-05",
+        "en": "Benchmark recorded date: 2022-05"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2022.acl-long.356/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "bird": {
+      "status": "later-version",
+      "period": {
+        "zh": "2023 · 发布论文 v3",
+        "en": "2023 · release-paper v3"
+      },
+      "results": [
+        {
+          "system": "ChatGPT",
+          "metric": "Execution accuracy",
+          "score": "40.08%"
+        }
+      ],
+      "scope": {
+        "zh": "发布论文摘要中的历史模型结果；该页为 v3，未将其冒充已单独复核的 v1。",
+        "en": "Historical model result in the release-paper abstract. The available page is v3, not a separately verified v1."
+      },
+      "source": "https://arxiv.org/abs/2305.03111",
+      "locator": "Available v3 abstract, ChatGPT execution accuracy.",
+      "initial_release": false,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      }
+    },
+    "bright": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2024-07",
+        "en": "Benchmark recorded date: 2024-07"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2407.12883",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "bright-pro": {
+      "status": "paper-reference",
+      "period": {
+        "zh": "2026-05-05 · 历史论文快照",
+        "en": "2026-05-05 · historical paper snapshot"
+      },
+      "results": [
+        {
+          "system": "BGE-Reasoner-8B",
+          "metric": "α-nDCG@25",
+          "score": "68%",
+          "scope": {
+            "zh": "静态检索 · Overall α-nDCG@25",
+            "en": "Static retrieval · Overall α-nDCG@25"
+          },
+          "source": "https://arxiv.org/abs/2605.04018"
+        }
+      ],
+      "scope": {
+        "zh": "保留原始轨道中的指定结果，不把不同指标、子集或系统拼成一个榜首。",
+        "en": "Selected original-track results; metrics, subsets, and systems are not pooled into one winner."
+      },
+      "source": "https://arxiv.org/abs/2605.04018",
+      "initial_release": null,
+      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"paper-table-2-static-alpha-ndcg25-overall\", \"entry_id\": \"bge-reasoner-8b\", \"score\": 68.0}]",
+      "caveat": {
+        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
+        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+      },
+      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/bright-pro.json",
+      "source_verified_at": "2026-09-03",
+      "transcribed_at": "2026-09-23"
+    },
+    "browsecomp": {
+      "status": "release-best",
+      "period": {
+        "zh": "2025-04-10 · 官方首发",
+        "en": "2025-04-10 · official launch"
+      },
+      "results": [
+        {
+          "system": "OpenAI deep research",
+          "metric": "Accuracy",
+          "score": "51.5%"
+        }
+      ],
+      "scope": {
+        "zh": "首发官方文章的最佳模型成绩；原始 1,266 题。作者说明 deep research 的训练专门覆盖此类任务。",
+        "en": "Best model in the official launch article, on the original 1,266 questions. The authors state that deep research was trained specifically for this task type."
+      },
+      "source": "https://openai.com/index/browsecomp/",
+      "locator": "Performance of OpenAI models table and deep-research training footnote.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best model in the official launch article, on the original 1,266 questions. The authors state that deep research was trained specifically for this task type."
+    },
+    "browsecomp-plus": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-08",
+        "en": "Benchmark recorded date: 2025-08"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2508.06600",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "browsecomp-plus-cm": {
+      "status": "release-reference",
+      "period": {
+        "zh": "2026-08-18 · 论文 v1 快照",
+        "en": "2026-08-18 · paper v1 snapshot"
+      },
+      "results": [
+        {
+          "system": "Independent 553M-document corpus / GPT-5.6 Sol",
+          "metric": "Answer accuracy",
+          "score": "80.7%",
+          "scope": {
+            "zh": "跨语料回答准确率",
+            "en": "Cross-corpus answer accuracy"
+          },
+          "source": "https://arxiv.org/abs/2608.20317"
+        }
+      ],
+      "scope": {
+        "zh": "保留原始轨道中的指定结果，不把不同指标、子集或系统拼成一个榜首。",
+        "en": "Selected original-track results; metrics, subsets, and systems are not pooled into one winner."
+      },
+      "source": "https://arxiv.org/abs/2608.20317",
+      "initial_release": true,
+      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"answer-accuracy\", \"entry_id\": \"independent-553m\", \"score\": 80.7}]",
+      "caveat": {
+        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
+        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+      },
+      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/browsecomp-plus-cm.json",
+      "source_verified_at": "2026-08-31",
+      "transcribed_at": "2026-09-23"
+    },
+    "came-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-01-15",
+        "en": "Benchmark recorded date: 2026-01-15"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.findings-acl.584/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "causalds": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-07-09",
+        "en": "Benchmark recorded date: 2026-07-09"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2607.08093",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "chemclir-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-19",
+        "en": "Benchmark recorded date: 2026-09-19"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.23231",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "claimprobe": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-12",
+        "en": "Benchmark recorded date: 2026-08-12"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.28643",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "commercial-tax": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-17",
+        "en": "Benchmark recorded date: 2026-08-17"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.16096",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "compaction-cliff": {
+      "status": "diagnostic",
+      "period": {
+        "zh": "2026-08-24 · 论文 v1 快照",
+        "en": "2026-08-24 · paper v1 snapshot"
+      },
+      "results": [
+        {
+          "system": "TypeCompact / Claude Sonnet",
+          "metric": "Constraint recall",
+          "score": "96%",
+          "scope": {
+            "zh": "五轮压缩后的约束保留率",
+            "en": "Constraint recall after five compaction rounds"
+          },
+          "source": "https://arxiv.org/abs/2608.22752"
+        }
+      ],
+      "scope": {
+        "zh": "指定压缩协议后的约束保留率，不是通用任务成功率。",
+        "en": "Constraint retention after the named compaction protocol, not general task success."
+      },
+      "source": "https://arxiv.org/abs/2608.22752",
+      "initial_release": true,
+      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"five-round-constraint-recall\", \"entry_id\": \"typecompact-round5\", \"score\": 96}]",
+      "caveat": {
+        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
+        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+      },
+      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/compaction-cliff.json",
+      "source_verified_at": "2026-08-31",
+      "transcribed_at": "2026-09-23"
+    },
+    "crag": {
+      "status": "release-best",
+      "period": {
+        "zh": "2024-06 · 论文 v1",
+        "en": "2024-06 · paper v1"
+      },
+      "results": [
+        {
+          "system": "Copilot Pro",
+          "metric": "Human-eval Score_h (equal-weighted)",
+          "score": "50.6"
+        },
+        {
+          "system": "GPT-4 Turbo + Task-3 RAG",
+          "metric": "Auto-eval accuracy",
+          "score": "43.6%"
+        }
+      ],
+      "scope": {
+        "zh": "分别为表 6 商业系统人工评分最佳和表 5 Task-3 基线准确率最佳；两类评分及挑战赛分数不可互换。",
+        "en": "Best industry-system human score in Table 6 and best Task-3 baseline accuracy in Table 5; these scoring protocols and challenge scores differ."
+      },
+      "source": "https://arxiv.org/html/2406.04744v1",
+      "locator": "Tables 5 and 6; equal-weighted industry evaluation and Task-3 baseline.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best industry-system human score in Table 6 and best Task-3 baseline accuracy in Table 5; these scoring protocols and challenge scores differ."
+    },
+    "crossmodalqa": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-31",
+        "en": "Benchmark recorded date: 2026-08-31"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.05518",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "da-code": {
+      "status": "release-best",
+      "period": {
+        "zh": "2024-10-09 · 论文 v1",
+        "en": "2024-10-09 · paper v1"
+      },
+      "results": [
+        {
+          "system": "DA-Agent / GPT-4",
+          "metric": "Total score",
+          "score": "30.5"
+        }
+      ],
+      "scope": {
+        "zh": "首版表 3 总分最佳；不是代码可执行率 76.8%，也不是预算内产出结果的完成率 99.4%。",
+        "en": "Best total score in v1 Table 3; distinct from 76.8% executable code and 99.4% within-budget completion."
+      },
+      "source": "https://arxiv.org/html/2410.07331v1",
+      "locator": "Table 3, GPT-4 total score.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best total score in v1 Table 3; distinct from 76.8% executable code and 99.4% within-budget completion."
+    },
+    "dabstep": {
+      "status": "release-best",
+      "period": {
+        "zh": "2025-06-30 · 论文 v1",
+        "en": "2025-06-30 · paper v1"
+      },
+      "results": [
+        {
+          "system": "o4-mini",
+          "metric": "Hard accuracy",
+          "score": "14.55%"
+        },
+        {
+          "system": "GPT-4.1",
+          "metric": "Easy accuracy",
+          "score": "80.56%"
+        }
+      ],
+      "scope": {
+        "zh": "表 1 隐藏测试集；Hard 与 Easy 各自的最佳模型不同，不合成单一模型成绩。",
+        "en": "Hidden test set, Table 1. Hard and Easy have different best models; these are not one model’s combined result."
+      },
+      "source": "https://arxiv.org/html/2506.23719v1",
+      "locator": "Table 1, hidden Easy and Hard subsets.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Hidden test set, Table 1. Hard and Easy have different best models; these are not one model’s combined result."
+    },
+    "dacomp": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-12",
+        "en": "Benchmark recorded date: 2025-12"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2512.04324",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "dare-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02-27",
+        "en": "Benchmark recorded date: 2026-02-27"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2602.24288",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "das-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-07",
+        "en": "Benchmark recorded date: 2026-08-07"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.18034",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "data-agent-benchmark": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-03-21 · 论文 v1",
+        "en": "2026-03-21 · paper v1"
+      },
+      "results": [
+        {
+          "system": "Gemini-3-Pro / paper ReAct agent",
+          "metric": "Pass@1",
+          "score": "38%"
+        }
+      ],
+      "scope": {
+        "zh": "表 3 五个通用模型基线最佳，每题 50 次、跨 12 数据集平均；不含 PromptQL 个案或后续验证器重算榜单。",
+        "en": "Best of five generic-model baselines in Table 3: 50 trials per query and a 12-dataset average. Excludes the PromptQL case study and later rescored boards."
+      },
+      "source": "https://arxiv.org/html/2603.20576v1",
+      "locator": "Table 3, generic ReAct-agent baselines.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅为原论文口径的历史参考。后续验证器、hints 和专用提示变化后的成绩不直接对比。",
+        "en": "Original-paper history only; later validators, hints, and task-specific prompts change comparability."
+      },
+      "comparison_scope": "Best of five generic-model baselines in Table 3: 50 trials per query and a 12-dataset average. Excludes the PromptQL case study and later rescored boards."
+    },
+    "data-eng-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-07-29",
+        "en": "Benchmark recorded date: 2026-07-29"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://github.com/Snowflake-Labs/data-eng-bench",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "data-exploration-benchmark": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-17",
+        "en": "Benchmark recorded date: 2026-08-17"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.16045",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "dataclawbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-05-04",
+        "en": "Benchmark recorded date: 2026-05-04"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2605.02503",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "datascibench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2025-02 · 论文 v1",
+        "en": "2025-02 · paper v1"
+      },
+      "results": [
+        {
+          "system": "GPT-4o-2024-05-13",
+          "metric": "Table 2 overall Score",
+          "score": "64.51"
+        },
+        {
+          "system": "GPT-4o-2024-05-13",
+          "metric": "Collected-prompts success",
+          "score": "19.82%"
+        }
+      ],
+      "scope": {
+        "zh": "分别是表 2 综合评分最佳与表 5 自采集问题成功率最佳；后者不是整个混合题集的准确率。",
+        "en": "Best overall Score in Table 2 and best success on collected prompts in Table 5; the latter is not whole-mixture accuracy."
+      },
+      "source": "https://arxiv.org/html/2502.13897v1",
+      "locator": "Tables 2 and 5, GPT-4o-2024-05-13 rows.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best overall Score in Table 2 and best success on collected prompts in Table 5; the latter is not whole-mixture accuracy."
+    },
+    "dataspace": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-08 · 论文 v1",
+        "en": "2026-08 · paper v1"
+      },
+      "results": [
+        {
+          "system": "Grok 4.5 / DataSpace-Agent",
+          "metric": "Task accuracy (272/410)",
+          "score": "66.34%"
+        }
+      ],
+      "scope": {
+        "zh": "表 3 固定 DataSpace-Agent 比较六个模型时最佳；410 题，不是不同模型与 harness 任意组合的上限。",
+        "en": "Best of six backbones with DataSpace-Agent fixed in Table 3, on 410 tasks; not a maximum over arbitrary model/harness combinations."
+      },
+      "source": "https://arxiv.org/html/2608.03451v1",
+      "locator": "Table 3, controlled backbone comparison; Section 6.1 budgets.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best of six backbones with DataSpace-Agent fixed in Table 3, on 410 tasks; not a maximum over arbitrary model/harness combinations."
+    },
+    "ddr-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-11-30",
+        "en": "Benchmark recorded date: 2025-11-30"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2602.02039",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "deepresearch-bench": {
+      "status": "release-reference",
+      "period": {
+        "zh": "2025-06-13 · 论文 v1 快照",
+        "en": "2025-06-13 · paper v1 snapshot"
+      },
+      "results": [
+        {
+          "system": "Gemini-2.5-Pro Deep Research",
+          "metric": "RACE Overall",
+          "score": "48.88",
+          "scope": {
+            "zh": "深度研究智能体 · RACE 总分",
+            "en": "Deep Research Agent · RACE Overall"
+          },
+          "source": "https://arxiv.org/abs/2506.11763"
+        },
+        {
+          "system": "Perplexity Deep Research",
+          "metric": "Citation Accuracy",
+          "score": "90.24%",
+          "scope": {
+            "zh": "深度研究智能体 · 引用准确率",
+            "en": "Deep Research Agent · Citation Accuracy"
+          },
+          "source": "https://arxiv.org/abs/2506.11763"
+        }
+      ],
+      "scope": {
+        "zh": "保留原始轨道中的指定结果，不把不同指标、子集或系统拼成一个榜首。",
+        "en": "Selected original-track results; metrics, subsets, and systems are not pooled into one winner."
+      },
+      "source": "https://arxiv.org/abs/2506.11763",
+      "initial_release": true,
+      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"paper-v1-table-1-deep-research-agent-race-overall\", \"entry_id\": \"gemini-2-5-pro-deep-research\", \"score\": 48.88}, {\"track_id\": \"paper-v1-table-1-deep-research-agent-citation-accuracy\", \"entry_id\": \"perplexity-deep-research\", \"score\": 90.24}]",
+      "caveat": {
+        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
+        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+      },
+      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/deepresearch-bench.json",
+      "source_verified_at": "2026-09-04",
+      "transcribed_at": "2026-09-23"
+    },
+    "deltaml-bench": {
+      "status": "release-reference",
+      "period": {
+        "zh": "2026-08-20 · 论文 v1 快照",
+        "en": "2026-08-20 · paper v1 snapshot"
+      },
+      "results": [
+        {
+          "system": "ARG scaffold / GPT-5",
+          "metric": "Per-run success",
+          "score": "33.9%",
+          "scope": {
+            "zh": "4×6h 单次成功率",
+            "en": "4×6h per-run success"
+          },
+          "source": "https://arxiv.org/abs/2608.19653"
+        },
+        {
+          "system": "ARG scaffold / GPT-5",
+          "metric": "Per-run success",
+          "score": "49%",
+          "scope": {
+            "zh": "2×12h 单次成功率",
+            "en": "2×12h per-run success"
+          },
+          "source": "https://arxiv.org/abs/2608.19653"
+        }
+      ],
+      "scope": {
+        "zh": "4×6h 与 2×12h 的单次运行成功率分开报告，不混成一种预算。",
+        "en": "The 4×6h and 2×12h per-run success rates are separate budget conditions."
+      },
+      "source": "https://arxiv.org/abs/2608.19653",
+      "initial_release": true,
+      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"4x6h-success\", \"entry_id\": \"gpt5-arg\", \"score\": 33.9}, {\"track_id\": \"2x12h-success\", \"entry_id\": \"gpt5-arg\", \"score\": 49}]",
+      "caveat": {
+        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
+        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+      },
+      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/deltaml-bench.json",
+      "source_verified_at": "2026-08-31",
+      "transcribed_at": "2026-09-23"
+    },
+    "di-bench-data-intelligence": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-04",
+        "en": "Benchmark recorded date: 2026-09-04"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.05776",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "dolphinbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-21",
+        "en": "Benchmark recorded date: 2026-09-21"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.24971",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "dreambench-swe": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-21",
+        "en": "Benchmark recorded date: 2026-08-21"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.20664",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "ds-1000": {
+      "status": "release-best",
+      "period": {
+        "zh": "2022-11-18 · 论文 v1",
+        "en": "2022-11-18 · paper v1"
+      },
+      "results": [
+        {
+          "system": "Codex-002",
+          "metric": "Accuracy",
+          "score": "43.3%"
+        }
+      ],
+      "scope": {
+        "zh": "首版摘要报告的最佳公开系统，在原版功能与表面约束判分下评测。",
+        "en": "Best public system reported by the v1 abstract, under original functional and surface-constraint evaluation."
+      },
+      "source": "https://arxiv.org/abs/2211.11501v1",
+      "locator": "v1 abstract, Codex-002.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best public system reported by the v1 abstract, under original functional and surface-constraint evaluation."
+    },
+    "dsaeval": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-01-20",
+        "en": "Benchmark recorded date: 2026-01-20"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2601.13591",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "dsagentbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08",
+        "en": "Benchmark recorded date: 2026-08"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.10366",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "dsgym": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-01-22",
+        "en": "Benchmark recorded date: 2026-01-22"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2601.16344",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "dynamicmem": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-06-22",
+        "en": "Benchmark recorded date: 2026-06-22"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2606.22877",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "eal-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-01",
+        "en": "Benchmark recorded date: 2026-09-01"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.01836",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "enterpriserag-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-04-14",
+        "en": "Benchmark recorded date: 2026-04-14"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2605.05253",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "evobrowsecomp": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-06 · 论文 v1",
+        "en": "2026-06 · paper v1"
+      },
+      "results": [
+        {
+          "system": "Claude-Opus-4.6 + tools",
+          "metric": "English accuracy",
+          "score": "44.8%"
+        },
+        {
+          "system": "Claude-Opus-4.6 + tools",
+          "metric": "Chinese accuracy",
+          "score": "36.8%"
+        }
+      ],
+      "scope": {
+        "zh": "表 2 的有工具设置，按语言分别比较；保留原版搜索预算，不与无工具或当前榜单混比。",
+        "en": "Best tool-enabled entries in Table 2, compared separately by language under the original search budget."
+      },
+      "source": "https://arxiv.org/html/2606.13120v1",
+      "locator": "Table 2, tool-enabled Claude-Opus-4.6.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best tool-enabled entries in Table 2, compared separately by language under the original search budget."
+    },
+    "evomembench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-05-18",
+        "en": "Benchmark recorded date: 2026-05-18"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2605.18421",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "fdabench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-09",
+        "en": "Benchmark recorded date: 2025-09"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2509.02473",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "gatemem": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-06-17",
+        "en": "Benchmark recorded date: 2026-06-17"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2606.18829",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "gisa": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02-06",
+        "en": "Benchmark recorded date: 2026-02-06"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2602.08543",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "groupmembench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-05-14 · 论文 v1",
+        "en": "2026-05-14 · paper v1"
+      },
+      "results": [
+        {
+          "system": "Best memory system in v1 (name not verified)",
+          "metric": "Average accuracy",
+          "score": "46.0%"
+        }
+      ],
+      "scope": {
+        "zh": "首版摘要明确报告的最佳记忆系统平均分；尚未核验对应系统名称，不据此猜测模型。",
+        "en": "Best memory-system average explicitly reported by the v1 abstract; the matching system name remains unverified rather than guessed."
+      },
+      "source": "https://arxiv.org/abs/2605.14498v1",
+      "locator": "v1 abstract, best memory-system average.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best memory-system average explicitly reported by the v1 abstract; the matching system name remains unverified rather than guessed."
+    },
+    "hotpotqa": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2018-10",
+        "en": "Benchmark recorded date: 2018-10"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/D18-1259/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "hybrid-deep-research": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-06",
+        "en": "Benchmark recorded date: 2026-06"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.09410",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "icm-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-03",
+        "en": "Benchmark recorded date: 2026-09-03"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.04438",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "implicitmembench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-04-09",
+        "en": "Benchmark recorded date: 2026-04-09"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.acl-long.1301/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "injecmem": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-24",
+        "en": "Benchmark recorded date: 2026-08-24"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.23471",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "inmind": {
+      "status": "diagnostic",
+      "period": {
+        "zh": "2026-07 · 论文 v1",
+        "en": "2026-07 · paper v1"
+      },
+      "results": [
+        {
+          "system": "Naive RAG / text-embedding-3-large / GPT-5-mini",
+          "metric": "Indirect application, Table 1",
+          "score": "16.0%"
+        },
+        {
+          "system": "Always-in-state / GPT-5-mini",
+          "metric": "Indirect application, Table 2",
+          "score": "68.8%"
+        }
+      ],
+      "scope": {
+        "zh": "125 题；分别保留表 1 检索配置最佳和表 2 常驻状态诊断。84.0% 的 oracle 不当成正常检索成绩。",
+        "en": "125 tasks: best retrieval configuration in Table 1 and always-visible-state diagnostic in Table 2. The 84.0% oracle is not a normal retrieval score."
+      },
+      "source": "https://arxiv.org/html/2607.24368v1",
+      "locator": "Tables 1 and 2; indirect application.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      }
+    },
+    "insightbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2024-07",
+        "en": "Benchmark recorded date: 2024-07"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2407.06423",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "irts-toolbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-06-13",
+        "en": "Benchmark recorded date: 2026-06-13"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2606.15107",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "kbgym": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-22",
+        "en": "Benchmark recorded date: 2026-08-22"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.21829",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "kilt": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2020-09",
+        "en": "Benchmark recorded date: 2020-09"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2009.02252",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "kramabench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-06-06",
+        "en": "Benchmark recorded date: 2025-06-06"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2506.06541",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "leakdojo": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-04-07",
+        "en": "Benchmark recorded date: 2026-04-07"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.findings-acl.287/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "lifebench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-03 · 论文 v1",
+        "en": "2026-03 · paper v1"
+      },
+      "results": [
+        {
+          "system": "MemOS / GPT-5.1-Mini",
+          "metric": "Overall accuracy",
+          "score": "55.22%"
+        }
+      ],
+      "scope": {
+        "zh": "首版 4.3 节整体准确率最佳；GPT-5.1-Mini 同时承担记忆、回答与判分，原始 2,003 题。",
+        "en": "Best overall accuracy in v1 Section 4.3; GPT-5.1-Mini for memory, answers, and judging on the original 2,003 questions."
+      },
+      "source": "https://arxiv.org/html/2603.03781v1",
+      "locator": "Sections 4.2 and 4.3: setup and overall accuracy.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best overall accuracy in v1 Section 4.3; GPT-5.1-Mini for memory, answers, and judging on the original 2,003 questions."
+    },
+    "lifeside": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-06",
+        "en": "Benchmark recorded date: 2026-06"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2606.04660",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "lit-ragbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-10-22",
+        "en": "Benchmark recorded date: 2025-10-22"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2603.06198",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "litreview-arena": {
+      "status": "diagnostic",
+      "period": {
+        "zh": "2026-07-01 · 论文 v1 快照",
+        "en": "2026-07-01 · paper v1 snapshot"
+      },
+      "results": [
+        {
+          "system": "LitJudge",
+          "metric": "Spearman ρ",
+          "score": "0.792",
+          "scope": {
+            "zh": "与专家 Utility 判断的相关性",
+            "en": "Correlation with expert utility judgments"
+          },
+          "source": "https://arxiv.org/abs/2608.21374"
+        }
+      ],
+      "scope": {
+        "zh": "评分器与人工判断的相关性，不是研究智能体的任务得分。",
+        "en": "Evaluator correlation with human judgment, not a research-agent task score."
+      },
+      "source": "https://arxiv.org/abs/2608.21374",
+      "initial_release": true,
+      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"expert-utility-correlation\", \"entry_id\": \"litjudge\", \"score\": 0.792}]",
+      "caveat": {
+        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
+        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+      },
+      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/litreview-arena.json",
+      "source_verified_at": "2026-08-31",
+      "transcribed_at": "2026-09-23"
+    },
+    "livebrowsecomp": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-05 · 论文 v1",
+        "en": "2026-05 · paper v1"
+      },
+      "results": [
+        {
+          "system": "GPT-5.4 / search-augmented agent",
+          "metric": "LiveBrowseComp avg@4",
+          "score": "43.2%"
+        }
+      ],
+      "scope": {
+        "zh": "表 3/5 的 LiveBrowseComp 平均正确率最佳；avg@4 不是四次中任选一次成功的 pass@4。",
+        "en": "Best LiveBrowseComp average accuracy in Tables 3 and 5; avg@4 is not success on any of four attempts (pass@4)."
+      },
+      "source": "https://arxiv.org/html/2605.28721v1",
+      "locator": "Tables 3 and 5, GPT-5.4 search-augmented.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best LiveBrowseComp average accuracy in Tables 3 and 5; avg@4 is not success on any of four attempts (pass@4)."
+    },
+    "livedrbench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2025-08-06 · 论文 v1",
+        "en": "2025-08-06 · paper v1"
+      },
+      "results": [
+        {
+          "system": "OpenAI deep research",
+          "metric": "Overall F1",
+          "score": "0.55"
+        }
+      ],
+      "scope": {
+        "zh": "初始实验中最佳的深度研究系统；在 100 个任务的结构化主张发现上计分，不是报告文风评分。",
+        "en": "Best deep-research system in the initial experiment, scoring structured claim discovery across 100 tasks, not report style."
+      },
+      "source": "https://arxiv.org/abs/2508.04183v1",
+      "locator": "v1 paper abstract and original overall comparison.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best deep-research system in the initial experiment, scoring structured claim discovery across 100 tasks, not report style."
+    },
+    "livesqlbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-05-28",
+        "en": "Benchmark recorded date: 2025-05-28"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://livesqlbench.ai/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "locomo": {
+      "status": "release-best",
+      "period": {
+        "zh": "2024-02-27 · 论文 v1",
+        "en": "2024-02-27 · paper v1"
+      },
+      "results": [
+        {
+          "system": "GPT-3.5-turbo-16K + observation RAG (top-5)",
+          "metric": "QA overall F1",
+          "score": "41.4"
+        },
+        {
+          "system": "GPT-3.5-turbo",
+          "metric": "Event-summary FactScore F1",
+          "score": "45.9"
+        }
+      ],
+      "scope": {
+        "zh": "分别为表 2–3 的自动 QA 最佳与表 4 的事件总结 F1 最佳；不含人类对照。",
+        "en": "Best automated QA overall F1 in Tables 2–3 and event-summary F1 in Table 4, respectively; human controls excluded."
+      },
+      "source": "https://arxiv.org/html/2402.17753v1",
+      "locator": "Tables 2–4: observation RAG top-5; GPT-3.5-turbo event-summary row.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best automated QA overall F1 in Tables 2–3 and event-summary F1 in Table 4, respectively; human controls excluded."
+    },
+    "locomo-conv": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-03",
+        "en": "Benchmark recorded date: 2026-09-03"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.03467",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "locomo-plus": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02-11",
+        "en": "Benchmark recorded date: 2026-02-11"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.acl-long.1150/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "lohosearch": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-06-11",
+        "en": "Benchmark recorded date: 2026-06-11"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2606.12837",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "longmemeval": {
+      "status": "release-best",
+      "period": {
+        "zh": "2024-10-14 · 论文 v1",
+        "en": "2024-10-14 · paper v1"
+      },
+      "results": [
+        {
+          "system": "GPT-4o + round values / fact-expanded keys (top-10)",
+          "metric": "LongMemEval-M QA accuracy",
+          "score": "72.0%"
+        }
+      ],
+      "scope": {
+        "zh": "表 2 索引设计实验的最佳端到端 QA；不是 LongMemEval-S、oracle 条件或跨所有预算的统一上限。",
+        "en": "Best end-to-end QA in the indexing-design experiment of Table 2; not LongMemEval-S, oracle retrieval, or a maximum across all budgets."
+      },
+      "source": "https://arxiv.org/html/2410.10813v1",
+      "locator": "Table 2: Value=Round, K=V+fact, GPT-4o Top-10=0.720.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best end-to-end QA in the indexing-design experiment of Table 2; not LongMemEval-S, oracle retrieval, or a maximum across all budgets."
+    },
+    "longmemeval-v2": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-05",
+        "en": "Benchmark recorded date: 2026-05"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2605.12493",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "maple": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-04",
+        "en": "Benchmark recorded date: 2026-08-04"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.15624",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "mc-search": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02-22",
+        "en": "Benchmark recorded date: 2026-02-22"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2603.00873",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "medmemorybench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-05-12",
+        "en": "Benchmark recorded date: 2026-05-12"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2605.11814",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "mem-gallery": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-01-07",
+        "en": "Benchmark recorded date: 2026-01-07"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.acl-long.1892/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "mem2actbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-07",
+        "en": "Benchmark recorded date: 2026-07"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.acl-long.370/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "membench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2025-06 · 论文 v1",
+        "en": "2025-06 · paper v1"
+      },
+      "results": [
+        {
+          "system": "RetrievalMemory / Qwen2.5-7B",
+          "metric": "Factual participation @100K accuracy",
+          "score": "83.3%"
+        },
+        {
+          "system": "RetrievalMemory / Qwen2.5-7B",
+          "metric": "Factual observation @100K accuracy",
+          "score": "93.3%"
+        }
+      ],
+      "scope": {
+        "zh": "表 3、固定 Qwen2.5-7B 的两个 100K factual-memory 设置分别比较；不合成反思记忆总分。",
+        "en": "Separate best 100K factual-memory settings in Table 3 with Qwen2.5-7B fixed; no synthetic overall score including reflective memory."
+      },
+      "source": "https://arxiv.org/html/2506.21605v1",
+      "locator": "Table 3, 100K factual participation and observation.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Separate best 100K factual-memory settings in Table 3 with Qwen2.5-7B fixed; no synthetic overall score including reflective memory."
+    },
+    "membench-staleness": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-22",
+        "en": "Benchmark recorded date: 2026-08-22"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://github.com/Ps23102004/membench",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memcalib": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-21",
+        "en": "Benchmark recorded date: 2026-09-21"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.24259",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memevobench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-04-17",
+        "en": "Benchmark recorded date: 2026-04-17"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2604.15774",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memeye": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-05-14",
+        "en": "Benchmark recorded date: 2026-05-14"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2605.15128",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memfusebench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-07-21",
+        "en": "Benchmark recorded date: 2026-07-21"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.18704",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memgui-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02-03",
+        "en": "Benchmark recorded date: 2026-02-03"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2602.06075",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memlens": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-05-14",
+        "en": "Benchmark recorded date: 2026-05-14"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2605.14906",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memory-trust-gap": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-01",
+        "en": "Benchmark recorded date: 2026-09-01"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.01852",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memoryagentbench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2025-07 · 论文 v1",
+        "en": "2025-07 · paper v1"
+      },
+      "results": [
+        {
+          "system": "NV-Embed-v2 RAG / GPT-4o-mini",
+          "metric": "RULER-QA",
+          "score": "83.0"
+        },
+        {
+          "system": "Contriever RAG / GPT-4o-mini",
+          "metric": "FactCon-MH accuracy",
+          "score": "7.0%"
+        }
+      ],
+      "scope": {
+        "zh": "主表 2 中两个子任务的最佳配置；不把整套基准的不同能力合成一个总分。",
+        "en": "Best configurations for two selected subtasks in main Table 2; different capabilities are not reduced to a synthetic overall score."
+      },
+      "source": "https://arxiv.org/html/2507.05257v1",
+      "locator": "Table 2, RULER-QA and FactCon-MH.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅指表 2 的比较范围，不含后续消融；多跳冲突按表中 7.0 记录，正文“至多 6”与表格不一致。",
+        "en": "Table 2 scope only, excluding later ablations. Its 7.0 multi-hop conflict entry differs from the prose claim of at most 6."
+      },
+      "comparison_scope": "Best configurations for two selected subtasks in main Table 2; different capabilities are not reduced to a synthetic overall score."
+    },
+    "memoryarena": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02-18",
+        "en": "Benchmark recorded date: 2026-02-18"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2602.16313",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memprobe": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-06-23",
+        "en": "Benchmark recorded date: 2026-06-23"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2606.24595",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memsecbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-07-29",
+        "en": "Benchmark recorded date: 2026-07-29"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2607.27080",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "memtrapbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-20",
+        "en": "Benchmark recorded date: 2026-08-20"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.20202",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "merrin": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-04-15",
+        "en": "Benchmark recorded date: 2026-04-15"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2604.13418",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "mlagentbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2023-10",
+        "en": "Benchmark recorded date: 2023-10"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2310.03302",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "mle-bench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2024-10-09 · 论文 v1",
+        "en": "2024-10-09 · paper v1"
+      },
+      "results": [
+        {
+          "system": "o1-preview + AIDE",
+          "metric": "Competitions with at least bronze",
+          "score": "16.9%"
+        }
+      ],
+      "scope": {
+        "zh": "首版 75 场 Kaggle 竞赛的最佳主实验配置；不是单题准确率或后续延长预算的榜单结果。",
+        "en": "Best main-experiment setup in the initial 75-competition benchmark; not per-question accuracy or a later extended-budget board."
+      },
+      "source": "https://arxiv.org/abs/2410.07095v1",
+      "locator": "v1 abstract and main evaluation, o1-preview + AIDE.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best main-experiment setup in the initial 75-competition benchmark; not per-question accuracy or a later extended-budget board."
+    },
+    "mle-dojo": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-05-12",
+        "en": "Benchmark recorded date: 2025-05-12"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2505.07782",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "mpbench": {
+      "status": "diagnostic",
+      "period": {
+        "zh": "2026-06-03 · 论文 v1 快照",
+        "en": "2026-06-03 · paper v1 snapshot"
+      },
+      "results": [
+        {
+          "system": "OpenClaw",
+          "metric": "Attack success rate",
+          "score": "34.25%",
+          "scope": {
+            "zh": "持久记忆投毒 ASR",
+            "en": "Persistent-memory poisoning ASR"
+          },
+          "source": "https://arxiv.org/abs/2606.04329"
+        },
+        {
+          "system": "HERMES",
+          "metric": "Attack success rate",
+          "score": "66.67%",
+          "scope": {
+            "zh": "持久记忆投毒 ASR",
+            "en": "Persistent-memory poisoning ASR"
+          },
+          "source": "https://arxiv.org/abs/2606.04329"
+        }
+      ],
+      "scope": {
+        "zh": "攻击成功率：越高表示攻击更有效，不是防御系统更好。",
+        "en": "Attack-success rates: higher indicates a stronger attack, not a better defender."
+      },
+      "source": "https://arxiv.org/abs/2606.04329",
+      "initial_release": true,
+      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"attack-success-rate\", \"entry_id\": \"openclaw\", \"score\": 34.25}, {\"track_id\": \"attack-success-rate\", \"entry_id\": \"hermes\", \"score\": 66.67}]",
+      "caveat": {
+        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
+        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+      },
+      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/mpbench.json",
+      "source_verified_at": "2026-08-31",
+      "transcribed_at": "2026-09-23"
+    },
+    "mr-lhdr": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-10",
+        "en": "Benchmark recorded date: 2026-09-10"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.11318",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "mtrag-un": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02-26",
+        "en": "Benchmark recorded date: 2026-02-26"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.findings-acl.503/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "mudabench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-04-19",
+        "en": "Benchmark recorded date: 2026-04-19"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.findings-acl.341/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "multihop-rag": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2024-01",
+        "en": "Benchmark recorded date: 2024-01"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2401.15391",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "muses-citeroots": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-31",
+        "en": "Benchmark recorded date: 2026-08-31"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.00313",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "ontologybench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-08",
+        "en": "Benchmark recorded date: 2026-09-08"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.08174",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "past-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-04",
+        "en": "Benchmark recorded date: 2026-08-04"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.04003",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "permemsafe": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-07",
+        "en": "Benchmark recorded date: 2026-07"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.findings-acl.320/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "pm-bench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-07-14 · 论文 v1",
+        "en": "2026-07-14 · paper v1"
+      },
+      "results": [
+        {
+          "system": "GPT-5.4 + optional heartbeat",
+          "metric": "Per-model Set-F1",
+          "score": "79.1%"
+        },
+        {
+          "system": "Optional heartbeat (8-model aggregate)",
+          "metric": "Macro Set-F1",
+          "score": "65.1%"
+        }
+      ],
+      "scope": {
+        "zh": "按表 3 记录单模型最佳、按表 2 记录跨模型最佳策略均值；二者分母不同。",
+        "en": "Per-model best from Table 3 and best cross-model scaffold average from Table 2, with different denominators."
+      },
+      "source": "https://arxiv.org/html/2607.12385v1",
+      "locator": "Tables 2 and 3, optional-heartbeat rows.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "摘要将 65.1% 关联到 GPT-5.4，与表格不一致；此处保留表 2/3 的明确口径，不代表当前最佳。",
+        "en": "The abstract associates 65.1% with GPT-5.4, unlike the tables. This reference follows the explicit Table 2/3 scopes, not current SOTA."
+      },
+      "comparison_scope": "Per-model best from Table 3 and best cross-model scaffold average from Table 2, with different denominators."
+    },
+    "q2d-web": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-08",
+        "en": "Benchmark recorded date: 2026-09-08"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.08887",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "rag-collapse": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-22",
+        "en": "Benchmark recorded date: 2026-08-22"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.22118",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "ragbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2024-07",
+        "en": "Benchmark recorded date: 2024-07"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2407.11005",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "ragcap-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-10",
+        "en": "Benchmark recorded date: 2025-10"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2510.13910",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "ragtruth": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2024-01",
+        "en": "Benchmark recorded date: 2024-01"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2401.00396",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "realmem": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-01",
+        "en": "Benchmark recorded date: 2026-01"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.findings-acl.703/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "recall-trap": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-10",
+        "en": "Benchmark recorded date: 2026-08-10"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.14838",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "rgb": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2023-09",
+        "en": "Benchmark recorded date: 2023-09"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2309.01431",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "sage": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02-05",
+        "en": "Benchmark recorded date: 2026-02-05"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2602.05975",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "scale-qa": {
+      "status": "release-reference",
+      "period": {
+        "zh": "2026-08-26 · 论文 v1 快照",
+        "en": "2026-08-26 · paper v1 snapshot"
+      },
+      "results": [
+        {
+          "system": "Full Context / GPT-4o-mini",
+          "metric": "Accuracy",
+          "score": "29.8%",
+          "scope": {
+            "zh": "128K Full Context 准确率",
+            "en": "128K Full Context accuracy"
+          },
+          "source": "https://arxiv.org/abs/2608.25655"
+        }
+      ],
+      "scope": {
+        "zh": "原文全上下文基线；不把单条已记录成绩当成首发榜首。",
+        "en": "Original full-context baseline, not a launch winner inferred from one recorded score."
+      },
+      "source": "https://arxiv.org/abs/2608.25655",
+      "initial_release": true,
+      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"128k-full-context-accuracy\", \"entry_id\": \"gpt-4o-mini-full-context\", \"score\": 29.8}]",
+      "caveat": {
+        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
+        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+      },
+      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/scale-qa.json",
+      "source_verified_at": "2026-08-31",
+      "transcribed_at": "2026-09-23"
+    },
+    "scholarquest": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-05-19",
+        "en": "Benchmark recorded date: 2026-05-19"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2606.20235",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "searchauditbench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-08 · 论文 v1",
+        "en": "2026-08 · paper v1"
+      },
+      "results": [
+        {
+          "system": "SearchAuditor / GPT-5.5",
+          "metric": "Full Pass Score (FPS)",
+          "score": "32.26%"
+        },
+        {
+          "system": "SearchAuditor / GPT-5.5",
+          "metric": "CS-Strict",
+          "score": "44.89%"
+        }
+      ],
+      "scope": {
+        "zh": "表 2 的轨迹审计配置最佳；FPS 判完整审计、CS-Strict 判关键错误步骤，不是搜索任务最终答案成功率。",
+        "en": "Best trajectory-auditing configuration in Table 2; FPS grades a complete audit and CS-Strict the critical step, not search-answer success."
+      },
+      "source": "https://arxiv.org/html/2608.05212v1",
+      "locator": "Table 2, SearchAuditor with GPT-5.5.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best trajectory-auditing configuration in Table 2; FPS grades a complete audit and CS-Strict the critical step, not search-answer success."
+    },
+    "sgr-bench": {
+      "status": "release-best",
+      "period": {
+        "zh": "2026-05 · 论文 v1",
+        "en": "2026-05 · paper v1"
+      },
+      "results": [
+        {
+          "system": "GPT-5.5 / CLI agent",
+          "metric": "Overall Item-F1",
+          "score": "66.18%"
+        },
+        {
+          "system": "GPT-5.5 / CLI agent",
+          "metric": "Overall Row-F1",
+          "score": "43.37%"
+        }
+      ],
+      "scope": {
+        "zh": "表 2/3、100 个任务中的最佳配置；Item-F1 与整行正确性的 Row-F1 分开保留。",
+        "en": "Best configuration in Tables 2–3 on 100 tasks; item and full-row F1 remain separate metrics."
+      },
+      "source": "https://arxiv.org/html/2605.22219v1",
+      "locator": "Tables 2 and 3, GPT-5.5 CLI.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best configuration in Tables 2–3 on 100 tasks; item and full-row F1 remain separate metrics."
+    },
+    "snapshot-compatibility-audit": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-24",
+        "en": "Benchmark recorded date: 2026-08-24"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.22856",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "sp-mem": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-17",
+        "en": "Benchmark recorded date: 2026-08-17"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.16551",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "spider": {
+      "status": "release-best",
+      "period": {
+        "zh": "2018-09-24 · 论文 v1",
+        "en": "2018-09-24 · paper v1"
+      },
+      "results": [
+        {
+          "system": "Best model in v1 abstract (name not verified)",
+          "metric": "Database-split exact match",
+          "score": "14.3%"
+        }
+      ],
+      "scope": {
+        "zh": "首版摘要明确报告的数据库切分最佳成绩；模型名称尚未核验，不用后续版本的 12.4% 替换。",
+        "en": "Best database-split score explicitly reported in the v1 abstract; model name unverified. The later 12.4% figure is not substituted."
+      },
+      "source": "https://arxiv.org/abs/1809.08887v1",
+      "locator": "v1 abstract, database-split best reported score.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Best database-split score explicitly reported in the v1 abstract; model name unverified. The later 12.4% figure is not substituted."
+    },
+    "spider-2": {
+      "status": "release-reference",
+      "period": {
+        "zh": "2024-11-12 · 论文 v1",
+        "en": "2024-11-12 · paper v1"
+      },
+      "results": [
+        {
+          "system": "o1-preview + paper code-agent framework",
+          "metric": "Task success",
+          "score": "17.0%"
+        }
+      ],
+      "scope": {
+        "zh": "首版摘要中的代码智能体结果，对应原版任务集合；不与后来的 Lite、Snow 或修改后的任务集混比。",
+        "en": "Code-agent result in the initial abstract on the original task collection; not later Lite, Snow, or revised sets."
+      },
+      "source": "https://arxiv.org/abs/2411.07763v1",
+      "locator": "v1 abstract: o1-preview code-agent result.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      }
+    },
+    "statabench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-06-22",
+        "en": "Benchmark recorded date: 2026-06-22"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2606.22977",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "statemembench": {
+      "status": "diagnostic",
+      "period": {
+        "zh": "2026-08-20 · 论文 v1 快照",
+        "en": "2026-08-20 · paper v1 snapshot"
+      },
+      "results": [
+        {
+          "system": "StateMem / DeepSeek",
+          "metric": "State score",
+          "score": "36.3%",
+          "scope": {
+            "zh": "DeepSeek 同底座状态维护得分",
+            "en": "Same-backbone DeepSeek state-maintenance score"
+          },
+          "source": "https://arxiv.org/abs/2608.19652"
+        }
+      ],
+      "scope": {
+        "zh": "指定模型下的状态记忆配置；不声明跨模型或跨协议的完整榜首。",
+        "en": "A state-memory configuration under the specified model, not a full cross-model or cross-protocol winner."
+      },
+      "source": "https://arxiv.org/abs/2608.19652",
+      "initial_release": true,
+      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"deepseek-state-score\", \"entry_id\": \"deepseek-statemem\", \"score\": 36.3}]",
+      "caveat": {
+        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
+        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+      },
+      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/statemembench.json",
+      "source_verified_at": "2026-08-31",
+      "transcribed_at": "2026-09-23"
+    },
+    "statformbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-09-02",
+        "en": "Benchmark recorded date: 2026-09-02"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2609.01982",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "structmemeval": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-02",
+        "en": "Benchmark recorded date: 2026-02"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2602.11243",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "t2-ragbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2025-05-14",
+        "en": "Benchmark recorded date: 2025-05-14"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://aclanthology.org/2026.eacl-long.8/",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "tml-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-03-05",
+        "en": "Benchmark recorded date: 2026-03-05"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2603.05764",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "utility-under-attack": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-21",
+        "en": "Benchmark recorded date: 2026-08-21"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.21230",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "vakra": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08",
+        "en": "Benchmark recorded date: 2026-08"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.12282",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "visdocagentbench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-18",
+        "en": "Benchmark recorded date: 2026-08-18"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.17889",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "wandr": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-07-14",
+        "en": "Benchmark recorded date: 2026-07-14"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.14747",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "warehouse-reliability-bench": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-08-10",
+        "en": "Benchmark recorded date: 2026-08-10"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2608.09254",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    },
+    "wikisql": {
+      "status": "release-best",
+      "period": {
+        "zh": "2017-08 · 发布论文",
+        "en": "2017-08 · release paper"
+      },
+      "results": [
+        {
+          "system": "Seq2SQL",
+          "metric": "Execution accuracy",
+          "score": "59.4%"
+        },
+        {
+          "system": "Seq2SQL",
+          "metric": "Logical-form accuracy",
+          "score": "48.3%"
+        }
+      ],
+      "scope": {
+        "zh": "原论文摘要中的 Seq2SQL 结果；execution 与 logical-form 是两种不同指标。",
+        "en": "Seq2SQL results in the original abstract; execution and logical-form accuracy are different metrics."
+      },
+      "source": "https://arxiv.org/abs/1709.00103",
+      "locator": "Original paper abstract: Seq2SQL.",
+      "initial_release": true,
+      "checked_at": "2026-09-23",
+      "caveat": {
+        "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
+        "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
+      },
+      "comparison_scope": "Seq2SQL results in the original abstract; execution and logical-form accuracy are different metrics."
+    },
+    "worldmemarena": {
+      "status": "unverified",
+      "period": {
+        "zh": "基准记录日期：2026-05-28",
+        "en": "Benchmark recorded date: 2026-05-28"
+      },
+      "scope": {
+        "zh": "尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。",
+        "en": "A best result tied to a model, metric, and protocol in the initial release has not yet been verified."
+      },
+      "results": [],
+      "source": "https://arxiv.org/abs/2605.29341",
+      "locator": "Initial-release score and comparison scope not yet verified.",
+      "caveat": {
+        "zh": "不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。",
+        "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
+      },
+      "initial_release": null
+    }
+  }
+}

@@ -1,5 +1,12 @@
 # SearchAuditBench: final-answer scores do not explain why a deep-search agent failed
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-08 · paper v1<br>
+> **SearchAuditor / GPT-5.5 — Full Pass Score (FPS): 32.26%**; **SearchAuditor / GPT-5.5 — CS-Strict: 44.89%**<br>
+> Best trajectory-auditing configuration in Table 2; FPS grades a complete audit and CS-Strict the critical step, not search-answer success. [Original source](https://arxiv.org/html/2608.05212v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](searchauditbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2608.05212) · [Code](https://github.com/lzzzx666/SearchAuditor)

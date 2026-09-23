@@ -1,5 +1,12 @@
 # MemoryAgentBench: turning static long context into an incremental memory agent
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2025-07 · paper v1<br>
+> **NV-Embed-v2 RAG / GPT-4o-mini — RULER-QA: 83.0**; **Contriever RAG / GPT-4o-mini — FactCon-MH accuracy: 7.0%**<br>
+> Best configurations for two selected subtasks in main Table 2; different capabilities are not reduced to a synthetic overall score. [Original source](https://arxiv.org/html/2507.05257v1)<br>
+> Table 2 scope only, excluding later ablations. Its 7.0 multi-hop conflict entry differs from the prose claim of at most 6.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](memoryagentbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2507.05257) · [Code](https://github.com/HUST-AI-HYZ/MemoryAgentBench)

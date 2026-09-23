@@ -1,5 +1,12 @@
 # BIRD: text-to-SQL grounded in large, dirty database contents
 
+<!-- RELEASE-REFERENCE:START -->
+> **Historical paper result (not the initial version)** · 2023 · release-paper v3<br>
+> **ChatGPT — Execution accuracy: 40.08%**<br>
+> Historical model result in the release-paper abstract. The available page is v3, not a separately verified v1. [Original source](https://arxiv.org/abs/2305.03111)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](bird.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2305.03111) · [Project](https://bird-bench.github.io/)

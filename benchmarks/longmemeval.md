@@ -1,5 +1,12 @@
 # LongMemEval：把“记得”拆成五种长期能力
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2024-10-14 · 论文 v1<br>
+> **GPT-4o + round values / fact-expanded keys (top-10) — LongMemEval-M QA accuracy: 72.0%**<br>
+> 表 2 索引设计实验的最佳端到端 QA；不是 LongMemEval-S、oracle 条件或跨所有预算的统一上限。 [原始来源](https://arxiv.org/html/2410.10813v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](longmemeval.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2410.10813) · [代码](https://github.com/xiaowu0162/LongMemEval)

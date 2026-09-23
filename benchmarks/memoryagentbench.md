@@ -1,5 +1,12 @@
 # MemoryAgentBench：把 static long context 改造成 incremental memory agent
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2025-07 · 论文 v1<br>
+> **NV-Embed-v2 RAG / GPT-4o-mini — RULER-QA: 83.0**；**Contriever RAG / GPT-4o-mini — FactCon-MH accuracy: 7.0%**<br>
+> 主表 2 中两个子任务的最佳配置；不把整套基准的不同能力合成一个总分。 [原始来源](https://arxiv.org/html/2507.05257v1)<br>
+> 仅指表 2 的比较范围，不含后续消融；多跳冲突按表中 7.0 记录，正文“至多 6”与表格不一致。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](memoryagentbench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2507.05257) · [代码](https://github.com/HUST-AI-HYZ/MemoryAgentBench)

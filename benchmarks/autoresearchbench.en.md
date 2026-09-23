@@ -1,5 +1,12 @@
 # AutoResearchBench: literature search needs both target finding and unknown-size set discovery
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-04 · paper v1<br>
+> **Claude-Opus-4.6 / ReAct — Deep Research accuracy: 9.39%**; **Gemini-3.1-Pro-Preview / ReAct — Wide Research IoU: 9.31%**<br>
+> Subtask bests within the controlled ReAct comparison of Table 2; excludes 50-question end-to-end-system tests and distinguishes IoU from accuracy. [Original source](https://arxiv.org/html/2604.25256v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](autoresearchbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2604.25256) · [Code](https://github.com/CherYou/AutoResearchBench) · **Area: RAG / Agentic Retrieval**

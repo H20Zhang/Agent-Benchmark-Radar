@@ -1,5 +1,11 @@
 # LiveSQLBench: text-to-SQL under schema and business-rule drift
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2025-05-28<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://livesqlbench.ai/)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](livesqlbench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Project](https://livesqlbench.ai/) · [Code](https://github.com/bird-bench/livesqlbench)

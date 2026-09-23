@@ -1,5 +1,12 @@
 # DABstep：多步金融数据分析，同时保留 objective grading
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2025-06-30 · 论文 v1<br>
+> **o4-mini — Hard accuracy: 14.55%**；**GPT-4.1 — Easy accuracy: 80.56%**<br>
+> 表 1 隐藏测试集；Hard 与 Easy 各自的最佳模型不同，不合成单一模型成绩。 [原始来源](https://arxiv.org/html/2506.23719v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](dabstep.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2506.23719) · [Benchmark](https://huggingface.co/spaces/adyen/DABstep)

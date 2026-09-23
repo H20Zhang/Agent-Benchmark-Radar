@@ -1,5 +1,11 @@
 # Utility Under Attack
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-21<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2608.21230)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 Utility Under Attack reframes memory security from “does the attack succeed?” to **how much benign long-term-memory utility is lost after a small amount of malicious memory enters the system, and how much legitimate evidence a defense sacrifices while trying to stop it**. It combines a LongMemEval-style benign task with false-fact poisoning, write-time screening, and provenance-aware retrieval in one security–utility contract.

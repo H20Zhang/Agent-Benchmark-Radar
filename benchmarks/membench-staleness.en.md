@@ -1,5 +1,11 @@
 # membench (staleness): ranking current facts ahead of stale facts
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-22<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://github.com/Ps23102004/membench)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 **English** | [中文](membench-staleness.md) · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Code, scenarios, and results](https://github.com/Ps23102004/membench)

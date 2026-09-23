@@ -1,5 +1,12 @@
 # MPBench
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release diagnostic (historical reference)** · 2026-06-03 · paper v1 snapshot<br>
+> **OpenClaw — Attack success rate: 34.25%** (Persistent-memory poisoning ASR); **HERMES — Attack success rate: 66.67%** (Persistent-memory poisoning ASR)<br>
+> Attack-success rates: higher indicates a stronger attack, not a better defender. [Original source](https://arxiv.org/abs/2606.04329)<br>
+> From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 ## Measurement object
 
 MPBench measures the **cross-session lifecycle of persistent-memory poisoning**. Six classes of malicious content enter persistent memory through four write channels; the benchmark then asks whether the content is actually stored and, in a later session with a relevant query, whether the poisoned record is retrieved and influences the output. The object is therefore the full `write → persist → retrieve → respond` chain rather than immediate prompt-injection success.

@@ -1,5 +1,11 @@
 # Mem-Gallery: multimodal memory is more than turning images into captions
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-01-07<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://aclanthology.org/2026.acl-long.1892/)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](mem-gallery.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://aclanthology.org/2026.acl-long.1892/) · [Code](https://github.com/YuanchenBei/Mem-Gallery)

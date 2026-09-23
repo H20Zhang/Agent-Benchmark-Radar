@@ -1,5 +1,11 @@
 # DreamBench-SWE
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-21<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2608.20664)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 DreamBench-SWE measures **memory hygiene in multi-session software engineering**. A later coding task must decide whether evidence retained from an earlier session—evidence that cannot be reconstructed from the current repository—is still current, scoped, authorized/relevant, and therefore should be used, or whether it should now be suppressed. Hidden executable oracles score the resulting code changes, so memory affects real action rather than only QA.

@@ -1,5 +1,12 @@
 # The Compaction Cliff
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时诊断结果（历史参考）** · 2026-08-24 · 论文 v1 快照<br>
+> **TypeCompact / Claude Sonnet — Constraint recall: 96%** (五轮压缩后的约束保留率)<br>
+> 指定压缩协议后的约束保留率，不是通用任务成功率。 [原始来源](https://arxiv.org/abs/2608.22752)<br>
+> 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 The Compaction Cliff 测的是 **安全约束在有限上下文管理过程中的存活率**。当 agent 反复做压缩、分解或检索时，原本明确的规则能否被完整保留，并继续约束后续行动。它把“记忆有没有保留信息”拆成更严格的问题：不同类型的信息是否需要不同 retention contract，尤其是不能被近似摘要掉的 safety constraints。

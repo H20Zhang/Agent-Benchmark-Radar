@@ -1,5 +1,12 @@
 # DeepResearch Bench: evaluating research artifacts, evidence, and citations
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release result (historical reference; not a best claim)** · 2025-06-13 · paper v1 snapshot<br>
+> **Gemini-2.5-Pro Deep Research — RACE Overall: 48.88** (Deep Research Agent · RACE Overall); **Perplexity Deep Research — Citation Accuracy: 90.24%** (Deep Research Agent · Citation Accuracy)<br>
+> Selected original-track results; metrics, subsets, and systems are not pooled into one winner. [Original source](https://arxiv.org/abs/2506.11763)<br>
+> From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](deepresearch-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2506.11763) · [Project](https://deepresearch-bench.github.io/) · [Code](https://github.com/Ayanami0730/deep_research_bench)

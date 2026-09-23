@@ -1,5 +1,12 @@
 # SearchAuditBench：只看最终答案，无法知道深度搜索智能体为什么失败
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-08 · 论文 v1<br>
+> **SearchAuditor / GPT-5.5 — Full Pass Score (FPS): 32.26%**；**SearchAuditor / GPT-5.5 — CS-Strict: 44.89%**<br>
+> 表 2 的轨迹审计配置最佳；FPS 判完整审计、CS-Strict 判关键错误步骤，不是搜索任务最终答案成功率。 [原始来源](https://arxiv.org/html/2608.05212v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](searchauditbench.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
 [论文](https://arxiv.org/abs/2608.05212) · [代码](https://github.com/lzzzx666/SearchAuditor)

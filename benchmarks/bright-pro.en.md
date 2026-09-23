@@ -1,5 +1,12 @@
 # Bright-Pro: retrieval should cover complementary reasoning aspects, not just relevant passages
 
+<!-- RELEASE-REFERENCE:START -->
+> **Historical paper reference (initial version unverified)** · 2026-05-05 · historical paper snapshot<br>
+> **BGE-Reasoner-8B — α-nDCG@25: 68%** (Static retrieval · Overall α-nDCG@25)<br>
+> Selected original-track results; metrics, subsets, and systems are not pooled into one winner. [Original source](https://arxiv.org/abs/2605.04018)<br>
+> From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](bright-pro.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://aclanthology.org/2026.acl-long.1705/) · [Code](https://github.com/yale-nlp/Bright-Pro)

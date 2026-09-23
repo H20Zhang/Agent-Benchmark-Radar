@@ -1,5 +1,12 @@
 # WikiSQL：大规模 executable text-to-SQL 的起点，但还不是复杂数据库推理
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2017-08 · 发布论文<br>
+> **Seq2SQL — Execution accuracy: 59.4%**；**Seq2SQL — Logical-form accuracy: 48.3%**<br>
+> 原论文摘要中的 Seq2SQL 结果；execution 与 logical-form 是两种不同指标。 [原始来源](https://arxiv.org/abs/1709.00103)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](wikisql.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/1709.00103)

@@ -1,5 +1,12 @@
 # MLE-bench
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2024-10-09 · 论文 v1<br>
+> **o1-preview + AIDE — Competitions with at least bronze: 16.9%**<br>
+> 首版 75 场 Kaggle 竞赛的最佳主实验配置；不是单题准确率或后续延长预算的榜单结果。 [原始来源](https://arxiv.org/abs/2410.07095v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 MLE-bench 测的是 **从竞赛描述和原始数据出发，独立完成端到端 machine-learning engineering 并交付可评分预测文件**的能力。agent 需要理解任务、检查数据、写代码、训练/验证模型、迭代实验并提交结果；最终用重建测试集和历史 private-leaderboard 门槛判断是否达到 bronze / silver / gold 等 human-relative contract。

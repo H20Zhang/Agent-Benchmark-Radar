@@ -1,5 +1,11 @@
 # MLE-Dojo
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2025-05-12<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2505.07782)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 MLE-Dojo measures an **interactive ML-engineering trajectory**, not only the final submission. In a Gym-style environment, the agent repeatedly reads the task, executes code, observes errors and HumanRank feedback, changes the experiment, and submits again. The protocol therefore exposes whether each step moves the data/model/experiment state in a useful direction.

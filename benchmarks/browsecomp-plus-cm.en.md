@@ -1,5 +1,12 @@
 # BrowseComp-Plus_CM: projecting agentic search onto an independent large corpus
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release result (historical reference; not a best claim)** · 2026-08-18 · paper v1 snapshot<br>
+> **Independent 553M-document corpus / GPT-5.6 Sol — Answer accuracy: 80.7%** (Cross-corpus answer accuracy)<br>
+> Selected original-track results; metrics, subsets, and systems are not pooled into one winner. [Original source](https://arxiv.org/abs/2608.20317)<br>
+> From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](browsecomp-plus-cm.md) | **English** · [Back to entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2608.20317) · [Code](https://github.com/castorini/cmass) · [Data](https://huggingface.co/datasets/castorini/cmass)

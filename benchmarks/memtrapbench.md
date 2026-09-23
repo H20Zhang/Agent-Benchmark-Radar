@@ -1,5 +1,11 @@
 # MemTrapBench
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-08-20<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2608.20202)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 MemTrapBench 测的是 **memory applicability judgment**：即使一段历史记忆被正确保存、也与当前问题语义相关，agent 能否判断它现在是否仍应该参与推理，而不是因为“retrieval 相关”就机械复用。它把长期记忆的失败模式从“忘了什么”推进到“记得没错，但用错了”。

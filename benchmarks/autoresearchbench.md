@@ -1,5 +1,12 @@
 # AutoResearchBench：literature search 必须同时测 target finding 与 unknown-size set discovery
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-04 · 论文 v1<br>
+> **Claude-Opus-4.6 / ReAct — Deep Research accuracy: 9.39%**；**Gemini-3.1-Pro-Preview / ReAct — Wide Research IoU: 9.31%**<br>
+> 表 2 受控 ReAct 比较中的分项最佳；不混入只跑 50 题的端到端系统测试，也不把 IoU 当准确率。 [原始来源](https://arxiv.org/html/2604.25256v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](autoresearchbench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2604.25256) · [代码](https://github.com/CherYou/AutoResearchBench) · **领域：RAG / Agentic Retrieval**

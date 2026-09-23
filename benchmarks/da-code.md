@@ -1,5 +1,12 @@
 # DA-Code：在真实数据上生成 grounded executable data-science code
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2024-10-09 · 论文 v1<br>
+> **DA-Agent / GPT-4 — Total score: 30.5**<br>
+> 首版表 3 总分最佳；不是代码可执行率 76.8%，也不是预算内产出结果的完成率 99.4%。 [原始来源](https://arxiv.org/html/2410.07331v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](da-code.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2410.07331) · [项目页](https://da-code-bench.github.io/)

@@ -1,5 +1,11 @@
 # RAG Collapse
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-22<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2608.22118)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 RAG Collapse is not a one-shot retrieval-relevance benchmark. It asks whether **independent sources are progressively displaced when a fixed model repeatedly retrieves model-authored sources inside a recursive corpus loop**. The measured object is therefore corpus provenance and retrieval-feedback dynamics, not degradation of the model weights themselves.

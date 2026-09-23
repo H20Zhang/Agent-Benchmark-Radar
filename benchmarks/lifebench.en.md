@@ -1,5 +1,12 @@
 # LifeBench: long-horizon memory beyond explicit facts
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-03 · paper v1<br>
+> **MemOS / GPT-5.1-Mini — Overall accuracy: 55.22%**<br>
+> Best overall accuracy in v1 Section 4.3; GPT-5.1-Mini for memory, answers, and judging on the original 2,003 questions. [Original source](https://arxiv.org/html/2603.03781v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](lifebench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2603.03781) · [Code and data synthesis](https://github.com/1754955896/LifeBench)

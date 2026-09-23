@@ -1,5 +1,11 @@
 # KBGym / Training a Knowledge Base
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-22<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2608.21829)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 KBGym turns a knowledge base from a pre-built static index into a **persistent state that can be trained from supervised experience, frozen, and then evaluated independently**. A curator sees supervised questions and gold answers and edits the store; after freezing, an independent reader answers both trained and unseen questions at different supervision-coverage levels. The object is therefore whether training-time edits to knowledge representation transfer to future queries.

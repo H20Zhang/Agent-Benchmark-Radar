@@ -1,5 +1,12 @@
 # DeltaML-Bench: machine-learning agents in real research repositories
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release result (historical reference; not a best claim)** · 2026-08-20 · paper v1 snapshot<br>
+> **ARG scaffold / GPT-5 — Per-run success: 33.9%** (4×6h per-run success); **ARG scaffold / GPT-5 — Per-run success: 49%** (2×12h per-run success)<br>
+> The 4×6h and 2×12h per-run success rates are separate budget conditions. [Original source](https://arxiv.org/abs/2608.19653)<br>
+> From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](deltaml-bench.md) | **English** · [Back to entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2608.19653) · [Code and tasks](https://github.com/AlgorithmicResearchGroup/deltaml-bench-vivaria)

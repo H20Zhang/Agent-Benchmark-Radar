@@ -1,5 +1,12 @@
 # LiveBrowseComp：用最近 90 天的低显著性事实减少“模型本来就知道”
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-05 · 论文 v1<br>
+> **GPT-5.4 / search-augmented agent — LiveBrowseComp avg@4: 43.2%**<br>
+> 表 3/5 的 LiveBrowseComp 平均正确率最佳；avg@4 不是四次中任选一次成功的 pass@4。 [原始来源](https://arxiv.org/html/2605.28721v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](livebrowsecomp.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2605.28721) · [数据](https://huggingface.co/datasets/Forival/LiveBrowseComp)

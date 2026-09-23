@@ -1,5 +1,12 @@
 # SCALE-QA
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release result (historical reference; not a best claim)** · 2026-08-26 · paper v1 snapshot<br>
+> **Full Context / GPT-4o-mini — Accuracy: 29.8%** (128K Full Context accuracy)<br>
+> Original full-context baseline, not a launch winner inferred from one recorded score. [Original source](https://arxiv.org/abs/2608.25655)<br>
+> From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 - **Measurement object:** Whether a memory system can reconstruct the causally relevant episode in a flat, mixed-topic long-running thread when a later task decision depends on dormant local constraints, rather than merely retrieving semantically similar chunks.
 - **Closest predecessor:** LongMemEval already tests cross-session reasoning, updates, and abstention but preserves timestamped session structure; SCALE-QA removes explicit boundaries and makes identifying the operative episode part of the task.
 - **Decisive evidence:** The benchmark contains 3,000 audited questions across 10 domains and 4,346 exact evidence snippets; one deterministic runtime scales from 16K through 128K with a 400-question 1M diagnostic. At 128K, GPT-4o-mini Full Context scores 29.8% despite 100% evidence containment, separating “evidence is visible” from “the right episode is operationally reconstructed.”
