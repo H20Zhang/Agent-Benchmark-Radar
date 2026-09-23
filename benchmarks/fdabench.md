@@ -1,5 +1,11 @@
 # FDABench：在异构 evidence 上做完整分析的数据 agent
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2025-09<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2509.02473)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](fdabench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [项目页](https://fdabench.github.io/)

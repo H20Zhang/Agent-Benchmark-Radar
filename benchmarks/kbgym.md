@@ -1,5 +1,11 @@
 # KBGym / Training a Knowledge Base
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-08-22<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2608.21829)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 KBGym 把知识库从“预先构建好的静态索引”变成一个**可以被监督经验训练、随后冻结并独立评测的持久状态对象**。curator 在看到监督问答与 gold answer 后编辑知识库；冻结后由独立 reader 回答训练内和不同 coverage 层级的未见问题。核心问题不是单次 retrieval，而是训练阶段对知识表示的修改能否迁移到未来 query。

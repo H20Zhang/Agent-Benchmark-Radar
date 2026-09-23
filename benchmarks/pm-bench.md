@@ -1,5 +1,12 @@
 # PM-Bench：Agent Memory 不只是记住过去，也要记得未来要做什么
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-07-14 · 论文 v1<br>
+> **GPT-5.4 + optional heartbeat — Per-model Set-F1: 79.1%**；**Optional heartbeat (8-model aggregate) — Macro Set-F1: 65.1%**<br>
+> 按表 3 记录单模型最佳、按表 2 记录跨模型最佳策略均值；二者分母不同。 [原始来源](https://arxiv.org/html/2607.12385v1)<br>
+> 摘要将 65.1% 关联到 GPT-5.4，与表格不一致；此处保留表 2/3 的明确口径，不代表当前最佳。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](pm-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2607.12385)
@@ -13,8 +20,6 @@ PM-Bench 测 **prospective memory**：智能体在继续执行其他活动时，
 LoCoMo、LongMemEval 等长期记忆基准主要问“过去发生了什么 / 当前状态是什么”；PM-Bench 把时间方向翻转成“未来条件满足时要记得做什么”，从 retrospective recall 推到 intention maintenance + cue monitoring + timely execution。
 
 ## 决定性证据
-
-论文比较 8 个 LLM、8 种 agent configuration；最好的 GPT-5.4 agent 也只有 65.1% F1，而且没有一种改善 prospective memory 的策略跨模型稳定占优。
 
 ## 这个分数能证明什么
 
@@ -31,6 +36,12 @@ LoCoMo、LongMemEval 等长期记忆基准主要问“过去发生了什么 / �
 ## 下一步最有判别力的验证
 
 将同一 intention 分别设置为 time-based、event-based、更新、取消与冲突条件；配对比较纯上下文、外部持久记忆、显式 scheduler，并按首次正确触发、漏触发与误触发分开评分。
+
+<!-- RELEASE-TABLE-CORRECTION:START -->
+
+**原版表格口径：** 表 2 的 65.1% 是 optional-heartbeat 在八个模型上的 Macro Set-F1；表 3 的单模型最佳是 GPT-5.4 + optional heartbeat，Set-F1 为 79.1%。摘要将 65.1% 关联到 GPT-5.4，与表格不一致；此处以表 2/3 的明确分母为准。[原文表 2–3](https://arxiv.org/html/2607.12385v1)
+
+<!-- RELEASE-TABLE-CORRECTION:END -->
 
 <!-- RESEARCH-DECISION:START -->
 ## 研究决策卡

@@ -1,5 +1,12 @@
 # BEAM: pushing long-term memory to coherent 10M-token conversations
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2025-10 · paper v1<br>
+> **LIGHT / Llama-4-Maverick — Average @500K: 0.359**; **LIGHT / Llama-4-Maverick — Average @10M: 0.266**<br>
+> Best ten-ability averages at the selected lengths in Table 1; 500K and 10M are different settings. [Original source](https://arxiv.org/html/2510.27246v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](beam.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2510.27246) · [Code](https://github.com/mohammadtavakoli78/BEAM)

@@ -1,5 +1,11 @@
 # membench（staleness）：让当前事实排在过期事实之前
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-08-22<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://github.com/Ps23102004/membench)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](membench-staleness.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [代码、场景与结果](https://github.com/Ps23102004/membench)

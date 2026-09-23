@@ -1,5 +1,11 @@
 # MUSES / CiteRoots
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-31<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2609.00313)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 ## Measurement object
 
 Tests prospective literature retrieval from an author’s prior work, separating later citations, unfamiliar sources, rhetorical roots and author-endorsed inspiration.

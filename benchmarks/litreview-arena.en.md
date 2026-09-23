@@ -1,5 +1,12 @@
 # LitReview Arena / LitReviewBench / LitJudge
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release diagnostic (historical reference)** · 2026-07-01 · paper v1 snapshot<br>
+> **LitJudge — Spearman ρ: 0.792** (Correlation with expert utility judgments)<br>
+> Evaluator correlation with human judgment, not a research-agent task score. [Original source](https://arxiv.org/abs/2608.21374)<br>
+> From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 This benchmark/evaluator family measures **expert utility of an open-ended literature-review artifact**, not only citation count or a static rubric. Domain experts provide pairwise preferences over coverage, claim support, organization, research recommendations, and overall usefulness, while LitJudge is calibrated against those expert preferences as an automatic evaluator.

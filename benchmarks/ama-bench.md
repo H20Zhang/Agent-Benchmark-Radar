@@ -1,5 +1,12 @@
 # AMA-Bench：从对话历史走向 agent-environment trajectory memory
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-02 · 论文 v1<br>
+> **AMA-Agent — Average accuracy: 57.22%**<br>
+> 首版摘要报告的 AMA-Agent 平均准确率最佳；属于记忆问答协议，不是环境行动成功率。 [原始来源](https://arxiv.org/html/2602.22769v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](ama-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2602.22769) · [项目页](https://ama-bench.github.io/) · [代码](https://github.com/AMA-Bench/AMA-Bench)

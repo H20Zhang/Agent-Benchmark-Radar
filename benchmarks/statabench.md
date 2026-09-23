@@ -1,5 +1,11 @@
 # StatABench：统计 agent 既要会概念，也要会选择并执行正确统计工具
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-06-22<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2606.22977)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](statabench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2606.22977)

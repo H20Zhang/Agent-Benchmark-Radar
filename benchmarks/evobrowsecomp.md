@@ -1,5 +1,12 @@
 # EvoBrowseComp：如果基准会过时，就让题目生成机制也能持续更新
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-06 · 论文 v1<br>
+> **Claude-Opus-4.6 + tools — English accuracy: 44.8%**；**Claude-Opus-4.6 + tools — Chinese accuracy: 36.8%**<br>
+> 表 2 的有工具设置，按语言分别比较；保留原版搜索预算，不与无工具或当前榜单混比。 [原始来源](https://arxiv.org/html/2606.13120v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](evobrowsecomp.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
 [论文](https://arxiv.org/abs/2606.13120) · [数据](https://huggingface.co/datasets/Krystalan/EvoBrowseComp)

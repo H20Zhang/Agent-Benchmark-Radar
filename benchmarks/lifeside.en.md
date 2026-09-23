@@ -1,5 +1,11 @@
 # LifeSide: long-term user understanding is not the same as factual recall
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-06<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2606.04660)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](lifeside.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 ## What it measures

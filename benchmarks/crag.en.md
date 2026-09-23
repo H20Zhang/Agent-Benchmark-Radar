@@ -1,5 +1,12 @@
 # CRAG: RAG under freshness, long-tail knowledge, and abstention pressure
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2024-06 · paper v1<br>
+> **Copilot Pro — Human-eval Score_h (equal-weighted): 50.6**; **GPT-4 Turbo + Task-3 RAG — Auto-eval accuracy: 43.6%**<br>
+> Best industry-system human score in Table 6 and best Task-3 baseline accuracy in Table 5; these scoring protocols and challenge scores differ. [Original source](https://arxiv.org/html/2406.04744v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](crag.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2406.04744) · [Code](https://github.com/facebookresearch/CRAG)

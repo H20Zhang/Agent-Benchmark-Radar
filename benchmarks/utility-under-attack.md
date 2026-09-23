@@ -1,5 +1,11 @@
 # Utility Under Attack
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-08-21<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2608.21230)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 Utility Under Attack 把 memory security 的问题从“攻击能不能成功”改成 **少量恶意记忆进入系统后，正常长期记忆 utility 会损失多少，以及防御为了阻止攻击会误伤多少正常证据**。它使用 LongMemEval 风格的良性任务，把 false-fact poisoning、write-time filtering 与 provenance-based retrieval 放进同一个 security–utility contract。

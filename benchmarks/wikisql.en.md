@@ -1,5 +1,12 @@
 # WikiSQL: executable text-to-SQL at scale, before cross-schema reasoning
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2017-08 · release paper<br>
+> **Seq2SQL — Execution accuracy: 59.4%**; **Seq2SQL — Logical-form accuracy: 48.3%**<br>
+> Seq2SQL results in the original abstract; execution and logical-form accuracy are different metrics. [Original source](https://arxiv.org/abs/1709.00103)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](wikisql.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/1709.00103)

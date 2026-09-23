@@ -1,5 +1,12 @@
 # StateMemBench
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时诊断结果（历史参考）** · 2026-08-20 · 论文 v1 快照<br>
+> **StateMem / DeepSeek — State score: 36.3%** (DeepSeek 同底座状态维护得分)<br>
+> 指定模型下的状态记忆配置；不声明跨模型或跨协议的完整榜首。 [原始来源](https://arxiv.org/abs/2608.19652)<br>
+> 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 StateMemBench 测的是 **跨会话修订后当前 operative state 的维护能力**。事实、约束与决定会持续新增、覆盖或依赖彼此；最终回答必须基于当前仍有效的状态，而不是只要能召回某条历史记录就算成功。它关注的是“系统此刻相信什么、哪些规则仍生效”，而不仅是 old/new fact ranking。

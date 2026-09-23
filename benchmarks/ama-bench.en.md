@@ -1,5 +1,12 @@
 # AMA-Bench: memory over agent-environment trajectories
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-02 · paper v1<br>
+> **AMA-Agent — Average accuracy: 57.22%**<br>
+> Best AMA-Agent average accuracy reported in the v1 abstract under the memory-QA protocol, not downstream action success. [Original source](https://arxiv.org/html/2602.22769v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](ama-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2602.22769) · [Project](https://ama-bench.github.io/) · [Code](https://github.com/AMA-Bench/AMA-Bench)

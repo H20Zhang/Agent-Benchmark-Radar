@@ -1,5 +1,12 @@
 # DA-Code: grounded executable code for real data-analysis tasks
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2024-10-09 · paper v1<br>
+> **DA-Agent / GPT-4 — Total score: 30.5**<br>
+> Best total score in v1 Table 3; distinct from 76.8% executable code and 99.4% within-budget completion. [Original source](https://arxiv.org/html/2410.07331v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](da-code.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2410.07331) · [Project](https://da-code-bench.github.io/)

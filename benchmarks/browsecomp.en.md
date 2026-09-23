@@ -1,5 +1,12 @@
 # BrowseComp: persistent search for hard-to-find web evidence
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2025-04-10 · official launch<br>
+> **OpenAI deep research — Accuracy: 51.5%**<br>
+> Best model in the official launch article, on the original 1,266 questions. The authors state that deep research was trained specifically for this task type. [Original source](https://openai.com/index/browsecomp/)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](browsecomp.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [OpenAI release](https://openai.com/index/browsecomp/) · [Paper](https://arxiv.org/abs/2504.12516) · [Eval code](https://github.com/openai/simple-evals)

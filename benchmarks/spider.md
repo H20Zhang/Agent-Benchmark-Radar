@@ -1,5 +1,12 @@
 # Spider：让 text-to-SQL 真正泛化到 unseen database schema
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2018-09-24 · 论文 v1<br>
+> **Best model in v1 abstract (name not verified) — Database-split exact match: 14.3%**<br>
+> 首版摘要明确报告的数据库切分最佳成绩；模型名称尚未核验，不用后续版本的 12.4% 替换。 [原始来源](https://arxiv.org/abs/1809.08887v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](spider.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/1809.08887) · [项目页](https://yale-lily.github.io/spider)

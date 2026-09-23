@@ -1,5 +1,11 @@
 # data-eng-bench：Data Agent / 可执行数据工程
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-07-29<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://github.com/Snowflake-Labs/data-eng-bench)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](data-eng-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [基准仓库](https://github.com/Snowflake-Labs/data-eng-bench) · [协议修复](https://github.com/Snowflake-Labs/data-eng-bench/commit/35b83370bd9ae06d9ac8a2beb95d2544c90d88a5)

@@ -1,5 +1,12 @@
 # DataSpace：混合工作区中的可验证分析
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-08 · 论文 v1<br>
+> **Grok 4.5 / DataSpace-Agent — Task accuracy (272/410): 66.34%**<br>
+> 表 3 固定 DataSpace-Agent 比较六个模型时最佳；410 题，不是不同模型与 harness 任意组合的上限。 [原始来源](https://arxiv.org/html/2608.03451v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](dataspace.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2608.03451) · **领域：Data Agent**

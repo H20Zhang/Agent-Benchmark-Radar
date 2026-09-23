@@ -1,5 +1,12 @@
 # MPBench
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时诊断结果（历史参考）** · 2026-06-03 · 论文 v1 快照<br>
+> **OpenClaw — Attack success rate: 34.25%** (持久记忆投毒 ASR)；**HERMES — Attack success rate: 66.67%** (持久记忆投毒 ASR)<br>
+> 攻击成功率：越高表示攻击更有效，不是防御系统更好。 [原始来源](https://arxiv.org/abs/2606.04329)<br>
+> 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 测量对象
 
 MPBench 测的是 **persistent-memory poisoning 的完整跨会话链路**：六类恶意内容通过四种写入渠道进入持久记忆后，系统是否会把它们真正写入；之后在另一次会话中出现相关查询时，恶意记录是否会被检索并影响输出。关键点是把攻击拆成 `write → persist → retrieve → respond`，而不是只看一次 prompt injection 是否即时劫持 agent。

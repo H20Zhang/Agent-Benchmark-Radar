@@ -1,5 +1,12 @@
 # Bright-Pro：检索不只要找到相关段落，还要覆盖完整推理要点
 
+<!-- RELEASE-REFERENCE:START -->
+> **历史论文结果（首版归属待核验）** · 2026-05-05 · 历史论文快照<br>
+> **BGE-Reasoner-8B — α-nDCG@25: 68%** (静态检索 · Overall α-nDCG@25)<br>
+> 保留原始轨道中的指定结果，不把不同指标、子集或系统拼成一个榜首。 [原始来源](https://arxiv.org/abs/2605.04018)<br>
+> 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](bright-pro.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
 [论文](https://aclanthology.org/2026.acl-long.1705/) · [代码](https://github.com/yale-nlp/Bright-Pro)

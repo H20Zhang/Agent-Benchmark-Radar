@@ -1,5 +1,12 @@
 # BrowseComp：为难找事实持续搜索，而不是只做一次检索
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2025-04-10 · 官方首发<br>
+> **OpenAI deep research — Accuracy: 51.5%**<br>
+> 首发官方文章的最佳模型成绩；原始 1,266 题。作者说明 deep research 的训练专门覆盖此类任务。 [原始来源](https://openai.com/index/browsecomp/)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](browsecomp.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [OpenAI 发布页](https://openai.com/index/browsecomp/) · [论文](https://arxiv.org/abs/2504.12516) · [评测代码](https://github.com/openai/simple-evals)

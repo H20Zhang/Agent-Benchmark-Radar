@@ -1,5 +1,11 @@
 # DSAEval: cumulative, multimodal data-science projects
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-01-20<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2601.13591)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](dsaeval.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2601.13591) · [Project](https://dsaeval.github.io/DSAEval/)

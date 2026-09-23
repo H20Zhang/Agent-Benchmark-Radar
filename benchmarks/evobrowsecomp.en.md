@@ -1,5 +1,12 @@
 # EvoBrowseComp: if a benchmark becomes stale, make regeneration part of the benchmark infrastructure
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-06 · paper v1<br>
+> **Claude-Opus-4.6 + tools — English accuracy: 44.8%**; **Claude-Opus-4.6 + tools — Chinese accuracy: 36.8%**<br>
+> Best tool-enabled entries in Table 2, compared separately by language under the original search budget. [Original source](https://arxiv.org/html/2606.13120v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](evobrowsecomp.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2606.13120) · [Data](https://huggingface.co/datasets/Krystalan/EvoBrowseComp)

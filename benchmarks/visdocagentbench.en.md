@@ -1,5 +1,11 @@
 # VisDocAgentBench: RAG / agentic visual-document retrieval
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-18<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2608.17889)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](visdocagentbench.md) | **English** · [Back to the entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2608.17889) · [Code](https://github.com/hulx2002/VisDocAgentBench) · [Data](https://huggingface.co/datasets/hulx2002/VisDocAgentBench)

@@ -1,5 +1,12 @@
 # MemBench: expanding memory evaluation beyond answer accuracy
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2025-06 · paper v1<br>
+> **RetrievalMemory / Qwen2.5-7B — Factual participation @100K accuracy: 83.3%**; **RetrievalMemory / Qwen2.5-7B — Factual observation @100K accuracy: 93.3%**<br>
+> Separate best 100K factual-memory settings in Table 3 with Qwen2.5-7B fixed; no synthetic overall score including reflective memory. [Original source](https://arxiv.org/html/2506.21605v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](membench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2506.21605) · [Code](https://github.com/import-myself/Membench)

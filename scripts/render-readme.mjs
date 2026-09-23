@@ -1,3 +1,4 @@
+import {spawnSync} from 'node:child_process';
 /** README is the primary publication surface. This uses only Node's standard library. */
 import {readFileSync, writeFileSync, existsSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
@@ -99,3 +100,10 @@ for(const [path,value] of outputs){
 }
 if(process.argv.includes('--check')&&stale.length){console.error('Stale README projections: '+stale.join(', '));process.exitCode=1;}
 else console.log(`README projections ${process.argv.includes('--check')?'verified':'updated'}: ${records.length} benchmarks, ${results.size} result sets; scan remains ${period.asOf}.`);
+
+// FROZEN-RELEASE-REFERENCES: frozen editorial data, not current scores.
+const releaseArgs=[resolve(root,'scripts/render-release-references.py')];
+if(process.argv.includes('--check')) releaseArgs.push('--check');
+const releaseCheck=spawnSync(process.env.PYTHON||'python3',releaseArgs,{cwd:root,stdio:'inherit'});
+if(releaseCheck.error){console.error(releaseCheck.error.message);process.exitCode=1;}
+else if(releaseCheck.status!==0){process.exitCode=releaseCheck.status||1;}

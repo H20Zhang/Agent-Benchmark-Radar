@@ -1,5 +1,11 @@
 # MemTrapBench
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-20<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2608.20202)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 MemTrapBench measures **memory applicability judgment**. Even when a historical memory is faithfully stored and semantically relevant to the current question, can an agent decide whether that memory should still influence reasoning rather than reusing it mechanically? It moves the long-term-memory failure mode from “the system forgot” to “the system remembered correctly but used the memory in the wrong situation.”

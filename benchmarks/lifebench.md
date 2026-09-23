@@ -1,5 +1,12 @@
 # LifeBench：长期 memory 不只包括显式事实
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-03 · 论文 v1<br>
+> **MemOS / GPT-5.1-Mini — Overall accuracy: 55.22%**<br>
+> 首版 4.3 节整体准确率最佳；GPT-5.1-Mini 同时承担记忆、回答与判分，原始 2,003 题。 [原始来源](https://arxiv.org/html/2603.03781v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](lifebench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2603.03781) · [代码与数据合成](https://github.com/1754955896/LifeBench)

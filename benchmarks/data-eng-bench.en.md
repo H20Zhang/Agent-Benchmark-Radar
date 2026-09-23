@@ -1,5 +1,11 @@
 # data-eng-bench: Data Agent / executable data engineering
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-07-29<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://github.com/Snowflake-Labs/data-eng-bench)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](data-eng-bench.md) | **English** · [Back to the entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Benchmark repository](https://github.com/Snowflake-Labs/data-eng-bench) · [Protocol fix](https://github.com/Snowflake-Labs/data-eng-bench/commit/35b83370bd9ae06d9ac8a2beb95d2544c90d88a5)

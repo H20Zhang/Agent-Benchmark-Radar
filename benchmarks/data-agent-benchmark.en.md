@@ -1,5 +1,12 @@
 # Data Agent Benchmark (DAB): enterprise questions across heterogeneous databases
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-03-21 · paper v1<br>
+> **Gemini-3-Pro / paper ReAct agent — Pass@1: 38%**<br>
+> Best of five generic-model baselines in Table 3: 50 trials per query and a 12-dataset average. Excludes the PromptQL case study and later rescored boards. [Original source](https://arxiv.org/html/2603.20576v1)<br>
+> Original-paper history only; later validators, hints, and task-specific prompts change comparability.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](data-agent-benchmark.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2603.20576) · [Project](https://ucbepic.github.io/DataAgentBench/) · [Code](https://github.com/ucbepic/DataAgentBench)

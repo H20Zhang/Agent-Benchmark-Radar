@@ -1,5 +1,12 @@
 # DeltaML-Bench：真实研究仓库中的机器学习实验智能体
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时结果（历史参考，非最佳声明）** · 2026-08-20 · 论文 v1 快照<br>
+> **ARG scaffold / GPT-5 — Per-run success: 33.9%** (4×6h 单次成功率)；**ARG scaffold / GPT-5 — Per-run success: 49%** (2×12h 单次成功率)<br>
+> 4×6h 与 2×12h 的单次运行成功率分开报告，不混成一种预算。 [原始来源](https://arxiv.org/abs/2608.19653)<br>
+> 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](deltaml-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2608.19653) · [代码与任务](https://github.com/AlgorithmicResearchGroup/deltaml-bench-vivaria)

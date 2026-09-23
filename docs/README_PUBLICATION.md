@@ -44,3 +44,10 @@ table, direct note and source links, one-sentence summary parity, truthful date
 labels, citation values and bilingual ID/order equivalence. Source integrity tests
 and the complete legacy Library validation remain. The retired website can still
 be checked explicitly, but its visual assumptions do not govern the README.
+
+## Historical result headers
+
+Every benchmark note carries a frozen historical reference directly under its title.
+Edit `data/release-references.json`, not generated blocks or current leaderboard data.
+The normal renderer updates both languages and `--check` validates them. See
+[Historical release references](RELEASE_REFERENCES.md) for version, scope, and missing-evidence rules.

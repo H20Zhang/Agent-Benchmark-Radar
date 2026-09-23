@@ -1,5 +1,12 @@
 # SGR-Bench：找到正确网站还不够，还要建立正确的检索状态
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2026-05 · 论文 v1<br>
+> **GPT-5.5 / CLI agent — Overall Item-F1: 66.18%**；**GPT-5.5 / CLI agent — Overall Row-F1: 43.37%**<br>
+> 表 2/3、100 个任务中的最佳配置；Item-F1 与整行正确性的 Row-F1 分开保留。 [原始来源](https://arxiv.org/html/2605.22219v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](sgr-bench.en.md) · [返回入口](../README.md) · [基准库](../library/README.md)
 
 [论文](https://arxiv.org/abs/2605.22219) · [数据](https://huggingface.co/datasets/PKUAIWeb/SGR-BENCH)

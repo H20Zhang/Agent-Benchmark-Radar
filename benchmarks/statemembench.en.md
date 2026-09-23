@@ -1,5 +1,12 @@
 # StateMemBench
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release diagnostic (historical reference)** · 2026-08-20 · paper v1 snapshot<br>
+> **StateMem / DeepSeek — State score: 36.3%** (Same-backbone DeepSeek state-maintenance score)<br>
+> A state-memory configuration under the specified model, not a full cross-model or cross-protocol winner. [Original source](https://arxiv.org/abs/2608.19652)<br>
+> From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 StateMemBench measures **maintenance of the currently operative state after cross-session revisions**. Facts, constraints, and decisions can be added, superseded, or linked by dependencies; the final answer must use what remains valid now rather than succeeding merely because some historical record can be recalled. The object is “what should the system currently believe and which rules are still in force,” not only local old-versus-new ranking.

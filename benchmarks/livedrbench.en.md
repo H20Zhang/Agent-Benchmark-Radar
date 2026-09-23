@@ -1,5 +1,12 @@
 # LiveDRBench: separating broad claim discovery from report writing
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2025-08-06 · paper v1<br>
+> **OpenAI deep research — Overall F1: 0.55**<br>
+> Best deep-research system in the initial experiment, scoring structured claim discovery across 100 tasks, not report style. [Original source](https://arxiv.org/abs/2508.04183v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](livedrbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2508.04183) · [Code](https://github.com/microsoft/LiveDRBench) · [Data](https://huggingface.co/datasets/microsoft/LiveDRBench)

@@ -1,5 +1,11 @@
 # Beyond Goldfish Memory: an early coordinate for multi-session conversational memory
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2022-05<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://aclanthology.org/2022.acl-long.356/)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](beyond-goldfish-memory.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://aclanthology.org/2022.acl-long.356/) · **Area: Agent Memory**

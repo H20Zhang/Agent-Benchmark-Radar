@@ -1,5 +1,12 @@
 # LitReview Arena / LitReviewBench / LitJudge
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时诊断结果（历史参考）** · 2026-07-01 · 论文 v1 快照<br>
+> **LitJudge — Spearman ρ: 0.792** (与专家 Utility 判断的相关性)<br>
+> 评分器与人工判断的相关性，不是研究智能体的任务得分。 [原始来源](https://arxiv.org/abs/2608.21374)<br>
+> 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 这组 benchmark/evaluator 测的是 **开放式文献综述作为研究 artifact 的真实专家 utility**，而不是只检查 citation 数量或静态 rubric。领域专家做 pairwise preference，评价 coverage、claim support、结构、研究建议与总体 usefulness；与此同时，LitJudge 用这些专家偏好去校准自动 evaluator。

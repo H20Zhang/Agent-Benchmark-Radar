@@ -1,5 +1,12 @@
 # MLE-bench
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2024-10-09 · paper v1<br>
+> **o1-preview + AIDE — Competitions with at least bronze: 16.9%**<br>
+> Best main-experiment setup in the initial 75-competition benchmark; not per-question accuracy or a later extended-budget board. [Original source](https://arxiv.org/abs/2410.07095v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 ## What it actually measures
 
 MLE-bench measures whether an agent can **start from a competition description and raw data, perform end-to-end machine-learning engineering, and deliver a scoreable prediction artifact**. The agent must understand the task, inspect data, write code, train and validate models, iterate, and submit. Reconstructed test sets and historical private-leaderboard thresholds define human-relative bronze/silver/gold style success contracts.

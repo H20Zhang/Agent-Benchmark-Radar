@@ -1,5 +1,12 @@
 # InMind: when relevant memory is not similar to the query
 
+<!-- RELEASE-REFERENCE:START -->
+> **Release diagnostic (historical reference)** · 2026-07 · paper v1<br>
+> **Naive RAG / text-embedding-3-large / GPT-5-mini — Indirect application, Table 1: 16.0%**; **Always-in-state / GPT-5-mini — Indirect application, Table 2: 68.8%**<br>
+> 125 tasks: best retrieval configuration in Table 1 and always-visible-state diagnostic in Table 2. The 84.0% oracle is not a normal retrieval score. [Original source](https://arxiv.org/html/2607.24368v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](inmind.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2607.24368) · [Project](https://keep-it-inmind.github.io/) · [Code](https://github.com/imlrz/InMind)

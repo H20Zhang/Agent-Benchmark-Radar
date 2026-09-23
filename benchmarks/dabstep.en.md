@@ -1,5 +1,12 @@
 # DABstep: multi-step financial analysis with objective final grading
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2025-06-30 · paper v1<br>
+> **o4-mini — Hard accuracy: 14.55%**; **GPT-4.1 — Easy accuracy: 80.56%**<br>
+> Hidden test set, Table 1. Hard and Easy have different best models; these are not one model’s combined result. [Original source](https://arxiv.org/html/2506.23719v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](dabstep.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2506.23719) · [Benchmark](https://huggingface.co/spaces/adyen/DABstep)

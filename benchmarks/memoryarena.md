@@ -1,5 +1,11 @@
 # MemoryArena：记忆是否真的改善后续行动
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-02-18<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2602.16313)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](memoryarena.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2602.16313) · [项目页](https://memoryarena.github.io/) · [代码](https://github.com/ZexueHe/MemoryArena)

@@ -1,5 +1,11 @@
 # Q2D-Web
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-09-08<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://arxiv.org/abs/2609.08887)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 ## Measurement object
 
 Tests document retrieval for agent-rewritten queries against a large production-derived corpus, with citation, production-ranking, and pooled relevance labels.

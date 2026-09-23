@@ -1,5 +1,12 @@
 # PM-Bench: Agent memory must remember what to do later, not only what happened before
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-07-14 · paper v1<br>
+> **GPT-5.4 + optional heartbeat — Per-model Set-F1: 79.1%**; **Optional heartbeat (8-model aggregate) — Macro Set-F1: 65.1%**<br>
+> Per-model best from Table 3 and best cross-model scaffold average from Table 2, with different denominators. [Original source](https://arxiv.org/html/2607.12385v1)<br>
+> The abstract associates 65.1% with GPT-5.4, unlike the tables. This reference follows the explicit Table 2/3 scopes, not current SOTA.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](pm-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2607.12385)
@@ -14,7 +21,7 @@ Benchmarks such as LoCoMo and LongMemEval primarily ask what happened in the pas
 
 ## Decisive evidence
 
-The paper evaluates eight LLMs under eight agent configurations. The best reported GPT-5.4 agent reaches only 65.1% F1, and no prospective-memory strategy dominates consistently across models.
+The paper evaluates eight LLMs under eight agent configurations.
 
 ## What the score supports
 
@@ -31,6 +38,12 @@ Real days-to-months horizons, external notification systems, conflicts and cance
 ## Next discriminating validation
 
 Pair time-based, event-based, updated, cancelled, and conflicting variants of the same intention. Compare context-only, persistent memory, and explicit scheduling while separating correct first trigger, misses, and false triggers.
+
+<!-- RELEASE-TABLE-CORRECTION:START -->
+
+**Original-table scope:** the 65.1% in Table 2 is optional heartbeat’s Macro Set-F1 over eight models. The best individual-model result in Table 3 is GPT-5.4 + optional heartbeat at 79.1% Set-F1. The abstract associates 65.1% with GPT-5.4, unlike the tables; the explicit Table 2/3 denominators govern this reference. [Original Tables 2–3](https://arxiv.org/html/2607.12385v1)
+
+<!-- RELEASE-TABLE-CORRECTION:END -->
 
 <!-- RESEARCH-DECISION:START -->
 ## Research decision card

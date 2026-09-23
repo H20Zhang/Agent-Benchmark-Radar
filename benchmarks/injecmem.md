@@ -1,5 +1,11 @@
 # InjecMEM
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-08-24<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2608.23471)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 InjecMEM 测的是 **targeted persistent-memory injection**：攻击者只通过一次看似普通的交互把恶意记录写进持久记忆；在之后的独立会话里，当出现与该 topic 相关的查询时，系统是否会把这条记录重新检索出来，并进一步生成攻击者预设的目标内容。测量对象因此覆盖 `write → memory drift/persistence → retrieve → generate` 的完整轨迹。

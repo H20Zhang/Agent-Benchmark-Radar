@@ -1,5 +1,11 @@
 # RAG Collapse
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（待核验）** · 基准记录日期：2026-08-22<br>
+> 尚未核验原始发布版本中可定位到模型、指标和协议的最佳成绩。 [原始来源](https://arxiv.org/abs/2608.22118)<br>
+> 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
+<!-- RELEASE-REFERENCE:END -->
+
 ## 它到底测什么
 
 RAG Collapse 不是在测一次检索是否找到了相关文档，而是在测一个**固定模型 + 递归检索语料**形成反馈环以后，独立来源会不会被模型自己生成的来源逐轮挤出。它把 model-collapse 研究里的递归机制从“训练数据 → 新模型”迁移到“检索语料 → 上下文 → 新来源”，因此测量对象是 corpus provenance 与 retrieval feedback dynamics，而不是基础模型权重退化。

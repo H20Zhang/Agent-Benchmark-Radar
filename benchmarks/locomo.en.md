@@ -1,5 +1,12 @@
 # LoCoMo: making very-long-term conversational memory measurable
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2024-02-27 · paper v1<br>
+> **GPT-3.5-turbo-16K + observation RAG (top-5) — QA overall F1: 41.4**; **GPT-3.5-turbo — Event-summary FactScore F1: 45.9**<br>
+> Best automated QA overall F1 in Tables 2–3 and event-summary F1 in Table 4, respectively; human controls excluded. [Original source](https://arxiv.org/html/2402.17753v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](locomo.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://aclanthology.org/2024.acl-long.747/) · [Code](https://github.com/snap-research/locomo)

@@ -1,5 +1,12 @@
 # LiveDRBench：把广泛证据发现同报告写作拆开
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时最佳结果（历史参考）** · 2025-08-06 · 论文 v1<br>
+> **OpenAI deep research — Overall F1: 0.55**<br>
+> 初始实验中最佳的深度研究系统；在 100 个任务的结构化主张发现上计分，不是报告文风评分。 [原始来源](https://arxiv.org/abs/2508.04183v1)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](livedrbench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2508.04183) · [代码](https://github.com/microsoft/LiveDRBench) · [数据](https://huggingface.co/datasets/microsoft/LiveDRBench)

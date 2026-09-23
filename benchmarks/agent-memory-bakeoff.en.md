@@ -1,5 +1,11 @@
 # Agent Memory Bakeoff: lexical mismatch and write-time enrichment
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-21<br>
+> A best result tied to a model, metric, and protocol in the initial release has not yet been verified. [Original source](https://github.com/JaysonRawlins/agent-memory-bakeoff)<br>
+> No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
+<!-- RELEASE-REFERENCE:END -->
+
 **English** | [中文](agent-memory-bakeoff.md) · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Code, data, and protocol](https://github.com/JaysonRawlins/agent-memory-bakeoff)

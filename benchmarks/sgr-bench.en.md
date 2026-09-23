@@ -1,5 +1,12 @@
 # SGR-Bench: search where the correct website is not enough
 
+<!-- RELEASE-REFERENCE:START -->
+> **Best at release (historical reference)** · 2026-05 · paper v1<br>
+> **GPT-5.5 / CLI agent — Overall Item-F1: 66.18%**; **GPT-5.5 / CLI agent — Overall Row-F1: 43.37%**<br>
+> Best configuration in Tables 2–3 on 100 tasks; item and full-row F1 remain separate metrics. [Original source](https://arxiv.org/html/2605.22219v1)<br>
+> Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
+<!-- RELEASE-REFERENCE:END -->
+
 [中文](sgr-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
 [Paper](https://arxiv.org/abs/2605.22219) · [Dataset](https://huggingface.co/datasets/PKUAIWeb/SGR-BENCH)

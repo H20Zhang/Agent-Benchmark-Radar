@@ -1,5 +1,12 @@
 # BIRD：让 text-to-SQL 真正面对大型、脏的 database content
 
+<!-- RELEASE-REFERENCE:START -->
+> **历史论文结果（非首版参考）** · 2023 · 发布论文 v3<br>
+> **ChatGPT — Execution accuracy: 40.08%**<br>
+> 发布论文摘要中的历史模型结果；该页为 v3，未将其冒充已单独复核的 v1。 [原始来源](https://arxiv.org/abs/2305.03111)<br>
+> 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](bird.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2305.03111) · [项目页](https://bird-bench.github.io/)

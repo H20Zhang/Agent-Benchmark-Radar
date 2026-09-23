@@ -1,5 +1,12 @@
 # BrowseComp-Plus_CM：把 agentic search 投到独立大语料
 
+<!-- RELEASE-REFERENCE:START -->
+> **发布时结果（历史参考，非最佳声明）** · 2026-08-18 · 论文 v1 快照<br>
+> **Independent 553M-document corpus / GPT-5.6 Sol — Answer accuracy: 80.7%** (跨语料回答准确率)<br>
+> 保留原始轨道中的指定结果，不把不同指标、子集或系统拼成一个榜首。 [原始来源](https://arxiv.org/abs/2608.20317)<br>
+> 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
+<!-- RELEASE-REFERENCE:END -->
+
 **中文** | [English](browsecomp-plus-cm.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
 
 [论文](https://arxiv.org/abs/2608.20317) · [代码](https://github.com/castorini/cmass) · [数据](https://huggingface.co/datasets/castorini/cmass)
