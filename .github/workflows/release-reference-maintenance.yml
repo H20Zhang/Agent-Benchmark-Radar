@@ -25,34 +25,11 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-      - name: Inspect existing source-bounded result records
+      - name: Apply explicitly authored historical references
         run: |
-          python - <<'PY'
-          import json,re
-          from pathlib import Path
-          registry=json.loads(Path('data/benchmarks.json').read_text())
-          for r in registry:
-              p=Path('data/results')/(r['id']+'.json')
-              if p.exists():
-                  s=json.loads(p.read_text())
-                  print('RESULT',r['id'],r['released'],json.dumps(s,ensure_ascii=False,separators=(',',':')))
-          print('END_RESULTS')
-          for r in registry:
-              text=(Path('benchmarks')/(r['id']+'.en.md')).read_text()
-              blocks=text.split('\n\n')
-              selected=[b for b in blocks if re.search(r'\d',b) and re.search(r'%|score|accuracy|pass@|F1|nDCG|success|ceiling|recall|precision|saturat',b,re.I) and not b.startswith(('#','[','>','<!--'))]
-              print('NOTE',r['id'],r['released'],r['artifacts'].get('paper'),json.dumps(selected,ensure_ascii=False,separators=(',',':')))
-          print('END_NOTES')
-          PY
-      - name: Apply authored references when available
-        run: |
-          if [ -f scripts/apply-release-references.py ]; then
-            python scripts/apply-release-references.py
-          fi
-          if [ -f scripts/render-release-references.py ]; then
-            python scripts/render-release-references.py
-            python scripts/render-release-references.py --check
-          fi
+          python scripts/apply-release-references.py
+          python scripts/render-release-references.py
+          python scripts/render-release-references.py --check
       - name: Validate complete bilingual publication
         run: |
           python -m unittest discover -s tests -v
@@ -61,9 +38,9 @@ jobs:
           python scripts/validate_detail_pages.py
           python scripts/audit_detail_pages.py
           git diff --check
-      - name: Save validated reference projections only on maintenance branch
+      - name: Save validated projections on maintenance branch only
         run: |
-          git add benchmarks data docs SCHEMA.md CURATION.md tests scripts/render-release-references.py 2>/dev/null || git add benchmarks data docs SCHEMA.md CURATION.md tests
+          git add benchmarks data docs tests scripts/render-release-references.py scripts/render-readme.mjs
           if git diff --cached --quiet; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
