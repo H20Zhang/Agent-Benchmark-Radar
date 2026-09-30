@@ -1,4 +1,4 @@
-# LoHoSearch: controlling search-space size and constraint-graph complexity instead of merely calling a query hard
+# LoHoSearch: long-horizon search with large candidate sets and complex constraints
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-06-11<br>
@@ -6,50 +6,72 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](lohosearch.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](lohosearch.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2606.12837) · [Data](https://huggingface.co/datasets/meituan-longcat/LoHoSearch)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction.
 
-LoHoSearch contains 544 human-verified questions across 11 domains, split into 282 tree-structured and 262 graph-structured tasks, derived from a knowledge graph with more than 7M Wikipedia entities. It explicitly controls candidate search-space size and structural constraint complexity and also measures calibration.
+Read the complete substantive v2 text, limitations and Appendices A–D, including graph construction, filtering, calibration formula, full prompt/tool definitions and both cases; visually checked Tables 2–3.
 
-## Compared with what
+[arXiv 2606.12837v2 · 2026-06-17](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:reading:END -->
 
-Many deep-search benchmarks rely on annotator intuition for difficulty. LoHoSearch makes candidate-space size and constraint-graph structure observable variables, enabling more controlled study of long-horizon context management.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Score boundary
+A graph of approximately 7.62 million English Wikipedia entities and 265 million directed hyperlink edges supports sampling low-popularity entities with large relation-specific candidate sets. Tree questions require intersecting constraints to identify an answer; graph questions add cycles/cross-constraints with up to ten entities. DeepSeek-V3.2 verbalizes obfuscated structures and assists validation/difficulty filtering. The 544 questions comprise 282 tree and 262 graph cases across eleven categories. An illustrative workflow eliminates candidates through relationships among an album, singers and producers, then returns one entity and confidence rather than a locally matching candidate.
 
-Dual-judge accuracy and calibration support long-horizon constraint reasoning under the Wikipedia-derived space and named provider/tool. Synthetic question generation and live search infrastructure still limit external validity.
+Editorial placement: the paper directly compares BrowseComp. LoHoSearch replaces manually constructed hard searches with graph-controlled candidate spaces and constraint structure, adding structural difficulty and context-management stress. It is not a recent-fact benchmark; LiveBrowseComp’s freshness diagnosis is complementary rather than interchangeable.
 
-## Fair comparison conditions
+[Source](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:method:END -->
 
-Align tree/graph slice, provider, tool interface, context window, judge, and search budget, and report calibration separately.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Next evaluation coordinate
+Models receive shared search/browse definitions supporting up to five queries and three pages per call, temperature 1.0 and 200K context split into 184K input/16K output; reasoning follows official defaults. Total calls, wall-clock caps and main-table repeat counts are unspecified. Scores average accuracy from GPT-4.1 with the BrowseComp judge prompt and Qwen2.5-32B with the SimpleQA prompt, not their consensus. ECE uses five equal-width confidence bins, with missing confidence fields adding noise. Summary/discard interventions trigger above 80% context usage; Verify checks constraints before submission, without matched additional cost.
 
-The next step maps structural difficulty to natural user-query distributions and tests whether controlled complexity predicts real search cost and failure probability.
+[Source](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Selected model scores and calibration error
 
-## Research decision card
+All 544 v2 questions; each judge uses question-level accuracy and the two values are averaged. Lower ECE is better, with missing-confidence handling incompletely specified. Reasoning modes differ rather than matching inference compute.
 
-### When to use it
+| Model | Mean two-judge accuracy (%) | ECE (%) |
+| --- | --- | --- |
+| GPT-5.5 | 34.74 | 48 |
+| Claude-Opus-4.6 | 15.62 | 31 |
+| DeepSeek-V4-Flash | 10.02 | 48 |
 
-Use LoHoSearch for long-horizon search pressure from large candidate spaces and complex constraint graphs. Long traces do not establish task importance, and successful search does not establish calibrated confidence. Inspect elimination efficiency, context management, and calibration together.
+Source location: Table 2, p. 5; Appendix A, pp. 10–11 · [Source](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:result-2:START -->
+## Context interventions with DeepSeek-V4-Flash fixed
 
-Illustrative task: multiple constraints jointly identify a target, while each alone leaves many candidates. The agent must retain verified and unresolved constraints during elimination. Losing one early restriction can send later searches toward the wrong object.
+544 questions with the same backbone/tools; history is managed above 80% context use. Verify additionally checks conditions before submission, without equalized realized compute. Three selected strategies; the gain is 6.80 percentage points, not a 6.8% relative increase.
 
-### Most discriminating experiment
+| Strategy | LoHoSearch accuracy (%) |
+| --- | --- |
+| Baseline | 10.02 |
+| Summary | 11.31 |
+| Discard-all + Verify | 16.82 |
 
-Match tool budgets separately on tree- and graph-structured tasks and compare no compression, summary compression, and explicit candidate state. Report completion, constraint coverage, and calibration, distinguishing absent evidence from forgotten operative constraints.
+Source location: Table 3, p. 5; Section 3.3, p. 6 · [Source](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:result-2:END -->
 
-### Pair with
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, limitations and next experiment
 
-[browsecomp](browsecomp.en.md) · [compaction-cliff](compaction-cliff.en.md)
+The matched-backbone context experiment supports particular intervention bundles, not a pure window-size effect. Graph/tree differences also vary entity and edge structure. The rise from 35 to 61 mean tool calls concerns correct trajectories only, not all-task cost. Sixteen samples yield 38.3% pass@16 versus 24.6% confidence-based selection: at-least-once coverage and actual selection are distinct. Difficulty filtering by one DeepSeek-family model, English Wikipedia grounding and incomplete uniqueness verification limit generalization.
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+This note uses v2 dated June 17, not the unverified June 11 initial-release reference. The reported “6.8% gain” is 16.82−10.02=6.80 percentage points. Human reviewers could not conclusively exclude alternatives for 29.2% of questions, so within-graph uniqueness is not open-world uniqueness. Table 2 marks GPT-5.5 and Claude rows as non-reasoning while most others use reasoning; service instability and safety refusals also affect some rows.
 
-<!-- RESEARCH-DECISION:END -->
+Freeze tasks, independently vary candidate counts and constraint density, and match total tokens/calls when comparing summaries, explicit candidate state and final verification. Add human-confirmed alternative answers and independent judges, reporting costs and failures for all runs, selection policy and calibration.
+
+[Source](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:limitations:END -->

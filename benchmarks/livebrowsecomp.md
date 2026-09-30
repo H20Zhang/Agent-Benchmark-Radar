@@ -1,4 +1,4 @@
-# LiveBrowseComp：用最近 90 天的低显著性事实减少“模型本来就知道”
+# LiveBrowseComp：近期长尾事实与搜索依赖诊断
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2026-05 · 论文 v1<br>
@@ -7,50 +7,71 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](livebrowsecomp.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](livebrowsecomp.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2605.28721) · [数据](https://huggingface.co/datasets/Forival/LiveBrowseComp)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读所述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-LiveBrowseComp 有 335 个 human-authored questions，基于 benchmark 构建前 90 天内、来自六类持续更新 sources 的低显著性事实。protocol 包含 closed-book diagnostic、agentic web search 与 answer-source-removal ablation，试图区分“模型已知后去 web 验证”和“真正发现新 evidence”。
+完整阅读正文第 1–6 节及附录 A–G，涵盖三个诊断、过滤阈值、判分提示、运行／闭卷配置、人工审核和分领域结果；核对表 3 与图 7。
 
-## 相比什么前进了
+[arXiv 2605.28721v1 · 2026-05-27](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:reading:END -->
 
-BrowseComp 很难，但随着训练和传播可能逐渐进入模型参数。LiveBrowseComp 把 freshness 与 intrinsic-knowledge diagnosis 作为显式变量，让 knowledge cutoff 与 evidence discovery 更容易区分。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+LiveBrowseComp 有 335 道人工编写的短答案题，种子来自新闻、影视、游戏、漏洞、体育与地震六类更新源；要求至少一条不可用较早信息替代的线索来自构造前 90 天，同时筛除容易直接检索和答案不稳定的题。拟题者记录证据链，另组审核正确性、唯一性、难度和时间依赖；三名解题者任一在 30 分钟内解出就排除。论文还在旧基准上分别禁用工具、移除答案证据、分析查询线索来源，用来研究参数知识与证据发现的混合。闭卷答对证明该次成功不需要检索，不等价于训练集泄露证明。
 
-short-answer accuracy 支持某个 dated web snapshot 与 model cutoff 下的 fresh retrieval；benchmark 本身快速老化，因此 current score 必须带 result date，不能长期冻结为 SOTA。
+编辑比较：BrowseComp 是直接参照；LiveBrowseComp 新增近期长尾事实与闭卷／证据屏蔽诊断，试图区分已有知识和新证据发现。一个示例从近期短片及制作公司特征出发，组合公司名称来源和作者身份线索，最终输出唯一片名。该坐标与 LoHoSearch 的候选空间难度不同，近期并不自动更难或永久无污染。
 
-## 公平比较条件
+[来源](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:method:END -->
 
-锁定 benchmark snapshot、search provider、tool interface、model cutoff 与 source-removal protocol。不同日期结果需要独立 tracking。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 下一步评测坐标
+搜索实验采用 RedSearcher 风格框架，Serper 每次最多十条结果、Jina 目标化网页读取，并允许所述辅助工具；temperature=0.7、top-p=0.9，每题 256K 上下文和 250 步上限，不做历史摘要压缩，超限强制最终回答。每题四次独立采样；avg@4 为平均正确率，pass@4 是四次至少一次正确的题比例。GPT-OSS 裁判比较最终短答案与参考，允许别名／表面形式变化，不是完整引用或推理质量评分，精确裁判规模未披露。证据屏蔽先导实验改用 Qwen3-8B-Embedding 索引，移除 evidence/gold 文档，仅保留无关及困难负例，并禁用额外互联网访问。
 
-下一步应建立连续 refresh lineage：同一 search agent 在多期 fresh snapshots 上是否稳定，而不是只在某一批 recent facts 上表现好。
+[来源](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 同一论文中的搜索增强平均正确率
 
-## 研究决策卡
+各题四次采样；LiveBrowseComp 为全部 335 题，BrowseComp 对照不是同题干预；两列均保留表 3 的 avg@4 标签。最多 250 步／256K 上下文，GPT-OSS 判分，实际辅助工具存在上述未配平。
 
-### 什么时候值得用
+| 模型 | BrowseComp avg@4（%） | LiveBrowseComp avg@4（%） |
+| --- | --- | --- |
+| GPT 5.4 | 72.1 | 43.2 |
+| GLM 5.1 | 68.0 | 33.9 |
+| DeepSeek v3.2 | 51.4 | 37.6 |
 
-适合检验模型是否真正依赖近期证据完成搜索，而不是借网页验证已知答案。新鲜度是相对于模型和构建时间的属性；同一静态发布随着时间推移，未必仍然保持最初的低记忆泄露条件。
+事实位置：表 3，第 9 页；附录 B–C，第 17–18 页 · [来源](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 旧题库中屏蔽支持证据的先导实验
 
-示意任务：答案来自构建期前不久发布的一项低显著性事实，系统需要找到具体来源。闭卷答对或移除答案来源后仍答对，会削弱该题对真正证据发现能力的支持。
+BrowseComp-Plus 的文档索引干预，四次至少一次成功；原文未明确本实验精确题数，不能用 335 作分母。只保留无关和困难负例，不代表一般搜索失败情形；与上一表的 avg@4 不可混用。
 
-### 最有判别力的实验
+| 模型 | 闭卷 pass@4（%） | 屏蔽证据 pass@4（%） |
+| --- | --- | --- |
+| MiniMax M2.5 | 44.5 | 8.0 |
+| Kimi-K2.6 | 25.5 | 2.3 |
 
-对每个模型重新做闭卷与来源移除对照，按事实日期和来源分项，固定搜索预算。若重新发布题目，应报告题集变化而非把不同快照的绝对分数直接当作模型进步曲线。
+事实位置：表 1，第 4 页；附录 C.2，第 18–19 页 · [来源](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:limitations:START -->
+## 解读、局限与下一步
 
-[browsecomp](browsecomp.md) · [evobrowsecomp](evobrowsecomp.md)
+该批近期题降低了所测模型的闭卷成绩，却不能保证未来模型永远不认识它们。模型在两套题上的分数下降同时混入领域、题型及工具条件变化；相近的人类解题率（图 6 为 60/200 与 62/200 个观测）提供参考，不是证明所有下降只由参数知识引起的随机实验。移除证据后表现变差，也可能反映负例误导或无法可靠拒答，不能据此断言检索没有价值。约一半题来自影视／娱乐，且只用一个搜索后端；90 天是近似边界，不是已知训练截止日。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+正文说工具统一，附录 C 却列 Python、Google Scholar 和 Maps 随模型而异；闭卷推理开关与输出预算也不同，不能称为完全配平。图 7 标为 avg@4，但部分旧基准值与此前 pass@4 重复，且显示两个 2.0%，与“全部低于 2%”文字不符；这里不拿这些混合标签算增益。附录 B 的提示要求字段化 yes/no，解析说明却按首字符 A/B 判分，需固定实际评分代码。证据屏蔽实验的具体题数未明确；它在 BrowseComp-Plus 文档索引上进行，并非在 LiveBrowseComp 实时网页上。
 
-<!-- RESEARCH-DECISION:END -->
+保留每题事实日期、来源与网站快照，重复闭卷诊断，统一真实工具与思考预算，并固定评分器。用同题的支持证据、无证据、无关证据和对抗负例四种环境，区分新事实发现、证据使用及拒答校准；跨期更新用锚题与共同模型校准难度。
+
+[来源](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:limitations:END -->

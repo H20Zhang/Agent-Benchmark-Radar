@@ -1,4 +1,4 @@
-# Beyond Goldfish Memory: an early coordinate for multi-session conversational memory
+# Beyond Goldfish Memory: multisession training, summary memory and dialogue quality
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2022-05<br>
@@ -6,118 +6,112 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](beyond-goldfish-memory.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](beyond-goldfish-memory.md) | **English**
 
-[Paper](https://aclanthology.org/2022.acl-long.356/) · **Area: Agent Memory**
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-Beyond Goldfish Memory is important mainly for its historical position. Before today's Agent Memory terminology and system stacks matured, it already made **persistent memory across sessions** an explicit evaluation problem.
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-## What it actually measures
+Read the final 18-page ACL paper, Sections 1–7 and Appendices A–D, all fifteen tables, and rendered image-only summary/conversation/opening examples plus collection/evaluation interfaces on pages 14–18. No implementation audit or independent model training/evaluation.
 
-The work uses open-domain conversations resumed across multiple human-human chat sessions and asks a system to keep using prior interactions in later conversations, preserving personal facts, remembered content, and conversational continuity.
+[ACL 2022 final (2022-05)](https://aclanthology.org/2022.acl-long.356.pdf)
 
-The core object is therefore:
+[Auxiliary material (checked 2026-09-30)](https://aclanthology.org/2022.acl-long.356/)
 
-- whether information from earlier sessions can be correctly reused later;
-- whether remembering history improves continuity and personalization of future responses.
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-Unlike current memory-agent evaluations centered on write, retrieve, update, and act, this benchmark lives primarily at the **cross-session recall + conversational continuity** layer.
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-## Compared with what
+Beyond Goldfish Memory introduces Multi-Session Chat (MSC), where two roles resume conversation after simulated hours or days, testing how previous interaction supplies personal knowledge. Crowdworkers can change between sessions while roles remain fixed; this is not a months-long relationship between the same real users. Session one directly inherits PersonaChat, followed by new human dialogue and turn-level salient-information summaries, establishing actual data genealogy.
 
-Traditional dialogue benchmarks often treat each conversation session as an independent example. A model may maintain context within one session without carrying anything into a later one.
+Compared with a fixed PersonaChat profile, MSC expands personal knowledge through interaction and reserves a fifth session beyond training-session length. SumMem trains a supervised summarizer to write new personal information or no-summary, then retrieves summary memories to generate replies. RAG, FiD and FiD-RAG distinguish retriever training and decoder fusion. This is an early foundation for later long-conversation memory evaluation, without testing tool actions, authority revocation or physical deletion.
+Illustrative continuation: after discussing a pet in an earlier session, a later opening asks how the pet is doing. Summary memory should support continuity, while more references to old topics do not automatically establish detail-level correctness.
+<!-- EVIDENCE:method:END -->
 
-The key change here is simple but consequential: **a session boundary no longer implies a memory reset**.
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-That establishes a foundational assumption for later long-term memory benchmarks. Long-term memory is not just a longer prompt; prior interactions must continue to influence future episodes.
+Training contains 4000 three-session series and 1001 four-session series; validation/test session five contain 500/501 episodes. Summing per-session rows does not count independent personas. Sessions typically have six or seven turns per speaker; five-session test histories average about 66 utterances and 1614 BlenderBot BPE tokens. The 1155 role profiles are separated between training and validation/test. Models initialize from BlenderBot BST 2.7B and fine-tune on MSC, with 128/512/1024 encoder truncation. DPR retrieves whole-session or summary documents; N is selected from 3/5/6 on validation. Training uses up to eight 32GB V100s, 4000 updates and batch size 128, typically eight hours for standard models and sixteen for retrieval models. Automatic metrics use ParlAI defaults: lower perplexity is better, while lexical F1/BLEU are not memory-fact accuracy.
+<!-- EVIDENCE:setup:END -->
 
-## How the evaluation works
+<!-- EVIDENCE:result-1:START -->
+## Table 7, selected test perplexity comparisons
 
-An interpretable multi-session memory result needs the dialogue model, history-access method, retrieval or summarization strategy, and response-evaluation protocol to be fixed.
+Test set; lower perplexity is better. BST-to-MSC changes training data as well. Differences from MSC-1024 better represent incremental memory architecture, although retrieval computation differs.
 
-If a system sees only retrieved history, final quality bundles retrieval and generation. If it sees the complete history, it operates under a different evidence contract.
+Test session 2: 501 episodes/5939 utterances; session 5: 501/5945. Perplexity aggregates token likelihood, not a count of correct episodes; opening rows use opening responses.
 
-Modern long-context models that directly ingest all prior text therefore cannot be compared naively with early external-memory setups.
+| Model | Session 2 perplexity | Session 5 perplexity | Session-opening perplexity |
+|---|---|---|---|
+| BST 2.7B | 9.98 | 10.5 | 12.92 |
+| MSC 2.7B (truncate 1024) | 8.76 | 9.16 | 8.09 |
+| MSC 2.7B (FiD-RAG) | 8.75 | 9.11 | 8.03 |
+| SumMem-MSC 2.7B (FiD-RAG) | 8.7 | 9.07 | 7.87 |
 
-## What a score supports
+Locator: Table 7, selected test perplexity comparisons · [Source](https://aclanthology.org/2022.acl-long.356.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-Automatic generation metrics or human ratings can support a claim that, under the current history-access mechanism and dialogue model, the system better preserves cross-session consistency, relevance, or personalization.
+<!-- EVIDENCE:result-2:START -->
+## Table 4, selected validation context controls
 
-A higher final-response score does not isolate whether the gain comes from:
+Same BST 2.7B-1024 initialization with MSC training. Human gold summaries are diagnostic context, not a deployable writer. Openings depend more on old information and show larger gaps than the full session.
 
-- better memory writing;
-- better retrieval;
-- more faithful summarization;
-- stronger generation conditioned on memory.
+Validation session 5: 500 episodes, 5964 utterances; opening perplexity uses only opening responses.
 
-The components are bundled in the final response, so this is mainly a **system-level memory-effect** benchmark rather than a fine-grained component-attribution benchmark.
+| Context | Session 5 perplexity | Session 5 opening perplexity |
+|---|---|---|
+| No session history | 9.3 | 10.46 |
+| Dialogue history | 9.08 | 7.94 |
+| Gold summary | 8.96 | 7.77 |
+| Predicted summary | 9.0 | 7.81 |
 
-## Main confounders
+Locator: Table 4, selected validation context controls · [Source](https://aclanthology.org/2022.acl-long.356.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-The first is the **base dialogue model**. Stronger generation can improve continuity even if the memory mechanism itself changes little.
+<!-- EVIDENCE:result-3:START -->
+## Table 8, selected human conversation evaluations
 
-The second is the **history-access budget**. How much prior evidence is visible, and in what form, strongly determines what the system can exploit.
+Fifth-session conversations with validation personas; workers receive summaries of four prior sessions. Each new conversation has seven human and eight bot messages. Percentages use annotated replies, final ratings whole conversations; reply counts are not independent conversation counts. RAG and FiD-RAG lead different metrics.
 
-The third is **human-evaluation sensitivity** when subjective dialogue quality is the primary endpoint.
+Response counts shown per row. Exact independent conversation/worker counts are not printed. Reported t-tests compare with BST, not every pair among memory models.
 
-## Fair comparison contract
+| Model | Partner-topic reference % | Engaging responses % | Final rating / 5 | Annotated responses |
+|---|---|---|---|---|
+| BST 2.7B | 14.5 | 53.0 | 3.14 | 668 |
+| MSC 2.7B (truncate 1024) | 22.5 | 54.2 | 3.47 | 653 |
+| SumMem-MSC 2.7B (RAG) | 33.8 | 62.1 | 3.65 | 668 |
+| SumMem-MSC 2.7B (FiD-RAG) | 26.4 | 59.3 | 3.68 | 649 |
 
-At minimum, align:
+Locator: Table 8, selected human conversation evaluations · [Source](https://aclanthology.org/2022.acl-long.356.pdf)
+<!-- EVIDENCE:result-3:END -->
 
-- dialogue model;
-- session segmentation and history length;
-- history-access or retrieval contract;
-- summarization and memory capacity;
-- generation decoding;
-- human and automatic evaluation protocol.
+<!-- EVIDENCE:result-4:START -->
+## Appendix A Tables 13–14, selected test lexical metrics
 
-A system with full-history access and one restricted to a fixed number of retrieved memories should be treated as different tracks.
+Original reported scales; lexical overlap against reference replies. Open dialogue can have multiple good answers, so these are not task-success percentages.
 
-## What is still missing
+Same test-session pool as Table 7; opening responses are a separate subset.
 
-This early coordinate does not systematically test:
+| Model | Session 5 F1 | Opening F1 | Session 5 BLEU-4 | Opening BLEU-4 |
+|---|---|---|---|---|
+| BST 2.7B | 19.4 | 13.7 | 0.57 | 0.107 |
+| MSC 2.7B (truncate 1024) | 20.0 | 14.1 | 0.631 | 0.139 |
+| SumMem-MSC 2.7B (FiD-RAG) | 20.2 | 14.5 | 0.678 | 0.222 |
 
-- updates and staleness when new information supersedes old facts;
-- conflicting memories and source reliability;
-- deletion and forgetting;
-- permissions and privacy;
-- whether memory improves tool use or future actions;
-- token, latency, and storage cost of maintaining memory over time.
+Locator: Appendix A Tables 13–14, selected test lexical metrics · [Source](https://aclanthology.org/2022.acl-long.356.pdf)
+<!-- EVIDENCE:result-4:END -->
 
-These later became major branches of Agent Memory evaluation.
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
 
-## Most discriminating next test
+The clearest evidence is that multisession training and access to history help; automatic gains from summary retrieval beyond the stronger 1024-token baseline are modest. All improvement cannot be attributed to retrieval, and more topic references do not establish factual correctness. Three-to-five-session experiments do not validate indefinite memory; persistent storage cannot guarantee perfect retrieval/generation. Role-play and instructions to continue earlier topics shape both collection and human evaluation. No persona/conversation-clustered intervals are provided. The ethics section says memory stays private to the individual conversation, but leakage and privacy guarantees are not separately tested.
 
-The highest-value extension from this historical baseline is not simply longer dialogue, but **state change**: update a user preference, fact, or constraint in a later session and test whether the system applies the newest state instead of mechanically repeating old memory.
+Table 9 prints Unique counts larger than Total, inconsistent with its near-100% uniqueness percentages; do not use those columns to certify exact deduplication counts. The prose says keeping the self summary is slightly more important, while Table 4’s partner-only row has lower perplexity than self-only; report rows rather than that interpretation. Table 5 sparsity caption says how often a summary is generated, but the prose identifies the gold 42% as no-summary frequency; that convention is ambiguous, so it is not used as a memory-size result.
 
-That moves evaluation from long-term storage to long-term maintenance.
 
-<!-- RESEARCH-DECISION:START -->
 
-## Research decision card
-
-### When to use it
-
-Use Beyond Goldfish Memory as a historical anchor for cross-session dialogue continuity. It motivates the need for memory but does not replace mechanism-level evaluation of writing, conflict updates, deletion, or action effects. Make that foundational role explicit in a modern suite.
-
-### What a concrete task looks like
-
-Illustrative task: two participants resume a conversation after a gap and must naturally continue earlier topics and relationships. Evaluation concerns not only fact repetition but consistency and coherence of the generated continuation.
-
-### Most discriminating experiment
-
-Compare no history, full history, and summary memory for the same continuation, scoring historical consistency separately from general fluency. Blind evaluators to conditions so longer or more polite replies are not mistaken for better memory. Add structured update tasks for mechanism-level claims.
-
-### Pair with
-
-[locomo](locomo.en.md) · [longmemeval](longmemeval.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Evolution position
-
-`single-session dialogue → cross-session conversational memory → updateable persistent memory → memory-guided action`
-
-Beyond Goldfish Memory occupies the second step and is an important precursor to LoCoMo, LongMemEval, and the broader Agent Memory benchmark lineage.
+Next: Pair with LoCoMo, first comparing raw versus predicted-summary memory with the same backbone/training data and matched retrieval tokens/candidates. Separately evaluate factual correctness, contradictions and engagement at openings versus mid-session. Extend session length and add profile changes, reporting persona-series intervals rather than relying only on lexical similarity.
+<!-- EVIDENCE:limitations:END -->

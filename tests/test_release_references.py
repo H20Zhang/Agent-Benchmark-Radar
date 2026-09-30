@@ -145,6 +145,20 @@ class RepositoryReleaseReferenceContract(unittest.TestCase):
         self.assertEqual(refs['bird']['source'],'https://arxiv.org/html/2305.03111v3')
         self.assertEqual(refs['ds-1000']['results'][0]['metric'],'Insertion pass@1')
 
+    def test_memory_references_keep_operator_identity_and_aggregation(self):
+        refs=self.data['benchmarks']
+        self.assertEqual(refs['compaction-cliff']['results'][0]['system'],'TypeCompact')
+        self.assertEqual(refs['compaction-cliff']['status'],'diagnostic')
+        self.assertEqual(refs['groupmembench']['results'][0]['system'],'Hindsight / GPT-5')
+        self.assertEqual(refs['groupmembench']['results'][0]['score'],'46.01%')
+        self.assertIn('micro-average',refs['groupmembench']['scope']['en'])
+        result=json.loads((ROOT/'data/results/compaction-cliff.json').read_text())
+        self.assertEqual(len(result['tracks']),2)
+        self.assertTrue(all(len(track['entries'])==1 for track in result['tracks']))
+        typed=next(e for track in result['tracks'] for e in track['entries'] if e['id']=='typecompact-round5')
+        self.assertNotIn('model',typed)
+        self.assertEqual(typed['score'],96)
+
 
 if __name__=='__main__':
     unittest.main()

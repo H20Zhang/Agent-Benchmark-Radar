@@ -1,4 +1,4 @@
-# LifeSide: long-term user understanding is not the same as factual recall
+# LifeSide: memory, user modeling, privacy and simulated companionship
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-06<br>
@@ -8,46 +8,59 @@
 
 [中文](lifeside.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-## What it measures
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-LifeSide scales personal-memory evaluation to 2,000 personas and roughly 111K tasks spanning memory tracking, user understanding, privacy control, and emotional companionship. The target is not only what a user said before, but whether a system forms an appropriate, bounded user model and uses it well over long interaction histories.
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-## Compared with what
+Read all 28 pages: §§1–5, limitations/ethics and Appendices A–D, including implementation configurations, metric equations, all psychological scoring anchors and all supplied prompt templates. Visually checked the main results and metric/example page.
 
-LoCoMo and LongMemEval primarily emphasize conversational facts and reasoning. LifeSide adds persistent user understanding, privacy, and companionship, directly challenging the assumption that saturation on existing memory QA means personalized memory is solved.
+[arXiv v1 / 2026-06-03](https://arxiv.org/pdf/2606.04660v1)
+<!-- EVIDENCE:reading:END -->
 
-## Decisive evidence and score boundary
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-The work reports that models which saturate prior memory benchmarks still fail substantially on long-horizon user understanding and companionship. This supports a benchmark-coverage gap, not a causal claim that one memory architecture is responsible; backbone capability, persona construction, and the judge all matter.
+A manager schedules persona events and pressures; a simulated user converts hidden thoughts into partly disclosed speech; critics validate consistency. Agents receive visible histories, while the companionship judge can inspect latent states. Tasks separate Structured Episodic Recall (SER: infer missing event attributes), Event Chain Tracking (ECT: reconstruct emotion changes across related events), evolving user models, recipient-conditioned privacy and multi-turn support (§2).
 
-## Fair comparison conditions
+For example, an absence message to a supervisor should convey the necessary delay information while withholding protected personal details, including when the recipient pressures the agent for more specificity (Figure 10). Completeness and disclosure are therefore separate outcomes.
 
-Align persona/history generation, privacy policy, answerer, and judge, and inspect task families separately. Collapsing factual recall with emotional or privacy behavior into one number hides the capability structure.
+### Measurement genealogy
 
-## Next evaluation coordinate
+LifeSide joins conversational-memory evaluation from LoCoMo/LongMemEval with personalized-support work such as ES-MemEval. Its added coordinate is incomplete user disclosure within evolving environmental conditions. A useful next step tests observability and permission boundaries independently, rather than treating a latent-state judge’s preference as proof of real companionship.
+<!-- EVIDENCE:method:END -->
 
-The next step connects long-term user models to real permissions, deletion, tool-mediated actions, and externally observable consequences of incorrect personalization.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-<!-- RESEARCH-DECISION:START -->
+The corpus has 2,000 personas and 111,674 tasks over 24–36 months, but experiments use the first 100 profiles. Frontier models use visible full histories when they fit, at temperature 0; RAG/memory methods supply top-8 records. Table 2 names GPT-5-mini as their answerer; Appendix B names GPT-5.1-mini. Exact evaluated task counts, simulator/judge identities, support-rollout budgets and repeat counts are unspecified. ECT averages LCS-F1 and normalized edit similarity; privacy averages attribute fractions (§3; Appendix B).
+<!-- EVIDENCE:setup:END -->
 
-## Research decision card
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-### When to use it
+Selected reported values. Every row uses tasks from the first 100 profiles; task-specific sample counts are not reported. Emotional percentages normalize the six 0–5 dimensions; violation is leaked protected attributes divided by protected attributes within each task, then aggregated, not an any-leak rate.
 
-Use LifeSide to study interactions among memory, user understanding, and privacy in persistent-companion tasks, not to rank a memory component in isolation. With simulated personas and environments, results first describe behavior under those simulation rules; real longitudinal relationships require separate validation.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Gemini-3-Flash / SER | LifeSide first 100 profiles; SER task count unstated | Exact Match (%) | 41.24 | Visible full context when fitting; temperature 0 | Table 2, p.6 |
+| GPT-5-mini / companionship | First 100 profiles; support task count unstated | Six-dimension normalized score (%) | 32.62 | Raw visible history; latent-state LLM judge | Table 2, p.6 |
+| Mem0 / companionship | First 100 profiles; support task count unstated | Six-dimension normalized score (%) | 34.13 | Top-8; GPT-5-mini in table, GPT-5.1-mini in appendix | Table 2, p.6 |
+| GPT-5-mini / regulation | First 100 profiles; scored support turns not enumerated | Mean rubric score (0–5) | 1.52 | Raw visible history; judge identity unspecified | Table 3, p.7 |
+| Letta / regulation | First 100 profiles; scored support turns not enumerated | Mean rubric score (0–5) | 0.85 | 15-turn passages; top-8; answerer identity conflict | Table 3, p.7 |
+| GPT-5-mini / Boundary Defense | First 100 profiles; protected attributes per task | Mean attribute violation (%) | 42.98 | Adversarial disclosure pressure; lower is better | Table 2, p.6; Eq.6, p.18 |
 
-### What a concrete task looks like
+Source: [Table 2, p.6; Table 3, p.7; Eq.6, p.18](https://arxiv.org/pdf/2606.04660v1)
+<!-- EVIDENCE:results:END -->
 
-Illustrative task: a user's goals or emotional context change across sessions, and the assistant must use relevant history without revealing personal content in an inappropriate setting. Personal relevance and appropriate information use are separate outcomes to evaluate together.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-### Most discriminating experiment
+Memory can improve one dimension while degrading another; it does not uniformly reduce companionship scores. The headline 50% privacy figure describes a completion-conditioned pattern, not an overall episode leak rate. Synthetic hidden-state labels, unresolved answerer identity and unmatched retrieved/full-history context limit causal conclusions. The paper explicitly excludes clinical validity; human validation of the support judge remains future work.
+<!-- EVIDENCE:limitations:END -->
 
-Vary memory and privacy policy independently over identical simulated-user trajectories. Report assistance quality and inappropriate disclosure rather than only a composite reward. Repeat with a simulator not used during development to test dependence on persona generation or evaluator preferences.
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-### Pair with
-
-[dynamicmem](dynamicmem.en.md) · [gatemem](gatemem.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+Resolve model identities, hold answerer and evidence budget fixed, and cross raw histories versus memory representations with independent privacy policies. Audit visible-evidence sufficiency and report both any-leak episodes and attribute-level leakage, alongside support quality judged without privileged hidden facts.
+<!-- EVIDENCE:next:END -->

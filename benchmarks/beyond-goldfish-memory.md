@@ -1,4 +1,4 @@
-# Beyond Goldfish Memory：multi-session conversation 的早期长期记忆坐标
+# Beyond Goldfish Memory：多会话训练、摘要记忆与聊天质量
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2022-05<br>
@@ -6,118 +6,112 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](beyond-goldfish-memory.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](beyond-goldfish-memory.en.md)
 
-[论文](https://aclanthology.org/2022.acl-long.356/) · **领域：Agent Memory**
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-Beyond Goldfish Memory 的重要性主要是历史位置：它在今天“Agent Memory”这一整套术语和系统形态成熟之前，就把 **跨 session 的持续记忆** 变成了独立评测问题。
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-## 它到底测什么
+已阅读ACL最终版18页全文、正文第1—7节、附录A—D及全部15表；渲染并逐页阅读末五页仅图像可见的摘要、完整对话、开场示例与采集/评价界面。未审计实现或独立训练评测。
 
-该工作使用跨多次 human-human chat sessions 的开放域对话，要求系统在后续聊天中继续利用过去互动，保持人物信息、事实和交流连续性。
+[ACL 2022 最终版](https://aclanthology.org/2022.acl-long.356.pdf) · ACL 2022 final (2022-05)
 
-核心对象可以概括成两件事：
+[辅助材料（2026-09-30查阅）](https://aclanthology.org/2022.acl-long.356/)
 
-- 过去 session 中的信息能否在之后被正确重新使用；
-- 系统是否能因为记住历史而生成更连贯、更个性化的回复。
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-与今天强调 write / retrieve / update / act 的 memory agent 不同，它主要处在 **cross-session recall + conversational continuity** 这一层。
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-## 相比此前评测多测了什么
+Beyond Goldfish Memory提出Multi-Session Chat（MSC）数据集，让两个角色经过数小时或数天后继续聊天，并测试如何使用此前交谈形成的个人信息。时间间隔是模拟的，续聊的众包人员可能更换，角色保持一致；这不是同一批真实用户持续数月交往。第一会话直接继承PersonaChat，之后新增人工对话和逐轮重要信息摘要，是明确的数据谱系。
 
-传统 dialogue benchmark 往往把一次 conversation session 当成独立样本。即使模型在一个 session 内保持上下文，也不需要在几天后或新的 session 中继续承接旧信息。
+相比PersonaChat一次性给定人物描述，MSC让人物资料随互动扩展，并把第五会话留作超出训练会话长度的检查。SumMem先用监督摘要器提取新个人信息、无新增时输出空摘要，再从摘要记忆检索并生成回复；RAG、FiD、FiD-RAG则区分检索器训练和解码融合。它是后来的长对话记忆评测的早期基础，但并不测工具行动、撤权或物理删除。
+理解续聊的示意：先前会话提过养宠物，几天后的开场自然追问宠物近况。摘要记忆应帮助保持人物和话题连续性，但更常提到旧话题不自动证明每个细节都准确。
+<!-- EVIDENCE:method:END -->
 
-这项工作的关键变化是：**session boundary 不再等于 memory reset**。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-这看似简单，但它定义了后来长期对话 benchmark 的一个基础前提：真正的长期记忆问题不是把单个 prompt 变长，而是让过去 interaction 在未来 episode 中持续产生影响。
+训练含4000个三会话系列和1001个四会话系列；验证第五会话500个、测试501个，不应把训练各会话行相加当成独立人物数。每会话通常每人6—7轮，测试五会话平均约66句、1614个BlenderBot BPE词元。角色来自1155份人物设定，训练与验证/测试人物分开。模型由BlenderBot BST 2.7B初始化，在MSC微调，编码截断128/512/1024；DPR检索整会话或摘要文档，N从3/5/6中按验证集选择。最多八张32GB V100、4000更新、批量128，标准模型约8小时、检索模型约16小时。自动指标用ParlAI默认值，困惑度越低越好；词汇F1/BLEU不是记忆事实准确率。
+<!-- EVIDENCE:setup:END -->
 
-## 实际怎样评测
+<!-- EVIDENCE:result-1:START -->
+## 先区分训练增益与记忆架构增量
 
-这类早期 multi-session memory setting 通常需要同时固定 dialogue model、历史可见方式、retrieval / summarization strategy 和生成评价协议。
+测试集，困惑度越低越好。BST到MSC同时改变训练数据；后两行与MSC-1024的差距才更接近记忆架构增量，但检索计算预算仍不同。
 
-如果系统只能看到检索到的历史片段，那么最终质量同时依赖 retrieval 和 generation；如果系统能直接看到完整历史，则又变成另一种 evidence contract。
+测试会话2为501系列、5939句；会话5为501系列、5945句。困惑度按词元似然聚合，不是正确系列数。
 
-因此现代 long-context 模型直接把全部历史塞进上下文的结果，不能和早期 external-memory setup 不加区分地横向比较。
+| 模型 | 会话2困惑度 | 会话5困惑度 | 会话开头困惑度 |
+|---|---|---|---|
+| BST 2.7B | 9.98 | 10.5 | 12.92 |
+| MSC 2.7B (truncate 1024) | 8.76 | 9.16 | 8.09 |
+| MSC 2.7B (FiD-RAG) | 8.75 | 9.11 | 8.03 |
+| SumMem-MSC 2.7B (FiD-RAG) | 8.7 | 9.07 | 7.87 |
 
-## 分数能说明什么
+定位：表7：部分测试困惑度 · [原文](https://aclanthology.org/2022.acl-long.356.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-自动生成指标或人类评价可以说明：在当前历史访问机制和 dialogue model 下，系统是否更能保持跨 session 的一致性、相关性或个性化。
+<!-- EVIDENCE:result-2:START -->
+## 旧信息对开场尤其重要
 
-但一个更高的最终回复质量，不能单独证明：
+同一BST 2.7B-1024初始化并用MSC训练；人工作出的金摘要是诊断参照，不是可部署写入器。开头更依赖旧信息，因此差距大于整会话。
 
-- memory write 更好；
-- retrieval 更准确；
-- summary 更保真；
-- generation 更会利用 memory。
+验证第五会话500系列、5964句；开头只取开场回复。
 
-这些组件被捆绑在最终响应里，因此它更适合评价 **system-level memory effect**，不适合做精细的 memory-component attribution。
+| 上下文 | 会话5困惑度 | 会话5开头困惑度 |
+|---|---|---|
+| 无此前会话 | 9.3 | 10.46 |
+| 原始对话历史 | 9.08 | 7.94 |
+| 人工金摘要 | 8.96 | 7.77 |
+| 预测摘要 | 9.0 | 7.81 |
 
-## 最主要的混杂因素
+定位：表4：部分验证上下文对照 · [原文](https://aclanthology.org/2022.acl-long.356.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-第一是 **base dialogue model**。生成能力更强本身就可能提高一致性，即使 memory mechanism 没有本质进步。
+<!-- EVIDENCE:result-3:START -->
+## 人工评分的分母与指标分别看
 
-第二是 **history access budget**。能看到多少历史、以什么形式看到历史，直接决定了系统可利用的证据。
+验证人物的第五会话，工人拿到此前四会话摘要，15条新消息中人类7条、机器人8条。前两指标按标注回复，最终评分按整场；不能将回复数当成独立会话数。RAG和FiD-RAG在不同指标上领先，不能选一个统一赢家。
 
-第三是 **human evaluation sensitivity**。如果主要依赖主观对话质量，人评说明和参与者分布都会影响结论。
+表中列逐回复标注数；独立会话和工人数量未明确。显著性检验以BST为参照，不覆盖所有方法两两比较。
 
-## 公平比较条件
+| 模型 | 引用对方旧话题% | 有吸引力回复% | 最终评分/5 | 标注回复数 |
+|---|---|---|---|---|
+| BST 2.7B | 14.5 | 53.0 | 3.14 | 668 |
+| MSC 2.7B (truncate 1024) | 22.5 | 54.2 | 3.47 | 653 |
+| SumMem-MSC 2.7B (RAG) | 33.8 | 62.1 | 3.65 | 668 |
+| SumMem-MSC 2.7B (FiD-RAG) | 26.4 | 59.3 | 3.68 | 649 |
 
-至少应对齐：
+定位：表8：部分人工聊天评价 · [原文](https://aclanthology.org/2022.acl-long.356.pdf)
+<!-- EVIDENCE:result-3:END -->
 
-- dialogue model；
-- session 划分和历史长度；
-- history access / retrieval contract；
-- summarization 和 memory capacity；
-- generation decoding；
-- human / automatic evaluation protocol。
+<!-- EVIDENCE:result-4:START -->
+## 词汇指标补充证据，不能代替事实正确性
 
-如果一个系统使用完整历史，另一个只能使用固定数量 retrieved memories，应该视为不同 track。
+保留论文原始数值刻度；按参考回复的词汇重合评分，开放聊天可能有多个好答案，因此不是任务成功百分比。
 
-## 还没有覆盖什么
+与表7相同测试池，开场为单独子集，保留原文F1/BLEU刻度。
 
-这个早期坐标还没有系统评估：
+| 模型 | 会话5 F1 | 开头F1 | 会话5 BLEU-4 | 开头BLEU-4 |
+|---|---|---|---|---|
+| BST 2.7B | 19.4 | 13.7 | 0.57 | 0.107 |
+| MSC 2.7B (truncate 1024) | 20.0 | 14.1 | 0.631 | 0.139 |
+| SumMem-MSC 2.7B (FiD-RAG) | 20.2 | 14.5 | 0.678 | 0.222 |
 
-- 新信息覆盖旧信息后的 update / staleness；
-- 冲突记忆和来源可靠性；
-- 主动遗忘与删除；
-- 权限与隐私；
-- tool use 和未来行动是否因为 memory 而改善；
-- 长期维护 memory 的 token、latency 和 storage cost。
+定位：附录A表13—14：部分词汇指标 · [原文](https://aclanthology.org/2022.acl-long.356.pdf)
+<!-- EVIDENCE:result-4:END -->
 
-这些后来逐渐成为 Agent Memory benchmark 的主要扩展方向。
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
 
-## 下一步最有判别力的验证
+最清楚的证据是跨会话训练与历史访问有帮助，摘要检索在较强1024词元基线之上的自动指标增益较小。不能把全部改进归因于检索，也不能把引用旧话题更多直接解释为事实更准确。训练和测试只有3—5会话，未验证无限期记忆；“存储不忘”也不保证检索和生成永远不出错。人物扮演与续聊提示有明确分布偏好，人工评价使用同类提示；未提供按人物/会话聚类的区间。伦理部分称记忆限定在个人会话内、不与他人共享，但没有单独测试泄漏或隐私保障。
 
-从这个历史基线出发，最关键的下一步不是继续把对话做得更长，而是加入 **state change**：让用户偏好、事实或约束在后续 session 中发生更新，再测试系统能否应用最新状态而不是机械复述旧记忆。
+表9的Unique数比Total还大，与百分比不合，不用于精确去重认证。正文说保留自己的摘要更重要，但表4对方摘要单独保留的困惑度更低。表5的sparsity图注说摘要生成频率，正文却把金标准42%解释为空摘要频率，因此不作为记忆容量结果。
 
-这能把“长期保存”推进到“长期维护”。
 
-<!-- RESEARCH-DECISION:START -->
 
-## 研究决策卡
-
-### 什么时候值得用
-
-适合作为跨会话对话连续性的历史参照。它帮助界定为何助手需要记忆，但不能替代对写入、冲突更新、删除和行动效果的机制评价；今天使用它应明确其作为基础能力锚点的角色。
-
-### 一个具体任务长什么样
-
-示意任务：两位对话参与者在一段时间后重新交流，需要自然承接此前提到的人与事。评价的重点不仅是复述事实，还包括生成内容是否与过去一致、是否形成连贯的后续对话。
-
-### 最有判别力的实验
-
-对同一后续会话比较无历史、完整历史和摘要记忆，并把历史一致性与一般对话流畅度分开评分。盲测评分者，防止更长或更礼貌的回复被误认为记忆更好；机制研究还应补充结构化更新任务。
-
-### 建议搭配
-
-[locomo](locomo.md) · [longmemeval](longmemeval.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`single-session dialogue → cross-session conversational memory → updateable persistent memory → memory-guided action`
-
-Beyond Goldfish Memory 位于第二步，是今天 LoCoMo、LongMemEval 以及更广泛 Agent Memory benchmark 的重要前驱坐标。
+下一步：与LoCoMo配对，先用同骨干同训练数据比较原文与预测摘要、固定检索词元和候选数，再单列开头与会话中段的事实正确性、矛盾与吸引力。扩大实际会话长度并加入资料更新，按人物系列报告区间，避免只用词汇相似度评价个性化记忆。
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# VisDocAgentBench：RAG / Agentic visual-document retrieval
+# VisDocAgentBench：跨页证据驱动的视觉文档检索
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-18<br>
@@ -6,60 +6,71 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](visdocagentbench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](visdocagentbench.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2608.17889) · [代码](https://github.com/hulx2002/VisDocAgentBench) · [数据](https://huggingface.co/datasets/hulx2002/VisDocAgentBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-在同一 ranked-page 输出上比较 static ranker 与 search/inspection agent。
+已完整阅读所述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-## 它接在什么之后
+完整阅读 30 页正文及附录 A–H，涵盖路径构建、全文审查、全部工具与排序协议、资源、分层结果、完整成功／失败轨迹和许可；目视核对表 3、5 与图 3。未复现实验或重新审计 100 篇源文档。
 
-前一代评价通常把该问题压成较短的最终分数或单一 proxy。这个评测把 predecessor critique 变成 capability × environment × protocol 的显式差异，并保留可执行或可复核资产。
+[arXiv 2608.17889v1 · 2026-08-18](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:reading:END -->
 
-## 实际怎样评测
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-**问题：** Agent 能否通过搜索、视觉检查与 OCR，把分散证据页排入 top 10？
+从十个主题各选十篇 2026 年论文，渲染 2375 页；2324 个正文页面用于造题。GPT-5.5 提取查询锚点、隐藏语义桥和视觉目标描述，再用嵌入候选与 VLM 复核跨页关系，生成直接、单桥、双桥路径。1522 条候选由一名作者与独立 AI 在全文上下文评分，双方均达 60/100 才可入选；最终每级 40 题、120 个唯一目标。查询保留关系，却隐藏桥实体、标题、页号和精确图注。示例需先识别任务失败所属分类，再找到对应名称的黄色示例页；检索词只有终点外观时可能命中相似却错误的页面。全文检查和强检索器前十负例检查用于减少多解，但不是穷举全库人工标注。
 
-**测量对象：** 在统一页面排序协议下比较静态 ranker 与迭代视觉/OCR agent 的视觉文档检索基准。
+编辑比较：相较 MMDocIR／IRPAPERS 的页面检索和 ViDoRAG 的最终问答，新增坐标是让静态检索器与可迭代 agent 都提交同样的页面排名，并把潜在证据路径、发现、查看和最终排序分开记录。它连接视觉文档检索与 agentic search，但只有六条跨文档路径，不能作为大规模跨文档能力的成熟测量。
 
-**规模与协议：** 2,375 pages from 100 documents and 120 queries, with 1,469 redistributable page images. 协议包括 shared-top-10-contract, twelve-action-agent-budget, support-provided-intervention。
+[来源](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:method:END -->
 
-## 分数能说明什么
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-2,375 pages、120 queries 使用 shared top-10 contract；support intervention 与 ablations 使 discovery 和 inspection 可见。 它支持的是该环境、harness、model/tool/resource configuration 下的 system-level evidence；除非其他变量匹配，否则不能把榜单差异归因给单一组件。
+静态检索一次排名全部页面；agent 最多 12 步，每步一个操作，必要时加一次只排序的最终调用。视觉路线用 Qwen3-VL-Embedding-8B，OCR 路线用 PaddleOCR-VL-1.6 后的 Qwen3-Embedding-8B；两者都可查看最多十页／批并裁剪，搜索返回不含文档身份的句柄与分数，无摘要。最终提交最多十个不同已发现页面，候选足够时须恰好十个。R@1 是唯一目标排第一的查询比例，R@10 是落在前十的比例，MRR@10 是截断倒数排名均值；无效输出计零，rationale 不评分。支持的模型推理设置为 medium，开源 Qwen3.5-397B-A17B 用 16 张 A100 BF16，另比较开关 thinking。
 
-## 最主要的混杂因素
+[来源](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:setup:END -->
 
-120 queries、six cross-document paths，且 agent routes 未 capacity-matched，限制 planner 或 vision 的因果归因。 关键混杂包括 small-query-set, planner-model-tool-mismatch, few-cross-document-paths。
+<!-- EVIDENCE:result-1:START -->
+## 直接匹配到双桥检索的差距
 
-## 还没有覆盖什么
+全部分母 120；L1／L3 各 40。Nemotron 是一次静态 MaxSim 排名，另两者为相同视觉索引上的 12 步 agent；并非等计算量。agent 的第一名准确率更高，不表示其前十覆盖对每个静态检索器都更高。
 
-只有 120 条 query 和 6 条跨文档路径，planner、模型与工具路径也没有按容量匹配。
+| 视觉检索系统 | 全部 R@1（%） | L1 R@1（%） | L3 R@1（%） | 全部 R@10（%） |
+| --- | --- | --- | --- | --- |
+| Nemotron ColEmbed | 40.00 | 97.50 | 2.50 | 70.00 |
+| GPT-5.6-sol | 61.67 | 85.00 | 40.00 | 68.33 |
+| Claude Opus 5 | 67.50 | 92.50 | 47.50 | 75.00 |
 
-## 放进演化图怎么看
+事实位置：表 3、12，PDF 第 9、23 页 · [来源](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:result-1:END -->
 
-`map_delta=reinforces`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+<!-- EVIDENCE:result-2:START -->
+## 支持页使目标更容易进入候选，但排序仍有损失
 
-<!-- RESEARCH-DECISION:START -->
+相同 40 道 L3 查询、语料和 12 步工具预算；干预先加入无角色标签的金标准支持页。R@10 增加 22.50 个百分点，R@1 只增加 5.00，分别代表覆盖与最终排序，不能当成回答准确率。
 
-## 研究决策卡
+| GPT-5.6-sol／视觉 L3 条件 | R@1（%） | R@10（%） | MRR@10（%） |
+| --- | --- | --- | --- |
+| 标准初始化 | 40.00 | 52.50 | 43.36 |
+| 预先提供全部支持页 | 45.00 | 75.00 | 55.19 |
 
-### 什么时候值得用
+事实位置：表 5，PDF 第 11 页 · [来源](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:result-2:END -->
 
-适合比较静态视觉文档排序与多轮页面检查，但应严格对齐最终排序协议与行动预算。迭代智能体使用更强模型或更多工具时，成绩差异首先是整个系统的差异，不足以单独证明迭代策略更优。
+<!-- EVIDENCE:limitations:START -->
+## 解读、局限与下一步
 
-### 一个具体任务长什么样
+同一 planner 的视觉检索普遍强于 OCR 索引，说明发现阶段的表示有价值，但两索引模型不同，不能证明一切视觉处理必然更好。完整 agent 对静态／固定候选排序的增益也伴随推理与输入成本。移除裁剪反而把视觉 R@1 从 61.67 提到 64.17，不能概括成每种工具都有益。提供支持页有帮助，仍不能保证目标正确排序。120 个英文科学文档查询、作者主导构造、无重复置信区间和六个跨文档样本使泛化判断有限；来源许可要求部分页面本地重建，不应把公开标注许可理解成全体原文可再分发。
 
-示意任务：系统需要从科学文档页面中找出支持问题的页面，既可以依赖静态表征，也可以打开页面查看图表或 OCR 内容后再排序。检查页面产生的新证据应改变候选选择，而不只是增加调用。
+“OCR-Text”只描述全库搜索表示，两条 agent 路线都能查看页面图片和裁剪，因此不是纯文本模型与视觉模型的隔离实验。图 3 是依次以已发现／已查看目标为条件的漏斗：OCR 最后 42 个不等于表 3 全部 120 题中排名第一的 44 个，不能把条件漏斗当作全局准确率分母。支持页干预提前免费给出金标准支持内容，固定行动步数并不等于固定信息或 token 预算。检索参数采用默认值，正文未给出所有闭源模型温度、输出 token 上限或重复试验区间。
 
-### 最有判别力的实验
+保持 planner、实际 token／图像预算和检索候选暴露量一致，比较视觉、OCR 与混合索引；单独统计未发现、发现未查看、已查看但排序错三种错误，并对支持页干预加入等信息量的非金标准对照。扩大跨文档、表单和多语种样本，重复种子并报告配对区间，才判断路径推理是否稳定改善。
 
-让静态与迭代方法共享候选集合、视觉骨干和最终 top-k，再增加支持页面直接给定条件。记录每次检查带来的排序改进，并分别报告可公开页面子集与完整页面集合，避免资料可得性影响比较。
-
-### 建议搭配
-
-[mc-search](mc-search.md) · [maple](maple.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+[来源](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:limitations:END -->

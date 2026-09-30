@@ -1,4 +1,4 @@
-# MedMemoryBench：个性化医疗中的 streaming memory accumulation
+# MedMemoryBench：模拟长期医疗历史上的检查点问答
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-05-12<br>
@@ -6,64 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](medmemorybench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](medmemorybench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2605.11814) · [代码](https://github.com/AQ-MedAI/MedMemoryBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-MedMemoryBench 评估 **streaming clinical accumulation**：患者历史持续增长，关键医疗状态必须保持精确，而且信息越来越多时，retrieval/reasoning 可能主动变差。它把 memory saturation 变成显式可测的 failure mode。
+已阅读全部 27 页，包括正文第 1–7 节和附录 A–G，覆盖标注者资格、补充基座／评判结果、完整作答／评判提示、基线适配和仅限研究的限制；目视核对主表及预算／成本图。
 
-## 相比此前评测多测了什么
+[arXiv v1 / 2026-05-12](https://arxiv.org/pdf/2605.11814v1)
+<!-- EVIDENCE:reading:END -->
 
-开放域 conversation memory 往往只把历史变长当 scale problem；医疗场景的错误成本和 state 结构不同：旧信息可能持续相关、被新诊断覆盖，或与新症状发生复杂交互。MedMemoryBench 用 evaluate-while-constructing protocol，在 memory 逐步构建过程中持续测量。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+二十个由去标识病例构建的档案扩展成合成的一年期事件图。患者／医生智能体生成会话，累积摘要再指导后续模拟。过敏和禁忌等高优先级事实被用于构造依赖记忆的问题；人工可在问答构建后回改先前不一致的对话（第 4 节）。
 
-数据约有 2,000 个 session、16,000 个 interaction turn，基于 clinically grounded synthetic patient archetype 并经过专家验证；公开框架包含 14 类 memory-method baseline。实验暴露了 complex medical reasoning、noise resilience 与 history 增长后的 memory saturation 等明显瓶颈。
+睡眠呼吸暂停示例中，设备使用时长和睡眠相关指标跨就诊发生变化；后续问题需把正确的历史测量与当前阶段联系起来，不能只复制最近匹配的句子（图 3）。这是基准案例，不是治疗建议。评测按时间写入会话，每十个会话回答已具备证据的问题，排除未来信息（第 5 节）。
 
-## 这个分数能证明什么
+### 测量坐标的演进
 
-它能支持 synthetic but clinically structured history 下的 memory robustness 判断，但绝不等价于临床有效性或可直接用于 patient care 的安全证明；downstream medical model 与 synthetic trajectory assumption 都是重要 confounder。
+LoCoMo 提供加噪预实验参照；LongMemEval 和 MemoryAgentBench 已有更新／流式测量坐标。MedMemoryBench 把这些问题放入事实优先级不同的医学结构历史中。其新增价值是这一领域组合，而非证明所有既有记忆基准都静态、无噪声。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-应固定 patient trajectory、clinical backbone、streaming checkpoint、retrieval budget 与 evaluator，并报告 performance 随 accumulated memory size 的曲线，而不是只有一个最终平均分。stale/superseded state 和 irrelevant noise 也应拆开，因为对应不同机制。
+共 2,020 个会话、15,988 轮和 1,939 题；混合模式为每个档案加入约 200 个辅助会话，包含常识咨询和家属代理咨询。六类任务分别是实体精确匹配（EEM）、时间定位（TLA）、状态更新（SUA）、选择题（MQ）、推断生成（IG）和多跳临床推断（MCD），采用精确字符串／选项匹配或二元评判。主系统统一 GPT-5.1、BGE-small-v1.5、默认前五条和 4,096 分块；温度 0.3，输出上限 10,240。原始历史对照有 128K 上下文。MCD 要求节点／因果覆盖至少 0.75、链完整度至少 0.7，且结论正确。重复次数、置信区间及具体检查点权重未提供。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-真实 EHR 有 missing record、coding artifact、provider disagreement、法规约束和 distribution shift；prospective clinical outcome 与真实 harm 也不是 synthetic benchmark 能回答的。
+以下摘选表 2 比较，保留原文数值。精简与混合共享临床问题，但辅助历史和检查点位置可能不同。记忆单元及持久核心记忆不同，默认前五条不等于相同词元暴露。
 
-## 下一步最有判别力的验证
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Long-Context | 1,939 题；六类任务准确率的平均 | 原文平均分（%），精简／混合 | 51.58 / 38.75 | 原始历史；128K 上下文窗口；GPT-5.1；必要时由 Claude-4-Sonnet 评判 | 表 2, 第 7 页 |
+| Letta | 1,939 题；六类任务准确率的平均 | 原文平均分（%），精简／混合 | 51.21 / 41.55 | 核心记忆加检索记忆；GPT-5.1；必要时由 Claude-4-Sonnet 评判 | 表 2, 第 7 页 |
+| A-Mem | 1,939 题；六类任务准确率的平均 | 原文平均分（%），精简／混合 | 44.84 / 29.27 | 已存储记忆条目；GPT-5.1；必要时由 Claude-4-Sonnet 评判 | 表 2, 第 7 页 |
+| Embedding | 1,939 题；六类任务准确率的平均 | 原文平均分（%），精简／混合 | 42.15 / 40.78 | 稠密检索；BGE-small-v1.5；GPT-5.1；必要时由 Claude-4-Sonnet 评判 | 表 2, 第 7 页 |
+| A-Mem / MCD | 191 道多跳临床推断题 | 准确率（%），精简／混合 | 31.93 / 10.80 | GPT-5.1；默认前 5 条；三个评判阈值加结论正确 | 表 2, 第 7 页; 附录 D.2, 第 25 页 |
 
-分别对 write compression、retrieval、reasoning 画 stage-level saturation curve，并在每个 checkpoint 加 oracle retrieval，定位长临床 memory 主要是“写丢了、找不到、还是找到了不会用”。
+来源：[表 2, 第 7 页; 附录 D.2, 第 25 页](https://arxiv.org/pdf/2605.11814v1)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-## 研究决策卡
+表 2 的平均分可重建为六类准确率的等权均值，而非已核验的 1,939 题合并准确率。精简模式中 Letta 略低于原始历史；部分混合模式单元格提高，因此不能声称每类任务都退化。附录 E 将 HippoRAG-v2 缓存至最后会话才建索引，检查点行为尚不清楚；MIRIX 和 ReMem 也有明显适配。标注者被说明为医疗业务部门工程人员，未明示临床资质。200 个已评分输出的人工一致率为 87.5%，生成推断类更弱。幻觉指标是错误回答中未拒答的比例，不是每次就诊的伤害率，不能据此推导临床有效性或部署安全。
+<!-- EVIDENCE:limitations:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-适合研究持续信息流下的状态维护与记忆饱和，不能当作临床部署安全验证。它的研究价值在于观察错误何时随历史积累出现；医疗语境中的合成问答成绩与实际诊疗效果是不同层级的证据。
-
-### 一个具体任务长什么样
-
-示意任务：一位合成用户的状态跨多次会话发生修订，系统在多个检查点回答历史与当前状态问题。早期相关事实可能被噪声挤出，新状态也可能未覆盖旧记录，需要逐阶段诊断。
-
-### 最有判别力的实验
-
-在相同流式输入上同时保留历史事实问答与当前状态问答，绘制检查点质量和累计写入成本。加入正确当前状态给定条件，区分记忆更新失败与回答模型的领域推理失败，并限制结论为模拟环境。
-
-### 建议搭配
-
-[memoryagentbench](memoryagentbench.md) · [statemembench](statemembench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`long conversation memory → streaming clinical state → saturation-aware high-stakes memory`
-
-它把“memory 越长越容易退化”从工程现象提升成生产级评测问题。
+审查检查点轨迹，证明每种方法只索引当时可见历史，并让精简／混合查询对齐相同临床状态。固定问题证据，分别改变噪声与历史长度，并在每个检查点加入金标检索。按患者聚类报告不确定性，区分过时状态、代理人物混淆、证据缺失及医学上合理的其他推理路径。
+<!-- EVIDENCE:next:END -->

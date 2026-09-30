@@ -1,4 +1,4 @@
-# LoHoSearch：控制 search-space size 与 constraint-graph complexity，而不是只说“这题很难”
+# LoHoSearch：大候选空间与复杂约束下的长程搜索
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-06-11<br>
@@ -6,50 +6,72 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](lohosearch.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](lohosearch.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2606.12837) · [数据](https://huggingface.co/datasets/meituan-longcat/LoHoSearch)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读所述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-LoHoSearch 含 544 个 human-verified questions、11 个 domains，分成 282 个 tree-structured 与 262 个 graph-structured tasks，源自超过 7M Wikipedia entities 的 knowledge graph。它显式控制 candidate search-space size 与 structural constraint complexity，并评价 long-context search 与 calibration。
+完整阅读 v2 全部实质正文、局限和附录 A–D，包括图构造、过滤、置信度公式、完整提示／工具定义及两个案例；核对表 2–3。
 
-## 相比什么前进了
+[arXiv 2606.12837v2 · 2026-06-17](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:reading:END -->
 
-很多 deep-search benchmark 的难度来自 annotator intuition。LoHoSearch 用结构化生成把“候选空间有多大、约束图有多复杂”变成可观测变量，使 long-horizon context management 的难度更容易分层比较。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+从英文 Wikipedia 页面和超链接构建约 762 万实体、2.65 亿有向边的图，再抽低流行度实体及大候选集合关系。树状题要求多条约束求交后唯一确定答案，图状题加入循环和交叉约束，最多十个实体；DeepSeek-V3.2 将隐去实体名的结构写成问题，并参与验证和难度筛选。最终 544 题含树状 282、图状 262，覆盖 11 类。示意流程是根据专辑、歌手、制作人及其关系逐项排除候选，输出一个实体和置信度；不能只找到一个符合局部线索的对象。
 
-dual-judge accuracy 与 calibration 支持在 Wikipedia-derived search space、指定 provider/tool 下的 long-horizon constraint reasoning；synthetic question generation 和 live search provider 仍影响外部有效性。
+编辑比较：论文直接对照 BrowseComp。LoHoSearch 将人工设计的难搜索问题改为由知识图控制候选空间和约束结构的合成题；新增坐标是结构难度及长上下文管理。它不是近期事实基准，和 LiveBrowseComp 的知识新鲜度诊断互补，分数不能替代彼此。
 
-## 公平比较条件
+[来源](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:method:END -->
 
-锁定 tree/graph slice、search provider、tool interface、context window、judge 与 search budget，并单独报告 calibration。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 下一步评测坐标
+模型使用同一搜索与网页读取工具定义：单次最多五条搜索、三页读取；temperature=1.0，200K 上下文分为 184K 输入和 16K 输出，推理设置沿用官方默认。总体工具次数、墙钟上限和主表重复次数未明确报告。正确率分别由 GPT-4.1 搭配 BrowseComp 提示及 Qwen2.5-32B 搭配 SimpleQA 提示判定，再对两种正确率取平均；不是要求双裁判都同意。ECE 使用五个等宽置信度区间，但缺失置信度输出会引入噪声。上下文超过 80% 时触发摘要或丢弃历史，Verify 在提交前检查约束，额外消耗未配平。
 
-下一步应将结构难度与真实用户 query distribution 对齐，验证 controlled complexity 是否预测自然搜索任务中的资源消耗与失败概率。
+[来源](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 选取模型的分数与置信度误差
 
-## 研究决策卡
+v2 全部 544 题；每位裁判以题数为分母，再平均正确率；ECE 越低越好，缺失置信度处理未充分说明。模型推理模式不同，不能称同等推理计算。
 
-### 什么时候值得用
+| 模型 | 双裁判平均正确率（%） | ECE（%） |
+| --- | --- | --- |
+| GPT-5.5 | 34.74 | 48 |
+| Claude-Opus-4.6 | 15.62 | 31 |
+| DeepSeek-V4-Flash | 10.02 | 48 |
 
-适合研究大候选空间和复杂约束图带来的长程搜索压力。调用轨迹长不等于问题重要，搜索成功也不保证置信度可靠；应同时检查候选排除效率、上下文管理和最终判断的校准。
+事实位置：表 2，第 5 页；附录 A，第 10–11 页 · [来源](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 固定 DeepSeek-V4-Flash 的上下文处理对照
 
-示意任务：多个条件共同确定目标，任何单一条件都会产生大量候选。系统需要维持已验证与未验证约束，并逐步排除候选；遗忘一个早期限制可能让后续搜索围绕错误对象展开。
+544 题、相同主干与搜索工具；上下文使用超过 80% 时处理历史；Verify 另外做提交前条件检查，实际总计算预算未配平。选取三项，不把 6.80 个百分点写成 6.8% 相对提升。
 
-### 最有判别力的实验
+| 策略 | LoHoSearch 正确率（%） |
+| --- | --- |
+| 原始框架 | 10.02 |
+| 摘要压缩 | 11.31 |
+| 丢弃历史并最终校验 | 16.82 |
 
-在树状与图状任务中分别固定总工具预算，比较无压缩、摘要压缩与显式候选状态。报告完成率、约束覆盖和置信度校准，并分析失败是否因证据缺失还是早期有效约束被遗忘。
+事实位置：表 3，第 5 页；第 3.3 节，第 6 页 · [来源](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:limitations:START -->
+## 解读、局限与下一步
 
-[browsecomp](browsecomp.md) · [compaction-cliff](compaction-cliff.md)
+同主干的上下文实验支持特定处理组合改善得分，但不是“单靠扩大窗口”的干预。图状题更难的相关性同时受实体和边数等构造因素影响；正确轨迹平均调用 35→61 只统计答对轨迹，不能当作全部任务成本。十六次采样的 pass@16 为 38.3%，按模型置信度选答案为 24.6%，两者分别是至少一次成功覆盖与实际选择成绩。单个 DeepSeek 家族模型筛难、英语维基来源以及不完整唯一性验证限制外推。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+本文采用 6 月 17 日 v2，不能替换页首尚待核验的 6 月 11 日初版记录。论文的“提升 6.8%”实际为 16.82−10.02=6.80 个百分点。29.2% 的题未能由人工彻底排除其他答案，图内唯一性不等于开放世界唯一性。GPT-5.5 与 Claude 两行按表 2 标为非推理模式，其他模型多为推理模式；服务不稳定及安全拒绝也影响个别行。
 
-<!-- RESEARCH-DECISION:END -->
+预先固定题集，独立改变候选数与约束密度，匹配总 token／调用数后比较摘要、显式候选状态及最终校验。加入人工确认的备选答案和独立裁判，并同时报告所有运行的成本、失败、重复采样选择策略与校准。
+
+[来源](https://arxiv.org/pdf/2606.12837v2)
+<!-- EVIDENCE:limitations:END -->

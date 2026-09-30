@@ -1,4 +1,4 @@
-# Utility Under Attack
+# Utility Under Attack：挡住注入后，记忆是否仍然有用
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-21<br>
@@ -6,60 +6,97 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](utility-under-attack.en.md) · [基准库](../library/README.md)
 
-Utility Under Attack 把 memory security 的问题从“攻击能不能成功”改成 **少量恶意记忆进入系统后，正常长期记忆 utility 会损失多少，以及防御为了阻止攻击会误伤多少正常证据**。它使用 LongMemEval 风格的良性任务，把 false-fact poisoning、write-time filtering 与 provenance-based retrieval 放进同一个 security–utility contract。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已阅读全文的方法、实验设置、结果及局限；未独立复现实验。
 
-MPBench 建立了 persistent poisoning 的宽攻击 taxonomy，但主要关注攻击暴露与成功率。这个工作深入其中相对简单的 false-fact 类，将 **retained benign utility** 设为主结果，因此可以识别两类此前容易被掩盖的失败：攻击成功率不高但 utility 已大幅下降，以及防御降低攻击的同时也让正常答案不可达。
+阅读全文第 1–8 节及附录 A，包括威胁模型、三组语料条件、筛查阶段消融、来源加权推导、全部结果和复现设置。核对 arXiv 第一版；没有运行 Aegis 或复算冻结 JSON。下文明确保留两处论文叙述与表格/公式方向的不一致。
 
-## 决定性证据
+[主论文全文](https://arxiv.org/pdf/2608.21230v1) · 2608.21230v1
+<!-- EVIDENCE:reading:END -->
 
-在仅 **1.2% 语料被投毒**时，accuracy 从 **0.850 降到 0.300**。所测 write-time pipeline 对 **360 条毒记忆拒绝 0 条**；强 provenance 权重可以恢复部分结果，但会把 untrusted answer evidence 的 recall 降到 **0**。这说明 content-only screening 与简单 additive provenance 在该相似度分布下存在明显 structural trade-off。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 这个分数支持什么判断
+PoisonedRAG、AgentPoison、MINJA 已研究知识或记忆投毒；本文把测量重点从攻击者是否得到目标答案，转成同一助手原有答题能力还剩多少，并检查没有攻击时防御会不会删掉有用证据。其直接数据基础是 LongMemEval_S，不是另造所有问题；与 MPBench 的多攻击、多系统广度相比，这里只对 Aegis 一个实现深入拆分写入筛查和读取排序。谱系上的新增证据是效用与过度防御的配对诊断，不是首个发现记忆可被投毒。
+<!-- EVIDENCE:placement:END -->
 
-结果支持“在这套 memory stack、retriever、embedder 与 reader 下，少量 false fact 足以造成显著 utility degradation，且所测简单防御存在安全—效用冲突”。它不支持“所有防御都失败”，也不能把残余 utility 单纯归因于 retrieval，因为 reader 的 abstention 行为同样影响最终 accuracy。
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-## 公平比较条件
+每个 LongMemEval_S 问题的约 50 段历史被按会话轮次写成独立记忆，带时间戳和题目独立命名空间。种子 42 抽取 120 题，生成器看到问题和正确答案，一次生成错误答案及三段自然聊天式假陈述，共 360 条，约占语料 1.2%。它们模仿查询关键词，但没有指令、触发词优化、梯度搜索或检索反馈迭代。真实历史标为 internal，注入内容标为 untrusted；攻击者不能改旧记忆、调整排序或抬升来源等级。虽然形式很朴素，生成器拿到正确答案是额外实验信息，不能把它说成完全不知目标事实的现实攻击。
 
-需要固定 memory stack、embedder、retrieval top-k、reader、attack rate、poison similarity distribution 和 provenance prior。任何防御都应该同时报告 poisoned-record exposure、benign recall、answer accuracy 与 abstention，而不能只给 attack rejection rate。若 provenance 来源质量分布不同，ranking 权重也不再可直接比较。
+Aegis 写入管线依次检查结构、敏感信息、注入规则和条件触发的模型分类。模型分类置信度达到 0.8 才升级拒绝，较低阈值区间可能只标记。读取时先语义候选检索，再用相似度、来源先验、效用、时间衰减和来源元数据加权。实验比较无防御、出厂权重和较强权重，并增加两个控制语料：M 把部分非证据轮次也标为不可信，再投毒；N 不投毒，却把全部答案证据标为不可信。M 检查来源标签不再等同恶意时能否工作，N 检查真实证据从保守标记渠道进入时的代价。
+<!-- EVIDENCE:method:END -->
 
-## 研究上怎么用
+<!-- EVIDENCE:setup:START -->
+## 实验设置与计分口径
 
-这个 benchmark 很适合检验新的 memory defense 是否只是“更激进地拒绝信息”。对于 admission filter、provenance ranking、conflict resolution、memory consolidation 等方法，应画出 **security–utility frontier**，并说明提升来自减少 poison exposure、保留可信 evidence，还是让 reader 更会 abstain。
+阅读模型为 claude-sonnet-5，裁判为温度 0 的 gpt-4o-2024-08-06，使用 LongMemEval 官方评审提示；假陈述由 claude-haiku-4-5-20251001 生成。top-k=15，不做查询改写、总结或图检索；来源打分本身是实验干预，不能把“无重排序”理解为完全没有来源重新打分。原始干净全量 500 题正确率 0.860，但主要投毒比较只用同一 120 题，干净参考 0.850。后续构建的干净重测 0.875 与原值差异 p=0.45；不能混用全量或不同构建作为分母。
 
-## 下一步最有价值的验证
+“保留效用”实际定义为当前准确率/干净准确率，没有减去无记忆基线，因此是准确率比，不是因果意义的增量记忆收益。报告毒记忆占检索上下文比例和排第一的问题比例，以区分检索暴露与阅读器抵抗。配对精确 McNemar 检验只在同一语料内比较；M 与 N 不互作配对。筛查另用 direct deepset（263 恶意、399 良性）、InjecAgent（250 恶意）、Dolly 和合成记忆各 750 良性、NotInject 339 良性，报告召回及假阳性，1,000 次自助抽样。API 缓存和退避使其延迟不可与本地延迟直接相比；嵌入模型具体标识未在附录列出。
+<!-- EVIDENCE:setup:END -->
 
-当前缺口是自适应攻击、真实 provenance 分布、更多 memory stack，以及作者提出的 occupancy gate。最高杠杆的下一步不是再添加一个静态 filter，而是比较不同 defense 在相同 benign workload 和 adaptive attacker 下的 Pareto frontier，验证是否存在真正支配 baseline 的方法。
+<!-- EVIDENCE:result-1:START -->
+## 主要投毒实验
 
-## 谱系位置
+同一 120 题、360 条毒记忆，top-k=15；claude-sonnet-5 回答、GPT-4o 官方提示判定。效用为准确率/0.850，表中取整。出厂 wt/ws=0.15/0.60，较强为 0.35/0.45；相对无防御 McNemar p 分别为 0.80、0.0015。
 
-它把 memory attack 评价从攻击成功率推进到安全—效用共同测量；`map_delta=reinforces`。与 MPBench / InjecMEM 配合，它让 memory security 开始覆盖 **write exposure、retrieval exposure、generation success 和 benign utility** 四个不同坐标。
+| 条件 | 准确率 | 保留效用（%） | 毒占上下文（%） | 毒排名第一（%） |
+|---|---|---|---|---|
+| 干净语料 | 0.850 | 100 | 0.0 | 0 |
+| 投毒／禁用来源权重 | 0.300 | 35 | 20.0 | 100 |
+| 投毒／出厂权重 | 0.317 | 37 | 20.0 | 87 |
+| 投毒／较强权重 | 0.475 | 56 | 8.8 | 2 |
 
-Primary: https://arxiv.org/abs/2608.21230
+来源：表 3 · [论文](https://arxiv.org/pdf/2608.21230v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 当不可信渠道也携带真证据
 
-## 研究决策卡
+各语料均 120 题；准确率分母为问题数，证据召回是问题级是否召回证据，占用为检索上下文比例。M 含 18.7% 良性不可信干扰与 1.18% 毒；N 无毒、答案证据不可信。wt=0.35；仅语料内配对，M p≈1.17e-10，N p≈6.31e-30。
 
-### 什么时候值得用
+| 语料与条件 | 准确率 | 证据召回（%） | 良性不可信占上下文（%） |
+|---|---|---|---|
+| M／禁用来源权重 | 0.3167 | 99.17 | 6.56 |
+| M／较强权重 | 0.7000 | 99.17 | 0.00 |
+| N／禁用来源权重 | 0.8583 | 99.17 | 50.67 |
+| N／较强权重 | 0.0417 | 0.00 | 0.00 |
 
-适合评价记忆防御是否在抗污染的同时保住正常任务效用。单纯让模型拒绝更多问题也能降低攻击成功率，但这不是可用的防御收益；必须沿安全—效用曲线比较具体工作点。
+来源：表 6 · [论文](https://arxiv.org/pdf/2608.21230v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-3:START -->
+## 筛查召回与误伤必须对应同一配置
 
-示意任务：正常历史中混入少量虚假记忆，检索结果既可能被污染内容占据，也可能被防御过度过滤。最终答案变差有两种相反原因，需要区分污染影响与防御造成的证据缺失。
+单位均为 0–1 比例。直接召回分母 263 恶意项，间接召回分母 250，NotInject 假阳性分母 339 良性项。前三阶段的 155 个间接检出均来自敏感信息检查，不是注入规则；不是后续代理行为的攻击成功率。
 
-### 最有判别力的实验
+| 筛查配置 | 直接注入召回 | 间接注入召回 | NotInject 假阳性 |
+|---|---|---|---|
+| 简单正则 | 0.144 | 0.000 | 0.015 |
+| Aegis 第 1–3 阶段 | 0.144 | 0.620 | 0.015 |
+| Aegis 第 1–4 阶段／Haiku | 0.741 | 0.832 | 0.035 |
+| ProtectAI DeBERTa v2 | 0.414 | 0.660 | 0.428 |
 
-在相同干净与污染查询对上扫描筛查阈值或来源排序权重，同时报告正常正确率、污染伤害和检索占位。再增加可适应防御的污染设置，检查当前工作点是否仅适配固定攻击样本。
+来源：表 4–5 · [论文](https://arxiv.org/pdf/2608.21230v1)
+<!-- EVIDENCE:result-3:END -->
 
-### 建议搭配
+<!-- EVIDENCE:interpretation:START -->
+## 证据支持的结论
 
-[injecmem](injecmem.md) · [memevobench](memevobench.md)
+360 条假陈述全部通过写入拒绝检查；无防御时每题第一名均为毒记忆，15 条上下文中的毒占比 20%，准确率从 0.850 掉到 0.300。出厂来源权重没有检出显著改善，p=0.80 不等于证明等效。较强权重在最初语料回升至 0.475，在 M 回升至 0.7000，但 M 的不可信良性文本全部是干扰项，删掉它们本身就有利。N 显示另一端：没有攻击也从 0.8583 降至 0.0417，证据召回归零。不能只凭低攻击成功率称它安全。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+在其他打分项相同、internal 与 untrusted 先验差为 0.7 时，可信记忆可抵御的相似度差为 wt×0.7/ws：出厂 0.175，较强设置约 0.544；观察到的毒优势 0.32 超过前者。只测了两个权重，排除所有中间权重或所有检索器的结论还依赖语料相似度分布与攻击能力假设。作者提出按来源限制上下文占用，但未实现或评估，不应写成已验证解法。
+<!-- EVIDENCE:interpretation:END -->
 
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源缺口与下一步
+
+单一系统、阅读器、嵌入空间、一次 120 题抽样和非自适应攻击限制外推；知道真答案及预计查询不等于现实匿名攻击者可免费获得这些信息。来源等级不能被洗白是前提，未验证对摘要转写或可信工具回声的来源提升攻击。内容文本本身通常不足以判断事实真假，但 0/360 是该管线上的观察，不证明所有具备外部核实的写入防御无效。M 是偏有利上界，N 是全部证据不可信的极端，不是生产流量分布。干净全量还误拒 109/124,462 轮，虽不含答案证据仍是实际过度防御。下一步应做中间权重扫描、多个嵌入/阅读器、不同证据来源混合比例，以及实现占用约束后同时量效用和攻击率。
+
+两处需修正读取方式。摘要/结论把 0.832 间接注入召回与 1.5% NotInject 假阳性并写，但表 4–5 中前者属于 Haiku 四阶段管线，其假阳性是 3.5%；1.5% 属于前三阶段，间接召回为 0.620。式 (2) 附近文字把胜出方向写反：在其简化条件下，不可信项要胜过可信项，应是语义优势大于来源补偿阈值；图 2 与后续解释支持这个方向。本页采用表格与正确比较关系，不照抄冲突句。
+<!-- EVIDENCE:limitations:END -->

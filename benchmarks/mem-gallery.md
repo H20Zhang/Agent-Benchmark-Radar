@@ -1,4 +1,4 @@
-# Mem-Gallery：多模态 memory 不只是把图片 caption 化
+# Mem-Gallery：多会话图文记忆的组织与更新
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-01-07<br>
@@ -6,50 +6,62 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](mem-gallery.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](mem-gallery.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://aclanthology.org/2026.acl-long.1892/) · [代码](https://github.com/YuanchenBei/Mem-Gallery)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-Mem-Gallery 用 multi-session visual-text conversations，在统一框架下比较 12 个 memory systems，覆盖 memory extraction、test-time adaptation、reasoning、knowledge management 与 multimodal retention，并同时观察效率。
+已阅读论文集全部 35 页，即第 40750–40784 页：第 1–5 节、局限及附录 A.1–A.10，包括完整任务定义、基线实现、指标、全部检索／骨干模型表和三个图示案例；目视核对表 4、12 及视觉推理案例。
 
-## 相比什么前进了
+[ACL 2026 / 2026-07 / 2026.acl-long.1892](https://aclanthology.org/2026.acl-long.1892.pdf)
+<!-- EVIDENCE:reading:END -->
 
-文本 memory benchmark 可以把图像压成 captions 后继续工作。Mem-Gallery 把 visual retention 和跨模态 reasoning 设为一等能力，使视觉细节在写入或压缩阶段丢失的代价能被观察。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+人工设计的故事与重新组织的 MMRC 会话构成长篇图文对话，并标注支持答案的轮次。记忆按轮次累积，再回答覆盖提取／适应、推理和知识管理的九类任务。测试时学习指利用新见过的示例，不更新模型参数（第 3 节；附录 A.3）。
 
-统一框架支持跨 memory system 的相对比较，但最终 QA/efficiency 仍受到 multimodal backbone、memory harness 与 judge 影响。高分说明 package 在该视觉对话 contract 下更好，不能直接证明某个 compression 或 retrieval component 因果更优。
+一个案例要求把新狗照片与先前提及的朋友宠物比较。UniversalRAG 找回了 Cairn Terrier 线索，却在最终比较中与该线索自相矛盾；找回证据因此不等于视觉推理成功（图 17）。
 
-## 公平比较条件
+### 测量坐标的演进
 
-锁定 multimodal backbone、image encoding/compression、memory budget、answerer 与 judge，并分别报告 capability slices 和 efficiency。
+LoCoMo 提供多会话对话的前序测量对象，MMDU/MMRC 提供局部多模态对话的前序对象及部分构造材料。Mem-Gallery 将跨会话保留与视觉搜索、新示例和纠正结合起来。下一步应在相同证据预算下分离感知损失、记忆损失与检索后的推理失败。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-下一步应把 visual memory 接到真实环境 action，并验证细粒度 visual evidence 是否改变后续 tool choice 或 state update。
+20 个对话场景包含 240 个会话、3,962 轮、1,003 张历史图像及 1,711 对问答。文本方法接收 GPT-5.1 生成的图像描述。MemEngine 固定随机种子，温度为 0，嵌入使用 GME-Qwen2-VL-2B-Instruct，默认检索前 10 项；开放骨干模型通过 A100 上的 vLLM 运行。其他方法参数沿用原实现，具体上限与重复次数未说明。F1 是归一化后词元重合的逐题均值；另用 Qwen-2.5-72B-Instruct 按 0 至 1 的五档评分（附录 A.2、A.5）。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 研究决策卡
+以下为精选事实单元格。答案 F1 对 1,711 对问答取平均。检索召回对 1,527 个有支持证据的问题平均其找回线索比例，排除 184 个拒答问题；该分母由表 8 与表 16 的排除规则计算得到。所选 F1／召回值不使用模型评判器。
 
-### 什么时候值得用
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| A-Mem / Qwen-2.5-VL-7B | Mem-Gallery；1,711 对问答 | 平均答案 F1（0–1） | 0.6228 | 适用时取前 10 项；GPT-5.1 图像描述 | 表 4, 第 40756 页 (PDF 第 7 页) |
+| MuRAG / Qwen-2.5-VL-7B / K=10 | Mem-Gallery；1,711 对问答 | 平均答案 F1（0–1） | 0.6966 | 前 10 项多模态记忆；相同嵌入模型 | 表 4, 第 40756 页 (PDF 第 7 页) |
+| MemGPT / Gemini-2.5-Flash-Lite | Mem-Gallery；1,711 对问答 | 平均答案 F1（0–1） | 0.7202 | 文本记忆配 GPT-5.1 描述；原生记忆控制 | 表 12, 第 40776 页 (PDF 第 27 页) |
+| MuRAG / Gemini-2.5-Flash-Lite | Mem-Gallery；1,711 对问答 | 平均答案 F1（0–1） | 0.7155 | 前 10 项多模态记忆 | 表 12, 第 40776 页 (PDF 第 27 页) |
+| MuRAG / Qwen-2.5-VL-7B / K=20 | Mem-Gallery；1,711 对问答 | 平均答案 F1（0–1） | 0.6884 | 前 20 项；相同语料与回答模型 | 表 15, 第 40780 页 (PDF 第 31 页) |
+| MuRAG／线索召回 / K=10 | Mem-Gallery；1,527 个有证据问题（计算所得） | 平均 Recall@10（0–1） | 0.8601 | 标注线索条目；不含拒答题 | 表 16, 第 40781 页 (PDF 第 32 页) |
+| MuRAG／线索召回 / K=20 | Mem-Gallery；1,527 个有证据问题（计算所得） | 平均 Recall@20（0–1） | 0.9228 | 相同线索协议；扩大检索数 | 表 16, 第 40781 页 (PDF 第 32 页) |
 
-适合研究视觉信息在长期对话中的保留与知识管理。必须先验证视觉确实参与解题：如果文本转述已包含答案，更高分可能来自语言推理，而非多模态记忆保存得更好。
+来源：[表 4, 第 40756 页 (PDF 第 7 页); 表 12, 第 40776 页 (PDF 第 27 页); 表 15, 第 40780 页 (PDF 第 31 页); 表 16, 第 40781 页 (PDF 第 32 页)](https://aclanthology.org/2026.acl-long.1892.pdf)
+<!-- EVIDENCE:results:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-示意任务：早期会话展示一张图片，后续只用语言询问其中的细节或与另一张图的差异。系统应能追溯原始视觉证据；仅保留笼统图像描述可能丢掉决定答案的细粒度属性。
+前表中的骨干模型相关反转，使“描述文本记忆普遍更差”这一结论不能成立。相同检索条数不等于相同图像词元或计算预算，完整记忆基线也会截断。增大 K 后召回率提高，答案 F1 未必提高。评判规则明确奖励自信表达，并对部分保留语气或赘述扣分，存在文风敏感性；未报告独立人工评判校准。这些合成对话结果不能代替部署或行动安全证据。
+<!-- EVIDENCE:limitations:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-固定视觉语言骨干，比较原图可访问、仅描述文本与压缩视觉记忆，并分开统计确实依赖图像的问题。记录写入后的信息损失和检索失败，避免把视觉编码能力与记忆机制的收益混为一谈。
-
-### 建议搭配
-
-[memeye](memeye.md) · [memlens](memlens.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+提供标注线索对应的原图，并匹配图像描述词元预算，分离感知与检索。固定骨干模型后交叉比较这些条件和记忆更新方式，再按对话报告答案 F1、线索召回及纠正成功率的不确定性，并纳入完整图像与写入成本。
+<!-- EVIDENCE:next:END -->

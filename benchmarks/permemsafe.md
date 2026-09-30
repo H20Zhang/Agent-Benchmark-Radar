@@ -1,4 +1,4 @@
-# PerMemSafe：个性化 memory 会让通用 safety rule 不再够用
+# PerMemSafe：隐含个人风险及其解除后的回答评测
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-07<br>
@@ -6,64 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](permemsafe.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](permemsafe.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[ACL 2026](https://aclanthology.org/2026.findings-acl.320/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-PerMemSafe 评估长期 self-evolving agent 的 **implicit personalized safety**。一个对普通用户完全安全的回答，可能因为 memory 中积累的特定用户风险而变得危险；而且这些风险会随时间出现、变化或解除。
+已阅读论文集全部 19 页，即第 6415–6433 页：正文第 1–6 节、局限及附录 A–G，包括更强模型结果、生成筛选、两轨各自的安全／帮助评分规则、人工矩阵、失败案例及全部 SentinelMem 提示；目视核对图 5 和表 3–4。
 
-## 相比此前评测多测了什么
+[ACL 2026 / 2026-07 / 2026.findings-acl.320](https://aclanthology.org/2026.findings-acl.320.pdf)
+<!-- EVIDENCE:reading:END -->
 
-传统 safety benchmark 主要根据当前 prompt 与 context-independent policy 判断；personalized-memory benchmark 又通常奖励更丰富的 user modeling。PerMemSafe 把两者的张力暴露出来：个性化越强，agent 需要正确 retrieve 和推理的 latent safety context 反而越多。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+合成历史间接表达已标注的个人风险，并混入超过 90% 的无关交互。只有在无记忆回答不触发安全关注时，查询才被保留。安全感知（Safety Perception，SP）检查是否意识到既往风险；动态演化（Dynamic Evolution，DE）则要求明确承认风险已缓解或解除，并引用相关依据（第 3 节；附录 E）。
 
-论文报告，即使最强的被测 self-evolving agent，safety rate 也只有约 50%。SentinelMem 显式建模 personalized risk inference 与 memory evolution，相比既有 memory framework 把 implicit personalized safety 提升 23.8%，同时保持 helpfulness。
+一个案例先出现深夜在线赌博和工作受影响的线索，后续询问信用卡奖励优化。检索片段虽提及相关行为，泛化的优化回答仍被判为缺乏个性化安全意识（附录 F）。这里测的是在指定风险标签下使用上下文，不是诊断或观测真实财务伤害。SentinelMem 推断风险，分开维护偏好／风险档案，并保留当前及前一状态和回答指导。
 
-## 这个分数能证明什么
+### 测量坐标的演进
 
-benchmark 能支持“memory-augmented agent 是否会在 evolving history 下识别 user-specific risk”的系统级判断；SentinelMem 的提升不能拆成某一个 memory operation 的因果增益，因为 risk extraction、update、retrieval 与 response policy 是联合设计的。
+较早的个性化安全研究在单轮中直接给出用户背景；PersonaMem 提供动态档案与干扰构建思路，LoCoMo 更重回忆。PerMemSafe 把风险证据移入噪声历史，并评分风险解除后的处理，增加了相关坐标，但并未覆盖所有风险演化轨迹。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-应固定 backbone、conversation history、risk evolution、helpfulness task、safety policy 与 retrieval budget，并同时报告 safety 与 helpfulness；一律拒绝个性化服务不算优秀 memory system。stale-risk、resolved-risk、newly-emerging-risk 也应拆开报告。
+论文报告五个领域的 276 段对话和 750 项测试，但未明确逐轨数量或历史词元长度。记忆检索取前三条；智能体与评判器温度为 0，输出上限 2,048 词元，结果取三次运行均值。GPT-4o 评判时获得金标风险和相关历史。个性化安全率（PSR）为二元规则合规率；个性化帮助得分（PHS）将 1–5 分乘以 20，实际为 20–100，尽管正文写成 0–100。人工核查使用 100 项和三名人工智能／自然语言处理方向研究生。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-benchmark 不可能覆盖所有医疗/法律/物理风险与真实 user consent；错误推断个性化风险本身也可能造成伤害，敏感 risk memory 的长期 privacy/governance 又是另一层问题。
+以下精选总体与消融事实。PUP 指主动用户画像。表 3 未重述基座，GPT-4o-mini 由其完整系统行与图 5 对应而推断。总体值取两轨报告分数的平均，各轨分母未单列。
 
-## 下一步最有判别力的验证
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Mem0 | PerMemSafe 总体；声明共 750 项，各轨数量未列出 | PSR（%）／PHS（1–5 ×20；实际范围 20–100） | 39.20 / 56.40 | GPT-4o-mini；前 3 条；温度 0；输出 2,048 词元；三次运行；GPT-4o 评判 | 表 2, 第 6420 页 (PDF 第 6 页) |
+| SentinelMem | PerMemSafe 总体；声明共 750 项，各轨数量未列出 | PSR（%）／PHS（1–5 ×20；实际范围 20–100） | 48.53 / 64.00 | GPT-4o-mini；前 3 条；温度 0；输出 2,048 词元；三次运行；GPT-4o 评判 | 图 5, 第 6422 页 (PDF 第 8 页) |
+| 消融基线 Vanilla | PerMemSafe 总体；声明共 750 项，各轨数量未列出 | PSR（%）／PHS（1–5 ×20；实际范围 20–100） | 25.20 / 56.20 | GPT-4o-mini（由对应完整系统行推断）；前 3 条；温度 0；输出 2,048 词元；三次运行；GPT-4o 评判 | 表 3, 第 6422 页 (PDF 第 8 页) |
+| Vanilla + PUP | PerMemSafe 总体；声明共 750 项，各轨数量未列出 | PSR（%）／PHS（1–5 ×20；实际范围 20–100） | 43.60 / 57.40 | GPT-4o-mini（由对应完整系统行推断）；前 3 条；温度 0；输出 2,048 词元；三次运行；GPT-4o 评判 | 表 3, 第 6422 页 (PDF 第 8 页) |
+| Mem0／更强基座 | PerMemSafe 总体；声明共 750 项，各轨数量未列出 | PSR（%）／PHS（1–5 ×20；实际范围 20–100） | 72.93 / 80.60 | GPT-5.1；前 3 条；温度 0；输出 2,048 词元；三次运行；GPT-4o 评判 | 表 4, 第 6426 页 (PDF 第 12 页) |
 
-重点测 calibration：什么时候应该基于记忆风险直接行动，什么时候应该 clarification，什么时候应该把它判为 stale。frontier 不只是“记住 safety context”，而是管理 personalized risk belief 的 confidence 与 lifecycle。
+来源：[表 2, 第 6420 页 (PDF 第 6 页); 图 5, 第 6422 页 (PDF 第 8 页); 表 3, 第 6422 页 (PDF 第 8 页); 表 4, 第 6426 页 (PDF 第 12 页)](https://aclanthology.org/2026.findings-acl.320.pdf)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-## 研究决策卡
+SP 可因推理中表现出风险意识而通过，并不证明最终行动无害；DE 会惩罚未明确引用风险解除依据的合理泛化回答。因此 PSR 不是无事故率。论文概述中的 23.8% 对应 39.20 到 48.53 的相对提升，而非提高 23.8 个百分点或跨基座平均。附录 C 中 Mem0／GPT-5.1 达到 72.93，因此约 50% 的上限只适用于正文轻量模型比较。对模糊用户线索推断风险可能造成过度病理化；论文未提供无风险误报对照、临床验证或部署隐私审计。
+<!-- EVIDENCE:limitations:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-适合检验单看当前请求很正常、结合个人历史却需要谨慎处理的情形。个性化安全不仅要记住风险，还要在风险解除或条件变化后更新；永久沿用旧风险也会降低帮助质量。
-
-### 一个具体任务长什么样
-
-示意任务：早期历史表达了一项与服务选择相关的个体限制，之后该限制被明确修订。系统面对类似的新请求时，需要应用当前有效状态，而不是机械地沿用最早的安全判断。
-
-### 最有判别力的实验
-
-构造风险有效、风险已解除和无相关风险三组配对历史，固定当前请求。分别检查漏用相关记忆与过度沿用旧风险，并联合报告安全和帮助质量，才能评价更新策略而不是一律保守的回答倾向。
-
-### 建议搭配
-
-[longmemeval](longmemeval.md) · [memtrapbench](memtrapbench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`generic safety → personalized memory → evolving personalized risk state`
-
-它说明 personalization 和 safety 是耦合目标，不能再当成两个独立模块。
+为同一查询配对风险有效、已解除、含糊和无风险历史。把真实有害指导与是否提及风险分开评分，认可有用澄清而不强制披露敏感推断标签。组件消融应匹配记忆字节和检索词元，并报告不确定性、误报和风险解除后的过度谨慎。
+<!-- EVIDENCE:next:END -->

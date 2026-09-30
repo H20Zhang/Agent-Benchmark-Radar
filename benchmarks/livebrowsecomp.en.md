@@ -1,4 +1,4 @@
-# LiveBrowseComp: using low-salience facts from the previous 90 days to reduce “the model already knew it”
+# LiveBrowseComp: recent long-tail facts and search-dependence diagnostics
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2026-05 · paper v1<br>
@@ -7,50 +7,71 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](livebrowsecomp.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](livebrowsecomp.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2605.28721) · [Data](https://huggingface.co/datasets/Forival/LiveBrowseComp)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction.
 
-LiveBrowseComp contains 335 human-authored questions based on low-salience facts published during the preceding 90 days across six frequently updated source families. Closed-book diagnostics and answer-source-removal ablations distinguish fresh evidence discovery from web-assisted verification of facts already in model parameters.
+Read Sections 1–6 and Appendices A–G, including all three diagnostics, filtering thresholds, judging prompt, search/closed-book settings, human review and domain results; visually checked Table 3 and Figure 7.
 
-## Compared with what
+[arXiv 2605.28721v1 · 2026-05-27](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:reading:END -->
 
-BrowseComp is hard, but over time its questions can become familiar to models. LiveBrowseComp makes freshness and intrinsic-knowledge diagnosis explicit variables, separating knowledge cutoff from search ability more directly.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Score boundary
+LiveBrowseComp contains 335 human-authored short-answer questions seeded from six updating news, film, game, vulnerability, sports and earthquake sources. At least one indispensable clue must originate within ninety days of construction; easy direct-search and unstable-answer cases are filtered. Authors record evidence chains, while independent reviewers check correctness, uniqueness, difficulty and temporal dependence; a question is excluded if any of three solvers finishes within thirty minutes. Separate diagnostics on older benchmarks remove tools, block answer evidence and trace query provenance to study the mixture of prior knowledge and evidence discovery. Closed-book success establishes that retrieval was unnecessary for that attempt, not training-data leakage.
 
-Short-answer accuracy supports fresh retrieval for a dated web snapshot and model cutoff. The benchmark ages quickly, so current scores must carry result dates rather than being frozen as timeless SOTA.
+Editorial placement: BrowseComp is the direct reference; LiveBrowseComp adds recent long-tail facts and closed-book/evidence-blocking diagnostics to separate prior knowledge from discovery. One example combines a recent short film’s production-company clues and creator roles to identify its title. This differs from LoHoSearch’s candidate-space difficulty: recency is neither automatic difficulty nor permanent decontamination.
 
-## Fair comparison conditions
+[Source](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:method:END -->
 
-Align benchmark snapshot, search provider, tool interface, model cutoff, and source-removal protocol. Results from different dates need separate tracking.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Next evaluation coordinate
+Search experiments use a RedSearcher-style scaffold, Serper with up to ten results, Jina goal-conditioned page retrieval and the stated auxiliary tools. Temperature is 0.7, top-p 0.9, with 256K context and a 250-step cap, no historical-summary compression, and forced final answers at the limit. Four independent attempts per question yield avg@4 mean accuracy and pass@4 at-least-once success. A GPT-OSS judge compares final short answers with references, allowing aliases and surface variation; it does not grade full reasoning or citation quality, and its exact model size is unspecified. The evidence-blocking pilot instead uses Qwen3-8B-Embedding retrieval over a corpus stripped of evidence/gold documents, retaining irrelevant/hard negatives and disabling additional internet access.
 
-The next step creates a continuous refresh lineage: does the same search agent remain strong across multiple fresh snapshots rather than one batch of recent facts?
+[Source](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Search-augmented mean accuracy in the reported study
 
-## Research decision card
+Four attempts per question; all 335 LiveBrowseComp questions, with BrowseComp a different question set rather than a same-item intervention. Both columns retain Table 3’s avg@4 label. Up to 250 steps/256K context, GPT-OSS grading, with the auxiliary-tool mismatch described above.
 
-### When to use it
+| Model | BrowseComp avg@4 (%) | LiveBrowseComp avg@4 (%) |
+| --- | --- | --- |
+| GPT 5.4 | 72.1 | 43.2 |
+| GLM 5.1 | 68.0 | 33.9 |
+| DeepSeek v3.2 | 51.4 | 37.6 |
 
-Use LiveBrowseComp to test dependence on recent evidence rather than web-assisted confirmation of known answers. Freshness is relative to model and construction dates. An unchanged release may not preserve its original low-memorization condition as time passes.
+Source location: Table 3, p. 9; Appendices B–C, pp. 17–18 · [Source](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:result-2:START -->
+## Pilot evidence blocking on an older question corpus
 
-Illustrative task: the answer comes from a low-salience fact published shortly before construction, requiring a specific source. Closed-book success or success after removing that source weakens the evidence that the task measures discovery.
+Intervention on the BrowseComp-Plus document index, measuring success at least once in four attempts. The exact question count is not stated and must not be replaced with 335. Only irrelevant/hard negatives remain, not a generic search-failure setting; these pass@4 scores are not interchangeable with avg@4 above.
 
-### Most discriminating experiment
+| Model | Closed-book pass@4 (%) | Evidence-blocked pass@4 (%) |
+| --- | --- | --- |
+| MiniMax M2.5 | 44.5 | 8.0 |
+| Kimi-K2.6 | 25.5 | 2.3 |
 
-Repeat closed-book and source-removal controls for each model, slicing by fact date and source under a fixed search budget. When refreshing questions, report set changes rather than treating scores across different snapshots as a direct model-progress curve.
+Source location: Table 1, p. 4; Appendix C.2, pp. 18–19 · [Source](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:result-2:END -->
 
-### Pair with
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, limitations and next experiment
 
-[browsecomp](browsecomp.en.md) · [evobrowsecomp](evobrowsecomp.en.md)
+The recent set reduces closed-book performance for tested models without guaranteeing novelty for future models. Cross-benchmark score changes also involve domain, question and tool differences. Similar human solve rates—60/200 and 62/200 observations in Figure 6—are a reference, not randomization proving that all model loss comes from prior knowledge. Worse performance after evidence removal may reflect negative-document distraction or poor abstention; it does not establish that retrieval is valueless. Roughly half the questions concern films/entertainment, only one search backend is used, and ninety days is a heuristic rather than a known training cutoff.
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+The main text describes shared tools, but Appendix C makes Python, Google Scholar and Maps model-dependent; closed-book reasoning modes and output budgets also differ. Figure 7 is labeled avg@4 while several static scores repeat earlier pass@4 values, and two bars are 2.0%, contradicting “all below 2%”; no gain is calculated from those mixed labels here. Appendix B requests structured yes/no output but describes an A/B first-character parser, requiring the actual scorer to be pinned. The evidence-blocking sample count is not explicit; that study uses the BrowseComp-Plus document index, not LiveBrowseComp’s live web.
 
-<!-- RESEARCH-DECISION:END -->
+Retain fact dates, sources and web snapshots, repeat closed-book diagnostics, align actual tools/reasoning budgets and pin the scorer. Compare supporting, absent, irrelevant and adversarial-negative evidence on identical questions to separate discovery, evidence use and abstention. Calibrate refreshes with anchor questions and shared models.
+
+[Source](https://arxiv.org/pdf/2605.28721v1)
+<!-- EVIDENCE:limitations:END -->

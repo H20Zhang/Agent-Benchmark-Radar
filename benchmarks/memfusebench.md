@@ -1,4 +1,4 @@
-# MemFuseBench：Agent Memory / 跨来源融合
+# MemFuseBench：融合跨来源事件，同时保留证据出处
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-07-21<br>
@@ -6,60 +6,77 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](memfusebench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](memfusebench.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2608.18704) · [数据](https://github.com/Darwin-Agent/Mi-Memory/tree/master/MemFuse/MemFuseBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-把评价对象从单历史召回推进到跨设备、用户与时间的 linking、causal fusion、conflict 和 provenance。
+已阅读全文的方法、实验设置、结果及局限；未独立复现实验。
 
-## 它接在什么之后
+已读正文全部章节及附录A–E，包括六阶段构造、模型核验、融合图、精确检索设置、消融和全部已刊提示。附录明确仅节选完整提示库，未刊提示未读取；未独立复现。
 
-前一代评价通常把该问题压成较短的最终分数或单一 proxy。这个评测把 predecessor critique 变成 capability × environment × protocol 的显式差异，并保留可执行或可复核资产。
+[主论文全文](https://arxiv.org/pdf/2608.18704v1) · arXiv:2608.18704v1
+<!-- EVIDENCE:reading:END -->
 
-## 实际怎样评测
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-**问题：** 系统能否在来源互异且可能冲突的事件流中找对证据、融合因果并保留出处？
+与LoCoMo/LongMemEval的对话历史记忆相比，本基准把同一情节拆到设备、应用、用户和时间各来源，要求连接互补片段、解释冲突与视角。与LifeBench/SMMBench相邻，但此处是统一潜在场景生成的语义事件，不是独立采集的真实多模态传感流。新增测量坐标是跨来源融合，不应把事件来源标签当作原始感知能力。
+<!-- EVIDENCE:placement:END -->
 
-**测量对象：** 跨异构事件流的来源连接、因果融合、冲突裁决与溯源记忆基准。
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-**规模与协议：** 357 questions over 7,823 source-tagged events with six diagnostic categories. 协议包括 evidence-checklists, adversarial-distractors, six-diagnostic-categories。
+Scene-to-Sensor先生成人物和设备清单，再生成因果时间线，将同一活动投射为各设备能观察到的带时间戳事件；随后生成六类问题、去重/排除常识捷径、注入不改变答案的相似干扰。逐阶段审阅—修订后，三种强模型读全上下文独立答题，分歧再人工修订，约20%问题至少修订一次。最终六场景7823事件、357题，平均每题需9.4事件；71道融合题平均15.2事件，70道冲突题仅2.8。示例是合并家庭对话、工作日历和电话判断安排，同时排除错误日期的相似记录。MemFuse保留不可变原子事件，聚类摘要作检索入口，以成员、因果和语义边连接；检索后回溯原事件。
+<!-- EVIDENCE:method:END -->
 
-## 分数能说明什么
+<!-- EVIDENCE:setup:START -->
+## 实验设置与计分口径
 
-357 questions、7,823 events 与 six diagnostics 分别观察 linking、causal fusion、conflict 和 provenance。 它支持的是该环境、harness、model/tool/resource configuration 下的 system-level evidence；除非其他变量匹配，否则不能把榜单差异归因给单一组件。
+分别以Qwen3-30B-A3B、GPT-4.1 Mini、Gemini3.1 Flash Lite同时执行系统特定LLM调用和最终回答；BGE-M3嵌入。全上下文读全部场景，其他系统最终20条上下文；不是等token、等计算。MemFuse初始检索种子候选30条，最多三次改写，因果扩展2跳/语义1跳，语义阈值0.8，回答期至少2轮最多5轮。附录允许最多3个融合摘要、每组10成员，摘要也占20条名额，总上限128000字符。回答温度1、2048输出token，构造/规划4096；GPT-4.1 Mini裁判温度0、4096，逐清单覆盖再逐题平均，非六类别等权，也不独立惩罚清单外幻觉。错误重试8次、格式再试3次，仍不可评分则暂不发布聚合而非记零。
+<!-- EVIDENCE:setup:END -->
 
-## 最主要的混杂因素
+<!-- EVIDENCE:result-1:START -->
+## 同底座的总体质量与token成本
 
-synthetic generation 与 model-guided verification 仍缺 human ceiling，不能证明真实用户历史上的外部效度。 关键混杂包括 synthetic-generator-style, model-guided-verification, missing-human-ceiling。
+357题逐题平均0–1；Fusion为71题。有限检索组20条、全上下文不限该条数；token为整个评测构建/推断量，不是每题费用，横杠为未报告或不适用。
 
-## 还没有覆盖什么
+| 系统 | 清单总体分 | 融合类分 | 构建token（百万） | 推断token（百万） |
+|---|---|---|---|---|
+| 朴素RAG | 0.3289 | 0.1823 | — | 0.76 |
+| EverMemOS | 0.455 | 0.3945 | 55.3 | 12.31 |
+| MemFuse | 0.4574 | 0.3308 | 29.73 | 7.1 |
+| 全上下文 | 0.5223 | 0.4219 | — | — |
 
-合成构造与模型引导核验缺少人类上限，也尚未证明真实世界外部效度。
+来源：表2，GPT-4.1 Mini部分 · [论文](https://arxiv.org/pdf/2608.18704v1)
+<!-- EVIDENCE:result-1:END -->
 
-## 放进演化图怎么看
+<!-- EVIDENCE:result-2:START -->
+## 回答期检索比预构造结构贡献更大
 
-`map_delta=early_signal`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+同357题，Gemini3.1 Flash Lite，最终20条，GPT-4.1 Mini裁判；0–1逐题覆盖均值。单项删组件，不保证调用/token成本相同；无区间。
 
-<!-- RESEARCH-DECISION:START -->
+| 变体 | 总体清单分 |
+|---|---|
+| MemFuse | 0.4698 |
+| 去回答期代理检索 | 0.3662 |
+| 去检索约束 | 0.4185 |
+| 去图结构 | 0.4514 |
+| 去融合记忆 | 0.4618 |
 
-## 研究决策卡
+来源：图4及消融段 · [论文](https://arxiv.org/pdf/2608.18704v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:interpretation:START -->
+## 证据支持的结论
 
-适合研究多来源记忆之间的连接、冲突处理与溯源。更长的上下文不是充分基线：真正需要比较的是同样证据在保留或丢失来源关系时，能否支持正确的跨来源结论。
+MemFuse在三底座的有限条数系统中总体最高，但全上下文在GPT/Gemini条件更强，且GPT条件仅领先EverMemOS0.0024。Gemini消融去回答期代理检索下降0.1036，远大于去融合摘要的0.0080，提示主要收益与迭代查证有关；这些删组件同时改变计算，不能全归因图结构。Qwen构建MemFuse需93.27百万token，高于EverMemOS76.52百万，成本优势不普遍。
+<!-- EVIDENCE:interpretation:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源缺口与下一步
 
-示意任务：一个来源记录事件发生，另一个解释原因，第三个给出修订信息。系统需要把记录对齐并说明为何采用某一版本；简单拼接来源可能把不同事件或权威层级混在一起。
+只有六个全合成场景，357问题并非357独立世界；来源真实性、冲突权威与因果关系均受生成器假设约束。模型核验后的20%修订不等于独立人工上限或逐标签一致性。裁判与一个被测底座同族，覆盖分数也不验证每个最终主张的出处。各系统记忆条目长度/压缩不同，全上下文和检索提示略异；单次点估计没有置信区间。下一步按场景聚类估计不确定性，在等最终token及等检索调用下比较，逐事件移除验证多来源必要性，并用独立真实来源和人工出处/幻觉审查复核。
 
-### 最有判别力的实验
-
-对相同事件集合比较无来源标识、带来源标识和显式跨来源关系，并逐类报告连接、融合、裁决和溯源结果。增加来源间矛盾但文本相似的对照，检验方法是否真正使用来源结构而非依赖生成文本风格。
-
-### 建议搭配
-
-[lifebench](lifebench.md) · [gatemem](gatemem.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+正文说最终投射为20个原子事件，附录C却让融合摘要先进入并占条目名额；实际装包需以实现核验。正文排名公式提时间衰减，附录明确式只列图跳衰减、RRF、路径先验及本实验为零的日期加分；不补写未列时间常数。完整提示库未全部刊出，场景生成模型的精确角色配置亦未完整说明。
+<!-- EVIDENCE:limitations:END -->

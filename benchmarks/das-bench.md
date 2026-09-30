@@ -1,4 +1,4 @@
-# DAS-Bench / DAS-Eval：RAG / 学术综述成品
+# DAS-Bench／DAS-Eval：综述的证据、组织与可交付质量
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-07<br>
@@ -6,60 +6,72 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](das-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](das-bench.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2608.18034) · [基准与评测器](https://github.com/ZhikaiXu24/DAS) · [数据](https://huggingface.co/datasets/ZhikaiXu24/DAS-Bench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-把 retrieval/drafting 扩展为可共享修订的 literature、taxonomy、claim、citation、discourse 与 PDF 成品协议。
+已完整阅读所述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-## 它接在什么之后
+完整阅读 35 页正文与附录 A–H，包括元数据抽取和审计、角色状态与修复、完整 16 项量表、主题／超时协议、全部消融、盲评与跨 judge 结果；目视核对表 2–4。另于 2026-09-30 核对官方仓库发布状态，未执行生成系统。
 
-前一代评价通常把该问题压成较短的最终分数或单一 proxy。这个评测把 predecessor critique 变成 capability × environment × protocol 的显式差异，并保留可执行或可复核资产。
+[arXiv 2608.18034v1 · 2026-08-18](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:reading:END -->
 
-## 实际怎样评测
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-**问题：** 系统能否把文献证据组装成可审计、可阅读的 publication-oriented survey？
+DAS-Bench 固定 30 个综述主题，其中 21 个 CS、九个跨学科；输出应是完整英文综述 PDF。DAS 先把论文抽为八组 25 字段，混合检索形成候选，再让分类规划读候选而非只读主题；每篇论文反向分配到至多三个章节。段落规划后先列主张、引用组与证据，再生成正文。示例：一个“检索方法”章节先确定稀疏／稠密／混合的组织，论文可分别支持方法与局限段落；发现某段把比较条件遗漏时只重做该段主张与草稿，不必重新检索整库。语义审核选择接受、直接改段、重规划段或重规划节；最终组装图表、BibTeX 与 LaTeX 并编译。
 
-**测量对象：** 对文献覆盖、taxonomy、claim、citation、discourse 与渲染成品质量评分的学术综述基准及评测器。
+编辑比较：AutoSurvey／SurveyForge 主要连接检索、大纲与综述生成，DeepSurvey 已包含全文分析和分节证据；DAS 增加可复用论文表示、显式写作状态和按缺陷范围重开局部状态的闭环。评价坐标也从答案／引用质量扩展到分类体系、层次论述和渲染稿件。但这说明一种研究设计值得测量，不证明共享数据层已取得通用优势或每个组成机制都必不可少。
 
-**规模与协议：** 30 topics across computer science and non-CS fields, with a matched 21-topic comparison subset. 协议包括 sixteen-criterion-evaluator, semantic-and-deterministic-checks, blinded-expert-comparison。
+[来源](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:method:END -->
 
-## 分数能说明什么
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-30 topics、16 criteria 加 deterministic citation checks 与 blinded expert comparison，覆盖 evidence、taxonomy、claim、discourse 和 artifact。 它支持的是该环境、harness、model/tool/resource configuration 下的 system-level evidence；除非其他变量匹配，否则不能把榜单差异归因给单一组件。
+可复现系统统一 Qwen3.5-397B-A17B-FP8 主干，但保留各自流程与可用文献库；缺少可复现检索资源者用与 DAS 相同的 300 候选，闭源系统用原生检索和配置，不能混称全链路公平控制。DAS 检索最多 1000、分类与路由用前 300；每段最多一次、每节最多两次回看解析源文档，审核最多三轮，每段写作检查最多六次。DAS-Eval 的 BSC（均衡学术引用质量）、TSQ（分类综合质量）、HDQ（层次论述质量）、MAR（稿件组装可靠性）各四项，1–5 分等权平均，不是正确率。主 judge 与生成主干相同，温度 0.2；Kimi K2.6 温度 0.6 复评。引用判断只依赖证据卡，缺少材料记不可评，不算稿件错误；MAR 长稿仅抽样页面。12 小时未产出 PDF 的运行不获质量分，并非零分。
 
-## 最主要的混杂因素
+[来源](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:setup:END -->
 
-generation backbone 与 main judge coupling、closed-system native configs 意味着跨系统差距仍是 system-level。 关键混杂包括 generator-judge-coupling, closed-system-native-configurations, judge-sensitivity。
+<!-- EVIDENCE:result-1:START -->
+## 相同 21 个 CS 主题上的结果
 
-## 还没有覆盖什么
+主 judge Qwen3.5，21 主题逐项平均后等权合并 16 项。DAS 与 Naive RAG 使用同 300 候选表示；AutoSurvey 保留其 530K 文献库。因此主题与主干匹配，检索资源、流程及成本未全匹配。
 
-生成方法尚未公开，共用的生成 backbone 同时还是主要自动评判器。
+| 系统 | BSC（1–5） | TSQ（1–5） | HDQ（1–5） | MAR（1–5） | 总分（1–5） |
+| --- | --- | --- | --- | --- | --- |
+| DAS | 3.87 | 4.18 | 4.25 | 5.00 | 4.32 |
+| Naive RAG | 3.67 | 4.00 | 4.11 | 4.07 | 3.96 |
+| AutoSurvey | 3.81 | 3.74 | 3.69 | 3.67 | 3.73 |
 
-## 放进演化图怎么看
+事实位置：表 A16、附录 F.1，PDF 第 31 页 · [来源](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:result-1:END -->
 
-`map_delta=early_signal`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+<!-- EVIDENCE:result-2:START -->
+## 局部修复的质量／成本取舍
 
-<!-- RESEARCH-DECISION:START -->
+30 个主题，从相同审核前状态开始，模型、提示、最多三轮预算和确定性检查一致。通过率分母是受审小节，表示在预算内获得 Reviewer PASS；不是事实正确的主张比例，也不是全部成本。
 
-## 研究决策卡
+| 修复策略 | 审核通过率（%） | 每综述审核修复 token（百万） | HDQ（1–5） |
+| --- | --- | --- | --- |
+| 仅直接改段 | 58.42 | 0.95 | 4.24 |
+| 仅重规划段落 | 53.69 | 0.96 | 4.38 |
+| 完整 DAS | 74.59 | 0.79 | 4.28 |
 
-### 什么时候值得用
+事实位置：表 4 与附录 F.3，PDF 第 9、31–32 页 · [来源](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:result-2:END -->
 
-适合评估学术综述作为完整成品的质量，包括文献组织、论点、引用和呈现。多维指标比单一文风偏好更丰富，但生成模型与评分模型相同或相近时，评价器自偏好仍需要独立检验。
+<!-- EVIDENCE:limitations:START -->
+## 解读、局限与下一步
 
-### 一个具体任务长什么样
+同覆盖主题的 DAS 排名领先，但 4.34 与人工综述显示相同不能推出达到人类可替代质量；人工样本并非为同一输入即时写作，评审也不逐条验证所有领域事实。三个外部评审来自 AI／综述研究，不是九个跨学科领域各自专家。两 judge 的细粒度相关中等（全覆盖 ρ=0.507），共享生成／评分模型与共享元数据有偏差风险。语义 Reviewer 本身不读源论文，确定性检查只能保障格式／标识等，不能证明引文蕴含。自动分类及层次草拟有维度取舍，删去候选感知分类的总分 4.35 反高于完整 4.34。运行时间不含整个离线库构造成本；DAS 平均 1.49 小时与 Naive RAG 0.20 小时来自不同执行结构，不是纯模型速度。
 
-示意任务：给定一个研究主题与论文池，系统构建分类体系、组织论证并生成可阅读的综述。文献覆盖全面但分类不合理，或文章美观却引文不支持论点，都属于不同的成品缺陷。
+DAS-2M 的约两百万是采集规模，去重与解析筛选后实验资源为 153 万篇；“全文解析”之后还移除 HTML 表格、图片及末尾参考／附录材料，关闭公式识别，并截断超长文本，不能等同无损全文证据库。月度维护追加新论文，不保证旧记录自动替换成新版。20 篇元数据的模型审计中，结果域仅 16/20 正确；结构完整不代表事实无误。官方仓库仍将核心方法标为待发布，与论文反复提及配套代码材料要分开看：[发布状态](https://github.com/ZhikaiXu24/DAS)。
 
-### 最有判别力的实验
+用独立、逐条回源的领域专家审计替代同一元数据卡的循环佐证，单独测条件／数字／引用归属错误；固定 300 篇候选、主干、总 token 与图表预算，报告不含 MAR 的学术分与含超时的效用。对共享表示加版本过期、来源冲突和增量更新实验，摊销离线抽取成本后再测跨主题复用收益。
 
-固定论文池与生成预算，先做匿名人工配对评价，再检查自动指标能否保持同样排序。对渲染质量与论证质量分别评分，并跨评价模型复测，避免把对某种写作风格的偏好当成研究内容质量。
-
-### 建议搭配
-
-[litreview-arena](litreview-arena.md) · [claimprobe](claimprobe.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+[来源](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:limitations:END -->

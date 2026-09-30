@@ -1,4 +1,4 @@
-# MPBench
+# MPBench：持久写入与条件行为影响分开测
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时诊断结果（历史参考）** · 2026-06-03 · 论文 v1 快照<br>
@@ -7,62 +7,114 @@
 > 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
 <!-- RELEASE-REFERENCE:END -->
 
-## 测量对象
+**中文** | [English](mpbench.en.md)
 
-MPBench 测的是 **persistent-memory poisoning 的完整跨会话链路**：六类恶意内容通过四种写入渠道进入持久记忆后，系统是否会把它们真正写入；之后在另一次会话中出现相关查询时，恶意记录是否会被检索并影响输出。关键点是把攻击拆成 `write → persist → retrieve → respond`，而不是只看一次 prompt injection 是否即时劫持 agent。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-LoCoMo / LongMemEval 主要测良性 memory fidelity；AgentDojo / InjecAgent 更偏同会话 hijacking。MPBench 将写入阶段与未来触发阶段分离，因此能区分“恶意内容能进入 store”与“它后来真的能被相关查询重新激活”两个失败面。这也是为什么 ASR 和 conditional RSR 需要同时看。
+已阅读v2正文第1—6节、附录A—D、全部七表、威胁模型和生成模板；从PDF核对公式及仅图像显示的JSON结构。阅读官方数据仓库固定提交README。未执行攻击、独立审核裁判或复现实验。 另以顺序JSON解码检查发布文件的全部对象数量与标签，不执行内容。
 
-## 决定性证据
+[arXiv 2606.04329v2 (2026-06-18)](https://arxiv.org/html/2606.04329v2)
 
-公开结果中，OpenClaw 的平均 **ASR / conditional RSR 为 34.25% / 17.40%**，HERMES 为 **66.67% / 64.70%**。PromptArmor 在 **1% FPR** 下的最佳 TPR 只有 **67.67%**。这些数字说明风险不只存在于写入：对部分系统，恶意记忆一旦留下，后续 retrieval 仍有很高机会把它重新暴露给 agent。
+[辅助材料（2026-09-30查阅）](https://github.com/Digital-Trust-Lab/mp-bench/blob/6886880a7c29625e0109e0ad91d0e095029f1577/README.md)
 
-## 这个分数支持什么判断
+[辅助材料（2026-09-30查阅）](https://github.com/Digital-Trust-Lab/mp-bench/blob/6886880a7c29625e0109e0ad91d0e095029f1577/adversarial_data.jsonl.jsonl)
 
-MPBench 的 headline score 描述的是 **system + harness 的 persistent-poisoning exposure**。它不能单独回答“基础模型是否容易被毒化”或“某个 memory retriever 是否有漏洞”，因为两个 agent 的写入、存储和检索策略不同，部分攻击渠道还依赖静态标注上下文。
+[辅助材料（2026-09-30查阅）](https://github.com/Digital-Trust-Lab/mp-bench/blob/6886880a7c29625e0109e0ad91d0e095029f1577/benign_data.jsonl.jsonl)
 
-## 公平比较条件
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-- 固定 backbone、写入渠道与 memory admission policy。
-- 对齐 retrieval top-k / ranking、触发查询与攻击预算。
-- 使用相同 evaluator，并同时报告 security 与 benign utility；只降低 RSR 但大量拒绝正常写入，并不构成更好的 memory system。
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-## 研究上怎么用
+MPBench把跨会话投毒分成两个阶段：外部不可信内容进入正常任务后，先检查持久记忆是否写入目标行为指令；只对成功写入的例子，再用新会话的相关任务检查是否产生目标行为。攻击者不能直接改记忆、系统提示或冒充用户。四条写入路径是明确指令、系统记忆策略、压缩和经验转技能；六类案例覆盖显式和看似普通事实的输入。
 
-如果一个 memory 方法声称“长期安全”或“能抵御 prompt injection”，MPBench 适合验证其持久化攻击面，但它最好与正常 utility benchmark 配对。尤其值得分开报告：write acceptance、retrieval exposure、conditional ASR 和 end-to-end joint success，这样才能定位防御到底卡在哪个生命周期阶段。
+谱系：与AgentDojo、InjecAgent的当前任务注入相比，它增加跨会话持久写入和后续激活；与LoCoMo、LongMemEval的良性记忆保真相比，它把来源信任和写入权限作为安全坐标。这是协议层比较，没有声称继承其数据。具体任务可理解为代理读入一份外部操作说明，稍后处理相关请求时沿用了未经用户授权的旧建议；本页只分析测量，不提供可执行载荷。
+<!-- EVIDENCE:method:END -->
 
-## 下一步最有价值的验证
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-当前最关键的缺口是更多 backbone、完全可执行的 delivery channel、自然 memory drift，以及 security–utility 曲线。最有判别力的实验是让不同 memory store 在相同 backbone、相同攻击和相同 utility workload 下比较，而不是把两个完整 agent 产品直接横比。
+论文数据池3240攻击例：五类各600、技能类240；另2997良性例。Meta-Llama-3.1-70B-Instruct按模板生成查询、外部上下文、预期写入和后续查询，做结构校验与抽查。两个代理都用GPT-OSS-120B和默认提示/记忆配置；OpenClaw没有技能写入通道，不能把不适用当0分。部分文件内容经工具取回，邮件、Slack、网页等以带外部标签的上下文静态输入，未完整模拟真实连接器链。ASR是成功写入率；RSR是成功写入子集内的后续行为影响率，不是单纯检索召回。两者用LLM语义判定，裁判模型和人工核验数量、一致率未提供。
+<!-- EVIDENCE:setup:END -->
 
-## 谱系位置
+<!-- EVIDENCE:result-1:START -->
+## 两个宏平均的类别和分母不同
 
-MPBench 补上了 memory safety 从良性 fidelity 到 persistent poisoning 的关键过渡；`map_delta=splits`。它把“记忆是否正确”拆成新的安全坐标：**记忆能否被恶意写入，以及未来是否会被重新激活。**
+分别对适用类别等权平均，不是按全部样本汇总；两个代理类别覆盖不同。不能相乘宏平均获得端到端成功率，也不能把RSR当作所有攻击例的比例。
 
-Primary: https://arxiv.org/abs/2606.04329
+攻击池3240例，OpenClaw不适用240技能例；逐行实际评测数和成功写入数未给出。
 
-<!-- RESEARCH-DECISION:START -->
+| 代理 | ASR写入% | 条件RSR影响% | 适用类别数 |
+|---|---|---|---|
+| OpenClaw | 34.25 | 17.4 | 5 |
+| HERMES | 66.67 | 64.7 | 6 |
 
-## 研究决策卡
+定位：表2：报告的代理级宏平均 · [原文](https://arxiv.org/html/2606.04329v2)
+<!-- EVIDENCE:result-1:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:result-2:START -->
+## 相同攻击类别下仍是成套系统比较
 
-适合研究不同写入渠道中的跨会话记忆污染。它与同一会话的提示注入不同，必须先证明内容进入持久记忆，再观察后续任务；渠道和写入策略不同的系统不应被直接解释为模型安全性差异。
+共用骨干但写入策略、自动加载与工具检索不同。HERMES会话开始自动注入记忆，OpenClaw需调用memory_search；此系统比较没有单独操纵检索或写入激进程度。
 
-### 一个具体任务长什么样
+选中类别题库各600，实际完成数与条件RSR分母未列。
 
-示意任务：外部上下文或工具反馈进入写入会话，查询会话则重新启动并处理正常任务。记录在后一个会话中再次出现，才说明影响跨越了会话边界；同一上下文的延续不能替代这个控制。
+| 类别 | OpenClaw ASR% | OpenClaw 条件RSR% | HERMES ASR% | HERMES 条件RSR% |
+|---|---|---|---|---|
+| 显式指令类 | 18.25 | 44.23 | 42.67 | 86.33 |
+| 显著性压缩类 | 45.1 | 11.31 | 85.17 | 69.86 |
+| 策略相符事实类 | 8.33 | 5.93 | 64.5 | 42.12 |
 
-### 最有判别力的实验
+定位：表2：部分共同攻击类别 · [原文](https://arxiv.org/html/2606.04329v2)
+<!-- EVIDENCE:result-2:END -->
 
-对不同渠道采用相同内容与预算，分别统计写入接受、后续检索和最终偏移，并增加持久记忆关闭条件。正常任务效用必须和安全指标一起报告，才能分清安全写入策略与不使用记忆造成的表面优势。
+<!-- EVIDENCE:result-3:START -->
+## 检测指标不能替代端到端防御效果
 
-### 建议搭配
+输入检测器的分类指标，不是接入代理后的端到端防御效果。CommandSans适配明显降低误报，但PromptArmor适配变差；不能把所有适配概括为没有收益。
 
-[injecmem](injecmem.md) · [gatemem](gatemem.md)
+攻击/良性池为3240/2997，但检测器测试集大小、适配划分和精确计数未说明。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+| 检测器与配置 | TPR检出率% | FPR误报率% |
+|---|---|---|
+| PIGuard 原始配置 | 38.33 | 0.33 |
+| PIGuard 适配配置 | 47.67 | 5.33 |
+| CommandSans 原始配置 | 52.33 | 45.0 |
+| CommandSans 适配配置 | 61 | 8.67 |
+| PromptArmor 原始配置 | 67.67 | 1 |
+| PromptArmor 适配配置 | 61.6 | 2.67 |
 
-<!-- RESEARCH-DECISION:END -->
+定位：表3：部分检测器适配结果 · [原文](https://arxiv.org/html/2606.04329v2)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:result-4:START -->
+## 弱信号检出差距与适配代价
+
+适配PIGuard缩小强弱差距，也降低强信号检出率。弱信号是本文构造类别，不代表所有内容上不可检测的攻击。
+
+强弱组实际评测分母未说明，不能直接套用全语料类别数量。
+
+| 检测器与配置 | 强信号检出% | 弱信号检出% |
+|---|---|---|
+| PIGuard 原始配置 | 51.67 | 18.34 |
+| PIGuard 适配配置 | 48.33 | 46.66 |
+| PromptArmor 原始配置 | 84.44 | 42.5 |
+
+定位：表4：部分强弱信号对照 · [原文](https://arxiv.org/html/2606.04329v2)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+后续会话影响说明存在持久风险，但没有跨很多轮的衰减曲线、持久性关闭对照或统一良性任务效用，所以不能证明记忆能力越强必然越危险。两个成套代理的差异不是写入策略的单变量因果证据。单骨干、静态外部内容、自动记忆加载和类别不对称限制外推；也没有当前版本安全性或产品排名结论。四个输入检测器的不足不证明所有输入防御不可能有效；写入来源控制是研究方向，不是本文已验证的防御。
+
+引言50.46%与41.05%是两个代理宏平均再平均，不是全量端到端概率。附录文字允许strong/moderate/weak，图示只列strong/weak，表2/7又把压缩类统一标为strong，需要数据核验。适配训练/测试划分、温度、输出上限、重试与裁判提示没有完整说明。官方入口提供数据和README，未提供完整执行与判定框架。 固定提交实际顺序解码得3241攻击对象和2999良性对象，与论文3240/2997不同；部分行连接多个对象，普通JSONL读取失败。类别标签不同于论文六类，没有显式技能类别标签，信号还出现moderate和subtle。本次未擅自映射或删重。 对象和ID均无重复；其中240条确有skill字段，但归在其他攻击标签下且没有retrieval_query，另两条缺少expected_memory与retrieval_query。因此没有显式技能标签不等于技能数据不存在。
+
+
+
+下一步：与AuthMem-Bench和MemSecBench配对，在同一骨干、通道、任务与记忆预算下分别开关写入验证、来源标签和自动加载；报告写入成功、检索暴露、条件行为偏移及逐例端到端比例。加入持久性关闭和合法记忆任务，按来源及任务簇估计区间，检查防御是否只是不用记忆。
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# EvoMemBench：用 scope × content 统一比较 memory systems
+# EvoMemBench：把记忆更新时序与任务能力分开看
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-05-18<br>
@@ -6,50 +6,127 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](evomembench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](evomembench.en.md)
 
-[论文](https://arxiv.org/abs/2605.18421) · [代码](https://github.com/DSAIL-Memory/EvoMemBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-EvoMemBench 用两条轴组织 memory：in-episode vs cross-episode，以及 knowledge-oriented vs execution-oriented。发布套件含 5,754 samples、六个 settings，paper 比较 15 个代表性 memory methods，同时报告 answer/execution success 与 token efficiency。
+已阅读v2正文第1—6节及附录A—C，包括完整改写提示、指标、方法适用范围与全部补充结果表；检查PDF图3—4热图标签与官方仓库概览。未审计实现、重建数据计数或独立运行。
 
-## 相比什么前进了
+[arXiv 2605.18421v2 (2026-06-15)](https://arxiv.org/html/2605.18421v2)
 
-memory literature 常在不同源 benchmark 上各自报告结果，导致“方法 A 更强”其实可能只是 task 类型不同。EvoMemBench 的核心增量是统一 taxonomy 与 comparison protocol，把 declarative knowledge 与 procedural/tool-use experience 放在同一个坐标系中。
+[辅助材料（2026-09-30查阅）](https://github.com/DSAIL-Memory/EvoMemBench)
 
-## 分数边界
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-跨方法比较提高了可读性，但 suite 聚合了 heterogeneous source benchmarks，因此 aggregate rank 仍会受 source mixture、preprocessing 与 task backbone 影响。它适合说明 coverage profile，不适合把单一总分解释为 universal memory quality。
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-## 公平比较条件
+EvoMemBench把记忆分为单任务内与跨任务、知识与执行两条轴，再展开为六套测试。“自演化”指外部记忆随观察更新，并非训练模型参数。单任务内每个信息块或交互轮后更新；跨任务在共享背景内逐个完成任务并写回经验；换独立背景时清空。跨环境迁移先在来源环境建立记忆，再冻结记忆测试目标环境。
 
-锁定 source benchmark version、preprocessing、backbone、agent harness 与 long-context budget，并同时报告四个 scope/content cells，而不是只给 aggregate。
+谱系：知识保留与修订直接取自MemoryAgentBench的检索和选择性遗忘任务；工具使用实际改写BFCL，跨任务知识取自CL-Bench，另继承xbench、WebWalkerQA和ALFWorld。其改变是把这些既有任务放入统一更新时序，而不是另造一种记忆算法。例如先创建目录，后续只说“刚建的目录”，并保持金标准操作顺序，减少显式重复答案。此改写仍需规划、工具调用和评分器，不能把所有失败归于记忆。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-下一步需要同一个 controlled environment 内同时产生四类 memory demand，从而进行真正 matched 的 component comparison。
+六套题库共5754个报告样本：InEp-Know 2800、InEp-Exec 800、CrossEp-Know 884、CrossEp-Tool 800、CrossEp-Web 270、CrossEp-Emb 200。15种记忆方法共用DeepSeek-V3.2；Gemini-3-Flash和GPT-5-mini是不同骨干的长上下文参照，不能用于隔离记忆机制。各设置只评适用方法，不是完整15×6矩阵。默认嵌入为text-embedding-v4，知识任务取前10条、执行任务前3条；不同方法的条目长度与计算量仍不同。InEp-Exec测试16K/32K/64K/128K窗口，优先保留当前输入和记忆、截掉较早历史。知识按正确答案比例、执行按最终目标成功率评分；进度分另按每任务通过的检查点比例再平均。总词元含任务代理与记忆模块所有输入和输出调用。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 保留事实与修订冲突不是同一能力
 
-## 研究决策卡
+相同DeepSeek-V3.2骨干。单跳和多跳是FactConsolidation两类，不是删除存储的验证。提高检索类成绩不保证提高冲突修订成绩。
 
-### 什么时候值得用
+InEp-Know题库包含2000个检索样本与800个修订样本；四列各用对应子集，不是共同分母。
 
-适合为不同记忆系统建立共同坐标：回合内或跨回合，知识型或执行型。它是组合评测框架，不是所有方法都处于同一个实验条件的单一任务；解读总分前，应先看收益集中在哪个坐标。
+| 方法 | EventQA准确率% | LongMemEval S*准确率% | 多跳修订准确率% | 单跳修订准确率% |
+|---|---|---|---|---|
+| DeepSeek-V3.2 | 83 | 32.33 | 10 | 65 |
+| BM25 | 88.8 | 50.33 | 7 | 54 |
+| Mem0 | 79.2 | 52 | 7 | 49 |
+| A-MEM | 91.2 | 51 | 5 | 35 |
 
-### 一个具体任务长什么样
+定位：表3：部分保留与修订结果 · [原文](https://arxiv.org/html/2605.18421v2)
+<!-- EVIDENCE:result-1:END -->
 
-示意任务：一种设置要求在当前长任务内保持证据，另一种要求把先前任务的经验带到新任务。两者都叫记忆，但写入时机、可见历史和最终输出不同，不宜直接用一个检索分数替代。
+<!-- EVIDENCE:result-2:START -->
+## 窗口更大不保证成绩单调上升
 
-### 最有判别力的实验
+同一骨干的报告Overall成功率。窗口包含当前请求、记忆与保留历史，扩大窗口并不使所有方法单调改善。
 
-在四个坐标分别保持相同骨干、工具和预算，报告逐坐标结果及成本。对跨回合设置加入无持久状态对照，对回合内设置加入完整上下文对照；不要让来源数据集的规模决定研究结论的权重。
+表2报告每领域200题、共800题；逐格完成数和重复运行区间未列。
 
-### 建议搭配
+| 方法 | 16K成功率% | 32K成功率% | 64K成功率% | 128K成功率% |
+|---|---|---|---|---|
+| DeepSeek-V3.2 | 28.5 | 35.5 | 45.3 | 39.5 |
+| BM25 | 36.5 | 44.5 | 47.2 | 40.5 |
+| ReasoningBank | 43 | 49.5 | 47.1 | 48 |
+| AWM | 31.5 | 43 | 53.1 | 35 |
 
-[memoryagentbench](memoryagentbench.md) · [memoryarena](memoryarena.md)
+定位：表4：部分单任务执行窗口比较 · [原文](https://arxiv.org/html/2605.18421v2)
+<!-- EVIDENCE:result-2:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:result-3:START -->
+## 难度档位与汇总权重改变解释
 
-<!-- RESEARCH-DECISION:END -->
+共享背景内顺序写回，按DeepSeek-V3.2基线成绩将背景分成三个难度档。Overall数值对应四领域等权均值，不是884题汇总准确率；Hard基线为0的结果受分档方式影响。
+
+120个背景、884题，四领域题数为294/257/306/27；每领域难度档精确题数未列。
+
+| 方法 | Easy准确率% | Medium准确率% | Hard准确率% |
+|---|---|---|---|
+| DeepSeek-V3.2 | 52.1 | 12.6 | 0 |
+| BM25 | 47.2 | 13.8 | 10.1 |
+| A-MEM | 43.8 | 10 | 6.7 |
+| ACE | 44.8 | 16.5 | 13 |
+
+定位：表5：部分跨任务知识难度比较 · [原文](https://arxiv.org/html/2605.18421v2)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:result-4:START -->
+## 执行改善也要看计算成本
+
+ALFWorld跨任务经验累积；成功率列是两个类别，词元列是六类别按题数加权均值，不能把总体成本当成这两个子集的单独成本。
+
+Clean & Place为37题、Pick Two & Place为45题；词元均值覆盖六类共200题。
+
+| 方法 | Clean & Place成功率% | Pick Two & Place成功率% | 平均总词元 |
+|---|---|---|---|
+| DeepSeek-V3.2 | 56.8 | 57.8 | 37175 |
+| A-MEM | 81.1 | 84.4 | 57338 |
+| ReasoningBank | 81.1 | 73.3 | 43609 |
+
+定位：表6与表9：部分具身任务表现与成本 · [原文](https://arxiv.org/html/2605.18421v2)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:result-5:START -->
+## 部分完成与最终成功必须分开
+
+InEp-Exec 16K同骨干条件。进度是部分完成，最终成功要求完整目标；步数与词元都包含失败运行，不代表成功任务的单位成本。
+
+报告题库800题，逐格完成数与置信区间未说明。
+
+| 方法 | 最终成功率% | 进度分% | 平均步数 | 平均总词元 |
+|---|---|---|---|---|
+| DeepSeek-V3.2 | 28.5 | 50.9 | 12.59 | 74630 |
+| BM25 | 36.5 | 57 | 13.58 | 109255 |
+| ReasoningBank | 43 | 58.9 | 15.47 | 151345 |
+
+定位：表4、14、15与16：16K下的表现与成本 · [原文](https://arxiv.org/html/2605.18421v2)
+<!-- EVIDENCE:result-5:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+这些结果支持按任务、预算和记忆表示选型，不支持统一最佳系统或单一记忆能力分数。程序化方法、检索和压缩同时改变内容、提示与计算，没有逐组件因果隔离。跨环境热图确有正负迁移，但“与目标决策过程匹配”是解释，未被匹配度干预直接证明。文中未给重复种子、置信区间或完整温度/输出上限，不能把小差距视为稳定排序。未提供人类或理想记忆统一上限；不同模型的长上下文参照也不是上限。
+
+题库规模不等于逐行完成数。工具使用多项成绩以2个百分点变化，不能单凭这一点认定分母为50或推翻每领域200题的说明。表5的Overall数值对应四领域等权均值。当前README的文件名带BFCL_v4，附录A却描述BFCL-V3-MultiTurn；需要实现溯源，不能据此直接改写论文成绩版本。
+
+
+
+下一步：与MemoryAgentBench并读，固定题目、骨干、提示和可见词元，分别比较不更新、原始历史检索和经验写回；再在按另一骨干预先划定的难度组上复测，报告共同样本、种子和成本。跨环境同时保留无记忆、来源记忆冻结与目标内学习三组，才能区分一般上下文帮助和可迁移经验。
+<!-- EVIDENCE:limitations:END -->

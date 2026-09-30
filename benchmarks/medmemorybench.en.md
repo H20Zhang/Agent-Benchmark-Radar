@@ -1,4 +1,4 @@
-# MedMemoryBench: streaming memory accumulation in personalized healthcare
+# MedMemoryBench: checkpoint QA over simulated longitudinal healthcare histories
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-05-12<br>
@@ -6,64 +6,60 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](medmemorybench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](medmemorybench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2605.11814) · [Code](https://github.com/AQ-MedAI/MedMemoryBench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-MedMemoryBench evaluates memory under **streaming clinical accumulation**: patient history grows over time, relevant medical state must remain precise, and increasing information density can actively make retrieval and reasoning worse. The benchmark treats memory saturation as a measurable failure mode.
+Read all 27 pages, main §§1–7 and Appendices A–G, including annotation qualifications, supplementary backbone/judge results, complete answering/judging prompts, baseline adaptations and research-only restrictions. Visually checked the main table and budget/cost figures.
 
-## What changed relative to prior evaluation
+[arXiv v1 / 2026-05-12](https://arxiv.org/pdf/2605.11814v1)
+<!-- EVIDENCE:reading:END -->
 
-Open-domain conversation memory typically treats longer history as a scale challenge. Healthcare changes the cost of error and the structure of state: old information can remain clinically relevant, become superseded, or interact with new symptoms. MedMemoryBench uses an evaluate-while-constructing protocol to observe performance as memory is incrementally built.
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-## Decisive evidence
+Twenty de-identified case-derived profiles are expanded into synthetic one-year event graphs. Patient/physician agents generate sessions, and accumulated summaries guide later simulation. High-priority facts such as allergies and contraindications seed memory-dependent queries; humans can revise inconsistent earlier dialogue after QA construction (§4).
 
-The dataset contains roughly 2,000 sessions and 16,000 interaction turns generated from clinically grounded synthetic patient archetypes and expert validation. The released framework includes 14 memory-method baselines. Experiments expose severe bottlenecks in complex medical reasoning, noise resilience, and memory saturation as the stream grows.
+In the sleep-apnea illustration, device-use duration and a sleep-related index change across visits; a later question must connect the appropriate historical measurement with the current stage, rather than copy the latest matching phrase (Figure 3). This is a benchmark scenario, not treatment guidance. Evaluation ingests chronological sessions and asks eligible queries every ten sessions, excluding future evidence (§5).
 
-## What the score supports
+### Measurement genealogy
 
-The benchmark supports claims about memory robustness under synthetic but clinically structured histories. It does not constitute clinical validation or evidence that a system is safe for patient care; the downstream medical model and synthetic trajectory assumptions remain major confounders.
+LoCoMo contributes a noise-injection preliminary test; LongMemEval and MemoryAgentBench supply prior updating/streaming coordinates. MedMemoryBench applies these concerns to medically structured histories with heterogeneous fact priority. Its novelty is this domain-specific combination, not evidence that all earlier memory benchmarks were static or noise-free.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-Fix patient trajectory, clinical backbone, streaming checkpoint, retrieval budget, and evaluator. Report performance as a function of accumulated memory size instead of one final average. Stale/superseded medical state and irrelevant noise should be separated because they stress different mechanisms.
+There are 2,020 sessions, 15,988 turns and 1,939 questions; Mixed adds roughly 200 auxiliary sessions per profile, including general-health and family-proxy dialogue. Six tasks cover Entity Exact Match (EEM), Temporal Location Accuracy (TLA), State Update Accuracy (SUA), Multiple Choice (MQ), Inference Generation (IG), and Multi-hop Clinical Deduction (MCD), using exact string/option matching or binary judging. Main systems share GPT-5.1, BGE-small-v1.5, default top-5 and chunk size 4,096; T=0.3 and output cap 10,240. Raw-history control has 128K context. MCD requires node/causal coverage ≥0.75, chain completeness ≥0.7 and the correct conclusion. Repetitions, confidence intervals and exact checkpoint weighting are not supplied.
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-Real EHR data includes missing records, coding artifacts, provider disagreement, legal constraints, and distribution shift. Prospective clinical outcomes and harm are outside a synthetic benchmark.
+Selected Table 2 comparisons, preserving reported values. Efficient and Mixed share clinical questions but differ in auxiliary history and potentially checkpoint placement. Default top-5 does not equal identical token exposure when memory units and persistent core memory differ.
 
-## Next discriminating validation
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Long-Context | 1,939 queries; six task-type accuracies averaged | Reported Avg. (%), Efficient / Mixed | 51.58 / 38.75 | Raw history; 128K context window; GPT-5.1; Claude-4-Sonnet judge where needed | Table 2, p.7 |
+| Letta | 1,939 queries; six task-type accuracies averaged | Reported Avg. (%), Efficient / Mixed | 51.21 / 41.55 | Core memory plus retrieved memory; GPT-5.1; Claude-4-Sonnet judge where needed | Table 2, p.7 |
+| A-Mem | 1,939 queries; six task-type accuracies averaged | Reported Avg. (%), Efficient / Mixed | 44.84 / 29.27 | Stored memory entries; GPT-5.1; Claude-4-Sonnet judge where needed | Table 2, p.7 |
+| Embedding | 1,939 queries; six task-type accuracies averaged | Reported Avg. (%), Efficient / Mixed | 42.15 / 40.78 | Dense retrieval; BGE-small-v1.5; GPT-5.1; Claude-4-Sonnet judge where needed | Table 2, p.7 |
+| A-Mem / MCD | 191 multi-hop clinical deduction questions | Accuracy (%), Efficient / Mixed | 31.93 / 10.80 | GPT-5.1; top-5 default; three judge thresholds plus correct conclusion | Table 2, p.7; Appendix D.2, p.25 |
 
-Build stage-level saturation curves for write compression, retrieval, and reasoning, with oracle retrieval at each checkpoint. This would identify whether longer clinical memory primarily fails because the right evidence is lost, not found, or misused.
+Source: [Table 2, p.7; Appendix D.2, p.25](https://arxiv.org/pdf/2605.11814v1)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-## Research decision card
+Table 2 Avg. reproduces an unweighted mean of six task accuracies, not a verified pooled accuracy over 1,939 queries. Letta narrowly trails raw history in Efficient; gains in some Mixed cells mean degradation is not universal per task. Appendix E buffers HippoRAG-v2 until a final-session index call, leaving its checkpoint behavior unresolved; MIRIX and ReMem also receive substantial adaptations. Annotation staff are identified as medical-division engineers, without explicit clinician credentials. Human agreement is 87.5% on 200 judged outputs, with weaker inference-generation agreement. Hallucination is non-refusal among incorrect answers, not harm per encounter. No clinical efficacy or deployment safety follows.
+<!-- EVIDENCE:limitations:END -->
 
-### When to use it
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-Use MedMemoryBench for streaming state maintenance and memory saturation, not as clinical deployment validation. Its research value is locating when errors emerge as histories accumulate. Synthetic medical-dialogue QA and real clinical outcomes are different levels of evidence.
-
-### What a concrete task looks like
-
-Illustrative task: a simulated user's state is revised over many sessions, with questions at repeated checkpoints. Relevant earlier facts may be displaced by noise, while newer state may fail to supersede old records. Diagnose these failures over time.
-
-### Most discriminating experiment
-
-Evaluate historical-fact and current-state questions on the same stream, plotting checkpoint quality and cumulative ingestion cost. Add a supplied-current-state control to separate updating failures from domain reasoning, and keep conclusions scoped to the simulated setting.
-
-### Pair with
-
-[memoryagentbench](memoryagentbench.en.md) · [statemembench](statemembench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`long conversation memory → streaming clinical state → saturation-aware high-stakes memory`
-
-MedMemoryBench makes memory degradation with accumulation a first-class production concern.
+Audit checkpoint traces to prove each method has indexed only available history and aligns Mixed/Efficient queries at equivalent clinical states. Hold query evidence fixed, vary noise separately from history length, and add oracle retrieval at every checkpoint. Report patient-cluster uncertainty and separate stale-state, proxy-person confusion, missing evidence and medically plausible alternative reasoning.
+<!-- EVIDENCE:next:END -->

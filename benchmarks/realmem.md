@@ -1,4 +1,4 @@
-# RealMem：面向持续演化长期项目的 memory
+# RealMem：持续变化项目对话中的回答一致性
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-01<br>
@@ -6,64 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](realmem.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](realmem.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2601.06966) · [ACL 2026](https://aclanthology.org/2026.findings-acl.703/) · [代码](https://github.com/AvatarMemory/RealMemBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-RealMem 评估 **long-term project-oriented interaction** 中的 memory：agent 要跨 session 跟踪目标、schedule、决策、不断变化的项目属性和依赖关系，并针对“当前项目状态”回答自然用户 query。
+已阅读论文集全部 17 页，即第 14349–14365 页：第 1–6 节、局限及附录 A.1–A.6，包括场景定义、补充基线／评判器、人工协议、所提供的完整案例和评分提示；目视核对表 2 并检查评分规则。
 
-## 相比此前评测多测了什么
+[ACL 2026 / 2026-07 / 2026.findings-acl.703](https://aclanthology.org/2026.findings-acl.703.pdf)
+<!-- EVIDENCE:reading:END -->
 
-casual conversation / task dialogue 可以把 session 看成个人事实集合；project memory 则不同：状态由多轮协作共同产生，承诺有 deadline，后续决策会覆盖前面决策，relevance 取决于当前 project phase。RealMem 显式模拟这种 evolution。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+项目蓝图生成事件和交错的会话计划。模拟用户只看到当前及先前事件，助手则利用提取的记忆和全局日程；记忆提取、去重及日程更新再反馈到后续对话生成。评测查询出现在对话进行中，而非只在全部结束后提出（第 3 节）。
 
-benchmark 包含 11 类项目场景、超过 2,000 段 cross-session dialogue。合成 pipeline 结合 project foundation construction、multi-agent dialogue generation、memory/schedule management，使 project state 真正随时间变化。实验显示当前 memory system 在动态 context dependency 与长期 project state 管理上仍明显困难。
+例如，旅行计划必须维持十二天，又要增加两天西海岸行程；回答需识别哪些已有安排必须调整，不能简单追加目的地（附录 A.5）。问答评判检查回答与最新相关记忆是否一致，并不检查旅行是否成功执行。
 
-## 结论边界：这个分数能证明什么
+### 测量坐标的演进
 
-RealMem 能支持对 evolving project history 的 retrieval/reasoning 能力判断；但最终仍以 query answering 为主，因此只能间接说明 memory 会不会改善真正的项目执行、排程或 artifact delivery。
+相对于 LoCoMo 的对话历史与 LongMemEval 的更新问题，RealMem 把交错项目状态和自然出现的推进请求作为测量对象，HaluMem 则提供记忆一致性的另一参照。下一步应评测计划修订或产物修改的实际执行是否遵守当前承诺。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-应固定 project history、time checkpoint、backbone、retrieval budget、schedule visibility 与 query evaluator，并把 superseded 与 still-active fact 分开评估，防止后续项目状态泄漏到早期 checkpoint。
+合成语料覆盖十一个场景、超过 2,000 个会话和 1,415 条查询，其中仅 24 条为时间推理题。GPT-4o-mini 提取记忆，GPT-4o-mini 或 GPT-4o 作答，GPT-4o 评判。纯记忆条件输入前 20 条记忆，会话条件输入对应的前 5 个原始会话；MemoryOS 无会话轨道。嵌入与参数沿用各实现，具体解码、上下文预算和重复次数未固定列出（第 5 节；附录 A.1）。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-项目成功远不只是回答问题：还需要创建 artifact、协商 scope、管理权限、失败恢复和执行不可逆 action，这些 operational loop 基本还没有进入 benchmark。
+以下摘选表 2 事实。各行由 GPT-4o 作答和评判，但记忆与会话轨道提供的证据不同。由于论文未说明如何从 0–3 回答一致性规则映射为主表分数，本表保留原尺度。Oracle 为金标证据对照。
 
-## 下一步最有判别力的验证
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| LightMem / GPT-4o／会话 | RealMem；基准包含 1,415 项评测查询 | 原文 QA Score；规则 0–3 分，表格缩放未说明 | 0.623 | 前 5 个原始会话；GPT-4o 评判 | 表 2, 第 14355 页 (PDF 第 7 页) |
+| Mem0 / GPT-4o／会话 | RealMem；基准包含 1,415 项评测查询 | 原文 QA Score；规则 0–3 分，表格缩放未说明 | 0.609 | 前 5 个原始会话；GPT-4o 评判 | 表 2, 第 14355 页 (PDF 第 7 页) |
+| Graph Mem / GPT-4o／会话 | RealMem；基准包含 1,415 项评测查询 | 原文 QA Score；规则 0–3 分，表格缩放未说明 | 0.567 | 前 5 个原始会话；GPT-4o 评判 | 表 2, 第 14355 页 (PDF 第 7 页) |
+| MemoryOS / GPT-4o／记忆 | RealMem；基准包含 1,415 项评测查询 | 原文 QA Score；规则 0–3 分，表格缩放未说明 | 0.567 | 前 20 条记忆；GPT-4o 评判 | 表 2, 第 14355 页 (PDF 第 7 页) |
+| Oracle / GPT-4o／记忆 | RealMem；基准包含 1,415 项评测查询 | 原文 QA Score；规则 0–3 分，表格缩放未说明 | 0.804 | 给定相关金标记忆；并非可部署检索；GPT-4o 评判 | 表 2, 第 14355 页 (PDF 第 7 页) |
 
-在每个 checkpoint 附加 executable project task，例如更新计划、修改 artifact、选择下一步行动，并检查是否与当前 project state 一致。这样才能验证 memory 是否真正减少协作错误，而不只是提高 QA。
+来源：[表 2, 第 14355 页 (PDF 第 7 页)](https://aclanthology.org/2026.findings-acl.703.pdf)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-## 研究决策卡
+表 2 的会话轨道优胜者取决于回答模型；GPT-4o 条件下最高的是 LightMem，而非正文笼统声称的 Graph Mem。评判规则为 0–3 分，但主表小数分的缩放方式未解释，不能标成已核验的准确率百分比。人工验证包含 30 次四系统比较，两名标注者各做 15 项，重叠关系不清。合成数据比例不能证明真实世界时间任务的发生频率，基准也不评测工具执行。
+<!-- EVIDENCE:limitations:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-适合研究长期项目中的目标、产物和进度状态，而不是只记住用户静态属性。选型关键是后续问题是否依赖项目状态演化；同名项目的旧安排被正确召回却错误采用，也应视为记忆失败。
-
-### 一个具体任务长什么样
-
-示意任务：用户先确定项目方向，随后调整交付物和优先级，再询问下一步。系统需要区分已经完成、已经取消和仍然有效的事项，而不是把所有曾出现过的要求拼成一份清单。
-
-### 最有判别力的实验
-
-让相同项目经历不同修订顺序，比较原始日志检索、状态摘要与显式状态维护。单独评分已取消要求是否重新出现，并在新项目上测试；只在同一项目模板上改进，无法证明跨项目泛化。
-
-### 建议搭配
-
-[longmemeval](longmemeval.md) · [statemembench](statemembench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`casual conversation memory → cross-session project state → persistent work context`
-
-它把 evolving project state 变成一个独立 memory object，更接近 workplace agent 的真实使用方式。
+公开逐题规则分与归一化方式，再跨轨道固定回答模型、嵌入模型和上下文词元数。以不同顺序回放相同项目修订，评分可执行的计划更新，并检查已取消要求是否重新出现。不确定性应按用户／项目聚类，而非把查询视为独立样本。
+<!-- EVIDENCE:next:END -->

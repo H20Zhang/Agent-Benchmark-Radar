@@ -562,30 +562,31 @@
       },
       "results": [
         {
-          "system": "TypeCompact / Claude Sonnet",
-          "metric": "Constraint recall",
+          "system": "TypeCompact",
+          "metric": "Constraint recall after five compaction rounds",
           "score": "96%",
           "scope": {
             "zh": "五轮压缩后的约束保留率",
             "en": "Constraint recall after five compaction rounds"
           },
-          "source": "https://arxiv.org/abs/2608.22752"
+          "source": "https://arxiv.org/html/2608.22752v1"
         }
       ],
       "scope": {
-        "zh": "指定压缩协议后的约束保留率，不是通用任务成功率。",
-        "en": "Constraint retention after the named compaction protocol, not general task success."
+        "zh": "TypeCompact 确定性算子的五轮约束保留诊断；Claude Sonnet 是独立对照，不是该算子的回答模型。公开工件为 20 个配置、五次名义 50% 压缩目标，约数 96%。",
+        "en": "Five-round constraint-retention diagnostic for the deterministic TypeCompact operator. Claude Sonnet is a separate comparator, not its answer model. The public artifact covers 20 configurations and five nominal 50%-target rounds; 96% is the rounded paper value."
       },
-      "source": "https://arxiv.org/abs/2608.22752",
+      "source": "https://arxiv.org/html/2608.22752v1",
       "initial_release": true,
-      "locator": "Explicit frozen source-ledger selection: [{\"track_id\": \"five-round-constraint-recall\", \"entry_id\": \"typecompact-round5\", \"score\": 96}]",
+      "locator": "paper-v1 Section 4.3 / Figure 3; pinned multiturn_stability.json TypeCompact round_5_c_recall=0.9579 over 20 configurations (rounded paper value 96%).",
       "caveat": {
-        "zh": "来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。",
-        "en": "From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA."
+        "zh": "公开实现传递未截断的类型化状态，而 LLM 传递截断文本；此诊断不证明同等可行预算下的优势或通用安全保证。未重跑实验。",
+        "en": "The released implementation carries untruncated typed state but truncated LLM text. This diagnostic does not establish equal-feasible-budget superiority or a general safety guarantee. Experiments were not rerun."
       },
-      "source_record": "https://github.com/H20Zhang/Agent-Benchmark-Radar/blob/deb08a4204dd9f31abb6a23662ffd2d48efbd42f/data/results/compaction-cliff.json",
-      "source_verified_at": "2026-08-31",
-      "transcribed_at": "2026-09-23"
+      "source_record": "https://github.com/searchsim-org/cikm26-knowledge-triage/blob/a6ceb01a3368cee25ef7ebcf05ebdab8c9be24a4/results/multiturn_stability.json",
+      "source_verified_at": "2026-09-30",
+      "transcribed_at": "2026-09-23",
+      "checked_at": "2026-09-30"
     },
     "crag": {
       "status": "release-best",
@@ -1316,24 +1317,24 @@
       },
       "results": [
         {
-          "system": "Best memory system in v1 (name not verified)",
-          "metric": "Average accuracy",
-          "score": "46.0%"
+          "system": "Hindsight / GPT-5",
+          "metric": "Micro-average QA accuracy",
+          "score": "46.01%"
         }
       ],
       "scope": {
-        "zh": "首版摘要明确报告的最佳记忆系统平均分；尚未核验对应系统名称，不据此猜测模型。",
-        "en": "Best memory-system average explicitly reported by the v1 abstract; the matching system name remains unverified rather than guessed."
+        "zh": "v1 表 2 所比较系统中最佳；按附录 G，对技术、金融、医疗、制造四领域过滤后合集做微平均，排除无法解析的裁判输出，不是六类别宏平均。摄入使用 GPT-4o-mini，回答和判分使用 GPT-5。",
+        "en": "Best among the compared systems in v1 Table 2. Appendix G defines a micro-average over the filtered union of Technology, Finance, Healthcare and Manufacturing, excluding unparseable judge outputs, not a six-category macro-average. Ingestion uses GPT-4o-mini; answering and judging use GPT-5."
       },
       "source": "https://arxiv.org/abs/2605.14498v1",
-      "locator": "v1 abstract, best memory-system average.",
+      "locator": "v1 Table 2, PDF p. 7; Appendix G p. 18 and Appendix I pp. 19–20 for aggregation/exclusions.",
       "initial_release": true,
-      "checked_at": "2026-09-23",
+      "checked_at": "2026-09-30",
       "caveat": {
         "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
         "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
       },
-      "comparison_scope": "Best memory-system average explicitly reported by the v1 abstract; the matching system name remains unverified rather than guessed."
+      "comparison_scope": "Best among the compared systems in v1 Table 2. Appendix G defines a micro-average over the filtered union of Technology, Finance, Healthcare and Manufacturing, excluding unparseable judge outputs, not a six-category macro-average. Ingestion uses GPT-4o-mini; answering and judging use GPT-5."
     },
     "hotpotqa": {
       "status": "unverified",

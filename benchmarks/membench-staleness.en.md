@@ -1,4 +1,4 @@
-# membench (staleness): ranking current facts ahead of stale facts
+# membench: current-fact hits versus stale-fact contamination
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-22<br>
@@ -6,62 +6,104 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-**English** | [中文](membench-staleness.md) · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](membench-staleness.md) | **English**
 
-[Code, scenarios, and results](https://github.com/Ps23102004/membench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the pinned official protocol, settings, result artifacts and limitations; no independent reproduction.
 
-This component benchmark measures **ranking correctness under memory updates and supersession**. When a store simultaneously contains an old fact, a newer replacement, negation, nearby entities, different validity windows, and distractors, can the system rank the currently valid state ahead of facts that must no longer be used and abstain when evidence is insufficient? Retrieval is not counted as successful merely because something relevant appears in top-k; stale-state leakage is a first-class failure.
+Read pinned complete README, runner, grader, aggregation metrics and recency backend; inspected temporal-scoping scenarios and the complete frozen leaderboard JSON. Did not execute backends or audit every scenario and adapter.
 
-## What changed relative to conventional recall benchmarks
+[eff49d9904164a0bc3e4e5f6c261bffe4ff8663b](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/README.md)
 
-Ordinary memory recall often asks only whether a gold fact appears somewhere in the retrieved set. If both stale and current versions are returned, recall can still look excellent. membench reports `staleness@1`, leakage, abstention, and contradiction resolution in addition to recall and precision, making **update semantics** separable from generic relevance. A public revision also replaced an invalid top-k staleness formulation and closed an abstention loophole that could inflate scores.
+[Auxiliary material (checked 2026-09-30)](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/membench/runner.py)
 
-## Decisive evidence
+[Auxiliary material (checked 2026-09-30)](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/membench/grader.py)
 
-The suite contains **60 executable probes** behind pluggable write/query/reset interfaces and reports recall, precision, `staleness@1`, leakage, abstention, contradiction resolution, and Wilson intervals. On **12 supersession probes, the embedding baseline returns a stale answer in 11 cases**; recency reranking reduces this to **0/12**. In this small controlled store, update-aware ranking therefore fixes a failure that semantic similarity alone handles poorly.
+[Auxiliary material (checked 2026-09-30)](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/membench/metrics.py)
 
-## What the score supports
+[Auxiliary material (checked 2026-09-30)](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/membench/backends/recency_backend.py)
 
-The results support the claim that pure embedding retrieval is fragile to supersession in these hand-written probes and that recency-aware reranking sharply reduces stale top-1 results. They do not establish that recency is sufficient for large-scale long-term memory: real updates are not always monotonic, and an older fact can remain correct within a particular time interval or context.
+[Auxiliary material (checked 2026-09-30)](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/results/leaderboard-2026-08-22.json)
 
-## Fair comparison contract
+[Auxiliary material (checked 2026-09-30)](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/scenarios/temporal_scoping.json)
 
-Memory records, timestamp semantics, write/query API, embedding model, top-k, abstention policy, and exact-substring evaluator should be aligned. Methods should report both current-fact recall and stale leakage so aggressive filtering cannot appear better by suppressing both. Recency methods should also report sensitivity to k because candidate-set changes alter whether the current fact is visible at all.
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-## How to use it in research
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-The suite is useful as a **unit test for update mechanisms**, including timestamp-aware scoring, conflict resolution, versioned memory, forgetting policies, and consolidation. A full memory system can first demonstrate component correctness here and then move to a long-horizon agent benchmark to test whether improved ranking changes future actions rather than only retrieval output.
+membench writes each handwritten multi-session story chronologically into a small store and probes at intermediate stages. Each suite resets memory; future writes are hidden. Backends return stored text without an answer model. An expected substring anywhere in top-k is a hit; a forbidden substring at rank one is staleness@1, while appearance anywhere is leak_rate@k. This reveals high recall achieved by returning both old and current facts.
 
-## Next discriminating validation
+Genealogy: These are independently authored update-semantics unit tests, not LongMemEval-derived data. Relative to knowledge-update QA, evaluation stops at text ranking and separates stale top-one output, lower-ranked contamination and missing current facts. StateMemBench offers a cross-scale pairing, not an interchangeable aggregate score.
+Illustrative scoring: an old record names contact A and a later update names B. Returning B can count as a hit while ranking A first simultaneously counts as stale contamination. High recall can coexist with incorrect priority.
+<!-- EVIDENCE:method:END -->
 
-The main gaps are scale, natural data, complex validity intervals, and downstream action. A high-value next benchmark would include multi-step supersession chains, non-monotonic rollback, time-bounded facts, and entity conflicts and compare recency ranking, explicit version graphs, and learned conflict resolvers under the same retrieval budget, measuring both current-state accuracy and historical traceability.
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-<!-- RESEARCH-DECISION:START -->
+Five suites contain twelve probes each: supersession, negation, entity confusion, temporal scoping and distractor load, totaling sixty. Stores contain roughly 12–52 facts and k=5. The frozen 2026-08-22 run records Ollama 0.32.15 and nomic-embed-text:latest digest 0a109f422b47. embed uses cosine; recency takes max(3k,10)=15 semantic candidates then sorts by timestamp; grep uses keyword overlap with recency tie-breaking. Default write metadata contains only timestamp/session ID, stripping handwritten topic/entity answer tags. Empty output has zero recall, is excluded from stale/leak denominators and counts toward abstention, so all three must be reported.
+<!-- EVIDENCE:setup:END -->
 
-## Research decision card
+<!-- EVIDENCE:result-1:START -->
+## Frozen leaderboard pooled results
 
-### When to use it
+Hits and stale output can coexist on the same probe. All backends have zero abstention, making stale denominators sixty here. Wilson binomial intervals assume independence that shared stories do not satisfy; generalization uncertainty can be larger. Tokens are characters divided by four, not tokenizer-measured billing.
 
-Use membench (staleness) as a quick regression test for stale-fact handling, not as the main evidence for general memory quality. It tests whether current facts outrank superseded ones. Passing small exact-match probes does not establish reliable state understanding in complex histories.
+60 probes per backend, twelve in each suite; counts correspond to the frozen rounded rates.
 
-### What a concrete task looks like
+| Backend | Hits / 60 | Stale top-one / 60 | Staleness@1 95% interval | Leak@5 | Mean approximate tokens |
+|---|---|---|---|---|---|
+| embed | 59 | 28 | 0.346–0.591 | 1 | 70.3 |
+| grep | 56 | 24 | 0.286–0.526 | 0.95 | 67.8 |
+| recency | 45 | 3 | 0.017–0.137 | 0.167 | 73.9 |
 
-Illustrative task: a fact about an entity is stored and later negated or superseded. A query should return the operative value rather than a forbidden old one. Returning nothing may reduce stale outputs without satisfying legitimate retrieval.
+Locator: Frozen leaderboard pooled results · [Source](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/README.md)
+<!-- EVIDENCE:result-1:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:result-2:START -->
+## Frozen leaderboard supersession subset
 
-Track operative-fact retrieval, stale-fact rank, and abstention together. Keep the metric definition stable while sweeping top-k. Add paraphrases and larger distractor stores to test whether success relies on exact substrings or tiny collections.
+Supersession only: 11/12 cannot describe all sixty probes. New-fact priority requires the new value to appear ahead of the old, or appear with the old absent; removing only the old value is insufficient.
 
-### Pair with
+Twelve probes; contradiction-resolution is defined only where a supersedes label exists.
 
-[statemembench](statemembench.en.md) · [longmemeval](longmemeval.en.md)
+| Backend | Hits / 12 | Stale top-one / 12 | Top-five stale leakage | New-fact priority |
+|---|---|---|---|---|
+| embed | 11 | 11 | 1 | 0 |
+| grep | 10 | 5 | 0.833 | 0.333 |
+| recency | 10 | 0 | 0 | 0.833 |
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Locator: Frozen leaderboard supersession subset · [Source](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/README.md)
+<!-- EVIDENCE:result-2:END -->
 
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:result-3:START -->
+## Frozen leaderboard selected other-suite trade-offs
 
-## Genealogy
+Proportions are 0–1. The correct entity may rank first while related entities contaminate lower ranks; recency increases stale top-one output from zero to 25% in distractor load.
 
-`map_delta=early_signal`, bound to `memory-update-and-staleness`. The corrected metrics make the suite useful as a component diagnostic, but **60 related hand-written probes, one author, and a small store** are not enough to establish a durable field shift. Broader evidence is needed before update-aware evaluation becomes a required coordinate of long-term-memory benchmarking.
+Each row uses twelve probes with no abstention.
+
+| Suite / backend | Recall@5 | Staleness@1 | Leak@5 |
+|---|---|---|---|
+| Entity confusion / embed | 1 | 0 | 1 |
+| Entity confusion / recency | 0.667 | 0 | 0.333 |
+| Distractor load / embed | 1 | 0 | 1 |
+| Distractor load / recency | 0.583 | 0.25 | 0.5 |
+
+Locator: Frozen leaderboard selected other-suite trade-offs · [Source](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/README.md)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
+
+Results establish a freshness–recall trade-off, not solved update handling. Staleness includes old values, wrong entities and expired facts, so the label is not one uniform failure mechanism. Temporal-scope and multi-session examples already exist; future work should expand their scale and composition. Substring scoring can reject paraphrases or credit a correct keyword in the wrong context. Downstream answers/actions, retrieval latency and long-run scalability are untested.
+
+staleness@1 is k-invariant only for rankings independent of k; recency changes its candidate pool with k. README says three embed suites are largely zero at top one; the frozen table shows exactly zero in entity-confusion and distractor-load, while temporal-scoping is 0.5. The source’s claim that deterministic substring scores are a lower bound on reasoning systems is too strong: substring false positives can also occur.
+
+
+
+Next: Pair with LongMemEval or StateMemBench, retaining the sixty probes as regression tests and adding story-held-out natural paraphrases, longer supersession chains and larger distractor stores. Fix the semantic candidate pool while varying returned k. Report appropriate abstention on unanswerable tasks alongside recall on answerable tasks, adding semantic human review and downstream answers.
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# MAPLE：RAG / 多 aspect 科学检索
+# MAPLE：科学论文的多角度检索一致性
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-04<br>
@@ -6,60 +6,56 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](maple.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](maple.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2608.15624) · [代码](https://github.com/Ggballs/MAPLE) · [数据](https://huggingface.co/datasets/kai-02/MAPLE)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-把单 query 的局部相关性拆成同一论文跨 motivation、method、result 的一致可检索性。
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-## 它接在什么之后
+已阅读全部 24 页：第 1–6 节、局限、附录 A–F、查询生成与评判提示，以及表 1–25；目视核对表 5、13。
 
-前一代评价通常把该问题压成较短的最终分数或单一 proxy。这个评测把 predecessor critique 变成 capability × environment × protocol 的显式差异，并保留可执行或可复核资产。
+[arXiv v1, 2026-08-16](https://arxiv.org/pdf/2608.15624v1)
+<!-- EVIDENCE:reading:END -->
 
-## 实际怎样评测
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-**问题：** 一个 retriever 能否在不同 aspect 的 query 下持续找回同一篇目标论文？
+AllAspect 要求某篇论文的所有关联查询都命中；AnyAspect 只要求一次命中。AspectCoverage 先在每篇论文内平均查询命中率，再对论文平均。因此，它们并非只检查三个大类是否各命中一次（第 4.1 节）。
+MAPLE-Synth 从 ICLR 2026 论文的 OpenReview 讨论提炼动机、方法与实验要点，再从 LitSearch／PaSa 的人工查询池取同类示例，指导 GPT-5.4 生成并去上下文化查询。检索对象是完整论文，困难负例由语义搜索和全文相关性判断筛选，普通负例来自 ACL Anthology。示意流程是同一篇量化论文分别被“为什么做低比特量化”“具体方法是什么”和“在哪种实验条件下有效”等多条查询检索；模型需要在每条查询的前二十篇中返回该论文，而不只是一个方面容易命中。
 
-**测量对象：** 测量同一论文能否在动机、方法与结果等多个 aspect 下持续被找回的科学检索基准。
+编辑比较：LitSearch 已连接查询与全文，PaSa 引入研究者式搜索；MAPLE 的变化是多查询指向同一篇论文，并要求跨查询稳定找回。因此它测检索一致性，不测代理最终写综述或判断研究结论真伪。AllAspect 还会随每篇查询数和难度增加而下降，其与 AnyAspect 的差距不能单独证明模型“不理解论文”。
+<!-- EVIDENCE:method:END -->
 
-**规模与协议：** 2,095 queries over 210 positive papers, 73,973 corpus papers, and 23,739 hard negatives. 协议包括 allaspect-at-k, anyaspect-at-k, aspect-coverage, matched-single-query-control。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 分数能说明什么
+语料共 73,973 篇论文，其中目标论文 210 篇、挖掘出的困难负例 23,739 篇；2,095 条查询中有 415 条涉及多模态证据。GPT-5.4 生成查询，DeepSeek-V4-Pro 筛选负例。文本按各模型上限截断，多模态模型使用页面截图；具体上限、硬件与重复运行不确定性未明确报告（第 3–4 节；附录 C、F）。
+<!-- EVIDENCE:setup:END -->
 
-2,095 queries、210 papers 上，matched single-query recall 与 AllAspect gap 显示 one-hit relevance 会掩盖 cross-aspect failure。 它支持的是该环境、harness、model/tool/resource configuration 下的 system-level evidence；除非其他变量匹配，否则不能把榜单差异归因给单一组件。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 最主要的混杂因素
+以下为精选事实单元格，成绩单位均为百分比。MAPLE-1Q 沿用相同语料、表征和排序流程，只为每篇目标论文抽取一条查询。主评测以目标论文标识判定命中，不使用答案生成评判器。
 
-generated queries、single domain 与 model-validated hard negatives 可能引入 style bias 和 label noise。 关键混杂包括 llm-generated-queries, single-domain-corpus, hard-negative-label-noise。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| GritLM-7B／全部查询命中 | MAPLE；210 篇目标论文 | AllAspect@20（%） | 15.7 | 整体提取文本；按模型上限截断 | 表 5，第 6 页 |
+| GritLM-7B／任意查询命中 | MAPLE；210 篇目标论文 | AnyAspect@20（%） | 98.1 | 相同主实验表征 | 表 5，第 6 页 |
+| GritLM-7B／查询覆盖 | MAPLE；对 210 篇论文宏平均 | AspectCoverage@20（%） | 61.8 | 论文内查询命中率的平均值 | 表 5，第 6 页 |
+| GritLM-7B／MAPLE-1Q | MAPLE-1Q；210 条抽样查询 | Recall@20（%） | 60.00 | 语料、表征与排序流程相同 | 表 6a，第 7 页 |
 
-## 还没有覆盖什么
+来源：[表 5，第 6 页; 表 6a，第 7 页](https://arxiv.org/pdf/2608.15624v1)
+<!-- EVIDENCE:results:END -->
 
-生成问题、相似度筛选、单一 ICLR 风格领域与模型核验负例可能造成风格偏差和假负例。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-## 放进演化图怎么看
+录用的 ICLR 2026 论文与生成式查询限制了外推范围。摘要重合度过滤不能证明全文必不可少，负例仍依赖模型判断。人工示例数量存在冲突：附录 B 为 11/33/40，表 11 为 48/105/47。摘要中的 15.7% 是主实验整体表征的结果，后续表征实验达到 24.76%（表 13）。
+<!-- EVIDENCE:limitations:END -->
 
-`map_delta=reinforces`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-<!-- RESEARCH-DECISION:START -->
-
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究同一论文能否从动机、方法和结果等不同角度被稳定找到。任意一个角度命中与全部角度命中并不等价；只报告平均 Recall，可能掩盖表征只编码了论文最显眼的一面。
-
-### 一个具体任务长什么样
-
-示意任务：同一篇论文对应几个不同信息需求，有的问题描述研究动机，有的关注方法结构或实验现象。系统应在这些表达下都定位到同一工作，而不是只在标题相近时命中。
-
-### 最有判别力的实验
-
-以论文为配对单位，分别报告任一要点命中、全部要点命中和各要点覆盖，固定总表示容量。比较单摘要、多视角表示与全文索引，并复核困难负例，避免错误负标签放大方法差异。
-
-### 建议搭配
-
-[bright-pro](bright-pro.md) · [sage](sage.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+固定每篇论文的查询数与表征预算，比较整体编码和分块编码，并按论文聚类计算自举区间。复核负例，引入独立采集的研究者查询，再判断全查询失败是否反映科学内容理解不足。
+<!-- EVIDENCE:next:END -->

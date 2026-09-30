@@ -1,4 +1,4 @@
-# MemBench: expanding memory evaluation beyond answer accuracy
+# MemBench: memory accuracy, latency and history-length stress tests
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2025-06 · paper v1<br>
@@ -9,48 +9,59 @@
 
 [中文](membench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2506.21605) · [Code](https://github.com/import-myself/Membench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-MemBench covers factual and reflective memory, separates participation from observation scenarios, and evaluates effectiveness, efficiency, and capacity rather than only task accuracy. Its question is therefore not merely whether an agent can recall information, but whether memory remains useful and affordable across different memory levels and interaction roles.
+Read all 17 pages, including §§1–5, limitations and Appendices A–D: profiles, factual/reflective examples, statistics, generation prompts and detailed results. Visually checked Tables 3–4 and 10–12.
 
-## Compared with what
+[arXiv v1 / 2025-06-20](https://arxiv.org/pdf/2506.21605v1)
+<!-- EVIDENCE:reading:END -->
 
-LoCoMo and LongMemEval made long-history QA harder and more diagnostic. MemBench adds orthogonal axes for memory level, interaction scenario, and resource behavior. A method should therefore not be called a better memory system solely because it tops one QA dataset while spending substantially more memory or behaving differently under observation versus participation.
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-## Decisive evidence and score boundary
+MemBench starts from user–entity graphs, turns attributes into evidence-bearing conversations or observed messages, inserts unrelated news-derived material, and ingests the result chronologically. Synthetic streams test factual recall and preference/emotion inference. Participation replays predefined assistant replies; it does not measure an agent’s freely chosen actions. Answers are multiple-choice, scored against labels. Recall@10 concerns evidence retrieval; latency concerns individual memory operations (§§3–4).
 
-The important contribution is the evaluation decomposition itself: the same memory system is inspected across factual/reflective memory, participation/observation, and effectiveness/efficiency/capacity. The primary sources do not provide a stable public leaderboard that can defensibly be treated as a single current SOTA ranking, so the Radar does not manufacture an Overall track. System results are comparable only under matched backbone, harness, and metric aggregation.
+For example, a correction changes an event duration from four days to one; the later choice question should use the corrected value. Repeated preferences for different sweet-and-salty dishes support a higher-level taste judgment (Figure 3; Appendix A.4).
 
-## Fair comparison conditions
+### Measurement genealogy
 
-Align the backbone, agent harness, memory budget, interaction scenario, and aggregation rule. If one system obtains higher effectiveness by consuming more tokens or capacity, accuracy alone does not support an architecture-level claim.
+MemSim supplies the graph-based simulation foundation. Compared with long-history QA in LoCoMo and LongMemEval, MemBench makes participation versus observation and factual versus reflective content explicit evaluation coordinates, alongside operation time and history-length stress. The next coordinate is whether these stored or inferred memories improve subsequent actions under matched costs.
+<!-- EVIDENCE:method:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-MemBench broadens what gets measured but still does not isolate which write, organization, retrieval, or update mechanism caused the outcome. Matched component interventions and long-term maintenance cost are the next useful coordinates.
+Main runs use MemEngine, Qwen2.5-7B and multilingual-e5-small. News-derived noise lengthens histories. Ordinary samples contain 360/280 factual and 120/60 reflective items for participation/observation; enlarged samples contain 90/84 and 30/15. Exact memory caps, sampling settings, timing hardware and repetition counts are not specified.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## Research decision card
+Selected reported values, not a composite ranking. Accuracy is correct choices divided by evaluated questions; the paper reports sampled item counts but does not fully reconcile effective denominators. Timing is seconds per memory operation, not complete answer latency.
 
-### When to use it
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| RetrievalMemory / Qwen2.5-7B / participation | Factual, nominal 100K; 90 sampled items | Choice accuracy (0–1) | 0.833 | MemEngine; multilingual-e5-small; noisy history | Table 3, p.7 |
+| FullMemory / Qwen2.5-7B / participation | Factual, nominal 100K; 90 sampled items | Choice accuracy (0–1) | 0.489 | Same factual sample; window cap unspecified | Table 3, p.7 |
+| RetrievalMemory / Qwen2.5-7B / observation | Factual, table labels 100K; 84 sampled items; effective denominator unresolved | Choice accuracy (0–1) | 0.933 | MemEngine; multilingual-e5-small | Table 3, p.7 |
+| GenerativeAgent / Qwen2.5-7B / write | Factual participation; per operation; timing sample size unspecified | Write latency (seconds / operation) | 6.116 | Memory write only; hardware unspecified | Table 3, p.7 |
+| GenerativeAgent / Qwen2.5-7B / preference | Ordinary reflective participation; per-slice denominator unspecified | Choice accuracy (0–1) | 0.742 | Preference slice; predefined dialogue | Table 10, p.17 |
+| GenerativeAgent / Qwen2.5-7B / emotion | Ordinary reflective participation; per-slice denominator unspecified | Choice accuracy (0–1) | 0.412 | Emotion slice; predefined dialogue | Table 10, p.17 |
 
-Use MemBench to profile a memory system across effectiveness, capacity, and cost. Breadth does not itself identify a component contribution. Treat task slices and resource curves as primary results rather than comparing only bundled-system totals.
+Source: [Table 3, p.7; Table 10, p.17](https://arxiv.org/pdf/2506.21605v1)
+<!-- EVIDENCE:results:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-Illustrative task: a system remembers interactions it participated in, uses information it only observed, and derives a higher-level conclusion from repeated experiences. The same storage budget may favor factual retention over reflective information, so these should be inspected separately.
+Table 4 repeats all RetrievalMemory accuracy cells from Table 3; retain them as reported, not independently confirmed. Its ordinary reflective scores match preference columns in Table 10, which separately reports emotion. Observation lengths conflict between §4.1 and table headings, and 0.933 cannot be reconstructed from 84 single binary trials. Capacity curves therefore do not identify an architecture-only storage limit.
+<!-- EVIDENCE:limitations:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-With one answerer, sweep memory capacity and report quality, write cost, and retrieval latency separately for factual and reflective tasks. An advantage that appears only with more capacity is not evidence of better organization; add capacity- and query-budget-matched controls.
-
-### Pair with
-
-[memoryagentbench](memoryagentbench.en.md) · [evomembench](evomembench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+Release an item-level scoring ledger, reconcile the duplicated cells and lengths, and repeat with fixed answerer/context caps. Plot factual, preference and emotion accuracy against ingestion and query cost, using the same questions as noise increases.
+<!-- EVIDENCE:next:END -->

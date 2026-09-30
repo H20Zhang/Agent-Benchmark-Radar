@@ -1,4 +1,4 @@
-# ImplicitMemBench: memory that changes first behavior without recall
+# ImplicitMemBench: first-response adaptation after distracting dialogue
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-04-09<br>
@@ -6,64 +6,58 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](implicitmembench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](implicitmembench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2604.08064) · [ACL 2026](https://aclanthology.org/2026.acl-long.1301/) · [Project](https://www.chonghanqin.com/project/implicitmembench/)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-ImplicitMemBench measures **implicit / non-declarative memory**: whether prior learning, priming, or conditioning automatically changes an agent's first response even when the test prompt does not explicitly ask it to recall the earlier episode. It covers Procedural Memory, Priming, and Classical Conditioning under a shared learn/prime → interference → test protocol.
+Read all 30 proceedings pages, pp.28232–28261: §§1–5, limitations and Appendices A–H, including judges, sensitivity tests, oracle/agent comparisons, all printed generation/curation/scoring prompts and examples. Visually checked Table 7. Some prompt fields are explicitly omitted by the published PDF; this is a source gap, not a completed code audit.
 
-## What changed relative to prior evaluation
+[ACL 2026 / 2026-07 / 2026.acl-long.1301](https://aclanthology.org/2026.acl-long.1301.pdf)
+<!-- EVIDENCE:reading:END -->
 
-Conventional long-term-memory benchmarks reward explicit access to declarative content: retrieve a fact, answer a question, summarize a history. This benchmark changes the observable from “can the model report what it remembers?” to “does prior experience alter behavior at the moment it matters?” First-attempt scoring is important because repeated prompting would turn an implicit effect back into explicit deliberation.
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-## Decisive evidence
+The protocol exposes a rule, theme or repeated outcome, inserts distracting dialogue, and scores the first response to a new task. Procedural and conditioning tasks use binary success; priming compares thematic transfer against a matched neutral-exposure control (§§3–4). For example, a file-copy utility teaches destination-before-source arguments; after distraction, the model must use that reversed order for a new transfer (Figure 7). This is text generation, not demonstrated filesystem execution.
 
-Across 300 items and 17 models, no evaluated model exceeds 66% overall. Reported aggregate scores include DeepSeek-R1 at 65.3, Qwen3-32B at 64.1, and GPT-5 at 63.0. A particularly sharp asymmetry appears between inhibition and preference behavior: 17.6% versus 75.0%, suggesting that models more readily acquire positive tendencies than suppress previously primed behavior.
+### Measurement genealogy
 
-## What the score supports
+LoCoMo and LongMemEval principally query retained information. MemoryAgentBench also includes test-time learning, so behavioral transfer is not wholly absent from predecessors. ImplicitMemBench narrows the coordinate to reminder-free first responses following brief exposure and interference. That operational distinction does not establish unconscious cognition or persistence across a context reset.
+<!-- EVIDENCE:method:END -->
 
-The score supports a claim about **behavioral adaptation from prior exposure**. It should not automatically be interpreted as evidence for an external agent-memory store: model context, prompting, latent adaptation, and explicit memory modules can all influence the behavior. This is a measurement-target contribution more than a clean component benchmark.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+There are 100 items per paradigm, generated with GPT-4o-mini and filtered from over 1,000 candidates. The paper targets roughly 500 context tokens, caps responses at 4,096, uses T=0 for procedural/conditioning and T=0.8 only at the priming test. Table 7 averages three runs for binary tasks. Only 18% of procedural items use rule validation; 94% of all items are LLM-judged, chiefly by GPT-4o-mini at T=0. Learning examples remain part of the protocol despite the setup’s “zero-shot” wording.
+<!-- EVIDENCE:setup:END -->
 
-Fix the backbone/version, learning examples, interference sequence, test prompt, decoding policy, and first-attempt rule. Do not compare a system allowed explicit reflection/retrieval loops against one scored on the immediate first response; that changes implicit memory into explicit reasoning.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+Selected facts, not the complete leaderboard. Overall is the arithmetic mean of the three displayed paradigm scales. The oracle Mem0 row has privileged manually selected content; it is not a fair automatic-system ranking.
 
-The suite does not establish durable learning across long real-world time spans, nor does it identify where the acquired behavior is represented. Safety-relevant persistence, forgetting, transfer across tasks, and interaction with external memory systems remain open.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| DeepSeek-R1 / procedural | 100 procedural items × 3 runs | First-try accuracy (%) | 76.33 | T=0; GPT-4o-mini or rule validator | Table 7, p.28239 (PDF p.8) |
+| DeepSeek-R1 / conditioning | 100 conditioning items × 3 runs | First-try accuracy (%) | 69.67 | T=0; GPT-4o-mini judge | Table 7, p.28239 (PDF p.8) |
+| DeepSeek-R1 / priming | 100 experimental/control pairs | Priming Influence Score (0–100) | 49.90 | Test T=0.8; GPT-4o-mini judge T=0 | Table 7, p.28239 (PDF p.8) |
+| DeepSeek-R1 / overall | Three equally weighted paradigm scores | Mixed overall score (0–100), not accuracy | 65.30 | 100 items per paradigm; max 4,096 output tokens | Table 7, p.28239 (PDF p.8) |
+| Mem0 + Key Info / DeepSeek-R1 / overall | Same three paradigms; oracle key information | Mixed overall score (0–100) | 74.12 | Perfect manual storage; not automatic memory extraction | Table 12, p.28244 (PDF p.13) |
 
-## Next discriminating validation
+Source: [Table 7, p.28239 (PDF p.8); Table 12, p.28244 (PDF p.13)](https://aclanthology.org/2026.acl-long.1301.pdf)
+<!-- EVIDENCE:results:END -->
 
-Cross a fixed model with no external memory, explicit episodic retrieval, procedural summaries, and learned skill representations while keeping the test prompt identical. The key question is which representation improves first-action transfer without increasing harmful persistence.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-<!-- RESEARCH-DECISION:START -->
+Overall combines two accuracies with a graded influence score; 65.30 is not 65.30% of 300 questions correct. Priming strength need not be useful or compliant behavior. No matched no-exposure control is reported for every procedural/conditioning task; defaults such as HTTPS can pass without learning. The five-person human result is called 100% accuracy even for graded priming, without a reconciliation. Appendix sensitivity lacks model/sample identities; memory-agent comparisons omit enough harness detail to prevent component-level causal attribution. Table 10’s original GLM score disagrees with Table 7, and Figure 6’s correlation caption names a different dependent variable from its plotted axis.
+<!-- EVIDENCE:limitations:END -->
 
-## Research decision card
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-### When to use it
-
-Use ImplicitMemBench to diagnose whether experience changes the first behavior without an explicit recall request. The focus is automatic enactment rather than factual reproduction. Behavior after a short learning episode does not establish durable cross-session external memory.
-
-### What a concrete task looks like
-
-Illustrative task: a learning phase demonstrates an operating convention, interference follows, and a related situation tests whether the first response follows that convention. Allowing repeated correction changes the object being measured, so first-attempt and retry success must remain separate.
-
-### Most discriminating experiment
-
-Keep the learning episode fixed and test within the same context, in a new session with external memory, and without memory. Increase interference distance to distinguish recency, persistence, and response bias. Same-session gains alone do not establish long-term memory.
-
-### Pair with
-
-[evomembench](evomembench.en.md) · [past-bench](past-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`explicit recall → retained experience → automatic behavior change`
-
-ImplicitMemBench broadens “memory” from stored information to learned behavioral bias.
+Randomize learned conventions against model defaults, include no-exposure and reversed-association controls, and separate first-action accuracy from priming and format violations. Then test the same items after context reset with budget-matched raw history, extracted memory and oracle rules; report item-level uncertainty and full judge prompts.
+<!-- EVIDENCE:next:END -->

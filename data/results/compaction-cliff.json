@@ -1,18 +1,18 @@
 {
   "benchmark_id": "compaction-cliff",
   "tracking_status": "paper-snapshot",
-  "verified_at": "2026-08-31",
+  "verified_at": "2026-09-30",
   "tracks": [
     {
       "track_id": "five-round-constraint-recall",
       "primary": true,
       "label": {
-        "zh": "五轮压缩后的约束保留率",
-        "en": "Constraint recall after five compaction rounds"
+        "zh": "TypeCompact 五轮约束保留诊断（单项）",
+        "en": "TypeCompact five-round constraint-retention diagnostic (single entry)"
       },
       "task": "Constraint survival after repeated compaction",
-      "split": "paper evaluation",
-      "protocol_version": "paper-v1",
+      "split": "20 AAC configurations; five sequential nominal 50%-target rounds",
+      "protocol_version": "paper-v1; pinned multiturn_stability.py/json at a6ceb01a3368cee25ef7ebcf05ebdab8c9be24a4. TypeCompact carries the untruncated typed object between rounds; rendered scored text is character-truncated. This is not a demonstrated equal-feasible-budget comparison.",
       "metric": {
         "id": "constraint-recall",
         "family": "recall",
@@ -26,29 +26,69 @@
         "reference_target": {
           "value": 100,
           "type": "benchmark-ceiling",
-          "source": "https://arxiv.org/abs/2608.22752"
+          "source": "https://arxiv.org/html/2608.22752v1"
+        }
+      },
+      "entries": [
+        {
+          "id": "typecompact-round5",
+          "method": "TypeCompact",
+          "score": 96,
+          "date": "2026-08-24",
+          "source": "https://arxiv.org/html/2608.22752v1",
+          "context": "TypeCompact carries the untruncated typed object between rounds; rendered scored text is character-truncated. This is not a demonstrated equal-feasible-budget comparison.",
+          "source_locator": "Section 4.3 / Figure 3; rounded paper diagnostic",
+          "artifact_source": "https://github.com/searchsim-org/cikm26-knowledge-triage/blob/a6ceb01a3368cee25ef7ebcf05ebdab8c9be24a4/results/multiturn_stability.json",
+          "date_basis": "Paper-v1 report date; experiment execution date not independently established",
+          "comparison_scope": "Single reported configuration only; cross-round state and effective budget accounting differ across implementations."
+        }
+      ]
+    },
+    {
+      "track_id": "five-round-sonnet-constraint-recall",
+      "primary": false,
+      "label": {
+        "zh": "Sonnet 五轮约束保留诊断（单项）",
+        "en": "Sonnet five-round constraint-retention diagnostic (single entry)"
+      },
+      "task": "Constraint survival after repeated compaction",
+      "split": "20 AAC configurations; five sequential nominal 50%-target rounds",
+      "protocol_version": "paper-v1; pinned multiturn_stability.py/json at a6ceb01a3368cee25ef7ebcf05ebdab8c9be24a4. The LLM carries its truncated text between rounds; the TypeCompact state path differs. Do not infer a matched-state or equal-feasible-budget ranking.",
+      "metric": {
+        "id": "constraint-recall",
+        "family": "recall",
+        "label": "Constraint recall",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ],
+        "reference_target": {
+          "value": 100,
+          "type": "benchmark-ceiling",
+          "source": "https://arxiv.org/html/2608.22752v1"
         }
       },
       "entries": [
         {
           "id": "sonnet-compact-round5",
           "method": "Sonnet /compact",
-          "model": "Claude Sonnet",
+          "model": "Claude Sonnet 4.6",
           "score": 10,
           "date": "2026-08-24",
-          "source": "https://arxiv.org/abs/2608.22752",
-          "context": "five rounds"
-        },
-        {
-          "id": "typecompact-round5",
-          "method": "TypeCompact",
-          "model": "Claude Sonnet",
-          "score": 96,
-          "date": "2026-08-24",
-          "source": "https://arxiv.org/abs/2608.22752",
-          "context": "five rounds"
+          "source": "https://arxiv.org/html/2608.22752v1",
+          "context": "The LLM carries its truncated text between rounds; the TypeCompact state path differs. Do not infer a matched-state or equal-feasible-budget ranking.",
+          "source_locator": "Section 4.3 / Figure 3; rounded paper diagnostic",
+          "artifact_source": "https://github.com/searchsim-org/cikm26-knowledge-triage/blob/a6ceb01a3368cee25ef7ebcf05ebdab8c9be24a4/results/multiturn_stability.json",
+          "date_basis": "Paper-v1 report date; experiment execution date not independently established",
+          "comparison_scope": "Single reported configuration only; cross-round state and effective budget accounting differ across implementations."
         }
       ]
     }
-  ]
+  ],
+  "scope_note": {
+    "zh": "分轨保留论文报告的约数，不构成匹配预算排名。TypeCompact 是确定性算子，Claude Sonnet 是独立对照；公开多轮实现的状态传递不对称。",
+    "en": "Separate tracks preserve rounded paper diagnostics without a matched-budget ranking. TypeCompact is a deterministic operator; Claude Sonnet is a separate comparator. The released multiround implementation carries state asymmetrically."
+  }
 }

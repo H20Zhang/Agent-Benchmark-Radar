@@ -1,4 +1,4 @@
-# PerMemSafe: personalized memory can make generic safety rules insufficient
+# PerMemSafe: risk-aware responses from implicit and resolved personal context
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-07<br>
@@ -6,64 +6,60 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](permemsafe.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](permemsafe.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[ACL 2026](https://aclanthology.org/2026.findings-acl.320/)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-PerMemSafe evaluates **implicit personalized safety** in long-horizon self-evolving agents. A response that is generically benign may become unsafe because of user-specific risk information accumulated in memory, and that risk can emerge, change, or resolve over time.
+Read all 19 proceedings pages, pp.6415–6433, main §§1–6, limitations and Appendices A–G, including stronger-model results, generation filters, both track-specific safety/helpfulness rubrics, human matrices, failure cases and all SentinelMem prompts. Visually checked Figure 5 and Tables 3–4.
 
-## What changed relative to prior evaluation
+[ACL 2026 / 2026-07 / 2026.findings-acl.320](https://aclanthology.org/2026.findings-acl.320.pdf)
+<!-- EVIDENCE:reading:END -->
 
-Traditional safety benchmarks evaluate the current prompt against context-independent policies. Personalized-memory benchmarks usually reward richer user modeling. PerMemSafe exposes the tension: better personalization increases the amount of latent safety context the agent must correctly retrieve and reason about.
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-## Decisive evidence
+Synthetic histories encode an annotated personal risk indirectly and interleave over 90% irrelevant interactions. Trigger queries are retained when memory-free responses show no safety concern. Safety Perception (SP) checks awareness of the prior risk; Dynamic Evolution (DE) requires explicit acknowledgement and evidence that it has been mitigated or resolved (§3; Appendix E).
 
-The paper reports that even the strongest evaluated self-evolving agent achieves only around a 50% safety rate. Its SentinelMem approach explicitly models personalized risk inference and memory evolution and improves implicit personalized safety by 23.8% over prior memory frameworks while maintaining helpfulness.
+In one case, late-night online gambling and disrupted work precede a request to optimize card rewards. Retrieved fragments mention the behavior, but a generic optimization answer receives low personalized-safety credit (Appendix F). The test concerns context use under the assigned risk label, not diagnosis or observed financial harm. SentinelMem extracts inferred risks, maintains separate preference/risk profiles, and keeps current plus preceding states with response guidance.
 
-## What the score supports
+### Measurement genealogy
 
-The benchmark supports a system-level claim about whether a memory-augmented agent recognizes user-specific risk under evolving histories. The SentinelMem gain does not isolate a single memory operation because risk extraction, updating, retrieval, and response policy are co-designed.
+Earlier personalized-safety work supplies explicit user context in a single turn; PersonaMem supplies dynamic-profile and distractor ideas, while LoCoMo emphasizes recall. PerMemSafe moves the risk evidence into noisy history and scores risk resolution. It adds a relevant coordinate without covering every evolving-risk trajectory.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-Fix backbone, conversation history, risk evolution, helpfulness tasks, safety policy, and retrieval budget. Safety must be reported with helpfulness; refusing all personalized assistance is not a useful memory system. Compare stale-risk, resolved-risk, and newly emerging-risk cases separately.
+The paper reports 276 conversations and 750 test instances across five domains, but does not provide explicit per-track counts or history-token lengths. Memory retrieval uses top-3 entries. Agent and judge temperatures are 0, response cap 2,048 tokens, results averaged over three runs. GPT-4o receives gold risk and relevant history when judging. Personalized Safety Rate (PSR) is binary rubric compliance; Personalized Helpfulness Score (PHS) is a 1–5 rating multiplied by 20, hence 20–100 in practice, despite the paper’s 0–100 wording. One hundred cases are checked against three AI/NLP graduate annotators.
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-The benchmark cannot cover all medical/legal/physical risk types or real user consent. False personalized-risk inference can itself be harmful, and long-term privacy/governance of sensitive risk memory is a separate concern.
+Selected overall and ablation facts. PUP means proactive user profiling. Table 3 does not restate its backbone; GPT-4o-mini is inferred from its full-system row matching Figure 5. Overall values average the two reported tracks, whose separate denominators are not specified.
 
-## Next discriminating validation
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Mem0 | PerMemSafe overall; 750 total instances stated, track counts unspecified | PSR (%) / PHS (1–5 ×20; actual range 20–100) | 39.20 / 56.40 | GPT-4o-mini; top-3; T=0; 2,048 output tokens; three runs; GPT-4o judge | Table 2, p.6420 (PDF p.6) |
+| SentinelMem | PerMemSafe overall; 750 total instances stated, track counts unspecified | PSR (%) / PHS (1–5 ×20; actual range 20–100) | 48.53 / 64.00 | GPT-4o-mini; top-3; T=0; 2,048 output tokens; three runs; GPT-4o judge | Figure 5, p.6422 (PDF p.8) |
+| Vanilla ablation baseline | PerMemSafe overall; 750 total instances stated, track counts unspecified | PSR (%) / PHS (1–5 ×20; actual range 20–100) | 25.20 / 56.20 | GPT-4o-mini (inferred from matching full row); top-3; T=0; 2,048 output tokens; three runs; GPT-4o judge | Table 3, p.6422 (PDF p.8) |
+| Vanilla + PUP | PerMemSafe overall; 750 total instances stated, track counts unspecified | PSR (%) / PHS (1–5 ×20; actual range 20–100) | 43.60 / 57.40 | GPT-4o-mini (inferred from matching full row); top-3; T=0; 2,048 output tokens; three runs; GPT-4o judge | Table 3, p.6422 (PDF p.8) |
+| Mem0 / stronger backbone | PerMemSafe overall; 750 total instances stated, track counts unspecified | PSR (%) / PHS (1–5 ×20; actual range 20–100) | 72.93 / 80.60 | GPT-5.1; top-3; T=0; 2,048 output tokens; three runs; GPT-4o judge | Table 4, p.6426 (PDF p.12) |
 
-Measure calibration: when should the agent act on a remembered risk, ask for clarification, or discard it as stale? The key frontier is not merely remembering safety context, but controlling confidence and lifecycle of personalized risk beliefs.
+Source: [Table 2, p.6420 (PDF p.6); Figure 5, p.6422 (PDF p.8); Table 3, p.6422 (PDF p.8); Table 4, p.6426 (PDF p.12)](https://aclanthology.org/2026.findings-acl.320.pdf)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-## Research decision card
+SP can pass for demonstrating risk awareness in reasoning without proving the final action is harmless; DE penalizes a reasonable generic answer that omits explicit resolution attribution. Thus PSR is not an incident-free rate. The headline 23.8% matches a relative gain from 39.20 to 48.53, not a 23.8-point gain or an average across backbones. Appendix C reaches 72.93 with Mem0/GPT-5.1, so the roughly-50% ceiling applies only to the lightweight main comparison. Risk inference can over-pathologize ambiguous users; no no-risk false-positive control, clinical validation or deployment privacy audit is supplied.
+<!-- EVIDENCE:limitations:END -->
 
-### When to use it
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-Use PerMemSafe when a current request is benign in isolation but requires caution given personal history. Personalized safety requires both retention of relevant risk and updating when circumstances change. Persistently applying obsolete risk can also reduce helpfulness.
-
-### What a concrete task looks like
-
-Illustrative task: an earlier history establishes a personal restriction relevant to a service choice, and a later session explicitly revises it. A new request requires the operative state rather than automatic reuse of the earliest safety judgment.
-
-### Most discriminating experiment
-
-Pair histories with an active risk, a resolved risk, and no relevant risk while holding the current request fixed. Measure both omission of relevant history and overuse of obsolete risk, reporting safety alongside helpfulness to distinguish updating from blanket conservatism.
-
-### Pair with
-
-[longmemeval](longmemeval.en.md) · [memtrapbench](memtrapbench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`generic safety → personalized memory → evolving personalized risk state`
-
-PerMemSafe shows that personalization and safety are coupled objectives, not independent modules.
+Pair the same query with active-risk, resolved-risk, ambiguous and no-risk histories. Judge actual harmful guidance separately from mentioning the risk, and score useful clarification without requiring disclosure of sensitive inferred labels. Match memory bytes and retrieval tokens across component ablations; report uncertainty, false positives and resolved-risk over-caution.
+<!-- EVIDENCE:next:END -->

@@ -1,4 +1,4 @@
-# LifeBench: long-horizon memory beyond explicit facts
+# LifeBench: long-term memory over simulated multi-source life records
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2026-03 · paper v1<br>
@@ -7,64 +7,59 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](lifebench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](lifebench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2603.03781) · [Code and data synthesis](https://github.com/1754955896/LifeBench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-LifeBench evaluates whether an agent can integrate **declarative and non-declarative memory** across long, heterogeneous life-event streams. In addition to explicit episodic and semantic facts, tasks require inferring habits and procedures from repeated behavior distributed across time and sources.
+Read all 28 pages: §§1–5 and Appendices A–H, including synthesis algorithms, quality rubrics, error cases, ethical limits and complete provided schemas/monthly-report examples. Visually checked Figures 7 and 9.
 
-## What changed relative to prior evaluation
+[arXiv v1 / 2026-03-04](https://arxiv.org/pdf/2603.03781v1)
+<!-- EVIDENCE:reading:END -->
 
-Conversation-memory benchmarks mainly encode what the user explicitly said. LifeBench asks what can be inferred from what the user repeatedly does. Its event simulation is densely connected over long horizons and draws on real-world priors, so a useful memory representation must aggregate repeated evidence rather than treat every event as an independent retrievable chunk.
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-## Decisive evidence
+DeepSeek-R1 expands survey-informed personas into yearly plots, nested events, daily activities and phone traces. A second agent checks time, location and travel feasibility; the benchmark then asks questions grounded in those records. Questions test extraction, multi-hop reasoning, temporal updates, inferred habits/preferences and abstention. Evidence gaps are filled by generating additional phone records after question creation (§3.2.5). This is controlled synthetic QA, not demonstrated real-user personalization.
 
-The paper reports that top evaluated memory systems reach only 55.2% accuracy. This matters because the added difficulty is not only context length: the benchmark mixes semantic, episodic, habitual, and procedural memory across multi-source traces, requiring evidence integration and behavioral abstraction.
+A source example asks about a person’s first time caring for a neighbor’s cat: the reference distinguishes initial nervousness and awkwardness from later confidence. Retrieving the event alone can miss the state that the question asks about (Table 4).
 
-## What the score supports
+### Measurement genealogy
 
-A LifeBench score supports whole-system ability to reconstruct and reason over long-horizon life patterns. It cannot cleanly attribute gains to retrieval versus aggregation versus inference, and the synthetic event generator embeds behavioral priors that may differ from real users.
+LoCoMo and LongMemEval center on conversational histories; Mem-Pal adds application logs. LifeBench moves the observable evidence to dense, heterogeneous life records, making cross-source aggregation and inferred habits explicit. Its next coordinate is time-correct, revisable personalization on less scripted records, rather than a larger synthetic history alone.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-Fix the event stream, backbone, accessible sources, temporal cutoff, retrieval budget, and answer evaluator. Report results by memory type; an approach strong on explicit episodic facts can otherwise hide failure on habits/procedures. Prevent future-event leakage when evaluating earlier time points.
+Ten synthetic users, one year each; 2,003 questions: 517 multiple-choice and 1,486 short-answer. GPT-5.1-Mini handles memory, answering and grading; text-embedding-3-small supplies embeddings. Structured records become textual summaries in LoCoMo-compatible inputs; monthly ground-truth summaries are excluded. Retrieval caps, temperatures, repeats and exact ingestion cutoffs are unspecified (§4.2; Appendix H.5).
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-Real personal data is sparse, contradictory, private, and often lacks objective labels for habits or intent. The benchmark also does not establish whether inferred habits should be persisted or acted on without user confirmation.
+Selected Figure 7 values; accuracy is the percentage of questions judged correct, using GPT-5.1-Mini and the LoCoMo grading prompt. Denominators come from Table 2; all systems use the same named base model and textualized records.
 
-## Next discriminating validation
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| MemOS / GPT-5.1-Mini / overall | LifeBench v1; 2,003 questions | Judged accuracy (%) | 55.22 | text-embedding-3-small; same-model judge | Figure 7, p.8; Table 2, p.6 |
+| Hindsight / GPT-5.1-Mini / overall | LifeBench v1; 2,003 questions | Judged accuracy (%) | 40.99 | Same named model, embeddings and judge | Figure 7, p.8; Table 2, p.6 |
+| Hindsight / GPT-5.1-Mini / ND | LifeBench v1 non-declarative slice; 429 questions | Judged accuracy (%) | 50.35 | Habits, skills, emotions and preferences; same judge | Figure 7, p.8; Table 2, p.6 |
+| MemOS / GPT-5.1-Mini / ND | LifeBench v1 non-declarative slice; 429 questions | Judged accuracy (%) | 47.32 | Same non-declarative slice and judge | Figure 7, p.8; Table 2, p.6 |
 
-Pair inferred habits/procedures with future decisions and explicit user corrections. The crucial question is whether a memory system can both infer latent patterns and revise them when the user changes behavior.
+Source: [Figure 7, p.8; Table 2, p.6](https://arxiv.org/pdf/2603.03781v1)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-## Research decision card
+Overall ranking hides the non-declarative reversal in the preceding table. Shared answering/judging models and summary preprocessing constrain attribution; the synthetic-history generator is a different model. Chinese-adult personas limit coverage; synthetic health traces are explicitly non-clinical. Figure 9 provides coarse per-user costs, not standardized latency. Architectural explanations in §4.3 lack matched component ablations.
+<!-- EVIDENCE:limitations:END -->
 
-### When to use it
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-Use LifeBench for habits and procedural knowledge inferred from distributed behavior, not only explicitly stated facts. Emphasize cross-source inference. A correct profile in simulated life histories does not establish understanding of real users or realized personalization utility.
-
-### What a concrete task looks like
-
-Illustrative task: several sources record repeated behavior under different circumstances, and a later question asks for the usual procedure rather than restating an individual record. The system must aggregate experience without promoting a one-off event into a stable habit.
-
-### Most discriminating experiment
-
-Compare single-source input, complete multi-source input, and shuffled source identities with the same reasoner and memory budget. Report explicit facts, inferred habits, and procedural knowledge separately. Gains restricted to fixed source patterns call for generator-prior checks before claims of general user understanding.
-
-### Pair with
-
-[dynamicmem](dynamicmem.en.md) · [memfusebench](memfusebench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`explicit conversational facts → multi-source life traces → inferred habitual/procedural memory`
-
-LifeBench expands the memory object from what users say to recurring structure in what they do.
+Enforce and publish timestamp cutoffs. Compare raw records, supplied summaries and source-shuffled summaries with fixed retrieval tokens; add an independent blinded judge and user-clustered intervals. Test whether inferred habits remain useful after explicit corrections.
+<!-- EVIDENCE:next:END -->

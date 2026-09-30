@@ -1,4 +1,4 @@
-# The Recall Trap: RAG / retrieval validity
+# Recall Trap: file coverage versus repair success under fixed context slots
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-10<br>
@@ -6,60 +6,71 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](recall-trap.md) | **English** · [Back to the entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](recall-trap.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.14838) · [Reproduction artifact](https://doi.org/10.5281/zenodo.21879550)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-Audits the proxy assumption that higher recall is better using downstream executable outcomes.
+Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction.
 
-## Genealogy: What It Follows
+Read all twenty-four pages, statistics and validity discussion, and Appendices A–D covering artifact handles, registration chronology, incompatible models and the fifteen-entry hypothesis registry; visually checked the result tables on pages 10 and 12. The archive was not executed and commit chronology was not independently audited.
 
-Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
+[arXiv 2608.14838v1 · 2026-08-14](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:reading:END -->
 
-## How It Is Evaluated
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-**Question:** Under fixed context slots, does higher file recall actually improve issue resolution?
+SWE-bench Verified issues and retrieved code occupy twelve fixed chunk slots. A model emits SEARCH/REPLACE edits once; edits are applied to isolated pristine repositories and graded by the official Docker tests. For an illustrative boundary-condition fix, ON keeps only the highest-ranked chunk per file, covering about twelve files; OFF retains the raw ranking, giving several chunks from about five files. ON may find the correct filename while OFF exposes the function body needed to edit it. This estimates the total packing-policy effect. A shared candidate pool and ranker do not imply identical served ranks, content or token counts.
 
-**Measurement object:** Validity audit showing that higher file recall can reduce downstream repair success under a fixed-slot code-retrieval protocol.
+Editorial placement: the closest methodological predecessors include Levy et al.’s fixed-length multi-document study and eRAG’s task-based retrieval evaluation; the paper credits RGFL for the right-file/wrong-lines failure mode. The added coordinate is a within-service file-deduplication intervention scored by executable repair tests, rather than a new universal recall paradox. It complements ContextBench’s cross-system correlations, while jointly changing file count, depth, positions and distractors rather than identifying one exclusive mediator.
 
-**Scale and protocol:** Paired fixed-pack evaluations on SWE-bench Verified with an open-weight preregistered replication. The protocol includes paired-dedup-ablation, official-docker-grading, repository-clustered-inference.
+[Source](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:method:END -->
 
-## What a Score Can Support
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-Paired fixed-pack evaluation with official Docker grading shows that higher recall can coincide with a lower resolve rate for dense retrieval, with an open-weight replication. It supports system-level evidence under this environment, harness, model/tool, and resource configuration; unmatched variables prevent attribution to one component.
+The main retriever fuses Qwen3-Embedding-8B, lexical and graph signals. Chunking, embeddings, ranking weights and slot count are held fixed. Generation is single-shot, tool-free, temperature 0.2, with 6000 output tokens for non-reasoning arms; repaired DeepSeek runs use 16000 with a requested 2000-token reasoning cap. Qwen’s 32000 amendment and reporting ambiguity are discussed below. Empty patches and retained harness errors count as failures; never-generated instances are excluded pairwise, giving model-specific n. Resolve rate is test-passing tasks divided by paired n, with paired McNemar tests and repository-cluster intervals. Mean ON/OFF inputs are 1451/1525 tokens: slots, not tokens, are fixed. Anchor dose uses gold pre-image patch lines and is a retrospective diagnostic, not an answer-free deployment signal.
 
-## Strongest Confounder
+[Source](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:setup:END -->
 
-The compound dedup treatment changes breadth, depth, rank, position, tokens, and distractors together; the causal result is limited to fixed slots. The load-bearing confounders are compound-packing-treatment, fixed-slot-context, single-shot-no-tools-harness.
+<!-- EVIDENCE:result-1:START -->
+## Effect size and evidence boundaries for the same packing switch
 
-## Remaining Gap: What It Still Does Not Measure
+SWE-bench Verified, twelve slots, one tool-free completion, official executable tests; empty patches remain failures. Absolute cross-model scores are not a capability ranking. DENSE-1’s interval includes zero. Denominators are paired n, not submitted patches only.
 
-The dedup flag changes breadth, depth, rank, position, token count, and distractors together in a single-shot no-tools harness.
+| Model/retriever | Paired n | ON resolved (%) | OFF resolved (%) | OFF−ON (pp) | Repository-cluster 95% CI (pp) |
+| --- | --- | --- | --- | --- | --- |
+| gpt-5.6-sol / fusion | 500 | 39.2 | 46.8 | +7.6 | [+0.8, +13.1] |
+| Qwen3.6-27B / fusion | 499 | 9.2 | 12.8 | +3.6 | [+0.9, +4.9] |
+| gpt-5.6-sol / DENSE-1 | 494 | 41.5 | 47.2 | +5.7 | [−0.9, +8.6] |
 
-## Genealogy: Where It Fits in the Map
+Source location: Section 5.1 and Figure 2, PDF pp. 10–11 · [Source](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:result-1:END -->
 
-`map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+<!-- EVIDENCE:result-2:START -->
+## Retriever and tool boundaries constrain generalization
 
-<!-- RESEARCH-DECISION:START -->
+BM25 remains twelve-slot single-shot, with clustered CI [−5.8, −0.3]. Read-enabled execution permits ten turns and further file reads; McNemar p=0.45, 80%-power MDE 4.5 pp. Models and harnesses differ, so absolute rates are not comparable and nonsignificance is not exact equivalence.
 
-## Research decision card
+| Condition | Paired n | ON resolved (%) | OFF resolved (%) | OFF−ON (pp) |
+| --- | --- | --- | --- | --- |
+| gpt-5.6-sol / BM25 / single-shot | 500 | 37.2 | 34.0 | −3.2 |
+| sonnet-5 / fusion / Read-enabled | 499 | 65.9 | 64.5 | −1.4 |
 
-### When to use it
+Source location: Sections 5.3, 5.5 and 6.2, PDF pp. 12,14,18 · [Source](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:result-2:END -->
 
-Use The Recall Trap to test whether retrieval metrics predict downstream code repair, not to claim that lower recall is generally better. Packing changes can jointly alter breadth, depth, position, and distractors, making the observed effect a compound intervention requiring decomposition.
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, limitations and next experiment
 
-### What a concrete task looks like
+The central gpt and Qwen contrasts remain positive under repository clustering and both-nonempty conditioning. DeepSeek’s conditional p=0.49 shows material patch-producibility involvement; DENSE-1’s clustered interval crosses zero. The BM25 reversal rules out a universal fewer-files law. Read-enabled agents do not show the same effect, but models also change, preventing a tool-only causal attribution. Gold-line coverage, distractor removal and chunk contiguity remain entangled. Random per-file chunk selection is worse, rejecting a bad-argmax explanation without separating file-set membership from depth. SWE-PolyBench gives only +2.59 pp over 617 model–instance pairs, p=0.056; gold validity also misses the preregistered 95% floor, so this is not confirmed multilingual generality.
 
-Illustrative task: a fixed number of code-context slots can contain shallow snippets from more files or deeper snippets from fewer files. Greater file recall may remove the surrounding code needed for a repair, making the downstream task harder.
+Index-evaluation recall 0.666→0.817 is distinct from gold-file presence in served packs: ON=0.878 and OFF=0.806. Original gpt responses were not logged; its apply-stage funnel comes from a separately preregistered replication, whose +6.4 pp must not replace the original +7.6 pp. Figure 2 broadly labels confirmation preregistered, but Appendix B qualifies original gpt/DeepSeek timing as same-day design commits supported by logs; DENSE-1 was designed after observing the primary effect. Section 4.3 says both Qwen arms were regenerated at 32K, while Section 5.9 describes K=12 as a lower-budget/high-empty regime. We therefore do not join K=4,12,40 into one matched curve.
 
-### Most discriminating experiment
+Hold file sets, token count and positions fixed while manipulating within-file depth, contiguity and gold-line exposure separately; add budget-matched parent expansion and larger-chunk controls. Use a same-model single-shot/Read-enabled factorial and post-cutoff, cross-file repairs. Report task success, empty-patch rates, actual input costs, repository-cluster intervals and per-instance exclusion reasons together.
 
-Vary file breadth, per-file depth, order, and total tokens independently under the same repair model and hidden execution tests. Pair results by repository and add a tool-using repair workflow to assess whether the effect is specific to single-shot fixed packing.
-
-### Pair with
-
-[beir](beir.en.md) · [browsecomp-plus](browsecomp-plus.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+[Source](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# WANDR：RAG / 实时 wide-and-deep 搜索
+# WANDR：大规模发现、补全与逐记录证据核验
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-07-14<br>
@@ -6,60 +6,73 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](wandr.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](wandr.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2608.14747) · [基准](https://github.com/perplexityai/wandr)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-把答案搜索扩展为开放集合 discovery、分层 enrichment 与 record-level refetch verification。
+已完整阅读所述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-## 它接在什么之后
+完整阅读 45 页正文与附录 A–J，涵盖所有任务构造／准入、实体规范化、评分伪代码与完整算例、运行成本、细粒度错误、输出交付消融和 RL 适用性边界；目视核对表 3–4 与第 41 页评分树。未运行线上研究任务或重新抓取其证据。
 
-前一代评价通常把该问题压成较短的最终分数或单一 proxy。这个评测把 predecessor critique 变成 capability × environment × protocol 的显式差异，并保留可执行或可复核资产。
+[arXiv 2608.14747v1 · 2026-08-14](https://arxiv.org/pdf/2608.14747v1)
+<!-- EVIDENCE:reading:END -->
 
-## 实际怎样评测
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-**问题：** Agent 能否在不知道完整集合时发现、补全并逐条核验实时网页记录？
+500 个任务来自去标识产品请求的可复用形状，经作者／批评者循环、可执行与难度检查、10–12 次运行合并的近满配额可行性见证、抽样 judge 审计和可选人工签核筛选。见证不作答案键。每个叶记录包括实体键、URL、摘录和结构化主张；例如需为 70 家公司找到任命证据，同时为相同公司补上市资格来源，共至少 140 个叶记录，而不是随意凑 140 行。实体别名先规范化，开放身份再语义去重，子任务沿共享键相乘，因此缺关键分支可使一个实体归零。任务中位数为 100 个核心成员、245 个记录；数据并非部署请求的随机样本。
 
-**测量对象：** 面向实时网页 wide-and-deep 记录收集的基准，包含分层任务和无需穷举金标的逐条核验。
+编辑比较：最近的集合型前身是 WideSearch 与 DeepWideSearch，前者逐表格单元评分、后者结合广度与深度并依赖人工金标准。WANDR 将要求写成可递归实体／子任务树，并以实时来源核验代替枚举全部答案；新增坐标是每个实体是否完成重复的调查与证明。它与 DRACO 的报告质量评价互补，但所称 recall 是相对任务配额的质量调整完成度，不是对真实世界所有合格实体的召回。
 
-**规模与协议：** 500 self-contained Harbor task packages for wide and deep live-web collection. 协议包括 required-volume-denominators, record-level-url-excerpt-refetch, soft-and-hard-f1。
+[来源](https://arxiv.org/pdf/2608.14747v1)
+<!-- EVIDENCE:method:END -->
 
-## 分数能说明什么
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-500 Harbor task packages 使用 required-volume denominator 与 URL/excerpt refetch，分别暴露 discovery、support 和 enrichment 的损失。 它支持的是该环境、harness、model/tool/resource configuration 下的 system-level evidence；除非其他变量匹配，否则不能把榜单差异归因给单一组件。
+统一 GPT-5.4 评估：抓取分流／规范化 low、判断 medium、身份去重 high；异常页面再走浏览器。完整叶判定要求页面可用、主张明确、摘录忠实、实体有效、整页满足所有条件、摘录单独足以证明所有条件；retrieval-only 只看整页的条件满足。仅使用置信度等级为 2 或 3 的叶信号，较低等级视为缺失，不进入 precision，仍可能造成 recall 配额缺口。软 precision 在已交子节点平均；recall 对同实体取最差值、保留配额内最高分成员并补零。hard 在递归节点把不足满分的得分压为零；子任务乘法、固定标签平均与分母规则保留。每题 F1 后再对任务等权平均，不能用总体平均 precision／recall 重算表中 F1。六个生产系统各只跑一轮，模型、接口、工具、交付渠道与预算不等，终端错误重试后仍失败按零计入 500 分母。
 
-## 最主要的混杂因素
+[来源](https://arxiv.org/pdf/2608.14747v1)
+<!-- EVIDENCE:setup:END -->
 
-unmatched stacks、shared fetch backend、web drift 与 LLM judge 使结果只能按 system-level evidence 解读。 关键混杂包括 unmatched-system-stacks, shared-fetch-backend, web-drift, llm-judge。
+<!-- EVIDENCE:result-1:START -->
+## 记录质量与配额完成仍有明显损失
 
-## 还没有覆盖什么
+500 题各一轮，完整 verdict，错误运行补零后逐题等权平均；同模型名也不代表相同系统配置。成本为论文运行时 solver 账单，延迟不含核验，不是当前报价或等预算比较。Perplexity 用文件分享，另外两者从沙盒取文件。
 
-网页会漂移，评判器依赖 LLM 与抓取后端，被测系统的服务商、模型、搜索工具和 harness 也未匹配。
+| 系统／主运行配置 | 完成运行／500 | Soft F1（0–1） | Hard F1（0–1） | 求解成本（美元／题） | 求解中位延迟（分钟） |
+| --- | --- | --- | --- | --- | --- |
+| Perplexity / GPT-5.5 high / Search as Code | 500 | 0.363 | 0.133 | 5.20 | 14.9 |
+| Anthropic / Opus 4.8 high / Managed Agents | 500 | 0.249 | 0.072 | 46.43 | 73.7 |
+| OpenAI / GPT-5.5 high / Responses API | 499 | 0.121 | 0.035 | 0.50 | 8.6 |
 
-## 放进演化图怎么看
+事实位置：表 3–5，PDF 第 15–16 页 · [来源](https://arxiv.org/pdf/2608.14747v1)
+<!-- EVIDENCE:result-1:END -->
 
-`map_delta=reinforces`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+<!-- EVIDENCE:result-2:START -->
+## 同一 45 题上增加 effort 并非总能提升
 
-<!-- RESEARCH-DECISION:START -->
+相同 45 个排程任务，各系统保留其最佳交付渠道；Perplexity xhigh 完成 44/45，其余 45/45，所有分数／成本仍除以 45。无重复方差；不同系统的同名 effort 不是统一计算预算。
 
-## 研究决策卡
+| 系统／effort | Soft F1（0–1） | Hard F1（0–1） | 求解成本（美元／题） |
+| --- | --- | --- | --- |
+| Perplexity / high | 0.397 | 0.156 | 4.75 |
+| Perplexity / xhigh | 0.447 | 0.224 | 7.32 |
+| OpenAI / high | 0.153 | 0.073 | 0.49 |
+| OpenAI / xhigh | 0.127 | 0.060 | 0.74 |
 
-### 什么时候值得用
+事实位置：表 6–7，PDF 第 18 页 · [来源](https://arxiv.org/pdf/2608.14747v1)
+<!-- EVIDENCE:result-2:END -->
 
-适合评价开放网页上既要搜得广、又要为每条记录补足字段的研究任务。逐条可验证有利于减少穷举金标依赖，但记录有效不代表集合完整；发现数量、有效性和补全质量必须分开理解。
+<!-- EVIDENCE:limitations:START -->
+## 解读、局限与下一步
 
-### 一个具体任务长什么样
+Perplexity 的优势与可编程扇出、持久候选表及配额回填一致，但不是这些机制的单因素因果实验；评估抓取后端还与其 solver 共用，可能产生可访问性对齐优势。实时页面漂移、动态内容丢失、LLM 身份与证据判断均影响分数。主结果最高 hard F1=0.133 不表示只完成了 13.3% 整个任务；这是成员层分数构成的任务平均。较深结构／更大规模与内容难度共同变化，曲线不隔离规模因果。45 题交付消融是独立随机运行而非确定性配对；文件交付更高分仍混有运行差异。RL 章节只提出训练环境用途，没有训练增益结果。
 
-示意任务：系统寻找满足条件的一批对象，并为每个对象提供字段、来源页面和支持摘录。抓到许多名字但字段不可靠，与少量高质量记录但覆盖不足，是两种不同的任务失败。
+正文将 hard precision 概括成完整成员，但附录 G 只对 recall 作配额补零；附录 H 的 Delhi 只交一个所需两个遗址，仍显示 hard/soft precision=1/1、recall=0/0.5。因此完整配额须看 hard recall，不能只看 hard precision。主结果按 500 个排程任务补零平均；错误分解的可用详情子集另有分母，如 Parallel 仅 350，不能当作全部 500 的无偏解释。论文署期 7 月 16 日、arXiv v1 为 8 月 14 日，保留历史栏但不把登记的 7 月 14 日自动等同 arXiv 首发。
 
-### 最有判别力的实验
+固定模型、检索与抓取后端、总费用和 token 配额，随机比较代码编排、并行搜索、显式配额状态与回填；做多次配对重复。冻结证据快照并用独立 fetcher／人工抽样复核，单列无法判断记录和缺失详情。分别报告配额完成、全部条件成立、摘录忠实且完整及真实集合覆盖估计，检查超额提交、别名填充和缓存污染是否套利。
 
-固定请求规模、搜索工具与抓取预算，分别报告去重后发现量、记录有效率和字段补全。缓存用于评分的来源快照，并复核失效页面，避免把网页变化或评分抓取器失败误当成研究智能体错误。
-
-### 建议搭配
-
-[gisa](gisa.md) · [autoresearchbench](autoresearchbench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+[来源](https://arxiv.org/pdf/2608.14747v1)
+<!-- EVIDENCE:limitations:END -->

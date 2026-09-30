@@ -1,4 +1,4 @@
-# MPBench
+# MPBench: separating persistent writes from conditional behavioral influence
 
 <!-- RELEASE-REFERENCE:START -->
 > **Release diagnostic (historical reference)** · 2026-06-03 · paper v1 snapshot<br>
@@ -7,60 +7,114 @@
 > From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
 <!-- RELEASE-REFERENCE:END -->
 
-## Measurement object
+[中文](mpbench.md) | **English**
 
-MPBench measures the **cross-session lifecycle of persistent-memory poisoning**. Six classes of malicious content enter persistent memory through four write channels; the benchmark then asks whether the content is actually stored and, in a later session with a relevant query, whether the poisoned record is retrieved and influences the output. The object is therefore the full `write → persist → retrieve → respond` chain rather than immediate prompt-injection success.
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What changed relative to predecessors
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-LoCoMo and LongMemEval mainly measure benign memory fidelity, while AgentDojo and InjecAgent emphasize same-session hijacking. MPBench separates the write event from the future trigger, so it can distinguish “malicious content entered memory” from “that content was later reactivated by retrieval.” This is why attack success and conditional retrieval success need to be interpreted together.
+Read Sections 1–6 and Appendices A–D, all seven tables, taxonomy, threat model and generation templates. Checked PDF metric formulas and image-only JSON schema. Read the official data repository README at the fixed commit. No attack execution, independent judge audit or reproduction. Parsed all released JSON objects for counts and schema labels without executing their content.
 
-## Decisive evidence
+[arXiv 2606.04329v2 (2026-06-18)](https://arxiv.org/html/2606.04329v2)
 
-For the evaluated systems, OpenClaw reports mean **ASR / conditional RSR of 34.25% / 17.40%**, while HERMES reports **66.67% / 64.70%**. PromptArmor reaches only **67.67% TPR at 1% FPR** in the reported setting. The important signal is that risk does not end at admission: in some stacks, a malicious record that persists still has a substantial chance of being surfaced again by a later relevant query.
+[Auxiliary material (checked 2026-09-30)](https://github.com/Digital-Trust-Lab/mp-bench/blob/6886880a7c29625e0109e0ad91d0e095029f1577/README.md)
 
-## What the score supports
+[Auxiliary material (checked 2026-09-30)](https://github.com/Digital-Trust-Lab/mp-bench/blob/6886880a7c29625e0109e0ad91d0e095029f1577/adversarial_data.jsonl.jsonl)
 
-The headline numbers measure **system + harness exposure to persistent poisoning**. They do not isolate the base model or the retriever as the cause because the two agents use different write and retrieval policies, and some channels rely on statically labeled context.
+[Auxiliary material (checked 2026-09-30)](https://github.com/Digital-Trust-Lab/mp-bench/blob/6886880a7c29625e0109e0ad91d0e095029f1577/benign_data.jsonl.jsonl)
 
-## Fair comparison contract
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-A fair comparison should align backbone, write channel, memory-admission policy, retrieval top-k / ranking, trigger queries, attack budget, and evaluator. Security results should be paired with benign-memory utility: reducing retrieval success by rejecting large amounts of legitimate memory is not evidence of a better memory system.
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-## How to use it in research
+MPBench separates cross-session poisoning into two stages. After untrusted external content enters a normal task, it checks whether persistent memory contains the targeted behavioral directive. Only successfully written cases receive a related task in a fresh session to test subsequent influence. Attackers cannot directly edit memory/system prompts or impersonate users. Four write paths cover explicit instructions, system retention policies, compaction and experience-to-skill synthesis; six classes span explicit and apparently ordinary factual inputs.
 
-If a memory method claims long-term security or resistance to prompt injection, MPBench is useful for testing the persistence surface, but it should be paired with a benign utility benchmark. Report write acceptance, retrieval exposure, conditional ASR, and end-to-end joint success separately so that the defense can be localized to a lifecycle stage rather than compressed into one number.
+Genealogy: Relative to AgentDojo/InjecAgent current-task injection, it adds persistent writes and later activation. Relative to LoCoMo/LongMemEval benign fidelity, it adds source trust and write authority as safety coordinates. This is a protocol comparison, not claimed data inheritance. A representative task is an agent reading external operational material and later reusing an unauthorized suggestion; this note analyzes measurement without executable payloads.
+<!-- EVIDENCE:method:END -->
 
-## Next discriminating validation
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-The main gaps are additional backbones, fully executable delivery channels, natural memory drift, and explicit security–utility curves. The experiment most likely to change the conclusion would compare multiple memory stores under the same backbone, attack set, and benign workload instead of comparing two packaged agents with different surrounding systems.
+The paper reports 3240 attack examples: five classes of 600 and 240 skill cases, plus 2997 benign examples. Meta-Llama-3.1-70B-Instruct generates queries, external context, expected writes and follow-up queries, followed by schema checks and spot checks. Both agents use GPT-OSS-120B with default prompts/memory configurations. OpenClaw lacks skill writing, so inapplicability is not zero performance. Some files are retrieved through tools; email, Slack and web inputs include statically labeled external context rather than complete connector pipelines. ASR is successful writing; RSR is subsequent behavioral influence conditional on successful writing, not simple retrieval recall. An LLM judges semantic matches, but its identity and the human audit sample/agreement are unspecified.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Table 2, reported agent-level macro averages
 
-## Research decision card
+Equal averages over applicable classes, not pooled sample rates, with different class coverage. Multiplying these macro averages does not yield end-to-end success; RSR is not a fraction of all attack attempts.
 
-### When to use it
+Attack pool 3240; OpenClaw excludes the 240 skill cases. Exact evaluated and write-positive counts per row are not printed.
 
-Use MPBench for cross-session memory poisoning across write channels. Unlike same-session prompt injection, it requires evidence of persistence before later effects are measured. Differences in channels and write policies should not be interpreted directly as differences in model safety.
+| Agent | ASR write % | Conditional RSR influence % | Applicable classes |
+|---|---|---|---|
+| OpenClaw | 34.25 | 17.4 | 5 |
+| HERMES | 66.67 | 64.7 | 6 |
 
-### What a concrete task looks like
+Locator: Table 2, reported agent-level macro averages · [Source](https://arxiv.org/html/2606.04329v2)
+<!-- EVIDENCE:result-1:END -->
 
-Illustrative task: external context or tool feedback enters a write session, then a fresh query session performs a benign task. Reappearance there establishes a cross-session path; merely continuing the original context does not provide that control.
+<!-- EVIDENCE:result-2:START -->
+## Table 2, selected matched-class contrasts
 
-### Most discriminating experiment
+Shared backbone but different write policies, automatic loading and tool retrieval. HERMES injects a memory snapshot at session start; OpenClaw requires memory_search. This system comparison does not separately manipulate retrieval or write aggressiveness.
 
-Match content and budgets across channels and measure write admission, later retrieval, and final deviation, including a persistence-disabled control. Report benign utility with security metrics to distinguish safe writing from apparent safety achieved by not using memory.
+Each selected class has a reported pool of 600, but exact completed evaluation counts and write-positive RSR denominators are not supplied.
 
-### Pair with
+| Class | OpenClaw ASR % | OpenClaw conditional RSR % | HERMES ASR % | HERMES conditional RSR % |
+|---|---|---|---|---|
+| Explicit Command Insertion | 18.25 | 44.23 | 42.67 | 86.33 |
+| Salience-Driven Compaction | 45.1 | 11.31 | 85.17 | 69.86 |
+| Policy-Conformant Fact Injection | 8.33 | 5.93 | 64.5 | 42.12 |
 
-[injecmem](injecmem.en.md) · [gatemem](gatemem.en.md)
+Locator: Table 2, selected matched-class contrasts · [Source](https://arxiv.org/html/2606.04329v2)
+<!-- EVIDENCE:result-2:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:result-3:START -->
+## Table 3, selected detector adaptation results
 
-<!-- RESEARCH-DECISION:END -->
+Input-detector classification, not end-to-end defense after deployment in an agent. CommandSans adaptation sharply reduces false positives while PromptArmor worsens; adaptation is not uniformly ineffective.
 
-## Genealogy
+Attack/benign pools 3240/2997; detector test sizes, adaptation train/test split and exact counts are not specified.
 
-MPBench creates the key transition from benign memory fidelity to persistent poisoning; `map_delta=splits`. It adds a distinct safety coordinate to memory evaluation: **can memory be maliciously written, and can that state be reactivated later?**
+| Detector / condition | TPR % | FPR % |
+|---|---|---|
+| PIGuard original | 38.33 | 0.33 |
+| PIGuard adapted | 47.67 | 5.33 |
+| CommandSans original | 52.33 | 45.0 |
+| CommandSans adapted | 61 | 8.67 |
+| PromptArmor original | 67.67 | 1 |
+| PromptArmor adapted | 61.6 | 2.67 |
 
-Primary: https://arxiv.org/abs/2606.04329
+Locator: Table 3, selected detector adaptation results · [Source](https://arxiv.org/html/2606.04329v2)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:result-4:START -->
+## Table 4, selected detector signal-strength contrasts
+
+Adapted PIGuard narrows the strong/weak gap while lowering strong-signal detection. Weak signal is a constructed taxonomy class, not all theoretically undetectable attacks.
+
+Exact strong/weak evaluation denominators are not supplied; do not infer them from the full corpus class counts.
+
+| Detector / condition | Strong-signal detection % | Weak-signal detection % |
+|---|---|---|
+| PIGuard original | 51.67 | 18.34 |
+| PIGuard adapted | 48.33 | 46.66 |
+| PromptArmor original | 84.44 | 42.5 |
+
+Locator: Table 4, selected detector signal-strength contrasts · [Source](https://arxiv.org/html/2606.04329v2)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
+
+Later-session effects establish persistent risk, but there is no long-run decay curve, persistence-disabled control or common benign-task utility measurement. Thus stronger memory is not proven inherently less safe. Differences between packaged agents are not single-variable causal evidence about writing policy. One backbone, static delivery, automatic memory loading and asymmetric class coverage limit transfer; results do not establish current product safety rankings. Four imperfect input detectors do not prove all input defenses impossible. Provenance-aware writing is a proposed direction, not a validated defense here.
+
+The introductory 50.46% ASR and 41.05% RSR are averages of the two agent macro averages, not pooled lifecycle probabilities. Appendix schema prose allows strong/moderate/weak signals, while its pictured schema allows strong/weak and Tables 2/7 classify compaction as strong; exact stratification needs data-level verification. Defense adaptation procedures, disjoint training/testing, temperature, output caps, retries and judge prompts are insufficiently specified for full reproduction. The official repository exposes data and README rather than a complete execution/judging harness at the inspected entry point; reading the paper does not certify reproduction. At fixed commit 6886880a7c29625e0109e0ad91d0e095029f1577, sequential JSON decoding finds 3241 adversarial and 2999 benign objects, not paper counts 3240/2997. Some objects are concatenated on one line, breaking standard JSONL parsing. Attack labels differ from the six paper classes, with no explicit skill-procedure label; signals include moderate and subtle. No undocumented class mapping or deletion was applied. All parsed IDs and objects are unique. The 240 skill-bearing objects do exist but use other attack labels and omit retrieval_query; two further adversarial objects lack expected_memory and retrieval_query. Absence of an explicit skill class label does not mean the skill data are absent.
+
+
+
+Next: Pair with AuthMem-Bench and MemSecBench. Under one backbone, delivery channel, task set and memory budget, independently toggle write validation, provenance labels and automatic loading. Report successful writes, retrieval exposure, conditional behavioral deviation and per-example joint success. Add persistence-disabled and legitimate-memory controls, with source/task-cluster intervals, to distinguish protection from simply avoiding memory.
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# DolphinBench: testing history-dependent actions under frozen memory
+# DolphinBench: accuracy, cost and latency of history-dependent actions
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-09-21<br>
@@ -6,52 +6,95 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](dolphinbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dolphinbench.md) | **English**
 
-[Paper](https://arxiv.org/abs/2609.24971) · [Code](https://github.com/mem0ai/dolphinbench) · [Project](https://dolphinbench.ai)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-DolphinBench evaluates three simulated knowledge-work personas, each with roughly 500K tokens of user messages and 200 tasks, for 600 tests overall. The target is a correct action in a work application, not merely a verbal recollection. Its applications are simulated; action-grounded evaluation should not be described as evidence from a production deployment. [Official overview](https://github.com/mem0ai/dolphinbench/blob/main/README.md)
+Read the complete six-section v2 paper, including both tables and construction/verification diagrams. Read complete README and CANONICAL_EVALUATION.md at pinned repository revision 81cb6f8405b40a9e76089cef650806a80af06ea2. No full raw-trace audit, code execution or independent reproduction.
 
-## Compared with what
+[arXiv 2609.24971v2 (2026-09-22)](https://arxiv.org/html/2609.24971v2)
 
-Compared with LoCoMo, historical information must support task completion. Compared with evaluations of continued learning across episodes, the standard test freezes the ingested memory so that one test cannot teach the next. This isolates utility of the existing history, not improvement over the 200-test sequence.
+[Auxiliary material (checked 2026-09-30)](https://github.com/mem0ai/dolphinbench/blob/81cb6f8405b40a9e76089cef650806a80af06ea2/README.md)
 
-## Evaluation protocol
+[Auxiliary material (checked 2026-09-30)](https://github.com/mem0ai/dolphinbench/blob/81cb6f8405b40a9e76089cef650806a80af06ea2/docs/CANONICAL_EVALUATION.md)
 
-Messages are ingested chronologically through the tested agent's normal memory interface. Processing must complete before a checkpoint is recorded. Each test starts a fresh conversation and fresh application state while memory remains frozen; trajectories, actions, and grader evidence are retained. Certification requires two successes with relevant history and two failures without it for the specified certification agent. That is a conditional selection test, not proof that every possible model needs the history. [Canonical protocol](https://github.com/mem0ai/dolphinbench/blob/main/docs/CANONICAL_EVALUATION.md)
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-## Decisive evidence and score boundary
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-The decisive evidence reviewed here is the public, executable state-isolation and grading protocol. This Radar has not independently rerun the 600 tasks. Differences between ingestion agents, providers, and answer models do not isolate a retriever effect. Official materials include older single-persona reference results alongside newer configuration summaries: interpret a score with its exact model, coverage, checkpoint, and recovery records rather than merging those releases into one ranking.
+DolphinBench asks agents to complete simulated-app work using earlier user history rather than answer historical-fact questions. Three knowledge-work personas each have about 500,000 user-message tokens. Agents ingest dated messages and generate their own replies, then freeze completed memory while each test starts fresh conversation/app state. Requests omit required remembered recipients, dates, preferences or content. Tasks contain one to four separately graded actions and pass only if all checks pass.
 
-## Confounders and remaining coverage gaps
+Editorial placement: Relative to LoCoMo, it adds history-dependent app actions and ingestion-through-testing costs. Relative to MemoryArena’s dependent subtasks, it tests frozen-history utility without learning during the test sequence. This paper’s description of Mem2ActBench as complete simulated execution is too broad: that benchmark’s main setting supplies the correct tool and measures arguments.
+Illustrative task: “Send the update to the person responsible for this project” omits the contact and preferred format stored in history. Success requires the correct recipient and content in the same simulated send action.
+<!-- EVIDENCE:method:END -->
 
-The strongest confounders are the ingestion model, asynchronous provider processing, and certification agent. Dates spanning years inside messages are not years of real provider operation and do not validate real-time decay. Separate ingestion, maintenance, and query costs, specify amortization, and keep missing costs distinct from zero. Three simulated users leave cross-user transfer, permission changes, and long-running online learning unmeasured.
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-<!-- RESEARCH-DECISION:START -->
+The CEO, infrastructure engineer and product manager each have 200 tests, totaling 600. The 500,000-token measure covers user content only, excluding generated assistant replies. Certification requires GPT-5.6-Luna to pass twice with relevant original history and fail twice without it, followed by inspection for missing-information rather than tool defects. Grading combines deterministic call checks with GPT-5.6-Sol semantic checks; recipient/content requirements must hold in the same send call. Total USD cost includes ingestion, testing and memory processing; median task latency includes tools but not ingestion waiting. Table 2 reports 13 configurations without repeated-run intervals, fully uniform budgets or independent human judge validation.
+<!-- EVIDENCE:setup:END -->
 
-## Research decision card
+<!-- EVIDENCE:result-1:START -->
+## Table 2, selected Hermes / GPT-5.6-Luna configurations
 
-### When to use it
+Hermes and GPT-5.6-Luna are fixed, but each memory configuration ingests independently. Values are paper-v2 reports, not current prices or a live board; totals are not recomputed from rounded components. Built-in zero memory cost means no separately billed memory component, not free ingestion.
 
-Use it to test whether long-term user context improves stateful workflows and whether that benefit survives lifecycle cost accounting.
+600 tasks across three personas; total costs cover the reported ingestion/test run, not USD per task.
 
-### What a concrete task looks like
+| Memory system | Task success (%) | Agent cost (USD) | Memory cost (USD) | Total cost (USD) | Median task latency (s) |
+|---|---|---|---|---|---|
+| Built-in memory | 65.67 | 61.48 | 0 | 61.48 | 44.35 |
+| Mem0 | 70.67 | 61.54 | 34.68 | 96.21 | 37.69 |
+| Hindsight | 69.5 | 57.99 | 26.66 | 84.65 | 55.31 |
 
-Illustrative task: prior messages identify a project contact and standing constraint; a new request requires updating the project in an application rather than merely repeating the remembered constraint.
+Locator: Table 2, selected Hermes / GPT-5.6-Luna configurations · [Source](https://arxiv.org/html/2609.24971v2)
+<!-- EVIDENCE:result-1:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:result-2:START -->
+## Table 2, selected Claude Code / Claude Sonnet 5 configurations
 
-Hold the writer, executor, interfaces, and graders fixed; compare no memory, budget-matched retrieval, and supplied relevant history. Report action success, evidence access, and total cost separately. Treat test-time memory updates as a different protocol rather than pooling them with frozen-memory scores.
+Claude Code and Claude Sonnet 5 are fixed. Keep this group separate from Hermes; backbone/harness differences are not backend effects. Honcho outscores Mem0 here, unlike the Luna group.
 
-### Pair with
+600 tasks per configuration; one reported aggregate without repeated-run intervals.
 
-[locomo-conv](locomo-conv.en.md) · [memoryarena](memoryarena.en.md) · [mem2actbench](mem2actbench.en.md)
+| Memory system | Task success (%) | Total cost (USD) | Median task latency (s) |
+|---|---|---|---|
+| Built-in memory | 26.33 | 1132.75 | 32.19 |
+| Mem0 | 32.33 | 1830.57 | 42.3 |
+| Honcho | 35.83 | 1565.82 | 37.92 |
 
-<!-- RESEARCH-DECISION:END -->
+Locator: Table 2, selected Claude Code / Claude Sonnet 5 configurations · [Source](https://arxiv.org/html/2609.24971v2)
+<!-- EVIDENCE:result-2:END -->
 
----
+<!-- EVIDENCE:result-3:START -->
+## Pinned README dataset table, user-message corpus sizes
 
-Evidence checked: 2026-09-23. This note uses paper metadata and the official protocols, implementations, or dataset descriptions identified above. Structural validation is not factual certification, and experiments were not independently reproduced.
+Counts use o200k_base over user messages only. Generated replies and memory representations add processing; multi-year simulated dates are not years of real provider operation.
+
+Three complete histories; 600 total tasks.
+
+| Persona | User-message tokens | Tasks |
+|---|---|---|
+| Alex Valdez | 500109 | 200 |
+| Morgan Chen | 500100 | 200 |
+| Riley Tanaka | 500056 | 200 |
+
+Locator: Pinned README dataset table, user-message corpus sizes · [Source](https://github.com/mem0ai/dolphinbench/blob/81cb6f8405b40a9e76089cef650806a80af06ea2/README.md)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
+
+Certification is conditional on the selected Luna agent and two samples, not proof that every model must fail without history or a model-independent 100% ceiling. The certifier is also the strongest configuration’s backbone, creating possible selection affinity. Authors are affiliated with Mem0, which is evaluated; independent reproduction and run evidence remain important. Three synthetic personas, short action tasks and simulated apps do not establish cross-user transfer, live-service robustness or interleaved lifelong use. Common interfaces do not equalize context, internal models, cost or latency.
+
+The pinned canonical guide says all three harness/model groups use five memory systems, whereas the paper and README show only three Claude Code systems; preserve the paper’s 13-row coverage. The guide also retains accepted Morgan-only 82/200, 138/200 and 126/200 results with 18 approved reruns; these are not the 600-task Table 2 results. Supermemory’s self-hosted compatibility patch is explicitly disclosed; it is not an unmodified hosted-product result. Hindsight client 0.6.1 in runtime versus 0.9.2 tooling illustrates why actual run provenance matters. Selected displayed cost components can differ by one cent from printed totals; preserve reported totals without inventing a reconciliation.
+
+
+
+Next: Fix ingestion agent, executor, tools and grader across no-history, budget-matched retrieval and supplied relevant history, logging evidence arrival separately from action correctness. Report ingestion, maintenance, query cost and amortization, and repeat whole runs. Treat test-time updating as a separate online protocol.
+<!-- EVIDENCE:limitations:END -->

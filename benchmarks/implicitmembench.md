@@ -1,4 +1,4 @@
-# ImplicitMemBench：不经显式回忆也会改变第一反应的记忆
+# ImplicitMemBench：干扰对话后的首次回答适应
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-04-09<br>
@@ -6,64 +6,58 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](implicitmembench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](implicitmembench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2604.08064) · [ACL 2026](https://aclanthology.org/2026.acl-long.1301/) · [项目页](https://www.chonghanqin.com/project/implicitmembench/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-ImplicitMemBench 测 **implicit / non-declarative memory**：过去的学习、priming 或 conditioning 能不能在测试 prompt 没有要求显式回忆时，自动改变 agent 的第一次行为。它统一覆盖 Procedural Memory、Priming 和 Classical Conditioning，并采用 learn/prime → interference → test 的流程。
+已阅读论文集全部 30 页，即第 28232–28261 页：第 1–5 节、局限及附录 A–H，包括评判器、敏感性实验、金标／智能体比较、所有已印出的生成／清洗／评分提示和案例；目视核对表 7。出版 PDF 明示省略了部分提示字段，这是来源缺口，不能视为已完成代码审计。
 
-## 相比此前评测多测了什么
+[ACL 2026 / 2026-07 / 2026.acl-long.1301](https://aclanthology.org/2026.acl-long.1301.pdf)
+<!-- EVIDENCE:reading:END -->
 
-传统长期 memory benchmark 主要奖励 declarative access：找回事实、回答问题、总结历史。这里把可观测量改成“过去经历是否在需要时直接改变行为”。first-attempt scoring 很关键，因为允许反复 prompting 后，原本的 implicit effect 会重新退化为显式推理问题。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+协议先展示规则、主题或反复出现的结果，插入干扰对话，再对新任务的首次回答评分。程序性任务与条件作用任务采用二元成功判定；启动任务则和中性曝光配对对照比较主题迁移（第 3–4 节）。例如，文件复制工具先教“目标路径在前、源路径在后”，干扰后要求在新复制请求中保持这一反常顺序（图 7）。这里生成的是文本，并未证明实际文件系统执行成功。
 
-在 300 个 item、17 个模型上，没有模型总体超过 66%。论文报告 DeepSeek-R1 65.3、Qwen3-32B 64.1、GPT-5 63.0；更有信息量的是 inhibition 与 preference 的明显不对称：17.6% 对 75.0%。这意味着模型更容易形成正向偏好，而不擅长抑制已经被 prime 的行为。
+### 测量坐标的演进
 
-## 这个分数能证明什么
+LoCoMo、LongMemEval 主要询问保留下来的信息；MemoryAgentBench 也包含测试时学习，因此不能把所有前作都说成完全没有行为迁移。ImplicitMemBench 更聚焦短曝光和干扰之后、没有规则提醒时的首次回答。这一操作定义本身不能证明无意识认知，也不能证明上下文重置后的持久性。
+<!-- EVIDENCE:method:END -->
 
-它证明的是 **prior exposure 是否造成行为适应**，不应直接被解释成外部 agent-memory store 的能力。model context、prompt、latent adaptation 和显式 memory module 都可能影响结果。因此它首先是 measurement target 的扩展，而不是干净的 memory component benchmark。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 公平比较契约
+每个范式 100 项，由 GPT-4o-mini 生成并从超过 1,000 个候选中筛选。论文以约 500 个上下文词元为目标，输出上限 4,096；程序性／条件作用任务温度为 0，启动任务仅测试阶段为 0.8。表 7 的二元任务取三次运行均值。只有 18% 的程序性题采用规则校验，全部题目中 94% 由模型评判，主要使用温度为 0 的 GPT-4o-mini。尽管设置称为“零样本”，学习阶段示例仍是协议的一部分。
+<!-- EVIDENCE:setup:END -->
 
-需要固定 backbone/version、learning examples、interference sequence、test prompt、decoding policy 与 first-attempt rule。若一边允许显式 reflection/retrieval loop，另一边只看即时第一反应，比较对象已经从 implicit memory 变成了 explicit reasoning。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 还没有测什么
+以下为精选事实，并非完整排行榜。总分为所列三个范式尺度的算术平均。金标 Mem0 行获得人工挑选的特权内容，不能作为自动系统的公平排名。
 
-它没有证明这种学习能跨越长期真实时间，也没有定位行为变化究竟存在哪里。安全相关的持久性、forgetting、跨任务 transfer，以及与 external memory 的交互仍是空白。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| DeepSeek-R1／程序性任务 | 100 道程序性任务 × 3 次运行 | 首次作答准确率（%） | 76.33 | 温度 0；GPT-4o-mini 或规则校验 | 表 7, 第 28239 页 (PDF 第 8 页) |
+| DeepSeek-R1／条件作用 | 100 道条件作用任务 × 3 次运行 | 首次作答准确率（%） | 69.67 | 温度 0；GPT-4o-mini 评判 | 表 7, 第 28239 页 (PDF 第 8 页) |
+| DeepSeek-R1／启动 | 100 组实验／对照配对 | 启动影响分（0–100） | 49.90 | 测试温度 0.8；GPT-4o-mini 评判温度 0 | 表 7, 第 28239 页 (PDF 第 8 页) |
+| DeepSeek-R1／总分 | 三个范式分数等权 | 混合总分（0–100），非准确率 | 65.30 | 每范式 100 项；输出上限 4,096 词元 | 表 7, 第 28239 页 (PDF 第 8 页) |
+| Mem0 + Key Info / DeepSeek-R1／总分 | 相同三个范式；人工提供关键金标信息 | 混合总分（0–100） | 74.12 | 人工完美存储；不代表自动记忆提取 | 表 12, 第 28244 页 (PDF 第 13 页) |
 
-## 下一步最有判别力的验证
+来源：[表 7, 第 28239 页 (PDF 第 8 页); 表 12, 第 28244 页 (PDF 第 13 页)](https://aclanthology.org/2026.acl-long.1301.pdf)
+<!-- EVIDENCE:results:END -->
 
-在同一个模型上比较 no-memory、episodic retrieval、procedural summary、learned skill representation，并保持 test prompt 完全一致。真正的问题是：哪种 representation 能提升 first-action transfer，同时又不引入有害的过度持久化。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-<!-- RESEARCH-DECISION:START -->
+总分混合两项准确率与一项分级影响分，65.30 不是 300 道题答对 65.30%。启动越强也未必越有用或越遵守指令。程序性／条件作用任务没有逐题报告匹配的无曝光对照，HTTPS 等默认偏好可能无需学习便通过。五名参与者的人工结果连分级启动任务也写成 100% 准确率，口径未解释。附录敏感性实验缺模型与样本身份；记忆智能体比较缺少足够执行设置，不能作组件级因果归因。表 10 的 GLM 原始分数与表 7 不符，图 6 相关性图注和纵轴描述的变量也不同。
+<!-- EVIDENCE:limitations:END -->
 
-## 研究决策卡
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-### 什么时候值得用
-
-适合诊断经历是否在没有显式回忆要求时改变首次行为。它强调自动使用而非事实复述；短学习片段中的行为变化不能直接当作跨会话、长期持久的外部记忆能力。
-
-### 一个具体任务长什么样
-
-示意任务：学习阶段展示一种操作惯例，插入干扰内容后出现相关场景，测试系统的第一反应是否遵循所学规则。允许多次修正会改变测量对象，因此首次尝试与重试后成功应分开。
-
-### 最有判别力的实验
-
-保持学习内容相同，分别在同一上下文、新会话加外部记忆和完全无记忆条件下测试。再增加干扰距离，判断效果来自最近上下文、持久记忆还是响应偏置；不要用同一会话成绩声称长期记忆已成立。
-
-### 建议搭配
-
-[evomembench](evomembench.md) · [past-bench](past-bench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`explicit recall → retained experience → automatic behavior change`
-
-它把 memory 从“存了什么”推进到“经历是否已经改变行为”。
+随机设置与模型默认习惯相反的惯例，加入无曝光和反转关联对照，并把首次行动准确率、启动分与格式违规分开。再在上下文重置后，以预算相同的原始历史、提取记忆和金标规则测试同一批题，报告逐题不确定性及完整评判提示。
+<!-- EVIDENCE:next:END -->

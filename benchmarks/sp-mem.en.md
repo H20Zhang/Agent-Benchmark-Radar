@@ -1,4 +1,4 @@
-# SP-Mem Privacy-Aware Memory Benchmark: Agent Memory / lifecycle privacy
+# SP-Mem: What to remember and when to restore private values
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-17<br>
@@ -6,60 +6,96 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](sp-mem.md) | **English** · [Back to the entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](sp-mem.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.16551) · [Code and data](https://github.com/Jensassss/SP-Mem)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-Places memory utility, consent, authorization, exact-value exposure, and cost in one protocol.
+The full primary paper was read for methods, setup, results and limitations; experiments were not independently reproduced.
 
-## Genealogy: What It Follows
+Read Sections 1–6 and Appendices A–F, including profile/dialogue generation, all four sanitization strategies, storage and restoration algorithms, domain results, ablations and judge prompts. This is the August 17, 2026 first version. Code was not executed, and synthetic profiles are not treated as real participants.
 
-Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
+[Full primary paper](https://arxiv.org/pdf/2608.16551v1) · 2608.16551v1
+<!-- EVIDENCE:reading:END -->
 
-## How It Is Evaluated
+<!-- EVIDENCE:placement:START -->
+## Relation to neighboring evaluations
 
-**Question:** Can personalized memory be used only when necessary and authorized without exposing private values?
+The paper connects utility-oriented memory systems such as Mem0, Zep and MemOS with query-aware protection in PII-Bench and contextual privacy norms in PrivacyLens. Its added coordinate is the persistent-memory lifecycle: isolate exact values at writing time, check task necessity and consent at query time, and assess both usefulness and disclosure. Correctly recalling a private fact is therefore insufficient: using generalized context without access, or requesting permission when needed, can be the desired behavior. This is a comparison of measurement goals, not a claim that the dataset inherits those benchmarks.
+<!-- EVIDENCE:placement:END -->
 
-**Measurement object:** Privacy-aware memory benchmark that jointly measures response quality, personalization, consent handling, exact-value exposure, and cost.
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-**Scale and protocol:** 1,000 synthetic profiles, 5,400 queries, four domains, and 376 subtasks. The protocol includes matched-privacy-preference-modes, pairwise-quality, exact-value-leakage, cost-accounting.
+The pool contains 1,000 synthetic profiles, equally divided across finance, medical, education and mental-support domains. There are 37 privacy fields in eight categories, plus 14 general preference dimensions and four additional dimensions per domain. Rules generate structured fields, Gemma-3-12B-IT enriches open fields, and an external disease dataset seeds medical attributes; consistency checks reject direct contradictions. The 376 subtasks comprise 185 preference-only, 51 privacy-only and 140 mixed tasks. Each user receives 12 coverage tasks and nine random tasks. Llama-3.1-8B-Instruct plays the user and Gemma-3-12B-IT the assistant, progressively disclosing required entities until coverage is complete. The full pool contains 21,000 histories and 54,000 query instances derived from 270 query variants. Histories average 8,530.70 tokens per user under cl100k_base, excluding chat-template overhead.
 
-## What a Score Can Support
+SP-Mem extracts natural-language facts and relation triples. Searchable vector and graph stores hold non-private information and sanitized representations; separate protected storage holds exact values, linked by mapping keys. Sanitization uses aliases, last-four-digit masking, numerical buckets and model-based generalization. The query analyzer selects a minimal required entity set from a whitelist. Exact values are restored only when needed and consented to; otherwise generation uses sanitized context. An illustrative dinner recommendation needs food preferences rather than an exact home address, while an address-dependent form requires permission first. The paper does not establish cryptographic security for the separate store.
+<!-- EVIDENCE:method:END -->
 
-Matched modes over 1,000 profiles, 5,400 queries, and four domains score response quality, authorization requests, and exact-value exposure together. It supports system-level evidence under this environment, harness, model/tool, and resource configuration; unmatched variables prevent attribution to one component.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup and scoring
 
-## Strongest Confounder
+Evaluation uniformly samples 100 users across the four domains, using 2,100 histories and 5,400 queries. Conditions are preference-only, privacy-only with consent allowed/denied, and mixed with consent allowed/denied. All memory systems use GPT-5.2-Chat for construction; response backbones are GPT-5.2-Chat, Llama-3.1-8B-Instruct, DeepSeek-V3.2 and Qwen3-14B. Appendix E states that memory baselines share query analysis, consent handling and generation while changing storage/retrieval backends. A separate full-context baseline receives the complete history. Stores are Qdrant and Neo4j; local open models use A40 GPUs. Retrieval counts, sampling temperatures, token caps and exact baseline versions are not fully specified.
 
-Explicit consent labels and an exact-string leakage proxy omit inference, re-identification, and adversarial multi-turn disclosure. The load-bearing confounders are synthetic-consent-labels, benchmark-system-codesign, exact-string-leakage-proxy.
+GPT-4.1 compares anonymized response pairs. Task completion P-TC applies to every condition; personalization P-PQ applies only to preference-bearing tasks. Every pair is judged in both orders: a decisive winner is retained only if both orders agree, and other cases become ties. Reported quality is (wins + ties)/comparisons, not the strict win rate; separate win/tie/loss counts are absent. PAR checks permission requests against whether exact private information is required. UPU exact-matches responses against the profile inventory for unnecessary or unauthorized values; masked and generalized values do not count. The total query count is not the denominator of every cell because conditions, metric applicability and effective comparison counts differ.
+<!-- EVIDENCE:setup:END -->
 
-## Remaining Gap: What It Still Does Not Measure
+<!-- EVIDENCE:result-1:START -->
+## Quality: non-loss is not strict win rate
 
-Explicit consent labels and exact-string leakage miss inference, re-identification, and adversarial multi-turn disclosure.
+Each row compares SP-Mem with the named baseline using the same response backbone. Allowed includes preference-only and both consented privacy-bearing conditions; denied includes the two refused conditions. Units are percentage (wins + ties)/valid pairs in the applicable group; P-PQ excludes privacy-only tasks. GPT-4.1 judges both orders and disagreement becomes a tie. Exact cell denominators are not listed.
 
-## Genealogy: Where It Fits in the Map
+| Comparison condition | P-TC (%) | P-PQ (%) |
+|---|---|---|
+| GPT-5.2-Chat / allowed / Full-context | 65.35 | 79.13 |
+| GPT-5.2-Chat / allowed / Mem0 | 90.87 | 94.24 |
+| GPT-5.2-Chat / denied / Full-context | 91.45 | 90.86 |
+| Qwen3-14B / allowed / Full-context | 45.09 | 71.70 |
+| Qwen3-14B / allowed / Mem0 | 80.63 | 89.54 |
+| Qwen3-14B / denied / Full-context | 86.65 | 88.88 |
 
-`map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+Source: Tables 3–4 · [Paper](https://arxiv.org/pdf/2608.16551v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## Direct exposure remains nonzero
 
-## Research decision card
+UPU is responses exposing unnecessary or unauthorized exact private values divided by valid responses in the condition; lower is better. These are narrative aggregates; backbone aggregation weights and per-condition denominators are not specified. Masked/generalized values do not count as exact exposure.
 
-### When to use it
+| System and condition | UPU (%) |
+|---|---|
+| SP-Mem / Preference-only | 0.33 |
+| Full-context / Preference-only | 16.00 |
+| SP-Mem / Privacy-only-denied | 1.12 |
+| SP-Mem / Mixed-denied | 1.21 |
 
-Use SP-Mem to trade off privacy authorization and personalization within one experiment. Absence of exact-value repetition does not rule out inference. Treat it as a diagnostic of consent handling and direct disclosure, not a complete privacy guarantee.
+Source: Section 4.4; Figure 4 · [Paper](https://arxiv.org/pdf/2608.16551v1)
+<!-- EVIDENCE:result-2:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:result-3:START -->
+## Permission detection and token trade-offs
 
-Illustrative task: a store contains an ordinary preference and information requiring authorization, but a service request needs only part of it. Appropriate behavior may use permitted information, request consent, or avoid disclosure rather than always answer or always refuse.
+PAR covers all five conditions: recall is divided by tasks requiring exact private information, precision by tasks requesting authorization; both are 0–1 proportions. Token ratios normalize the same-backbone full-context total to 1.00. They are not dollar costs and do not establish amortized construction cost.
 
-### Most discriminating experiment
+| Response backbone | PAR recall | PAR precision | SP-Mem token ratio | Mem0 token ratio |
+|---|---|---|---|---|
+| GPT-5.2-Chat | 0.84 | 1.00 | 0.31 | 0.25 |
+| Llama-3.1-8B-Instruct | 0.92 | 1.00 | 0.30 | 0.23 |
+| Qwen3-14B | 0.91 | 1.00 | 0.26 | 0.21 |
 
-Switch consent state for matched profiles while keeping service queries fixed, and jointly report utility and disclosure risk. Add semantic-paraphrase checks beyond exact-string leakage. Track unnecessary permission requests so privacy gains obtained through excessive friction remain visible.
+Source: Tables 5–6 · [Paper](https://arxiv.org/pdf/2608.16551v1)
+<!-- EVIDENCE:result-3:END -->
 
-### Pair with
+<!-- EVIDENCE:interpretation:START -->
+## What the evidence supports
 
-[gatemem](gatemem.en.md) · [permemsafe](permemsafe.en.md)
+Low exact-value exposure can coexist with high non-loss rates, but the results do not establish privacy at zero utility cost or universal superiority over full context. Qwen3-14B has only 45.09% task-completion non-loss against full context in the allowed group, implying decisive losses on more than half of comparisons. Higher rates elsewhere may contain many ties. Strong denied-group non-loss suggests sanitized information can support useful service without exact values. Hybrid vector-plus-graph memory exceeds 80% overall non-loss against either single branch, but this still does not identify strict win rates. SP-Mem uses fewer tokens than full history and more than existing memory baselines.
+<!-- EVIDENCE:interpretation:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:limitations:START -->
+## Limits, source gaps and next test
 
-<!-- RESEARCH-DECISION:END -->
+Synthetic profiles, fixed entity vocabularies and explicit consent labels simplify real ambiguity; profile-conditioned preferences may also encode particular associations. UPU excludes inference, paraphrased disclosure, re-identification, multi-turn attacks and compromise of protected storage. Last-four-digit masks and city-level generalizations can still be sensitive. Human-judge agreement, confidence intervals and repeated-run variability are not reported. Although latency is mentioned in the introduction, the principal cost table reports relative tokens, not end-to-end latency or monetary cost. A useful next test holds users/tasks fixed while switching consent, publishes win/tie/loss counts and valid denominators, adds semantic disclosure and multi-turn attacks, and audits that restoration logs contain only authorized fields.
+
+Scope reconciliation: 14 general plus four domain-specific preferences describes each user; the appendix’s 16 domain-specific dimensions cover all four domains. The scenario table has seven tested general scenarios plus profile completion used only for histories, so not all eight general entries enter testing. Figure 4’s narrative provides aggregate exposure rates without clearly specifying backbone weights or effective denominators by condition; the table above labels them as reported aggregates rather than assigning them to one model. Retrieval configurations and implementation-level protection of the exact-value store still require code inspection.
+<!-- EVIDENCE:limitations:END -->

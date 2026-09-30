@@ -1,4 +1,4 @@
-# ScholarQuest：academic search 的答案往往是一个 intent-conditioned paper set
+# ScholarQuest：按研究意图检索论文集合
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-05-19<br>
@@ -6,50 +6,71 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](scholarquest.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](scholarquest.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2606.20235) · [代码](https://github.com/pty12345/ScholarQuest)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读所述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-ScholarQuest 包含 1,111 个 queries、超过 1,000 个 CS topics、四种 research intents；每个 answer set 有 5–200 篇 arXiv papers，基于约 3M-paper shared backend 与 citation graph。指标包括 recall@100、recall@all 与 search efficiency。
+完整阅读正文第 1–6 节与附录 A–E，涵盖构造配置、人工混淆矩阵、完整调用案例和金标清单、四类示例及全部提示；核对表 2、图 4 和附录案例。
 
-## 相比什么前进了
+[arXiv 2606.20235v1 · 2026-06-18](https://arxiv.org/pdf/2606.20235v1)
+<!-- EVIDENCE:reading:END -->
 
-SAGE/AutoResearchBench 已开始测 open-ended literature discovery。ScholarQuest 进一步把 user intent 显式放进 set retrieval：同一个 topic 下，survey、method comparison 或 specific evidence 可能需要不同 paper sets。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+Qwen3-Max 将 1,682 个 ACM 主题映射到 arXiv 类别，保留 1,638 个计算机主题种子，每个生成四种意图的查询，再过滤成 1,111 条。金标构造用十种改写在多来源检索，并沿参考／被引关系扩展最多两跳；论文按 arXiv ID 去重，再依据标题、摘要和元数据由多个未具名 LLM 判相关性。示意问题是找“远程复制但排除本地复制”的论文，输出排序论文列表；错误地把被排除概念也当正向关键词，会扩张到不相关邻域。金标不是从论文全文逐条验证全部细节。
 
-recall 支持当前 generated queries、LLM relevance adjudication 与 corpus snapshot 下的 set retrieval。开放 literature 的 gold set 天然不完备，因此绝对 recall 既反映 agent，也反映 reference construction。
+编辑比较：论文直接对照 PaSa 的 RealScholar／AutoScholar 和 SPARBench，增加由 ACM 分类体系产生的研究主题与受控意图，并统一代理检索后端。与 MAPLE 的“多问同一篇”不同，ScholarQuest 是“一问返回多篇”；新增坐标是论文集合的覆盖及范围保持，不是全文事实核验或综述质量。
 
-## 公平比较条件
+[来源](https://arxiv.org/pdf/2606.20235v1)
+<!-- EVIDENCE:method:END -->
 
-锁定 intent slice、corpus/citation graph、gold-set version、search budget 与 relevance adjudicator。不同 intents 应单独呈现。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 下一步评测坐标
+ScholarBase 基于带摘要的 S2/arXiv 记录，支持 BGE-M3 稠密检索、BM25 和 RRF 混合检索、元数据查找及引文扩展。PaSa、SPAR、PaperScout 使用各自发布的代码和检查点，只统一后端；具体主干标识、最大调用／token／时间预算和重复次数未完整列出。外部搜索系统每查询最多返回 300 篇，并非全部系统都使用同一个内部排序器。Recall@100 是前100项中找回的金标论文数除以该查询全部金标论文数，再按查询平均；Recall@All 则用最终全部返回项计算同样的比例，不把所有查询的金标池混成一个分母。人工审计在三档自动标签各抽 150 对，共 450 对，三位博士多数票给参考判断。
 
-下一步应评价 evidence-set marginal utility：多找一篇论文是否填补新的 claim/aspect，而不仅是 reference set 中又命中一篇。
+[来源](https://arxiv.org/pdf/2606.20235v1)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 选取系统的总体召回与范围控制
 
-## 研究决策卡
+完整 1,111 条查询；各题金标数量不等，论文的答案规模分组覆盖 5–200 篇。前两项是全部查询的召回均值，范围控制只用对应子集；代理与单次检索预算不同，不能视为同计算量消融。
 
-### 什么时候值得用
+| 系统 | 总体 R@100（0–1） | 总体 R@All（0–1） | 范围控制 R@100（0–1） |
+| --- | --- | --- | --- |
+| Hybrid Retrieval | 0.214 | 0.244 | 0.091 |
+| PaSa | 0.281 | 0.310 | 0.193 |
+| PaperScout | 0.314 | 0.355 | 0.182 |
 
-适合研究按不同研究意图迭代收集论文，而不只是标题相似度搜索。答案是一个集合，漏掉研究分支与多找几篇近重复论文不是同等结果；检索效率应与集合覆盖一并评价。
+事实位置：表 2，第 5 页；第 4.1 节与附录 A.2 · [来源](https://arxiv.org/pdf/2606.20235v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 选取代理的搜索工作量
 
-示意任务：系统围绕一个主题搜集论文，沿引文关系扩展，再根据研究意图收紧或扩大范围。相同主题下的入门综述与全面相关工作检索，对集合边界和停止规则可能提出不同要求。
+同一 1,111 条查询的过程统计；候选数与调用数不是 token、耗时或货币费用，也不能将它们代入均分直接重建原文的逐题效率指标。没有配平总计算预算。
 
-### 最有判别力的实验
+| 系统 | 每题工具调用均值 | 每题观察候选均值 |
+| --- | --- | --- |
+| PaSa | 60.1 | 744 |
+| PaperScout | 45.0 | 408 |
 
-固定论文后端和调用预算，对比关键词搜索、引用扩展与意图条件化策略，逐意图报告召回。人工检查金标外的有效论文，并记录去重后的覆盖增长，避免不完整答案集合或重复结果误导评价。
+事实位置：图 4，第 5 页；第 4.3 节，第 6–7 页 · [来源](https://arxiv.org/pdf/2606.20235v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:limitations:START -->
+## 解读、局限与下一步
 
-[sage](sage.md) · [autoresearchbench](autoresearchbench.md)
+PaperScout 总体召回更高，却在范围控制的 R@100 上低于 PaSa，不能概括为每类都胜出。审核中自动高分组只有 129/150 是严格匹配，宽松匹配为 148/150；更高宽松一致性不消除目标集合误标，也无法估计未进入候选池的漏标。多轮策略、底层模型和实际调用预算同时不同，故不能将收益独占归因于自主规划。案例和按题统计说明大量探索仍可能偏离意图，但只是已有金标下的诊断；未命中不自动说明找出的其他论文无用。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+页首记录日期为 2026-05-19，而所读 arXiv v1 标为 2026-06-18；这不证明更早公开日期不存在，保留历史块并另待核验。BQ_002897 在表 10–11 有 12 篇金标，附录 D 写 11 篇且少列 2002.03740，不能据案例反推统一分母。原说明把四种意图泛写成综述或方法比较，实际为方法、设置、范围排除和主张比较。论文只明确百万级后端，这里不沿用未经本次核验的约 300 万精确规模。
 
-<!-- RESEARCH-DECISION:END -->
+固定同一主干、后端与调用／候选预算，分别启用改写、引文扩展和排除约束验证；用独立全文审查复核高分金标及金标外结果，报告精确率、去重召回和新增证据价值。对每种意图和答案规模分组，并解决案例清单版本差异。
+
+[来源](https://arxiv.org/pdf/2606.20235v1)
+<!-- EVIDENCE:limitations:END -->

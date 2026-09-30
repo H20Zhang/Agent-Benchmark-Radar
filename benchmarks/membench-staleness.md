@@ -1,4 +1,4 @@
-# membench（staleness）：让当前事实排在过期事实之前
+# membench：当前事实命中与旧事实污染的权衡
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-22<br>
@@ -6,62 +6,104 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](membench-staleness.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](membench-staleness.en.md)
 
-[代码、场景与结果](https://github.com/Ps23102004/membench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已阅读固定版本的官方协议、设置、结果记录与局限；未独立复现实验。
 
-这个 component benchmark 测的是 **memory update / supersession 的排序正确性**：当 store 中同时存在旧事实、新事实、否定信息、实体相近项和时间范围不同的记录时，系统能否让当前有效事实排在禁止使用的 stale fact 之前，并在证据不足时正确 abstain。它不把“retrieved something relevant”当成功，而是关心 retrieval result 是否仍然会泄漏过期状态。
+完整阅读固定提交README、运行器、评分器、聚合指标和recency后端；检查时间范围场景及完整冻结榜单JSON。未执行后端或逐项审计所有场景和适配器。
 
-## 相比常规 recall benchmark 多测了什么
+[固定版本 eff49d990416](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/README.md)
 
-普通 memory recall 往往只问 gold fact 有没有出现在 top-k；如果 stale 和 current 两条都被召回，recall 仍可能很好。membench 显式报告 `staleness@1`、leakage、abstention 和 contradiction resolution，因此把 **更新语义** 从 relevance 里拆出来。公开修订还替换了无效的 top-k staleness 指标，并堵住通过大量弃答刷高分的路径。
+[辅助材料（2026-09-30查阅）](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/membench/runner.py)
 
-## 决定性证据
+[辅助材料（2026-09-30查阅）](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/membench/grader.py)
 
-60 个可执行 probe 通过可插拔 write/query/reset 接口运行，并报告 recall、precision、`staleness@1`、leakage、abstention、contradiction resolution 与 Wilson interval。Embedding baseline 在 **12 个 supersession probe 中有 11 个返回 stale answer**；加入 recency reranking 后降到 **0/12**。这说明对该小型受控 store，更新-aware ranking 可以解决单纯 semantic similarity 明显处理不好的冲突。
+[辅助材料（2026-09-30查阅）](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/membench/metrics.py)
 
-## 这个分数支持什么判断
+[辅助材料（2026-09-30查阅）](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/membench/backends/recency_backend.py)
 
-结果支持“在这组手写 probe 与小 memory store 上，纯 embedding retrieval 对 supersession 很脆弱，而 recency-aware reranking 显著降低 stale top-1”。它不能推出更大规模长期 memory 中 recency 一定足够：真实更新可能不是单调时间覆盖，旧事实也可能在特定时间范围或上下文重新变得正确。
+[辅助材料（2026-09-30查阅）](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/results/leaderboard-2026-08-22.json)
 
-## 公平比较条件
+[辅助材料（2026-09-30查阅）](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/scenarios/temporal_scoping.json)
 
-需要固定 memory records、时间戳语义、write/query API、embedding model、top-k、abstention policy 和 exact-substring evaluator。不同方法应同时报告 current recall 与 stale leakage，避免通过激进过滤把两者一起降下来。recency 方法还必须报告 k 敏感性，因为 candidate set 变化本身会影响是否看到 current fact。
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 研究上怎么用
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-它适合作为 **update mechanism 的 unit test**，尤其适合测试 timestamp-aware scoring、conflict resolution、versioned memory、forgetting policy 或 memory consolidation。一个完整 memory system 可以先在这里证明 component correctness，再到长时程 agent benchmark 验证这种排序改善是否真的提升未来行动。
+membench将每套手写多会话故事按时间写入小型记忆库，在不同阶段查询；每套开始清空，后续信息不会提前可见。查询只要求返回已存文本，没有回答模型。预期子串在前k出现算命中；禁用子串排第一算staleness@1，出现在任意返回位置则算leak_rate@k。它能揭示“新旧都取回，因此召回很高”的假象。
 
-## 下一步最有价值的验证
+谱系：这是一套独立的更新语义单元测试，没有继承LongMemEval数据。与其知识更新QA相比，这里把评分停在文本排名，分开首位旧事实、剩余位置污染和当前事实缺失。它与StateMemBench可作跨尺度对照，但不能互换总体分数。
+理解评分的示意：旧记录说项目联系人是A，后续更新为B；返回列表包含B就可能命中，但A若仍排第一则同时记为旧事实污染。高召回因此可以与错误优先级并存。
+<!-- EVIDENCE:method:END -->
 
-当前主要缺口是规模、自然语料、复杂有效期和 downstream action。最高杠杆实验是构造多轮 supersession 链、非单调回滚、时间区间事实和实体冲突，并在相同 retrieval budget 下比较 recency、explicit version graph 和 learned conflict resolver，观察谁能同时维持 current accuracy 与历史可追溯性。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-## 谱系位置
+五套各12探针：替代、否定、实体混淆、时间范围、干扰负载，共60；每库约12—52事实，k=5。冻结2026-08-22记录使用Ollama 0.32.15、nomic-embed-text:latest，摘要0a109f422b47。embed纯余弦，recency先取max(3k,10)=15语义候选再按时间排序，grep按关键词重叠并以新近性打破平局。默认写入元数据仅时间戳与会话ID，手写实体/主题答案标签被剥离。空返回使召回为0，并从staleness/leak分母排除，单列弃答率；所以要同时看三项。
+<!-- EVIDENCE:setup:END -->
 
-`map_delta=early_signal`，绑定 `memory-update-and-staleness`。修正后的指标适合作为 component diagnostic，但 **60 个相关手写 probe + 单作者 + 小 store** 还不足以构成持久领域迁移；需要更广泛证据证明 update-aware evaluation 是长期 memory benchmark 的必需坐标。
+<!-- EVIDENCE:result-1:START -->
+## 少旧事实可能伴随更多正确事实缺失
 
-<!-- RESEARCH-DECISION:START -->
+命中和旧事实可以同题同时发生；所有后端弃答率0，因此本次stale分母均为60。区间为Wilson二项式区间，但探针共享故事、不是独立样本，实际泛化不确定性可能更大。词元为字符数除4的近似，不是实际tokenizer计费。
 
-## 研究决策卡
+每后端60探针、每套12，所有后端弃答为0；计数与冻结取整比例对应。
 
-### 什么时候值得用
+| 后端 | 命中数/60 | stale首位数/60 | staleness@1的95%区间 | Leak@5 | 平均近似词元 |
+|---|---|---|---|---|---|
+| embed | 59 | 28 | 0.346–0.591 | 1 | 70.3 |
+| grep | 56 | 24 | 0.286–0.526 | 0.95 | 67.8 |
+| recency | 45 | 3 | 0.017–0.137 | 0.167 | 73.9 |
 
-适合给记忆存储做过期事实的快速回归测试，不宜承担通用记忆性能主结论。它关注当前事实能否排在被替代事实之前；小规模精确匹配探针的通过，不等于复杂历史中的状态理解已经可靠。
+定位：冻结榜单：全量结果 · [原文](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/README.md)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 替代子集与全部题目分别报告
 
-示意任务：同一实体的一项事实先写入，之后被否定或替代，当前查询应优先返回有效值而避开禁止的旧值。全部不返回虽然能减少旧事实出现，却并未完成正常检索任务。
+只看替代子集，不能把11/12推广到全部60探针。新事实优先要求新值出现且排在旧值前，或新值出现而旧值不出现；仅删除旧值并不能得分。
 
-### 最有判别力的实验
+12道替代探针；只在声明supersedes的题上计算新事实优先率。
 
-在相同探针上同时记录当前事实命中、旧事实排位和弃答；扫描 top-k 时保持指标定义不变。再加入近义改写与更大干扰库，检查通过是否依赖精确子串和小存储规模。
+| 后端 | 命中数/12 | stale首位数/12 | 前五旧事实泄漏率 | 新事实优先率 |
+|---|---|---|---|---|
+| embed | 11 | 11 | 1 | 0 |
+| grep | 10 | 5 | 0.833 | 0.333 |
+| recency | 10 | 0 | 0 | 0.833 |
 
-### 建议搭配
+定位：冻结榜单：替代子集 · [原文](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/README.md)
+<!-- EVIDENCE:result-2:END -->
 
-[statemembench](statemembench.md) · [longmemeval](longmemeval.md)
+<!-- EVIDENCE:result-3:START -->
+## 降低污染不是对所有问题单调有益
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+0—1比例。实体精确匹配可占首位但相似实体仍污染其余位置；新近性在干扰子集反而使首位错误从0升至25%。
 
-<!-- RESEARCH-DECISION:END -->
+每行12探针，无弃答。
+
+| 子集与后端 | Recall@5 | staleness@1 | Leak@5 |
+|---|---|---|---|
+| 实体混淆／embed | 1 | 0 | 1 |
+| 实体混淆／recency | 0.667 | 0 | 0.333 |
+| 干扰负载／embed | 1 | 0 | 1 |
+| 干扰负载／recency | 0.583 | 0.25 | 0.5 |
+
+定位：冻结榜单：其他子集的权衡 · [原文](https://github.com/Ps23102004/membench/blob/eff49d9904164a0bc3e4e5f6c261bffe4ff8663b/README.md)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+这支持新近性与召回存在权衡，不能称recency已经解决更新问题。staleness包括旧值、错误实体和过期值，名称不能替代具体错误类型。时间范围和复杂会话例子已经存在，下一步应扩展其规模与组合难度。确切子串评分可能错判同义回答，也可能把包含正确词与错误语境的文本算命中。没有测真实下游答案、行动、检索时延或长期扩展性。
+
+不能把staleness@1视为所有后端都与k无关，recency的候选池随k变化。README描述三个embed子集首位几乎不旧，但表中只有实体和干扰为0，时间范围为0.5。子串分数也可能假阳性，不能一概称推理系统真实能力的下界。
+
+
+
+下一步：与LongMemEval或StateMemBench配对，保留当前60探针作回归集，另外建立按故事留出的自然改写、多步替代与更多干扰项；固定语义候选池再改变返回k，以隔离recency候选变化。报告无答案任务的正确弃答与可答任务召回，增加语义人工审核和下游回答。
+<!-- EVIDENCE:limitations:END -->

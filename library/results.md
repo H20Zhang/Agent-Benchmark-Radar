@@ -8,7 +8,7 @@
 |---|---|---:|---|---|
 | [MemProbe (stability–plasticity)](../benchmarks/memprobe-stability-plasticity.md) <!-- benchmark-id:memprobe-stability-plasticity --> | 论文快照 | 6 | 2026-09-30 | [JSON](../data/results/memprobe-stability-plasticity.json) |
 | [SCALE-QA](../benchmarks/scale-qa.md) <!-- benchmark-id:scale-qa --> | 论文快照 | 1 | 2026-08-31 | [JSON](../data/results/scale-qa.json) |
-| [The Compaction Cliff](../benchmarks/compaction-cliff.md) <!-- benchmark-id:compaction-cliff --> | 论文快照 | 1 | 2026-08-31 | [JSON](../data/results/compaction-cliff.json) |
+| [The Compaction Cliff](../benchmarks/compaction-cliff.md) <!-- benchmark-id:compaction-cliff --> | 论文快照 | 2 | 2026-09-30 | [JSON](../data/results/compaction-cliff.json) |
 | [Agent Memory Bakeoff](../benchmarks/agent-memory-bakeoff.md) <!-- benchmark-id:agent-memory-bakeoff --> | 榜单快照 | 2 | 2026-08-31 | [JSON](../data/results/agent-memory-bakeoff.json) |
 | [DreamBench-SWE](../benchmarks/dreambench-swe.md) <!-- benchmark-id:dreambench-swe --> | 论文快照 | 1 | 2026-08-31 | [JSON](../data/results/dreambench-swe.json) |
 | [DeltaML-Bench](../benchmarks/deltaml-bench.md) <!-- benchmark-id:deltaml-bench --> | 论文快照 | 2 | 2026-08-31 | [JSON](../data/results/deltaml-bench.json) |

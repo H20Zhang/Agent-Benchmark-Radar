@@ -1,4 +1,4 @@
-# StateMemBench
+# StateMemBench: From recalling facts to maintaining operative state
 
 <!-- RELEASE-REFERENCE:START -->
 > **Release diagnostic (historical reference)** · 2026-08-20 · paper v1 snapshot<br>
@@ -7,60 +7,83 @@
 > From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
 <!-- RELEASE-REFERENCE:END -->
 
-## What it actually measures
+[中文](statemembench.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-StateMemBench measures **maintenance of the currently operative state after cross-session revisions**. Facts, constraints, and decisions can be added, superseded, or linked by dependencies; the final answer must use what remains valid now rather than succeeding merely because some historical record can be recalled. The object is “what should the system currently believe and which rules are still in force,” not only local old-versus-new ranking.
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What changed relative to predecessors
+The full primary paper was read for methods, setup, results and limitations; experiments were not independently reproduced.
 
-LongMemEval and MemoryAgentBench already include knowledge updates, but update failures can remain entangled with retrieval, long-context understanding, and generic reasoning. StateMemBench uses symbolic event programs, deterministic replay, and a closed-pool grader to generate explicit dependencies and revision trajectories. This isolates **state drift** more directly: an output can be classified as current, targeted-superseded, or another failure.
+Read Sections 1–7 and Appendices A–I: cross-benchmark error labeling and human audit, symbolic scenarios and validation, all StateMem prompts, the answer wrapper and matched control, costs and all supplemental results. Reviewed the August 20, 2026 first version without reproducing code. Conflicting tables remain unresolved.
 
-## Decisive evidence
+[Full primary paper](https://arxiv.org/pdf/2608.19652v1) · 2608.19652v1
+<!-- EVIDENCE:reading:END -->
 
-The benchmark contains **234 multi-session scenarios and 322 probes**. Its grader separates current, targeted-superseded, and other outcomes. The paper reports that StateMem raises the score from **0.205 to 0.363 with the same DeepSeek backbone**; a length- and cost-matched control still retains roughly a **+15–32 point** structural advantage. The important evidence is that the gain is not fully explained by simply keeping more context or spending more tokens.
+<!-- EVIDENCE:placement:START -->
+## Relation to neighboring evaluations
 
-## What the score supports
+LongMemEval already includes knowledge updates, and MemoryAgentBench tests ordered fact edits. StateMemBench additionally scores selection of a stale value separately from generic errors. Compared with concurrent STALE, it explicitly states conflicts and dependencies, reducing the confound of discovering implicit relationships. Unlike conventional dialogue state tracking, it evaluates final decisions without imposing a fixed slot representation. Anti-traps require retaining an earlier value when it remains valid, defeating an always-pick-the-latest heuristic. This compares measurement coordinates: LongMemEval and LoCoMo are external generalization tests, not direct sources of StateMemBench questions.
+<!-- EVIDENCE:placement:END -->
 
-The results support the claim that structured current-state maintenance improves operative-state correctness under explicit dependencies and controlled revisions. They are not a general memory-quality measure and do not directly establish better long-horizon action in open environments because dependencies, revisions, and final probes are deliberately constructed.
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-## Fair comparison contract
+A symbolic program specifies rules, value updates, scoped exceptions, commitments and retractions; deterministic replay computes the operative answer. Traps arise when lazy policies such as trusting the latest mention, most frequent value or cached derivation disagree with replay. The five modes are status, salience, sequence, compound and anti-trap. Public research, shopping and personal-finance material supplies surface entities and vocabulary; state values and trap semantics are independently sampled. Sonnet-4.6 renders dialogues, followed by checks for load-bearing facts in assigned sessions and banned phrases. A strong reader with relevant sessions must answer correctly in at least two of three samples; a weak reader with full history must hit the drift target in at least three of five, or retain the gold answer for anti-traps. This deliberately selects model-trapping scenarios.
 
-Backbone, event program, visible history, state-representation budget, token/cost budget, replay policy, and grader should be fixed. Length- and cost-matched controls are especially important; otherwise a structured-state method can benefit simply from retaining more explicit information. Current-state accuracy and targeted-superseded error rate should also be reported separately so an average score cannot hide old-state leakage.
+Short Set A has 190 scenarios, each with 18 sessions, a median 165 turns and roughly 3,000 tokens, with one probe. Long Set B has 44 scenarios, each merging three trap threads across roughly 38 sessions, a median 599 turns and 7,000–15,000 tokens, with three probes. Thus there are 234 scenarios but 322 graded probes. In a shopping example, ten packs weekly implies twenty for two weeks; after the weekly amount falls to seven, the correct two-week total is fourteen rather than the cached twenty. Hidden grading pools contain the current answer, targeted drift value and plausible distractors; answer models never see the choices.
+<!-- EVIDENCE:method:END -->
 
-## How to use it in research
+<!-- EVIDENCE:setup:START -->
+## Experimental setup and scoring
 
-StateMemBench is useful for evaluating **state stores, versioned memory, dependency-aware update, and structured consolidation**. It complements a staleness benchmark: StateMemBench tests whether a complete current state can be reconstructed after multiple revisions, while staleness is closer to a local retrieval/ranking unit test. For an agent-memory paper, the combination localizes update mechanisms more cleanly than downstream long-context QA alone.
+StateMem makes one encoder call per turn to create structured units with content, priority, provenance and dependencies. Superseded units remain for audit but are inactive; a deterministic dependency traversal flags downstream units for rechecking without extra model calls. One answer call receives active state and triggers, then recomputes from current inputs. Roughly 165–600 encoder calls per scenario make this substantially more expensive than a single long-context call.
 
-## Next discriminating validation
+Memory/retrieval comparisons use matched Qwen-3.5-9B or DeepSeek-V4-Flash backbones, thinking disabled and temperature zero, with one run per configuration and a fixed DeepSeek-V4-Pro judge. Retrieval uses k=10 on StateMemBench and k=20 on external LongMemEval/LoCoMo. Accuracy is current-state answers divided by scored probes; drift rate is targeted stale answers divided by all probes, not by errors. Off-pool responses must accompany drift rates because non-answers can appear deceptively resistant. Deterministic word-boundary matching covers about 28% of answers and agrees with the judge on 94.1% of that subset; remaining free-form mapping still relies on the model judge.
+<!-- EVIDENCE:setup:END -->
 
-The main gaps are latent relation discovery, real user/environment drift, privacy governance, and whether better state tracking improves later closed-loop action. The highest-leverage next step is to remove explicit dependency annotations, require the agent to infer which natural-language facts supersede or constrain others, and connect state correctness to downstream tool/action success.
+<!-- EVIDENCE:result-1:START -->
+## Full set: accuracy, drift and off-pool responses
 
-<!-- RESEARCH-DECISION:START -->
+DeepSeek-V4-Flash, thinking off, temperature zero, DeepSeek-V4-Pro judge; 190 short and 132 long probes, total 322. Accuracy is a 0–1 proportion; drift also uses 322 as denominator. Other in-pool distractor answers are omitted, so displayed counts need not sum to 322.
 
-## Research decision card
+| Method | Correct /322 | Accuracy | Drift /322 | Off-pool count |
+|---|---|---|---|---|
+| Long-context | 48 | 0.149 | 206 | 64 |
+| Dense | 66 | 0.205 | 177 | 66 |
+| A-Mem | 64 | 0.199 | 181 | 72 |
+| StateMem | 117 | 0.363 | 158 | 36 |
+| StateMem without dependency propagation | 120 | 0.373 | 157 | 36 |
 
-### When to use it
+Source: Tables 3 and 14 · [Paper](https://arxiv.org/pdf/2608.19652v1)
+<!-- EVIDENCE:result-1:END -->
 
-Use StateMemBench to separate stale-state use from other answer errors, particularly for state maintenance and dependency updates. Its value is interpretable error typing. Collapsing all failures into incorrect answers discards the main advantage over ordinary QA.
+<!-- EVIDENCE:result-2:START -->
+## State-chain contribution with matched context
 
-### What a concrete task looks like
+Frozen 60-probe set, 30 short and 30 long probes from 22 long scenarios. Units are percent correct, k=10; each store is built once with identical retrieved chunks and a fixed DeepSeek-V4-Pro judge. Control and wrapper both see transcript plus retrieval and use one answer call with a maximum 250-word preliminary section. Backend-alone sees retrieval only. Its entire gain cannot be attributed to state structure.
 
-Illustrative task: a value in a plan is revised and dependent arrangements must change accordingly. After retrieving an old plan and a new event, the system must recover operative state rather than choose the most frequently mentioned description.
+| Backbone / backend | Backend alone (%) | Matched control (%) | State wrapper (%) |
+|---|---|---|---|
+| Qwen-3.5-9B / Mem0 | 25.0 | 28.3 | 56.7 |
+| DeepSeek-V4-Flash / Mem0 | 28.3 | 56.7 | 71.7 |
+| Qwen-3.5-9B / BM25 | 20.0 | 31.7 | 56.7 |
+| DeepSeek-V4-Flash / BM25 | 21.7 | 48.3 | 70.0 |
 
-### Most discriminating experiment
+Source: Table 6; Appendices F.2–F.5 · [Paper](https://arxiv.org/pdf/2608.19652v1)
+<!-- EVIDENCE:result-2:END -->
 
-Use the same event stream with full-evidence and supplied-operative-state controls, reporting stale-state and other errors separately. Vary revision-dependency depth while fixing text length to distinguish propagation difficulty from long-context interference.
+<!-- EVIDENCE:interpretation:START -->
+## What the evidence supports
 
-### Pair with
+On DeepSeek, StateMem raises full-set accuracy from the strongest retrieval baseline’s 0.205 to 0.363, yet roughly half of probes still select the drift target. Removing dependency propagation reaches 0.373, revealing over-propagation on anti-traps rather than a monotonic benefit from every component. On Qwen, StateMem scores 0.233 versus GraphRAG’s 0.224, with paired p=0.82, so superiority is not established. External tests show trade-offs: DeepSeek StateMem/full-context scores are 0.656/0.666 on LongMemEval and 0.592/0.587 on LoCoMo; Qwen LoCoMo is 0.566/0.612. These do not justify an unconditional claim of no recall loss.
 
-[longmemeval](longmemeval.en.md) · [membench-staleness](membench-staleness.en.md)
+The wrapper’s controlled results support question-conditioned revision chains, but it does more than rewrite retrieved snippets. Relative to the transcript-matched control it adds about 155 input and 169–188 output tokens without extra calls; relative to a bare backend it also adds full history, with median inputs around 8,600 tokens here and 87,000 on LongMemEval. The 60-probe subset overweights anti-traps, so its scores are not directly comparable with the full 322-probe ranking.
+<!-- EVIDENCE:interpretation:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:limitations:START -->
+## Limits, source gaps and next test
 
-<!-- RESEARCH-DECISION:END -->
+Trap policies and StateMem’s design are aligned; the authors treat own-benchmark margins as optimistic upper bounds and use external tasks to test generalization. Short/long sets also change thread composition and category mix, so aggregate differences cannot isolate a pure length effect. Small-to-mid-scale backbones, a same-family DeepSeek judge, Claude rendering and single runs limit generalization. Near-floor LightMem/MemoryOS results may reflect workload sensitivity or integration gaps; the authors exclude them from best-capability claims. The 35B Qwen context was reduced to 16,384 tokens after memory exhaustion, causing long-set tail truncation. A small human audit assigns less drift than model judges, so cross-benchmark prevalence retains a judge-labeled upper-bound interpretation. A stronger next test preregisters unseen revision mechanisms, matches complete input and cost, and evaluates models not used for scenario filtering.
 
-## Genealogy
-
-`map_delta=early_signal`. The benchmark advances update evaluation from “are both old and new facts stored?” to “**what is the operative state now?**” This coordinate complements staleness and applicability evaluation, but independent natural-data evidence is still missing, so the durable Benchmark Map should not yet change.
-
-Primary: https://arxiv.org/abs/2608.19652
+Table 6 and Appendix F.4 require a unit correction: the wrapper set has 30 short probes and 30 probes drawn from 22 long scenarios, not 30 complete long scenarios. Appendix Table 12’s Dense-alone category cells imply roughly 5% on Qwen and 0% on DeepSeek, conflicting with Table 6’s 21.7%/31.7% on the purported same 60 probes. These cells are not merged here, and maximum gain ranges are not treated as unambiguous. Some Qwen grading-drop descriptions also do not align cleanly with full-table denominators; the main selected rows above use the clearer DeepSeek counts.
+<!-- EVIDENCE:limitations:END -->

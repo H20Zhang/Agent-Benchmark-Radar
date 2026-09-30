@@ -1,4 +1,4 @@
-# MemBench：从“答对”扩到 memory 的 effectiveness、efficiency 与 capacity
+# MemBench：记忆准确率、延迟与历史长度压力测试
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2025-06 · 论文 v1<br>
@@ -7,50 +7,61 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](membench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](membench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2506.21605) · [代码](https://github.com/import-myself/Membench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-MemBench 同时覆盖 factual / reflective memory，并区分 participation 与 observation 两类交互场景；评价也不只看 task accuracy，而是把 effectiveness、efficiency 和 capacity 都纳入 memory capability。它试图回答的不是“这个 agent 会不会回忆”，而是不同层级、不同交互角色下 memory 是否仍有效且可承受。
+已阅读全部 17 页，包括第 1–5 节、局限及附录 A–D：档案、事实与反思型样例、统计、生成提示和细分结果；目视核对表 3–4、10–12。
 
-## 相比什么前进了
+[arXiv v1 / 2025-06-20](https://arxiv.org/pdf/2506.21605v1)
+<!-- EVIDENCE:reading:END -->
 
-LoCoMo、LongMemEval 主要把长期历史 QA 做得更难、更细。MemBench 的增量是把 memory level、interaction scenario 与资源维度并列成评测轴，因此一个方法不能再仅凭某个 QA 数据集上的最高准确率声称“memory 更好”。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据与分数边界
+MemBench 从用户与实体关系图出发，把属性变成含有证据的对话或观察消息，再插入由新闻构造的无关内容，并按时间顺序写入记忆。合成信息流用于测试事实回忆及偏好、情绪推断。参与式场景回放预设助手回复，并不评测智能体自主选择的行动。答案采用选择题，与标签直接比较；Recall@10 衡量证据检索，延迟对应单次记忆操作（第 3–4 节）。
 
-论文最重要的贡献是 evaluation decomposition 本身：同一个 memory system 需要在 factual/reflective、participation/observation 以及效率/容量之间同时接受检查。当前主来源没有提供一个可长期维护、协议稳定的统一公开 leaderboard，因此网页不会制造 Overall SOTA；系统级结果只在模型、harness 和 metric aggregation 对齐时可比。
+例如，用户先称活动持续四天，随后纠正为一天，后续选择题应采用新值；用户反复表达对不同甜咸食物的偏好，则支持更高层的口味判断（图 3；附录 A.4）。
 
-## 公平比较条件
+### 测量坐标的演进
 
-对齐 backbone、agent harness、memory budget、交互场景和 metric aggregation。若一个系统以更多 tokens、更多 memory capacity 或不同任务混合换来更高 effectiveness，单一 accuracy 不足以支持 architecture-level claim。
+MemSim 提供了基于关系图的模拟基础。与 LoCoMo、LongMemEval 的长期历史问答相比，MemBench 把参与式与观察式场景、事实型与反思型内容明确分开，并加入操作耗时和历史长度压力。下一步应检验这些已存储或推断出的记忆，能否在相同成本下改善后续行动。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-MemBench 增加了评价维度，但仍难定位 write、organization、retrieval、update 中哪个机制导致结果。下一步需要 matched component interventions，并把长期 maintenance cost 与行为改善联系起来。
+主实验使用 MemEngine、Qwen2.5-7B 和 multilingual-e5-small，并用新闻生成的噪声延长历史。普通规模的参与式／观察式样本分别含事实型 360/280 项、反思型 120/60 项；扩展规模分别为 90/84 和 30/15 项。具体记忆上限、采样参数、计时硬件和重复次数未明确报告。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 研究决策卡
+以下仅摘选原文报告值，不合成总排名。准确率为答对选择题数除以评测题数；论文给出抽样项数，但未完整解释实际分母。计时单位为秒／记忆操作，并非整次回答耗时。
 
-### 什么时候值得用
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| RetrievalMemory / Qwen2.5-7B／参与式 | 事实型，标称 100K；90 个抽样项 | 选择题准确率（0–1） | 0.833 | MemEngine；multilingual-e5-small；加噪历史 | 表 3, 第 7 页 |
+| FullMemory / Qwen2.5-7B／参与式 | 事实型，标称 100K；90 个抽样项 | 选择题准确率（0–1） | 0.489 | 相同事实型样本；窗口上限未说明 | 表 3, 第 7 页 |
+| RetrievalMemory / Qwen2.5-7B／观察式 | 事实型，表头标为 100K；84 个抽样项，实际分母未厘清 | 选择题准确率（0–1） | 0.933 | MemEngine；multilingual-e5-small | 表 3, 第 7 页 |
+| GenerativeAgent / Qwen2.5-7B／写入 | 事实型参与式；每次操作；计时样本量未说明 | 写入延迟（秒／操作） | 6.116 | 仅记忆写入；硬件未说明 | 表 3, 第 7 页 |
+| GenerativeAgent / Qwen2.5-7B／偏好 | 普通规模反思型参与式；切片分母未说明 | 选择题准确率（0–1） | 0.742 | 偏好切片；预设对话 | 表 10, 第 17 页 |
+| GenerativeAgent / Qwen2.5-7B／情绪 | 普通规模反思型参与式；切片分母未说明 | 选择题准确率（0–1） | 0.412 | 情绪切片；预设对话 | 表 10, 第 17 页 |
 
-适合为记忆系统建立多维画像，尤其在效果、容量和代价必须同时考虑时。广覆盖不等于能直接归因到某个记忆组件；使用它时应把任务类别和资源曲线作为主结果，而不是只比较打包系统总分。
+来源：[表 3, 第 7 页; 表 10, 第 17 页](https://arxiv.org/pdf/2506.21605v1)
+<!-- EVIDENCE:results:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-示意任务：系统既要记住直接参与的交流，也要利用旁观得到的信息，并从多次经历提炼较高层判断。相同记忆预算可能更利于事实保存，却不利于反思性信息，因此两类任务需要分别观察。
+表 4 的 RetrievalMemory 准确率与表 3 完全重复，应标为原文报告值，不能当作独立确认。其普通规模反思型成绩对应表 10 的偏好列，情绪另列。第 4.1 节与表头的观察式历史长度不一致，0.933 也无法由 84 次单一二值试验还原。因此，容量曲线不能单独界定架构自身的存储上限。
+<!-- EVIDENCE:limitations:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-在相同回答模型下扫描记忆容量，分别绘制事实型与反思型任务的质量—写入成本—检索延迟关系。若优势只在更大容量下出现，就不能把收益简单归为更好的组织方法；应加入等容量、等查询预算的对照。
-
-### 建议搭配
-
-[memoryagentbench](memoryagentbench.md) · [evomembench](evomembench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+先公开逐题评分记录，核对重复单元格与长度标签；再固定回答模型和上下文上限复测。增加噪声时保持题目相同，分别绘制事实、偏好、情绪准确率与写入及查询成本的关系。
+<!-- EVIDENCE:next:END -->

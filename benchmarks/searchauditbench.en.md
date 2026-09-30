@@ -1,4 +1,4 @@
-# SearchAuditBench: final-answer scores do not explain why a deep-search agent failed
+# SearchAuditBench: separating failure diagnosis from repair-guided recovery
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2026-08 · paper v1<br>
@@ -7,56 +7,84 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](searchauditbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](searchauditbench.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.05212) · [Code](https://github.com/lzzzx666/SearchAuditor)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction.
 
-SearchAuditBench collects 1,243 failed trajectories from eight open-weight models on five deep-search benchmarks, averaging 73.1 messages and 65.1K tokens. Experts annotate critical steps, a six-way root-cause taxonomy, and actionable repair directives, enabling localization, cause, diagnosis, and rubric-pass metrics.
+Read Sections 1–6 and Appendices A–G across thirty-three pages, including exclusions, annotation rules, cost, blinded grader validation, both full cases and five auditing prompts; visually checked Tables 2–4.
 
-## Compared with what
+[arXiv 2608.05212v1 · 2026-08-05](https://arxiv.org/pdf/2608.05212v1)
+<!-- EVIDENCE:reading:END -->
 
-Most benchmarks collapse failure to zero reward. SearchAuditBench makes the post-hoc auditor an evaluation object: can it find the earliest critical error, attribute the cause, and propose a repair that satisfies the reference rubrics?
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## What the reported results show
+Eight open-weight search models run a shared Search/Visit scaffold on five benchmarks. From 3,500 raw traces, gradable incorrect runs are retained after excluding bad references, corrupted traces, offline-unidentifiable environmental failures and cases lacking a single critical cause, leaving 1,243. Four author annotators split the cases, one labeler per case, with Claude Opus 4.6 proposing candidate error regions. Auditors know the final answer failed but receive no gold answer or web access. SearchAuditor combines holistic, backward-constraint and forward-timeline branches, adjudicates with trace windows and writes a repair. One case recognizes a perfect-cube requirement but substitutes a familiar sum-of-cubes puzzle and outputs 1729; repair must restore the mathematical constraint rather than reveal the target answer.
 
-With GPT-5.5 held fixed as the auditor backbone, the strongest baseline’s Fully-Passed Score (FPS) is 26.55%, versus 32.26% for SearchAuditor; strict critical-step localization is 44.89%. SearchAuditor’s FPS is 18.91% with Gemini 3.1 Pro and 24.62% with Claude Opus 4.8. Backbone changes cannot be attributed to the auditing framework.
+Editorial placement: AgentRx is the closest diagnostic-framework comparison, while underlying tasks such as BrowseComp primarily supply final-answer correctness. SearchAuditBench adds critical-step, root-cause and process-repair supervision, then separately links repairs to actual resumption. This is not yet early online detection when failure is unknown.
 
-FPS combines correct diagnosis with passing all expert-written repair rubrics. DeepSeek-V4-Flash judges the proposed repair; this score does not measure successful re-execution of the original search. [Paper v1, §5.1 and Table 2](https://arxiv.org/html/2608.05212v1#S5.SS1).
+[Source](https://arxiv.org/pdf/2608.05212v1)
+<!-- EVIDENCE:method:END -->
 
-## Score boundary
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-High scores support post-hoc diagnosis and rubric-satisfying repair suggestions on this failures-only mixture. They do not establish restored execution success, a stronger original search agent, or effective online intervention. Source models, harnesses, and the benchmark mixture determine the failure distribution.
+GPT-5.5, Gemini-3.1-Pro and Claude-Opus-4.8 are evaluated with high effort and the same backbone across auditing stages. CS-Strict requires the exact critical assistant message; CS-Loose permits its annotated span. Diag requires loose localization and the correct cause. DeepSeek-V4-Flash checks three to five expert repair criteria per case. Rep@Diag uses only correctly diagnosed cases, whereas FPS uses all cases. A blinded validation of two hundred diagnosis-passing outputs obtains 82.5% case-level agreement, not end-to-end annotation agreement. Main total budgets and repeated-run uncertainty are incompletely specified; the cost study permits model and transport retries, so five nominal stages need not mean exactly five calls.
 
-## Fair comparison conditions
+[Source](https://arxiv.org/pdf/2608.05212v1)
+<!-- EVIDENCE:setup:END -->
 
-Align the failed-trajectory corpus, sampling, root-cause taxonomy, localization tolerance, expert repair rubrics, grader, and auditor backbone. Comparing a GPT-5.5 framework with a Gemini 3.1 Pro framework does not isolate the framework. Actual re-execution is a separate next experiment, not the current FPS evaluator.
+<!-- EVIDENCE:result-1:START -->
+## Offline auditing with GPT-5.5 fixed
 
-## Next evaluation coordinate
+All 1,243 auditable failures; Rep@Diag alone uses each method’s correctly diagnosed subset, while other columns use all cases. FPS requires both sound diagnosis and every repair criterion. This table does not rerun the original search tasks.
 
-The next step places the auditor online and tests whether early intervention actually reduces final failures rather than merely explaining them after the fact.
+| Audit method | CS-Strict (%) | Diag (%) | Rep@Diag (%) | FPS (%) |
+| --- | --- | --- | --- | --- |
+| All-at-Once | 38.29 | 32.90 | 80.68 | 26.55 |
+| SearchAuditor | 44.89 | 38.05 | 84.78 | 32.26 |
 
-<!-- RESEARCH-DECISION:START -->
+Source location: Table 2 and Section 5.1, pp. 5–6 · [Source](https://arxiv.org/pdf/2608.05212v1)
+<!-- EVIDENCE:result-1:END -->
 
-## Research decision card
+<!-- EVIDENCE:result-2:START -->
+## Actual resumption: failure repair and overall accuracy
 
-### When to use it
+335 LiveBrowseComp questions; generating agents Kimi-K2.6 and Quest-35B, auditor GPT-5.5. Fix-rate denominators are 213/300 gradable failures; both overall denominators are 335, with original accuracy 34.03%/8.96%. Generic hints use SearchAuditor’s predicted location. Retries start fresh while repairs retain prefixes, differing in compute and context.
 
-Use SearchAuditBench for post-hoc localization, attribution, and repair of search failures, not general success of the original search agent. Failure-only sampling changes the distribution. A strong failure auditor may still over-correct successful trajectories.
+| Intervention | Kimi fix rate (%) | Kimi overall accuracy (%) | Quest fix rate (%) | Quest overall accuracy (%) |
+| --- | --- | --- | --- | --- |
+| Unguided retry | 9.39 | 40.00 | 5.00 | 13.43 |
+| Generic hint | 5.63 | 37.61 | 4.67 | 13.13 |
+| SearchAuditor repair | 17.37 | 45.07 | 10.33 | 18.21 |
 
-### What a concrete task looks like
+Source location: Section 5.4 and Table 4, pp. 6–7 · [Source](https://arxiv.org/pdf/2608.05212v1)
+<!-- EVIDENCE:result-2:END -->
 
-Illustrative task: an auditor receives a long failed search trace and must locate the decisive deviation, explain its cause, and propose an actionable repair directive. The wrong final answer may be a symptom of an earlier incorrect assumption rather than the root cause.
+<!-- EVIDENCE:result-3:START -->
+## Audit-perspective control under the stated matched compute
 
-### Most discriminating experiment
+Random three-hundred-case subset with GPT-5.5 and the same three-stage pipeline. The paper defines three holistic copies as matched compute; these scores differ from the full-1,243 result. This more directly tests audit perspective than cross-backbone/call-budget comparisons, but repeat intervals are absent.
 
-Evaluate localization, cause classification, and post-repair execution separately, adding successful traces to measure false alarms. Fix the original agent and remaining budget and compare audit-guided repair with restarting, ensuring gains do not merely come from more search compute.
+| Configuration | CS-Strict (%) | FPS (%) |
+| --- | --- | --- |
+| Full H+B+F | 49.00 | 31.67 |
+| Three holistic audits | 46.00 | 27.33 |
 
-### Pair with
+Source location: Table 3 and Section 5.3, p. 6 · [Source](https://arxiv.org/pdf/2608.05212v1)
+<!-- EVIDENCE:result-3:END -->
 
-[agenticragtracer](agenticragtracer.en.md) · [deepresearch-bench](deepresearch-bench.en.md)
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, limitations and next experiment
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Selecting only failures with one offline-identifiable cause excludes some environmental and multi-cause cases. Evidence-use-versus-retrieval proportions characterize this corpus, not all search failures. Actual recovery is tested separately: 213 Kimi and 300 Quest gradable failures on another benchmark resume from predicted critical steps with repairs; non-gradable runs still count as incorrect in overall accuracy. SearchAuditor beats retries and a generic hint at the same location, but added auditing compute is not fully matched against larger retry budgets, and failure is known. On one hundred cases, GPT-5.5 auditing averages 214.1 seconds/275.6K input tokens versus 38.5 seconds/68.9K for All-at-Once, a genuine quality-cost trade-off.
 
-<!-- RESEARCH-DECISION:END -->
+The original note treated actual rerun utility as future work, but Section 5.4 already performs repair-guided resumption on LiveBrowseComp. FPS remains offline diagnosis/repair-rubric success and is distinct from recovery. Appendix E measures cost on one hundred cases while Table 9 copies FPS from all 1,243, not the same cost-quality sample. A shared grader does not automatically eliminate differential error across output styles.
+
+Test online triggering on unfiltered successful, failed and environmentally blocked traces, reporting false alarms, harmful corrections and final success. Match total tokens/time including auditing against multiple fresh retries and diagnosis-free rollback. Independently double-annotate critical steps/causes and quantify reference/grader uncertainty.
+
+[Source](https://arxiv.org/pdf/2608.05212v1)
+<!-- EVIDENCE:limitations:END -->

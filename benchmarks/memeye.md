@@ -1,4 +1,4 @@
-# MemEye：不能被 caption 替代的视觉 memory
+# MemEye：视觉细节与状态变化的记忆诊断
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-05-14<br>
@@ -6,64 +6,61 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](memeye.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](memeye.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2605.15128) · [代码](https://github.com/MinghoKwok/MemEye)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-MemEye 沿两个轴评估 multimodal memory：**visual evidence granularity** 从 scene-level 到 pixel-level，**memory reasoning depth** 从单条 evidence 到 relational / evolutionary synthesis。它真正问的是：memory system 有没有保存之后推理所必需的视觉信息。
+已阅读全部 46 页中的实质内容：第 1–6 节及附录 A–E，包括过滤条件、分类核查、实现预算、评判提示、自举分析、全部结果矩阵和全部 13 个案例；目视核对主结果、图像描述消融与状态更新图示。
 
-## 相比此前评测多测了什么
+[arXiv v1 / 2026-05-14](https://arxiv.org/pdf/2605.15128v1)
+<!-- EVIDENCE:reading:END -->
 
-不少所谓 multimodal-memory question 只靠 caption 或文本 trace 也能回答，系统把图片扔掉仍能拿高分。MemEye 用 answerability、shortcut resistance、visual necessity、reasoning structure 等 ablation gate 验证题目，把“图片是否真的必要”变成 benchmark validity 的一部分。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+视觉粒度 X1–X4 依次指场景、局部区域、具体物体／人物实例，以及小字、颜色等像素细节；记忆操作 Y1–Y3 依次指单事实提取、跨会话关系关联，以及变化或冲突状态的综合。因此高 X 指 X3–X4，Y3 则需要处理更新与覆盖。候选题检查会去掉仅靠选项／文本或极简图像描述即可稳定回答的捷径，并用给定原图检查可回答性。这些检查由 GPT-5.4-mini、GPT-5.2 在四种答案位置上执行，再由人工裁定（附录 A.4）。
 
-公开 benchmark 有 371 个 mirrored MCQ + open-ended question，覆盖 8 类生活 scenario，并标注 clue round。论文评估 4 个 VLM backbone 上的 13 种 memory method，发现当前系统仍难以保存细粒度视觉 detail，也难以综合随时间变化的 visual state。
+例如，化石展柜的识别标签跨会话发生变化。检索结果若包含多张旧照片，即使新照片也在其中，系统仍可能偏向旧标签；任务要求读取当前有效状态，而不是统计某标签出现的次数（图 12）。
 
-## 这个分数能证明什么
+### 测量坐标的演进
 
-MemEye 提供的是 multimodal **evidence preservation + routing + temporal reasoning** 的整体证据，不能把结果直接归因给 storage：系统可能完整保存了图片，却因为 VLM backbone 看不出决定性的 pixel-level feature 而失败。
+Mem-Gallery 扩展了多会话视觉对话评测；MemEye 进一步加入显式证据粒度、视觉替换和状态变化对照。其诊断价值在于区分细节丢失与证据时间错误，而非证明所有图像描述都天然不足。下一步应在独立采集的轨迹上，以相同预算检验信息保留与状态选择。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-应固定 VLM backbone、image resolution/preprocessing、caption access、retrieval budget 与 clue history，并把 image-ablation / text-only control 与主结果一起报告，否则所谓 multimodal-memory gain 可能只是 caption generation 更好。
+共有 371 道原始问题，各配选择题与开放题形式，覆盖 221 个会话和 438 张图像；选择题采用四种答案位置。主实验 GPT-5.4-mini 温度为 0，最多输出 128 词元；完整上下文方法以 128K 为上限，超限按先进先出截断。语义检索增强生成（SRAG）用 MiniLM 文本嵌入检索十个对话轮次，视觉版本另用 SigLIP2。文本流使用 GPT-5.2 图像描述，开放回答也由 GPT-5.2 按 0 至 1 的五档评分。其他方法保留不同编码器或迭代预算，SimpleMem 实际检索二十条记忆（附录 C）。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-场景仍是 benchmark 化的 life scenario，不是开放世界连续视频；continuous video compression、跨设备媒体、privacy，以及保留 raw visual evidence 的 storage/latency cost 都没有被完整覆盖。
+所选结果均使用 GPT-5.4-mini。主平均分对 12 个分类单元格等权平均，不是直接对 371 题计算准确率；选择题 EM 先平均四种答案位置。图像描述对照另用配对的 80 道高 X 题目；时间重排区间对原始问题进行 10,000 次自举。
 
-## 下一步最有判别力的验证
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| SRAG(V) / GPT-5.4-mini／主实验 | 371 题；12 个单元格宏平均 | 选择题 EM／开放题评判分（0–1） | 0.6177 / 0.4937 | 前 10 个原图轮次；GPT-5.2 评判 | 表 2, 第 8 页 |
+| SRAG(T) / GPT-5.4-mini／主实验 | 371 题；12 个单元格宏平均 | 选择题 EM／开放题评判分（0–1） | 0.5484 / 0.3909 | 前 10 个描述文本轮次；GPT-5.2 描述／评判 | 表 2, 第 8 页 |
+| SRAG(V)／高 X 原图 | 配对高 X 子集；80 道开放题 | 平均评判分（0–1） | 0.428 | 原图；固定回答模型 | 表 11, 第 30 页 |
+| SRAG(T)／高 X 通用描述 | 配对高 X 子集；80 道开放题 | 平均评判分（0–1） | 0.235 | GPT-5.2 通用图像描述 | 表 11, 第 30 页 |
+| SRAG(T)／高 X 任务导向描述 | 配对高 X 子集；80 道开放题 | 平均评判分（0–1） | 0.387 | GPT-5.4-mini 描述；通常长 2–3 倍 | 表 11, 第 30 页 |
+| SRAG(V) 加时间重排／alpha=0.7／Y3 | Y3；60 道原始题目 | 配对评判分差／95% 区间（0–1 分单位） | +0.067 / [-0.042, +0.175] | 重新生成答案；lambda=0.02；固定候选池 | 表 14, 第 33 页 |
 
-用 oracle image retrieval 把 visual memory 拆成 store fidelity、retrieval recall、downstream visual interpretation，判断系统应该投资更好的 multimodal index，还是更强的 post-retrieval visual reasoning。
+来源：[表 2, 第 8 页; 表 11, 第 30 页; 表 14, 第 33 页](https://arxiv.org/pdf/2605.15128v1)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-## 研究决策卡
+极简图像描述过滤不能排除任意详细描述的替代能力，面向任务的描述对照大幅缩小了差距。单元格宏平均对大小不同的单元格赋予相同权重。评判器验证由一名人工完成，排除一个边界案例后保留 71 条预测，其一致性对应二值接受判断，并非完整分档校准。时间重排对答案质量的改善尚无确定统计证据。图像预处理、方法特定预算及生成式视觉状态，都限制了纯架构归因和部署外推。
+<!-- EVIDENCE:limitations:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-适合检验长期记忆是否保住真正必要的视觉细节。对多模态记忆论文，视觉必要性对照比单纯提高混合题集均分更关键；否则文本捷径会让丢失图像信息的系统也显得有效。
-
-### 一个具体任务长什么样
-
-示意任务：几次视觉观察记录同一物体的细节变化，之后要求判断具体属性和时间演化。图片的顺序、细粒度信息和证据来源都需要被保留，单张图识别正确还不足以完成整条任务。
-
-### 最有判别力的实验
-
-固定骨干后，对原图、粗描述、细描述及外部视觉记忆分别做测试，联合报告选择题和开放题。针对相同样本去掉视觉输入，确认性能差异确实来自必要图像信息，而不是回答格式或评分器变化。
-
-### 建议搭配
-
-[mem-gallery](mem-gallery.md) · [worldmemarena](worldmemarena.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`textualized multimodal memory → visually necessary evidence → fine-grained temporal visual memory`
-
-它堵住了一个常见 shortcut：不能再把 caption store 直接叫作“multimodal memory”。
+在多个明确词元预算下比较原图与图像描述，冻结回答模型和评判器。再交叉加入给定最新线索与全部线索的对照，区分当前状态定位题和真正需要比较变化的题目。同时报告按题加权与单元格宏平均分、按轨迹聚类的区间及写入成本。
+<!-- EVIDENCE:next:END -->

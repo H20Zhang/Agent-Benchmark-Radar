@@ -1,4 +1,4 @@
-# MAPLE: RAG / multi-aspect scientific retrieval
+# MAPLE: consistency across scientific paper search queries
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-04<br>
@@ -6,60 +6,56 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](maple.md) | **English** · [Back to the entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](maple.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.15624) · [Code](https://github.com/Ggballs/MAPLE) · [Data](https://huggingface.co/datasets/kai-02/MAPLE)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-Splits single-query relevance from consistent retrieval of one paper across motivation, method, and result aspects.
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-## Genealogy: What It Follows
+Read all 24 pages: §§1–6, limitations, Appendices A–F, query-generation and judging prompts, and Tables 1–25. Visually checked Tables 5 and 13.
 
-Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
+[arXiv v1, 2026-08-16](https://arxiv.org/pdf/2608.15624v1)
+<!-- EVIDENCE:reading:END -->
 
-## How It Is Evaluated
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-**Question:** Can a retriever recover the same target paper across queries about different aspects?
+AllAspect requires every associated query to retrieve its target; AnyAspect requires one. AspectCoverage averages query success within each paper, then across papers. These are paper-level measures, not a three-category checklist (§4.1).
+MAPLE-Synth extracts motivation, method and experimental aspects from OpenReview discussions of ICLR 2026 papers, retrieves same-aspect human exemplars from LitSearch/PaSa, and guides GPT-5.4 generation and decontextualization. Retrieval targets full papers; semantic search and full-text relevance judgments select hard negatives, while ACL Anthology provides background negatives. An illustrative quantization paper must be recovered through separate queries about its motivation, technique and experimental conditions, each placing the target within the top twenty rather than relying on one easy aspect.
 
-**Measurement object:** Scientific retrieval benchmark that measures whether one paper remains retrievable across motivation, method, and result aspects.
+Editorial placement: LitSearch already links queries to full text, and PaSa introduces researcher-style search. MAPLE adds many queries pointing to one paper and tests consistent recovery across them. It measures retrieval consistency, not survey writing or verification of scientific conclusions. AllAspect also declines as query count and difficulty increase, so its gap from AnyAspect does not alone establish failure to understand a paper.
+<!-- EVIDENCE:method:END -->
 
-**Scale and protocol:** 2,095 queries over 210 positive papers, 73,973 corpus papers, and 23,739 hard negatives. The protocol includes allaspect-at-k, anyaspect-at-k, aspect-coverage, matched-single-query-control.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## What a Score Can Support
+The corpus contains 73,973 papers, including 210 targets and 23,739 mined hard negatives; 2,095 queries include 415 multimodal references. GPT-5.4 generates queries; DeepSeek-V4-Pro filters negatives. Text inputs are truncated to model limits; screenshots serve multimodal models. Exact limits, hardware and repeated-run uncertainty are unspecified (§§3–4; Appendices C, F).
+<!-- EVIDENCE:setup:END -->
 
-Across 2,095 queries and 210 papers, the matched single-query recall versus AllAspect gap shows how one-hit relevance hides cross-aspect failure. It supports system-level evidence under this environment, harness, model/tool, and resource configuration; unmatched variables prevent attribution to one component.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## Strongest Confounder
+Selected factual cells; scores are percentages. MAPLE-1Q retains the same corpus, representations and ranking procedure while sampling one query per target paper. Main evaluation uses target-paper IDs, not an answer-generation judge.
 
-Generated queries, a single domain, and model-validated hard negatives can introduce style bias and label noise. The load-bearing confounders are llm-generated-queries, single-domain-corpus, hard-negative-label-noise.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| GritLM-7B / AllAspect | MAPLE; 210 target papers | AllAspect@20 (%) | 15.7 | Holistic extracted full text; model-limit truncation | Table 5, p. 6 |
+| GritLM-7B / AnyAspect | MAPLE; 210 target papers | AnyAspect@20 (%) | 98.1 | Same main-run representation | Table 5, p. 6 |
+| GritLM-7B / AspectCoverage | MAPLE; macro-average over 210 papers | AspectCoverage@20 (%) | 61.8 | Average of within-paper query success | Table 5, p. 6 |
+| GritLM-7B / MAPLE-1Q | MAPLE-1Q; 210 sampled queries | Recall@20 (%) | 60.00 | Matched corpus, representation and ranking | Table 6a, p. 7 |
 
-## Remaining Gap: What It Still Does Not Measure
+Source: [Table 5, p. 6; Table 6a, p. 7](https://arxiv.org/pdf/2608.15624v1)
+<!-- EVIDENCE:results:END -->
 
-Generated questions, similarity selection, one ICLR-style domain, and model-validated negatives can create style bias and false negatives.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-## Genealogy: Where It Fits in the Map
+Accepted ICLR 2026 papers and generated queries constrain generalization. The abstract-overlap filter does not prove that full text is necessary. Negative labels remain model judgments. Human-exemplar counts conflict: Appendix B gives 11/33/40, Table 11 gives 48/105/47. The abstract’s 15.7% is the main holistic result; later representation experiments reach 24.76% (Table 13).
+<!-- EVIDENCE:limitations:END -->
 
-`map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-<!-- RESEARCH-DECISION:START -->
-
-## Research decision card
-
-### When to use it
-
-Use MAPLE to test whether a paper is consistently discoverable through motivation, method, and result aspects. Any-aspect success differs from all-aspect success. Average recall can hide a representation that encodes only the most salient aspect.
-
-### What a concrete task looks like
-
-Illustrative task: several information needs target the same paper through its motivation, method structure, or experimental finding. Retrieval should identify the work across these expressions, not only when the query resembles its title.
-
-### Most discriminating experiment
-
-Pair evaluations by paper and report any-aspect, all-aspect, and per-aspect coverage under a fixed representation budget. Compare one summary, multi-aspect representations, and full-text indexing, reviewing hard negatives to avoid inflated differences from false-negative labels.
-
-### Pair with
-
-[bright-pro](bright-pro.en.md) · [sage](sage.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+Fix query count per paper and representation budget; compare holistic and chunked encoders, with bootstrap intervals clustered by paper. Audit negatives and use independently collected researcher queries before interpreting all-query failure as incomplete scientific understanding.
+<!-- EVIDENCE:next:END -->

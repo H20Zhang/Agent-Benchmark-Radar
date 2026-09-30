@@ -1,4 +1,4 @@
-# CAME-Bench：同一个 entity 在不同 latent goal 下并不是同一条 memory
+# CAME-Bench：重复实体与变化目标下的记忆检索
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-01-15<br>
@@ -6,50 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](came-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](came-bench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://aclanthology.org/2026.findings-acl.584/) · [代码](https://github.com/Seattleyrz/contextual-intent)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-CAME-Bench 有 14 条 goal-oriented trajectories 与 373 questions，context 平均约 23K、137K、408K tokens，覆盖 travel planning 与 policy debate。 recurring entities 会在不同 latent goals 下反复出现，系统必须结合当前 intent 取回正确版本的 evidence。
+已阅读论文集全部 35 页，即第 12008–12042 页：第 1–7 节、局限及附录 A–K，包括构建、金标审查、检索诊断、成本、稳健性、全部十二段提示和两个轨迹展示；目视核对主结果／消融表及检索提示。
 
-## 相比什么前进了
+[ACL 2026 / 2026-07 / 2026.findings-acl.584](https://aclanthology.org/2026.findings-acl.584.pdf)
+<!-- EVIDENCE:reading:END -->
 
-普通 vector retrieval 把同名实体或相近 fact 当成相似候选。CAME-Bench 专门制造 contextual interference，使 retrieval 错误可以归因于“没理解当前 goal”，而不是单纯找不到 entity。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+封闭世界实体先组成符号行动计划，再被生成成对话，并通过间接指代和分割话轮增加难度。题目覆盖状态修订、情境特定事实、多跳指代及综合回答（第 3 节；附录 A）。旅行展示先提出两个早餐候选，中间插入午餐与晚餐讨论，随后用序数指代询问第二个早餐地点，而非最近提到的任意餐厅（附录 J）。
 
-QA/evidence retrieval 与 length-scaling 支持 context-aware retrieval under synthetic trajectories。它不测试真实用户、actions 或 memory repair；benchmark 与 STITCH 方法共设计也意味着方法/benchmark coupling 是解释变量。
+STITCH 在线推断主题范围、事件和实体类型标签，消解指代、写入简短笔记，再优先按标签重合程度排序，语义相似度用于次级排序。标签由模型推断，并非基准直接提供的金标意图。
 
-## 公平比较条件
+### 测量坐标的演进
 
-锁定 trajectory generation、domain、length bucket、judge 与 evidence protocol，并将 23K/137K/408K 分开报告。
+LongMemEval 提供更新与长历史的近邻参照，LoCoMo 提供社交对话迁移参照。CAME-Bench 强化重复实体与交错目标造成的干扰，测量证据是否适用于当前情境；它不执行预订，也不直接评测删除或修复策略。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-下一步应在真实 evolving projects 中同时有多条竞争 goals，并要求 memory retrieval 支持后续 action 与 conflict repair。
+十四条合成轨迹包含 373 题；小／中／大规模分别有 6／6／2 条轨迹，平均长 2.3 万／13.7 万／40.8 万词元。检索系统统一使用中等推理强度的 GPT-5-mini，证据上限 4,096 词元。STITCH 每 50 步初始化／更新标签，考虑五个事件标签，截断前取四十条片段。GPT-4.1-mini 以温度 0、top_p=0.9 评判。单答案按宽松的包含关系判定，集合题匹配候选并按题宏平均 F1。人工验证只覆盖四条小规模轨迹，并非所有分区。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 研究决策卡
+精选的是终端回答 F1，而非检索召回率或完整排行榜。完整上下文行采用不同输入预算；消融行保留 STITCH 执行框架。分数为按题宏平均，不是整条轨迹全对的比例。
 
-### 什么时候值得用
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| STITCH / GPT-5-mini | CAME-Bench 小／中／大；144／168／61 题 | 答案集合宏平均 F1（0–1），小／中／大 | 0.844 / 0.682 / 0.592 | GPT-5-mini 中等推理；检索上限 4,096 词元；GPT-4.1-mini 评判 | 表 1, 第 12014 页 (PDF 第 7 页) |
+| Secom / GPT-5-mini | CAME-Bench 小／中／大；144／168／61 题 | 答案集合宏平均 F1（0–1），小／中／大 | 0.501 / 0.114 / 0.236 | GPT-5-mini 中等推理；检索上限 4,096 词元；GPT-4.1-mini 评判 | 表 1, 第 12014 页 (PDF 第 7 页) |
+| STITCH／去除主题范围 | CAME-Bench 小／中／大；144／168／61 题 | 答案集合宏平均 F1（0–1），小／中／大 | 0.463 / 0.257 / 0.213 | GPT-5-mini 中等推理；检索上限 4,096 词元；GPT-4.1-mini 评判 | 表 2, 第 12014 页 (PDF 第 7 页) |
+| STITCH／去除指代消解重写 | CAME-Bench 小／中／大；144／168／61 题 | 答案集合宏平均 F1（0–1），小／中／大 | 0.578 / 0.489 / 0.404 | GPT-5-mini 中等推理；检索上限 4,096 词元；GPT-4.1-mini 评判 | 表 2, 第 12014 页 (PDF 第 7 页) |
+| GPT-5-mini／完整上下文 | CAME-Bench 小／中／大；144／168／61 题 | 答案集合宏平均 F1（0–1），小／中／大 | 0.804 / 0.566 / 0.212 | 400K 词元窗口；超限时截去最早内容；相同评判器 | 表 1, 第 12014 页 (PDF 第 7 页) |
 
-适合诊断同一实体反复出现在不同目标中引发的检索串扰。它针对的是‘看起来相关，却属于另一个情境’；扩大 top-k 可能同时加入更多冲突证据，因此不能只把失败归为召回不足。
+来源：[表 1, 第 12014 页 (PDF 第 7 页); 表 2, 第 12014 页 (PDF 第 7 页)](https://aclanthology.org/2026.findings-acl.584.pdf)
+<!-- EVIDENCE:results:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-示意任务：同一个地点出现在两次目的不同的计划中，当前只追问其中一次安排。系统需要识别问题绑定的目标与情境；按地点名汇总所有记录，可能得到事实真实但任务错误的答案。
+大规模差距为 0.592−0.236=0.356 F1，转为百分制是 35.6 个百分点；正文的“相对提升 100%”不能由这些单元格重建。表 9 的 GPT-5-mini STITCH 中／大规模分数也不同于表 1–2，未解释运行区别。大规模只有两个轨迹簇，不同长度组也不是给相同问题逐步填充背景。消融支持共同设计的合成场景内各部分的贡献，不能给出普遍的检索错误因果解释。写入词元表未明确按步还是按轨迹计量，不能据此认定总部署成本。
+<!-- EVIDENCE:limitations:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-保持实体与事实不变，只改变查询绑定的目标，并比较纯相似度检索、带目标元数据的检索和正确情境直接给定。若第二种条件明显改善，应进一步检验目标标签是系统推断的还是人工提供的。
-
-### 建议搭配
-
-[scale-qa](scale-qa.md) · [locomo-plus](locomo-plus.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+固定实体和答案证据，只交换当前目标与干扰距离。以相同写入／查询预算比较推断标签、金标标签和向量检索，并审查每个 50 步缓冲区内的在线可见范围。增加独立轨迹、按轨迹聚类估计置信区间，再测试检索能否支持可执行的计划修订。
+<!-- EVIDENCE:next:END -->

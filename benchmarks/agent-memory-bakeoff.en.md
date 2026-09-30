@@ -1,4 +1,4 @@
-# Agent Memory Bakeoff: lexical mismatch and write-time enrichment
+# Agent Memory Bakeoff: write enrichment under query vocabulary shifts
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-21<br>
@@ -6,62 +6,86 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-**English** | [中文](agent-memory-bakeoff.md) · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](agent-memory-bakeoff.md) | **English**
 
-[Code, data, and protocol](https://github.com/JaysonRawlins/agent-memory-bakeoff)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the pinned official protocol, settings, result artifacts and limitations; no independent reproduction.
 
-This benchmark measures whether **the representation written into memory changes future accessibility**. When later queries no longer reuse the vocabulary of the original incident or runbook, can the system still retrieve the relevant memory, and does write-time enrichment bridge that lexical mismatch better than storing the raw text? The protocol makes write-side representation a controlled variable in the memory pipeline.
+Read pinned README and complete corpus/query generation, topic universe, retrieval runner and scorer. Parsed checked-in corpus/query counts and inspected a source scenario with its sibling documents. No independent retrieval run; the tree contains no committed raw retrieval-result matrix.
 
-## What changed relative to conventional memory benchmarks
+[57585be8bcf735ef783fc0b8134e809b943d9695](https://github.com/JaysonRawlins/agent-memory-bakeoff/blob/57585be8bcf735ef783fc0b8134e809b943d9695/README.md)
 
-Benchmarks such as LoCoMo and LongMemEval mostly observe downstream QA, where retrieval failures and answerer failures can be entangled. Agent Memory Bakeoff stops at the retrieval layer and crosses **BM25, vector, and hybrid retrieval with plain versus write-enriched memory**, making it easier to isolate whether enrichment itself improves access to the same underlying facts.
+[Auxiliary material (checked 2026-09-30)](https://github.com/JaysonRawlins/agent-memory-bakeoff/blob/57585be8bcf735ef783fc0b8134e809b943d9695/gen/generate_corpus.py)
 
-## Decisive evidence
+[Auxiliary material (checked 2026-09-30)](https://github.com/JaysonRawlins/agent-memory-bakeoff/blob/57585be8bcf735ef783fc0b8134e809b943d9695/gen/generate_queries.py)
 
-The suite contains **225 scenarios, 497 synthetic memory documents, and 390 independently generated queries**, with sibling-aware gold labels and MRR@10 plus recall@1/@5. Write-time enrichment raises **BM25 MRR from 0.678 to 0.783** and symptom-query **recall@5 from 60.0% to 83.8%**. In the constructed lexical-shift setting, enrichment therefore materially changes the accessibility of memory to a lexical retriever.
+[Auxiliary material (checked 2026-09-30)](https://github.com/JaysonRawlins/agent-memory-bakeoff/blob/57585be8bcf735ef783fc0b8134e809b943d9695/runners/retrieve.py)
 
-## What the score supports
+[Auxiliary material (checked 2026-09-30)](https://github.com/JaysonRawlins/agent-memory-bakeoff/blob/57585be8bcf735ef783fc0b8134e809b943d9695/eval/score.py)
 
-The result supports improved cross-vocabulary retrieval accessibility in this synthetic corpus with the tested local embedder. It does not establish better downstream answers or actions because the protocol ends at retrieval, and it does not show that enrichment dominates stronger embedding or reranking methods because the corpus is designed around the enrichment mechanism.
+[Auxiliary material (checked 2026-09-30)](https://github.com/JaysonRawlins/agent-memory-bakeoff/blob/57585be8bcf735ef783fc0b8134e809b943d9695/data/queries/queries.jsonl)
 
-## Fair comparison contract
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-Query set, gold definition, retrieval top-k, embedder, BM25 configuration, and document granularity should be fixed when comparing write representations. Changing the memory enrichment and the embedder or reranker simultaneously prevents component attribution. Reporting lexical, semantic, and hybrid retrievers separately is useful for showing whether the gain is specific to one retrieval family.
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-## How to use it in research
+Agent Memory Bakeoff is a retrieval-component experiment. A fictional operations scenario yields one to three sibling memories; plain and enriched indexes differ only by two or three future-search phrases and a symptom description. BM25, vector and fused retrieval use the same documents and queries. It directly varies write representation without an answer model, measuring accessibility rather than answer or action quality.
 
-The benchmark is useful for **memory component attribution**. A system that claims summarization, entity expansion, or semantic rewriting at write time improves future recall can first test the claim at this retrieval-only layer, then move to LongMemEval or MemoryAgentBench to determine whether higher accessibility translates into downstream utility.
+Genealogy: This is a synthetic public check motivated by the author’s private memory system, not data derived from LoCoMo or LongMemEval. Relative to those downstream QA benchmarks, the changed coordinate is the stopping point: retrieving any sibling from the right scenario is sufficient. Claims about private blind evaluation and latency lack public traces here and are not verified public-benchmark results.
+Illustrative query shift: a document records a fault under an internal cache-module name, while a later query only describes seeing stale values after an update. Enrichment adds symptom language at writing time; scoring checks retrieval of a same-scenario document, not repair success.
+<!-- EVIDENCE:method:END -->
 
-## Next discriminating validation
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-The main gaps are natural corpora, multiple embedders, broader query distributions, and evidence that retrieval gains propagate to final answers or actions. A particularly informative next experiment would compare equal-budget write enrichment, query expansion, and reranking on the same memory corpus and query set, answering whether computation is best spent at write, query, or read time.
+The pinned data contain 225 scenarios, 497 documents and 390 queries from 130 scenarios, with one identifier, conceptual and symptom query each. claude-haiku-4-5 generates documents, enrichment and queries. Queries see hidden scenarios but not document text/search phrases, reducing direct copying without eliminating shared-model or scenario dependence. BM25 uses bm25s defaults and English stopwords; local nomic-embed-text supplies cosine vectors. Hybrid scores use per-query min-max normalization, then α times BM25 plus 1−α times vector. α is swept from 0.1 to 0.9 without a separate tuning set. MRR uses the first sibling hit within ten; Recall@1/@5 is query-level any-gold-hit rate, not coverage of every relevant document.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## README Results, selected matched write-representation comparisons
 
-## Research decision card
+Same underlying documents, queries and gold sets; enrichment adds indexed text without matching storage or write-time compute. MRR is 0–1; other columns are percentages.
 
-### When to use it
+390 total queries, 130 per bucket; shared scenario clusters mean queries are correlated.
 
-Use Agent Memory Bakeoff as a fast component diagnostic of whether write-time retrieval cues bridge vocabulary mismatch. It is a retrieval testbed, not a benchmark of long-term agent utility. Ranking improvements require a downstream answering or execution check.
+| System | MRR@10 | Recall@1 % | Recall@5 % | Symptom Recall@5 % |
+|---|---|---|---|---|
+| bm25-plain | 0.678 | 58.7 | 79.7 | 60 |
+| bm25-enriched | 0.783 | 70.3 | 89.7 | 83.8 |
+| vector-plain | 0.565 | 46.7 | 69.7 | 39.2 |
+| vector-enriched | 0.625 | 52.1 | 76.7 | 63.1 |
 
-### What a concrete task looks like
+Locator: README Results, selected matched write-representation comparisons · [Source](https://github.com/JaysonRawlins/agent-memory-bakeoff/blob/57585be8bcf735ef783fc0b8134e809b943d9695/README.md)
+<!-- EVIDENCE:result-1:END -->
 
-Illustrative task: a memory uses an internal incident name while a later query describes an external symptom. Enrichment adds an alternative expression for the same event, potentially improving BM25 or hybrid retrieval but also introducing incorrect associations.
+<!-- EVIDENCE:result-2:START -->
+## README Results, selected enrichment-versus-fusion contrasts
 
-### Most discriminating experiment
+The best α is selected on the same query set. MRR rises by 0.023, but Recall@5 does not improve and conceptual-bucket recall falls. The selected optimum is not a held-out generalization gain.
 
-Cross retrieval method with write-time enrichment on fixed documents and queries, accounting for added storage and ingestion cost. Add natural queries not used in enrichment construction and inspect negative transfer from incorrect enrichment, rather than demonstrating fit to a mechanism-aligned synthetic corpus.
+390 queries; identifier/conceptual each 130. No repeated-run or cluster-bootstrap intervals are reported.
 
-### Pair with
+| System | MRR@10 | Recall@5 % | Identifier Recall@5 % | Conceptual Recall@5 % |
+|---|---|---|---|---|
+| bm25-enriched | 0.783 | 89.7 | 99.2 | 86.2 |
+| hybrid α=0.5 enriched | 0.801 | 90.5 | 99.2 | 86.9 |
+| hybrid α=0.6 enriched | 0.806 | 89.7 | 99.2 | 84.6 |
 
-[inmind](inmind.en.md) · [beir](beir.en.md)
+Locator: README Results, selected enrichment-versus-fusion contrasts · [Source](https://github.com/JaysonRawlins/agent-memory-bakeoff/blob/57585be8bcf735ef783fc0b8134e809b943d9695/README.md)
+<!-- EVIDENCE:result-2:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
 
-<!-- RESEARCH-DECISION:END -->
+This supports write-enrichment gains for BM25 on this synthetic corpus, not universal redundancy of embeddings. Enrichment and queries deliberately use symptom vocabulary, and all scenario siblings are gold without human verification that each answers every query. The released data are fixed; regeneration is not deterministic. No stable embedding digest, raw full retrieval matrix, uncertainty intervals or public latency table are supplied, so private-system cost claims cannot become quantitative conclusions here.
 
-## Genealogy
+README says the entire gain is concentrated in symptoms, but conceptual Recall@5 also rises from 79.2% to 86.2%, while identifier recall falls from 100% to 99.2%. Queries are blind to document text, not statistically independent: each three-query cluster shares one scenario and the generation model. The retrieval cache is keyed by file name and row count rather than corpus content hash; unchanged row counts after edits can reuse stale vectors unless caches are cleared.
 
-`map_delta=early_signal`, bound to `memory-component-attribution`. The suite adds a controlled write-side intervention coordinate but does not yet justify changing the durable memory benchmark chain; that would require stable long-term utility gains across tasks and model families.
+
+
+Next: Pair with LongMemEval or InMind using natural, scenario-held-out queries. Compare write expansion, query expansion and reranking under matched extra-token budgets, then measure answer utility and erroneous enrichment. Bootstrap scenarios rather than individual queries, tune α separately, and retain model digests plus full rankings.
+<!-- EVIDENCE:limitations:END -->

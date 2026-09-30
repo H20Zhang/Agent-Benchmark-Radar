@@ -1,70 +1,66 @@
-# GroupMemBench：多人对话中的 memory 不是把多个单人历史拼起来
+# GroupMemBench：合成工作群中的发言者条件问答
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2026-05-14 · 论文 v1<br>
-> **Best memory system in v1 (name not verified) — Average accuracy: 46.0%**<br>
-> 首版摘要明确报告的最佳记忆系统平均分；尚未核验对应系统名称，不据此猜测模型。 [原始来源](https://arxiv.org/abs/2605.14498v1)<br>
+> **Hindsight / GPT-5 — Micro-average QA accuracy: 46.01%**<br>
+> v1 表 2 所比较系统中最佳；按附录 G，对技术、金融、医疗、制造四领域过滤后合集做微平均，排除无法解析的裁判输出，不是六类别宏平均。摄入使用 GPT-4o-mini，回答和判分使用 GPT-5。 [原始来源](https://arxiv.org/abs/2605.14498v1)<br>
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](groupmembench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](groupmembench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2605.14498)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-GroupMemBench 评估 **multi-party conversation memory**：身份与 audience 会改变信息含义。它重点测 group dynamics、speaker-grounded belief 与 audience-adapted language，因此同一个术语或观点，取决于“谁说的、谁在问”。
+已阅读第 1 版全部 24 页，包括正文第 1–5 节及附录 A–L：图结构、采样公式、已刊提示、生成参数、领域结果、成本计量、评判协议、八个系统的完整案例轨迹及局限；目视核对表 2 和检索失败图。5 月 16 日另有第 2 版，本次未将其结果混入第 1 版审查。
 
-## 相比此前评测多测了什么
+[arXiv v1 / 2026-05-14](https://arxiv.org/pdf/2605.14498v1)
+<!-- EVIDENCE:reading:END -->
 
-大多数 agent-memory system/benchmark 都是假设一个 user 对一个 agent。把多个一对一 history 直接拼起来，会丢失 reply structure、per-speaker belief、shared/private context 和 Theory-of-Mind 变化。GroupMemBench 用 graph-grounded conversation，并把每个 adversarial query 绑定到具体 asker。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+图遍历选择发言者、受众、项目阶段和被回复消息；GPT-5 按人物设定生成文本，并偶尔加入噪声、分歧或决策反转。求解、评判、改写循环保留能难倒其检索求解器的问题，每条查询都带提问者身份（第 3 节）。
 
-benchmark 覆盖 multi-hop reasoning、knowledge update、term ambiguity、user-implicit reasoning、temporal reasoning、abstention 六类 query。当前最强被测 memory system 平均只有 46.0%，其中 knowledge update 27.1%、term ambiguity 37.7%；简单 BM25 还能匹配或超过多数 agent memory。这说明当前 ingestion pipeline 可能在摘要/结构化过程中丢掉 group memory 所需的 lexical 与 relational signal。
+金融案例中，User_13 问格式规范需和哪些团队对齐，金标为 Finance 与 Data Engineering。BM25 找到原始请求，Hindsight 在重写笔记中保留请求及发言者；其他系统取到别人的消息或合并了多余团队（附录 J）。这区分了保留人物关系的有效压缩与有损重写，并不证明一切压缩都有害。
 
-## 这个分数能证明什么
+### 测量坐标的演进
 
-这是很强的证据：**speaker/audience structure 不是可有可无的 metadata**。但数据仍是合成的，也没有直接区分失败来自 ingestion、indexing、retrieval，还是最终 Theory-of-Mind reasoning。
+LoCoMo 和 LongMemEval 提供长历史问答先例；EverMemBench 是更接近的多人对话前作。GroupMemBench 增加可控回复结构、角色／受众措辞和依赖提问者的问题。这些机制把社会情境转成可测条件，但不能证明类人的心智理论，也不执行访问权限。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-应固定 conversation graph、speaker identity、asker identity、backbone、retrieval budget 与 audience metadata。比较 ingestion scheme 时还要保留原始 lexical form；如果某个系统先做更激进 summary，可能直接把 benchmark 要测的 ambiguity cue 压掉。
+四个英语工作领域各含 30,000 条消息，覆盖六类问题。写入统一 GPT-4o-mini，GPT-5 作答并评判，支持的稠密组件使用 text-embedding-3-large。评判温度为 1、输出上限 2,048，每个回答只判一次；无法解析的判定被移出分母。跨领域分数对筛选后题目作微平均。总题数／各类数量、求解器身份／改写预算、作答解码和匹配检索词元上限未完整列出。案例中稠密检索取前十条，若干记忆轨迹只展示三条。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-真实群体空间还有 permission、private thread、成员变动、moderation、跨 channel identity；把一个人的 belief 暴露给另一个人的社会后果属于 governance，而不是 answer accuracy 能覆盖的。
+以下为第 1 版精选事实。总体分数不是六个类别百分比的算术平均；类别最高分来自不同方法，不能把摘要三个数字拼成同一个系统的能力画像。
 
-## 下一步最有判别力的验证
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Hindsight／全部类别 | 全部类别；四领域筛选后题目并集；未明确列出 N | GPT-5 评判准确率（%）；排除无法解析的判定 | 46.01 | 适用时由 GPT-4o-mini 写入；GPT-5 作答；沿用各检索预算 | 表 2, 第 7 页 |
+| BM25／全部类别 | 全部类别；四领域筛选后题目并集；未明确列出 N | GPT-5 评判准确率（%）；排除无法解析的判定 | 43.22 | 适用时由 GPT-4o-mini 写入；GPT-5 作答；沿用各检索预算 | 表 2, 第 7 页 |
+| HippoRAG／知识更新 | 知识更新；四领域筛选后题目并集；未明确列出 N | GPT-5 评判准确率（%）；排除无法解析的判定 | 27.10 | 适用时由 GPT-4o-mini 写入；GPT-5 作答；沿用各检索预算 | 表 2, 第 7 页 |
+| Hindsight／知识更新 | 知识更新；四领域筛选后题目并集；未明确列出 N | GPT-5 评判准确率（%）；排除无法解析的判定 | 17.76 | 适用时由 GPT-4o-mini 写入；GPT-5 作答；沿用各检索预算 | 表 2, 第 7 页 |
+| Hindsight／术语歧义 | 术语歧义；四领域筛选后题目并集；未明确列出 N | GPT-5 评判准确率（%）；排除无法解析的判定 | 37.74 | 适用时由 GPT-4o-mini 写入；GPT-5 作答；沿用各检索预算 | 表 2, 第 7 页 |
 
-加入 oracle speaker-aware retrieval，在相同 answer model 下比较 raw-message、per-user、thread、graph memory，判断主要损失发生在 write 阶段，还是已经取对 social state 后的 reasoning 阶段。
+来源：[表 2, 第 7 页](https://arxiv.org/pdf/2605.14498v1)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-## 研究决策卡
+表 2 确认 Hindsight 是第 1 版总体优胜者。各类别的优胜者不同：更新题 27.10 属于 HippoRAG，Hindsight 对应为 17.76。对抗筛选衡量的是受求解器影响的困难分布。金标消息编号未命中可能仍有重写后的替代证据；已检索成功样本上的条件准确率也不是金标证据干预实验。人工抽查 100 项有 99 项一致，不能证明评判偏差对所有系统相同或排名不变。成本不含查询和失败调用，分摊数据库大小也不是纯记忆内容字节。基准不测试隐私、成员变化或生产工作流安全。
+<!-- EVIDENCE:limitations:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-适合研究多人交流中的发言者、信念和受众条件。把全部聊天当成一个统一用户的记忆库会抹掉最重要的变量；回答内容真实，也可能因归属错误或使用了错误角色的术语而失败。
-
-### 一个具体任务长什么样
-
-示意任务：不同成员对同一计划持有不同观点，某个术语在不同团队中也有不同含义。当前提问者的身份决定应如何解释问题；系统需要把内容与说话者、回复关系和目标受众一起检索。
-
-### 最有判别力的实验
-
-在相同对话文本上保留、隐藏或打乱角色与回复结构，按提问者分别评分。若正确元数据给定后仍失败，再检查信念推理；若只有人工角色标签有效，则不能直接宣称系统能自主建立群体记忆。
-
-### 建议搭配
-
-[gatemem](gatemem.md) · [came-bench](came-bench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`single-user memory → speaker-grounded group memory → socially governed shared state`
-
-它说明多人 memory 不是“更多文本”，而是一种 relational state。
+固定回答模型和词元预算，比较原始消息、保留发言者的压缩和打乱发言者的存储。再独立以完整金标证据替换检索，并保留未参与对抗筛选的查询集。分别衡量回答质量、归属、更新和权限合规，保留精确评判分母及写入／查询成本。
+<!-- EVIDENCE:next:END -->

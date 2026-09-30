@@ -1,4 +1,4 @@
-# BEAM: pushing long-term memory to coherent 10M-token conversations
+# BEAM: memory evaluation across long synthetic conversations
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2025-10 · paper v1<br>
@@ -9,48 +9,59 @@
 
 [中文](beam.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2510.27246) · [Code](https://github.com/mohammadtavakoli78/BEAM)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-BEAM uses 100 coherent conversations and 2,000 validated questions across 128K, 500K, 1M, and 10M-token histories, covering ten memory abilities. Unlike random needle concatenation, it preserves narrative coherence and cross-event relations so that degradation with history length becomes directly observable for long-context and retrieval-augmented systems.
+Read all 80 pages: §§1–6 and Appendices A–G, including generation algorithms, all 44 prompt listings, complete provided task and scratchpad examples, and ablation/retrieval tables. Visually checked Tables 1 and 8. A later v2 exists; these results remain tied to v1.
 
-## Compared with what
+[arXiv v1 / 2025-10-31](https://arxiv.org/pdf/2510.27246v1)
+<!-- EVIDENCE:reading:END -->
 
-LoCoMo moved multi-session dialogue to roughly 16K tokens. BEAM pushes the same class of memory problem into million- and multi-million-token regimes while retaining conversational structure. Its central coordinate is how memory quality scales with horizon, not merely the best accuracy at one context size.
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-## Decisive evidence and score boundary
+BEAM generates narrative plans, expands them into user–assistant conversations, then human-validates probes and atomic answer criteria. Each conversation has two probes for each of ten abilities. Nine abilities use 0/0.5/1 criterion satisfaction; event ordering uses LLM-aligned Kendall tau-b. The displayed average therefore is not binary answer accuracy (§2).
 
-The paper reports that even LLMs supporting 1M-token contexts, with or without retrieval augmentation, degrade as dialogues lengthen. LIGHT, the authors' memory framework, improves average performance by roughly 3.5%–12.69% over the strongest baseline depending on the backbone, and ablations show complementary contributions from episodic memory, working memory, and a scratchpad. This demonstrates that BEAM exposes scale-induced failure. The LIGHT gain remains bundled-system evidence; the aggregate score alone does not prove any one component has a universal causal advantage.
+A contradiction probe asks about prior attendance after incompatible statements; the reference expects both claims and a clarification request. Event ordering follows when topics were mentioned, not necessarily real-world event dates (Appendices B.6, D; Listings 6, 16).
 
-## Fair comparison conditions
+### Measurement genealogy
 
-Align the backbone, actual context-window support, length bucket, retrieval budget, and question type. Scores from 128K and 10M should not be collapsed into an opaque current-best number, and models that truncate input are operating under a different evidence contract.
+Relative to LoCoMo and LongMemEval’s conversational-memory tests, BEAM adds much longer planned narratives, broader domains and a ten-ability profile. LIGHT combines an episodic index, recent-turn working memory and a compressed scratchpad. The remaining coordinate is whether the same supported questions survive longer histories at matched ingestion and answer-time cost.
+<!-- EVIDENCE:method:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-BEAM remains synthetic coherent conversation plus QA. The stronger next test is to apply comparable million-token pressure to real agent trajectories, continual writes/updates, and future action success.
+The dataset contains 100 conversations and 2,000 probes. Inference temperature is 0. RAG retrieves five dialogue pairs with BGE-small-en-v1.5/FAISS. LIGHT additionally uses Qwen2.5-32B-AWQ for indexing/filtering and GPT-4.1-nano to compress scratchpads from a 30K threshold toward 15K tokens. Qwen uses 128K for vanilla and 32K for RAG/LIGHT. At 10M, vanilla sees only the recent window. Judge identity, working-memory length, repeated runs and per-bucket sample counts are not pinned (§§3–4).
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## Research decision card
+Selected factual rows from v1. The denominator of Average is ten ability scores; nine aggregate rubric nuggets and one uses event-order correlation. Each chat contributes twenty probes, but counts by length bucket are not reported. The judge model is unspecified.
 
-### When to use it
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Llama-4-Maverick-fp8 / LIGHT / 500K | BEAM v1 500K bucket; mean over 10 abilities; bucket question count unstated | Reported mixed-metric average (unitless) | 0.359 | Key–value index, filtered scratchpad, recent turns | Table 1, p.8 |
+| Llama-4-Maverick-fp8 / RAG / 500K | BEAM v1 500K bucket; mean over 10 abilities; bucket question count unstated | Reported mixed-metric average (unitless) | 0.330 | Top-5 raw dialogue pairs; same BGE embedder | Table 1, p.8 |
+| Llama-4-Maverick-fp8 / LIGHT / 10M | BEAM v1 10M bucket; mean over 10 abilities; bucket question count unstated | Reported mixed-metric average (unitless) | 0.266 | Key–value index, filtered scratchpad, recent turns | Table 1, p.8 |
+| Llama-4-Maverick-fp8 / RAG / 10M | BEAM v1 10M bucket; mean over 10 abilities; bucket question count unstated | Reported mixed-metric average (unitless) | 0.249 | Top-5 raw dialogue pairs; same BGE embedder | Table 1, p.8 |
+| Gemini-2.0-flash / LIGHT / 10M | BEAM v1 10M bucket; mean over 10 abilities; bucket question count unstated | Reported mixed-metric average (unitless) | 0.192 | Key–value index, filtered scratchpad, recent turns | Table 1, p.8 |
+| Gemini-2.0-flash / RAG / 10M | BEAM v1 10M bucket; mean over 10 abilities; bucket question count unstated | Reported mixed-metric average (unitless) | 0.216 | Top-5 raw dialogue pairs; same BGE embedder | Table 1, p.8 |
 
-Use BEAM to examine degradation as histories grow. Extreme length is a stress variable, not automatic evidence of deployment realism. Track whether added content carries useful experience, repetition, or interference, and account for its ingestion cost.
+Source: [Table 1, p.8](https://arxiv.org/pdf/2510.27246v1)
+<!-- EVIDENCE:results:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-Illustrative task: a few early events in a very long coherent conversation determine an answer, while extensive later exchanges are only weakly relevant. Finding a keyword after length expansion is insufficient if event relations and temporal placement have been lost.
+The selected Gemini rows refute a universal LIGHT advantage. Table 8 also shows benefits from removing working memory at some shorter lengths, contrary to the blanket claim that every component always helps. Its first two base averages differ from Table 1’s Qwen rows, and the ablation backbone is not explicitly identified. Early-evidence-biased generation and different questions across length groups preclude a pure length-effect estimate.
+<!-- EVIDENCE:limitations:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-Evaluate the same questions and supporting facts at several history lengths, holding query-context budget fixed and reporting ingestion cost separately. Compare degradation curves for raw retrieval, summaries, and hierarchical memory. Avoid conflating a harder question set with a longer history.
-
-### Pair with
-
-[longmemeval](longmemeval.en.md) · [scale-qa](scale-qa.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+Use identical probes and evidence at several history lengths, match total retrieved and scratchpad tokens, and publish ingestion calls/cost. Pin the judge and event-alignment procedure, validate a blinded human subset, and report each ability separately with conversation-clustered uncertainty.
+<!-- EVIDENCE:next:END -->

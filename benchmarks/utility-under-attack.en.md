@@ -1,4 +1,4 @@
-# Utility Under Attack
+# Utility Under Attack: Does defended memory remain useful?
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-21<br>
@@ -6,60 +6,97 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-## What it actually measures
+[中文](utility-under-attack.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-Utility Under Attack reframes memory security from “does the attack succeed?” to **how much benign long-term-memory utility is lost after a small amount of malicious memory enters the system, and how much legitimate evidence a defense sacrifices while trying to stop it**. It combines a LongMemEval-style benign task with false-fact poisoning, write-time screening, and provenance-aware retrieval in one security–utility contract.
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What changed relative to predecessors
+The full primary paper was read for methods, setup, results and limitations; experiments were not independently reproduced.
 
-MPBench establishes a broad taxonomy of persistent poisoning and emphasizes attack exposure/success. This work focuses on the relatively simple false-fact class and makes **retained benign utility** a primary outcome. That exposes two failures that attack-success metrics can hide: substantial utility loss even with a small poison fraction, and defenses that reduce attack exposure by making legitimate evidence unreachable.
+Read Sections 1–8 and Appendix A, including the threat model, three corpus regimes, screening ablations, provenance-weight analysis, all results and reproducibility settings. Reviewed arXiv v1 without running Aegis or recomputing frozen JSON. Two inconsistencies between narrative and tables/equation direction are explicitly retained below.
 
-## Decisive evidence
+[Full primary paper](https://arxiv.org/pdf/2608.21230v1) · 2608.21230v1
+<!-- EVIDENCE:reading:END -->
 
-With only **1.2% of the corpus poisoned**, accuracy falls from **0.850 to 0.300**. The evaluated write-time pipeline rejects **0 of 360 poisoned memories**. Strong provenance weighting recovers some performance but drives recall for untrusted answer evidence to **0**. In the tested similarity distribution, content-only screening and simple additive provenance therefore exhibit a clear structural security–utility trade-off.
+<!-- EVIDENCE:placement:START -->
+## Relation to neighboring evaluations
 
-## What the score supports
+PoisonedRAG, AgentPoison and MINJA already study knowledge or memory poisoning. This work shifts measurement from producing the attacker’s target to retaining the assistant’s original answer quality, including whether defenses suppress useful evidence without an attack. It directly uses LongMemEval_S rather than inventing all questions. Compared with MPBench’s breadth across attacks and systems, this is a deeper study of one Aegis implementation, separating write screening from read ranking. Its contribution is paired utility and over-defense diagnosis, not priority for discovering memory poisoning.
+<!-- EVIDENCE:placement:END -->
 
-The results support the claim that a small amount of false-fact poisoning can substantially degrade utility in the tested memory stack, retriever, embedder, and reader, and that the evaluated simple defenses trade security for access to benign evidence. They do not establish that all defenses fail, and residual utility cannot be attributed to retrieval alone because reader abstention also affects final accuracy.
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-## Fair comparison contract
+Each LongMemEval_S question’s roughly 50-session history is stored as timestamped conversational-round memories in a separate namespace. Seed 42 selects 120 questions. A generator receives the question and true answer, then produces a false answer and three ordinary chat-style assertions in one pass: 360 records, about 1.2% of the corpus. They reuse query wording without instruction payloads, optimized triggers, gradients or retrieval-feedback iteration. Genuine histories are internal and poison is untrusted; attackers cannot alter old records, tune ranking or elevate trust. Despite simple payloads, access to the true answer is experimental side information, so this should not be described as a completely target-uninformed attack.
 
-Memory stack, embedder, retrieval top-k, reader, poison rate, poison-similarity distribution, and provenance prior should be aligned. A defense should report poisoned-record exposure, benign recall, answer accuracy, and abstention together rather than only attack rejection. Provenance-ranking weights are not directly comparable when source-quality distributions differ.
+Aegis screens structure, sensitive data, injection rules and conditionally invoked model classification. Classifier confidence at least 0.8 escalates to rejection; lower configured ranges may only flag. Retrieval combines semantic similarity with provenance prior, effectiveness, decay and metadata. Arms compare disabled provenance weighting, shipped weights and stronger weights. Corpus M additionally marks some non-evidence rounds untrusted before poisoning; Corpus N injects no poison but marks all answer-bearing evidence untrusted. M tests imperfect correlation between provenance and maliciousness; N tests the cost when genuine evidence arrives through conservatively labeled channels.
+<!-- EVIDENCE:method:END -->
 
-## How to use it in research
+<!-- EVIDENCE:setup:START -->
+## Experimental setup and scoring
 
-The benchmark is useful for detecting defenses that merely become more aggressive information rejectors. Admission filters, provenance ranking, conflict resolution, and memory consolidation methods should be compared through a **security–utility frontier**, with attribution of gains to reduced poison exposure, preserved trusted evidence, or better reader abstention.
+The reader is claude-sonnet-5; gpt-4o-2024-08-06 judges at temperature zero using official LongMemEval prompts; claude-haiku-4-5-20251001 generates poison. Retrieval uses top-k=15 without query rewriting, summarization or graphs. Provenance rescoring is the intervention, so “no reranking” must not be read as absence of that score. Clean full-set accuracy is 0.860 over 500 questions, whereas primary poisoning comparisons use the same 120 questions with clean reference 0.850. A newer-build clean remeasurement is 0.875 with p=0.45 versus the original; neither full-set nor cross-build denominators should be substituted.
 
-## Next discriminating validation
+“Utility retained” is accuracy divided by clean accuracy, without subtracting a no-memory baseline; it is an accuracy ratio, not causal incremental memory value. Poison occupancy and rank-one frequency separate retrieval exposure from reader resistance. Exact paired McNemar tests compare arms within each corpus; M and N are not paired against each other. Screening separately uses deepset (263 malicious, 399 benign), InjecAgent (250 malicious), Dolly and synthetic memories (750 benign each), and NotInject (339 benign), with recall, false-positive rates and 1,000 bootstrap resamples. Cached API calls and backoff prevent meaningful latency comparison with local detectors. The appendix does not identify the exact embedding model.
+<!-- EVIDENCE:setup:END -->
 
-The main gaps are adaptive attacks, realistic provenance distributions, additional memory stacks, and the proposed occupancy gate. The highest-value next study would compare defenses under the same benign workload and adaptive attacker and determine whether any method genuinely dominates the baseline Pareto frontier rather than moving along the same trade-off.
+<!-- EVIDENCE:result-1:START -->
+## Primary poisoning experiment
 
-<!-- RESEARCH-DECISION:START -->
+Same 120 questions, 360 poison records, top-k=15; claude-sonnet-5 answers and GPT-4o judges with official prompts. Utility is accuracy/0.850, rounded as reported. Shipped wt/ws=0.15/0.60; stronger=0.35/0.45. Paired McNemar p versus disabled is 0.80 and 0.0015 respectively.
 
-## Research decision card
+| Condition | Accuracy | Utility retained (%) | Poison context (%) | Poison rank one (%) |
+|---|---|---|---|---|
+| Clean | 0.850 | 100 | 0.0 | 0 |
+| Poisoned / disabled | 0.300 | 35 | 20.0 | 100 |
+| Poisoned / shipped | 0.317 | 37 | 20.0 | 87 |
+| Poisoned / stronger | 0.475 | 56 | 8.8 | 2 |
 
-### When to use it
+Source: Table 3 · [Paper](https://arxiv.org/pdf/2608.21230v1)
+<!-- EVIDENCE:result-1:END -->
 
-Use Utility Under Attack to assess whether a memory defense preserves legitimate utility while resisting poisoning. More refusal can reduce attack success without producing a useful defense. Compare operating points on the safety–utility trade-off rather than one security number.
+<!-- EVIDENCE:result-2:START -->
+## When untrusted channels carry genuine evidence
 
-### What a concrete task looks like
+Each corpus has 120 questions. Accuracy uses question count; evidence recall is question-level retrieval of evidence; occupancy is the retrieved-context fraction. M contains 18.7% benign untrusted distractors and 1.18% poison. N contains no poison and makes answer evidence untrusted. wt=0.35; tests pair only within corpus, M p≈1.17e-10 and N p≈6.31e-30.
 
-Illustrative task: a small amount of false memory enters a benign history. Retrieval can be occupied by poisoned records or stripped of legitimate evidence by over-filtering. Worse answers can arise from opposite mechanisms: poisoning or defensive evidence removal.
+| Corpus and condition | Accuracy | Evidence recall (%) | Benign-untrusted context (%) |
+|---|---|---|---|
+| M / disabled | 0.3167 | 99.17 | 6.56 |
+| M / stronger | 0.7000 | 99.17 | 0.00 |
+| N / disabled | 0.8583 | 99.17 | 50.67 |
+| N / stronger | 0.0417 | 0.00 | 0.00 |
 
-### Most discriminating experiment
+Source: Table 6 · [Paper](https://arxiv.org/pdf/2608.21230v1)
+<!-- EVIDENCE:result-2:END -->
 
-Sweep screening thresholds or provenance-ranking weights on matched clean and poisoned queries, tracking clean accuracy, poisoning harm, and retrieval occupancy. Add defense-adaptive poisoning to test whether an operating point fits only a fixed attack set.
+<!-- EVIDENCE:result-3:START -->
+## Screening recall and false positives must use the same configuration
 
-### Pair with
+All cells are 0–1 proportions. Direct recall uses 263 malicious items, indirect recall 250, and NotInject FPR 339 benign items. All 155 indirect detections before stage 4 arise from sensitive-data detection, not injection rules. These are content-classification metrics, not downstream attack success.
 
-[injecmem](injecmem.en.md) · [memevobench](memevobench.en.md)
+| Screening configuration | Direct recall | Indirect recall | NotInject FPR |
+|---|---|---|---|
+| Naive regex | 0.144 | 0.000 | 0.015 |
+| Aegis stages 1–3 | 0.144 | 0.620 | 0.015 |
+| Aegis stages 1–4 / Haiku | 0.741 | 0.832 | 0.035 |
+| ProtectAI DeBERTa v2 | 0.414 | 0.660 | 0.428 |
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Source: Tables 4–5 · [Paper](https://arxiv.org/pdf/2608.21230v1)
+<!-- EVIDENCE:result-3:END -->
 
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:interpretation:START -->
+## What the evidence supports
 
-## Genealogy
+All 360 false assertions escape write rejection. Without provenance defense, poison ranks first for every question and occupies 20% of the 15-item context; accuracy falls from 0.850 to 0.300. The shipped weight yields no significant improvement, but p=0.80 does not prove equivalence. Stronger weighting recovers 0.475 in the original corpus and 0.7000 in M, where all benign untrusted records are distractors and removing them provides an additional benefit. N exposes the opposite extreme: without an attack, accuracy drops from 0.8583 to 0.0417 and evidence recall reaches zero. Low attack success alone would hide that loss.
 
-The benchmark advances memory-attack evaluation from attack success to joint security–utility measurement; `map_delta=reinforces`. Together with MPBench and InjecMEM, it separates **write exposure, retrieval exposure, generation success, and benign utility** into distinct memory-security coordinates.
+Holding other score terms equal, with internal-minus-untrusted prior difference 0.7, the protected similarity margin is wt×0.7/ws: 0.175 at shipped weights and about 0.544 at stronger weights. Observed poison advantage 0.32 exceeds the first. Only two weights are measured; excluding every intermediate setting or other retrievers additionally depends on similarity-distribution and attacker-capability assumptions. Provenance occupancy constraints are proposed but not implemented or evaluated, so they are not a demonstrated remedy.
+<!-- EVIDENCE:interpretation:END -->
 
-Primary: https://arxiv.org/abs/2608.21230
+<!-- EVIDENCE:limitations:START -->
+## Limits, source gaps and next test
+
+One system, reader, embedding space, 120-question sample and nonadaptive attack limit generalization. Knowing true answers and likely queries is not free access for every real attacker. Non-elevatable provenance is assumed, not tested against laundering through summaries or trusted-tool echoes. Text alone generally cannot establish factual truth, but 0/360 is an observation for this pipeline, not proof against write defenses with external grounding. M is a favorable bound and N an all-evidence-untrusted extreme, not production traffic. The clean full run also wrongly refuses 109/124,462 rounds; none bears answers, but this remains over-defense. Next experiments should sweep intermediate weights, embeddings/readers and evidence-source mixtures, then evaluate occupancy constraints on both utility and attack outcomes.
+
+Two passages require correction. The abstract/conclusion juxtapose 0.832 indirect-injection recall with 1.5% NotInject false positives, but Tables 4–5 assign 0.832 to the four-stage Haiku pipeline with 3.5% false positives; 1.5% belongs to stages 1–3 with 0.620 indirect recall. Prose beside Equation (2) reverses the winner: under its simplified assumptions, untrusted content outranks trusted content when its semantic advantage exceeds the compensating trust margin. Figure 2 and subsequent reasoning support that direction. This note follows the tables and correct comparison rather than repeating the conflicting sentence.
+<!-- EVIDENCE:limitations:END -->

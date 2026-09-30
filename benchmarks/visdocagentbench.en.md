@@ -1,4 +1,4 @@
-# VisDocAgentBench: RAG / agentic visual-document retrieval
+# VisDocAgentBench: evidence-directed retrieval across visual document pages
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-18<br>
@@ -6,60 +6,71 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](visdocagentbench.md) | **English** · [Back to the entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](visdocagentbench.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.17889) · [Code](https://github.com/hulx2002/VisDocAgentBench) · [Data](https://huggingface.co/datasets/hulx2002/VisDocAgentBench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-Compares static rankers with search/inspection agents under the same ranked-page output.
+Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction.
 
-## Genealogy: What It Follows
+Read all thirty pages and Appendices A–H, including path construction, full-document review, tool/ranking protocols, resources, stratified results, complete success/failure traces and licensing; visually checked Tables 3 and 5 and Figure 3. No experiment rerun or independent audit of the hundred source papers.
 
-Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
+[arXiv 2608.17889v1 · 2026-08-18](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:reading:END -->
 
-## How It Is Evaluated
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-**Question:** Can an agent use search, visual inspection, and OCR to place distributed evidence pages in the top 10?
+One hundred 2026 papers, ten per topic, yield 2375 rendered pages; 2324 content pages support construction. GPT-5.5 extracts query anchors, hidden semantic bridges and visual-target descriptors. Embedding candidates plus VLM verification connect pages into direct, one-bridge and two-bridge paths. One author and a separate AI review 1522 paths in full-document context; both scores must reach 60/100. The final set has forty queries per level and 120 unique targets. Queries expose relations but hide bridge identities, titles, page numbers and exact captions. An example follows a task failure into its broader taxonomy before locating a yellow-labeled page bearing the related error name. Appearance-only matching can retrieve a plausible wrong page. Full-document checks and top-ten hard-negative review reduce ambiguity without exhaustively labeling the entire corpus.
 
-**Measurement object:** Visual-document retrieval benchmark that compares static rankers and iterative visual/OCR agents under one ranked-page contract.
+Editorial placement: compared with page retrieval in MMDocIR/IRPAPERS and final QA in ViDoRAG, the added coordinate is a common ranked-page endpoint for static rankers and iterative agents, with latent paths and discovery/examination/ranking separated. It connects visual-document retrieval with agentic search, but six cross-document paths cannot establish a mature large-scale cross-document measure.
 
-**Scale and protocol:** 2,375 pages from 100 documents and 120 queries, with 1,469 redistributable page images. The protocol includes shared-top-10-contract, twelve-action-agent-budget, support-provided-intervention.
+[Source](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:method:END -->
 
-## What a Score Can Support
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-Across 2,375 pages and 120 queries, a shared top-10 contract plus support interventions and ablations makes discovery and inspection visible. It supports system-level evidence under this environment, harness, model/tool, and resource configuration; unmatched variables prevent attribution to one component.
+Static rankers order all pages once. Agents receive twelve one-action steps and, if needed, one ranking-only final call. Visual search uses Qwen3-VL-Embedding-8B; OCR search embeds PaddleOCR-VL-1.6 output with Qwen3-Embedding-8B. Both can inspect up to ten pages per batch and crop them. Searches expose opaque handles/scores without snippets or document identity. Final lists contain up to ten distinct discovered pages, exactly ten when enough are available. R@1 is the query fraction ranking the unique target first; R@10 measures top-ten inclusion and MRR@10 averages truncated reciprocal rank. Invalid outputs score zero; rationales are not graded. Supported planners use medium effort; open Qwen3.5-397B-A17B runs BF16 on sixteen A100 GPUs with thinking on/off.
 
-## Strongest Confounder
+[Source](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:setup:END -->
 
-The 120 queries, six cross-document paths, and unmatched agent routes limit causal attribution to a planner or vision component. The load-bearing confounders are small-query-set, planner-model-tool-mismatch, few-cross-document-paths.
+<!-- EVIDENCE:result-1:START -->
+## From direct matching to two-bridge retrieval
 
-## Remaining Gap: What It Still Does Not Measure
+Overall n=120; L1/L3 each n=40. Nemotron uses one-shot static MaxSim; the other rows are twelve-step agents over a shared visual index, not compute-matched systems. Higher rank-one accuracy does not imply higher top-ten coverage than every static ranker.
 
-Only 120 queries and six cross-document paths; planner, model, and tool routes are not capacity matched.
+| Visual retrieval system | Overall R@1 (%) | L1 R@1 (%) | L3 R@1 (%) | Overall R@10 (%) |
+| --- | --- | --- | --- | --- |
+| Nemotron ColEmbed | 40.00 | 97.50 | 2.50 | 70.00 |
+| GPT-5.6-sol | 61.67 | 85.00 | 40.00 | 68.33 |
+| Claude Opus 5 | 67.50 | 92.50 | 47.50 | 75.00 |
 
-## Genealogy: Where It Fits in the Map
+Source location: Tables 3 and 12, PDF pp. 9,23 · [Source](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:result-1:END -->
 
-`map_delta=reinforces`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+<!-- EVIDENCE:result-2:START -->
+## Support pages improve coverage while ranking losses remain
 
-<!-- RESEARCH-DECISION:START -->
+Same forty L3 queries, corpus and twelve-step tool budget; intervention prepends all gold support pages without role labels. R@10 rises 22.50 pp while R@1 rises 5.00 pp, separating coverage from final ranking rather than measuring answer accuracy.
 
-## Research decision card
+| GPT-5.6-sol / visual L3 condition | R@1 (%) | R@10 (%) | MRR@10 (%) |
+| --- | --- | --- | --- |
+| Standard | 40.00 | 52.50 | 43.36 |
+| Support provided | 45.00 | 75.00 | 55.19 |
 
-### When to use it
+Source location: Table 5, PDF p. 11 · [Source](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:result-2:END -->
 
-Use VisDocAgentBench to compare static visual ranking with iterative page inspection under a common ranking contract and action budget. When iterative agents use stronger models or more tools, score differences first describe systems rather than the causal value of iteration.
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, limitations and next experiment
 
-### What a concrete task looks like
+Visual retrieval consistently beats the OCR index within planners, supporting the value of discovery representation, but embedding models differ and not every visual tool helps. Agent gains over static/fixed-candidate ranking include extra inference/input costs. Removing crops raises visual R@1 from 61.67 to 64.17, contradicting any blanket all-tools-help reading. Gold supports improve retrieval but do not guarantee correct ranking. Only 120 English scientific queries, author-led construction, absent repeat-run intervals and six cross-document cases limit transfer. Source licenses may require local page reconstruction; annotation licensing does not authorize redistribution of all underlying papers.
 
-Illustrative task: a system ranks scientific-document pages using static representations or opens pages to inspect figures and OCR before reranking. Newly inspected evidence should affect selection rather than merely increase the number of calls.
+OCR-Text describes corpus-wide search representation: both agent routes can inspect page images and crops, so this is not a pure text-only versus visual-model experiment. Figure 3 is conditional on prior discovery/examination: its final OCR count of forty-two is not the forty-four rank-one successes over all 120 queries in Table 3. Support-provided initialization gives gold support observations upfront; equal action counts do not mean equal information or token budgets. Retrieval uses defaults, but complete closed-model temperatures, output limits and repeat-run uncertainty are not reported.
 
-### Most discriminating experiment
+Match planner, actual token/image budget and candidate exposure while comparing visual, OCR and hybrid indices. Separately measure not-discovered, discovered-but-unexamined, and examined-but-misranked targets; add equal-information non-gold controls to support initialization. Expand cross-document, form and multilingual cases and report repeated-seed paired intervals before claiming robust path reasoning.
 
-Share candidate sets, visual backbone, and final top-k between static and iterative methods, with a supplied-support-page control. Track ranking gains per inspection and report redistributable and complete page collections separately to control artifact availability.
-
-### Pair with
-
-[mc-search](mc-search.en.md) · [maple](maple.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+[Source](https://arxiv.org/pdf/2608.17889v1)
+<!-- EVIDENCE:limitations:END -->

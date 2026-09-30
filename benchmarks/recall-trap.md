@@ -1,4 +1,4 @@
-# The Recall Trap：RAG / retrieval validity
+# Recall Trap：固定代码上下文预算中的文件覆盖与修复成功
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-10<br>
@@ -6,60 +6,71 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](recall-trap.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](recall-trap.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2608.14838) · [复现实验](https://doi.org/10.5281/zenodo.21879550)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-用 downstream executable outcome 审计“更高 recall 就更好”的 proxy 假设。
+已完整阅读所述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-## 它接在什么之后
+完整阅读 24 页正文、统计与有效性讨论及附录 A–D，包括复现清单、预注册时序、模型不兼容记录和 15 项假设账本；目视核对第 10、12 页结果表。未下载运行归档或独立核验提交时序。
 
-前一代评价通常把该问题压成较短的最终分数或单一 proxy。这个评测把 predecessor critique 变成 capability × environment × protocol 的显式差异，并保留可执行或可复核资产。
+[arXiv 2608.14838v1 · 2026-08-14](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:reading:END -->
 
-## 实际怎样评测
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-**问题：** 在固定 context slots 下，提高 file recall 是否真的提高 issue resolution？
+SWE-bench Verified 的问题描述与检索代码被装入固定 12 个片段槽位，模型一次生成 SEARCH/REPLACE 编辑，应用于独立干净仓库后执行官方 Docker 测试。例如修复某文件中的边界条件时，ON 每个文件只留最高排名片段，约覆盖 12 个文件；OFF 保留原排序，可在约五个文件中提供多个片段。前者更易包含正确文件名，后者可能补足真正需修改的函数体。该设计测的是整套装包策略对修复的总效果；同源候选和排序器固定，不意味着两组实际片段排名、内容或 token 完全相同。
 
-**测量对象：** 有效性审计：在固定槽位代码检索协议下，更高 file recall 可能降低下游修复成功率。
+编辑比较：最近的方法前身是固定总长度研究多文档干扰的 Levy 等工作，以及按任务结果评估检索的 eRAG；论文也明确承认“正确文件、错误代码行”已见于 RGFL。新增坐标是同一检索服务内切换文件去重规则，用执行测试测量最终修复，而非提出新的普遍召回悖论。ContextBench 的跨系统相关性与此单开关实验互补；但后者仍同时改变文件数、深度、位置和干扰项，不能据此建立唯一机制因果链。
 
-**规模与协议：** Paired fixed-pack evaluations on SWE-bench Verified with an open-weight preregistered replication. 协议包括 paired-dedup-ablation, official-docker-grading, repository-clustered-inference。
+[来源](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:method:END -->
 
-## 分数能说明什么
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-paired fixed-pack evaluation 与 official Docker grading 显示 dense retrieval 的 higher recall 可对应 lower resolve rate，并有 open-weight replication。 它支持的是该环境、harness、model/tool/resource configuration 下的 system-level evidence；除非其他变量匹配，否则不能把榜单差异归因给单一组件。
+主实验融合 Qwen3-Embedding-8B、词法与图信号；chunker、嵌入、排序权重和槽位数不变。单轮、无工具、温度 0.2；非推理组输出上限 6000，DeepSeek 修正后为 16000 并请求 2000 推理上限，Qwen 的 32000 修订与表述差异见局限。空补丁及保留的执行错误算失败；从未生成的任务按配对排除，因此不同模型 n 不同。主指标是通过测试的任务数／配对 n，另给配对 McNemar 和仓库聚类区间。ON／OFF 平均输入分别 1451／1525 token，固定的是槽位而非 token。anchor dose 需读取金标准补丁前像代码行，是事后诊断，不是可部署的无答案检索信号。
 
-## 最主要的混杂因素
+[来源](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:setup:END -->
 
-compound dedup treatment 同时改变 breadth、depth、rank、position、tokens 与 distractors；结论只适用于 fixed slots。 关键混杂包括 compound-packing-treatment, fixed-slot-context, single-shot-no-tools-harness。
+<!-- EVIDENCE:result-1:START -->
+## 同一装包开关的收益强度与证据边界
 
-## 还没有覆盖什么
+SWE-bench Verified、12 槽位、单轮无工具、官方执行测试，空补丁保留为失败；模型间绝对分数不作能力排名，DENSE-1 区间包含零。按模型配对 n 作分母，不是官方仅已提交补丁的分母。
 
-dedup 开关在 single-shot、无工具 harness 中同时改变 breadth、depth、rank、position、token 数和 distractor。
+| 模型／检索器 | 配对 n | ON 通过率（%） | OFF 通过率（%） | OFF−ON（百分点） | 仓库聚类 95% 区间（百分点） |
+| --- | --- | --- | --- | --- | --- |
+| gpt-5.6-sol / fusion | 500 | 39.2 | 46.8 | +7.6 | [+0.8, +13.1] |
+| Qwen3.6-27B / fusion | 499 | 9.2 | 12.8 | +3.6 | [+0.9, +4.9] |
+| gpt-5.6-sol / DENSE-1 | 494 | 41.5 | 47.2 | +5.7 | [−0.9, +8.6] |
 
-## 放进演化图怎么看
+事实位置：第 5.1 节与图 2，PDF 第 10–11 页 · [来源](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:result-1:END -->
 
-`map_delta=reinforces`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+<!-- EVIDENCE:result-2:START -->
+## 检索与工具边界阻止普遍化
 
-<!-- RESEARCH-DECISION:START -->
+BM25 仍是 12 槽位单轮，聚类区间 [−5.8, −0.3]；Read 条件最多 10 轮，可继续读文件，McNemar p=0.45，80% 功效最小可检效应 4.5 个百分点。两行模型与执行器不同，不比较绝对通过率，也不把未显著当作精确零效应。
 
-## 研究决策卡
+| 条件 | 配对 n | ON 通过率（%） | OFF 通过率（%） | OFF−ON（百分点） |
+| --- | --- | --- | --- | --- |
+| gpt-5.6-sol／BM25／单轮 | 500 | 37.2 | 34.0 | −3.2 |
+| sonnet-5／融合／允许 Read | 499 | 65.9 | 64.5 | −1.4 |
 
-### 什么时候值得用
+事实位置：第 5.3、5.5、6.2 节，PDF 第 12、14、18 页 · [来源](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:result-2:END -->
 
-适合检验检索指标能否真实预测下游代码修复，而不是寻找一个普遍‘召回越低越好’的结论。上下文打包同时改变广度、深度、位置和干扰时，观测到的效果属于复合处理，需要进一步拆分。
+<!-- EVIDENCE:limitations:START -->
+## 解读、局限与下一步
 
-### 一个具体任务长什么样
+核心 gpt 与 Qwen 对照在仓库聚类和双方非空条件下仍为正；DeepSeek 的条件检验 p=0.49，额外收益部分来自能否产出补丁。DENSE-1 聚类区间跨零。BM25 的反向结果直接排除了通用“少文件必胜”定律；开放 Read 的 agent 对照未检出同样效应，但同时换了模型，不能单独归因为工具。金标准行覆盖、干扰减少和片段连续性仍纠缠。随机每文件选片段更差，仅排除“argmax 选错片段”解释，未分离文件集合与深度。SWE-PolyBench 的 617 模型×任务配对仅 +2.59 个百分点、p=0.056，金标准有效性筛选还未达到预设 95% 门槛，因此不是跨语言确认。
 
-示意任务：固定数量的代码上下文槽位，可以放入更多文件的浅片段，也可以保留少数文件的深片段。文件召回增加时，关键函数的上下文可能被压缩，最终修复反而更难。
+本页区分索引评估召回 0.666→0.817 与实际上下文包中的金标准文件出现率：后者 ON=0.878、OFF=0.806。原始 gpt 运行未记录原始回复；应用补丁漏斗来自另一轮预注册重跑，不能将其 +6.4 个百分点替换原始 +7.6。图 2 图例泛称预注册，但附录 B 将原始 gpt／DeepSeek 限定为同日提交设计、顺序依赖日志，DENSE-1 是观察主结果后制定的对照。第 4.3 节说 Qwen 两组重跑至 32K，第 5.9 节又把 K=12 称作较低预算／高空输出阶段；因此不把 K=4、12、40 拼成同条件剂量曲线。
 
-### 最有判别力的实验
+保持文件集合、总 token 与片段位置不变，分别操纵同文件深度、连续性和金标准行暴露；加入预算匹配的父文档扩展与更大 chunk 对照。在同一模型上做单轮／可 Read 的因子实验，并在训练截止后、跨文件修复数据上复测。主报告应同时给任务通过率、空补丁率、实际输入成本、仓库聚类区间和逐任务排除原因。
 
-独立控制文件广度、每文件深度、顺序和总 token，使用同一修复模型及隐藏执行测试。按仓库配对统计结果，并加入有工具的修复流程，检验现象是否只在单次、无工具的固定打包协议中出现。
-
-### 建议搭配
-
-[beir](beir.md) · [browsecomp-plus](browsecomp-plus.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+[来源](https://arxiv.org/pdf/2608.14838v1)
+<!-- EVIDENCE:limitations:END -->

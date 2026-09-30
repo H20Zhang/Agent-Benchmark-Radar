@@ -1,70 +1,66 @@
-# GroupMemBench: memory in multi-party conversations
+# GroupMemBench: speaker-conditioned QA over synthetic workplace groups
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2026-05-14 · paper v1<br>
-> **Best memory system in v1 (name not verified) — Average accuracy: 46.0%**<br>
-> Best memory-system average explicitly reported by the v1 abstract; the matching system name remains unverified rather than guessed. [Original source](https://arxiv.org/abs/2605.14498v1)<br>
+> **Hindsight / GPT-5 — Micro-average QA accuracy: 46.01%**<br>
+> Best among the compared systems in v1 Table 2. Appendix G defines a micro-average over the filtered union of Technology, Finance, Healthcare and Manufacturing, excluding unparseable judge outputs, not a six-category macro-average. Ingestion uses GPT-4o-mini; answering and judging use GPT-5. [Original source](https://arxiv.org/abs/2605.14498v1)<br>
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](groupmembench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](groupmembench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2605.14498)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-GroupMemBench evaluates memory in **multi-party conversations** where identity and audience matter. It targets group dynamics, speaker-grounded beliefs, and audience-adapted language, so the same term or proposition can mean different things depending on who said it and who is asking.
+Read all 24 pages of v1, main §§1–5 and Appendices A–L: graph schema, sampling equations, published prompts, generation knobs, domain results, cost accounting, judge protocol, all eight-system case traces and limitations. Visually checked Table 2 and the retrieval-failure figures. v2 dated 16 May exists but was not substituted into this v1 review.
 
-## What changed relative to prior evaluation
+[arXiv v1 / 2026-05-14](https://arxiv.org/pdf/2605.14498v1)
+<!-- EVIDENCE:reading:END -->
 
-Most agent-memory systems and benchmarks are dyadic: one user talks to one agent. Concatenating several one-on-one histories does not preserve reply structure, per-speaker beliefs, shared versus private context, or Theory-of-Mind effects. GroupMemBench generates graph-grounded conversations and binds each adversarial query to a specific asker.
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-## Decisive evidence
+Graph traversal chooses a speaker, audience, project phase and reply parent; GPT-5 realizes messages with personas and occasional noise, disagreement or reversals. A solver–judge–refiner loop retains questions that defeat its retrieval solver. Every query includes an asker identity (§3).
 
-The benchmark covers six query categories including multi-hop reasoning, knowledge update, term ambiguity, user-implicit reasoning, temporal reasoning, and abstention. The strongest evaluated memory system reaches only 46.0% average accuracy; knowledge update is 27.1% and term ambiguity 37.7%. A simple BM25 baseline matches or exceeds most agent-memory systems, suggesting current ingestion pipelines erase lexical and structural signals that group memory needs.
+In the worked Finance case, User_13 asks which teams must align on formatting. The gold is Finance and Data Engineering. BM25 retrieves the original request; Hindsight preserves that request with its speaker in a rewritten note. Other systems retrieve wrong speakers or merge extra teams (Appendix J). This distinguishes useful speaker-preserving compression from lossy rewriting; it does not prove all compression is harmful.
 
-## What the score supports
+### Measurement genealogy
 
-This is strong evidence that **speaker/audience structure is not a cosmetic metadata field**. Still, the benchmark is synthetic and does not isolate whether failure comes from ingestion, indexing, retrieval, or final Theory-of-Mind reasoning.
+LoCoMo and LongMemEval supply long-history QA precedents. EverMemBench is the closer multi-party predecessor; GroupMemBench adds controlled reply structure, persona/audience wording and asker-conditioned questions. Those mechanisms operationalize social context, without establishing human-like Theory of Mind or enforcing access permissions.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-Fix conversation graph, speaker identities, asker identity, backbone, retrieval budget, and visible audience metadata. Preserve exact lexical forms when comparing ingestion schemes; summarizing one system's memory more aggressively can destroy the very ambiguity cues being tested.
+Four English workplace domains each contain 30,000 messages, with six query categories. GPT-4o-mini standardizes ingestion, GPT-5 answers and judges, and dense components use text-embedding-3-large where supported. Judge T=1, output cap 2,048, one verdict per answer; unclear parsed verdicts leave the denominator. Cross-domain scores are micro-averaged over filtered questions. Exact total/type counts, solver identity/refinement budget, answer decoding and matched retrieval-token caps are not fully tabulated. The worked dense retriever uses top-10, while several memory traces show three entries.
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-Real group spaces include permissions, private threads, changing membership, moderation, and cross-channel identity. Social consequences of exposing one person's belief to another are governance questions beyond answer accuracy.
+Selected v1 facts. Overall is not the mean of the six displayed category percentages. Category maxima come from different methods, so the abstract’s three headline numbers are not one system profile.
 
-## Next discriminating validation
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Hindsight / All categories | All categories; filtered union of four domains; N not explicitly tabulated | GPT-5-judged accuracy (%); unclear verdicts excluded | 46.01 | GPT-4o-mini ingestion where applicable; GPT-5 answerer; native retrieval budgets | Table 2, p.7 |
+| BM25 / All categories | All categories; filtered union of four domains; N not explicitly tabulated | GPT-5-judged accuracy (%); unclear verdicts excluded | 43.22 | GPT-4o-mini ingestion where applicable; GPT-5 answerer; native retrieval budgets | Table 2, p.7 |
+| HippoRAG / Knowledge Update | Knowledge Update; filtered union of four domains; N not explicitly tabulated | GPT-5-judged accuracy (%); unclear verdicts excluded | 27.10 | GPT-4o-mini ingestion where applicable; GPT-5 answerer; native retrieval budgets | Table 2, p.7 |
+| Hindsight / Knowledge Update | Knowledge Update; filtered union of four domains; N not explicitly tabulated | GPT-5-judged accuracy (%); unclear verdicts excluded | 17.76 | GPT-4o-mini ingestion where applicable; GPT-5 answerer; native retrieval budgets | Table 2, p.7 |
+| Hindsight / Term Ambiguity | Term Ambiguity; filtered union of four domains; N not explicitly tabulated | GPT-5-judged accuracy (%); unclear verdicts excluded | 37.74 | GPT-4o-mini ingestion where applicable; GPT-5 answerer; native retrieval budgets | Table 2, p.7 |
 
-Add oracle speaker-aware retrieval and compare raw-message, per-user, thread, and graph memory under the same answer model. This would reveal whether the main loss happens when memories are written or when the model reasons over correctly retrieved social state.
+Source: [Table 2, p.7](https://arxiv.org/pdf/2605.14498v1)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-## Research decision card
+Table 2 identifies Hindsight as the v1 overall winner. The category leaders differ: 27.10 Update belongs to HippoRAG, while Hindsight scores 17.76. Adversarial selection measures a solver-conditioned hard distribution. Missing gold-message IDs can reflect rewritten alternative evidence, and conditional accuracy on retrieved cases is not an oracle intervention. One hundred manual checks with 99 agreements do not establish uniform judge bias or immutable rankings. Cost excludes querying and failed calls; allocated database sizes are not pure memory payload bytes. No privacy, membership-change or production-workflow safety is tested.
+<!-- EVIDENCE:limitations:END -->
 
-### When to use it
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-Use GroupMemBench for speaker identity, beliefs, and audience conditioning in multi-party interaction. Flattening a group log into one user's memory removes the central variables. A true statement can still fail through incorrect attribution or role-specific terminology.
-
-### What a concrete task looks like
-
-Illustrative task: participants hold different beliefs about a plan, and a term has different meanings across teams. The asker's identity changes the appropriate interpretation. Retrieval must retain speakers, reply relations, and audience context together with content.
-
-### Most discriminating experiment
-
-Keep dialogue text fixed while retaining, hiding, or shuffling roles and reply structure, and score by asker. Failure with correct metadata points to belief reasoning. Benefits restricted to human-provided role labels do not establish autonomous group-memory construction.
-
-### Pair with
-
-[gatemem](gatemem.en.md) · [came-bench](came-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`single-user memory → speaker-grounded group memory → socially governed shared state`
-
-GroupMemBench shows that multi-user memory is not simply more text; it is relational state.
+Use the same answerer and token budget for raw, speaker-preserving compressed and speaker-shuffled stores. Independently replace retrieval with complete gold evidence, retaining a held-out non-adversarial query set. Measure answer quality, attribution, updates and access-policy compliance separately, and preserve exact verdict denominators plus ingestion/query costs.
+<!-- EVIDENCE:next:END -->

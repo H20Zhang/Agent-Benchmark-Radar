@@ -1,4 +1,4 @@
-# LifeBench：长期 memory 不只包括显式事实
+# LifeBench：合成多源生活记录的长期记忆评测
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2026-03 · 论文 v1<br>
@@ -7,64 +7,59 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](lifebench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](lifebench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2603.03781) · [代码与数据合成](https://github.com/1754955896/LifeBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-LifeBench 评估 agent 能否在长期、多源 life-event stream 中整合 **declarative 与 non-declarative memory**。除了显式的 episodic / semantic fact，它还要求从分散在时间和数据源中的重复行为推断 habit 与 procedure。
+已阅读全部 28 页：第 1–5 节与附录 A–H，包括合成算法、质量规则、错误案例、伦理边界及所提供的完整数据结构和月报样例；目视核对图 7、9。
 
-## 相比此前评测多测了什么
+[arXiv v1 / 2026-03-04](https://arxiv.org/pdf/2603.03781v1)
+<!-- EVIDENCE:reading:END -->
 
-conversation-memory benchmark 主要编码“用户明确说过什么”；LifeBench 开始问“用户反复做过什么，因此可以推断出什么”。长周期事件模拟彼此关联，并注入现实先验，所以好的 representation 不能只把每条 event 当作独立 chunk 去 retrieve，还要做跨事件 aggregation 与 behavioral abstraction。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+DeepSeek-R1 将带有调查先验的人物设定扩展为年度情节、嵌套事件、日常活动及手机记录，另一智能体验证时间、地点与行程可行性，再基于记录构造问题。题目测试信息提取、多跳推理、时间更新、习惯／偏好推断及拒答。问题生成后，会补充手机记录以填补证据缺口（第 3.2.5 节）。这是受控合成问答，尚未验证真实用户的个性化效用。
 
-论文报告当前最强一批 memory system 的准确率也只有 55.2%。这里的难度不只是 context length，而是 semantic、episodic、habitual、procedural memory 混合在多源 trace 里，需要做 evidence integration 与行为模式推断。
+原文案例询问用户首次独立照顾邻居的猫时的状态，参考答案区分最初的紧张、生疏与后来的信心。仅找回事件本身，仍可能漏掉问题要求的心理状态（表 4）。
 
-## 这个分数能证明什么
+### 测量坐标的演进
 
-LifeBench 能支持系统整体是否会重建和推理长期生活模式，但不能干净地区分 retrieval、aggregation 与 inference 的贡献；同时 synthetic event generator 中的行为先验未必等价于真实用户。
+LoCoMo、LongMemEval 以对话历史为中心，Mem-Pal 加入应用日志。LifeBench 将可观察证据扩展为密集、异质的生活记录，把跨来源聚合和习惯推断变成显式测量对象。下一步是检验较少脚本化记录上的时间一致性和可修正个性化，而不只是继续拉长合成历史。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-应固定 event stream、backbone、可访问 source、temporal cutoff、retrieval budget 与 answer evaluator，并按 memory type 拆分报告，否则 explicit episodic fact 上的强表现会掩盖 habit/procedure 的失败。评估早期时间点时必须防止 future-event leakage。
+10 名合成用户各覆盖一年，共 2,003 题：517 道选择题、1,486 道短答题。GPT-5.1-Mini 同时用于记忆、作答与判分，嵌入使用 text-embedding-3-small。结构化记录转换为兼容 LoCoMo 的文本摘要；不输入作为参考的月度总结。检索上限、温度、重复次数及精确写入时间截断未明确报告（第 4.2 节；附录 H.5）。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-真实个人数据更稀疏、更矛盾、更隐私，而且 habit / intent 往往没有客观 label；benchmark 也没有判断推断出的 habit 是否应该被长期保存，或能否在未经确认时直接用于行动。
+以下摘选图 7 数值。准确率为 GPT-5.1-Mini 按 LoCoMo 提示判定正确的题目百分比；分母来自表 2。各系统使用相同的所列基础模型与文本化记录。
 
-## 下一步最有判别力的验证
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| MemOS / GPT-5.1-Mini／整体 | LifeBench v1；2,003 题 | 评判准确率（%） | 55.22 | text-embedding-3-small；同模型判分 | 图 7, 第 8 页; 表 2, 第 6 页 |
+| Hindsight / GPT-5.1-Mini／整体 | LifeBench v1；2,003 题 | 评判准确率（%） | 40.99 | 相同所列模型、嵌入与评判器 | 图 7, 第 8 页; 表 2, 第 6 页 |
+| Hindsight / GPT-5.1-Mini／ND | LifeBench v1 非陈述性记忆切片；429 题 | 评判准确率（%） | 50.35 | 习惯、技能、情绪与偏好；相同评判器 | 图 7, 第 8 页; 表 2, 第 6 页 |
+| MemOS / GPT-5.1-Mini／ND | LifeBench v1 非陈述性记忆切片；429 题 | 评判准确率（%） | 47.32 | 相同非陈述性记忆切片与评判器 | 图 7, 第 8 页; 表 2, 第 6 页 |
 
-把 inferred habit/procedure 连接到未来 decision，再加入用户显式 correction，测试系统能否既推断 latent pattern，又在行为变化时及时撤销旧判断。
+来源：[图 7, 第 8 页; 表 2, 第 6 页](https://arxiv.org/pdf/2603.03781v1)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-## 研究决策卡
+总排名掩盖了前表非陈述性记忆切片的反转。作答与判分共用模型，加上摘要预处理，限制了归因；合成历史生成器使用的是另一模型。人物设定集中于中国成年人；合成健康记录明确不是临床数据。图 9 仅为粗粒度单用户成本估计，并非标准化延迟。第 4.3 节的架构解释缺少组件匹配消融。
+<!-- EVIDENCE:limitations:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-适合研究分散行为中的习惯和程序性知识，而不是把记忆限定为明确说过的事实。选用时应强调跨来源推断；合成生活轨迹上的正确画像，尚不能证明系统理解真实用户或拥有实际个性化效用。
-
-### 一个具体任务长什么样
-
-示意任务：多个来源分别记录用户在不同情境下的重复行为，之后的问题不直接复述某一条记录，而要求归纳惯常做法。系统需要聚合经历，同时避免把一次偶然行为升级为稳定习惯。
-
-### 最有判别力的实验
-
-比较单来源、完整多来源和来源标识被打乱的输入，固定推理模型与记忆预算。按显式事实、习惯推断和程序知识分项报告；如果只在来源模式固定时有效，应优先检验生成器先验，而非宣称通用用户理解。
-
-### 建议搭配
-
-[dynamicmem](dynamicmem.md) · [memfusebench](memfusebench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`explicit conversational facts → multi-source life traces → inferred habitual/procedural memory`
-
-它把 memory 的对象从“用户说了什么”扩展到“用户长期行为里有什么规律”。
+执行并公布时间截断规则；固定检索词元预算，比较原始记录、给定摘要和来源打乱的摘要。加入独立盲评与按用户聚类的区间，并测试显式纠正后习惯推断是否仍然有用。
+<!-- EVIDENCE:next:END -->

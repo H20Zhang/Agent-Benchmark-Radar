@@ -1,4 +1,4 @@
-# MEMLENS：长上下文与 memory agent 的多模态正面对比
+# MEMLENS：受控历史长度下的视觉记忆准确率
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-05-14<br>
@@ -6,64 +6,58 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](memlens.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](memlens.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2605.14906) · [代码](https://github.com/xrenaf/MEMLENS)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-MEMLENS 在受控 context length 下直接比较 **long-context VLM 与 memory-augmented agent** 的 multimodal multi-session memory，覆盖 information extraction、multi-session reasoning、temporal reasoning、knowledge update、answer refusal，并从 32K 扩展到 256K token。
+已阅读全部 63 页，包括正文第 1–5 节及附录 A–I，覆盖所有已刊提示、视觉案例、适配器说明、评判审查、共有子集结果、错误分类和局限；核对第 32 页为空白页，并目视检查表 16／21。不声称已审计未刊辅助提示或已复现代码。
 
-## 相比此前评测多测了什么
+[arXiv v1 / 2026-05-14](https://arxiv.org/pdf/2605.14906v1)
+<!-- EVIDENCE:reading:END -->
 
-它专门排除 text-only shortcut。image-ablation 验证大多数题确实需要 visual evidence，因此可以较干净地比较两种架构：保留 raw multimodal context，还是把历史压缩进 external memory representation。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+固定问题及证据会话被放入逐渐加长、带时间戳的历史中。先选图再生成对话，并抽象实体名称，让文字通常无法独立确定视觉对象。问答覆盖提取、跨会话综合、时间推理、四步更新和拒答（第 3 节）。帽子偏好案例用连续图片承载变化的喜好，最终图片决定当前答案；只记住早先喜欢的帽子会答错（图 14）。这是冻结历史上的离线问答，不是在线写入／删除测试。
 
-MEMLENS 有 789 个问题、4 档 context length。对 evidence 包含图片的 80.4% 问题，去掉图像后两种 frontier LVLM accuracy 都跌到 2% 以下。对 27 个 LVLM 与 7 个 memory agent 的评估显示：long-context model 在短 context 更强，但历史增长后退化；memory agent 对长度更稳定，却因 storage-time compression 丢失 visual fidelity。multi-session reasoning 上多数系统仍低于 30%。
+### 测量坐标的演进
 
-## 这个分数能证明什么
+LongMemEval 提供五类能力的对话框架，MMLongBench 提供多模态长度计量参照，LoCoMo／Mem-Gallery 提供跨会话先例。MEMLENS 增加证据图片移除对照和共有长度条件，比较的是具体系统流程，而非只改变架构的实验。
+<!-- EVIDENCE:method:END -->
 
-它揭示了真实架构 trade-off：**raw-context visual fidelity vs compressed-memory scalability**。结果不能推出某一范式普遍更好，因为不同系统的 backbone、compression format 与 context implementation 仍不完全匹配。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 公平比较契约
+全集含 789 题。直接视觉语言模型测 32K／64K／128K；七个记忆智能体使用种子 42 分层抽样的固定 195 题子集，延伸至 256K。表 16 在相同题号上重新计算直接模型成绩。纯文本智能体接收 BLIP-2 图片描述，M3-Agent 接收会话拼接图，M2A／M3C 保留嵌入。Qwen3-VL-235B-A22B-Instruct 作二元评判，并有独立模型和人工审查。超过 500 个解析词的输出自动计零；普通／思考模式生成上限为 2,048／16,384 词元。原生图片词元计量、解码温度和各智能体检索预算未完整列出。
+<!-- EVIDENCE:setup:END -->
 
-尽量匹配 VLM backbone，统一 cross-modal token accounting、evidence image、context cutoff 与 query set，并报告 memory construction/storage cost。拿 256K raw-context 和 external-memory agent 比，却不计 ingestion 与 retained bytes，是不完整的比较。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 还没有测什么
+精选数值保留论文报告尺度。不能把 789 题行与 195 题行当作同分母直接排名。图片消融和确定性重评分是诊断对照，不是额外排行榜单元格。
 
-256K 仍远小于多年个人媒体；benchmark 也以 QA 为主，没有覆盖未来 multimodal action、持续视频 ingestion、update/delete operation。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Qwen3.5-122B-A10B／直接输入 | MEMLENS 全集；789 题 | 原文总体准确率（%），32K／128K | 58.68 / 45.50 | 原始交错图文；Qwen3-VL-235B 评判 | 表 13, 第 49 页 |
+| Qwen3-VL-8B (I)／直接输入 | 固定共有子集；195 题 | 原文总体准确率（%），32K／128K | 50.77 / 34.36 | 原始图片；相同子集／评判器，输入界面不同于记忆智能体 | 表 16, 第 50 页 |
+| Mem0 / Qwen3-8B | 固定共有子集；195 题 | 原文总体准确率（%），32K／128K | 31.79 / 30.26 | BLIP-2 图片描述；FAISS；作答时无原始像素 | 表 14, 第 49 页 |
+| GPT-5.4／证据图片消融 | 634 道图片必需／图片辅助题 | 原文准确率（%），保留／移除图片 | 93.13 / 1.74 | 金标证据事实；无干扰历史；并非长上下文准确率 | 表 3, 第 6 页 |
+| 全部评测配置／封闭答案审查 | 12,234 个模型与题目配对，32K | 准确率（%），模型评判／确定性规则 | 42.3 / 37.8 | 混合全集／子集配置；仅可确定性评分答案 | 表 12, 第 39 页 |
 
-## 下一步最有判别力的验证
+来源：[表 13, 第 49 页; 表 16, 第 50 页; 表 14, 第 49 页; 表 3, 第 6 页; 表 12, 第 39 页](https://arxiv.org/pdf/2605.14906v1)
+<!-- EVIDENCE:results:END -->
 
-构建 selective hybrid：只保留少量高价值 raw visual evidence，其余压缩，并同时画 accuracy–retained bytes–context length 曲线，直接验证 benchmark 暗示的架构方向。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-<!-- RESEARCH-DECISION:START -->
+图片消融覆盖 634 题而非全部 789 题，且输入是孤立金标事实而非完整历史。适配损失、检索、基座和后训练同时变化，分差或错误标签都不能单独隔离其因果贡献。M3-Agent 作答时可重看拼接图，与“所有智能体都失去像素访问”的笼统说法不符。表 21 与附录 G.6 使用非固定主表分数；表 14／16 部分类别分也无法重建所声明总分。评判规则会改变封闭答案排名并过度给分，因此“排行榜顺序不变”的说法过强。四个长度点也不能证明连续记忆安全性。
+<!-- EVIDENCE:limitations:END -->
 
-## 研究决策卡
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-### 什么时候值得用
-
-适合区分长上下文视觉模型的长度退化与外部记忆压缩造成的视觉损失。两类系统未必测试相同题集；比较前先对齐样本、视觉输入与预算，否则‘记忆胜过长上下文’容易成为混合条件的结论。
-
-### 一个具体任务长什么样
-
-示意任务：跨会话的图文历史逐步增长，后续问题要求恢复旧图中的信息或识别状态更新。原图仍可见时答错，与压缩阶段已丢掉关键像素，是不同的失败环节。
-
-### 最有判别力的实验
-
-只在共同问题子集上比较原始长上下文与外部记忆，分别给定原图和正确文字证据形成上界诊断。扫描历史长度时固定题目，并记录压缩、检索与回答阶段的成本，避免仅比较最终 token 数。
-
-### 建议搭配
-
-[memeye](memeye.md) · [mem-gallery](mem-gallery.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`long-context multimodal QA ↔ external memory agents → hybrid selective visual retention`
-
-它的价值在于把两种主流 memory 架构为什么失败讲清楚了。
+先统一逐题输出、分母与所有汇总分。在共有 195 题上固定检查点和作答预算，仅切换原始像素、固定图片描述和可检索原图指针。按全部所需会话审查检索，而非以召回率 0.5 为成功阈值；同时报告精确匹配、模型／人工分歧、写入成本和保留字节数。
+<!-- EVIDENCE:next:END -->

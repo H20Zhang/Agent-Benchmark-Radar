@@ -1,4 +1,4 @@
-# LoCoMo-Plus: From Factual Recall to Latent Constraint Consistency
+# LoCoMo-Plus: applying conversational cues without direct reminders
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-02-11<br>
@@ -6,60 +6,59 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](locomo-plus.md) | **English** · [Back to entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](locomo-plus.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[ACL Paper](https://aclanthology.org/2026.acl-long.1150/) · **Area: Agent Memory**
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-> **Measurement delta.** LoCoMo-Plus introduces **cue–trigger semantic disconnect**: a past user state, goal, or value forms a latent constraint that must shape a later response even when the later query does not restate that constraint.
+Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.
 
-## Predecessor / implicit critique
+Read all 16 proceedings pages, pp.25085–25100: §§1–7, limitations, Appendices A–C and all generation/judge prompts. Visually checked the main result and judge-reliability tables. This is the final ACL paper, not a verified initial preprint snapshot.
 
-LoCoMo and related long-term-memory benchmarks made multi-session recall and long-context reasoning reusable evaluation targets. Many tasks, however, can still be framed as retrieving an explicitly stated past fact.
+[ACL 2026 / 2026-07 / 2026.acl-long.1150](https://aclanthology.org/2026.acl-long.1150.pdf)
+<!-- EVIDENCE:reading:END -->
 
-LoCoMo-Plus targets a harder personalization requirement: remembered state should constrain future behavior without a direct retrieval cue.
+<!-- EVIDENCE:method:START -->
+## Method and measurement
 
-## What it actually measures
+The pipeline generates short cue dialogues, manually screens their memory relevance, generates semantically distant triggers, filters overlap with BM25/MPNet, and inserts validated pairs into LoCoMo histories after a gap. Questions do not announce a memory-test category (§4).
 
-The benchmark evaluates long conversations in which latent user constraints must be preserved and applied later. The authors argue that string matching and explicit task-type prompting are misaligned with this setting and use **constraint consistency** as the central evaluation view.
+A user who earlier wanted fewer distractions while preparing for an exam later asks about starting a television series. The response should use the earlier goal without a direct reminder (§1). The cognitive judge labels explicit cue acknowledgment or adaptation as correct, and generic cue-ignoring responses as wrong (Table 7).
 
-## What a score supports
+### Measurement genealogy
 
-A higher score indicates stronger consistency with prior latent constraints in the benchmark response setting. It does not isolate memory storage: retrieval, state reconstruction, parametric reasoning, and harness/prompting can all contribute.
+This is a direct extension of LoCoMo: the new coordinate is a weak semantic link between historical cue and present trigger, rather than an additional factual question type. Its next boundary is distinguishing appropriate application from merely mentioning a memory, including cases where a former goal has changed or no longer applies.
+<!-- EVIDENCE:method:END -->
 
-## Strongest confounder
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-Constraint construction and evaluation are load-bearing. Ambiguous constraints can make it difficult to distinguish reasonable adaptation from inconsistency. Explicitly telling the model that it is taking a memory test can also change the measured capability.
+Context-only models receive full conversations. RAG retrieves top-5 segments; RAG and memory-system responses use GPT-4o. Gemini-2.5-Flash is the main judge; GPT-4o provides a judge check. Cognitive/temporal/adversarial labels are binary, while factual/commonsense labels allow partial credit. The final cognitive denominator, partial-credit weights, inference temperature, token caps and repeat counts are not specified. Generation uses temperature 0.7, 256 output tokens and 50 samples per relation type; these are not evaluation budgets (§6; Appendices A–B).
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-Real preference drift/conflict, action-level constraint application, permissions/authority/revocation, downstream harm from stale constraints, and matched retrieval/state-reconstruction cost remain open.
+Selected reported percentages. Cognitive scores use binary memory-awareness judgments over the final cognitive set, whose size is not numerically specified in the paper. The factual average is the paper’s reported aggregate across differently graded task types, not assumed to be a five-category macro-average.
 
-<!-- RESEARCH-DECISION:START -->
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| gemini-2.5-pro / factual | LoCoMo; aggregate denominator/weights not specified | Reported factual average (%) | 71.78 | Full context; Gemini-2.5-Flash judge; task-specific labels | Table 1, p.25090 (PDF p.6) |
+| gemini-2.5-pro / cognitive | LoCoMo-Plus; final item count unspecified | Binary memory-awareness success (%) | 26.06 | Full context; main judge; no task-type disclosure | Table 1, p.25090 (PDF p.6) |
+| gpt-4o / cognitive | LoCoMo-Plus; final item count unspecified | Binary memory-awareness success (%) | 21.05 | Full context; same main judge | Table 1, p.25090 (PDF p.6) |
+| A-Mem / GPT-4o / cognitive | LoCoMo-Plus; final item count unspecified | Binary memory-awareness success (%) | 17.20 | Structured memory; exact retrieval/token budget unstated | Table 1, p.25090 (PDF p.6) |
 
-## Research decision card
+Source: [Table 1, p.25090 (PDF p.6)](https://aclanthology.org/2026.acl-long.1150.pdf)
+<!-- EVIDENCE:results:END -->
 
-### When to use it
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-Use LoCoMo-Plus when a new query does not explicitly cue the relevant historical constraint. The useful control is whether the same latent constraint remains effective under both direct and semantically distant cues, rather than another explicit-fact recall test.
+The factual-to-cognitive gap changes tasks and grading criteria; it is not an isolated storage or retrieval effect. Cross-judge stability in Table 3 concerns factual aggregates. Human-agreement sample size and the normalized agreement formula are absent. Appendix B reports camera-ready judge discrepancies under investigation. Cognitive awareness does not establish optimal advice, calibrated uncertainty, or protection from stale-constraint overuse.
+<!-- EVIDENCE:limitations:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:next:START -->
+## Next experiment
 
-Illustrative task: a user previously expressed a persistent constraint and later asks a choice question using different language. The response should apply the constraint without another reminder, while avoiding unjustified application to unrelated questions.
-
-### Most discriminating experiment
-
-Construct direct-cue, indirect-cue, and explicitly inapplicable queries for the same history under one answerer. Measure constraint retrieval, correct application, and over-application separately. Consistency alone can hide inappropriate use of obsolete or irrelevant constraints.
-
-### Pair with
-
-[inmind](inmind.en.md) · [memtrapbench](memtrapbench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy consequence
-
-`multi-session factual recall → temporal/update reasoning → latent user-state constraint → future memory-guided action`
-
-LoCoMo-Plus is an important transition/frontier signal from remembering the past toward correctly applying remembered state to future behavior.
+Create direct-cue, distant-cue and explicitly obsolete-cue variants for the same histories. Hold answerer and evidence budget fixed; score retrieval, acknowledgment, appropriate adaptation and over-application separately. Use blinded human judgments and a frozen evaluator on the cognitive subset.
+<!-- EVIDENCE:next:END -->

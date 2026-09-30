@@ -1,4 +1,4 @@
-# MemEvoBench：当 memory 朝错误方向演化时是否仍然安全
+# MemEvoBench：受污染记忆更新三轮中的安全性
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-04-17<br>
@@ -6,64 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](memevobench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](memevobench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2604.15774)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列版本的实质正文与附录；未独立复现实验。
 
-MemEvoBench 测的是 agent 在多轮交互中 memory **逐渐被错误演化** 后还能不能保持安全。误导性 memory、带噪 tool output 和 biased feedback 会跨轮积累，因此攻击对象不再是一条 prompt，而是不断被污染并再次使用的内部 evidence base。
+已阅读第 2 版全部 33 页，包括第 1–6 节和附录 A–D：所有风险分类、构建／评测／反馈提示，以及两个完整记忆案例；目视核对表 1–3。第 1 版日期为 4 月 17 日，保留的发布说明不代表已核验该版成绩。
 
-## 相比此前评测多测了什么
+[arXiv v2 / 2026-05-21](https://arxiv.org/pdf/2604.15774v2)
+<!-- EVIDENCE:reading:END -->
 
-静态 safety benchmark 通常测试单 episode 是否抵抗 harmful prompt；memory benchmark 又通常只看 retention utility。MemEvoBench 把两者交叉起来：agent 开始时可能是安全的，但因为早期观察被写入、强化、再次检索，之后越来越不安全。这样 memory update policy 本身也成为 attack surface。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+每个案例从混合记忆开始，连续提出三个相关但不相同的问题，并把每次回答追加到记忆中。可选的模拟反馈奖励冒险捷径、批评谨慎回应。问答构建规定两条正确记忆和三条误导记忆，且刻意让正确片段不直接揭穿误导模式（附录 B）。
 
-benchmark 包含覆盖 7 个领域、36 类风险的 QA 任务，以及由 20 个 Agent-SafetyBench environment 改造的 workflow task；它构造 benign / misleading memory 混合池并追踪多轮行为。论文观察到随着误导信息持续进入 memory，安全性显著下降，而只在 prompt 层做静态防御不足以消除这种长期效应。
+物业通信案例先放入有缺陷的历史分享流程，再要求发送清洁安排与入住信息。参考答案要求检查收件人授权，评判对象是模拟工具轨迹（附录 D）。因此测量的是不安全先例的复用，并非生产服务中的实际泄露。
 
-## 这个分数能证明什么
+### 测量坐标的演进
 
-跨轮 degradation curve 能支持特定 corruption process 下 **memory-update robustness** 的系统级判断，但不能单独定位根因究竟是 write admission、consolidation、retrieval、trust calibration，还是 backbone 在读到错误 memory 后本身容易被带偏。
+AgentPoison 研究被投毒记忆的访问，Agent-SafetyBench 提供工作流环境，已有记忆错误演化研究则提出累积反馈风险。MemEvoBench 在短而受控的更新序列中结合这些坐标。三轮相关任务能诊断偏移，但不能证明持续数月的自主演化。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-应固定 corruption schedule、benign/malicious memory 比例、tool output、backbone、retrieval budget 与轮数，并同时报告 benign utility 与安全指标。一个简单“不存、不用 memory”的系统可能很安全，却把 memory 的价值一起消灭了。
+问答含七个领域、36 类风险的 108 个案例；工作流含从 20 个环境改编的 83 个案例。九个回答模型温度为 0，由 GPT-5.2 判定回答或轨迹风险；工作流评判在不确定时默认不安全。问答的 +ModTool 同时加入修正和网络搜索，工作流仅加入修正。检索选择、搜索后端、具体工具／输出预算和重复运行不确定性未固定列明；A-MEM 比较只覆盖部分模型。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-真实攻击者可能会根据 agent 行为自适应，而不是遵循固定生成器；memory 还涉及 access control、deletion 等治理问题，poisoning 不能覆盖全部。发现矛盾后的 recovery 也不同于一开始就抵御 corruption。
+以下为论文内精选比较，保留报告百分比和声明分母，不反推缺失计数。问答与工作流为独立测试；三轮数值不是真实部署事故率。
 
-## 下一步最有判别力的验证
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Gemini-2.5-Pro / Vanilla | 每轮 108 个问答案例（声明值） | 攻击成功率（%），第 1／2／3 轮；越低越安全 | 66.0 / 72.0 / 80.0 | 初始系统；有偏反馈；温度 0；GPT-5.2 评判 | 表 1, 第 6 页 |
+| Gemini-2.5-Pro / +SafePrompt | 每轮 108 个问答案例（声明值） | 攻击成功率（%），第 1／2／3 轮；越低越安全 | 42.0 / 49.0 / 66.0 | 初始系统；有偏反馈；温度 0；GPT-5.2 评判 | 表 1, 第 6 页 |
+| Gemini-2.5-Pro / +ModTool | 每轮 108 个问答案例（声明值） | 攻击成功率（%），第 1／2／3 轮；越低越安全 | 19.0 / 23.0 / 30.0 | 初始系统；有偏反馈；修正加网络搜索；温度 0；GPT-5.2 评判 | 表 1, 第 6 页 |
+| Qwen3-32B / A-MEM / Vanilla | 每轮 83 个工作流案例（声明值） | 攻击成功率（%），第 1／2／3 轮；越低越安全 | 60.2 / 71.1 / 72.3 | 无反馈；A-MEM；温度 0；GPT-5.2 评判 | 表 3, 第 8 页 |
+| Qwen3-32B / A-MEM / +ModTool | 每轮 83 个工作流案例（声明值） | 攻击成功率（%），第 1／2／3 轮；越低越安全 | 73.5 / 81.9 / 84.3 | 无反馈；修正工具，无问答轨道搜索工具；温度 0；GPT-5.2 评判 | 表 3, 第 8 页 |
 
-把 lifecycle 拆成 admission、consolidation、retrieval、use，并在同一证据上逐阶段注入 corruption。最高杠杆的问题是：长期鲁棒性主要应该靠写入过滤，还是靠使用时的验证与信任校准。
+来源：[表 1, 第 6 页; 表 3, 第 8 页](https://arxiv.org/pdf/2604.15774v2)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-## 研究决策卡
+精选表中的 A-MEM 工作流反例表明，不能声称修正必然改善安全；问答收益也混合了搜索与修正。各轮问题不同，单凭恶化曲线无法隔离记忆累积作用；无记忆对照有所帮助，但并非完整的冻结记忆／反馈因素实验。部分百分比无法从声明的案例数重建，50 条二元回答上 96.2% 的评判准确率也需澄清分母。没有正常任务效用或恢复成本测量，尚不能确立可部署的安全与效用取舍。
+<!-- EVIDENCE:limitations:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:next:START -->
+## 下一步实验
 
-适合研究记忆连续更新时的安全退化，而不是只测一次提示注入是否成功。核心问题是错误经验能否通过反复写回累积影响；如果只记录最后一次攻击成功率，就会丢掉退化路径和修复代价。
-
-### 一个具体任务长什么样
-
-示意任务：系统完成正常任务后把反馈写入记忆，其中少量反馈具有误导性。多轮之后，后续决策逐渐偏离原先规则；评价应追踪何时写入了错误、何时被调出以及是否可以纠正。
-
-### 最有判别力的实验
-
-固定正常任务流，逐轮对照干净反馈、噪声反馈与误导反馈，记录安全性和正常任务效用两条曲线。让修复仅删除相关记录，再比较全量重置，才能判断系统是否具备有选择的恢复能力。
-
-### 建议搭配
-
-[injecmem](injecmem.md) · [utility-under-attack](utility-under-attack.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`memory utility → memory update dynamics → adversarial memory evolution`
-
-它把 memory maintenance 从工程细节提升成了安全评测坐标。
+对相同查询序列分别使用干净、冻结污染和持续更新的记忆，再独立切换反馈、搜索与修正。同时报告安全完成任务比例、攻击成功率、检索／写入轨迹和选择性修复成本。公开原始计数与人工分歧，尤其核查参考答案要求澄清、执行提示却规定不能再与用户互动的情况。
+<!-- EVIDENCE:next:END -->

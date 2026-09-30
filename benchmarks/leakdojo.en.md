@@ -1,4 +1,4 @@
-# LeakDojo: RAG evaluation should also ask how much database content an attacker can extract
+# LeakDojo: content leakage and defenses in controlled RAG configurations
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-04-07<br>
@@ -6,50 +6,73 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](leakdojo.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](leakdojo.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://aclanthology.org/2026.findings-acl.287/) · [Code](https://github.com/yeasen-z/LeakDojo)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction.
 
-LeakDojo is a configurable RAG-leakage diagnostic. The paper compares six existing attacks across 14 LLMs and four datasets—FIQA, SciFact, NFCorpus, and Enron—while the current codebase implements seven attacks. Metrics include query-budget scaling, ROUGE-L recall, unique chunk recovery, and defense ablations.
+Read all twenty-two pages of the proceedings paper, limitations and Appendices A–B, including interfaces/corpora, metric formulas, configuration matrices, budget/temperature/threshold analyses, costs and complete prompts; visually checked Tables 3 and 9. No attacks were executed.
 
-## Compared with what
+[ACL Findings 2026 · 2026.findings-acl.287 · 5790–5811](https://aclanthology.org/2026.findings-acl.287.pdf)
+<!-- EVIDENCE:reading:END -->
 
-Earlier leakage studies often demonstrate one attack on one model or pipeline. LeakDojo turns attacks, models, retrievers, corpora, and defenses into a controlled comparison matrix, making database-extraction risk a reusable RAG evaluation object.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Score boundary
+Experiments use isolated RAG systems over public SciFact, NFCorpus, FiQA and Enron corpora, treating each original document/email record as a non-overlapping retrieval unit. Evaluators know the corpus; the tested attacker sees only queries/final responses and at most domain knowledge. An illustrative defensive evaluation distinguishes repeated disclosure of one record from recovery of new records, then enables input-intent/output-content checks and measures protection plus benign-QA costs. Implementations adapt prior methods—for example generated PIDE queries and RAG-Thief through another code framework—so matching attack labels do not imply exact reproduction.
 
-Recovered text or chunks support extraction risk under the named attack budget, chunking, query generator, and RAG pipeline. They do not cover authorization, API secrets, cross-tenant access, or real incident impact.
+Editorial placement: prior work such as PoR and RAG-Thief studies particular extraction strategies. LeakDojo separates query generation, extraction instructions, retrieval and defenses under controlled budgets. Beyond QA accuracy or generic injection success, it measures distinct retrieval coverage, disclosure triggering and reconstruction quality—not production authorization or tenant isolation.
 
-## Fair comparison conditions
+[Source](https://aclanthology.org/2026.findings-acl.287.pdf)
+<!-- EVIDENCE:method:END -->
 
-Align corpus/chunking, attack implementation, query budget, generator, model, retriever, and leakage threshold. Different budgets should be shown as curves rather than one maximum value.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Next evaluation coordinate
+The default budget is N=200. Main cells average vanilla RAG, reranking, and reranking plus rewriting. Retrieval uses bge-large-en-v1.5 with Chroma/MMR, a forty-candidate pool and similarity threshold 0.75; bge-reranker-large reranks, while gpt-4.1-mini handles rewriting/summarization and several auxiliary generators. Decoding is greedy. CCL divides unique leaked units by ideal retrieval capacity kN; ARC divides unique retrieved units by kN. Neither is the fraction of the entire corpus recovered. SLT counts queries whose response exceeds 0.5 ROUGE-L recall against any retrieved unit. CRR averages, over successful queries only, the best unit’s coverage by contiguous matching blocks of at least fifty tokens. Output defense instead thresholds ROUGE-L F1, a different criterion.
 
-The next step combines extraction with authorization boundaries, sensitive-field severity, and production consequences instead of weighting all chunks equally.
+[Source](https://aclanthology.org/2026.findings-acl.287.pdf)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Model-dependent strategy reversal on the same corpus
 
-## Research decision card
+Public Enron 2015 corpus, two hundred queries, averaged over three RAG configurations. CCL/ARC use kN; SLT uses query count. CCL 88.3% does not mean recovery of 88.3% of the Enron corpus, and model token costs are not matched.
 
-### When to use it
+| Model/strategy | CCL (%) | SLT (%) | ARC (%) |
+| --- | --- | --- | --- |
+| Gemini-3-flash / PoR | 88.3 | 100 | 88.4 |
+| DeepSeek-V3 / PoR | 6.8 | 12.0 | 75.4 |
+| DeepSeek-V3 / RAG-Thief | 64.4 | 97.3 | 74.8 |
 
-Use LeakDojo to compare corpus-extraction risk and defenses under controlled RAG configurations. Recovered text depends on query budget and chunking. It does not replace cross-tenant authorization or production-incident evaluation, nor should one attack's maximum leakage summarize the system.
+Source location: Table 2, proceedings p. 5795 (PDF p. 6); Appendix A.3 · [Source](https://aclanthology.org/2026.findings-acl.287.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:result-2:START -->
+## Protection against the default configuration does not establish general safety
 
-Illustrative task: an attacker uses bounded queries to recover restricted corpus content while a defense preserves legitimate QA. Repeating the same text and recovering new chunks create different cumulative exposure, requiring distinct accounting.
+FiQA, DeepSeek-V3, T2 reranking+rewriting, two hundred queries. These are reported controlled-evaluation facts without attack prompts. CCL uses kN; rows changing both instructions and defenses are not a single-defense causal contrast.
 
-### Most discriminating experiment
+| GEN-PIDE configuration | CCL (%) |
+| --- | --- |
+| Default / no defense | 57.5 |
+| Default / input detector | 0.2 |
+| CodeClaim / input detector | 59.6 |
+| CodeClaim / input and output detectors | 26.5 |
 
-Fix corpus, chunking, retriever, and query budget, reporting unique recovered chunks alongside benign QA quality. Cross attacks with models to test whether a defense reduces inappropriate evidence exposure rather than suppressing one output style.
+Source location: Table 3, proceedings p. 5797 (PDF p. 8) · [Source](https://aclanthology.org/2026.findings-acl.287.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-### Pair with
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, limitations and next experiment
 
-[gatemem](gatemem.en.md) · [injecmem](injecmem.en.md)
+Attack rankings reverse across models, so one high score cannot summarize universal risk. CCL≈SLT×ARC is an empirical fit, not proof of statistical independence; instruction-following/leakage correlation is not causal. Summarization may reduce near-verbatim leakage while losing grounding, without establishing an inevitable trade-off between all useful QA and security. Blocking old instruction styles can overstate protection when other tested configurations still disclose content. English public corpora, unit lengths, query budgets and incompletely matched generation costs limit production extrapolation.
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+The abstract states fourteen models while Table 4 lists fifteen configurations; the main result uses six, and supplementary settings should not be silently combined. Table 9’s CCL falls from 56.5 at temperature zero to 39.4 at 0.8, qualifying the prose’s “small impact” claim. Near Table 3, the new GEN-PIDE value 59.6 is compared with 7.3, but that baseline belongs to TGTB; GEN-PIDE’s corresponding undefended value is 57.5. Retriever settings list top_k=10 and final top_n=5; reproduction must pin the actual final k rather than infer leaked counts from percentages.
 
-<!-- RESEARCH-DECISION:END -->
+Within authorized isolated corpora, pin final retrieval depth, token/query budgets and record lengths; repeat seeds and measure verbatim/semantic leakage plus benign-QA correctness. Report coverage relative both to kN and to corpus size. Separate defense selection from held-out stress tests and measure false blocking and residual exposure after content transformation.
+
+[Source](https://aclanthology.org/2026.findings-acl.287.pdf)
+<!-- EVIDENCE:limitations:END -->

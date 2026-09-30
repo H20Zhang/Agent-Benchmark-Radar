@@ -1,4 +1,4 @@
-# DAS-Bench / DAS-Eval: RAG / academic-survey artifact
+# DAS-Bench / DAS-Eval: evidence, organization and artifact quality in surveys
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-07<br>
@@ -6,60 +6,72 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](das-bench.md) | **English** · [Back to the entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](das-bench.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.18034) · [Benchmark and evaluator](https://github.com/ZhikaiXu24/DAS) · [Data](https://huggingface.co/datasets/ZhikaiXu24/DAS-Bench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-Extends retrieval/drafting into a revisable protocol for literature, taxonomy, claims, citations, discourse, and rendered artifacts.
+Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction.
 
-## Genealogy: What It Follows
+Read all thirty-five pages and Appendices A–H, including metadata extraction/audits, role states and repairs, all sixteen rubric definitions, topics/timeouts, ablations, blinded experts and cross-judge results; visually checked Tables 2–4. Also checked the official repository’s release status on 2026-09-30; no generation-system execution.
 
-Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
+[arXiv 2608.18034v1 · 2026-08-18](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:reading:END -->
 
-## How It Is Evaluated
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-**Question:** Can a system assemble literature evidence into an auditable, readable, publication-oriented survey?
+DAS-Bench fixes thirty survey topics, twenty-one CS and nine interdisciplinary, requiring complete English survey PDFs. DAS extracts eight groups/twenty-five fields, retrieves candidates, and grounds taxonomy planning in those candidates rather than topic alone. Each paper is routed to at most three sections. Paragraph planning precedes explicit claim/citation groups and drafting. For example, a retrieval-method section first organizes sparse/dense/hybrid families; papers support both methods and limitations. A missing comparison condition can trigger replanning of one paragraph’s claims and draft rather than whole-corpus retrieval. Review selects acceptance, direct paragraph edits, paragraph replanning or section replanning; finalization builds figures, BibTeX and LaTeX and compiles the manuscript.
 
-**Measurement object:** Academic-survey benchmark and evaluator that score literature coverage, taxonomy, claims, citations, discourse, and rendered artifact quality.
+Editorial placement: AutoSurvey/SurveyForge connect retrieval, outlines and survey writing, while DeepSurvey already includes full-paper analysis and section evidence. DAS adds reusable paper representations, explicit writing states and scoped state reactivation. Evaluation extends beyond answer/citation quality to taxonomy, hierarchical discourse and rendered manuscripts. This motivates a measurable design, not proof of a generally superior shared data layer or of every component’s necessity.
 
-**Scale and protocol:** 30 topics across computer science and non-CS fields, with a matched 21-topic comparison subset. The protocol includes sixteen-criterion-evaluator, semantic-and-deterministic-checks, blinded-expert-comparison.
+[Source](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:method:END -->
 
-## What a Score Can Support
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-Thirty topics and 16 criteria combine deterministic citation checks with blinded expert comparison across evidence, taxonomy, claims, discourse, and artifact quality. It supports system-level evidence under this environment, harness, model/tool, and resource configuration; unmatched variables prevent attribution to one component.
+Reproducible systems share Qwen3.5-397B-A17B-FP8 but retain native workflows and available literature resources. Systems lacking reproducible retrieval receive the same three hundred candidates as DAS; closed systems retain native search/configuration, so the full comparison is not uniformly controlled. DAS retrieves up to one thousand papers and uses three hundred for taxonomy/routing. Parsed-source access is capped at one request per paragraph/two per section; review permits three rounds and drafting/checking six attempts per paragraph. DAS-Eval equally averages sixteen 1–5 criteria: four each for Balanced Scholarly Citation Quality (BSC), Taxonomic Synthesis Quality (TSQ), Hierarchical Discourse Quality (HDQ), and Manuscript Assembly Reliability (MAR). These are rubric scores, not accuracy. The main judge shares the generation backbone at temperature 0.2; Kimi K2.6 rejudges at 0.6. Citation judgments trust evidence cards only, missing evidence is unassessable rather than an error, and long-document MAR uses sampled pages. A twelve-hour failure to produce a PDF receives no quality score, not zero.
 
-## Strongest Confounder
+[Source](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:setup:END -->
 
-Generation-backbone and main-judge coupling plus closed-system native configurations keep cross-system gaps at the system level. The load-bearing confounders are generator-judge-coupling, closed-system-native-configurations, judge-sensitivity.
+<!-- EVIDENCE:result-1:START -->
+## Results on the same twenty-one CS topics
 
-## Remaining Gap: What It Still Does Not Measure
+Main Qwen3.5 judge, per-criterion means over twenty-one topics and equal aggregation of sixteen criteria. DAS/Naive RAG share three hundred candidate representations; AutoSurvey retains its 530K corpus. Topics/backbone match, but retrieval resources, workflow and costs do not all match.
 
-The generation method is not yet public, and the shared generation backbone is also the main automatic judge.
+| System | BSC (1–5) | TSQ (1–5) | HDQ (1–5) | MAR (1–5) | Total (1–5) |
+| --- | --- | --- | --- | --- | --- |
+| DAS | 3.87 | 4.18 | 4.25 | 5.00 | 4.32 |
+| Naive RAG | 3.67 | 4.00 | 4.11 | 4.07 | 3.96 |
+| AutoSurvey | 3.81 | 3.74 | 3.69 | 3.67 | 3.73 |
 
-## Genealogy: Where It Fits in the Map
+Source location: Table A16, Appendix F.1, PDF p. 31 · [Source](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:result-1:END -->
 
-`map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+<!-- EVIDENCE:result-2:START -->
+## Quality/cost trade-offs in scoped repair
 
-<!-- RESEARCH-DECISION:START -->
+Thirty topics, identical pre-review checkpoints, model, prompts, three-round limit and deterministic checker. Pass rate divides reviewed subsections that obtain Reviewer PASS within budget by reviewed subsections; it is neither factual-claim accuracy nor total pipeline cost.
 
-## Research decision card
+| Repair policy | Review pass rate (%) | Review/repair tokens per survey (millions) | HDQ (1–5) |
+| --- | --- | --- | --- |
+| Direct Edit Only | 58.42 | 0.95 | 4.24 |
+| Paragraph Replan Only | 53.69 | 0.96 | 4.38 |
+| Full DAS | 74.59 | 0.79 | 4.28 |
 
-### When to use it
+Source location: Table 4 and Appendix F.3, PDF pp. 9,31–32 · [Source](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:result-2:END -->
 
-Use DAS-Bench and DAS-Eval for academic surveys as complete artifacts, including literature organization, claims, citations, and presentation. Multiple criteria are richer than stylistic preference, but shared or related generation and grading models require independent bias checks.
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, limitations and next experiment
 
-### What a concrete task looks like
+DAS leads matched-topic comparisons, but its displayed 4.34 tie with human surveys does not establish interchangeability: human references were not generated from identical inputs, and assessors do not verify every domain claim. Three external experts specialize in AI/survey assessment rather than each non-CS field. Cross-judge submetric correlation is moderate (overall ρ=0.507); shared generator/judge and metadata can introduce correlated bias. The semantic Reviewer does not read sources, and deterministic checks verify syntax/identifiers rather than entailment. Components trade dimensions: removing candidate-grounded taxonomy yields 4.35 versus full DAS 4.34. Runtime excludes full offline-lake construction; DAS 1.49 hours versus Naive RAG 0.20 reflects different execution structures, not pure model speed.
 
-Illustrative task: from a topic and paper pool, a system builds a taxonomy, organizes arguments, and produces a readable survey. Broad coverage with a poor taxonomy and polished presentation with unsupported claims are different artifact failures.
+DAS-2M’s roughly two million is acquisition scale; 1.53 million papers survive deduplication/parsing. After PDF parsing, preprocessing removes HTML tables, images and trailing reference/appendix material, disables formula recognition and truncates long inputs: this is not a lossless full-evidence lake. Monthly ingestion appends new papers without guaranteeing automatic replacement of older versions. In the twenty-paper model audit, only 16/20 evaluation-result domains are correct; structural validity is not factual reliability. The official repository still marks core method implementation as pending, distinct from the paper’s references to accompanying code materials: [release status](https://github.com/ZhikaiXu24/DAS).
 
-### Most discriminating experiment
+Independently audit source-level numerical, conditional and attribution errors with subject specialists rather than recycling the same evidence cards. Match candidate pools, backbone, total tokens and visual budgets; report scholarly scores without MAR plus utility including timeouts. Stress shared representations with stale versions, conflicting sources and incremental updates, then amortize offline extraction cost when measuring cross-topic reuse.
 
-Fix the paper pool and generation budget, obtain blinded human pairwise judgments, and test whether automatic metrics preserve the ranking. Score rendering and argument quality separately and repeat across evaluators to distinguish style preference from research quality.
-
-### Pair with
-
-[litreview-arena](litreview-arena.en.md) · [claimprobe](claimprobe.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+[Source](https://arxiv.org/pdf/2608.18034v1)
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# DreamBench-SWE
+# DreamBench-SWE：代码修改能否正确使用先前会话中的隐蔽证据
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-21<br>
@@ -6,60 +6,87 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](dreambench-swe.en.md) · [基准库](../library/README.md)
 
-DreamBench-SWE 测的是 **跨会话软件工程中的 memory hygiene**：后续代码任务需要决定，早期会话留下、而且无法从当前 repository 状态重新推断的证据，现在是否仍然 current、scoped、authorized / relevant；该用时要正确利用，不该用时要抑制。最终修改由隐藏可执行 oracle 评分，因此 memory 的影响落到真实代码 action，而不是停留在 QA。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已阅读全文的方法、实验设置、结果及局限；未独立复现实验。
 
-MemoryArena / WorldMemArena 已经把 memory 与后续行动连接起来，SWE-bench 则提供真实可执行代码任务。DreamBench-SWE 将两者交叉成 **repository-continuation memory trap**：控制早期会话给了什么、当前 repo 能重新推出什么，以及哪些旧证据在 successor task 中已经失效。后来出现的 Agent Memory Bench (coding agents) 使用真实仓库，构成外部有效性的互补对照。
+阅读完整 67 页第一版论文，包括第 1–9 节与附录 A–H：逐陷阱审计、原始与后续实验身份、预注册、构念配额、聚类统计、运行和计分细节、完整术语及伦理边界。区分原始 v2.0.5 实验和追加 v2.1.0 审计；论文 arXiv 版本与实验版本不是同一编号。未运行代码或核验私有原始日志。
 
-## 决定性证据
+[主论文全文](https://arxiv.org/pdf/2608.20664v1) · 2608.20664v1
+<!-- EVIDENCE:reading:END -->
 
-v2 的每个完整 condition 包含 **60 traps × 3 seeds = 180 个 S3 cells**。successor 中 B0 为 **21/180**，B5 为 **82/180**，typed-plus-raw reference probe 为 **83/180**，一个 pinned Mem0 literal-storage 配置为 **97/180**；所有可用 memory-vs-B0 比较在 Holm 校正后都拒绝零假设。核心结论是 benchmark 对“保留了可用历史证据”这一 treatment 有足够区分力。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 这个分数支持什么判断
+它与 SWE-bench 的关系是从单次问题修复转向同一仓库跨会话延续：后续代码能否使用早先出现、当前无法推断的约定。MemoryArena、EvoMemBench、STATE-Bench 已研究多会话和执行型记忆，因此本论文的新增坐标是软件专属的作用域、过时事实、生成文件来源和错误经验，与隐藏可执行判定结合。它使用受控样例仓库，不是 SWE-bench 问题的直接扩展数据集。“睡眠”仅指离线处理轨迹，“梦”仅指派生重放或修复产物。
+<!-- EVIDENCE:placement:END -->
 
-这些结果支持 DreamBench-SWE 是一个有区分力的、可执行的 memory profile benchmark，也支持“某些任务如果没有跨会话证据几乎无法完成”。它不支持 B5、typed-plus-raw、Mem0 等 memory-bearing condition 之间的机制优越性或等价性，更不能直接外推到一般 coding product，因为 memory configuration 与 coding harness 一起构成 treatment。
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-## 公平比较条件
+每个陷阱含 S1、S2 两次铺垫和 S3 一次评分任务。早先会话注入项目规则、审阅意见或失效证据；S3 必须产生非空生产代码修改，外部隐藏测试检查结果。示意：S1/S2 指定本模块导出的精确私有格式标记，S3 只要求实现导出，标记不在当前提示或代理文件系统中。随机标记由密码学随机源注入，作者只写占位骨架。记住标记仍需正确实现代码，不等于复制完整补丁。
 
-需要固定 wake/judge/model stack、coding harness、tool permissions、filesystem/network access、trap set、seed、memory injection format 和 oracle。尤其要区分 **memory availability** 与 **memory policy quality**：如果一个 condition 拿到了更多原始证据，胜过 B0 只能说明历史信息有价值，不说明某种 memory architecture 更好。
+原始 v2 包含 60 个陷阱：22 个早期任务、8 个合成试验任务、30 个新任务，按十类测量对象分配：原样保留、干扰下检索、过时替代、更新传播、作用域、来源冲突、跨会话合成、源文件工作流、错误经验拒绝、无关记忆下弃答。普通任务延续先前生产代码，即使先前未通过测试，只要补丁可应用且符合编辑策略也继续；13 个干净起点陷阱则让 S3 回到固定原始仓库，仅继承记忆。三个种子是同一陷阱的重复测量，而非三倍独立题目。
 
-## 研究上怎么用
+参考系统保留不可变原始轨迹，并离线生成带类型、来源、作用域、置信度、风险与有效期的派生记忆。维护包括整合、失败经验提取、受证据约束的反事实重放、矛盾修复和过时抑制；删除只改变派生记录状态，不销毁原始证据。读入前按状态、作用域、来源、风险等过滤，再在固定词元预算内排序。typed-only 只用派生管线，raw-only 只给原始事件胶囊，hybrid 两者兼有。B5 则每段轨迹确定性保存一条原样事件，不是原版 Mem0；B6 也只是子任务记忆替代实现。
+<!-- EVIDENCE:method:END -->
 
-它适合验证 coding-agent memory 的三个不同 claim：第一，跨会话保留的信息是否真的能改变 future action；第二，旧信息失效后能否抑制 harmful reuse；第三，scope / authorization metadata 是否影响正确行为。研究者应分别报告 use-when-needed、suppress-when-invalid 和最终 executable success，而不是只给一个总体成功率。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与计分口径
 
-## 下一步最有价值的验证
+主要执行模型与维护/诊断模型均为 GPT-5.5，执行器是 Codex CLI 0.142.0，镜像基于 node:22-slim。代理容器有 git 和 Codex，却没有 Python/pytest，因此代理不能自己运行仓库测试；评分器在外部应用生产补丁并运行隐藏判定。测试、Git 元数据和导入钩子等编辑受禁止。容器不挂载隐藏判定、参考补丁、序列和分析文件；这是文件系统隔离，没有声称网络断开。早期未隔离结果被作废，正式证据有金丝雀与扫描检查，但不能证明所有外部泄漏均不存在。
 
-当前缺口是生产级真实 repository、跨模型 / 跨 harness 迁移，以及 C9/C10 缺乏 B0 headroom，因此暂时不能做广义 rejection / abstention 结论。最高杠杆验证是把同一 memory-hygiene protocol 移到真实 repo continuation 上，并让不同 coding harness 在相同 evidence access 下比较，分离 benchmark trap 与 harness-specific effect。
+每条件 60 陷阱 ×3 种子＝180 个有效 S3 单元；首个完成尝试通过的 Pass@1 与超时后最终通过分开。统计以 60 陷阱聚类，整体交换同一陷阱所有种子的条件标签，用精确符号置换与 Holm 多重校正。原始 v2 的六个预注册比较与后续 v2.1 的比较族严格分开。后续审计在看到原始结果之后设计，但在其自身结果之前冻结；四个准入条件完成 720/720 个 S3 单元。Hosted Mem0 仅准入关闭事实推断的字面存储配置：mem0ai 2.0.11、隔离命名空间、最多 6 项检索、1,200 词元读入。原生 Mem0 与两个 Supermemory 配置在预评估一致性/修复门槛被拒，不能记成零分。主要任务判定可执行，卫生诊断中的模型标签不是另一个独立任务成绩。论文未在正文集中列出全部工具/生成停止上限；精确复现还需要所列冻结配置与私有评分资产。
+<!-- EVIDENCE:setup:END -->
 
-## 谱系位置
+<!-- EVIDENCE:result-1:START -->
+## 原始 v2：主要系统比较未拒绝
 
-它把“过去记忆是否帮助后续行动”继续拆成：retained evidence 是否仍然 **current、scoped、authorized / relevant，以及何时应该被抑制**；`map_delta=early_signal`。这是从 memory QA 走向 action-grounded lifecycle evaluation 的一个重要但仍待外部复现的坐标。
+原始 v2，GPT-5.5/Codex 执行，隐藏可执行 S3 判定。60 陷阱×3 种子，Pass@1 为 0–1 比例；区间为陷阱聚类自助法。hybrid 对 B5 配对 21 胜/15 负，P1 聚类 p=0.518419、六比较 Holm p=1.000。
 
-Primary: https://arxiv.org/abs/2608.20664
+| 条件 | 通过数/180 | Pass@1 | 聚类 95% 区间 |
+|---|---|---|---|
+| B0（无外部记忆） | 21 | 0.117 | [0.050, 0.200] |
+| B5（原样事件） | 89 | 0.494 | [0.378, 0.617] |
+| DF（仅类型化派生） | 80 | 0.444 | [0.333, 0.556] |
+| DF（仅原始事件） | 84 | 0.467 | [0.350, 0.578] |
+| DF（混合） | 95 | 0.528 | [0.422, 0.633] |
 
-<!-- RESEARCH-DECISION:START -->
+来源：表 7、9 · [论文](https://arxiv.org/pdf/2608.20664v1)
+<!-- EVIDENCE:result-1:END -->
 
-## 研究决策卡
+<!-- EVIDENCE:result-2:START -->
+## 后续 v2.1：相对无记忆可区分，机制未识别
 
-### 什么时候值得用
+后续独立冻结审计，同一 60 陷阱、三重复种子，各 180 有效 S3 单元。通过率为 0–1 比例，精确置换按陷阱聚类；Family A 保留全部 6 槽位，三个未准入槽位 p=1。B0 横线表示不与自身比较，不是缺失或零 p 值。
 
-适合检查多会话编码记忆的作用域、权威性、过期处理与错误经验拒绝。它的价值不只是任务成功，而是用不可从当前仓库推断的历史证据和隐藏检查器检验记忆是否必要；构造场景仍限制外推。
+| 条件 | 通过数/180 | 通过率 | 相对 B0 的 Holm p |
+|---|---|---|---|
+| B0（无外部记忆） | 21 | 0.1167 | — |
+| B5（原样事件） | 82 | 0.4556 | 0.00129625 |
+| DF-hybrid（混合参考系统） | 83 | 0.4611 | 9.36294e-06 |
+| B5-MEM0-LIT | 97 | 0.5389 | 3.92602e-05 |
 
-### 一个具体任务长什么样
+来源：表 12–13 · [论文](https://arxiv.org/pdf/2608.20664v1)
+<!-- EVIDENCE:result-2:END -->
 
-示意任务：早期会话确定一个有效规则，之后出现冲突或作用域不同的经验，最终编码任务要求采用正确的那条。保存全部内容并不够，系统必须判断哪项记忆有权影响当前修改。
+<!-- EVIDENCE:interpretation:START -->
+## 证据支持的结论
 
-### 最有判别力的实验
+原始结果不能支持复杂维护管线优于原样事件记忆：hybrid 虽多成功 6 个单元，P1 聚类 p=0.518419、Holm p=1；其余五个预注册比较也未拒绝。这不证明等效。描述性消融中，去掉矛盾修复反而 88/180，高于 typed-only 的 80/180，不能把每个操作都称为已证实机制。
 
-保留无记忆与确定性原样记忆两种强对照，按陷阱类型报告结果和无记忆余量。对于无记忆也能完成的类型，不应声称测出了记忆收益；按任务而非单次随机运行聚类估计不确定性。
+后续审计提供更明确的测量区分：三个可用记忆条件相对 B0 均在保留六个槽位的 Holm 校正后显著。它只刻画一个确切 Hosted Mem0 配置，不能把 97/180 解读为产品冠军。它对 B5 的次要比较原始 p=0.0273438，但陷阱多数折叠敏感性 p=0.21875；对 hybrid 的次要比较 p=0.162649。两项预注册机制对照由于另一端未准入而均不可用。历史 v2 的 Hosted Mem0 低分与后续高分属于不同实验，不能混成一次“修复带来”的因果收益。
+<!-- EVIDENCE:interpretation:END -->
 
-### 建议搭配
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源缺口与下一步
 
-[agent-memory-bench-coding](agent-memory-bench-coding.md) · [memtrapbench](memtrapbench.md)
+完整运行不等于每种测量能力都有效。原始 B0 铺垫通过率 287/360=0.797，略低于预注册 0.80；故 S3 所有失败不能都归因于记忆。C9 错误经验拒绝和 C10 弃答分别被 B0 全过 12/12、6/6，这些分层没有预期的无记忆难度，后续也如此。hybrid 有用记忆精确率 0.264，低于 B5 的 0.556；有害记忆率所有条件均为 0，不能据此声称降低危害。多项卫生指标共线或任务耦合，回归指标还依赖失败输出子串。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+只完成一个执行模型、受控小仓库、三会话和固定读入预算；未完成第二骨干迁移。可变托管服务和模型别名令新运行成为新实验。后续操作表记录 hybrid 12,655 次诊断/维护调用、约 1.74205 亿词元，对比 B5 约 220.936 万词元；成本列不补算未知服务价格，因此不可据小额记录成本推导生产效率。公开包排除原始服务日志和隐藏评分资产，阅读本文不等于独立复算全部私有证据。下一步应重新验证 C9/C10、使用能自测的执行器，并预注册新模型与真实仓库上的配对检验。
 
-<!-- RESEARCH-DECISION:END -->
+结果版本必须保留：arXiv 第一版同时报道原始 v2 与追加 v2.1，不把后续重跑当作原始发布成绩。表 8 的“Cells”汇集多个条件，某系统成绩的分母则为陷阱数乘三个种子；表 10 部分分层仅对应新增任务，不能拿其较小分母替换全量分层。公开材料足以阅读协议与选定结果，但没有独立打开全部冻结结果文件或私有资产；上面的版本、成本和显著性均按论文所报告口径。
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# StateMemBench
+# StateMemBench：从找回旧事实到维护当前有效状态
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时诊断结果（历史参考）** · 2026-08-20 · 论文 v1 快照<br>
@@ -7,60 +7,83 @@
 > 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](statemembench.en.md) · [基准库](../library/README.md)
 
-StateMemBench 测的是 **跨会话修订后当前 operative state 的维护能力**。事实、约束与决定会持续新增、覆盖或依赖彼此；最终回答必须基于当前仍有效的状态，而不是只要能召回某条历史记录就算成功。它关注的是“系统此刻相信什么、哪些规则仍生效”，而不仅是 old/new fact ranking。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已阅读全文的方法、实验设置、结果及局限；未独立复现实验。
 
-LongMemEval / MemoryAgentBench 已经包含 knowledge update，但 update 往往和 retrieval、长上下文理解及一般 reasoning 混在一起。StateMemBench 使用 symbolic event program、deterministic replay 与 closed-pool grader，显式生成状态依赖和修订轨迹，因此更直接地隔离 **state drift**：错误答案可以区分为采用 current state、命中 targeted superseded state，还是其他失败。
+阅读全文第 1–7 节及附录 A–I，涵盖跨基准错误标注及真人审计、符号程序和场景过滤、StateMem 全部提示、回答包装器与匹配对照、成本和全部补充结果。核对 2026 年 8 月 20 日第一版；未复现代码。对不同表格冲突保留未解决状态。
 
-## 决定性证据
+[主论文全文](https://arxiv.org/pdf/2608.19652v1) · 2608.19652v1
+<!-- EVIDENCE:reading:END -->
 
-benchmark 包含 **234 个多会话场景、322 个 probe**。grader 区分 current、targeted-superseded 与 other outcome。论文报告 StateMem 在相同 DeepSeek backbone 下将分数从 **0.205 提到 0.363**；即使做 length/cost-matched control，仍保留约 **+15–32 point** 的结构收益。最重要的证据是：收益并不完全由更长 context 或更多 token 解释。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 这个分数支持什么判断
+LongMemEval 已包含知识更新，MemoryAgentBench 的事实整合也测试后来的修改；StateMemBench 进一步把“选中过时值”单独计为结果，而不并入所有错误。论文与并行工作 STALE 的区别是：这里直接给出依赖和冲突，避免把发现隐含关系混入状态维护。与传统对话状态跟踪相比，它不强制被测系统输出固定槽位表示，而检查最终决策。新增的反陷阱要求旧值仍有效时不要贸然更新，因此“总选最新提及”也不能通关。此处是评测坐标比较；LongMemEval、LoCoMo 仅用于另行泛化测试，不是本基准题目的直接来源。
+<!-- EVIDENCE:placement:END -->
 
-结果支持“在显式依赖、受控修订的协议下，结构化维护当前状态能改善 operative-state correctness”。它不等价于一般 memory quality，也不能直接证明真实 agent 在开放环境中因此行动得更好，因为 benchmark 的依赖关系、修订方式和最终 probe 都被严格构造。
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-## 公平比较条件
+先生成由规则声明、值更新、局部例外、承诺和撤回组成的符号事件程序，再用确定性重放计算当前答案。若只相信最近提及、最常提及或旧的派生值等简化策略与重放结果不同，就得到陷阱及其过时答案。五类是状态变化、显著性竞争、依赖序列、复合错误和反陷阱。研究、购物、个人财务三个领域的公开材料只提供表面实体和语言，数值与陷阱独立抽样，不能从背景材料直接答题。Sonnet-4.6 渲染多轮对话，程序检查关键事实所在会话及禁用短语；还要求强模型在相关会话上至少 2/3 次答对，弱模型完整历史至少 3/5 次落入陷阱，反陷阱则要求保留正确值。这个过滤刻意选择易诱导模型犯错的场景。
 
-比较方法时必须固定 backbone、event program、可见历史、state representation budget、token/cost budget、replay policy 和 grader。尤其要保留 length/cost-matched control，否则结构化 state 方法可能因为保留更多显式信息而天然占优。还应分别报告 current accuracy 与 targeted-superseded error rate，避免平均分隐藏“旧状态泄漏”。
+短集 A 有 190 个场景，各 18 段会话、中位 165 轮、约 3,000 词元，每场一题。长集 B 有 44 个场景，每个融合三个不同陷阱线程，约 38 段会话、中位 599 轮、约 7,000–15,000 词元，每场三个子题。因此共 234 场景、322 个评分探针，不是 234 个独立单题。购物示例先设每周 10 包、两周共 20 包，后来改为每周 7 包；问两周总数应重新算成 14，而不是复述 20。评分时的隐藏候选池包含当前正确值、目标过时值及其他合理干扰项，答题模型看不到选项。
+<!-- EVIDENCE:method:END -->
 
-## 研究上怎么用
+<!-- EVIDENCE:setup:START -->
+## 实验设置与计分口径
 
-StateMemBench 适合测试 **state store、versioned memory、dependency-aware update、structured consolidation** 等机制。它与 staleness benchmark 应组合使用：前者验证多步修订后能否恢复完整当前状态，后者更像局部 retrieval/ranking unit test。对于 agent memory paper，这种组合比单独 LongMemEval QA 更能定位 update mechanism 的真实作用。
+StateMem 每轮调用一次模型，把事实、约束、来源和依赖解析为结构化状态单元。被取代单元保留供审计但不再激活；确定性依赖遍历把受影响的派生单元标成需要复核，不额外调用模型。回答时把有效状态、优先级、来源及复核触发原因交给一次生成，要求使用当前输入重算。整场约 165–600 次编码调用，不能视为与一次长上下文调用等成本。
 
-## 下一步最有价值的验证
+主要记忆与检索实验分别用 Qwen-3.5-9B 和 DeepSeek-V4-Flash 作同骨干对照，关闭推理模式、温度 0，每配置一次运行；固定 DeepSeek-V4-Pro 评审。检索默认 StateMemBench 的 k=10，外部 LongMemEval/LoCoMo 为 k=20。正确率是当前答案数/评分探针数；漂移率是目标过时答案数/全部探针数，而不是错误中的比例。必须同时报告候选池外回答，否则大量不作答也会看似低漂移。确定性词边界匹配只覆盖约 28% 回答，并在该子集与模型评审有 94.1% 一致率；其余自由文本仍依赖评审模型。
+<!-- EVIDENCE:setup:END -->
 
-当前缺口包括潜在关系发现、真实用户/环境漂移、隐私治理，以及 state tracking 是否改善后续 closed-loop action。最高杠杆的下一步是去掉显式 dependency annotation，让 agent 自己从自然交互中发现哪些事实互相覆盖或约束，并把 state correctness 与未来 tool/action success 连接起来。
+<!-- EVIDENCE:result-1:START -->
+## 全量测试：正确、漂移与不作答一起看
 
-## 谱系位置
+DeepSeek-V4-Flash，关闭推理，温度 0，DeepSeek-V4-Pro 评审；190 个短探针与 132 个长探针，共 322。正确率为 0–1 比例；漂移分母也为 322。其他池内干扰答案未列，故所列计数不必相加为 322。
 
-`map_delta=early_signal`。它把 update evaluation 从“新旧事实是否都存着”推进到“**当前 operative state 是什么**”。这个 coordinate 与 staleness、applicability 互补，但目前仍缺少独立自然数据证据，因此 durable Benchmark Map 暂不改。
+| 方法 | 正确数/322 | 正确率 | 漂移数/322 | 池外回答数 |
+|---|---|---|---|---|
+| 完整上下文 | 48 | 0.149 | 206 | 64 |
+| Dense | 66 | 0.205 | 177 | 66 |
+| A-Mem | 64 | 0.199 | 181 | 72 |
+| StateMem | 117 | 0.363 | 158 | 36 |
+| StateMem（移除依赖传播） | 120 | 0.373 | 157 | 36 |
 
-Primary: https://arxiv.org/abs/2608.19652
+来源：表 3、14 · [论文](https://arxiv.org/pdf/2608.19652v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 匹配输入后，状态链仍贡献多少
 
-## 研究决策卡
+固定 60 个评分探针，短长各 30；长探针来自 22 个场景。单位为正确探针百分比，k=10；同一存储建一次、相同检索片段，固定 DeepSeek-V4-Pro 评审。对照和包装器都见完整转录加检索、用同一次回答调用和最多 250 词前置文本；仅后端只见检索内容。不能把后端到包装器的全部提升归因于状态结构。
 
-### 什么时候值得用
+| 骨干／后端 | 仅后端（%） | 匹配对照（%） | 状态包装器（%） |
+|---|---|---|---|
+| Qwen-3.5-9B / Mem0 | 25.0 | 28.3 | 56.7 |
+| DeepSeek-V4-Flash / Mem0 | 28.3 | 56.7 | 71.7 |
+| Qwen-3.5-9B / BM25 | 20.0 | 31.7 | 56.7 |
+| DeepSeek-V4-Flash / BM25 | 21.7 | 48.3 | 70.0 |
 
-适合把‘用了旧状态’从一般回答错误中拆出来，尤其适合状态维护和依赖更新研究。它的核心价值在于错误类型可解释；若所有错误都汇总为不正确，就丢掉了这一设计相对普通问答的增量。
+来源：表 6、附录 F.2–F.5 · [论文](https://arxiv.org/pdf/2608.19652v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:interpretation:START -->
+## 证据支持的结论
 
-示意任务：一个计划中的数值被修订，依赖该数值的后续安排也需要同步改变。系统检索到旧计划和新事件后，必须恢复当前有效状态，而不是只选择出现次数最多的描述。
+DeepSeek 主实验中，StateMem 由检索最强基线 0.205 提高到 0.363，但仍约一半探针选择目标过时值。移除依赖传播得到 0.373，说明传播也会在反陷阱中过度失效；不能断言每个部件都单调增益。Qwen 的 StateMem 为 0.233、GraphRAG 为 0.224，配对检验 p=0.82，没有证实前者显著更强。外部测试呈现权衡：DeepSeek 上 StateMem/完整上下文在 LongMemEval 为 0.656/0.666，在 LoCoMo 为 0.592/0.587；Qwen 的 LoCoMo 为 0.566/0.612，因此“不会损失召回”不能当成所有条件的严格结论。
 
-### 最有判别力的实验
+包装器的受控结果支持按问题整理修订链有额外价值；它不是单纯改写检索片段。相对完整历史匹配对照增加约 155 输入词元和 169–188 输出词元，不增加调用次数；但相对裸后端新增完整历史，输入中位约 8,600 词元，LongMemEval 约 87,000。小样本集反陷阱占比更高，不能把包装器的 60 题分数与全量 322 题分数当作同分母排名。
+<!-- EVIDENCE:interpretation:END -->
 
-使用相同事件流，加入完整证据可见与正确当前状态给定的对照，分别统计旧状态错误和其他错误。改变修订依赖的深度时固定文本长度，从而区分依赖传播难度与长上下文干扰。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源缺口与下一步
 
-### 建议搭配
+陷阱策略与 StateMem 的设计目标共同定义，作者也把本基准上的优势视作乐观上界，需依靠外部测试检查泛化。短长集还改变了线程混合和题型组合，不能仅由总体差异识别纯长度效应。弱/中等骨干、与评审同族的 DeepSeek、Claude 渲染和单次运行均限制外推。LightMem、MemoryOS 的异常低分可能来自工作负载不适配或集成缺口，作者明确不把它们当作最佳能力证据。35B Qwen 长上下文因显存改为 16,384 词元，长集受尾部截断影响。真人小样本审计比模型少标漂移，跨基准漂移发生率应保留评审标注上界含义。下一步应预注册新的修订机制、匹配完整输入和成本，并在未参与筛题的回答模型上验证。
 
-[longmemeval](longmemeval.md) · [membench-staleness](membench-staleness.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+表 6 与附录 F.4 的单位需区分：包装器是 30 个短探针加来自 22 个长场景的 30 个探针，并非 30 个完整长场景。附录表 12 的 Dense 单后端按题型行加权约为 Qwen 5%、DeepSeek 0%，与表 6 同称 60 题却给出的 21.7%/31.7% 不一致；此处不合并这些冲突值，也不把范围最大增益当作无疑义结论。正文对 Qwen 的个别丢弃评分描述与全量表格分母也未完全对齐，下面主实验选用分母清楚的 DeepSeek 行。
+<!-- EVIDENCE:limitations:END -->

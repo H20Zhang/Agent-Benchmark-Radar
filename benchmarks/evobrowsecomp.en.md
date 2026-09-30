@@ -1,4 +1,4 @@
-# EvoBrowseComp: if a benchmark becomes stale, make regeneration part of the benchmark infrastructure
+# EvoBrowseComp: regenerable bilingual web-search questions and version boundaries
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2026-06 · paper v1<br>
@@ -7,54 +7,71 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](evobrowsecomp.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](evobrowsecomp.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2606.13120) · [Data](https://huggingface.co/datasets/Krystalan/EvoBrowseComp)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction.
 
-EvoBrowseComp currently releases 800 complex live-web questions, 400 English and 400 Chinese, generated through a multi-agent web-traversal, synthesis, and filtering pipeline designed for periodic regeneration. It measures bilingual agentic web search and reasoning-graph following.
+Read the complete v2 main text, limitations and Appendices A–F, including all generation/filter/judging prompts, human validation, annual-refresh plan and reasoning-effort intervention; visually checked Tables 3 and 5–7.
 
-## Compared with what
+[arXiv 2606.13120v2 · 2026-08-30](https://arxiv.org/pdf/2606.13120v2)
+<!-- EVIDENCE:reading:END -->
 
-The paper compares EvoBrowseComp with BrowseComp and BrowseComp-ZH, whose fixed questions can become stale or contaminated. EvoBrowseComp makes question regeneration part of the benchmark design. LiveBrowseComp is a useful complementary recent-fact benchmark, but it is not the reported comparison baseline in the paper’s Table 3.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## What the reported results show
+Approximately fifty thousand web seed entities cover nine domains and fifty subdomains. Three DeepSeek-V3.2 agents collect/synthesize QA, check credibility and old-fact popularity, and parse questions into projection/intersection/complement graphs for refinement. Generation requires at least five iterations and five edges, with the answer depending on fresh evidence. An illustrative question links software vendors, partner organizations and cloud platforms with exclusion constraints to identify a new release. Six models answering three times help filter questions, but convergence on one wrong answer is only a heuristic, not exhaustive uniqueness proof. The release retains four hundred questions per language.
 
-Paper v1 uses Search and Visit tools, a 128K context limit, at most 40 tool calls, GLM-5-Chat as judge, and the mean of three evaluations. Claude-Opus-4.6 obtains 44.8% on English and 36.8% on Chinese with tools. Without tools, DeepSeek-V3.2 obtains 6.3% and 10.3%, respectively. These are separate language/tool settings, not one bilingual success rate. The three data-generation agents use DeepSeek-V3.2; the judge is a different role. [Paper v1, §3 and Tables 2–3](https://arxiv.org/html/2606.13120v1#S3).
+Editorial placement: compared with BrowseComp/BrowseComp-ZH’s fixed human-written sets, EvoBrowseComp makes generation a three-agent process in English and Chinese. Relative to LiveBrowseComp’s human recent-fact validation, it adds automated regeneration without demonstrating cross-year difficulty stability or permanent decontamination.
 
-## Score boundary
+[Source](https://arxiv.org/pdf/2606.13120v2)
+<!-- EVIDENCE:method:END -->
 
-A score supports only the named generation/filter/judge pipeline and web date. Automatic regeneration does not guarantee equal difficulty across versions, so generations should not be treated as a progress curve without calibration.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Fair comparison conditions
+Main runs use Search/Visit tools, 128K context, at most forty tool calls, temperature 0.6 and top-p 0.95, normally with maximum reasoning; accuracy averages three independent evaluations per model. Temperature-zero GLM-5-Chat judges final-answer agreement rather than entire trajectories. Two author experts review eight hundred model predictions; the judge’s Spearman correlation is 0.864, not perfect agreement. A four-hundred-question quality audit finds 87.8% passing evidence correctness, question consistency/unambiguity and answer derivability jointly, distinct from the independent human-solving baseline.
 
-Align the snapshot, generator and filtering models, language, search provider, tool interface, context limit, maximum tool calls, decoding settings, and judge. Keep English/Chinese, tool-based/tool-free, and different generated releases in separate tracks. Repeat runs under the same protocol before interpreting score changes.
+[Source](https://arxiv.org/pdf/2606.13120v2)
+<!-- EVIDENCE:setup:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:result-1:START -->
+## Selected v2 results by language and tool access
 
-The key next step is cross-generation calibration: prove that a new release is fresher rather than merely harder, easier, or stylistically closer to the generator.
+Four hundred questions per language, averaged over three independent evaluations; 128K context, forty-call cap, maximum reasoning and GLM-5-Chat final-answer grading. This is not at-least-once success over three attempts, nor a matched bilingual same-item comparison.
 
-<!-- RESEARCH-DECISION:START -->
+| Model | English tools (%) | English no tools (%) | Chinese tools (%) | Chinese no tools (%) |
+| --- | --- | --- | --- | --- |
+| Claude-Opus-4.8 | 46.2 | 9.0 | 38.3 | 14.0 |
+| Claude-Opus-4.6 | 44.8 | 6.0 | 36.8 | 8.8 |
+| DeepSeek-V3.2 | 23.0 | 6.3 | 30.5 | 10.3 |
 
-## Research decision card
+Source location: Table 3, p. 8; Section 3.1, p. 7 · [Source](https://arxiv.org/pdf/2606.13120v2)
+<!-- EVIDENCE:result-1:END -->
 
-### When to use it
+<!-- EVIDENCE:result-2:START -->
+## Reasoning-effort comparison within DeepSeek-V4-Flash
 
-Use EvoBrowseComp to explore refreshable bilingual search evaluation, while distinguishing a regeneration pipeline from a single public snapshot. Long-term contamination resistance requires cross-version operation and difficulty calibration. Regenerability does not make scores directly comparable across versions.
+Four hundred questions per language with a forty-call cap. ER is the reported proportion exceeding allowed calls, not error rate or wall-clock timeout. The full termination/final-answer extraction behavior at the cap is not specified.
 
-### What a concrete task looks like
+| Configuration | English accuracy (%) | English exceed ratio (%) | Chinese accuracy (%) | Chinese exceed ratio (%) |
+| --- | --- | --- | --- | --- |
+| DS-V4-High | 34.5 | 38.8 | 24.8 | 54.5 |
+| DS-V4-Max | 16.5 | 75.5 | 10.8 | 82.5 |
 
-Illustrative task: a generation pipeline builds complex questions from live pages, and agents search in Chinese and English before returning short answers. Language versions may access different sources or reflect generator style, so inspect language slices rather than only a bilingual average.
+Source location: Table 5 and reasoning-effort discussion, p. 8 · [Source](https://arxiv.org/pdf/2606.13120v2)
+<!-- EVIDENCE:result-2:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, limitations and next experiment
 
-Compare systems on one fixed release, then retain auditable anchor tasks across refreshes to separate model change from task change. Vary generators and filtering models to test ranking stability, and inspect whether evidence difficulty is aligned across languages.
+Tool gains establish a retrieval contribution on this snapshot, not absence of prior knowledge or generation bias. English and Chinese sets are not guaranteed matched question pairs, preventing a direct transfer interpretation. DeepSeek-V4-Flash high reasoning outperforms max alongside fewer call-limit exceedances, showing how strategy changes effective exploration under one cap rather than that less reasoning is always better. Earlier BrowseComp scores are borrowed from technical reports, not rerun under this protocol. Construction still admits incorrect evidence; derivability from the evidence list does not establish real-world truth.
 
-### Pair with
+The body uses August 30 v2 while preserving the v1 historical header. V2 prose still claims tool-free scores below 11%, but Table 3 gives Claude-Opus-4.8 14.0% in Chinese. Introductory claims of continuous low-cost refresh contrast with Section 2.4’s annual plan due to scarce fresh knowledge and cost; construction reports approximately 40,000 GPU hours, not an established frequently running service. January 1, 2026 is not every model’s actual training cutoff.
 
-[livebrowsecomp](livebrowsecomp.en.md) · [gisa](gisa.en.md)
+Independently audit source evidence and alternative answers, retaining timestamps and accessible snapshots. Keep anchor questions/shared models across regenerations. Evaluate a reasoning-effort × tool-budget grid on identical tasks, reporting accuracy, forced termination, cost and intervals so task refresh and budget changes are not mistaken for model progress.
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+[Source](https://arxiv.org/pdf/2606.13120v2)
+<!-- EVIDENCE:limitations:END -->
