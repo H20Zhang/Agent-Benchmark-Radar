@@ -1,4 +1,4 @@
-# LongMemEval：把“记得”拆成五种长期能力
+# LongMemEval：检索键、时间筛选与回答证据的作用
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2024-10-14 · 论文 v1<br>
@@ -7,50 +7,90 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](longmemeval.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](longmemeval.en.md)
 
-[论文](https://arxiv.org/abs/2410.10813) · [代码](https://github.com/xiaowu0162/LongMemEval)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-LongMemEval 用 500 个高质量问题和可扩展、带时间戳的 user-assistant histories，分别测试 information extraction、multi-session reasoning、knowledge update、temporal reasoning 与 abstention。与一次性把长文本塞给模型不同，协议强调历史是随交互逐步出现的，系统需要在线吸收，再在之后回答问题。
+已阅读v2正文第1—6节、可复现性与伦理说明以及附录A—E；补读PDF图7—8、10—13的提示文字，并检查官方README中的2025年9月数据清理说明。未复现，未把曲线估算为精确数值。
 
-## 相比什么前进了
+[arXiv 2410.10813v2 (2025-03-04)](https://arxiv.org/html/2410.10813v2)
 
-LoCoMo 已证明很长的多 session 对话会让模型失效；LongMemEval 的关键增量是把“长期记忆”进一步拆成 update 与 abstention 等能力，并用属性控制的历史构造让上下文长度可以扩展。因此一个系统在 factual recall 上高分，不再足以说明它能正确处理事实更新或知道何时不回答。
+[补充来源 2410.10813v2，2026-09-30 核对](https://arxiv.org/pdf/2410.10813v2)
 
-## 决定性证据与分数边界
+[官方来源，2026-09-30 所见内容（可变页面）](https://github.com/xiaowu0162/LongMemEval)
 
-官方仓库在 2025 年还专门清理 history sessions，以减少历史构造对答案正确性的干扰；这本身说明 benchmark version 是 load-bearing variable。当前网页不把第三方 LongMemEval 成绩直接混为官方榜单，因为 answerer、retrieval top-k、judge 和数据版本经常不同。这里的分数能支持“在给定历史版本和 reader 下，系统提供了多少可用长期证据”，不能单独定位 memory write/retrieval 的因果贡献。
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-必须锁定数据版本、history construction、reader/answerer、retrieval budget 与 grader。尤其要区分 full-history、retrieval-only 与外部 memory system；如果 reader 或 top-k 同时变化，端到端 accuracy 只能当 packaged-system evidence。
+把人工策划的证据会话嵌入带时间戳的用户—助手历史，再提出500道涵盖提取、跨会话综合、时间推理、更新和弃答的问题。框架区分存储内容、索引键、检索查询和读取策略。一轮包含一条用户消息及其助手回复。
 
-## 下一步评测坐标
+定位比较：相较LoCoMo的长对话记忆，LongMemEval更集中地操纵检索表示、时间推理、知识更新和弃答，区分约115K与更大历史档位。它把记忆流程拆成可比较的检索与阅读环节，但总体QA分数仍不能单独定位哪一步失效。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-LongMemEval 仍以历史 QA 为终点。LongMemEval-V2 随后把对象推进到 agent-environment trajectories、workflow knowledge 与 latency；更进一步还要直接测 remembered experience 是否改善未来行动。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-<!-- RESEARCH-DECISION:START -->
+S每题约115ktokens；M有500会话、约1.5Mtokens。主要记忆实验采用Stella V5 1.5B检索、Llama3.1 8B Instruct提取，并将值按时间排序，以JSON及Chain-of-Note读取。索引键与提取仅使用用户侧消息；返回内容保持所选粒度。贪心生成，上限800tokens。GPT-4o-2024-08-06按题型规则作二元正确性判断。
+<!-- EVIDENCE:setup:END -->
 
-## 研究决策卡
+<!-- EVIDENCE:result-1:START -->
+## 扩展索引键，可同时改善召回与回答
 
-### 什么时候值得用
+数值为0–1比例。事实只扩展检索键，返回值仍是原始轮次；同一回答器内比较，GPT-4o提高5.0个百分点。
 
-适合研究‘记得住但用错版本’这类长期助手问题。它的价值在于把更新、时间推理和弃答拆开，而非用一个总体准确率替代所有记忆能力；报告分项通常比再加一个平均分更有诊断价值。
+LongMemEval-M的500题；每题检索前10个轮次片段。
 
-### 一个具体任务长什么样
+| 索引配置 | Recall@10 | GPT-4o QA@10 | Llama3.1-70B QA@10 | Llama3.1-8B QA@10 |
+|---|---|---|---|---|
+| Stella V5 / K=V | 0.692 | 0.67 | 0.624 | 0.534 |
+| Stella V5 / K=V+fact | 0.784 | 0.72 | 0.682 | 0.572 |
 
-示意任务：用户先给出旧偏好，数次会话后明确修改，随后询问当前应采用哪项安排。系统必须识别更新关系，而不是在两个相似片段中挑一个；没有充分历史证据时还应避免猜测。
+定位：v2表3：轮次级检索 · [原文](https://arxiv.org/html/2410.10813v2)
+<!-- EVIDENCE:result-1:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:result-2:START -->
+## 证据存在，也不保证完整历史读得好
 
-让旧事实和新事实都进入检索结果，再与仅给当前有效事实的条件比较。若前者仍失败，瓶颈已不只是召回率，而是冲突消解或时态解释；另报没有答案的问题，防止通过一律作答抬高部分题型成绩。
+数值为0–1比例。直接回答87.0%到60.6%是26.4个百分点差距，不是26.4%的相对下降；该差距不能单独归为写入或检索失败。
 
-### 建议搭配
+500题；理想条件只提供证据会话，S条件提供完整历史。
 
-[statemembench](statemembench.md) · [scale-qa](scale-qa.md)
+| 回答配置 | 理想证据QA | LongMemEval-S QA |
+|---|---|---|
+| GPT-4o / direct | 0.87 | 0.606 |
+| GPT-4o / Chain-of-Note | 0.924 | 0.64 |
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+定位：v2图3(b) · [原文](https://arxiv.org/html/2410.10813v2)
+<!-- EVIDENCE:result-2:END -->
 
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:result-3:START -->
+## 时间筛选首先改善的是证据召回
+
+数值为0–1比例。Stella V5与事实扩展键固定，改变查询时间范围提取模型；这是召回指标，不是最终QA。
+
+时间推理子集；表格未给各配置实际有效题数。
+
+| 时间筛选 | Recall@10 |
+|---|---|
+| 无时间筛选 | 0.55 |
+| GPT-4o时间筛选 | 0.722 |
+| Llama3.1-8B时间筛选 | 0.57 |
+
+定位：v2表4：轮次级检索与事实扩展键 · [原文](https://arxiv.org/html/2410.10813v2)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+在这些固定配置中，扩展索引键同时改善召回和QA，但证据可见仍不保证读对。严格召回判失败时，也可能只是缺少旧事实，而更新后的答案已经正确。裁判允许时长差一单位，且答案同时包含旧信息与正确新信息也可得分，因此该指标不是严格时间精度或彻底删除测试。Oracle是模型条件下的参考。
+
+表9的Stella检索数值与主表3/表10存在差异，本页明确使用表3。2024年8月商业产品试验只有97条缩短历史，排除了若干题型，不是完整500题，也不是当前产品比较。2025年9月清理后的数据与论文运行版本需分开。
+
+下一步：固定清理后数据版本、读取器和token预算。在返回内容不变的条件下对比原始索引键与事实扩展键，再加入直接提供证据的对照。更新能力可搭配StateMemBench，隐式使用可搭配InMind；分别报告题型分数与成本。
+<!-- EVIDENCE:limitations:END -->

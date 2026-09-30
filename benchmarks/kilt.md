@@ -1,4 +1,4 @@
-# KILT：用统一 Wikipedia snapshot 把 provenance 纳入知识密集型评测
+# KILT：在统一维基快照上联合评估答案与来源
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2020-09<br>
@@ -6,50 +6,65 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](kilt.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](kilt.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2009.02252) · [代码](https://github.com/facebookresearch/KILT)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-KILT 把 open-domain QA、fact checking、entity linking、slot filling 等多种 knowledge-intensive tasks 映射到同一个 Wikipedia snapshot，并同时评价 downstream task quality 与 provenance。系统不仅要给出答案，还要说明答案来自共享知识源中的哪些页面。
+全文第1–9节及附录11的映射、标注、接口和实现；表1–17已阅读。
 
-## 相比什么前进了
+[v1,2020-09-04](https://arxiv.org/pdf/2009.02252v1)
+<!-- EVIDENCE:reading:END -->
 
-此前各任务通常使用不同 corpus、retriever 与 evidence definition，跨任务很难判断 retrieval infrastructure 是否真正可复用。KILT 用统一 snapshot 和 provenance contract 把“知识从哪里来”变成跨任务公共坐标，为后来的 RAG evaluation 提供了基础。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 决定性证据与分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-KILT 的核心证据不是今天某个饱和 leaderboard 数字，而是统一 retrieval source 后可以同时比较 task performance 与 provenance quality。一个高 KILT 分数支持系统在固定 snapshot 上完成多种 knowledge-intensive tasks；它不支持 freshness、live search 或 agentic retrieval 的结论。不同 retriever-generator stacks 的端到端差值也不能自动归因给 retrieval。
+KILT把此前各自使用不同知识源的知识密集型任务映射到同一维基快照。改变的测量坐标是统一来源与证据门控，因而跨任务比较更可解释；它没有统一训练预算或消除来源标注缺口。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-必须锁定 KILT Wikipedia snapshot、task split、retrieval index、provenance metric 和 generator。更新 corpus 或改用外部搜索已经改变 evaluation object，不能与原始 KILT 排名直接横比。
+把11数据集、五类任务的来源映射到2019-08-01维基快照（590万页）。页面重定向后以最高BLEU定位原证据，开发/测试过滤低于0.5者。分别评输出、页面检索及只有完整证据集排到前列才计分的KILT指标。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-KILT 消除了 snapshot 差异，却也因此避开 freshness 与 environment drift。后续需要在可复现的同时引入时间、版本变化和交互式 search control。
+DPR 索引包含 22220793 个不重叠的 100 词块。BART+DPR 使用固定 DPR 的前 3 块；RAG 使用前 5 块并更新查询编码器，因此二者还改变训练方式。KILT 指标仅在至少一个完整标准来源集合达到 R-precision=1 时保留答案分数。所选测试集 NQ 为 1444 题、HotpotQA 为 5569 题；按参考答案和来源判分，没有 LLM 裁判。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 答案与完整来源之间的缺口
 
-## 研究决策卡
+测试集 NQ 1444 题、HotpotQA 5569 题；指标为百分数，KILT-EM 要求答案正确且至少一个完整来源集合的 R-precision=1。
 
-### 什么时候值得用
+| 数据集／系统 | 答案 EM | R-precision | KILT-EM |
+|---|---|---|---|
+| NQ / BART+DPR | 41.27 | 54.29 | 30.06 |
+| NQ / RAG | 44.39 | 59.49 | 32.69 |
+| HotpotQA / BART+DPR | 25.18 | 25.04 | 1.96 |
+| HotpotQA / RAG | 26.97 | 30.59 | 3.21 |
 
-适合研究统一知识源上的检索复用与答案溯源。它的主要意义是让不同知识密集型任务共享证据坐标；更高任务分数不必然意味着来源更准确，二者应保持独立报告。
+事实来源：表 2–4, 附录表 13–14 · [论文](https://arxiv.org/pdf/2009.02252v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-示意任务：同一知识库支持事实核查、实体链接与问答，各任务除输出结果外还需指出支持页面。检索基础设施可以复用，但任务的答案格式与正确性定义不同，不能把一种任务的成功推广到全部任务。
+统一快照不等于统一能力：同一RAG在HotpotQA答案EM26.97，但完整来源门控后只剩3.21。RAG与固定DPR对照还同时改变训练和检索数量，不能单归因于检索器。
+<!-- EVIDENCE:interpretation:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-在固定知识快照上交换检索器，保持每项任务的生成器和评测协议一致，分别报告任务成绩与溯源成绩。再检查同一检索改进是否跨任务有效；只改善一个任务时，应检验任务特定适配而非通用检索复用。
+全部题目设计为库内可回答，不测弃答；来源可不完备，也可能由另一个系统补出。人工来源标注κ在NQ为0.3、ELI5为0.1。下一步固定证据数量并扩充等价来源标注。
 
-### 建议搭配
+正文一处写BART+DPR分类器，附录讨论BERT+DPR，属于命名不一致；不要据此推测未说明的模型变体。
+<!-- EVIDENCE:limitations:END -->
 
-[beir](beir.md) · [crag](crag.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+相关基准：[beir](beir.md) · [crag](crag.md)

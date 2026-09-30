@@ -305,24 +305,24 @@
     "bird": {
       "status": "later-version",
       "period": {
-        "zh": "2023 · 发布论文 v3",
-        "en": "2023 · release-paper v3"
+        "zh": "2023-11-15 · 论文 v3",
+        "en": "2023-11-15 · paper v3"
       },
       "results": [
         {
-          "system": "ChatGPT",
-          "metric": "Execution accuracy",
+          "system": "ChatGPT + CoT",
+          "metric": "Test execution accuracy with evidence",
           "score": "40.08%"
         }
       ],
       "scope": {
-        "zh": "发布论文摘要中的历史模型结果；该页为 v3，未将其冒充已单独复核的 v1。",
-        "en": "Historical model result in the release-paper abstract. The available page is v3, not a separately verified v1."
+        "zh": "v3 表 2 的 ChatGPT + CoT、给定知识证据、1,789 题测试集结果；不是普通 ChatGPT，也不是摘要中的 GPT-4 54.89%。这是后续版本的选定历史基线，不声称首版最佳。",
+        "en": "V3 Table 2: ChatGPT + CoT with supplied knowledge evidence on the 1,789-question test split. This is neither plain ChatGPT nor the abstract’s GPT-4 54.89%; it is a selected later-version baseline, not an initial-release best claim."
       },
-      "source": "https://arxiv.org/abs/2305.03111",
-      "locator": "Available v3 abstract, ChatGPT execution accuracy.",
+      "source": "https://arxiv.org/html/2305.03111v3",
+      "locator": "v3 Table 2, ChatGPT + COT, Testing Data / w/ knowledge.",
       "initial_release": false,
-      "checked_at": "2026-09-23",
+      "checked_at": "2026-09-30",
       "caveat": {
         "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
         "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
@@ -1068,23 +1068,23 @@
       "results": [
         {
           "system": "Codex-002",
-          "metric": "Accuracy",
+          "metric": "Insertion pass@1",
           "score": "43.3%"
         }
       ],
       "scope": {
-        "zh": "首版摘要报告的最佳公开系统，在原版功能与表面约束判分下评测。",
-        "en": "Best public system reported by the v1 abstract, under original functional and surface-constraint evaluation."
+        "zh": "v1 表 5 的 Insertion 格式最佳结果，功能测试与表面约束共同判分；1,000 题，每题生成 40 个样本、温度 0.2，估计 pass@1，不是 pass@40。",
+        "en": "Best v1 Table 5 Insertion result under functional and surface checks: 1,000 problems, 40 samples per problem at temperature 0.2 to estimate pass@1, not pass@40."
       },
       "source": "https://arxiv.org/abs/2211.11501v1",
-      "locator": "v1 abstract, Codex-002.",
+      "locator": "v1 Table 5, Insertion / Codex-002 / Overall, PDF p. 8; implementation details §4.2.",
       "initial_release": true,
-      "checked_at": "2026-09-23",
+      "checked_at": "2026-09-30",
       "caveat": {
         "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
         "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
       },
-      "comparison_scope": "Best public system reported by the v1 abstract, under original functional and surface-constraint evaluation."
+      "comparison_scope": "Best overall v1 Insertion result among the compared public systems; Completion is a separate prompt format."
     },
     "dsaeval": {
       "status": "unverified",
@@ -2912,24 +2912,29 @@
       },
       "results": [
         {
-          "system": "Best model in v1 abstract (name not verified)",
-          "metric": "Database-split exact match",
+          "system": "SQLNet",
+          "metric": "Database-split dev exact match",
           "score": "14.3%"
+        },
+        {
+          "system": "SQLNet",
+          "metric": "Database-split test exact match",
+          "score": "14.7%"
         }
       ],
       "scope": {
-        "zh": "首版摘要明确报告的数据库切分最佳成绩；模型名称尚未核验，不用后续版本的 12.4% 替换。",
-        "en": "Best database-split score explicitly reported in the v1 abstract; model name unverified. The later 12.4% figure is not substituted."
+        "zh": "v1 表 2 的数据库切分结果：开发集 14.3%、测试集 14.7%，均为该表相应切分最佳；摘要只写 14.3%，未说明是开发集。后续版本分开比较。",
+        "en": "V1 Table 2 database-split results: 14.3% on development and 14.7% on test, each leading its split in that table. The abstract gives 14.3% without naming development; later revisions remain separate."
       },
       "source": "https://arxiv.org/abs/1809.08887v1",
-      "locator": "v1 abstract, database-split best reported score.",
+      "locator": "v1 PDF p. 8, Table 2, SQLNet database-split row; Test All / Dev All columns.",
       "initial_release": true,
-      "checked_at": "2026-09-23",
+      "checked_at": "2026-09-30",
       "caveat": {
         "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
         "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
       },
-      "comparison_scope": "Best database-split score explicitly reported in the v1 abstract; model name unverified. The later 12.4% figure is not substituted."
+      "comparison_scope": "V1 Table 2 database-split results: 14.3% on development and 14.7% on test, each leading its split in that table. The abstract gives 14.3% without naming development; later revisions remain separate."
     },
     "spider-2": {
       "status": "release-reference",
@@ -3183,34 +3188,34 @@
     "wikisql": {
       "status": "release-best",
       "period": {
-        "zh": "2017-08 · 发布论文",
-        "en": "2017-08 · release paper"
+        "zh": "2017-08-31 · 论文 v1",
+        "en": "2017-08-31 · paper v1"
       },
       "results": [
         {
           "system": "Seq2SQL",
           "metric": "Execution accuracy",
-          "score": "59.4%"
+          "score": "60.3%"
         },
         {
           "system": "Seq2SQL",
           "metric": "Logical-form accuracy",
-          "score": "48.3%"
+          "score": "49.2%"
         }
       ],
       "scope": {
-        "zh": "原论文摘要中的 Seq2SQL 结果；execution 与 logical-form 是两种不同指标。",
-        "en": "Seq2SQL results in the original abstract; execution and logical-form accuracy are different metrics."
+        "zh": "首版 Seq2SQL 的执行准确率与逻辑形式准确率；v1 数据规模为 87,726 例。后续 v7 的 59.4%／48.3% 与 80,654 例另列，不能归到首版。",
+        "en": "Initial-version Seq2SQL execution and logical-form accuracy, with 87,726 examples in v1. The later v7 values 59.4% / 48.3% and 80,654 examples are separate revision evidence."
       },
-      "source": "https://arxiv.org/abs/1709.00103",
-      "locator": "Original paper abstract: Seq2SQL.",
+      "source": "https://arxiv.org/abs/1709.00103v1",
+      "locator": "v1 abstract and paper results, Seq2SQL; separate from v7 dated 2017-11-09.",
       "initial_release": true,
-      "checked_at": "2026-09-23",
+      "checked_at": "2026-09-30",
       "caveat": {
         "zh": "仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。",
         "en": "Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable."
       },
-      "comparison_scope": "Seq2SQL results in the original abstract; execution and logical-form accuracy are different metrics."
+      "comparison_scope": "Best reported v1 Seq2SQL test execution and logical-form accuracy, not the revised v7 dataset/results."
     },
     "worldmemarena": {
       "status": "unverified",

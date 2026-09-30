@@ -1,4 +1,4 @@
-# BrowseComp-Plus：固定语料后，才能更清楚地问 agent 还是 retriever 在进步
+# BrowseComp-Plus：用固定语料区分检索与代理能力
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2025-08<br>
@@ -6,50 +6,89 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](browsecomp-plus.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](browsecomp-plus.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2508.06600) · [代码](https://github.com/texttron/BrowseComp-Plus)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-BrowseComp-Plus 将 BrowseComp-style deep search 转成约 830 个 queries、约 100K 篇固定且人工核验的 documents，并同时保留 positives 与 hard negatives。它报告 retrieval recall、answer accuracy 与 controlled retriever 条件，目标是把 live-web stack 中纠缠的 retriever、agent 与环境因素拆开。
+正文第1–6节及附录A–H，包含证据挖掘、标注示例、排除案例、提示和API成本；未对照后续版本。
 
-## 相比什么前进了
+[arXiv v1 (2025-08-08)；未宣称与 ACL 2026 版本相同](https://arxiv.org/pdf/2508.06600v1)
+<!-- EVIDENCE:reading:END -->
 
-BrowseComp 很真实，但 provider ranking 与 web drift 使复现实验和归因困难。BrowseComp-Plus 用 fixed corpus 换取 reproducibility，使同一 agent 换 retriever、同一 retriever 换 agent 成为更可信的 matched comparison。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 决定性证据与当前成绩
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-ACL 2026 版本显示在该 fixed-corpus protocol 下，Search-R1+BM25 仅 3.86%，GPT-5 benchmark agent 55.9%，GPT-5 配 Qwen3-Embedding-8B retrieval 达 70.1%，且搜索调用更少。Radar 将这组数字作为独立 paper snapshot；它们不能与 live BrowseComp 51.5% 或不同 corpus variants 直接排名，因为 evaluation object 已改变。
+它直接继承BrowseComp问题，但把开放网页换成固定文档集并补充相关文档标注。变化是让检索器、代理和二者交互更可分离；后来ClimbMix投射又追问围绕问题构造的小语料是否过于容易。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-锁定 corpus/qrels、830-query subset、context cap、judge、search budget 与 retriever. 不同 query-conditioned corpus construction 或 corpus scale 应分 track。
+从 BrowseComp 的 1266 个问答对出发，o3 在知道答案的情况下寻找每条线索的来源；抓取失败或人工不能验证完整证据链的问题被移除。14 名标注者标出支持线索的原文跨度，最终留下 830 题；另用 GPT-4o 分解原问题、经 Google 搜索挖掘干扰文档，去重后语料共 100195 篇。evidence 文档支持问题线索，gold 文档直接或隐含地给出最终答案，两类 qrels 分开评估。智能体在固定语料内多轮调用检索工具，默认每次返回前 5 篇的前 512 token，再生成答案、文档引用和置信度。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-固定语料提升 attribution，却去掉 freshness 与真实 provider interface。BrowseComp-Plus_CM 进一步指出 query-conditioned small corpus 会低估 evidence-discovery difficulty，因此 corpus construction 本身仍需成为可见变量。
+830题共享100195篇固定文档；BM25 用 Pyserini，稠密检索用 Tevatron。默认每次前5篇、每篇前512 token。主表 GPT-5/o3/gpt-oss 为高推理投入；Search-R1 使用训练时提示，其余共享工具提示。gpt-4.1 按参考答案等价判分。论文未统一给出各模型精确日期版本及绝对停止/token上限。oracle直接提供全部标准文档，Qwen3-32B 有50题上下文溢出。API费用是830题总智能体费用，不含检索基础设施。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 固定智能体、更换检索器
 
-## 研究决策卡
+830 题，GPT-5 high；准确率与证据召回率为百分数，调用次数为每题平均，费用为整次实验的智能体 API 美元，不含检索基础设施。
 
-### 什么时候值得用
+| GPT-5 检索器 | 答案准确率 | 证据召回率 | 搜索调用次数 | 智能体 API 总成本（美元） |
+|---|---|---|---|---|
+| BM25 | 55.9 | 61.7 | 23.23 | 400.36 |
+| Qwen3-Embedding-8B | 70.12 | 78.98 | 21.74 | 360.71 |
 
-适合在固定语料中比较深度搜索策略与检索基础设施，比实时网页更有利于归因。控制语料带来了可复现性，也去掉了部分网页漂移与接口复杂性；因此它应与实时搜索互补，而不是替代后者。
+事实来源：表 1; 附录 H 表 8 · [论文](https://arxiv.org/pdf/2508.06600v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 读取全文的增益
 
-示意任务：系统在一个固定文档集合中多轮搜索，逐步满足问题的间接约束并找到答案。检索器能否找出关键材料与智能体能否正确追问，可以在共同语料和接口下分别观察。
+830 题，均用 Qwen3-Embedding-8B；准确率为百分数，调用数为每题平均；预览仅含每篇前 512 token。
 
-### 最有判别力的实验
+| GPT-4.1 接口 | 答案准确率 | 搜索调用次数 | 全文读取调用次数 |
+|---|---|---|---|
+| 仅预览 | 35.42 | 8.67 | — |
+| 预览加全文读取 | 43.61 | 10.03 | 1.85 |
 
-交叉替换检索器与智能体，固定可见文档、top-k 和总调用预算，联合报告证据召回、答案与成本。再扩大干扰语料或换独立语料，检查收益是否只在精心构建的候选集合中成立。
+事实来源：表 5; 节 4.8.3 · [论文](https://arxiv.org/pdf/2508.06600v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:result-3:START -->
+## 增加推理投入也增加搜索
 
-[browsecomp](browsecomp.md) · [browsecomp-plus-cm](browsecomp-plus-cm.md)
+830 题，固定 Qwen3-Embedding-8B；准确率与召回率为百分数，搜索次数为每题平均；不是等搜索预算比较。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+| gpt-oss-20B 推理投入 | 答案准确率 | 证据召回率 | 搜索调用次数 |
+|---|---|---|---|
+| 低 | 13.37 | 17.37 | 1.87 |
+| 高 | 34.58 | 49.29 | 23.87 |
 
-<!-- RESEARCH-DECISION:END -->
+事实来源：表 4 · [论文](https://arxiv.org/pdf/2508.06600v1)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
+
+固定同一 GPT-5 后，BM25 换成 Qwen3-Embedding-8B，使答案准确率由 55.90% 提高到 70.12%，平均搜索调用由 23.23 降到 21.74。该结果支持此语料与接口下的检索器作用；不能与实时 BrowseComp 直接排名，也不能把较少调用自动等同于更低总算力成本。全文读取实验已存在：GPT-4.1 加 get-document 后从 35.42% 提高到 43.61%，因此阅读接口应作为独立控制项。
+<!-- EVIDENCE:interpretation:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
+
+样本经过可抓取性、答案可验证性及人工时间筛选，不等同于原始 1266 题；42 个地图距离问题及 13 个歧义问题被排除。前 512 token 仅保证 86.5% 的题在至少一个 gold 文档中仍可见答案，不保证全部线索可见。全量标准文档条件同时改变证据选择和可见长度，不能把全部差距归因于检索排序。扩充语料中的新文档未标注，假负例会影响检索分数。下一步固定总 token／调用预算与全文接口，使用独立采样大语料并补标新证据，再交叉替换智能体与检索器。
+
+所选成绩可直接追溯到arXiv v1，无需借未核验的ACL版本归属。论文把100195→9771311篇称约10倍，实际约97.5倍；保留精确数量。BM25原始Recall@1000在表2为13.7、表6为13.6。引用精度是文档层指标，不能写成逐主张蕴含率。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[browsecomp](browsecomp.md) · [browsecomp-plus-cm](browsecomp-plus-cm.md)

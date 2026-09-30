@@ -1,4 +1,4 @@
-# BRIGHT：当 relevance 本身需要 reasoning
+# BRIGHT：需要推理才能识别的相关文档
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2024-07<br>
@@ -6,136 +6,92 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](bright.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](bright.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2407.12883) · [官方榜单](https://brightbenchmark.github.io/) · **领域：RAG / Retrieval**
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-BRIGHT 的核心问题不是“retriever 能否理解 query 语义”，而是更难的一层：**相关性本身是否需要先推理才能被识别？** 如果 query 与正确文档之间没有直接词汇或 embedding 相似度，只靠一次向量匹配就可能系统性漏掉答案。
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-## 它到底测什么
+v4正文及附录A–I、表1–49；镜像缺失的表18以后内容由51页PDF补齐。
 
-BRIGHT 包含 **1,384 个真实 queries**，覆盖 economics、psychology、mathematics、coding 等多个领域。
+[arXiv v4 (2025-03-26)，ICLR 2025；不是首版成绩](https://arxiv.org/pdf/2407.12883v4)
+<!-- EVIDENCE:reading:END -->
 
-与传统 retrieval benchmark 不同，很多相关文档只有在先理解问题、推导隐含条件或构造 reasoning steps 后，才会显得相关。因此 nDCG@10 不只测 representation similarity，也间接暴露：
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-- query 是否被正确分解；
-- 隐含 constraint 是否被识别；
-- retrieval query 是否需要 reasoning expansion；
-- reranker 是否能识别“表面不相似但逻辑上相关”的证据。
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-## 相比此前评测多测了什么
+与BEIR所代表的异质零样本检索相比，BRIGHT专门让相关性依赖问题求解，主题或词面相近并不足够。它把测量重心推向推理型相关性；对话代理和下游问答仍需各自受控实验。
+<!-- EVIDENCE:placement:END -->
 
-BEIR 的重点是 **跨领域 zero-shot generalization**：换 domain 后 retriever 是否还能泛化。
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-BRIGHT 增加的是另一维：即使 domain 已知，**relevance judgment 本身也可能需要 reasoning**。
+1384查询分12任务：七个StackExchange领域通过答案引用和人工核验建立证据，其余按代码算法、语法或共同定理定义相关。难负例主题相似但无解题帮助；部分数学/代码候选按查询排除潜在假负例。
+<!-- EVIDENCE:method:END -->
 
-这两个 benchmark 不应被当成替代关系：
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-- BEIR 更像 robustness test；
-- BRIGHT 更像 reasoning-aware relevance test。
+本文采用 v4：1384 查询、12 个任务，主分数为各数据集等权宏平均 nDCG@10×100。SFR 使用 SFR-Embedding-Mistral，输入上限 4096 token；Qwen 为 gte-Qwen1.5-7B-instruct，上限 8192 token。重排比较 MS-MARCO MiniLM-L12 与 gpt-4-0125-preview，候选数必须保留。下游问答只覆盖七个 StackExchange 领域，由 Claude 3.5 Sonnet 同时生成和按参考内容覆盖量表评分；它不是二元答案正确率。
+<!-- EVIDENCE:setup:END -->
 
-一个方法可能在 BEIR 上稳定，却在 BRIGHT 上因为无法做 query reasoning 而明显退化。
+<!-- EVIDENCE:result-1:START -->
+## 原查询排序
 
-## 实际怎样评测
+12 个数据集的宏平均 nDCG@10（0–100）；v4 共 1384 个查询，各数据集权重相同。
 
-BRIGHT 的核心输出仍是 ranking metric，例如 nDCG@10。也就是说，它最终评价的是“正确文档排得够不够前”。
+| 系统 | 分数 |
+|---|---|
+| BM25 | 14.5 |
+| SFR | 18.3 |
+| Qwen | 22.5 |
 
-但产生这个 ranking 的方法可以非常不同：
+事实来源：表 2 · [论文](https://arxiv.org/pdf/2407.12883v4)
+<!-- EVIDENCE:result-1:END -->
 
-- 原始 query 直接 dense retrieval；
-- LLM 先生成 reasoning / query expansion；
-- multi-query retrieval；
-- retrieve-then-rerank；
-- 针对不同 dataset 使用额外 preprocessing。
+<!-- EVIDENCE:result-2:START -->
+## 独立重排实验块
 
-因此解释一个 BRIGHT 分数时，必须把 **reasoning budget、reranking stage 和 index setting** 与分数一起报告。
+12 个数据集宏平均 nDCG@10（0–100）；该独立实验块 BM25 基线为 14.3，不应与表 2 的 14.5 混用。
 
-## 决定性证据与当前成绩
+| BM25 重排器 | 候选文档数 k | 分数 |
+|---|---|---|
+| 无 | — | 14.3 |
+| MiniLM-L12 | 100 | 8.3 |
+| GPT-4 | 10 | 17.4 |
 
-原始论文最重要的发现不是某个绝对数字，而是：当相关性需要 reasoning 时，当时的强 retrievers 相比传统 retrieval benchmark 出现明显下降。这说明 BRIGHT 确实暴露了传统相似度检索的盲区。
+事实来源：表 3/表 41 · [论文](https://arxiv.org/pdf/2407.12883v4)
+<!-- EVIDENCE:result-2:END -->
 
-官方 leaderboard 后续持续更新。本 Radar 当前单独追踪 short-document 12-dataset mean nDCG@10；任何“当前最佳”都只应该解释为 **该 leaderboard track、该时间点、该协议下的最高已核验分数**，不能外推到 long-document、不同 subset 或 agentic search。
+<!-- EVIDENCE:result-3:START -->
+## 初步下游评价
 
-## 分数能说明什么
+7 个 StackExchange 领域的平均参考内容覆盖评分（0–100）；Claude 3.5 Sonnet 同时生成与评分，逐领域查询数见数据表，不能解释为二元正确率。
 
-更高的 BRIGHT nDCG 支持的是：在指定 dataset mixture、document setting 和 retrieval pipeline 下，系统更能找到 reasoning-dependent relevant documents。
+| 检索条件 | 平均分 |
+|---|---|
+| 无 | 77.7 |
+| Qwen | 79.6 |
+| 标准证据 | 81.8 |
 
-它不能单独证明：
+事实来源：表 4, 表 46 · [论文](https://arxiv.org/pdf/2407.12883v4)
+<!-- EVIDENCE:result-3:END -->
 
-- agent 的 multi-step search 更强；
-- 最终 QA answer 更正确；
-- reasoning 本身是因果来源；
-- 系统成本更优。
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-例如，一个非常昂贵的 query-expansion + reranking pipeline 可能显著提高 nDCG，但并不意味着它是更好的 production retriever。
+原文已有初步下游QA，不能写成完全未测证据使用；但同模型生成/判分及内容覆盖量表不能证明独立事实正确率或智能体策略因果优势。
+<!-- EVIDENCE:interpretation:END -->
 
-## 最主要的混杂因素
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-第一是 **reasoning expansion budget**。用一个强 LLM 生成大量候选 query，本身就可能带来显著收益。
+相关性仍含主观性；GritLM继续训练只检验特定无查询-文档映射泄露，不证明普遍抗污染。下一步固定候选、版本和计算预算，分开测检索与答案。
 
-第二是 **reranking**。如果一个方法做单阶段 retrieval，另一个方法在 top-k 上再跑昂贵 cross-encoder 或 LLM judge，两者并不是同一个系统成本级别。
+v1为1398题/SFR18.0，v4为1384题/SFR18.3。v4表2最高行是22.5，正文/表注却称24.3；重排块BM25为14.3，不能与原查询表14.5混用。表46把predicted_answer放入PROBLEM和STUDENT ANSWER，需实现核验；长上下文表6/39的一些均值也不同。
+<!-- EVIDENCE:limitations:END -->
 
-第三是 **dataset aggregation**。不同子数据集难度和规模不同，macro average 会隐藏某些 domain 的失败。
-
-第四是 **short vs. long document setting**。document granularity 改变后，retrieval difficulty 和 index cost 都会变化。
-
-## 公平比较条件
-
-至少需要对齐：
-
-- short / long document setting；
-- dataset subset；
-- index preprocessing 与 chunking；
-- 是否允许 reasoning expansion / multi-query；
-- reranker 类型与 candidate depth；
-- LLM、token 与调用预算；
-- metric 与 aggregation rule。
-
-如果这些条件不同，应该分别报告 track，而不是混成一个统一排名。
-
-## 还没有覆盖什么
-
-BRIGHT 本质上仍是 **static ranking benchmark**。它没有完整测量：
-
-- 根据第一次 retrieval 失败后主动改写 query；
-- 多步搜索中的 evidence chaining；
-- live corpus 与新信息；
-- search trajectory 的错误定位；
-- latency、token、tool-call 与 index serving cost；
-- retrieved evidence 是否最终被 generator 正确使用。
-
-## 下一步最有判别力的验证
-
-下一步最值得做的是把 BRIGHT 从“一次 ranking”扩展成 **reasoning-controlled retrieval trajectory**：给 agent 相同 query，允许有限次 search / reformulation，并同时记录每一步新找到的有效证据与成本。
-
-这样可以比较：一个系统是因为 first-hop retriever 更强，还是因为它更会发现自己第一次没搜对并进行修正。
-
-<!-- RESEARCH-DECISION:START -->
-
-## 研究决策卡
-
-### 什么时候值得用
-
-适合检验相关性本身需要推理的检索任务。它比普通语义相似检索更能区分查询理解能力，但查询改写、长推理与重排都增加计算；只有在相同资源约束下比较，才能判断方案是否更有效率。
-
-### 一个具体任务长什么样
-
-示意任务：查询描述一个现象，真正有用的文档解释背后的原理，却没有重复查询词语。系统需要推断信息需求；检索到许多主题相同但不能解释现象的文档，并不构成有效证据。
-
-### 最有判别力的实验
-
-固定语料与相关性标注，对比原查询、模型改写查询、重排与混合检索，并分别计入改写和重排成本。再按领域与推理类型分析，区分更好表示、更多计算和参数知识提供的收益。
-
-### 建议搭配
-
-[beir](beir.md) · [bright-pro](bright-pro.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`semantic similarity retrieval → reasoning-aware relevance → iterative reasoning-controlled evidence search`
-
-BRIGHT 位于中间一步：它把“相关性需要推理”正式变成 benchmark，但还没有把完整 search process 作为评测对象。
+相关基准：[beir](beir.md) · [bright-pro](bright-pro.md)

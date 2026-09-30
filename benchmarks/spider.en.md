@@ -2,69 +2,64 @@
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2018-09-24 · paper v1<br>
-> **Best model in v1 abstract (name not verified) — Database-split exact match: 14.3%**<br>
-> Best database-split score explicitly reported in the v1 abstract; model name unverified. The later 12.4% figure is not substituted. [Original source](https://arxiv.org/abs/1809.08887v1)<br>
+> **SQLNet — Database-split dev exact match: 14.3%**; **SQLNet — Database-split test exact match: 14.7%**<br>
+> V1 Table 2 database-split results: 14.3% on development and 14.7% on test, each leading its split in that table. The abstract gives 14.3% without naming development; later revisions remain separate. [Original source](https://arxiv.org/abs/1809.08887v1)<br>
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](spider.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](spider.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/1809.08887) · [Project](https://yale-lily.github.io/spider)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-Spider evaluates **complex cross-domain text-to-SQL generalization**. It contains 10,181 questions and 5,693 unique SQL queries over 200 multi-table databases spanning 138 domains, with databases separated between train and test so systems must handle unseen schemas.
+Read all substantive v1 and EMNLP proceedings text, plus the complete one-page hardness supplement. The v5 check covers version metadata and Table 2 only; it is not a full v5 reading.
 
-## What changed relative to prior evaluation
+[arXiv 1809.08887v1 · 2018-09-24](https://arxiv.org/pdf/1809.08887v1) · [Proceedings · EMNLP 2018 · D18-1425](https://aclanthology.org/D18-1425.pdf) · [arXiv 1809.08887v5 · 2019-02-02](https://arxiv.org/pdf/1809.08887v5) · [Supplement · EMNLP 2018 · D18-1425 · supplement](https://aclanthology.org/attachments/D18-1425.Attachment.zip)
+<!-- EVIDENCE:reading:END -->
 
-WikiSQL largely operates on one table at a time with a constrained grammar. Spider makes joins, nested queries, set operations, aggregation, and new database schemas central. The benchmark changed the core question from memorizing query patterns to aligning language with an unfamiliar relational structure.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Decisive evidence
+Spider tests SQL structure on unseen multi-table schemas. SQLNet uses a sketch decoder; TypeSQL additionally uses database contents. Exact matching ignores literal values, so it does not establish autonomous value retrieval.
 
-At release, the strongest reported model achieved only 12.4% exact match on the database split. The low score was not merely a scale effect: train and test differ in both SQL programs and schemas, deliberately blocking direct template reuse.
+<!-- EDITORIAL-METHOD:START -->
+Annotators construct questions and SQL around relational schemas, then paraphrase the questions, covering joins, nesting, grouping and set operations. Database-disjoint evaluation prevents simple reuse of training-database name mappings. An illustrative workflow supplies an employee–department schema and a counting question: identify the join key, grouping target and condition, then emit SQL. Component evaluation checks clauses such as SELECT and WHERE before whole-query matching. This measures schema-linked structure, while omission of literal values limits end-to-end execution claims. The version table establishes the need to pin the evaluation contract, not parser progress across revisions.
 
-## What the score supports
+Editorial placement: WikiSQL is the closest earlier single-table reference. Spider expands the coordinate to unseen multi-table schemas and compositional SQL, rather than introducing held-out tables for the first time. BIRD later emphasizes values and domain evidence. The useful distinction is single-table template generation versus relational composition on new schemas.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-Spider strongly supports schema-generalization and complex SQL-generation claims under a static, relatively compact database setting. High scores do not establish robustness to dirty values, huge catalogs, dialect documentation, business-rule drift, or multi-query workflows.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+The v1 experiment adds six earlier datasets: 206 databases split 146/20/40 for train/dev/test. EMNLP instead uses 130/36/40. The paper adapts existing parsers; a comparable inference-token budget is unspecified.
+<!-- EVIDENCE:setup:END -->
 
-Use the same database split, schema serialization, value-access policy, SQL evaluator, and model/tool budget. Distinguish exact-match from execution-based evaluation and disclose any schema-linking retrieval or external metadata added beyond the benchmark input.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+Version audit only; all values are exact match over queries, excluding literal values. Database counts describe the split, not the query denominator.
 
-Schemas are small compared with enterprise warehouses, database contents are not the main difficulty, and each task still has a well-formed query intent. Real analysts must search metadata, resolve ambiguous business terms, and sometimes decide that no query should be executed.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| SQLNet · v1 test | Spider v1; 40 test databases | Exact match (% queries) | 14.7% | Question + schema | v1 Table 2, p. 8 |
+| SQLNet · v1 dev | Spider v1; 20 dev databases | Exact match (% queries) | 14.3% | Same v1 protocol | v1 Table 2, p. 8 |
+| TypeSQL · EMNLP | Spider EMNLP; 40 test databases | Exact match (% queries) | 9.7% | Content-assisted typing; changed split | EMNLP Table 2, p. 3918 |
+| SQLNet · v5 | Spider v5; 40 test databases | Exact match (% queries) | 12.4% | Revised result; not initial release | v5 Table 2, p. 8 |
 
-## Next discriminating validation
+Fact source: [v1 Table 2, p. 8; EMNLP Table 2, p. 3918; v5 Table 2, p. 8](https://arxiv.org/pdf/1809.08887v1)
 
-Treat Spider as the schema-generalization rung and measure the same agent on BIRD, Spider 2.0, and reliability-oriented warehouse tasks. The degradation across rungs is more informative than one Spider leaderboard number.
+[EMNLP Table 2](https://aclanthology.org/D18-1425.pdf) · [arXiv v5 Table 2](https://arxiv.org/pdf/1809.08887v5)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-## Research decision card
+The header uses v1: SQLNet obtains 14.3% on development and 14.7% on test. EMNLP and v5 appear in the body only for version auditing. The v5 value of 12.4% must not be backdated or treated as a cross-version progress ranking. Normalized schemas and exclusion of ambiguous/outside-knowledge questions limit enterprise extrapolation.
 
-### When to use it
-
-Use Spider for SQL generalization across schemas, while recognizing that static question-to-query mapping does not cover enterprise analysis. Distinguish SQL generation from business-semantic understanding, and structural matching from result equivalence.
-
-### What a concrete task looks like
-
-Illustrative task: a query requires several joins over an unseen schema, with nested operations or aggregation. Executable SQL can still be wrong because of join direction, aggregation scope, or duplicated rows.
-
-### Most discriminating experiment
-
-Preserve database-level splits and compare schema-linking and query-generation strategies under one backbone. Supplement structural matching with execution-equivalence checks and supplied-relevant-table controls. Do not describe tuning on test schemas as zero-shot generalization.
-
-### Pair with
-
-[bird](bird.en.md) · [spider-2](spider-2.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`single-table SQL → unseen multi-table schema → enterprise SQL workflow`
-
-Spider established cross-schema generalization; later benchmarks mainly make the database and workflow more real.
+<!-- EDITORIAL-NEXT:START -->
+Next, fix one version and question set, separately supply gold schema links, gold literal values and both, then report structural matching and execution consistency across multiple database instances. This separates schema linking, compositional decoding and accidental result equality instead of treating revision changes as progress.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

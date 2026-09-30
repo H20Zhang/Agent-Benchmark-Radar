@@ -6,50 +6,69 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](rgb.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](rgb.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2309.01431)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-RGB uses four English/Chinese diagnostic testbeds for noise robustness, negative rejection, information integration, and counterfactual robustness. Rather than measuring retriever ranking, it controls the supplied context and asks whether a generator uses, rejects, or combines that evidence correctly.
+all main sections, construction, evaluation, error analyses, conclusion; no separate appendix in this PDF; Tables 1–7; Tables 5,7 visually verified
 
-## Compared with what
+[v1,2023-09-04](https://arxiv.org/pdf/2309.01431v1)
+<!-- EVIDENCE:reading:END -->
 
-Many RAG evaluations collapse retrieval and generation into one final-answer score. RGB isolates context use so failures such as finding evidence but misusing it, answering without evidence, or failing to integrate multiple pieces become separately observable.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Decisive evidence and score boundary
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-The paper shows that mainstream LLMs behave unreliably when context is noisy, missing, or counterfactual. This supports the need for context-use diagnostics; it says nothing directly about which retriever is better because retrieval is controlled. Score differences across generators or prompts cannot be credited to retrieval.
+Unlike primarily ranking-focused retrieval benchmarks, RGB manipulates supplied context to diagnose generator evidence use. It provides axes for abstention, conflict and integration evaluation without measuring a real search process.
+<!-- EVIDENCE:placement:END -->
 
-## Fair comparison conditions
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-Align the generator, prompt, constructed negatives/counterfactuals, and diagnostic split. Do not compress the four abilities into an opaque current-best number that hides asymmetric failure modes.
+Human-checked news questions retrieve ten Google pages, split into≤300-token passages and reranked. Five supplied documents control noise, answer absence, integration and counterfactuals; the target is generator evidence use.
+<!-- EVIDENCE:method:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-The stronger successor connects these diagnostics back to a retrieval loop: can an agent notice conflict, search again, and recover within a tool budget rather than passively consume fixed context?
+Base questions number 300 per language; integration and counterfactual tests each use 100 per language. ChatGPT means gpt-3.5-turbo without a specified dated snapshot. Accuracy uses answer-substring matching and does not establish that the whole response is contradiction-free. Rej checks a designated refusal string; Rej* uses ChatGPT for semantic refusal judgments. Counterfactual testing includes only models above 70% closed-book accuracy and explicitly warns them about erroneous documents.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## ChatGPT evidence-use diagnostics
 
-## Research decision card
+ChatGPT percentages; noise and rejection use 300 questions per language, integration and counterfactual tests 100 per language; answers use substring matching, Rej uses a specified string, and Rej* uses semantic judgment.
 
-### When to use it
+| Measure/condition | English | Chinese |
+|---|---|---|
+| Noise 0 accuracy | 96.33 | 95.67 |
+| Noise.8 accuracy | 76.0 | 70.67 |
+| Integration noise 0 accuracy | 55 | 63 |
+| Integration noise.4 accuracy | 34 | 47 |
+| Only-noise Rej | 24.67 | 5.33 |
+| Only-noise Rej* | 45 | 43.33 |
+| Counterfactual closed-book accuracy | 89 | 91 |
+| Counterfactual documents accuracy | 9 | 17 |
 
-Use RGB to isolate how a generator uses supplied evidence under noise, counterfactuals, and unanswerability. It is not a retriever benchmark. Improvements from supplying better context do not establish a better search policy.
+Source: Tables 1,3,5,7 · [Paper](https://arxiv.org/pdf/2309.01431v1)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-Illustrative task: a question is paired with correct, noisy, answer-free, or counterfactual context, testing evidence-grounded answering. The system must select usable material and recognize when an answer is unsupported.
+Low exact rejection mixes evidence failure with formatting; retain Rej/Rej*. Counterfactual tasks select known facts and do not generalize directly to unfamiliar knowledge.
+<!-- EVIDENCE:interpretation:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-Vary context conditions for the same generator and report each of the four competencies. Keep supplied-context diagnosis separate from end-to-end retrieval tests. Check both over-trust and neglect of retrieved text rather than optimizing robustness in only one direction.
+Prompts explicitly warn about errors; substring hits can coexist with contradictions. Next: independently audit answers, abstention and repair in real retrieval trajectories.
 
-### Pair with
+No material selected-cell conflict. Counterfactual correction-rate denominator is insufficiently explicit; omitted from table rather than guessed.
+<!-- EVIDENCE:limitations:END -->
 
-[ragtruth](ragtruth.en.md) · [lit-ragbench](lit-ragbench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+Related benchmarks: [ragtruth](ragtruth.en.md) · [lit-ragbench](lit-ragbench.en.md)

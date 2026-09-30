@@ -1,4 +1,4 @@
-# HotpotQA：把 multi-hop evidence composition 变成显式评测目标
+# HotpotQA：联合评估多跳问答与支持事实
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2018-10<br>
@@ -6,50 +6,78 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](hotpotqa.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](hotpotqa.en.md) · [基准库](../library/README.md)
 
-[论文](https://aclanthology.org/D18-1259/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-HotpotQA 包含约 113K 个 Wikipedia 问题，并给出 sentence-level supporting facts。它要求系统跨多个文档找到互补证据并完成 multi-hop reasoning，因此不仅看最终答案，也能检查支撑答案的 evidence 是否被找到。
+全文第1–7节及附录A–C；关键表4–7经PDF图像核对。
 
-## 相比什么前进了
+[EMNLP 2018 终稿](https://aclanthology.org/D18-1259.pdf)
+<!-- EVIDENCE:reading:END -->
 
-早期 open-domain QA 很容易把 retrieval 与 reasoning 压成一次单跳命中。HotpotQA 把跨文档组合与 supporting-fact supervision 变成 benchmark contract，成为后来 MultiHop-RAG、agentic retrieval 与 evidence-grounded QA 的重要前驱。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 决定性证据与分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-它最持久的价值是让 answer accuracy 与 evidence coverage 可以分开观察：答对不等于找对 supporting facts。与此同时，今天的模型可能利用 dataset shortcuts、参数记忆或更强 reader，因此现代高分不能直接证明 retriever 或 multi-hop policy 更好。没有锁定 retriever-reader interface 时，端到端 EM/F1 只能支持 packaged QA system 的判断。
+相较较早的单段、单跳问答，HotpotQA把跨段组合与支持句标注同时纳入任务。谱系上的关键变化是从只看答案，转向答案和证据链联合正确；它仍不等同开放网页上的自主研究。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-必须对齐 fullwiki/distractor setting、corpus snapshot、retriever、reader、supporting-fact metric 和允许的 candidate budget。静态 Wikipedia 上的结果不能直接与 live-web search agent 的成绩横比。
+从Wikipedia首段超链接采样桥接实体，另从同类实体列表采样比较题；众包写问题、答案和支持句。三折模型筛选区分中等与困难题，开发/测试只取困难题。基线联合预测答案和支持句。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-HotpotQA 不覆盖动态网页、工具状态、搜索成本与 query reformulation。后续 benchmark 应让系统自己决定何时继续搜索、如何修正检索路径，并验证 evidence portfolio 是否真正驱动最终答案。
+语料是 2017-10-01 英文 Wikipedia 首段，训练 90564 题，开发 7405 题；两个测试设置各有独立的 7405 题。Distractor 给定两个标准段落和八个 tf-idf 干扰段落；Fullwiki 在约 500 万页中先用倒排索引取最多 5000 个候选，再以 bigram tf-idf 取前 10 段。基线是带字符表示、自注意力及双向注意力的 RNN 阅读器，联合训练支持句预测与 yes/no/span 答案头。联合指标先把答案和支持事实的 precision/recall 相乘，再算 F1 并逐题平均。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 同一开发集两种信息条件
 
-## 研究决策卡
+相同的 7405 题开发集，均为百分数；答案、支持事实与联合指标逐题计算后平均。Distractor 提供 2 个标准段落及 8 个干扰段落，Fullwiki 先从全库检索。
 
-### 什么时候值得用
+| 设置 | 答案 EM | 答案 F1 | 支持事实 F1 | 联合 F1 |
+|---|---|---|---|---|
+| 干扰段落开发集 | 44.44 | 58.28 | 66.66 | 40.86 |
+| 全维基开发集 | 24.68 | 34.36 | 40.98 | 17.73 |
 
-适合检验多文档证据组合，是多跳检索的基础参照，而不是实时搜索智能体能力的完整代表。尤其要区分候选段落已给定与全库检索；两者对检索器的要求不同，不能把答案分数直接混比。
+事实来源：表 4, 节 5.2 · [论文](https://aclanthology.org/D18-1259.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 支持监督与给定证据
 
-示意任务：问题需要先通过一篇文档确定中间实体，再用另一篇文档取得最终属性。系统既要输出答案，也要找到足够支持两步推理的事实；猜中答案不等于证据链正确。
+7405 题 distractor 开发集的平均答案 F1，单位百分数；区分去掉支持监督与直接提供标准证据。
 
-### 最有判别力的实验
+| 条件 | 答案 F1 |
+|---|---|
+| 基线 | 58.28 |
+| 无支持事实监督 | 56.19 |
+| 仅标准段落 | 63.58 |
+| 仅标准支持句 | 66.98 |
 
-固定回答模型，比较单次检索、迭代检索和给定支持事实，分别报告证据召回与答案质量。另做移除一个必要证据的检查，验证问题是否存在捷径；不要把更大候选池带来的收益全归给多跳规划。
+事实来源：表 7 · [论文](https://aclanthology.org/D18-1259.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-[multihop-rag](multihop-rag.md) · [browsecomp-plus](browsecomp-plus.md)
+答对与支持链正确必须分开：开发集干扰条件答案F1为58.28，联合F1只有40.86。不要跨不同测试集把差值当逐题干预；开发集比较更直接。
+<!-- EVIDENCE:interpretation:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-<!-- RESEARCH-DECISION:END -->
+模型筛选、首段语料和仅100例人工类型分析限制外推；其中6%单跳、2%不可回答。下一步固定读者和候选预算，比较自主多跳检索。
+
+附录 C 把未找到段落的排名截为候选数加一，因而其平均排名是乐观截断值，并非全语料真实排名。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[multihop-rag](multihop-rag.md) · [browsecomp-plus](browsecomp-plus.md)

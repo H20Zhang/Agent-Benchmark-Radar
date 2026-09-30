@@ -1,4 +1,4 @@
-# InjecMEM
+# InjecMEM：把记忆检索暴露与输出偏移分开量化
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-24<br>
@@ -6,60 +6,104 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](injecmem.en.md)
 
-InjecMEM 测的是 **targeted persistent-memory injection**：攻击者只通过一次看似普通的交互把恶意记录写进持久记忆；在之后的独立会话里，当出现与该 topic 相关的查询时，系统是否会把这条记录重新检索出来，并进一步生成攻击者预设的目标内容。测量对象因此覆盖 `write → memory drift/persistence → retrieve → generate` 的完整轨迹。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-AgentPoison / MINJA 更偏攻击方法本身，MPBench 则给出更宽的 persistent-poisoning taxonomy。InjecMEM 的增量是把问题收窄到 **topic-conditioned targeted generation**，并显式区分 retrieval success、在成功检索条件下的 attack success，以及最终 joint success。这样可以看到攻击失败究竟发生在 store/retrieval 还是 generation 阶段。
+已阅读正文第1—5节及附录A—H，包括威胁模型、指标、防御、语料构造、迁移过程与定性融合上下文案例。未运行攻击、未审计实现或独立复现；本页不提供可直接使用的注入载荷。
 
-## 决定性证据
+[arXiv 2608.23471v1 (2026-08-24)](https://arxiv.org/html/2608.23471v1)
 
-Multi-GCG 在 MemoryOS 上报告 **46.5% RSR、76.6% conditional ASR、35.6% joint ASR**；多个通用 filter 几乎不降低 conditional ASR。这个组合比只看 ASR 更重要：它表明一旦恶意记录被检索，generation 端仍可能高概率服从攻击目标，而整体攻击率还受到 retrieval exposure 的限制。
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 这个分数支持什么判断
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-结果支持“在所测 memory stack 与白盒优化条件下，攻击可以穿过持久化、检索与生成链路”。它不支持对未见模型家族的通用黑盒迁移结论，也不能直接归因给 MemoryOS 的某一个内部组件，因为最强攻击需要 backbone 白盒访问和 fused prompt 知识。
+这是一项记忆注入攻击方法及其受控评估协议。攻击者只向被测智能体提交一次会被记录的内容，随后正常主题查询可能取回它并改变回答。方法把提高主题检索暴露的内容与生成侧干扰分开，后者利用可访问骨干模型和多种模拟上下文优化。存储内部是黑盒，但骨干并非完全黑盒；还预先恢复了最终提示格式。评估分别观察记录进入回答上下文、检索后目标文本出现、两者同时发生。
 
-## 公平比较条件
+定位比较：与AgentPoison式直接污染检索库相比，InjecMEM通过一次被记录的交互使内容进入后续记忆检索，再分开优化暴露与生成干扰。这个变化属于威胁模型和攻击流程，不能把条件攻击率当成一般记忆质量指标。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-比较攻击或防御时，应固定 backbone、memory write policy、store/rewrite mechanism、retrieval top-k、trigger query、攻击 token/optimization budget 与 generation prompt。RSR、conditional ASR 和 joint ASR 必须一起报告，否则可能把“防御只是让攻击更难被检索”误读成“模型生成端已变安全”。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-## 研究上怎么用
+主骨干Qwen2.5-7B-Instruct，主要系统MemoryOS，另测MemGPT。19领域合成语料含944段对话、3096个问答页；每领域约50条留出查询，完整流程重复10个随机种子。注入前预填多领域记录，之后追加非目标领域对话形成漂移。RSR看记录是否进入融合提示；ASR-c以已检索到注入的查询为分母；ASR-j以全部目标查询为分母。目标是归一化字符串匹配的预设输出，不是实际危险行动成功。检索容量、温度等所有数值并未完整报告。
+<!-- EVIDENCE:setup:END -->
 
-InjecMEM 适合检验声称具备 memory security 的系统是否只在 write-time 做过滤，还是能够在生命周期后段继续控制风险。对于新的 memory architecture，最有信息量的 ablation 是分别替换 admission、rewrite/consolidation、retrieval 与 generation defense，观察哪一阶段真正降低 joint success，同时保留 benign retrieval utility。
+<!-- EVIDENCE:result-1:START -->
+## 一次注入经过两种存储系统后的结果
 
-## 下一步最有价值的验证
+主要使用Qwen2.5-7B-Instruct；MemGPT复用在MemoryOS优化的生成干扰，提示格式不同。不能只按76.6%报告端到端风险。
 
-当前缺口是 rewrite-heavy store、真实部署、adaptive defense，以及完整的 security–utility curve。最有判别力的下一步是测试攻击在不同 backbone、不同 memory rewrite policy 和黑盒访问条件下是否仍能保持高 conditional ASR，而不是继续只优化同一个白盒攻击目标。
+19个领域，每领域约50查询，重复10种子；条件ASR仅统计已检索到注入的查询，逐行精确分母未给出。
 
-## 谱系位置
+| 系统 | 检索暴露RSR（%） | 条件ASR-c（%） | 联合ASR-j（%） |
+|---|---|---|---|
+| MemoryOS | 46.5 | 76.6 | 35.6 |
+| MemGPT | 37.2 | 48.6 | 18.1 |
 
-它把 memory security 从“恶意内容是否能写进去”推进到 **write → drift → retrieve → generate** 的端到端轨迹；`map_delta=reinforces`。与 MPBench 配合时，MPBench 提供宽攻击面，InjecMEM 提供更细的 targeted-generation attribution。
+定位：表3：受控系统比较 · [原文](https://arxiv.org/html/2608.23471v1)
+<!-- EVIDENCE:result-1:END -->
 
-Primary: https://arxiv.org/abs/2608.23471
+<!-- EVIDENCE:result-2:START -->
+## 过滤减少暴露，但效用指标并不完整
 
-<!-- RESEARCH-DECISION:START -->
+过滤发生在检索后；BBR另在写入时测量。LLM筛查为Qwen2.5-0.5B，固定阈值0.5；困惑度阈值经扫描选取。横线为原表未报告，RSR为0时条件ASR无定义。
 
-## 研究决策卡
+主实验查询；BBR另用良性写入页，具体页数未报告。
 
-### 什么时候值得用
+| 防御 | RSR（%） | ASR-j（%） | ASR-c（%） | 写入良性阻断BBR（%） |
+|---|---|---|---|---|
+| No defense | 46.5 | 35.6 | 76.6 | 0 |
+| LLM-as-a-Judge | 36.2 | 27.3 | 75.4 | 0.65 |
+| Perplexity | 0 | — | — | 71.8 |
 
-适合诊断一次低权限交互如何通过持久记忆影响后续回答。写入成功、被检索到和最终行为被改变是不同事件；只报告被检索之后的条件攻击成功率，会高估真实端到端风险。
+定位：表6：部分检索后防御 · [原文](https://arxiv.org/html/2608.23471v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-3:START -->
+## 见过的家族与未见家族不可混称迁移
 
-示意任务：一条外来记录试图把来源中的指令混入长期记忆，之后正常查询再次触发它。防御需要维持内容与指令的信任边界，同时不能阻止合法事实被正常写入和调用。
+联合优化使用Qwen与Mistral；Llama是未见家族。仅用于说明泛化边界，不是端到端风险比较。
 
-### 最有判别力的实验
+只统计已检索到注入的查询，精确条件分母未报告。
 
-分别记录写入、检索、条件行为偏移与联合成功率，并对同一防御报告正常任务阻断。更换写入模型、回答模型和摘要策略检验迁移，避免把白盒优化下的一组结果当作所有部署的风险上界。
+| 测试骨干 | 联合优化后ASR-c（%） |
+|---|---|
+| Qwen2.5-7B-Instruct | 70.5 |
+| Mistral-7B-Instruct-v0.3 | 43.2 |
+| Llama-3.1-8B-Instruct | 0 |
 
-### 建议搭配
+定位：表5：联合优化的迁移指标 · [原文](https://arxiv.org/html/2608.23471v1)
+<!-- EVIDENCE:result-3:END -->
 
-[mpbench](mpbench.md) · [utility-under-attack](utility-under-attack.md)
+<!-- EVIDENCE:result-4:START -->
+## 真实对话背景是有限外部检查
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+WildChat用于非目标主题的预填和漂移背景，其他设置延续主实验；标准差不是置信区间，也不是临床或金融任务成绩。
 
-<!-- RESEARCH-DECISION:END -->
+每主题三个种子，首查询检索设置，未单列逐种子样本数。
+
+| 主题 | RSR@1均值（%） | ASR-j均值（%） | ASR-j标准差（百分点） |
+|---|---|---|---|
+| 健康 | 64.7 | 46.0 | 5.29 |
+| 金融 | 60.0 | 40.7 | 7.02 |
+
+定位：表8：WildChat背景检查 · [原文](https://arxiv.org/html/2608.23471v1)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+结果揭示了保留原始交互文本的系统在特定白盒优化下的漏洞，不是所有记忆架构的风险上界。大幅重写/摘要的系统仍是明确缺口。检索过滤的安全指标和写入时良性阻断不是同阶段的效用指标，不能据零BBR声称正常任务无损。WildChat只作为两主题实验的良性背景，不是生产部署。未见家族上的失败说明迁移有限；拼接针对各家族优化的字符串也不能当作零样本通用迁移。非目标回答不受影响只有定性例子，缺少广泛效用曲线。
+
+RSR@k中的k指注入后的前k次主题查询，不是检索返回条数。主表46.5%的汇总也不能替代@50的35.4%。零检索时条件攻击率没有分母，表中横线需保留。BadChain在该协议中被压缩并去掉固定触发词，因此零分只适用于被改写的比较条件。
+
+
+
+下一步：分别记录写入保留、检索暴露、条件目标偏移与联合偏移，使用同一查询和预算比较防御。把良性任务成功与每阶段误拦截并列，测试重写式存储和长时间漂移。迁移实验明确区分见过的骨干、同家族未见模型与完全未见家族，并使用非操作性目标。
+<!-- EVIDENCE:limitations:END -->

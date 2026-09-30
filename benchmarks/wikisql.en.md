@@ -1,70 +1,62 @@
-# WikiSQL: executable text-to-SQL at scale, before cross-schema reasoning
+# WikiSQL: single-table SQL generation on held-out tables
 
 <!-- RELEASE-REFERENCE:START -->
-> **Best at release (historical reference)** · 2017-08 · release paper<br>
-> **Seq2SQL — Execution accuracy: 59.4%**; **Seq2SQL — Logical-form accuracy: 48.3%**<br>
-> Seq2SQL results in the original abstract; execution and logical-form accuracy are different metrics. [Original source](https://arxiv.org/abs/1709.00103)<br>
+> **Best at release (historical reference)** · 2017-08-31 · paper v1<br>
+> **Seq2SQL — Execution accuracy: 60.3%**; **Seq2SQL — Logical-form accuracy: 49.2%**<br>
+> Initial-version Seq2SQL execution and logical-form accuracy, with 87,726 examples in v1. The later v7 values 59.4% / 48.3% and 80,654 examples are separate revision evidence. [Original source](https://arxiv.org/abs/1709.00103v1)<br>
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](wikisql.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](wikisql.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/1709.00103)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-WikiSQL evaluates natural-language-to-SQL generation over **single Wikipedia tables** with executable supervision. The original release contains 80,654 manually annotated question–SQL pairs over 24,241 tables and focuses on a constrained SQL grammar without multi-table joins.
+Read all substantive main text and Appendices A–C of both v1 and v7, including collection, baseline details and predictions.
 
-## What changed relative to prior evaluation
+[arXiv 1709.00103v7 · 2017-11-09](https://arxiv.org/pdf/1709.00103v7) · [arXiv 1709.00103v1 · 2017-08-31](https://arxiv.org/pdf/1709.00103v1)
+<!-- EVIDENCE:reading:END -->
 
-Before WikiSQL, semantic-parsing datasets were much smaller and often tied to limited domains. WikiSQL made execution-grounded text-to-SQL large enough for neural training and evaluation, while Seq2SQL also used database execution as a learning signal for unordered query components.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Decisive evidence
+WikiSQL holds out tables but restricts each query to one table. Seq2SQL separates aggregation and selection, then trains WHERE generation with execution rewards. That feedback is a training mechanism, not inference-time repair.
 
-The Seq2SQL paper reports execution accuracy improving from 35.9% for an attentional sequence-to-sequence baseline to 59.4%, with logical-form accuracy improving from 23.4% to 48.3%. The benchmark therefore demonstrated both the value of SQL structure and the usefulness of execution as supervision.
+<!-- EDITORIAL-METHOD:START -->
+Questions originate from SQL templates over Wikipedia HTML tables, followed by crowd paraphrasing and verification. Outputs are restricted to a selected column, optional aggregation and WHERE conditions, without joins. An illustrative input is an athlete table and a request for one country’s mean age; the output selects age, applies AVG and filters country. Seq2SQL restricts pointer outputs, predicts aggregation/selection separately and learns conditions with execution reward. Since reordering conditions need not change meaning, reward-based learning addresses a weakness of imitating only one reference sequence.
 
-## What the score supports
+Editorial placement: compared with generic sequence-to-sequence semantic parsing, WikiSQL combines larger table-disjoint evaluation with executable supervision. Spider extends the coordinate to multi-table and nested SQL. The contribution concerns training objectives and structured decoding, not an already interactive database agent.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-WikiSQL scores support competence at mapping a question to a simple executable query over one known table. They are weak evidence for enterprise database agents: schema discovery, joins, nested queries, business semantics, database values, and workflow planning are largely absent.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+The v7 dataset contains 80,654 examples over 24,241 tables. Training runs for at most 300 epochs with development-execution early stopping. Inference uses question and schema; table contents support training rewards and evaluation.
+<!-- EVIDENCE:setup:END -->
 
-Fix the official split, table contents, SQL grammar, execution engine, and whether execution-guided decoding is allowed. Report execution accuracy separately from exact logical-form matching because semantically equivalent SQL can differ syntactically.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+V7 Table 2; table-disjoint test split; EX = execution accuracy, LF = logical-form accuracy, both percentages of test examples. Same training/evaluation family.
 
-The benchmark does not test generalization to complex unseen multi-table schemas in the sense later introduced by Spider, nor data cleaning, external knowledge, dialect differences, or interactive database exploration.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Aug Ptr Network | WikiSQL v7 test | EX / LF (%) | 53.3% / 43.3% | Restricted pointer outputs | Table 2, p. 7 |
+| Seq2SQL (no RL) | WikiSQL v7 test | EX / LF (%) | 57.1% / 47.4% | Structured decoder; teacher forcing | Table 2, p. 7 |
+| Seq2SQL | WikiSQL v7 test | EX / LF (%) | 59.4% / 48.3% | WHERE policy gradient after pretraining | Table 2, p. 7 |
 
-## Next discriminating validation
+Fact source: [Table 2, p. 7](https://arxiv.org/pdf/1709.00103v7)
+<!-- EVIDENCE:results:END -->
 
-Use WikiSQL mainly as a controlled lower rung in a scaling curve—single table → unseen multi-table schema → large dirty database → enterprise workflow—rather than as a frontier endpoint.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-<!-- RESEARCH-DECISION:START -->
+The no-RL comparison supports a 2.3-point EX gain within v7, while the full baseline gap bundles changes. The header gives true v1 values, EX 60.3% and LF 49.2%, with 87,726 examples and a 100-epoch cap; the body uses v7’s 80,654 examples and 300-epoch cap. Keep them separate. LF can reject equivalent SQL; EX can accept accidental result agreement.
 
-## Research decision card
-
-### When to use it
-
-Use WikiSQL as a historical anchor for executable natural-language database queries, not as the main endpoint for complex data agents. Single-table correctness differs from relational integration, business semantics, and end-to-end analysis. Make its role as a lower-complexity control explicit.
-
-### What a concrete task looks like
-
-Illustrative task: a question specifies filters and an aggregate over one table, and the system generates and executes SQL. This tests condition and value mapping without requiring multi-database discovery or business-relationship inference.
-
-### Most discriminating experiment
-
-Fix tables, splits, and execution environment; report logical-form and execution accuracy separately and disclose execution feedback. Test the same method on multi-table and unseen-schema tasks before generalizing single-table gains to database reasoning.
-
-### Pair with
-
-[spider](spider.en.md) · [bird](bird.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`natural-language database query → executable single-table SQL → cross-domain schema generalization`
-
-WikiSQL is important as a foundation precisely because later benchmarks expose how much its constrained setting leaves out.
+<!-- EDITORIAL-NEXT:START -->
+Next, hold the pointer architecture and split fixed while changing only WHERE supervision, then perturb table contents to expose accidental result equality. Add join tasks separately to test transfer instead of extrapolating cross-database capability from single-table scores.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

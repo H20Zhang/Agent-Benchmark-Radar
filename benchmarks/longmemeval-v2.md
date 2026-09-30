@@ -1,4 +1,4 @@
-# LongMemEval-V2：在超大 agent history 上压缩可复用经验
+# LongMemEval-V2：工作流和文件工具怎样帮助找回行动历史
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-05<br>
@@ -6,64 +6,89 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](longmemeval-v2.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](longmemeval-v2.en.md)
 
-[论文](https://arxiv.org/abs/2605.12493) · [项目页](https://xiaowu0162.github.io/longmemeval-v2/) · [代码](https://github.com/xiaowu0162/LongMemEval-V2)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-LongMemEval-V2 测 memory system 能否把巨量 **web-agent / enterprise trajectory** 压缩成之后推理可用的 compact evidence。能力覆盖 static state recall、dynamic state tracking、workflow knowledge、environment gotcha 与 premise awareness，不再只是对话事实。
+已阅读正文第1—6节与附录A—E，包括标注、评分细则、全部列出的控制器/沙箱提示、消融、案例和局限。表格已核对，未独立测量截图像素或曲线，也未运行代码。
 
-## 相比此前评测多测了什么
+[arXiv 2605.12493v1 (2026-05-12)](https://arxiv.org/html/2605.12493v1)
 
-LongMemEval V1 已经把 history 拉长并显式评估 update/temporal reasoning；V2 同时改变 experience 来源与尺度：历史可达到 500 条 trajectory、115M token，有用知识包括 action 中学到的 procedure 与环境特性。memory 的角色由 chat retriever 变成 experience compressor。
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-benchmark 有 451 个手工 curated question，覆盖 web / enterprise 场景和 5 类能力。AgentRunbook-C 平均 accuracy 72.5，对比论文中最强 RAG baseline 的 48.5，以及 off-the-shelf coding-agent memory 的 69.3。后者同时付出明显更高 latency，因此 accuracy–latency frontier 本身就是结果的一部分。
+依次写入预收集网页轨迹，搜集紧凑多模态证据，再让固定读取器回答451道题。分别测试静态状态、动态变化、工作流、陷阱与错误前提识别。R使用状态/事件/笔记池；C通过清单、流程指引和检查脚本搜索文件。
 
-## 这个分数能证明什么
+定位比较：LongMemEval-V2延续长期记忆问答方向，但将核心证据扩展到用户—智能体工具调用历史，并比较文件、编码工具与检索式工作流。它不是简单把原版历史加长；新问题和控制器设置使跨版本分数不能直接相减。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-它能支持“系统会不会从超大 trajectory archive 中提取可复用 knowledge”的判断，并说明 active agentic retrieval 可能以更高成本超过 passive RAG。但如果 agentic retrieval 同时改变 search depth、reasoning 与 tool use，就不能把增益单独归给 memory component。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-## 公平比较契约
+Small为各域共享100轨迹、约25Mtokens；Medium每题约500轨迹、115M。读取器Qwen3.5-9B，上限200Ktokens，采样温度0.6/top-p0.95。R控制器为开启思考的Qwen3.5-9B，嵌入Qwen3-Embedding-8B；coding控制器为Codex0.117.0中的GPT-5.4-mini xhigh。查询并发上限3。结构化答案用匹配，陷阱/错误前提题由GPT-5.2 medium评判。
+<!-- EVIDENCE:setup:END -->
 
-应固定 history snapshot、backbone、最大返回 evidence、retrieval/tool-call budget 与 answer evaluator，并把 latency、token/tool cost、evidence volume 和 accuracy 一起报告。拿 fixed top-k RAG 和不受限 iterative search 直接比，回答的是两个不同问题。
+<!-- EVIDENCE:result-1:START -->
+## 主表比较同时包含控制器差异
 
-## 还没有测什么
+共用回答器与上下文上限，但控制器模型随方案变化；C对Codex是更接近匹配的控制器比较。延迟仅为查询阶段，不是全生命周期成本。
 
-最终任务仍然是 context-gathering QA，而不是未来 closed-loop task success。trajectory 持续到来时的 write/update cost、过时 procedure 的维护，以及破坏性 environment change 仍缺少评测。
+每档451题，主结果包含前提错误题。
 
-## 下一步最有判别力的验证
+| 系统 | Small准确率（%） | Small查询延迟（秒） | Medium准确率（%） | Medium查询延迟（秒） |
+|---|---|---|---|---|
+| RAG: query→slice+notes | 51.0 | 0.2 | 45.9 | 0.3 |
+| AgentRunbook-R | 58.6 | 26.9 | 57.0 | 25.8 |
+| Codex | 69.9 | 177.2 | 68.7 | 185.8 |
+| AgentRunbook-C | 74.9 | 108.3 | 70.1 | 139.9 |
 
-把五类 knowledge 转成 future executable task，在 equal-cost 下比较 passive retrieval、compiled runbook 与 agentic reacquisition。真正的系统 trade-off 是：哪些 experience 值得长期保留，哪些应该便宜地重新获取。
+定位：表2：主要方法 · [原文](https://arxiv.org/html/2605.12493v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 辅助函数的收益并非所有切分都一致
 
-## 研究决策卡
+同一编码控制器；去掉辅助函数降低Small成绩，却略提高Medium，不能声称全面有益。
 
-### 什么时候值得用
+同一编码控制器与各档451题。
 
-适合研究从大量网页操作经历中积累环境知识，例如工作流规则和容易踩到的限制。它与长对话记忆的差别主要是经验来源和知识对象；最终仍是问答，因此不应把检索质量直接包装为网页行动能力。
+| 配置 | Small准确率（%） | Medium准确率（%） |
+|---|---|---|
+| AgentRunbook-C | 74.9 | 70.1 |
+| AgentRunbook-C without workflow | 70.1 | 64.1 |
+| AgentRunbook-C without helper functions | 71.4 | 71.8 |
 
-### 一个具体任务长什么样
+定位：表2：编码控制器消融 · [原文](https://arxiv.org/html/2605.12493v1)
+<!-- EVIDENCE:result-2:END -->
 
-示意任务：历史轨迹显示某类操作必须经过特定页面状态，当前问题要求解释如何完成该流程。系统要从分散的视觉和工具记录中恢复可复用步骤，而不只是记住一次页面上的文字。
+<!-- EVIDENCE:result-3:START -->
+## 理想证据试验采用不同题集和回答方式
 
-### 最有判别力的实验
+直接QA，不是主实验的上下文收集任务；同时改变证据选择与笔记，不能作为主分数的硬上限。
 
-按环境留出测试，而不是随机拆分同一网站的轨迹；同时比较有无历史经验和证据直接给定条件。记录检索延迟，再增加真实执行检查，分别识别环境记忆的可访问性、可迁移性与行动效用。
+排除前提/弃答题的先导子集；表中未报告精确题数，不能视为完整451题主结果。
 
-### 建议搭配
+| 模型 | 直接理想轨迹（%） | 理想片段加笔记（%） |
+|---|---|---|
+| Qwen3.5-9B (thinking) | 59.6 | 82.5 |
+| GPT-5.4-mini (medium) | 65.3 | 86.3 |
 
-[ama-bench](ama-bench.md) · [memoryarena](memoryarena.md)
+定位：图4的先导实验、附录B · [原文](https://arxiv.org/html/2605.12493v1)
+<!-- EVIDENCE:result-3:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
 
-<!-- RESEARCH-DECISION:END -->
+文件辅助设计改善了所测准确率/延迟取舍，但未测试实时任务执行或终身更新收益。题目经筛选使强模型无历史时出错，不能外推自然请求中的发生率。UNKNOWN记0；陷阱题只需一个正确且无矛盾见解，前提题规则也接受明确说明无法核验实时实例。
 
-## 演化位置
+每题历史规模的表1上限为498会话，正文以约500会话描述，不应写成所有题恰有500会话。查询模板还包含question_type和original_goals元数据；在归因前需要核验各基线的输入权限是否完全一致。
 
-`long chat history → agent trajectory archive → compressed reusable environment knowledge`
-
-V2 让 memory 开始和“重新获取经验”在超大历史上正面竞争。
+下一步：在同一控制器和成本预算下比较R与C，分别计量写入、查询和读取成本。保持Small/Medium证据种子一致，测试新环境，再加入有/无历史的可执行后续任务。
+AgentRunbook-C保留原始轨迹；它是证据搜集策略，不是把整个档案压缩成摘要。最多选择20个状态、返回200K词元上下文。两档均值72.5/69.3/48.5分别属于C、Codex、slice+notes；48.5不是全部RAG方案最高值，AgentRunbook-R为57.8。
+<!-- EVIDENCE:limitations:END -->

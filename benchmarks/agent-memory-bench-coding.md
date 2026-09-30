@@ -1,4 +1,4 @@
-# Agent Memory Bench：编码智能体中的因果记忆复用
+# Agent Memory Bench：编码检索收益、接入检查与历史污染
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-22<br>
@@ -6,62 +6,107 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](agent-memory-bench-coding.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](agent-memory-bench-coding.en.md)
 
-[代码、任务、预注册与 pilot](https://github.com/GiulioDER/agent-memory-bench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已阅读固定版本的官方协议、设置、结果记录与局限；未独立复现实验。
 
-Agent Memory Bench 测的是 **过去 repository-task experience 是否因果地改善后续 coding action**。它不是把“有 memory 的 agent”和“没有 memory 的 agent”随意横比，而是在中性、逐字一致的 session feed 与隐藏 executable oracle 下，插入一个可拔插 memory layer，并验证该 layer 是否真的被集成、是否真的在后续 session 中可用和被使用。
+已完整阅读固定提交的README、方法页、状态文档、复现指南、预登记000/026、pilot-001分析、official-003摘要/分析/审计；定点检查配对统计与榜单加载代码。没有论文全文可通读，证据来自官方协议和记录；未执行项目代码或付费模型实验，未全面重审后来加入的厂商运行。
 
-## 相比前身多测了什么
+[官方协议，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/docs/STATUS.md)
 
-PAST-Bench 等工作已经推动 memory 从 QA 走向 future action；这里进一步把 **treatment validity** 做成协议的一部分。很多 memory 实验的隐藏问题是：系统配置里“有 memory”并不意味着任务执行时 agent 实际看到了、检索到了或使用了它。integration hash 与 proof-of-treatment gate 试图把“memory treatment 真发生了”从最终 task success 中独立验证。
+[官方来源，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/README.md)
 
-## 决定性证据
+[官方来源，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/site/method.html)
 
-公开 corpus 包含 **24 个真实仓库任务、24 条 precursor transcript 与 99 个 distractor**。各 arm 共用 baseline 和逐字 session feed；在隐藏 executable oracle 评分前，integration hash 与 proof-of-treatment gate 验证 memory 确实可用并被使用，同时显式记录 ingestion/session cost 与 negative transfer。当前预注册 pilot 最终只有 **13 个 survivor**，相对 CLAUDE.md baseline 的估计提升只有 **+0.014**，区间跨过零。
+[官方来源，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/docs/REPLICATION.md)
 
-## 结论边界：这个分数支持什么判断
+[官方来源，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/preregistration/000-pilot.md)
 
-当前 pilot 支持的是“在这组 survivor、Claude-specific 环境和所测 memory product 下，还没有足够证据证明稳定正向收益”。它**不支持**“memory 对 coding agent 无用”：样本远低于目标统计功效，proof-of-treatment 又产生 survivor selection，而且参测 Recall memory 产品由作者开发。这里最重要的产出是因果评测 protocol，而不是一个确定的产品排名。
+[官方来源，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/preregistration/026-official-003-fair-instruction.md)
 
-## 公平比较条件
+[官方来源，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/pilot-001/analysis.json)
 
-需要固定 coding agent/backbone、repo/task、session feed、tool permissions、execution budget、memory ingestion timing、retrieval visibility 与 executable grader。任何 memory 方法都应同时报告 integration success、treatment exposure、task success、negative transfer 与总成本。若只在“memory 成功接入”的 survivor 上报告结果，还必须同时给出 survivor rate，避免把 integration failure 从评价对象中消失。
+[官方来源，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/official-003/leaderboard_summary.json)
 
-## 研究上怎么用
+[官方来源，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/reports/official-003-analysis.md)
 
-这个 benchmark 对 memory paper 最值得借鉴的是 **proof-of-treatment + executable outcome + cost accounting**。如果声称某个 memory mechanism 改善 coding/data agent，应先证明 memory 真被读取和利用，再用 matched baseline 判断 action utility；否则“配置里有 memory”只是 treatment assignment，不是 treatment received。
+[官方来源，固定版本 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/reports/official-003-audit.md)
 
-## 下一步最有价值的验证
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-最大的缺口是统计功效、跨 backbone/harness 迁移与 author-built treatment 的独立性。最高杠杆的下一步是扩大真实 repo task 数，在多个 coding agent 上运行相同 neutral-feed protocol，并预先规定 intention-to-treat 与 treatment-on-treated 两套 estimand；这样既不会因接入失败丢样本，也能回答 memory 真被使用时是否有收益。
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-## 谱系位置
+给各记忆配置相同的逐字会话语料，在隔离仓库中执行相同任务、种子和环境。智能体产出代码后，由沙箱外隐藏输入的可执行检查器判通过/失败，不使用LLM裁判。接入检查验证工具已列出、钩子触发、文件摘要和配置隔离，不能单独证明智能体真的检索并使用记忆。比如时区任务要求遵循只写在旧会话里的约定；原始记录加grep、无记忆、静态说明和无信息占位文本均为对照。
 
-`map_delta=reinforces`，绑定 `memory-action-utility`。它独立加强了 PAST-Bench 所代表的因果 treatment 评测方向，但目前零结果本身不修改 defining chain。真正值得推广的是“**验证 memory 被用过，再谈 memory 带来的因果收益**”这一 benchmark contract。
+定位比较：与一般记忆问答相比，这个官方协议把记忆接到编码任务的通过/失败结果，并安排空白、安慰剂、项目说明和检索记忆实验臂。它测预填语料的检索效用；没有观察长期记忆形成，且泄漏审计限制旧成绩的解释。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-## 研究决策卡
+当前套件34个可执行任务，official-003只用26个任务：73个任务—条件组合×5种子×8配置，共2920次会话；365个计划配对单元中317个通过接入检查、48个剔除，每单元每配置只运行一次。模型为deepseek/deepseek-v4-flash，经Claude Code。五条件为证据存在、缺失、被新事实取代、无日期冲突、属于相邻子系统。每条件约4900篇文档预先摄入，运行期间不写入记忆，因此测检索而非完整写入/巩固生命周期。
+<!-- EVIDENCE:setup:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:result-1:START -->
+## 主运行：正向点估计尚未排除零效应
 
-适合检验编码智能体是否真的使用了前序任务记忆，而不是只把记忆服务接进系统。处理组实际生效的证据尤其重要；低样本量试验和存活样本筛选，仍不足以证明某种产品普遍优于其他方案。
+比例与绝对差均为0–1；基线的[0,0]只是自比较，不是成功率置信区间。其余为原样报告的差值区间，均跨零；存在已披露的标签暴露。
 
-### 一个具体任务长什么样
+26个任务、317个通过接入检查的任务/种子/条件配对单元；区间不含整次运行之间的波动。
 
-示意任务：前序会话中存在无法仅从当前仓库推出的任务经验，后续编码任务需要利用它，最终由隐藏可执行检查器评分。中性输入控制保证不同记忆系统不是先拿到了不同质量的提示。
+| 配置 | 成功率 | 相对claude_md差值 | 95%区间下界 | 95%区间上界 |
+|---|---|---|---|---|
+| claude_md | 0.5773 | 0 | 0 | 0 |
+| recall | 0.6593 | 0.082 | -0.0063 | 0.1808 |
+| bare | 0.6593 | 0.082 | -0.0195 | 0.1963 |
+| placebo | 0.6719 | 0.0946 | -0.0369 | 0.2493 |
 
-### 最有判别力的实验
+定位：official-003结果汇总：部分实验臂 · [原文](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/official-003/leaderboard_summary.json)
+<!-- EVIDENCE:result-1:END -->
 
-除遵守中性输入和处理生效检查外，报告所有分配样本的结果，以及只在处理生效样本上的条件结果。比较无记忆和原始记录检索，并纳入写入、查询与编码会话成本，避免存活筛选夸大净收益。
+<!-- EVIDENCE:result-2:START -->
+## 旧先导的全部任务和筛选子集不能混用
 
-### 建议搭配
+旧先导实验，差值为按任务平均的recall−claude_md；95%区间按任务聚类重采样，不含整次运行波动。两种范围McNemar p均为1.0。不可与official-003作直接进步对比。
 
-[past-bench](past-bench.md) · [dreambench-swe](dreambench-swe.md)
+旧先导计划24题×3种子=72单元，实际71个接入有效；13个筛选后任务保留38单元。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+| 分析范围 | 任务数 | 配对单元数 | recall差值 | 95%下界 | 95%上界 |
+|---|---|---|---|---|---|
+| 全部任务 | 24 | 71 | 0.0139 | -0.0278 | 0.0556 |
+| 按难度筛选后任务 | 13 | 38 | 0.0256 | 0 | 0.0769 |
 
-<!-- RESEARCH-DECISION:END -->
+定位：pilot-001分析：全任务与筛选子集分开 · [原文](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/pilot-001/analysis.json)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:result-3:START -->
+## 同一配置在不同证据条件下表现不同
+
+执行检查器二元通过数；不同条件难度和样本集合不同，不能用两行差异估计条件的纯因果效应。
+
+分母为各条件通过接入检查的配对单元。
+
+| 条件 | 配对单元 | recall通过数 | claude_md通过数 |
+|---|---|---|---|
+| present | 111 | 56 | 43 |
+| contradictory | 51 | 37 | 39 |
+
+定位：official-003汇总：部分条件计数 · [原文](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/official-003/leaderboard_summary.json)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+不能把该结果描述为干净的记忆产品因果排名。official-003在运行开始后才登记协议，且没有提前公告；9月26日审计发现文档名暴露stale_/rival_角色，工作目录/命名空间也暴露条件名。修复没有消除旧成绩的污染，需要重新运行。配对接入剔除会改变样本集合，预算也未匹配。检查器拒绝朴素参考解并不证明基础模型不可能另找正确解。Recall由基准作者开发，需披露。无正向显著差异不等于记忆无用；先导13个保留任务也不能替代全24题估计。
+
+旧笔记把13个筛选后任务和全部24题的0.0139差值混在一起；本页分别列出。接入可用不等于实际使用。源码与语料在旧运行之后多次修复，当前工具验证通过也不证明旧实验无混杂。稍后的厂商运行使用不同的交集样本，还存在各自适配器和协议偏离，本页不把它们并入317单元主表。
+
+
+
+下一步：用不泄露条件或文档角色的命名重新冻结语料，提前登记统计与剔除规则，并同时报告全部分配样本和通过接入样本。区分接入可用、搜索发生、证据到达和最终执行成功；匹配完整成本，重复整个运行，再单独加入跨会话写入/更新任务。
+<!-- EVIDENCE:limitations:END -->

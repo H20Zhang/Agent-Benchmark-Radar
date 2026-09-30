@@ -7,64 +7,79 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](browsecomp.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](browsecomp.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[OpenAI release](https://openai.com/index/browsecomp/) · [Paper](https://arxiv.org/abs/2504.12516) · [Eval code](https://github.com/openai/simple-evals)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it actually measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-BrowseComp contains 1,266 hard fact-seeking questions whose answers require persistent, creative web browsing across multiple sources. Answers are deliberately short and verifiable, keeping grading simple while making **evidence discovery** difficult.
+main sections 1–5; Appendices A–B prediction/grading prompts; Tables 1–3 and Figures 1–5; Table 3/Figure 4 visually verified
 
-## What changed relative to prior evaluation
+[arXiv v1 (2025-04-16) — v1,2025-04-16; separate from 2025-04-10 launch article](https://arxiv.org/pdf/2504.12516v1)
+<!-- EVIDENCE:reading:END -->
 
-Simple factual QA and shallow web search saturate once a browsing model can issue a few searches. BrowseComp shifts difficulty into search persistence, query reformulation, source chaining, and finding obscure evidence rather than long-form answer generation.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Decisive evidence
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-The benchmark was constructed around single, stable, indisputable short answers, often requiring tens or potentially hundreds of pages to locate. Its continued usefulness comes from separating hard search from subjective report judging: failure is usually inability to find the answer rather than disagreement over prose quality.
+Compared with HotpotQA’s fixed encyclopedic evidence, BrowseComp emphasizes locating obscure facts through sustained web search. Short answers simplify grading but leave corpus and evidence-use attribution uncontrolled; BrowseComp-Plus subsequently freezes that interface.
+<!-- EVIDENCE:placement:END -->
 
-## What the score supports
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-A score supports end-to-end browsing-agent ability under a particular search provider, browsing interface, time, and model. It does not cleanly measure retrieval algorithm quality because web navigation, query generation, model priors, and tool implementation are inseparable.
+Humans invert stable facts into difficult multi-constraint questions, screened with models, simple searches and some human attempts. A grader checks short-answer equivalence, not evidence trajectories.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-Record model/version, search provider, tool interface, date, call/token budget, and whether page fetching is available. Web drift makes historical scores only approximately comparable. Equal answer grading does not imply equal information access.
+There are 1,266 questions. Table models are GPT-4o-2024-08-06, gpt-4o-search-preview-2025-03-11 and o1-2024-12-17 at medium effort. Deep Research is trained on similar tasks; the paper does not give a comparable absolute tool/token budget or a clear exact final-grader model. Parallel experiments sample up to 64 runs per question and select by confidence; this best-of-N is not oracle pass@N.
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Historical system outcomes
 
-OpenAI explicitly notes the short-answer distribution may correlate poorly with open-ended user research. BrowseComp does not evaluate citation quality, synthesis, ambiguity clarification, artifact generation, or user-facing completeness.
+Reference-answer equivalence accuracy in percent on 1,266 questions; dated model versions appear in the conditions, while the absolute tool and token budget for Deep Research is undisclosed.
 
-## Next discriminating validation
+| System | Accuracy |
+|---|---|
+| GPT-4o | 0.6 |
+| GPT-4o browsing | 1.9 |
+| o1 medium | 9.9 |
+| Deep Research | 51.5 |
 
-Pair BrowseComp questions with evidence-set scoring and controlled search budgets. This would distinguish “found the answer by luck/priors” from efficient discovery of sufficient supporting evidence.
+Source: Table 3 · [Paper](https://arxiv.org/pdf/2504.12516v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## Human-attempt denominators
 
-## Research decision card
+Counts; 367/1,255 is self-reported completion, whereas 317/367 is reference agreement among completed attempts; 29.2% is not reference-answer accuracy.
 
-### When to use it
+| Outcome | Numerator | Denominator |
+|---|---|---|
+| Reported solved | 367 | 1255 |
+| Reference agreement among solved | 317 | 367 |
+| Gave up after≥2h | 888 | 1255 |
 
-Use BrowseComp for persistent search and discovery of hard-to-find evidence. Short answers simplify endpoint evaluation but do not cover full research-report quality. Scores depend on search backend, tools, prior model knowledge, and budget, not only the model name.
+Source: Table 2 · [Paper](https://arxiv.org/pdf/2504.12516v1)
+<!-- EVIDENCE:result-2:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-Illustrative task: indirect constraints require repeated query reformulation, candidate elimination, and pursuit of a verifiable answer. Stopping and evidence checking matter as much as search volume; more calls do not guarantee supporting sources.
+Human 29.2% is reported solved, not reference-graded accuracy. Models differ in training/version/tools, preventing a pure browsing-tool causal claim.
+<!-- EVIDENCE:interpretation:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-Compare policies under the same search backend, fetch interface, and total budget, with closed-book and answer-source-removal diagnostics. Report accuracy, calls, and failed trajectories. Closed-book-solvable examples provide weaker discrimination of evidence-discovery ability.
+Answer uniqueness is not exhaustive; screening is model-dependent. Parallel voting spends more resources. Next: fixed versions/budgets and complete evidence verification.
 
-### Pair with
+§4.5 states 14% zero-success tasks but later mentions 118 of 1287 zero-pass tasks before 21 removals; denominators/versions are not reconciled. Exact calibration-error definition and absolute browsing-compute budget absent; do not invent them.
+<!-- EVIDENCE:limitations:END -->
 
-[browsecomp-plus](browsecomp-plus.en.md) · [livebrowsecomp](livebrowsecomp.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`factual QA → persistent web search → evidence-aware research agents`
-
-BrowseComp is a clean benchmark of search hardness, not a complete benchmark of research usefulness.
+Related benchmarks: [browsecomp-plus](browsecomp-plus.en.md) · [livebrowsecomp](livebrowsecomp.en.md)

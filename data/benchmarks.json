@@ -6259,9 +6259,9 @@
       "open-ended-queries",
       "agent-retriever-ablation"
     ],
-    "scale": "1,200 expert queries across computer science, healthcare, humanities, and natural science: 600 short-form and 600 open-ended queries over a 200,000-paper corpus.",
+    "scale": "1,200 GPT-5-mini-generated queries across four scientific domains: 600 short-form and 600 open-ended. Table 1 domain-corpus counts sum to 186,669 and 180,886 respectively; overlap is unspecified, so an exact union cannot be reconstructed.",
     "measurement_strength": "Separates targeted from open-ended scientific discovery and exposes agent-retriever fit by swapping search backends under a controlled paper collection.",
-    "coverage_gap": "The released repository provides query and ground-truth files but not a turnkey copy of the full 200,000-paper corpus and evaluation environment.",
+    "coverage_gap": "Gold open-ended sets use seed papers and shared references rather than exhaustive expert discovery; the paper does not fully specify an exact corpus union or a comprehensive human query-validation protocol.",
     "confounders": [
       "agent-generated-subqueries",
       "corpus-snapshot",

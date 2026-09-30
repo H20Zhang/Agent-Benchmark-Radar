@@ -1,4 +1,4 @@
-# GateMem: useful shared memory under access control and deletion
+# GateMem: usefulness, access and post-deletion leakage in shared memory
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-06-17<br>
@@ -6,64 +6,107 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](gatemem.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](gatemem.md) | **English**
 
-[Paper](https://arxiv.org/abs/2606.18829) · [Code](https://github.com/rzhub/GateMem)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-GateMem evaluates whether a shared-memory agent can remain useful while enforcing **who may access which memory and what must be forgotten**. It models multiple principals across medical, office, education, and household scenarios, with long-form episodes, incremental memory injection, hidden checkpoints, access boundaries, and deletion targets.
+Main §§1–5 and substantive Appendices A–E read through HTML, with exact assistant/judge templates checked in PDF pp 19–21 and selected Tables 2/3/4/7/8/9 confirmed in v1 PDF. Figure curves not independently digitized; no reproduction or implementation audit.
 
-## What changed relative to prior evaluation
+[arXiv2606.18829v1 (2026-06-17)](https://arxiv.org/pdf/2606.18829v1)
 
-Most memory benchmarks reward remembering more. Privacy benchmarks often test leakage without measuring whether the system remains useful. GateMem makes the tension explicit: utility, access-control violations, and deletion leakage are scored together. A system cannot win by storing everything, and it cannot win by refusing to remember anything.
+The frozen release reference is preserved. Newly reviewed versions and conditions do not replace initial-release results.
+[Versioned HTML 2606.18829v1](https://arxiv.org/html/2606.18829v1)
+<!-- EVIDENCE:reading:END -->
 
-## Decisive evidence
+<!-- EVIDENCE:method:START -->
+## Task construction and memory observation
 
-The evaluation finds no tested approach simultaneously strong on utility, access control, and active forgetting. Long-context baselines can provide strong governance behavior but pay high token cost, while retrieval/external-memory approaches reduce cost yet can surface unauthorized or deleted information. The released evaluator tracks utility together with privacy and deletion leakage rather than collapsing them into one accuracy number.
+Stream multi-principal facts, permission changes and deletion requests into shared memory. At hidden checkpoints, provide the authenticated requester, policy and visible memory, then request an answer, redacted answer, refusal or no-memory response. Continue the episode and score legitimate usefulness, unauthorized disclosure and post-deletion recovery.
 
-## What the score supports
+Editorial placement: Compared with LongMemEval’s historical-information QA, GateMem adds use, access-denial and forgetting checks. Correct recall can fail when the fact should not be used, adding lifecycle/access evidence beyond QA accuracy. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-GateMem supports a claim about the **governed memory system** under a specific principal/policy model. It does not isolate whether a leak originates in storage, indexing, retrieval filtering, generation, or policy interpretation. A good aggregate score therefore should be accompanied by the separate utility/access/deletion axes.
+<!-- EVIDENCE:setup:START -->
+## Experimental conditions and scoring targets
 
-## Fair comparison contract
+91 episodes and 2218 checkpoints: 728 utility, 727 access-control and 763 forgetting checks. Reset per episode; ingest chronologically. Answer temperature 0.2/max 4096 tokens; GPT-4o judge temperature 0/max 4096; text-embedding-3-small embeddings. Long-Context uses up to 300 recent turns; both RAG variants retrieve 20, with policy filtering potentially returning fewer. A-MEM final evidence 20; Mem0 update window 10/similar memories 5; REMem-I up to 5 reasoning steps.
+<!-- EVIDENCE:setup:END -->
 
-Fix principals, policy rules, deletion requests, memory history, model, retrieval top-k, and query set. Measure latency/token/storage overhead because stricter governance may be achieved by expensive full-context inspection. Do not expose hidden leak-target annotations to the agent; they are evaluator metadata, not task input.
+<!-- EVIDENCE:result-1:START -->
+## Medical tasks: utility and leakage trade off
 
-## What remains unmeasured
+Same domain and backbone; Appendix D content labels without additional action gating. MGS=100×(U/100)×(1−A/100)×(1−F/100). Do not rank across the two blocks.
 
-Real enterprise policies include nested groups, delegated authority, purpose limitation, retention schedules, auditability, and policy changes over time. Cryptographic deletion and physical data erasure are also outside a language-level benchmark.
+210 utility, 192 access, 177 forgetting checkpoints
 
-## Next discriminating validation
+| System | Utility U ↑ (%) | Access leakage A ↓ (%) | Deletion leakage F ↓ (%) | MGS ↑ (%) |
+|---|---|---|---|---|
+| Long-Context | 64.8 | 24.0 | 7.3 | 45.6 |
+| RAG-Naive | 46.7 | 58.9 | 24.9 | 14.4 |
+| RAG-Policy | 28.1 | 17.2 | 7.3 | 21.6 |
 
-Separate policy enforcement at write, index, retrieval, and generation time under the same tasks. The key systems question is where to enforce access/deletion constraints so that violations fall without paying full-context cost.
+Locator: Table 3, Medical / GPT-4o-mini · [Source](https://arxiv.org/pdf/2606.18829v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## Office tasks: results depend on the backbone and domain
 
-## Research decision card
+Same domain and backbone; Appendix D content labels without additional action gating. MGS=100×(U/100)×(1−A/100)×(1−F/100). Do not rank across the two blocks.
 
-### When to use it
+154 utility, 171 access, 222 forgetting checkpoints
 
-Use GateMem for shared-memory utility, access boundaries, and deletion behavior. The goal is not simply to conceal everything sensitive but to retain authorized usefulness while preventing unauthorized access. Behavioral non-disclosure is not proof of physical erasure.
+| System | Utility U ↑ (%) | Access leakage A ↓ (%) | Deletion leakage F ↓ (%) | MGS ↑ (%) |
+|---|---|---|---|---|
+| Long-Context | 89.6 | 33.9 | 4.5 | 56.5 |
+| RAG-Naive | 74 | 29.8 | 9.5 | 47 |
+| RAG-Policy | 76 | 19.9 | 6.3 | 57 |
 
-### What a concrete task looks like
+Locator: Table 3, Office / GPT-5.4 · [Source](https://arxiv.org/pdf/2606.18829v1)
+<!-- EVIDENCE:result-2:END -->
 
-Illustrative task: multiple participants contribute information under different access rules, a later request seeks content reserved for another role, and a deletion request follows. The agent must condition memory use on identity, purpose, and time rather than merely detect sensitive keywords.
+<!-- EVIDENCE:result-3:START -->
+## Fewer tokens do not guarantee faster responses
 
-### Most discriminating experiment
+Mean end-to-end wall time includes ingestion. Tokens are not currency, storage or total compute; typical concurrency 4–8.
 
-Pair authorized, unauthorized, and post-deletion queries under fixed storage and retrieval, then compare policy implementations. Report legitimate utility, unauthorized disclosure, and post-deletion recovery separately. Deployment claims additionally require authentication and storage-erasure checks.
+579 medical checkpoints, 21 episodes
 
-### Pair with
+| System | Seconds/checkpoint ↓ | Thousand LLM tokens/checkpoint ↓ |
+|---|---|---|
+| Long-Context | 4.22 | 4.04 |
+| RAG-Policy | 11.1 | 1.15 |
+| A-MEM | 41.76 | 1.37 |
+| Mem0 | 85.9 | 1.27 |
 
-[sp-mem](sp-mem.en.md) · [utility-under-attack](utility-under-attack.en.md)
+Locator: Table 4, GPT-4o-mini Medical selected rows · [Source](https://arxiv.org/pdf/2606.18829v1)
+<!-- EVIDENCE:result-3:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:result-4:START -->
+## How closely did the judge match human labels?
 
-<!-- RESEARCH-DECISION:END -->
+Stratified 289 of 579 outputs from one run; at least two human annotators with adjudication. Judge validation, not system success.
 
-## Genealogy
+Sample sizes are shown in the table.
 
-`remember more → remember selectively → governed multi-principal memory`
+| Field | Sample size | Judge–human agreement (%) |
+|---|---|---|
+| Utility correctness | 105 | 99.0 |
+| Access leakage | 96 | 99.0 |
+| Deletion leakage | 88 | 97.7 |
 
-GateMem turns privacy and forgetting from caveats into first-class memory-system objectives.
+Locator: Table 9, human validation selected fields · [Source](https://arxiv.org/pdf/2606.18829v1)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Supported conclusions and unresolved questions
+
+Utility and leakage trade off even within a backbone. Context length, filtering, indexing and calls vary, preventing a memory-structure-only causal interpretation. MGS multiplies three rates rather than pooling checkpoint accuracy. Human validation covers 289 outputs from one run, not every domain/backbone. Synthetic institutional episodes do not establish real-world compliance.
+
+HTML body displays an August 24 date despite v1 header; selected facts/tables and prompts verified against explicit v1 PDF dated June 18. Do not infer an experiment date. §3 metric equations include action conditions whereas Appendix D and exact judge prompt describe content-only leakage without extra action gating for main tables.
+
+Next experiment: Hold backbone, stream and total budget fixed; report both content leakage and action accuracy on paired checkpoints, then vary retrieval depth and access filtering separately. Add paraphrased and multi-turn probes after revocation plus storage-level deletion audits; pair with ordinary long-horizon QA to expose usefulness and governance costs.
+Scenarios already cover delegation, evolving permissions and impersonation; real authentication, deployment and storage-level erasure remain unverified.
+<!-- EVIDENCE:limitations:END -->

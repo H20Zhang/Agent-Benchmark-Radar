@@ -1,4 +1,4 @@
-# BrowseComp：为难找事实持续搜索，而不是只做一次检索
+# BrowseComp：持续搜索难以定位的事实
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2025-04-10 · 官方首发<br>
@@ -7,64 +7,79 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](browsecomp.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](browsecomp.en.md) · [基准库](../library/README.md)
 
-[OpenAI 发布页](https://openai.com/index/browsecomp/) · [论文](https://arxiv.org/abs/2504.12516) · [评测代码](https://github.com/openai/simple-evals)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-BrowseComp 有 1,266 个很难找的 factual question，需要 agent 持续、创造性地浏览多个 web source。答案刻意设计成短且可验证，因此 grading 很简单，真正困难的是 **evidence discovery**。
+全文第1–5节及附录A–B的预测/评分提示，全部表1–3和图1–5。
 
-## 相比此前评测多测了什么
+[arXiv v1 (2025-04-16)，与 2025-04-10 发布文章分开](https://arxiv.org/pdf/2504.12516v1)
+<!-- EVIDENCE:reading:END -->
 
-简单 factual QA / shallow web search 在模型能发几次 search 后很快接近饱和。BrowseComp 把难度放到 persistence、query reformulation、source chaining 和 obscure evidence discovery，而不是长文本生成。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 决定性证据
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-题目围绕单一、稳定、可验证的短答案构造，很多题需要浏览大量网页才能定位。这种设计的重要价值是把“搜索难”与“长报告主观评分难”拆开：多数失败首先是没有找到答案，而不是 prose judge 不同意。
+相较HotpotQA的固定百科证据，BrowseComp把困难主要放在开放网页事实定位与持续搜索。最终短答案简化判分，却没有提供固定候选语料或逐步证据使用的可归因性；BrowseComp-Plus随后针对这一界面缺口冻结语料。
+<!-- EVIDENCE:placement:END -->
 
-## 这个分数能证明什么
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-分数证明特定 search provider、browser interface、时间点、model 下 browsing agent 的整体能力，不能干净归因给 retriever，因为 web navigation、query generation、model prior 与 tool implementation 是耦合的。
+人工先选稳定事实，再逆向构造多约束难题；通过模型、五次简单搜索和部分人类尝试筛难。评分器判断最终短答案与参考的语义等价，不检查搜索证据链。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-必须记录 model/version、search provider、tool interface、运行日期、call/token budget，以及能否 fetch page。web drift 使历史分数只能近似比较；同一个 answer grader 并不意味着信息访问条件相同。
+共 1266 道题。表中 GPT-4o 为 2024-08-06，搜索版为 gpt-4o-search-preview-2025-03-11，o1 为 2024-12-17 的 medium 设置。Deep Research 训练过相似任务，论文没有给出可对齐的绝对工具/token 预算；最终裁判的精确模型也未清楚注明。并行实验每题最多采样 64 次，按置信度选择 best-of-N，不能当作 oracle pass@N。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 历史系统结果
 
-OpenAI 自己也指出短答案分布和真实 open-ended user query 的相关性未知。BrowseComp 不测 citation quality、长文 synthesis、ambiguity clarification、artifact generation 或用户需求完整性。
+1266 道题的参考答案等价准确率，单位百分数；模型版本见条件表，Deep Research 的绝对工具／token 预算未公开。
 
-## 下一步最有判别力的验证
+| 系统 | 准确率 |
+|---|---|
+| GPT-4o | 0.6 |
+| GPT-4o browsing | 1.9 |
+| o1 medium | 9.9 |
+| Deep Research | 51.5 |
 
-给题目增加 evidence-set scoring，并固定 search budget，区分“靠 prior/运气猜到答案”和“高效找到了足够 supporting evidence”。
+事实来源：表 3 · [论文](https://arxiv.org/pdf/2504.12516v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 人类尝试的不同分母
 
-## 研究决策卡
+计数表；367/1255 为自报解出，317/367 为已解出子集的参考答案一致，不能把 29.2% 当作参考答案准确率。
 
-### 什么时候值得用
+| 结果 | 分子 | 分母 |
+|---|---|---|
+| 自报解出 | 367 | 1255 |
+| 已解出子集内参考答案一致 | 317 | 367 |
+| 尝试至少 2 小时后放弃 | 888 | 1255 |
 
-适合研究持续搜索和难找证据的发现能力。短答案让终点容易判断，却不能覆盖完整研究报告质量；成绩同时受搜索后端、工具接口、模型已有知识和调用预算影响，不能只按模型名称归因。
+事实来源：表 2 · [论文](https://arxiv.org/pdf/2504.12516v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-示意任务：问题给出多个间接约束，系统需要反复改写查询、筛除候选并追到一个可验证答案。正确停止和证据核对与搜索次数同样重要；更多调用不保证找到真正支持答案的来源。
+29.2%是人类自报解出比例，并非参考答案通过率；模型版本与训练、工具同时不同，也不能从表3隔离浏览工具的因果贡献。
+<!-- EVIDENCE:interpretation:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-在相同搜索后端、抓取接口和总预算下比较策略，并加入闭卷条件和来源移除诊断。报告准确率、调用数与失败轨迹；若闭卷已能答对，应谨慎解释该样本对搜索能力的区分度。
+唯一答案未穷举证明；筛题本身依赖被测模型。并行投票大幅增加资源，不等于单次能力。下一步固定版本/预算并核实完整证据。
 
-### 建议搭配
+第4.5节称14%题目零成功，后文又出现删21题前的1287题中118题零成功，样本版本/分母未对齐。精确校准误差定义和绝对浏览预算未充分给出。
+<!-- EVIDENCE:limitations:END -->
 
-[browsecomp-plus](browsecomp-plus.md) · [livebrowsecomp](livebrowsecomp.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`factual QA → persistent web search → evidence-aware research agents`
-
-它是一个很干净的 search-hardness benchmark，但不是完整 research-usefulness benchmark。
+相关基准：[browsecomp-plus](browsecomp-plus.md) · [livebrowsecomp](livebrowsecomp.md)

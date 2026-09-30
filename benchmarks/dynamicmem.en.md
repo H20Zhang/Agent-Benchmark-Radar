@@ -1,4 +1,4 @@
-# DynamicMem: maintaining a changing personal state across months
+# DynamicMem: when profile reconstruction and personalized service diverge
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-06-22<br>
@@ -6,64 +6,104 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](dynamicmem.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dynamicmem.md) | **English**
 
-[Paper](https://arxiv.org/abs/2606.22877) · [Code](https://github.com/wenyaxie023/DynamicMem)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-DynamicMem asks whether a personal-assistant memory system can infer and maintain **attributes, habits, and preferences that evolve over time** from distributed activity across many applications. The hard part is not recalling one event; it is deciding which observations define durable profile state and when new evidence should replace an older belief.
+Entire substantive main 1–6 and Appendices A–K read, including all construction, answer, scoring and failure-diagnosis prompts; author checklist statistical-significance disclosure checked. Figures read through captions and source-reported numeric changes, not digitized into invented point values. No code execution or reproduction.
 
-## What changed relative to prior evaluation
+[arXiv2606.22877v1 (2026-06-22)](https://arxiv.org/html/2606.22877v1)
 
-Conversation-memory benchmarks usually provide explicit statements inside one dialogue stream. DynamicMem distributes weak evidence across 16 applications and roughly 15 months, then checks the profile at multiple temporal checkpoints. This turns temporal supersession and aggregation into the primary measurement object.
+The frozen release reference is preserved. Newly reviewed versions and conditions do not replace initial-release results.
+<!-- EVIDENCE:reading:END -->
 
-## Decisive evidence
+<!-- EVIDENCE:method:START -->
+## Task construction and memory observation
 
-The benchmark averages about 2.2M tokens and 1,772 grounded events per simulated user, with five quarterly checkpoints. The paper reports that profile reconstruction degrades as history grows even when service-task accuracy remains relatively flat; no tested system simultaneously preserves stable facts and reliably replaces changing ones. More than 93% of analyzed failures are attributed to retrieval rather than the final answer model.
+Generate attributes, habits and preferences with externally motivated changes, turn these into cross-app event chains and state-consistent request/response logs, then retain only checkpoint-supported gold fields. State Completion names the state key; Personalized Service supplies a situation and task requiring a reminder, filter or configuration. Five quarterly checkpoints use only the available log prefix.
 
-## What the score supports
+Editorial placement: Compared with LongMemEval’s long-history QA, DynamicMem centers changing user profiles and measures both state completion and situation-driven service. Checkpoints and different task demands expose the gap between recovering a fact and using it when needed. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-The result supports a claim about **dynamic personal-state tracking** under the benchmark's simulated activity distribution. The retrieval diagnosis is stronger than end QA alone, but it still depends on the benchmark's attribution procedure and does not prove one index structure is the root cause.
+<!-- EVIDENCE:setup:START -->
+## Experimental conditions and scoring targets
 
-## Fair comparison contract
+10 PersonaHub users; 1790 event chains/17715 logs, about 2.2M tokens per user. 1824 State Completion and 1810 Service problems, 4994 fine-grained scoring points in total. Gemini-3-Flash-preview constructs data; GPT-5-mini builds memory and answers, text-embedding-3-large retrieves, GPT-5.4 scores. Fixed authored queries/tasks. RAG/HippoRAG2 top 20; A-Mem: 5 plus 5 linked neighbors; MemoryOS/SimpleMem: 10; actual context budgets differ.
+<!-- EVIDENCE:setup:END -->
 
-Fix event stream, checkpoint, backbone, profile schema, retrieval budget, and evidence available up to that time. Future events must never leak into earlier checkpoints. Report stable-attribute retention and changed-attribute replacement separately; an append-only system can look good on the former while failing the latter.
+<!-- EVIDENCE:result-1:START -->
+## Named-habit recall differs from scenario-triggered service
 
-## What remains unmeasured
+0–100 score; per-field s=0.8 × Core+0.2 × Detail/2, Core binary/Detail 0, 1, 2. Same stored corpus, different queries, not necessarily identical retrieved context.
 
-Real personal data has missingness, contradictory devices/accounts, explicit user corrections, privacy constraints, and uncertain ground truth. The benchmark also does not score the downstream harm of a stale profile relative to a missing profile.
+All five checkpoints; 1824 SC/1810 PS problems total; exact habit-family field count not separately supplied in table
 
-## Next discriminating validation
+| System | Habit State Completion score | Habit Service score | Preference Service score |
+|---|---|---|---|
+| Vanilla RAG | 53.5 | 5.3 | 65.0 |
+| A-Mem | 56.9 | 7.4 | 64.4 |
+| MemoryOS | 52.3 | 9.6 | 62.5 |
 
-Add counterfactual update events with known revocation times and downstream decisions whose correctness depends on using the newest state. This would connect profile maintenance directly to action utility and stale-memory harm.
+Locator: Table 2, selected systems; §4.3 scoring · [Source](https://arxiv.org/html/2606.22877v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## Three to fifteen months affect the task families differently
 
-## Research decision card
+Explicit source-reported deltas, not digitized absolute values; history length and current target states both change.
 
-### When to use it
+C1=first 3 months; C5=15 months; per-checkpoint eligible fields differ
 
-Use DynamicMem for evolving user profiles inferred from multi-application behavior. The challenge is reconstructing operative attributes from distributed evidence rather than extracting explicit statements. Score profile recovery and personalized service separately so more profiling is not mistaken for better assistance.
+| System | State Completion change (points) | Service change (points) |
+|---|---|---|
+| Vanilla RAG | -4.4 | 2.8 |
+| A-Mem | -8.9 | 4.9 |
+| SimpleMem | -16.7 | -1.5 |
 
-### What a concrete task looks like
+Locator: §5.1 Finding 1, explicit reportedC 5−C1 changes · [Source](https://arxiv.org/html/2606.22877v1)
+<!-- EVIDENCE:result-2:END -->
 
-Illustrative task: behavior across applications changes over months, making an old routine unrepresentative of current preferences. At a checkpoint, the system must update the profile and use it for a service request. Accurate recall of an old habit may lead to a wrong choice.
+<!-- EVIDENCE:result-3:START -->
+## The shared answerer receives unequal context budgets
 
-### Most discriminating experiment
+Shared GPT-5-mini answerer, unequal context sizes; does not normalize ingestion cost.
 
-Compare frozen, sliding-window, and continuously updated profiles under equal history access. At each checkpoint, report both state recovery and service quality, including slices before and after life changes. This distinguishes accumulation from genuine adaptation.
+Average retrieved-memory context per query
 
-### Pair with
+| System | SC context (thousand tokens) | Service context (thousand tokens) |
+|---|---|---|
+| Vanilla RAG | 12.6 | 14.6 |
+| A-Mem | 15.6 | 17.0 |
+| SimpleMem | 20.8 | 20.7 |
 
-[lifebench](lifebench.en.md) · [memprobe](memprobe.en.md)
+Locator: Appendix I, measured answer-context budget · [Source](https://arxiv.org/html/2606.22877v1)
+<!-- EVIDENCE:result-3:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:result-4:START -->
+## Judge calibration covers one user and four configurations
 
-<!-- RESEARCH-DECISION:END -->
+189 items each from A-Mem/HippoRAG2/Oracle/RAG; does not validate all users/systems or the error-taxonomy classifier.
 
-## Genealogy
+Sample sizes are shown in the table.
 
-`event recall → personal profile extraction → temporally evolving user state`
+| Scope | Audited items | Unreasonable judgments | Agreement (%) |
+|---|---|---|---|
+| User001, four configurations | 756 | 28 | 96.3 |
 
-DynamicMem shifts the bottleneck from “can we retrieve history?” to “which version of the user is true now?”
+Locator: Appendix I human judge audit · [Source](https://arxiv.org/html/2606.22877v1)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Supported conclusions and unresolved questions
+
+Profile completion declines with history, but Service is not uniformly stable: SimpleMem drops slightly. Retention and updating should be separated; curves/cases alone cannot prove a compression/index mechanism caused a failure. Gold evidence marks first occurrence only, so valid later restatements can make exact citation recall understate evidence availability. Oracle logs provide a model-conditioned reference, not a hard ceiling. Ten synthetic users, observability filtering, no error bars and single-user judge calibration limit generalization.
+
+Appendix K says cited evidence is everything the answerer saw; Appendix J generates a local concise citation list from a larger memory context. Treat attribution as conditional until code/artifacts reconcile. §5.1 says the habit Service gap is not a memory failure because corpus is shared; different queries/retrieved contexts still confound that inference. Update figure caption uses changes from most recent previous presence; nearby prose says both regimes anchoredC 1. Use caption definition for update, C1 anchor for stable retention. No statistical significance/error bars, explicitly acknowledged in checklist.
+
+Next experiment: Freeze logs, queries and total budget; compare raw records, summaries and explicit updated state, separating stable/changed fields quarterly. Retain full retrieved context and answer citations, audit sufficiency separately, then run paired oracle-evidence and answerer-swap interventions. Add executed service tasks to measure stale-profile costs.
+All app records are synthetic. Service tasks generate and score reminder, filter or configuration fields without executing tools or testing realized outcomes.
+The reported “over 93%” failure attribution comes from 300 sampled non-perfect cases per system/task with nonempty citations; failures without citations are excluded. The answerer generates local evidence excerpts, while diagnosis treats those excerpts as all available evidence. Without verifying equivalence to the full retrieved context, this does not establish that changing the answerer cannot help.
+<!-- EVIDENCE:limitations:END -->

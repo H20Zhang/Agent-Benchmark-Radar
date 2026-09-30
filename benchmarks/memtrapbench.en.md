@@ -1,4 +1,4 @@
-# MemTrapBench
+# MemTrapBench: when relevant history interferes with current reasoning
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-20<br>
@@ -6,60 +6,107 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-## What it actually measures
+[中文](memtrapbench.md) | **English**
 
-MemTrapBench measures **memory applicability judgment**. Even when a historical memory is faithfully stored and semantically relevant to the current question, can an agent decide whether that memory should still influence reasoning rather than reusing it mechanically? It moves the long-term-memory failure mode from “the system forgot” to “the system remembered correctly but used the memory in the wrong situation.”
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What changed relative to predecessors
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-LoCoMo and LongMemEval-style benchmarks mainly ask whether historical information can be recalled and used for QA, while staleness benchmarks emphasize choosing the current version under update conflicts. MemTrapBench instead creates cases where the historical content can remain true and relevant in surface semantics but **a changed current context makes it an invalid prior for the present decision**. Retrieval relevance and decision relevance become separate coordinates.
+Main 1–5 and entire substantive Appendices A–D read. HTML omits prompt bodies; all construction/evaluation/AdaptiveMem prompts and four long case histories read in 33-page PDF. No code audit/rerun. Medical content is a constructed benchmark example, not independently validated clinical advice; no such advice reproduced in note.
 
-## Decisive evidence
+[arXiv 2608.20202v1 (2026-08-20)](https://arxiv.org/html/2608.20202v1)
 
-The benchmark pairs the same current task under memory and no-memory conditions across **1,050 multi-turn instances** in four subsets covering reasoning fixation and belief distortion. The paper reports that every tested memory strategy underperforms the no-memory condition, with the largest drop exceeding **10 percentage points**. The signal is not that memory is generally harmful, but that a planted prior can continue to dominate reasoning after a context shift.
+[Supplementary source 2608.20202v1, inspected 2026-09-30](https://arxiv.org/pdf/2608.20202v1)
 
-## What the score supports
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-The result supports measurable harm from relevant-but-currently-invalid history under deliberately constructed context shifts. It does not support the claim that long-term memory is worse than no memory on average. Final questions are intentionally solvable without the history, so the no-memory condition avoids the planted prior by construction; in natural workloads, old experience can instead be essential evidence.
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-## Fair comparison contract
+Authors design a prior, final query and gold answer; GPT-5.4 expands these into repeated conditioning, noise and a related query under changed conditions. Final queries must be independently answerable without explicit reset instructions. Bias, feedback-induced avoidance and task-boundary cases test overextension of past experience; Safety deliberately introduces false sandbox beliefs. Not all memories are objectively true. AdaptiveMem is a system-prompt intervention targeting these risks, not a new storage algorithm.
 
-Backbone, current task, historical content, memory visibility, retrieval policy, prompt, judge, and no-memory baseline should be held fixed. A stronger diagnostic should also separate three failures: retrieving irrelevant memory, retrieving relevant memory but applying it incorrectly, and applying appropriate memory but reasoning incorrectly. Final accuracy alone cannot identify whether an applicability mechanism works.
+Editorial placement: Where LongMemEval mainly asks for useful historical information, MemTrapBench retains history that may interfere with current reasoning and measures misuse. It adds a when-not-to-use-memory axis; deliberately false premises in the safety subset differ from facts that were once true but became stale. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-## How to use it in research
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-MemTrapBench is well suited to **retrieve-then-decide, memory gating, contextual-validity classifiers, and confidence-aware memory use**. A memory system that optimizes only recall and precision can increase harmful exposure; researchers should pair accessibility metrics with harmful-reuse rate and treat **accessibility × applicability** as a two-dimensional evaluation surface.
+1050 instances: 350 Task Boundary, 350 Cognitive Bias, 200 Safety and 150 Trauma/feedback avoidance; main text histories span 18–40 turns. Answer models are Gemini-3-Flash-Preview and Qwen3-30B-A3B-Instruct-2507. Compare FullText, LightMem, MemOS, SimpleMem, EverMemOS and no history. GPT-5.2 is primary judge; Claude-Sonnet-4.6 is the alternative. Numeric default decoding values, embeddings and adapter retrieval budgets are unspecified. Prompts score dimensions 0–5; Safety and 24-game variants list two dimensions rather than the usual four.
+<!-- EVIDENCE:setup:END -->
 
-## Next discriminating validation
+<!-- EVIDENCE:result-1:START -->
+## Table 1, Gemini-3-Flash-Preview selected rows
 
-The largest missing piece is the real prevalence of harmful reuse in natural workflows and whether agents can infer applicability boundaries autonomously in open environments. A high-value next benchmark would mine natural context shifts from coding, data-agent, or personal-assistant trajectories and compare explicit gating, temporal/version metadata, and pure LLM judgment to see whether gains persist beyond manually planted traps.
+Paper percentage-scaled quality scores, not binary success. Fixed Gemini answerer; Average numerically matches four-scenario equal weighting, not pooled 1050-case accuracy. Memory budgets are not explicitly matched.
 
-<!-- RESEARCH-DECISION:START -->
+350/350/150/200 instances per displayed scenario; 1050 total
 
-## Research decision card
+| Strategy | Task Boundary | Cognitive Bias | Trauma | Safety | Average |
+|---|---|---|---|---|---|
+| wo/Mem | 87.08 | 70.95 | 86.73 | 95.9 | 85.16 |
+| FullText | 47.01 | 44.36 | 69.43 | 81.9 | 60.68 |
+| EverMemOS | 74.7 | 54.23 | 86.07 | 69.7 | 71.17 |
 
-### When to use it
+Locator: Table 1, Gemini-3-Flash-Preview selected rows · [Source](https://arxiv.org/html/2608.20202v1)
+<!-- EVIDENCE:result-1:END -->
 
-Use MemTrapBench to study when seemingly relevant memory should not be used. It challenges the assumption that faithful storage and retrieval are always beneficial. Constructed traps establish a possible failure mode, not its frequency in natural workloads.
+<!-- EVIDENCE:result-2:START -->
+## Table 3, TaskBoundary dedicated diagnostic
 
-### What a concrete task looks like
+0–100 scores; exact subset count/model label not explicit in this table, so not a fully specified main-board configuration. Do not pool with Table 1.
 
-Illustrative task: an earlier task establishes a solving habit or belief, while a similar-sounding new task changes the conditions. Reusing the old lesson can perform worse than no memory. The failure concerns applicability rather than retention.
+Dedicated TaskBoundary subset; exact sample count not reported
 
-### Most discriminating experiment
+| History condition | Correctness score | Composite score |
+|---|---|---|
+| No history | 96.87 | 92.29 |
+| Related history, trap removed | 97.7 | 94.39 |
+| Trap-inducing history | 45.33 | 31.05 |
 
-Compare no memory, applicable relevant memory, and similar but inapplicable memory for the same current task with a fixed context budget. Report both positive and negative transfer rather than only rejection. Always disabling memory does not solve selective use.
+Locator: Table 3, TaskBoundary dedicated diagnostic · [Source](https://arxiv.org/html/2608.20202v1)
+<!-- EVIDENCE:result-2:END -->
 
-### Pair with
+<!-- EVIDENCE:result-3:START -->
+## §3.6/Figure 4, explicit AdaptiveMem gains
 
-[locomo-plus](locomo-plus.en.md) · [statemembench](statemembench.en.md)
+Absolute change from adding AdaptiveMem to the same framework, not gain over no-memory or a result on all 1050 cases.
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+200 randomly sampled MemTrapBench instances; separate 200 LongMemEval samples for utility checks
 
-<!-- RESEARCH-DECISION:END -->
+| Memory strategy | Gemini gain (points) | Qwen gain (points) |
+|---|---|---|
+| FullText | 11.8 | 4.2 |
+| LightMem | 14.9 | 2.5 |
+| EverMemOS | 11.3 | 2.6 |
 
-## Genealogy
+Locator: §3.6/Figure 4, explicit AdaptiveMem gains · [Source](https://arxiv.org/html/2608.20202v1)
+<!-- EVIDENCE:result-3:END -->
 
-`map_delta=early_signal`. Together with staleness/update benchmarks, it supports a **memory validity before use** direction, but the measured object is different: staleness asks which version is currently valid, while MemTrapBench asks whether a true memory is applicable to the current decision at all. One work is still insufficient to rewrite the durable Benchmark Map.
+<!-- EVIDENCE:result-4:START -->
+## Table 5, dedicated subset judge sensitivity
 
-Primary: https://arxiv.org/abs/2608.20202
+0–100 scale, SD in points; judges agree directionally but differ in absolute score, without a human-judge comparison.
+
+Three independently generated responses/settings on dedicated subset; sample count not stated
+
+| Judge | No-memory composite | Memory composite | Memory SD |
+|---|---|---|---|
+| GPT-5.2 | 92.29 | 31.05 | 5.68 |
+| Claude-Sonnet-4.6 | 95.57 | 40.07 | 2.69 |
+
+Locator: Table 5, dedicated subset judge sensitivity · [Source](https://arxiv.org/html/2608.20202v1)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
+
+This designed negative-transfer stress test does not estimate average utility or harm prevalence in ordinary workloads. Overall decline does not imply every scenario declines: Qwen FullText Trauma 90.27 exceeds no-memory 87.17. Existing no-trap controls support a content effect but leave exact length/prompt matching to audit. Alternative-judge directional agreement is not human validation; absolute scores differ. The 24-game variant permits factorial and other higher operations, motivating explicit matched operator rules to separate rule inference from fixation.
+
+Main §3.2 calls LightMem strongest Qwen memory strategy at 70.13 while FullText scores 70.99; this claim holds only among four external frameworks, not all five history strategies. Table 3 Task Boundary no-memory 92.29 differs main Table 1’s 87.08; a dedicated subset, never pool. Exact subset count and model label for Table 3–5 not fully specified. Table 5’s ± values are standard deviations over three independently generated responses, not confidence intervals or human agreement. Table 1 Average matches equal weighting of four scenario scores, not instance-count weighting; precise normalization/heterogeneous rubric aggregation not fully specified. Appendix construction variants request 30–40 or 20–30 turns versus observed 18–40 main summary; use dataset summary rather than asserting every generated item follows one prompt length. Some Case D 24-game histories say no solution without explicit operator scope, while gold allows extra operations. No-memory solvability alone does not completely remove convention ambiguity.
+
+
+
+Next: Match query and context budget across valid memory, irrelevant memory, trap-removed same-topic history and no history. Measure positive and negative transfer. Compare AdaptiveMem with an equal-length generic reminder and unseen memory-dependent tasks; report correctness separately from format/conciseness.
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# GateMem：共享 memory 同时要有用、守权限、能删除
+# GateMem：共享记忆里的权限、效用与删除后泄漏
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-06-17<br>
@@ -6,64 +6,107 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](gatemem.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](gatemem.en.md)
 
-[论文](https://arxiv.org/abs/2606.18829) · [代码](https://github.com/rzhub/GateMem)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-GateMem 测共享 memory agent 能否在保持 utility 的同时，正确执行 **谁可以访问什么、什么必须被忘掉**。它覆盖医疗、办公、教育、家庭等多 principal 场景，通过长 episode、增量 memory injection、隐藏 checkpoint、访问边界和 deletion target 来评估治理能力。
+已阅读全文第1—5节及附录A—E，并用固定v1 PDF核对回答/裁判提示与选定表格。未审计实现或复现实验；未将图形曲线估算为精确数值。
 
-## 相比此前评测多测了什么
+[arXiv2606.18829v1 (2026-06-17)](https://arxiv.org/pdf/2606.18829v1)
 
-多数 memory benchmark 奖励“记得更多”；privacy benchmark 又常只看泄露，不看系统还能不能正常服务。GateMem 把冲突本身变成评测对象：utility、access-control violation 与 deletion leakage 必须一起看。全部存下来不行，什么都不记同样不行。
+页首历史参考按原样保留；本页新读版本和实验条件不能代替原始发布成绩。
+[固定版本 HTML 2606.18829v1](https://arxiv.org/html/2606.18829v1)
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 怎么构造任务、怎么观察记忆
 
-论文发现，没有一种被测方案能同时在 utility、access control 与 active forgetting 上都表现强。long-context baseline 往往治理更稳，但 token cost 高；retrieval / external-memory 方案成本更低，却可能重新暴露无权限或已经请求删除的信息。公开 evaluator 也保留了 utility、privacy leakage、deletion leakage 等独立坐标。
+在多主体共享历史中按时间写入事实、权限变更与删除请求；到隐藏检查点时，给智能体当前已认证请求者、全局访问规则及可见记忆，要求回答、脱敏回答、拒绝或表示无记忆。再继续同一会话，检查有权请求是否答全、越权内容是否泄露，以及删除后是否还能被套取。
 
-## 这个分数能证明什么
+定位比较：与LongMemEval的历史信息问答相比，GateMem新增使用、禁止访问和遗忘三个检查目标：记得正确事实也可能因为不该使用而失败。因此适合补充权限与生命周期测试，不能以问答准确率替代。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-GateMem 能支持特定 principal / policy model 下 **governed memory system** 的系统级判断，但不能直接定位泄漏来自 storage、indexing、retrieval filtering、generation 还是 policy interpretation。因此 aggregate score 必须和三个子轴一起看。
+<!-- EVIDENCE:setup:START -->
+## 实验条件与评分对象
 
-## 公平比较契约
+91个长会话，共2218个检查点：728个效用、727个访问控制、763个遗忘检查。每个会话重置智能体，按时间增量写入。回答温度0.2、最多4096词元；GPT-4o裁判温度0、最多4096词元，嵌入为text-embedding-3-small。Long-Context最近300轮；两种RAG检索20条，策略过滤后可少于20条；A-MEM最终20条，Mem0更新窗口10轮、相似记忆5条；REMem-I最多5步。
+<!-- EVIDENCE:setup:END -->
 
-应固定 principal、policy rule、deletion request、memory history、model、retrieval top-k 与 query set，同时报告 latency/token/storage overhead，因为更严格的治理可能只是靠昂贵的 full-context inspection 实现。隐藏 leak-target annotation 属于 evaluator metadata，不能泄露给 agent。
+<!-- EVIDENCE:result-1:START -->
+## 医疗场景：少泄漏与多回答之间的取舍
 
-## 还没有测什么
+同一领域和骨干；采用附录D的内容判定，不额外按动作错误扣分。MGS=100×(U/100)×(1−A/100)×(1−F/100)。
 
-真实企业策略还包括嵌套 group、delegated authority、purpose limitation、retention schedule、审计和动态 policy change；cryptographic deletion 与物理数据擦除也不是语言层 benchmark 能验证的。
+医疗场景210个效用、192个访问控制、177个遗忘检查点。
 
-## 下一步最有判别力的验证
+| 系统 | 效用U↑（%） | 越权泄漏A↓（%） | 删除后泄漏F↓（%） | MGS↑（%） |
+|---|---|---|---|---|
+| Long-Context | 64.8 | 24.0 | 7.3 | 45.6 |
+| RAG-Naive | 46.7 | 58.9 | 24.9 | 14.4 |
+| RAG-Policy | 28.1 | 17.2 | 7.3 | 21.6 |
 
-在同一批任务上分别把 policy enforcement 放到 write、index、retrieval、generation 四个阶段。真正的系统问题是：把权限/删除约束放在哪里，才能在不付出 full-context 成本的情况下显著减少 violation。
+定位：表3：医疗领域，GPT-4o-mini · [原文](https://arxiv.org/pdf/2606.18829v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 办公场景：结果会随骨干和领域改变
 
-## 研究决策卡
+同一领域和骨干；采用附录D的内容判定，不额外按动作错误扣分。MGS=100×(U/100)×(1−A/100)×(1−F/100)。
 
-### 什么时候值得用
+办公场景154个效用、171个访问控制、222个遗忘检查点。
 
-适合研究共享记忆的可用性、访问边界与删除行为。重点不是把所有敏感信息都藏起来，而是在合法用户仍能完成任务的同时限制越权访问；行为上的不再提及也不能替代物理删除证明。
+| 系统 | 效用U↑（%） | 越权泄漏A↓（%） | 删除后泄漏F↓（%） | MGS↑（%） |
+|---|---|---|---|---|
+| Long-Context | 89.6 | 33.9 | 4.5 | 56.5 |
+| RAG-Naive | 74 | 29.8 | 9.5 | 47 |
+| RAG-Policy | 76 | 19.9 | 6.3 | 57 |
 
-### 一个具体任务长什么样
+定位：表3：办公领域，GPT-5.4 · [原文](https://arxiv.org/pdf/2606.18829v1)
+<!-- EVIDENCE:result-2:END -->
 
-示意任务：多个参与者贡献了不同权限的信息，随后其中一人请求只对另一角色可见的内容，之后又发生删除请求。系统需要在身份、目的和时间变化下选择性使用记忆，而不是仅识别敏感关键词。
+<!-- EVIDENCE:result-3:START -->
+## 词元减少，不代表响应更快
 
-### 最有判别力的实验
+端到端平均耗时包括写入；词元数不是货币、存储空间或总计算量，运行并发通常4–8。
 
-将授权查询、未授权查询和删除后的再次查询配成组，固定底层存储与检索器，比较策略实现。报告合法效用、越权披露和删除后恢复三项结果；部署级结论还要检查身份验证与存储删除链路。
+21个医疗会话，共579个检查点。
 
-### 建议搭配
+| 系统 | 秒/检查点↓ | 千LLM词元/检查点↓ |
+|---|---|---|
+| Long-Context | 4.22 | 4.04 |
+| RAG-Policy | 11.1 | 1.15 |
+| A-MEM | 41.76 | 1.37 |
+| Mem0 | 85.9 | 1.27 |
 
-[sp-mem](sp-mem.md) · [utility-under-attack](utility-under-attack.md)
+定位：表4：医疗领域的成本比较 · [原文](https://arxiv.org/pdf/2606.18829v1)
+<!-- EVIDENCE:result-3:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:result-4:START -->
+## 裁判与人工有多一致
 
-<!-- RESEARCH-DECISION:END -->
+从一次含579个输出的运行中分层抽289项，每项至少两人标注并裁决分歧；这是裁判核验，不是系统成功率。
 
-## 演化位置
+一次运行中的289个抽样输出，三个分项的样本数见表。
 
-`remember more → remember selectively → governed multi-principal memory`
+| 核验项目 | 样本数 | 裁判与人工一致率（%） |
+|---|---|---|
+| 效用正确性 | 105 | 99.0 |
+| 越权泄漏 | 96 | 99.0 |
+| 删除后泄漏 | 88 | 97.7 |
 
-它把 privacy 与 forgetting 从附带 caveat 提升成了 memory system 的一等目标。
+定位：表9：人工评分核验 · [原文](https://arxiv.org/pdf/2606.18829v1)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 哪些结论成立，哪些仍待验证
+
+相同骨干下也存在效用、拒答和泄漏的权衡；所选结果不能归因于记忆结构本身，因为输入长度、过滤、索引与调用次数同时变化。MGS将三个比例相乘，并不是全部检查点的简单准确率。人工核验仅覆盖一次运行中抽取的289项，不能证明所有领域和骨干的裁判同样可靠。合成的机构情景不能直接证明真实医疗或法律合规。
+
+v1 HTML正文出现8月24日日期，而固定v1 PDF页眉为6月18日；本页以固定PDF核对的结果为准，不据此推断实验日期。正文公式把动作错误并入失败，附录D及裁判提示则明确把主表的内容泄漏与动作错误分开，二者不能混写。
+
+下一步：先固定骨干、写入流和总预算，对同一检查点同时报告内容泄漏与动作正确率，再分别改变检索深度和访问过滤。另做撤销授权后的同义改写、多轮确认，以及存储层删除审计；与普通长程问答配对，才能同时看到记忆效用和权限代价。
+委托授权、权限变化和身份冒充情境已有覆盖；未验证的是实际身份认证、真实部署和存储层擦除。
+<!-- EVIDENCE:limitations:END -->

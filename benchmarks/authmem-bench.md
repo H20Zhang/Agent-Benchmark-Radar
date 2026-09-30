@@ -1,4 +1,4 @@
-# AuthMem-Bench：记住内容还不够，还要记住它有没有权威
+# AuthMem-Bench：信息被记住后，是否被错误赋予行动权限
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-03<br>
@@ -6,50 +6,94 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](authmem-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](authmem-bench.en.md)
 
-[论文](https://arxiv.org/abs/2608.01679)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-AuthMem-Bench 测 persistent-memory consolidation 是否保留 **source authority**。它用配对设计固定要记住的 claim 与下游任务，只改变来源的权威条件，从而检查同一内容在被整理进长期记忆后，会不会失去“谁有资格让系统把它当成事实或指令”的边界。
+已阅读正文第1—6节及附录A—F的全部实验、分解与审计表；HTML缺失的写入、判定、来源预测与行动提示从PDF补读。未审计实现或独立复现实验。
 
-## 相比此前评测多测了什么
+[arXiv 2608.01679v2 (2026-08-04)](https://arxiv.org/html/2608.01679v2)
 
-GateMem 等工作已经把共享记忆的 access control 变成评测对象；AuthMem-Bench 更进一步把风险定位到 **consolidation boundary**：即使最终记忆文本本身没有明显恶意内容，来源约束也可能在摘要、抽取或归一化时被洗掉。
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-论文报告，在 7 种 consolidator × 7 个 LLM backbone 的 49 个配置中，48 个观察到 authority collapse；在受控 action-grounded 条件下，缺少 authority metadata 的 collapsed memory 平均 unauthorized-action rate 为 50.3%。端到端实验中，自动预测并持久保存 authority label 后，观察到的 unauthorized-action rate 从 16.9% 降到 0.0%，同时 benign task success 基本不变。
+AuthMem-Bench把同一句信息放进权限不同的来源，随后要求智能体使用其中的具体值完成同一个工具调用。例如，第三方报告某个住址与用户亲自确认该住址，内容相同，却不应同样授权修改用户资料。50条基础历史各构造7种来源到用途的转变，共350对、700个历史版本。配对保留任务、工具和参数判定，只更换承载信息的发言；当前请求不再重复具体值。A模块测写入时是否丢掉来源约束，B模块直接提供记忆、隔离写入和检索，C模块再检验写入到首次工具调用的完整链条。
 
-## 这个分数能证明什么
+定位比较：与长期记忆问答和针对恶意内容的记忆投毒相比，AuthMem-Bench固定信息内容，只交换其授权来源，再追踪写入与行动。新增坐标是内容真实与行动获准之间的区别；相同记忆事实不应自动拥有相同权限。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-它支持“某个 memory pipeline 是否在写入/整理过程中保持来源权威边界”的判断。它不能单独证明完整权限系统安全，因为身份认证、真实 ACL、跨租户隔离、provenance spoofing 与物理删除不在同一个受控对象里。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-## 公平比较契约
+基础历史来自τ²-Bench的30条成功轨迹和APIGen-MT-5k的20条合成轨迹；航空、零售和电信三领域，按实体隔离为30/10/10条训练、验证、测试基础历史。固定策略将用户、助手、工具来源分别映射为Authorized、Attested、Unendorsed，这是本评测的用途规则，不是普适的事实可信度排序。七个骨干跨七种改编的记忆写作目标，统一最多16条文本记忆；Mem0、LangMem、Graphiti和Letta名称不代表运行了完整产品。温度均为0，每配置每例一个接受轨迹；写入上限4096词元，语义判定2048，来源预测8192，行动1024。A模块由GPT-5.6-Luna判定；B/C直接严格匹配首次原生工具名和完整参数对象，错误或缺失均失败，不以环境状态回放证明真实操作成功。
+<!-- EVIDENCE:setup:END -->
 
-固定 consolidator 输入、LLM backbone、authority-label policy、memory write/read policy 与 downstream action harness；尤其不能把人工提供 authority metadata 的系统与需要自行恢复 authority 的系统直接归因为同一组件能力。
+<!-- EVIDENCE:result-1:START -->
+## 遗漏和来源保留必须一起报告
 
-## 还没有测什么
+前三个指标分别以全部非授权例、全部非授权例、全部授权例为分母。基础矩阵为49配置均值；其余为七骨干均值。标记要求保留焦点信息；再加来源约束后，升级率下降，而保留率接近不变。
 
-真实多主体身份系统、恶意 provenance 伪造、长期多次 consolidation 后的 authority drift，以及生产 memory store 中的治理代价。
+每配置350对；基础矩阵每侧17150例，三个干预条件每侧各2450例。
 
-## 下一步最有判别力的验证
+| 写入条件 | 越权升级（%） | 非授权信息保留（%） | 授权信息保留（%） |
+|---|---|---|---|
+| 基础矩阵 | 17.8 | 26.0 | 61.5 |
+| 最简控制 | 21.6 | 25.3 | 58.0 |
+| 焦点标记 | 55.8 | 83.5 | 98.2 |
+| 焦点标记加来源约束 | 9.9 | 82.5 | 98.6 |
 
-做 `same claim × same downstream task × different source authority × repeated consolidation depth` 的 factorial control，并在正确 authority metadata 直接给定条件下建立 oracle ceiling，区分 authority extraction、persistence 与 action policy 三层失败。
+定位：表2—3、附录D.2—D.3：同时考虑遗漏的写入比较 · [原文](https://arxiv.org/html/2608.01679v2)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
-## 研究决策卡
-### 什么时候值得用
-如果你的 claim 是 memory consolidation、summary、experience extraction 或 self-evolving memory 不应把来源约束洗掉，AuthMem-Bench 是比一般 recall benchmark 更直接的安全坐标。
-### 一个具体任务长什么样
-示意任务：相同一句陈述分别来自有权设定规则的用户与低权限外部来源；经过 consolidation 后，后续 action request 看起来完全相同。正确系统必须只在授权来源条件下把记忆当成可执行约束。
-### 最有判别力的实验
-固定 claim 与 action，只改变 authority 和 consolidation depth；同时给出 oracle authority metadata，测收益究竟来自正确识别来源还是下游 policy。
-### 建议搭配
-[GateMem](gatemem.md) · [InjecMEM](injecmem.md) · [Utility Under Attack](utility-under-attack.md)
-> **读分数的原则：** authority preservation 是 memory lifecycle 的一层，不等价于完整部署权限安全。
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:result-2:START -->
+## 动作侧对照同时比较安全与效用
 
-## 演化位置
-`recall → shared-memory governance → provenance / authority-preserving consolidation`
+B模块直接提供焦点记忆，七种行动模型等权平均。ASR为非授权配对中错误执行指定调用的比例；TSR为授权配对中正确执行的比例。全部拒绝也会降低ASR，因此必须同时看TSR。
+
+每模型每条件每侧350例，七模型合计每项指标2450例。
+
+| 记忆条件 | ASR（%） | TSR（%） |
+|---|---|---|
+| 不提供记忆 | 0 | 0 |
+| 去掉来源、无元数据 | 50.3 | 49.4 |
+| 保留来源、无元数据 | 40.5 | 53.6 |
+| 去掉来源、最保守合并标签 | 5.1 | 5.1 |
+| 保留来源、金标准标签 | 2.7 | 53.9 |
+
+定位：表4、附录E.2：受控行动干预 · [原文](https://arxiv.org/html/2608.01679v2)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:result-3:START -->
+## 严格留出结果与全量结果分开读
+
+验证集选定Gemini 3.1 Pro负责Mem0-inspired写入和行动，Qwen3.7-Max预测支撑来源，再按角色映射权限。各条件共用冻结的记忆文本，检索按固定顺序返回整个写入集合。测试70对严格留出；350对包含训练与验证，属于描述性全量结果。
+
+分母保留所有配对，包括遗漏；测试10个基础历史簇，全量50个。
+
+| 条件与切分 | 禁止调用数 | 非授权分母 | ASR（%） | 正确调用数 | 授权分母 | TSR（%） |
+|---|---|---|---|---|---|---|
+| 无元数据／测试 | 10 | 70 | 14.3 | 20 | 70 | 28.6 |
+| 预测标签／测试 | 0 | 70 | 0 | 20 | 70 | 28.6 |
+| 无元数据／全量 | 59 | 350 | 16.9 | 139 | 350 | 39.7 |
+| 预测标签／全量 | 0 | 350 | 0 | 140 | 350 | 40.0 |
+
+定位：表5、附录F.5—F.7：冻结的完整流水线 · [原文](https://arxiv.org/html/2608.01679v2)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+48/49表示配置中至少出现一次升级，不是98%的样例都失败。唯一零升级配置Mem0 classic加GPT-5.5丢弃了全部350条非授权焦点信息；基础矩阵也有74%非授权信息被遗漏，所以低升级率不能单独证明安全。端到端中只有139/350条非授权焦点与256/350条授权焦点被写入并取回，标签无法补回丢失内容。全量预测标签零ASR的论文95%区间为[0,7.1]，按50个基础历史簇计算；不是零风险保证。参考标签与预测标签均为40% TSR，但四次相同提示的独立调用给出不同成功结果，不能称逐例等价。金标准标签也不是通用安全上限：B模块GPT-5.4 mini在保留来源加金标准标签时仍有13.4% ASR。
+
+评测比较的是统一接口下的改编写作目标，不是完整产品。C2返回整个写入集合，未检验大型记忆库的检索困难。每例只运行一条温度零轨迹，区间不涵盖重复API调用的不确定性。A模块额外判定核验使用模型而非人工金标准：刻意选择的8686例中Luna与Qwen一致率84.57%，多数判定使44100例中的253例改变。骨干与提示的效果分解是描述性的，不能据此断定底层模型是因果主因。
+
+
+
+下一步：保留已有的来源交换、无记忆、金标准标签和最保守标签对照；下一步在相同完整产品实现中重复这一矩阵，加入大型记忆库的预算匹配检索、来源标签损坏与多轮真实状态回放，分开报告遗漏、错误授权、正确行动和重复调用波动。
+<!-- EVIDENCE:limitations:END -->

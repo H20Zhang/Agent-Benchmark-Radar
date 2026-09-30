@@ -6,50 +6,77 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](ragtruth.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](ragtruth.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2401.00396)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-RAGTruth contains nearly 18K naturally generated RAG responses with manual hallucination annotations at case and word level, including severity. The target is localized grounding failure relative to retrieved evidence rather than a single faithful/unfaithful label for an entire answer.
+main sections 1–7; Appendices A–C: examples, generation/detection prompts; Tables 1–10; Tables 5–6 visually verified
 
-## Compared with what
+[arXiv v1 — v1, PDF header 2023-12-31](https://arxiv.org/pdf/2401.00396v1)
+<!-- EVIDENCE:reading:END -->
 
-Earlier hallucination evaluation often depended on automatic judges or coarse answer labels. Fine-grained human spans make it possible to locate exactly where generation exceeds the evidence and to compare failure patterns across domains and source LLMs.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Decisive evidence and score boundary
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-The dataset shows that an apparently correct long RAG answer can still contain local unsupported spans with different severity. Detector performance supports hallucination detection on the annotated distribution. It does not measure adaptive retrieval policy, and a lower hallucination rate cannot automatically be credited to the retriever because source LLM and retrieval setup are load-bearing confounders.
+Compared with RGB’s controlled stress tests, RAGTruth locates unsupported spans in actual model responses using human annotation. It shifts from whole-question correctness to hallucination location and detector quality; response selection remains distinct from active retrieval repair.
+<!-- EVIDENCE:placement:END -->
 
-## Fair comparison conditions
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-Align the response set, annotation policy, severity definition, and detector input. Changing the source generator or retrieval pipeline changes the hallucination distribution and belongs in a separate track.
+2973 inputs generate 17838 responses from six models. Humans annotate evident/subtle conflict or unsupported additions. Incorrect refusals and null-as-false cases receive separate controls.
+<!-- EVIDENCE:method:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-The next step is closed-loop correction: once an unsupported claim is detected, can an agent find missing evidence, revise the answer, and retain a citation-level audit trace?
+The test contains 450 source instances, 150 per task, with six model responses per instance rather than only 450 responses. The detector uses Llama2-13B LoRA with learning rate 3e-4, three epochs and four A100 GPUs. Response F1 detects hallucination presence; span F1 measures character overlap, not token or exact-span match. The SelfCheck comparison uses responses from five other models rather than repeated samples from the same model.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Detection versus localization
 
-## Research decision card
+The test has 450 source instances, 150 per task, with multiple model responses per instance; F1 is in percent, at response level for hallucination presence and span level for character overlap.
 
-### When to use it
+| Method | Response_F1 | Char_span_F1 |
+|---|---|---|
+| GPT-4-turbo prompt | 68.3 | 32.7 |
+| Finetuned Llama2-13B | 80.7 | 54.8 |
 
-Use RAGTruth for localized hallucination detection and faithfulness assessment. Fine-grained labels expose error locations, but detecting an error does not establish that the original system can prevent or repair it. Keep detection and generation claims distinct.
+Source: Tables 5–6 · [Paper](https://arxiv.org/pdf/2401.00396v1)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:result-2:START -->
+## Selection reduces hallucination with coverage loss
 
-Illustrative task: most of an answer is supported, but a sentence or a few words overstate the evidence. A superficially correct answer still needs localized annotation; a single whole-answer truth label loses that diagnostic information.
+Paired Llama 2-7B and Mistral 7B candidates for 450 source instances; returned count is in responses, and hallucination rate is a percentage of responses actually returned in each row.
 
-### Most discriminating experiment
+| Selection | Returned_count | Hallucination_rate |
+|---|---|---|
+| Random | 450 | 55.1 |
+| Fewest detected spans | 450 | 43.1 |
+| No detected spans | 326 | 23.9 |
 
-Test detection on held-out generators and domains, separating span localization from response-level classification. Use detections for repair and evaluate both support and completeness afterward, so deleting substantial content cannot masquerade as improved faithfulness.
+Source: Table 7, section 6.3 · [Paper](https://arxiv.org/pdf/2401.00396v1)
+<!-- EVIDENCE:result-2:END -->
 
-### Pair with
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-[ragbench](ragbench.en.md) · [claimprobe](claimprobe.en.md)
+The paper tests candidate selection, not active search/revision. No-detected-span selection returns 326/450; report coverage alongside hallucination.
+<!-- EVIDENCE:interpretation:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-<!-- RESEARCH-DECISION:END -->
+v1 lacks sufficient quantified annotation agreement; tasks/six generators bound distribution. Next: held-out generators/domains and completeness-aware repair.
+
+Table 6 fine-tuned span F1=54.8; §6.2 prose says 48.4. Preserve table attribution. Table 7 group 2 random 10.4→fewest 5.3 is labelled 41.0% reduction; rounded cells imply~49%, unresolved.
+<!-- EVIDENCE:limitations:END -->
+
+Related benchmarks: [ragbench](ragbench.en.md) · [claimprobe](claimprobe.en.md)

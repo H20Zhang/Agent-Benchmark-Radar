@@ -1,4 +1,4 @@
-# LoCoMo: making very-long-term conversational memory measurable
+# LoCoMo: dialogue QA, event summaries and memory representation
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2024-02-27 · paper v1<br>
@@ -7,56 +7,92 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](locomo.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](locomo.md) | **English**
 
-[Paper](https://aclanthology.org/2024.acl-long.747/) · [Code](https://github.com/snap-research/locomo)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-LoCoMo moves memory evaluation from short dialogue context to genuinely multi-session histories: conversations average roughly 600 turns and 16K tokens and can span 32 sessions. It evaluates QA, event summarization, and multimodal dialogue generation, so the target includes long-range temporal and causal reasoning rather than only retrieving one remembered sentence.
+Substantive sections 1–9 and Appendices A–D read in PDF text: generation, three tasks, setup, main results, limitations/impacts, prompts/examples, dataset and implementation, additional results. Table 2/3/4/5/7 values read from PDF extraction. Figure-only plot coordinates not digitized. February v1 result tables additionally checked for historical-reference reconciliation.
 
-## Compared with what
+[ACL 2024 final proceedings](https://aclanthology.org/2024.acl-long.747.pdf)
 
-Many earlier long-context tests were closer to needle retrieval or single-document understanding. LoCoMo instead accumulates information through coherent interaction and asks models to use that history across multiple downstream tasks. It therefore became a foundation for later benchmarks such as LongMemEval and MemoryAgentBench. The benchmark establishes long-term history as a separate evaluation coordinate; it does not validate one particular memory architecture.
+[Supplementary source 2402.17753v1, inspected 2026-09-30](https://arxiv.org/html/2402.17753v1)
 
-## Decisive evidence and score boundary
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-The ACL paper reports that long-context LLMs and RAG improve performance, yet models still substantially trail humans on lengthy conversations and long-range temporal/causal dynamics. This supports the measurement claim that simply enlarging a context window does not solve long-term memory. It does not identify whether a gain came from writing, indexing, retrieval, the answerer, or the judge. The Radar therefore keeps third-party LoCoMo scores with incompatible question sets or judges out of one artificial leaderboard.
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-## Fair comparison conditions
+Two persona-conditioned agents converse along dated causal event graphs; humans repair inconsistent dialogue, images and event grounding. Evaluate historical QA, event-summary factual coverage and multimodal continuation separately. Observations convert utterances into speaker-linked factual statements with source turn IDs.
 
-Comparisons must align the LoCoMo question/version, answerer or reader, retrieval budget, visible history, and the evaluator used for QA or summarization. LLM-as-judge choices and filtering can materially shift absolute numbers, so one Overall score is not sufficient evidence for a memory-component claim.
+Editorial placement: Relative to shorter multi-session dialogue evaluations, LoCoMo extends persistent personas into longer conversations with image sharing and evaluates QA, event summaries and dialogue generation. Later work reusing only QA does not cover the full original task suite. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-LoCoMo mostly asks what happened in the past. The next step is to test whether remembered experience changes future actions and planning, while separating update, forgetting, conflict handling, and maintenance cost from end-to-end QA accuracy.
+Ten English test conversations average 588.2 turns, 27.2 sessions and 16,618.1 tokens. There are 1,986 QA items: 841 single-hop, 282 multi-hop, 321 temporal, 96 open-domain and 446 adversarial. Images become BLIP-2 captions for QA/summary. DRAGON retrieves dialogues, observations or summaries; k counts units, not matched tokens. Evaluation temperature 0/top-p 1, one inference run per model.
+<!-- EVIDENCE:setup:END -->
 
-## Follow-up comparisons: query form, memory use, and action outcomes
+<!-- EVIDENCE:result-1:START -->
+## Larger context can improve recall while weakening abstention
 
-[LoCoMo-Conv](locomo-conv.en.md) changes conversational query form while retaining history and evidence. [MemCalib](memcalib.en.md) tests how strongly supplied propositions should influence a response. [DolphinBench](dolphinbench.en.md) tests actions, cost, and latency with frozen memory and per-test app resets. These diagnose retrieval input, context use, and action outcomes respectively; their aggregate scores are not one interchangeable ranking.
+Normalized answer partial-match F1,0–100. Older dialogue truncated for constrained windows; human and model access conditions are not equivalent compute budgets.
 
-On 2026-09-23 these instruments were accepted after review of their official protocols or detailed dataset descriptions. Their notes specify code and data availability. Acceptance does not claim independent reproduction or mislabel a project-description review as a paper full-text audit.
+1,986 QA items; temporal 321/adversarial 446. These are F1 scores, not counts of correct answers. Overall aggregation is reproduced as reported, not reconstructed from category means.
 
-<!-- RESEARCH-DECISION:START -->
+| System | Context | Overall F1 | Temporal F1 | Adversarial F1 |
+|---|---|---|---|---|
+| gpt-3.5-turbo / 4K | 4K | 23.9 | 15.6 | 34.8 |
+| gpt-3.5-turbo / 16K | 16K | 35.9 | 24.3 | 14.8 |
+| gpt-4-turbo / 128K | 128K | 51.6 | 51.4 | 15.7 |
+| Human | — | 87.9 | 92.6 | 89.4 |
 
-## Research decision card
+Locator: ACL final Table 2 · [Source](https://aclanthology.org/2024.acl-long.747.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-### When to use it
+<!-- EVIDENCE:result-2:START -->
+## Evidence representation changes retrieval and answer quality
 
-Use LoCoMo as an entry point for long-term conversational memory, not as sole evidence that an agent improves through experience. Separate accessibility of historical information from its effect on future behavior; this benchmark primarily informs the former.
+Answer F1 / annotated-evidence recall, 0–100. DRAGON retriever and common reader; representation and context length differ.
 
-### What a concrete task looks like
+Same QA benchmark; summary recall counts relevant sessions, not necessarily preservation of their answer facts.
 
-Illustrative task: an early conversation describes a move, a later session updates work plans, and the current question asks how the events relate in time. The system must retain the person, chronology, and event links; retrieving a sentence with matching keywords may still be insufficient.
+| System | k | Overall F1 | Overall R@k |
+|---|---|---|---|
+| gpt-3.5-turbo + Dialog RAG / k=5 | 5 | 38.8 | 56.7 |
+| gpt-3.5-turbo + Observation RAG / k=5 | 5 | 43.3 | 56.2 |
+| gpt-3.5-turbo + Observation RAG / k=25 | 25 | 42.1 | 67.5 |
+| gpt-3.5-turbo + Summary RAG / k=5 | 5 | 30.9 | 72.1 |
 
-### Most discriminating experiment
+Locator: ACL final Table 3 · [Source](https://aclanthology.org/2024.acl-long.747.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-Hold the answerer and question set fixed; compare full history, budget-matched retrieved snippets, and supplied supporting evidence. Report both evidence recall and answer quality. A retrieval-to-supplied-evidence gap motivates work on memory access; failure in both conditions instead directs attention to reading and temporal reasoning.
+<!-- EVIDENCE:result-3:START -->
+## Event summaries use a different metric
 
-### Pair with
+Adapted atomic-fact summary scores, 0–100. Incremental event summarization; no RAG condition; model and window both differ.
 
-[longmemeval](longmemeval.en.md) · [memoryarena](memoryarena.en.md)
+Ten conversations, 35.8 ground-truth events/conversation on average; summary metric differs from QA F1.
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+| System | Context | FactScore precision | FactScore recall | FactScore F1 |
+|---|---|---|---|---|
+| Llama-3-70B-Instruct | 4K | 40.3 | 35.6 | 37.8 |
+| gpt-4-turbo | 128K | 51.9 | 46.5 | 48.9 |
 
-<!-- RESEARCH-DECISION:END -->
+Locator: ACL final Table 4 · [Source](https://aclanthology.org/2024.acl-long.747.pdf)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
+
+Evidence representation changes answer quality: observations improve F1 despite similar top-5 evidence recall, and higher recall need not improve answers. The ten synthetic, human-edited dialogues, single runs, lexical scoring and caption substitution limit external validity; no architecture-only effect or deployment gain is established.
+
+February v1 and ACL final contain different models/results; historical 41.4/45.9 confirmed in v1 Tables 3/4. ACL Table 3 extraction has an observation row k=5 after k=25; omitted that ambiguous row from selected facts. ACL prose contains inconsistent Gemini naming versus Table 2; use the printed Table 2 model labels. Do not infer normalized lexical F1 as binary accuracy.
+
+Next: Retain original QA F1 alongside any later judge. Fix reader, test items and token budget; compare raw turns, observations, full history and supplied evidence. Pair with LongMemEval for temporal updates and MemoryArena for whether recovered history changes action success.
+QA and summaries use 10 human-edited dialogues; MiniGPT-5 continuation training uses 50 additional unfiltered dialogues. The ACL final RAG reader is labeled gpt-3.5-turbo, distinct from the original 16K label.
+<!-- EVIDENCE:limitations:END -->

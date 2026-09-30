@@ -1,4 +1,4 @@
-# RGB：把 RAG 的“会不会用 context”拆成四种 failure modes
+# RGB：分别检验噪声、拒答、信息整合与反事实
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2023-09<br>
@@ -6,50 +6,69 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](rgb.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](rgb.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2309.01431)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-RGB 用中英文四组 diagnostic testbeds 分别检查 noise robustness、negative rejection、information integration 与 counterfactual robustness。它不问 retriever 找得多准，而是把 retrieved context 已经给到 generator 后，模型是否能正确使用、拒绝或整合这些证据。
+全部正文、构造、评测、错误分析和表1–7；此版本没有独立附录。
 
-## 相比什么前进了
+[v1,2023-09-04](https://arxiv.org/pdf/2309.01431v1)
+<!-- EVIDENCE:reading:END -->
 
-普通 RAG benchmark 常把 retrieval 与 generation 压成一个 final-answer score。RGB 把 generator 对 context 的处理能力独立出来，使“检索到了但没用对”“没有答案却硬答”“多证据无法整合”等失败可以被区分。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 决定性证据与分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-论文显示当 context 含噪、缺证据或存在 counterfactual information 时，主流 LLM 的行为明显不稳定。这个结论支持 RAG 需要 context-use diagnostics；它不能说明某个 retriever 更好，因为 evaluation 直接控制了 supplied context。不同 prompt 和 generator 的分数也不能归因给 retrieval。
+相较主要测检索排序的基准，RGB通过受控上下文替换直接诊断生成器怎样使用证据。它为后来的拒答、冲突与整合评测提供分解坐标，但没有测真实搜索过程。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-必须锁定 generator、prompt、constructed negatives/counterfactuals 与每个 diagnostic split。四种能力不应随意压成一个 SOTA 总分，否则会掩盖能力间的 trade-off。
+新闻问答经人工检查后检索Google前10页，切成最多300token片段并稠密重排。控制每题五文档的噪声比例、无答案、跨文档整合和人工反事实；这测生成器的证据使用，不是检索器排序。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-下一步要把这些 context-use failures 接回真实 retrieval loop：观察 agent 是否能发现证据冲突、主动补搜并在工具预算内恢复，而不只是被动读取固定 context。
+基准问答每语言 300 题；信息整合与反事实各每语言 100 题。ChatGPT 指 gpt-3.5-turbo，精确日期版本未注明。答案准确率使用答案子串匹配，不能保证完整回答无矛盾。Rej 检查指定拒答字符串，Rej* 用 ChatGPT 判断语义拒答。反事实实验仅测试闭卷准确率超过 70% 的模型，并明确提示其警惕错误文档。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## ChatGPT证据使用诊断
 
-## 研究决策卡
+ChatGPT，百分数；噪声与拒答每种语言 300 题，整合与反事实每种语言 100 题；答案按子串匹配，Rej 按指定字符串、Rej* 按语义判定。
 
-### 什么时候值得用
+| 指标／条件 | 英语 | 中文 |
+|---|---|---|
+| 噪声比例 0 的准确率 | 96.33 | 95.67 |
+| 噪声比例 0.8 的准确率 | 76.0 | 70.67 |
+| 信息整合，噪声比例 0 的准确率 | 55 | 63 |
+| 信息整合，噪声比例 0.4 的准确率 | 34 | 47 |
+| 纯噪声拒答率 Rej | 24.67 | 5.33 |
+| 纯噪声语义拒答率 Rej* | 45 | 43.33 |
+| 反事实测试的闭卷准确率 | 89 | 91 |
+| 提供反事实文档时的准确率 | 9 | 17 |
 
-适合隔离生成器如何使用给定证据，尤其是噪声、反事实与不可回答情形。它不是检索器评测；如果把更好的上下文直接交给模型，所得提升不能用来证明搜索策略更好。
+事实来源：表 1,3,5,7 · [论文](https://arxiv.org/pdf/2309.01431v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-示意任务：同一问题搭配正确、混有干扰、缺乏答案或与参数知识冲突的上下文，要求模型据证据回答。系统需要识别哪些材料值得采用，以及什么时候应该拒绝给出未经支持的答案。
+低拒答率既含证据判断失败，也含未按指定句式输出；应并列Rej与Rej*。反事实题筛选为模型已知知识，不能直接外推新知识场景。
+<!-- EVIDENCE:interpretation:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-对同一生成器改变上下文条件，按四类能力分别报告，并把固定上下文诊断与真实检索端到端测试分开。尤其检查模型是否过度相信检索文本或完全忽略文本，避免只提高一个方向的鲁棒性。
+提示明确警告错误，字符串命中仍可能夹带矛盾内容。下一步在真实检索轨迹中分别审核答案、弃答和证据纠错。
 
-### 建议搭配
+反事实纠错率的分母没有足够明确，本文不自行补数；所选表格数字未发现实质冲突。
+<!-- EVIDENCE:limitations:END -->
 
-[ragtruth](ragtruth.md) · [lit-ragbench](lit-ragbench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+相关基准：[ragtruth](ragtruth.md) · [lit-ragbench](lit-ragbench.md)

@@ -1,4 +1,4 @@
-# Mem2ActBench：从记住事实到正确调用工具
+# Mem2ActBench：提供正确工具后，能否从历史填对参数
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-07<br>
@@ -6,64 +6,92 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](mem2actbench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](mem2actbench.en.md)
 
-[论文](https://arxiv.org/abs/2601.19935) · [ACL 2026](https://aclanthology.org/2026.acl-long.370/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-Mem2ActBench 测的是长期 memory 能不能被 **主动转化为 tool use**：agent 不仅要选对工具，还要把过去交互里学到的信息正确落到工具参数里。任务不会直接提示“请回忆某条 memory”，因此 memory relevance 必须由 agent 在行动时自己识别。
+已阅读ACL终版正文第1—6节、局限/伦理及附录A—D，包括算法和提示模板；检查官方仓库README与根目录以核对评估器，看到构造流水线，但未验证评估器实现。未复现实验。
 
-## 相比此前评测多测了什么
+[ACL 2026 会议终稿（2026-07）](https://aclanthology.org/2026.acl-long.370.pdf)
 
-多数 memory benchmark 停在 retrieval 或 answer generation；多数 tool-use benchmark 又把当前调用所需信息直接放在 prompt 里。Mem2ActBench 把二者连接起来：必须先找到此前学到的个人/上下文信息，再把它映射到正确的 action schema。
+[官方来源，2026-09-30 所见内容（可变页面）](https://github.com/Cantaloupe-M/Mem2ActBench)
 
-## 决定性证据
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-数据构造得到 2,029 个多轮 session 和 400 个 memory-dependent tool-use task；人工检查中 91.3% 被确认具有强 memory dependency。论文比较 7 类代表性 memory framework，并发现当前系统在主动利用 memory、尤其是 parameter grounding 上仍明显不足。
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-## 这个分数能证明什么
+合并工具使用对话和闲聊噪声，提取绑定实体的事实，解决局部冲突，再拓扑排序记忆更新。先生成金标准调用，再在最终查询中隐藏来自记忆的参数；词面和模型过滤器排除明显泄漏。
 
-它能比 recall accuracy 更直接地证明 memory 是否具有 operational utility，即 **memory → tool selection / argument grounding** 的整体链路是否有效。但它仍不能把 retrieval 与 reasoning 完全拆开：取对 memory 后也可能填错参数；行动失败也可能来自 planning，而不是存储本身。
+定位比较：与LoCoMo等只要求回答历史事实的任务相比，Mem2ActBench要求将历史信息写进工具参数。主设置已提供正确工具，因此它补充参数落地这一环，不等于工具选择或完整执行成功评测。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-应固定 tool schema、backbone、可用工具集合、session history、retrieval budget 与 action attempt 数，并尽量拆分 tool-selection 与 parameter-grounding 错误。如果某个系统可以额外查看工具文档或多次 retry，它面对的是不同难度的 action problem。
+400个生成任务；评估按原顺序使用429个含证据会话。七种记忆框架分别共用7B/32B/72B的Qwen2.5-Instruct骨干，温度0，检索嵌入为BGE-M3。主表直接提供目标工具。历史链构造使用Qwen3-Next-80B-A3B-Instruct，反向查询由Kimi-K2-Thinking生成。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 主实验比较参数F1，不是执行成功
 
-这些任务围绕 benchmark tool schema 合成，不等价于长期真实账户里的权限、不可逆副作用和 API 演化；它主要测“能否使用已记住的信息”，而不是数月尺度上 memory 是否被正确写入、更新和删除。
+论文报告的参数F1，0–100；不是执行成功率。直接提供正确工具，同列骨干一致；索引和检索实现不同。
 
-## 下一步最有判别力的验证
+400题，历史为429个含所需证据的会话；F1的微/宏汇总实现未在论文中明确。
 
-加入 oracle-retrieval 与 oracle-planning 对照。若 oracle memory 仍无法显著提升 tool success，瓶颈在 action grounding；若大幅补齐差距，则 write/retrieval policy 才是主要研究对象。
+| 系统 | Qwen2.5-7B参数F1 | Qwen2.5-32B参数F1 | Qwen2.5-72B参数F1 |
+|---|---|---|---|
+| A-mem | 30.99 | 33.72 | 35.93 |
+| LTMemory | 26.71 | 33.87 | 35.32 |
+| Mem0 | 14.21 | 24.52 | 28.95 |
 
-<!-- RESEARCH-DECISION:START -->
+定位：ACL终版表3：参数F1 · [原文](https://aclanthology.org/2026.acl-long.370.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-## 研究决策卡
+<!-- EVIDENCE:result-2:START -->
+## 澄清带来更多证据和额外轮次
 
-### 什么时候值得用
+参数F1和一元词重合度，0–100。Qwen2.5-72B-Instruct。澄清条件由理想用户提供历史片段，改变轮次与信息访问，不是直接可比条件或硬上限。
 
-适合研究记忆如何进入工具选择与参数填写，测量位置比普通历史问答更靠近行动。但正确工具调用仍只是行动链的一环；执行后的状态正确性、权限和长期后果需要另外检查。
+独立200题子集。
 
-### 一个具体任务长什么样
+| 策略 | 参数F1 | BLEU-1 |
+|---|---|---|
+| LTMemory基线 | 29.24 | 50.64 |
+| 查询扩展 | 32.42 | 53.07 |
+| 自我修正 | 29.68 | 51.73 |
+| 交互澄清 | 48.68 | 61.89 |
 
-示意任务：用户此前说明了偏好的服务与必要参数，当前只发出简短操作请求。系统需找到相关偏好，选择工具并填对参数；记忆中的事实即使能被复述，也可能没有正确转成调用。
+定位：ACL终版表6、第5.6节 · [原文](https://aclanthology.org/2026.acl-long.370.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:result-3:START -->
+## 91.3%是数据质量核验
 
-把检索到的记忆和最终工具调用分别评分，再加入正确记忆直接给定条件。如果检索正确而参数错误，应优先改进记忆到动作的映射；另测旧偏好已被更新的情形，防止准确执行了过时要求。
+五位专家，每个受检条目至少两人审阅；属于样本质量核验，不是智能体结果。91.3%无法直接对应200题中的整数通过数，汇总细节不明。
 
-### 建议搭配
+各阶段抽样数见表，每个条目至少两位专家审阅。
 
-[memoryarena](memoryarena.md) · [gatemem](gatemem.md)
+| 核验阶段 | 抽样条目数 | 通过核验（%） |
+|---|---|---|
+| 事实提取 | 200 | 96.5 |
+| 冲突消解 | 150 | 86.7 |
+| 记忆依赖 | 200 | 91.3 |
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+定位：ACL终版表2 · [原文](https://aclanthology.org/2026.acl-long.370.pdf)
+<!-- EVIDENCE:result-3:END -->
 
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
 
-## 演化位置
+参数指标与选定诊断显示证据利用仍有改进空间。主结果不能证明自主工具选择或执行质量。合成冲突清理、依赖模型的泄漏过滤、未明确的F1汇总及TA语义矛盾，限制了更强结论。
 
-`memory QA → memory-conditioned decision → memory-grounded tool action`
+TA在第4.1节被定义为工具与全部参数都正确，但主表TA为87—97%、参数F1仅14—36，且后文另区分工具TSA与全匹配EM；语义尚未调和，本页不据TA下结论。表4的Recall@k栏实际是检索深度1/5/10，不是召回率。表4—5也未清楚给出骨干，故不作为条件完整的比较。平均轮数在12与13之间不一致。
 
-这里把“memory 有用”从抽象说法变成了：它有没有真正改变正确的工具行动。
+下一步：先用人工评分调用核验发布的评估器，再固定骨干、schema和预算，交叉比较金标准/检索证据与隐藏/提供工具身份。参数精确匹配和真实执行分别统计，可与MemoryArena配对测试闭环效用。
+构造语料共有2029个会话，评估仅使用其中429个含证据会话。查询可能明确提到此前偏好，隐藏的是具体参数值，而不是完全消除记忆使用提示。
+<!-- EVIDENCE:limitations:END -->

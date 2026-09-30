@@ -1,4 +1,4 @@
-# RAGBench：不只评 RAG，也评“评 RAG 的 evaluator”
+# RAGBench：训练和检验检索增强回答的评分器
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2024-07<br>
@@ -6,64 +6,77 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](ragbench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](ragbench.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2407.11005) · [数据](https://huggingface.co/datasets/rungalileo/ragbench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-RAGBench 是覆盖 5 个 industry-oriented domain、约 100K example 的 **RAG quality + RAG evaluator** benchmark。TRACe 不只给一个最终分数，而是提供可解释、可行动的 failure label。
+全文第1–8节及附录9.1–9.7，包括提示、后处理、训练和域外评测。
 
-## 相比此前评测多测了什么
+[arXiv v1；PDF 页眉为 2024-06-25，不据此推断首发时间](https://arxiv.org/pdf/2407.11005v1)
+<!-- EVIDENCE:reading:END -->
 
-如果 evaluator 无法区分 retrieval/context defect 与 answer defect，RAG pipeline 就很难有针对性优化。RAGBench 把一部分评测对象从“哪个 RAG 系统赢”转成“负责判分的 evaluator 是否真的识别了失败类型”。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 决定性证据
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-数据覆盖多类 RAG task 与 user manual 等 industry corpus。论文发现，通用 LLM-based evaluator 在这个 RAG evaluation task 上甚至可能不如 finetuned RoBERTa，说明 evaluator 看起来更强大，不等于 measurement validity 更强。
+相较只看最终答案的问答基准，RAGBench将文档—问题—回答三元组变成评分器训练和测试数据，并拆分相关性、证据使用与忠实性。它位于“如何评价RAG”的支线，不能把评分器拟合标签的成绩当作生成系统能力提升。
+<!-- EVIDENCE:placement:END -->
 
-## 这个分数能证明什么
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-RAGBench 能支持其 annotation scheme 下 evaluator quality 与 RAG failure dimension 的判断，但不能证明 adaptive retrieval policy；任何由 evaluator 排出来的系统 leaderboard，也会继承 evaluator 自身的 bias。
+12个数据源统一为文档、问题、回答，并用GPT-4-0125-preview标相关句、使用句和回答支持。TRACe分别量相关比例、使用比例、相关内容覆盖及全回答忠实性。句标签广播到token后训练DeBERTa多头评分器。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-应固定 labeled split、evaluator prompt/model/version、threshold 与被评估的 RAG output，并在用 evaluator 排系统之前先报告 agreement/calibration。human label 的不确定性也不应被 aggregate metric 隐藏。
+训练、开发、测试分别约 7.8 万、1.2 万、1.1 万例，按问题在每个来源内划分。回答主要由 GPT-3.5-0125 和 Claude 3 Haiku 以温度 1 生成，部分来源沿用已有回答；监督标签由 GPT-4-0125-preview 产生。实际评分器为 DeBERTa-v3-Large NLI 检查点加三个预测头，在 A100 上训练三轮，二元阈值 0.5。幻觉检测用 AUROC，相关性及使用率用 RMSE；Completeness 有定义但主表没有独立预测成绩。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 优势与反例应同时保留
 
-静态 label 不覆盖 live-web drift、iterative tool use、budget allocation 或 stopping；所谓 actionable label 只有在它真的能指导 intervention 并改善 end-to-end behavior 时才有意义。
+各来源测试集；幻觉 AUROC 越高越好，相关性 RMSE 越低越好，均为 0–1；标签来自 GPT-4，未逐行给出测试样本分母。
 
-## 下一步最有判别力的验证
+| 数据集／指标 | GPT3.5 | RAGAS | DeBERTa |
+|---|---|---|---|
+| HotpotQA/Hall_AUROC | 0.59 | 0.62 | 0.85 |
+| DelucionQA/Hall_AUROC | 0.57 | 0.7 | 0.64 |
+| PubMedQA/Rel_RMSE | 0.21 | 0.37 | 0.26 |
 
-针对每种 diagnostic label 自动触发一种 pipeline intervention，再验证预测的 failure class 是否真的改善，把 explainability 从描述性 taxonomy 变成因果上有用的诊断。
+事实来源：表 3, 节 5 · [论文](https://arxiv.org/pdf/2407.11005v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 跨域训练的退化
 
-## 研究决策卡
+同一来源测试集的幻觉 AUROC（0–1）；比较全部领域与仅通用知识的训练数据，逐来源测试分母未明确列出。
 
-### 什么时候值得用
+| 数据集 | 全领域训练 | 仅通用知识训练 |
+|---|---|---|
+| FinQA | 0.81 | 0.67 |
+| TechQA | 0.86 | 0.76 |
 
-适合评价 RAG 评分器与失败诊断，而不只是再给 RAG 系统算一个答案分。评价器和被评价系统属于不同对象；一个自动指标与标注更一致，并不直接证明用它优化后的系统更好。
+事实来源：表 4, 附录 9.7 · [论文](https://arxiv.org/pdf/2407.11005v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-示意任务：给定问题、检索上下文和生成答案，评价器需要判断证据是否相关、回答是否忠实以及失败发生在哪一侧。答案看似流畅，仍可能缺少支持；检索正确，也可能在生成时引入新错误。
+模型应写DeBERTa-v3-Large；摘要RoBERTa与方法不一致。优势集中在多数幻觉检测数据，不能称所有指标都胜。完整性指标被定义，但主表未给独立预测成绩。
+<!-- EVIDENCE:interpretation:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-在独立领域的人工标签上比较评价器，并检查错误类型而非只看总体相关系数。再用不同评价器选择系统版本，观察排序是否在独立人工审查中保持；这比只拟合已有标签更接近评价器的实际价值。
+GPT-4标签可能传递偏置；合成质量排序验证不等于逐例人工有效性。下一步用独立人工标签、留出生成器和等成本评分器复核。
 
-### 建议搭配
+摘要写RoBERTa，但方法与表3写DeBERTa；本文采用可定位的方法名称。表1称TechQA为5篇文档，附录9.2称10篇，未自行调和。论文的普遍优势措辞也有表3反例。
+<!-- EVIDENCE:limitations:END -->
 
-[ragtruth](ragtruth.md) · [claimprobe](claimprobe.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`RAG output score → failure labels → evaluator validity and actionable diagnosis`
-
-它的重要性在于：benchmark/evaluator 本身也成为 RAG 系统研究对象。
+相关基准：[ragtruth](ragtruth.md) · [claimprobe](claimprobe.md)

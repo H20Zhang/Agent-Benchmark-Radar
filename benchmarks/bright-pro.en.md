@@ -7,52 +7,77 @@
 > From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](bright-pro.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](bright-pro.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://aclanthology.org/2026.acl-long.1705/) · [Code](https://github.com/yale-nlp/Bright-Pro)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-Bright-Pro contains 739 queries across seven StackExchange domains, 2,763 reasoning aspects, 5,272 gold passages, and 526,319 documents; 175 queries form an agentic-search subset. α-nDCG and weighted aspect recall measure whether an evidence portfolio covers complementary reasoning aspects, with fixed-round and adaptive agentic search protocols.
+Read Sections 1–7 and limitations; appendices inspected: A–H, metric formulas, reference validation, prompts, decoding, all seven dataset examples, full result tables and five qualitative trace cases; visual checks: Tables 3–4 checked on rendered PDF page 8. Not performed: No training or evaluation rerun; no repository audit
 
-## Compared with what
+[ACL 2026 — ACL 2026 proceedings, pp. 36776–36806; no claim of arXiv v1 equivalence](https://aclanthology.org/2026.acl-long.1705.pdf)
+<!-- EVIDENCE:reading:END -->
 
-BRIGHT established that relevance can require reasoning, but its relevant sets remain comparatively narrow. Bright-Pro decomposes each query into weighted aspects, so repeatedly retrieving similar passages does not look like complete evidence coverage.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## What the reported results show
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-Static and agentic results are separate comparisons. In the ACL paper, BGE-Reasoner-8B records Overall α-nDCG@25 of 68.0 on the static set (Table 2). With a fixed three-round GPT-5-mini search agent, its round-three answer quality is 4.31/5 (Table 3). The adaptive-round protocol additionally accounts for search cost using AER. Rankings can change with the agent backbone, so this site keeps protocols and backbones separate rather than defining a cross-protocol total. [Tables 2–4](https://aclanthology.org/2026.acl-long.1705.pdf#page=7).
+Bright-Pro extends BRIGHT-style reasoning relevance with weighted aspects and coverage/generation evaluation. The question becomes whether evidence combinations cover required facets, allowing static ranking and agent answer quality to order systems differently.
+<!-- EVIDENCE:placement:END -->
 
-## Score boundary
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-High α-nDCG or aspect recall supports evidence-portfolio coverage under the fixed corpus and annotation version. Agentic-search outcomes also depend on agent-retriever coupling, round budget, and judge. Static retrieval and the 175-query agentic subset are different evaluation objects and require separate tracks.
+Experts re-audit evidence from seven BRIGHT StackExchange domains, decompose each query into complementary reasoning aspects, and normalize 1–5 importance ratings. Weak evidence is removed, overlapping same-source passages are merged, new evidence is collected, and a second domain annotator reviews each example. Static evaluation covers 739 queries: α-nDCG with α=0.5 discounts repeated hits on the same aspect, while weighted aspect recall credits the importance of aspects covered at least once. Agentic evaluation uses the same 175 questions, retrieving five passages per round under either exactly one to three rounds or adaptive stopping. RTriever-Synth contains 140,000 query bundles built by decomposing reference answers into aspects and generating complementary positives and topically close negatives that omit essential evidence. Actual training still samples one positive and one negative per query per step to LoRA-tune Qwen3-Embedding-4B.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison conditions
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-Align the corpus, aspect annotations, number of rounds or stopping protocol, top-k per round, agent backbone, and judge. In particular, AER values from GPT-5-mini and Qwen3.5-122B-A10B search agents must remain separate. Version annotation revisions with results; the full static set and 175-query agentic subset are not interchangeable.
+Static evaluation uses 739 questions; agentic evaluation fixes 175, twenty-five per domain. Each call returns five passages capped at 2,048 tokens using Qwen3-0.6B tokenization, without a full-document reader. GPT-5-mini-08-07 uses medium effort and output limits of 30,000 per turn and 10,000 final tokens; Qwen3.5-122B-A10B-GPTQ-Int4 runs on vLLM 0.19.1 with 25,600/12,800 limits. Fixed runs take exactly one to three rounds; adaptive runs cap at 100. GPT-5 generates references and judges: aspect coverage 0/0.5/1 is weight-averaged to w and mapped to round(4w+1) for completeness; overall quality is 1–5. Per-example AER is quality×exp[-0.05(R−1)].
+<!-- EVIDENCE:setup:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:result-1:START -->
+## Static ranking versus three-round answer ranking
 
-Align aspect coverage with the claims in the final answer: which aspects change the conclusion and which only add redundancy? Include tokens, search rounds, and latency in the cost comparison to establish whether better retrieval permits earlier stopping without losing completeness.
+Static evaluation uses 739 queries and α-nDCG×100; three-round evaluation uses 175 queries and GPT-5-mini with top five passages per round. Overall quality is the mean GPT-5 judge score on a 1–5 scale. Values across these protocols are not direct gains.
 
-## Research decision card
+| Retriever | Static alpha-nDCG@25 | Round-3 alpha-nDCG@15 | Round-3 overall |
+|---|---|---|---|
+| BGE-Reasoner-8B | 68.0 | 63.04 | 4.31 |
+| DIVER-4B-1020 | 63.7 | 51.56 | 4.16 |
+| DIVER-4B | 59.9 | 53.08 | 4.29 |
+| RTriever-4B | 55.3 | 50.79 | 4.25 |
 
-### When to use it
+Source: Table 2 and Table 3 · [Paper](https://aclanthology.org/2026.acl-long.1705.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-Use Bright-Pro for complementary reasoning-aspect coverage across an evidence set, not only relevance of individual documents. Static retrieval, fixed-round search, and adaptive search answer different questions. Do not pool coverage, answer quality, and efficiency into an undefined overall ranking.
+<!-- EVIDENCE:result-2:START -->
+## Adaptive quality and search rounds
 
-### What a concrete task looks like
+The same 175 queries with GPT-5-mini; rounds are per-query means, quality is on a 1–5 scale, and AER averages per-example quality discounted by exp[-0.05(R−1)]. It cannot be reconstructed exactly from the reported means.
 
-Illustrative task: a question needs several complementary aspects; early retrieval covers one, so the next search should target a missing aspect. More evidence of the same type may remain relevant without increasing useful coverage.
+| Retriever | Mean rounds | Overall quality | AER |
+|---|---|---|---|
+| BGE-Reasoner-8B | 5.1 | 4.43 | 3.65 |
+| GTE-7B | 6.67 | 4.51 | 3.44 |
+| BM25 | 5.73 | 4.42 | 3.53 |
 
-### Most discriminating experiment
+Source: Table 4; Equation 1 · [Paper](https://aclanthology.org/2026.acl-long.1705.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-Fix the agent backbone and search budget and compare relevance ranking with selection targeting uncovered aspects. Align aspect coverage with claims in the final answer and test whether earlier stopping preserves completeness. Report efficiency separately for different backbones.
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-### Pair with
+Static rankings do not fully survive agent integration: DIVER-4B-1020 has higher static α-nDCG@25 than DIVER-4B, yet lower GPT-5-mini answer quality after three fixed rounds, 4.16 versus 4.29. Under adaptive stopping, GTE-7B has higher answer quality than BGE, 4.51 versus 4.43, but needs 6.67 rather than 5.10 rounds and scores 3.44 rather than 3.65 on AER. AER discounts quality by round count; it is not a measurement of tokens, dollars or latency, so quality and rounds should remain visible.
+<!-- EVIDENCE:interpretation:END -->
 
-[bright](bright.en.md) · [claimprobe](claimprobe.en.md)
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+The full static set differs from the 175-question agentic subset, and static α-nDCG@25 is not directly comparable with cumulative @5/@10/@15 across rounds. The reported κ=0.742 validates importance ratings on 50 questions only. Reference validation on 40 examples uses one author as rater and does not establish independent human agreement with the final judge. Expert-added aspects can favor broader answers than a narrow reading of the question. Next, add the untouched 4B base and matched-budget training ablations, paired confidence intervals, independent judges, and measured token, latency and repeated-evidence costs.
 
-<!-- RESEARCH-DECISION:END -->
+The abstract and conclusion claim substantial improvement over the Qwen3-Embedding-4B base, but reviewed result tables include Qwen3-8B rather than an untrained Qwen3-4B control. A causal training gain over the exact base is not numerically established here. Appendix F initially calls LLM-side settings shared, but specifies different per-turn and final output limits across GPT and Qwen backends. Matching is within backend, not equal compute across backends. Section 6.2 says the upper tier is 4–14 points above every general embedder, whereas Table 2 includes BGE 68.0 versus Qwen3-8B 49.5, an 18.5-point gap. Use table rows rather than the range. The note’s exact totals of 2,763 aspects and 5,272 gold passages are not directly reported in the reviewed paper tables, which give rounded per-query averages. They require dataset verification; do not present them as paper-verified counts.
+<!-- EVIDENCE:limitations:END -->

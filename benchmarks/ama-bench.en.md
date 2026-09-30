@@ -1,4 +1,4 @@
-# AMA-Bench: memory over agent-environment trajectories
+# AMA-Bench: trajectory QA, tool retrieval and bounded execution tests
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2026-02 · paper v1<br>
@@ -7,64 +7,106 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](ama-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](ama-bench.md) | **English**
 
-[Paper](https://arxiv.org/abs/2602.22769) · [Project](https://ama-bench.github.io/) · [Code](https://github.com/AMA-Bench/AMA-Bench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-AMA-Bench evaluates memory over **agent-environment trajectories** rather than human-agent conversation alone. Questions require recall, causal inference, state updating, and state abstraction over histories containing actions, observations, and changing environment state.
+Main 1–7 and Appendices A–L; PDF-only construction/routing/code prompts and WebArena/BabyAI/TextWorld examples read. Tables and cross-table inconsistencies checked; no experiments rerun.
 
-## What changed relative to prior evaluation
+[arXiv 2602.22769v4 (2026-05-27)](https://arxiv.org/html/2602.22769v4)
 
-LoCoMo and LongMemEval establish long conversational memory but their histories are primarily communication artifacts. AMA-Bench changes the source of memory to machine-generated experience: what the agent did, what the environment returned, and how state changed. This makes causality and objective state more central than conversational phrasing.
+[Supplementary source 2602.22769v4, inspected 2026-09-30](https://arxiv.org/pdf/2602.22769v4)
 
-## Decisive evidence
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-The project reports 206 trajectory samples, 2,471 QA pairs, six domains, and four target capabilities: Recall, Causal Inference, State Updating, and State Abstraction. Its AMA-Agent reaches 57.22% average accuracy, 11.16 percentage points above the strongest reported baseline, using a causality graph plus tool-augmented retrieval.
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-## What the score supports
+Benchmark QA probes recall, causal dependencies, state changes and abstraction from action-observation trajectories. AMA-Agent is a separate method: LLM-extracted state graph, top 5 node retrieval, then selective neighborhood lookup or Python search over raw trajectory JSON.
 
-The benchmark supports memory reasoning over stored trajectories and suggests that causal structure plus active retrieval can help. The method gain remains system-level evidence: graph construction, retrieval tools, backbone, and answerer all change together. Moreover, the endpoint is still QA about experience rather than success on a future environment task.
+Editorial placement: Unlike user-dialogue suites such as LoCoMo and LongMemEval, AMA-Bench uses agent execution traces and adds causal, update and abstraction questions. Version 4 also adds bounded online execution checks; trajectory QA and executed-task outcomes should remain distinct. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-Fix trajectory set, backbone, retrieval/tool budget, evidence visibility, and QA evaluator. Report per-capability results because a system strong on raw recall may still fail state abstraction or causal inference. Tool-augmented systems should disclose extra search calls and latency.
+Table 9: six domains, 208 trajectories/2496 QA, average 57,506 tokens; synthetic 1200 QA across 8K–128K. Core memory is built once and frozen across independent questions. Qwen3-32B binary judge; main method comparison uses Qwen3-32B answerer. LongContext uses 32,768 tokens reserves 4K output and truncates the middle.
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Four abilities under a shared Qwen3-32B backbone
 
-The benchmark only indirectly tests whether remembering a trajectory improves later acting. Long-running error accumulation, experience deletion, policy learning, and transfer to unseen environments remain separate questions.
+LLM-judged accuracy,[0,1]; parenthetical paper values are F1, not uncertainty. Common Qwen3-32B backbone; unmatched memory/tool pipelines.
 
-## Next discriminating validation
+2496 QA; categories 839/596/647/414; reported Average is not an equal-weight four-category mean
 
-Take the same trajectories and evaluate a paired future task whose optimal action depends on the remembered causal/state information. This would connect trajectory QA to the more consequential criterion: behavior improvement.
+| System | Recall | Causal inference | State updating | State abstraction | Average accuracy |
+|---|---|---|---|---|---|
+| AMA-Agent | 0.6238 | 0.6145 | 0.5305 | 0.4719 | 0.5722 |
+| MemoRAG | 0.4708 | 0.5497 | 0.4257 | 0.3659 | 0.4606 |
+| EMem | 0.4631 | 0.4925 | 0.4512 | 0.3421 | 0.461 |
 
-<!-- RESEARCH-DECISION:START -->
+Locator: v4 Table 5 · [Source](https://arxiv.org/html/2602.22769v4)
+<!-- EVIDENCE:result-1:END -->
 
-## Research decision card
+<!-- EVIDENCE:result-2:START -->
+## Graph and tool removal change operational packages
 
-### When to use it
+ Graph replacement uses direct Qwen3-Embedding-4B context index; tool ablation disables calls. Operational package interventions, not independent proof of causal graph semantics.
 
-Use AMA-Bench for memory of agent execution trajectories rather than only personal facts in dialogue. Causal relations among tool outputs and environment states matter. Answering questions about a stored trajectory still does not establish better action on a new task.
+The subset and protocol are specified above; exact per-cell sample counts are not supplied.
 
-### What a concrete task looks like
+| System | Average accuracy |
+|---|---|
+| AMA-Agent | 0.57 |
+| AMA-Agent without causality graph | 0.43 |
+| AMA-Agent without tool retrieval | 0.44 |
 
-Illustrative task: an agent invokes a tool, observes a state change, and adjusts its next action; a later question asks why the state arose. The memory must connect action, feedback, and consequence rather than retrieve only the final state description.
+Locator: v4 Table 7 · [Source](https://arxiv.org/html/2602.22769v4)
+<!-- EVIDENCE:result-2:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:result-3:START -->
+## The revised paper includes bounded execution tests
 
-Compare full trajectories, observations alone, and preserved action–feedback pairs on the same questions. Then use the memory in related executable tasks and report action gains separately. This separates trajectory understanding from experience transfer.
+ Same Qwen3-32B execution agent; in-episode rollouts. Table 19 instead reports AMA TextWorld 50.5%.
 
-### Pair with
+Rollout sample counts not specified in these tables/Appendix H; do not infer from offline QA totals
 
-[longmemeval-v2](longmemeval-v2.en.md) · [memoryarena](memoryarena.en.md)
+| System | TextWorld E2E (%) | TextWorld QA (%) | Spider2 E2E (%) | Spider2 QA (%) |
+|---|---|---|---|---|
+| AMA-Agent | 51.5 | 40.4 | 26.2 | 57.4 |
+| LongContext | 47.5 | 33.0 | 23.5 | 50.9 |
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Locator: v4 Table 6; discrepancy with Table 19 noted · [Source](https://arxiv.org/html/2602.22769v4)
+<!-- EVIDENCE:result-3:END -->
 
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:result-4:START -->
+## Judge calibration covers one answer model
 
-## Genealogy
+Judge agreement 92.67%. Calibration sample is one answer model, not all systems or full benchmark.
 
-`conversation history → agent trajectory → causal/state memory of experience`
+300 GPT-5.2 output instances, 50 per domain; human adjudication
 
-AMA-Bench is a bridge from conversational memory benchmarks toward memory for acting agents.
+| Judgment | Count |
+|---|---|
+| True positive | 190 |
+| False positive | 7 |
+| False negative | 15 |
+| True negative | 88 |
+
+Locator: v4 Table 17 · [Source](https://arxiv.org/html/2602.22769v4)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
+
+Evidence supports trajectory-QA improvements and a bounded rollout check. Graph extraction remains lossy semantic abstraction; the code fallback has raw-log access. Correlation across six systems does not establish individual-example QA predictiveness. No cross-task transfer claim is warranted.
+
+Table 6 TextWorld AMA 51.5 vs Table 19 50.5; no reconciliation supplied. Table 22 Qwen3-32B AMA 0.5629 vs Table 5 0.5722; ordering across models also not fully preserved despite caption. Table 8 selected counts 33 embodied / 34 software-engineering trajectories conflict Table 9 30/36 and 208 total. Abstract strongest-margin 11.16 pp matches MemoRAG, not later Table 5 EMem. Judge prose “within 8.1 points” conflicts Table 16 agreement 84.7%; use table and do not claim rankings judge-invariant. EMem/HiMem references are unresolved Anonymous/TODO citations in v4; exact implementation identity incompletely traceable. PDF Appendix K construction prompt receives previous_state_text although main §5.1 describes independent local extraction; no unconditional no-error-propagation claim.
+
+Next: Match raw-log access, tool calls, embeddings and token budget; compare state graph versus equally detailed non-graph records. Retain rollout validation but add matched unseen follow-on tasks for experience transfer.
+<!-- EVIDENCE:limitations:END -->

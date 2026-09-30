@@ -1,4 +1,4 @@
-# Agent Memory Bench: causal memory reuse in coding agents
+# Agent Memory Bench: coding retrieval gains, admission and historical leakage
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-22<br>
@@ -6,62 +6,107 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](agent-memory-bench-coding.md) | **English** · [Back to entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](agent-memory-bench-coding.md) | **English**
 
-[Code, tasks, preregistration, and pilot](https://github.com/GiulioDER/agent-memory-bench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the pinned official protocol, settings, result artifacts and limitations; no independent reproduction.
 
-Agent Memory Bench measures whether **experience from earlier repository tasks causally improves later coding action**. Instead of loosely comparing an agent configured with memory against one without it, the protocol inserts a pluggable memory layer under a neutral, verbatim session feed and hidden executable grading, while checking whether the memory integration is valid and whether memory is actually available and used in later sessions.
+Complete README, site/method.html, docs/STATUS.md and REPLICATION.md; preregistrations 000 and 026; pilot-001 analysis; official-003 summary, analysis and audit reports. Targeted stats/bootstrap and board-loader source inspection. Public revision pinned; no benchmark code executed, no model runs or external-state changes. Joined vendor run provenance was not fully re-audited.
 
-## What changed relative to predecessors
+[Official protocol 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/docs/STATUS.md)
 
-PAST-Bench and related work already move memory evaluation from QA toward future action. Agent Memory Bench adds **treatment validity** as an explicit protocol concern. A common hidden failure in memory experiments is that “memory enabled” in system configuration does not mean the agent actually saw, retrieved, or used the memory during the task. Integration hashes and proof-of-treatment gates attempt to verify treatment receipt separately from downstream success.
+[Official source at pinned revision 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/README.md)
 
-## Decisive evidence
+[Official source at pinned revision 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/site/method.html)
 
-The public corpus contains **24 real-repository tasks, 24 precursor transcripts, and 99 distractors**. Arms share the same baseline and verbatim session feed; before hidden executable oracles score the result, integration hashes and proof-of-treatment gates verify that memory is actually available and used. Ingestion/session cost and negative transfer are recorded explicitly. The current preregistered pilot leaves only **13 surviving cases** and estimates a gain of just **+0.014 over a CLAUDE.md baseline**, with an interval crossing zero.
+[Official source at pinned revision 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/docs/REPLICATION.md)
 
-## What the score supports
+[Official source at pinned revision 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/preregistration/000-pilot.md)
 
-The current pilot supports only the statement that, for these survivors in a Claude-specific environment with the evaluated memory product, there is not yet sufficient evidence of a stable positive effect. It does **not** show that memory cannot help coding agents: the sample is far below target power, proof-of-treatment creates a survivor set, and the Recall memory product is author-built. The stronger contribution at this stage is the causal-evaluation protocol rather than a product ranking.
+[Official source at pinned revision 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/preregistration/026-official-003-fair-instruction.md)
 
-## Fair comparison contract
+[Official source at pinned revision 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/pilot-001/analysis.json)
 
-Coding agent/backbone, repository/task, session feed, tool permissions, execution budget, memory-ingestion timing, retrieval visibility, and executable grader should be fixed. Every memory method should report integration success, treatment exposure, task success, negative transfer, and total cost. If results are reported only for cases where memory integration succeeds, the survivor rate must also be reported so integration failures do not disappear from the evaluation object.
+[Official source at pinned revision 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/official-003/leaderboard_summary.json)
 
-## How to use it in research
+[Official source at pinned revision 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/reports/official-003-analysis.md)
 
-The most transferable idea is **proof-of-treatment + executable outcome + cost accounting**. A memory mechanism that claims to improve coding or data agents should first establish that memory was actually retrieved and used, then compare action utility under a matched baseline. “Memory is enabled in the configuration” is treatment assignment, not evidence that treatment was received.
+[Official source at pinned revision 695dd26a6732174a59386fa28aa844ad31d31a48](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/reports/official-003-audit.md)
 
-## Next discriminating validation
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-The largest gaps are statistical power, cross-backbone/harness transfer, and independence from an author-built treatment. The highest-leverage next study would expand the number of real repository tasks, run the same neutral-feed protocol across multiple coding agents, and preregister both intention-to-treat and treatment-on-treated estimands. That would preserve integration failures while still answering whether memory helps when it is genuinely used.
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-<!-- RESEARCH-DECISION:START -->
+Feed identical verbatim transcripts to each arm, then run matched task/seed/fixture cells in isolated repositories. Hidden executable checkers grade produced code pass/fail without an LLM judge. Admission verifies tools, hooks, file digests and isolation, not actual retrieval or causal memory use. A timezone task may depend on a convention recorded only in an earlier session; controls include raw transcripts with grep, no memory, static instructions and content-free placebo text.
 
-## Research decision card
+Editorial placement: Compared with generic memory QA, this official protocol measures coding-task pass/fail across bare, placebo, project-instruction and retrieved-memory arms. It tests prefilled-corpus retrieval utility rather than long-term memory formation, with historical scores limited by the leakage audit. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-### When to use it
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-Use Agent Memory Bench for coding agents to verify actual use of prior-task memory, not merely integration of a memory service. Proof that the treatment took effect is important, while a small survivor-selected pilot cannot establish broad product superiority.
+The current suite has 34 executable tasks; official-003 uses 26 tasks: 73 task-condition combinations × 5 seeds × 8 arms=2920 sessions. Of 365 planned paired cells, 317 are admitted and 48 discarded, with one session per arm/cell. Model deepseek/deepseek-v4-flash through Claude Code. Conditions are present, absent, superseded, contradictory and adjacent. About 4900 documents per condition are bulk-ingested before the grid; writes are disabled during runs, so this evaluates retrieval rather than the full memory lifecycle.
+<!-- EVIDENCE:setup:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:result-1:START -->
+## official-003 leaderboard_summary.json, selected arms
 
-Illustrative task: a precursor session contains experience not inferable from the current repository, a later coding task can use it, and a hidden executable oracle grades the outcome. Neutral feeds prevent memory systems from receiving differently informative inputs.
+Rates/absolute deltas on 0–1 scale. Baseline [0,0] is self-comparison, not a success-rate confidence interval. Other bounds are reported contrast intervals crossing zero; disclosed label exposure remains.
 
-### Most discriminating experiment
+317 admitted matched task/seed/condition cells; 26 tasks; interval excludes whole-run variability
 
-Keep neutral feeds and treatment-admission checks, but report both all assigned cases and conditional results on admitted cases. Compare no memory and raw-transcript retrieval, including ingestion, query, and coding-session costs, so survivor selection cannot inflate net benefit.
+| Arm | Success rate | Delta vs claude_md | 95% lower bound | 95% upper bound |
+|---|---|---|---|---|
+| claude_md | 0.5773 | 0 | 0 | 0 |
+| recall | 0.6593 | 0.082 | -0.0063 | 0.1808 |
+| bare | 0.6593 | 0.082 | -0.0195 | 0.1963 |
+| placebo | 0.6719 | 0.0946 | -0.0369 | 0.2493 |
 
-### Pair with
+Locator: official-003 leaderboard_summary.json, selected arms · [Source](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/official-003/leaderboard_summary.json)
+<!-- EVIDENCE:result-1:END -->
 
-[past-bench](past-bench.en.md) · [dreambench-swe](dreambench-swe.en.md)
+<!-- EVIDENCE:result-2:START -->
+## pilot-001 analysis.json, separate all-task and screened estimands
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Historical pilot; per-task mean recall−claude_md, task-cluster bootstrap 95% intervals excluding whole-run variation. Both scopes have McNemar p=1.0. Not directly comparable as progress against official-003.
 
-<!-- RESEARCH-DECISION:END -->
+pilot-001;24 tasks×3 seeds planned 72 cells, 71 admitted; 13 screened tasks retain 38 cells
 
-## Genealogy
+| Analysis set | Tasks | Paired cells | Recall delta | 95% lower | 95% upper |
+|---|---|---|---|---|---|
+| All tasks | 24 | 71 | 0.0139 | -0.0278 | 0.0556 |
+| After ceiling/floor screening | 13 | 38 | 0.0256 | 0 | 0.0769 |
 
-`map_delta=reinforces`, bound to `memory-action-utility`. It independently strengthens the causal-treatment direction represented by PAST-Bench, while the current null result does not alter the defining chain. The benchmark contract worth carrying forward is: **verify that memory was used before claiming a causal memory benefit**.
+Locator: pilot-001 analysis.json, separate all-task and screened estimands · [Source](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/pilot-001/analysis.json)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:result-3:START -->
+## official-003 summary, selected condition counts
+
+Binary checker pass counts; condition difficulty and admitted sets differ, so differences between rows do not isolate a condition effect.
+
+Per-condition admitted cells; same selected arms and seed/task pairing
+
+| Condition | Paired cells | Recall passes | claude_md passes |
+|---|---|---|---|
+| present | 111 | 56 | 43 |
+| contradictory | 51 | 37 | 39 |
+
+Locator: official-003 summary, selected condition counts · [Source](https://github.com/GiulioDER/agent-memory-bench/blob/695dd26a6732174a59386fa28aa844ad31d31a48/results/official-003/leaderboard_summary.json)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
+
+This is not a clean causal product ranking. official-003 registered after launch without advance announcement. A September 26 audit found stale_/rival_ labels in document names and condition names in paths/namespaces; fixes do not repair historical scores, requiring reruns. Paired admission changes the sample and budgets are unmatched. A failing naive reference does not prove a capable model cannot find another correct solution. Recall is developed by the benchmark authors. No positive significant contrast does not imply memory is useless; 13 screened tasks do not replace the all 24-task pilot estimate.
+
+Old note conflates pilot-001’s 13 screened tasks with all 24 task delta 0.0139. Actual survivor delta 0.0256 across 38 cells; task screening is separate from admission discard. README says one seed per cell; preregistration 026 specifies 5 seeds per task-condition, with one session per resulting cell. Method page general preregistration/only-variable claims conflict with explicitly disclosed mid-run 026 and unequal shipped integration instructions. Prefer dated run records. STATUS preserves stale historical sections saying protocol/vendor arms never ran, superseded by its dated September 26 updates. Do not read all paragraphs as current. Official audit warns published tokensPerTask denominator does not match observed-session rates; no dollar/cost ranking certified here. Prefetch prompt contents were not stored, so zero measured label exposure cannot establish no exposure. Prefetch is a changed-query diagnostic, not a mathematical performance ceiling. Separate vendor runs use joined subsets and specific adapter deviations; do not pool their raw rates with 317-cell main results. Historical pilot-001 raw streams incomplete; protocol and corpus changed afterward. Legacy result is a dated record, not an exactly reproducible current run.
+
+
+
+Next: Freeze neutral corpus/path names and preregister statistics/exclusions before rerunning. Report all-assigned and admitted sets, separating availability, actual search, evidence arrival and execution. Match lifecycle cost, repeat whole runs and add a distinct longitudinal write/update track.
+<!-- EVIDENCE:limitations:END -->

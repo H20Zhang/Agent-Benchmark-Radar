@@ -1,70 +1,63 @@
 # BIRD: text-to-SQL grounded in large, dirty database contents
 
 <!-- RELEASE-REFERENCE:START -->
-> **Historical paper result (not the initial version)** · 2023 · release-paper v3<br>
-> **ChatGPT — Execution accuracy: 40.08%**<br>
-> Historical model result in the release-paper abstract. The available page is v3, not a separately verified v1. [Original source](https://arxiv.org/abs/2305.03111)<br>
+> **Historical paper result (not the initial version)** · 2023-11-15 · paper v3<br>
+> **ChatGPT + CoT — Test execution accuracy with evidence: 40.08%**<br>
+> V3 Table 2: ChatGPT + CoT with supplied knowledge evidence on the 1,789-question test split. This is neither plain ChatGPT nor the abstract’s GPT-4 54.89%; it is a selected later-version baseline, not an initial-release best claim. [Original source](https://arxiv.org/html/2305.03111v3)<br>
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](bird.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](bird.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2305.03111) · [Project](https://bird-bench.github.io/)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-BIRD evaluates text-to-SQL against **large database contents**, external knowledge, dirty values, and query efficiency. It contains 12,751 question–SQL pairs over 95 databases totaling 33.4 GB across 37 professional domains.
+Read all substantive text of the 28-page v3 and Appendices A.1–A.7 and B.1–B.13, including prompts, execution/VES definitions and the human study.
 
-## What changed relative to prior evaluation
+[arXiv 2305.03111v3 · 2023-11-15](https://arxiv.org/pdf/2305.03111v3)
+<!-- EVIDENCE:reading:END -->
 
-Spider makes unseen schema the main difficulty but abstracts away much of the database-content problem. BIRD adds value grounding: the language in a question may not directly match stored values, data can be noisy, external knowledge may bridge the gap, and two correct SQL queries can have very different execution costs.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Decisive evidence
+BIRD evaluates SQL grounded in database values and optional expert-written evidence. EX compares result sets, discarding duplicates and order. VES averages correctness times the square root of reference/prediction runtime across all questions; incorrect outputs contribute zero.
 
-The original paper reports ChatGPT + chain-of-thought at 40.08% execution accuracy on test with external knowledge, versus 92.96% human performance. It also introduces efficiency analysis rather than treating all executable correct SQL as equivalent.
+<!-- EDITORIAL-METHOD:START -->
+BIRD collects real databases from multiple domains, retaining non-normalized values and practical scale, and annotates questions, SQL and external-knowledge notes with review. An illustrative workflow asks for an aggregate using a business abbreviation: the model must map it to actual column values, choose filters/joins and produce executable SQLite SQL. Supplied evidence may provide that mapping or a calculation definition. The task therefore combines schema interpretation with content grounding. VES rewards efficient execution only when the result is correct, aggregated over every question; it is not a standalone runtime measure.
 
-## What the score supports
+Editorial placement: Spider emphasizes SQL structure on unfamiliar schemas; BIRD adds value grounding, external knowledge and execution efficiency. Spider 2.0 later adds documentation, project code and interactive workflows. Larger databases alone do not establish cross-system discovery or production reliability.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-BIRD supports claims about realistic database-value comprehension plus SQL generation. It still does not establish enterprise-agent competence: the task begins with a defined database rather than requiring cross-system discovery, metadata search, or multi-step workflow execution.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+The v3 test split has 1,789 questions across 15 databases. GPT-4 uses a zero-shot programming prompt and temperature 0; ChatGPT+CoT adds one pseudo-demonstration. DIN-SQL adds retrieval/examples/self-correction, with no complete token/retry budget reported.
+<!-- EVIDENCE:setup:END -->
 
-Fix database snapshot, external-knowledge access, schema/value retrieval policy, SQL engine, model, and execution budget. Report execution accuracy and efficiency separately. Value retrieval is part of the measured system and must not be silently replaced with oracle matches.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+V3 Table 2; SQLite test; EX is percent of all 1,789 questions. Only the first two rows isolate supplied evidence for the same named model.
 
-Business semantics, permissions, schema drift, multiple database systems, write operations, and clarification are outside the main protocol. Large database size is not the same as a large enterprise catalog.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| GPT-4 · no evidence | BIRD test; 1,789 questions / 15 databases | EX (%) | 34.88% | gpt-4-32k; T=0 | Table 2, p. 7 |
+| GPT-4 · evidence | BIRD test; 1,789 questions / 15 databases | EX (%) | 54.89% | gpt-4-32k; T=0 | Table 2, p. 7 |
+| ChatGPT + CoT | BIRD test; 1,789 questions / 15 databases | EX (%) | 40.08% | gpt-3.5-turbo; evidence; T=0 | Table 2, p. 7 |
+| GPT-4 + DIN-SQL | BIRD test; 1,789 questions / 15 databases | EX (%) | 55.90% | Evidence; expanded scaffold | Table 2, p. 7 |
 
-## Next discriminating validation
+Fact source: [Table 2, p. 7](https://arxiv.org/pdf/2305.03111v3)
+<!-- EVIDENCE:results:END -->
 
-Measure whether a BIRD-tuned system transfers to Spider 2.0 and LiveSQLBench without changing its schema/value retrieval strategy. This tests whether value grounding is a reusable capability or benchmark-specific engineering.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-<!-- RESEARCH-DECISION:START -->
+The header retains a selected later-v3 result: ChatGPT+CoT with evidence scores 40.08%, not plain ChatGPT or the best result in that version. V3 is dated 2023-11-15, not the initial release. The human 92.96% reference uses trained annotators before expert correction without matched model budgets. EX can miss order-sensitive errors.
 
-## Research decision card
-
-### When to use it
-
-Use BIRD to study the effect of database values, dirty content, and external knowledge on SQL correctness. Interpret efficiency conditional on correct results: executing a semantically wrong query faster is not a useful improvement in database QA.
-
-### What a concrete task looks like
-
-Illustrative task: business language does not directly match stored values, requiring data inspection and supplied knowledge to determine filters and joins. Schema-only reasoning may miss abbreviations, missing values, or encoding differences.
-
-### Most discriminating experiment
-
-Fix external knowledge, database contents, and execution budget; compare schema-only access, value retrieval, and supplied-correct-value controls. Measure cost for correct queries separately and review disputed gold SQL so annotation or cache differences are not attributed to method quality.
-
-### Pair with
-
-[spider](spider.en.md) · [livesqlbench](livesqlbench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`unseen schema → database-value grounding → enterprise metadata/workflow reasoning`
-
-BIRD is the step where text-to-SQL stops being only semantic parsing and becomes partly a data-retrieval problem.
+<!-- EDITORIAL-NEXT:START -->
+Next, supply gold value mappings, business rules and both on identical questions, retaining the relatively clean GPT-4 evidence comparison. Add order/duplicate-aware validation and match DIN-SQL retry/token budgets; otherwise scaffold gains may reflect privileged guidance or additional compute.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# MemTrapBench
+# MemTrapBench：相关历史怎样干扰当前推理
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-20<br>
@@ -6,60 +6,107 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](memtrapbench.en.md)
 
-MemTrapBench 测的是 **memory applicability judgment**：即使一段历史记忆被正确保存、也与当前问题语义相关，agent 能否判断它现在是否仍应该参与推理，而不是因为“retrieval 相关”就机械复用。它把长期记忆的失败模式从“忘了什么”推进到“记得没错，但用错了”。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-LoCoMo / LongMemEval 一类评测主要问历史信息能否被召回并支持 QA；staleness benchmark 又更多问新旧事实冲突时能否排对版本。MemTrapBench 的增量在于：历史内容本身可以依然真实、也可以语义相关，但**当前任务的条件已经变化，使这段记忆不再是有效先验**。因此 retrieval relevance 与 decision relevance 被显式拆开。
+已阅读正文第1—5节及附录A—D。HTML缺失的构造、评分与AdaptiveMem提示，以及四个长案例，从33页PDF补读。未审计代码或复现实验；医学案例仅作为合成评测材料阅读，不作为已核验的临床建议。
 
-## 决定性证据
+[arXiv 2608.20202v1 (2026-08-20)](https://arxiv.org/html/2608.20202v1)
 
-benchmark 对同一当前任务构造 memory 与 no-memory 配对条件，四个子集共 **1,050 个多轮样例**，覆盖 reasoning fixation 与 belief distortion。作者报告所有受测 memory strategy 都低于 no-memory，最大下降超过 **10 个百分点**。重要信号不是“memory 总体有害”，而是 planted prior 在 context shift 后仍会被 agent 过度采用。
+[补充来源 2608.20202v1，2026-09-30 核对](https://arxiv.org/pdf/2608.20202v1)
 
-## 这个分数支持什么判断
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-它支持“在刻意构造的 context shift 中，相关但当前无效的历史记忆会产生可测负效应”。它不支持“长期记忆平均而言不如 no-memory”，因为最终问题被设计成不依赖历史也能作答，no-memory 条件天然规避了 planted prior；真实工作负载中旧经验有时恰恰是必要信息。
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-## 公平比较条件
+人工设计先验、当前问题和标准答案，再由GPT-5.4扩展成多轮历史：先反复建立规则或策略，插入噪声，最后换到看似相关但条件不同的任务。当前问题必须独立可答，不能带“忽略旧规则”等显式重置指令。认知偏差、负面反馈回避和任务边界考察旧经验越界；安全类则故意加入错误的沙箱信念。因此并非所有历史记忆都客观为真。AdaptiveMem是提醒模型检查这四种风险的系统提示，不是新存储算法。
 
-比较 memory strategy 时应固定 backbone、当前任务、历史内容、memory visibility、retrieval policy、prompt、judge 和 no-memory baseline。最好进一步区分三种失败：错误检索了不相关记忆、正确检索但错误采用、正确采用但推理失败。否则只看最终 accuracy 无法判断 applicability mechanism 是否真的工作。
+定位比较：与LongMemEval主要要求找回有用信息不同，MemTrapBench把可能干扰当前推理的历史保留下来，观察误用记忆的代价。它提供“不该用哪些信息”的补充坐标；安全子集中故意错误的前提也不同于纯粹过期但曾经正确的记忆。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-## 研究上怎么用
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-MemTrapBench 很适合验证 **retrieve-then-decide、memory gating、contextual validity classifier、confidence-aware memory use** 等机制。一个 memory system 如果只优化 recall/precision，可能反而增加 harmful exposure；研究者应该同时报告 recall utility 与 harmful-reuse rate，形成“accessibility × applicability”二维评测。
+1050例：任务边界350、认知偏差350、安全200、负面反馈回避150，正文历史长度18—40轮。回答模型为Gemini-3-Flash-Preview和Qwen3-30B-A3B-Instruct-2507；比较完整历史与LightMem、MemOS、SimpleMem、EverMemOS，以及无历史。GPT-5.2主要评分，Claude-Sonnet-4.6作替代裁判。论文只说采用模型默认温度和输出上限，未明确数值、嵌入及各适配器检索预算。多数提示分别打0—5分；安全和24点子场景只列两个评分维度，其余通常四个。
+<!-- EVIDENCE:setup:END -->
 
-## 下一步最有价值的验证
+<!-- EVIDENCE:result-1:START -->
+## 同一Gemini回答器的主表结果
 
-当前最大缺口是自然工作流中 harmful reuse 的真实发生率，以及开放环境里 agent 是否能自主推断记忆的适用边界。最高杠杆实验是从真实 coding/data-agent/personal-assistant trajectory 中构造自然 context shift，比较显式 gating、temporal/version metadata 与纯 LLM judgment，验证收益是否超出人工 planted trap。
+论文百分制质量分，不是二元成功率。固定Gemini回答器；平均列在数值上对应四类等权，而非1050例合并准确率。记忆预算未明确匹配。
 
-## 谱系位置
+表中四类分别350、350、150、200例，共1050例。
 
-`map_delta=early_signal`。它与 staleness/update benchmark 共同支持“**memory validity before use**”这一方向，但测量对象不同：staleness 关注哪个版本当前有效，MemTrapBench 关注即使记忆是真的、它是否适用于当前决策。单篇工作仍不足以改写 durable Benchmark Map。
+| 策略 | 任务边界 | 认知偏差 | 负面反馈回避 | 安全 | 平均分 |
+|---|---|---|---|---|---|
+| wo/Mem | 87.08 | 70.95 | 86.73 | 95.9 | 85.16 |
+| FullText | 47.01 | 44.36 | 69.43 | 81.9 | 60.68 |
+| EverMemOS | 74.7 | 54.23 | 86.07 | 69.7 | 71.17 |
 
-Primary: https://arxiv.org/abs/2608.20202
+定位：表1：Gemini-3-Flash-Preview部分结果 · [原文](https://arxiv.org/html/2608.20202v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 保留相关历史、只移除陷阱已有对照
 
-## 研究决策卡
+0–100分；模型标签与子集规模未在该表明确，不作为完整主榜配置。不能与表1任务边界分数合并。
 
-### 什么时候值得用
+专门的任务边界子集，未报告精确样本数。
 
-适合研究何时不该使用看起来相关的记忆。它直接挑战‘正确保存、正确检索就一定有益’；但人为设置的陷阱主要证明这种失效可能发生，不能据此估计自然任务中的发生频率。
+| 历史条件 | 正确性分数 | 综合分数 |
+|---|---|---|
+| 无历史 | 96.87 | 92.29 |
+| 移除陷阱但保留相关历史 | 97.7 | 94.39 |
+| 含陷阱历史 | 45.33 | 31.05 |
 
-### 一个具体任务长什么样
+定位：表3：任务边界专项诊断 · [原文](https://arxiv.org/html/2608.20202v1)
+<!-- EVIDENCE:result-2:END -->
 
-示意任务：旧任务形成了某种解题习惯或判断，新任务的条件已经变化，但措辞仍相似。系统若执着套用过去的经验，会比没有旧记忆时表现更差；错误发生在使用边界而非事实是否保存。
+<!-- EVIDENCE:result-3:START -->
+## AdaptiveMem的增益来自200例抽样
 
-### 最有判别力的实验
+在同一记忆框架上添加AdaptiveMem提示的绝对变化，不是相对无记忆的增益，也不是全部1050例的成绩。
 
-对相同当前任务比较无记忆、有效相关记忆和应拒绝的相似记忆，固定总上下文预算。报告正迁移与负迁移两侧，而不是只优化拒绝率；一个一律不用记忆的系统并没有解决选择性使用问题。
+随机200个MemTrapBench样例；效用检查另抽200个LongMemEval样例。
 
-### 建议搭配
+| 记忆策略 | Gemini增量（分） | Qwen增量（分） |
+|---|---|---|
+| FullText | 11.8 | 4.2 |
+| LightMem | 14.9 | 2.5 |
+| EverMemOS | 11.3 | 2.6 |
 
-[locomo-plus](locomo-plus.md) · [statemembench](statemembench.md)
+定位：第3.6节与图4：明确报告的AdaptiveMem增益 · [原文](https://arxiv.org/html/2608.20202v1)
+<!-- EVIDENCE:result-3:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:result-4:START -->
+## 换裁判保持方向，但绝对分数会变
 
-<!-- RESEARCH-DECISION:END -->
+0–100分，标准差单位为分；两裁判同向但绝对分不同，并未报告人工裁判对照。
+
+专门子集，每种设置独立生成三次回答，子集样本数未明确。
+
+| 裁判 | 无记忆综合分 | 有记忆综合分 | 有记忆标准差 |
+|---|---|---|---|
+| GPT-5.2 | 92.29 | 31.05 | 5.68 |
+| Claude-Sonnet-4.6 | 95.57 | 40.07 | 2.69 |
+
+定位：表5：专项子集的裁判敏感性 · [原文](https://arxiv.org/html/2608.20202v1)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+这个有意构造的负迁移压力测试不能估计日常记忆的平均收益或危害频率。总体下降不代表每个子类都下降：Qwen完整历史在负面反馈回避项为90.27，高于无记忆87.17。无陷阱对照已经存在，支持历史内容会影响结果，但仍需严格匹配长度与其他提示。替代裁判同意方向并不等于人工正确性验证；其绝对分数有明显差异。24点变体允许阶乘等额外操作，后续应显式匹配操作权限，避免把题目规则推断混入记忆定势。
+
+四类总体分数下降不等于每个子类都下降。安全子集故意放入错误前提，不能统一描述为“记忆内容一直正确”。表1的Qwen完整历史70.99高于LightMem的70.13，后者“最好”仅限四个外部框架。表3—5属于专门子集，不能与主表拼接；具体规模和模型标注尚不充分。
+
+
+
+下一步：在相同问题和总上下文预算下，比较有效历史、无关历史、保留主题但删除陷阱的历史和无历史；同时测正迁移与负迁移。对AdaptiveMem增加等长通用提醒对照，并在需要历史才能作答的新任务上验证。按子类报告正确性与格式/简洁性，不能用综合分掩盖不同失败。
+<!-- EVIDENCE:limitations:END -->

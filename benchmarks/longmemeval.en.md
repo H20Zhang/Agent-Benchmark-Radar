@@ -1,4 +1,4 @@
-# LongMemEval: separating long-term memory into five capabilities
+# LongMemEval: retrieval keys, temporal filters and answer evidence
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2024-10-14 · paper v1<br>
@@ -7,50 +7,90 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](longmemeval.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](longmemeval.md) | **English**
 
-[Paper](https://arxiv.org/abs/2410.10813) · [Code](https://github.com/xiaowu0162/LongMemEval)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-LongMemEval uses 500 high-quality questions embedded in scalable, timestamped user-assistant histories to test information extraction, multi-session reasoning, knowledge updates, temporal reasoning, and abstention. Rather than presenting one static long document, the protocol models history as interactions that arrive over time and must be absorbed before later questions are asked.
+Main 1–6, reproducibility/ethics and Appendices A–E inspected. PDF supplemental prompt text checked for Figures 7–8 and 10–13; numerical figure curves not digitized. Official README checked for September 2025 data cleaning. No rerun.
 
-## Compared with what
+[arXiv 2410.10813v2 (2025-03-04)](https://arxiv.org/html/2410.10813v2)
 
-LoCoMo established that very long multi-session dialogue is difficult. LongMemEval goes further by separating update and abstention from generic recall and by using attribute-controlled history construction that can scale context length. A high factual-recall score therefore no longer implies that a system can replace stale knowledge or know when evidence is absent.
+[Supplementary source 2410.10813v2, inspected 2026-09-30](https://arxiv.org/pdf/2410.10813v2)
 
-## Decisive evidence and score boundary
+[Official source observed 2026-09-30 (mutable page)](https://github.com/xiaowu0162/LongMemEval)
 
-The official repository later cleaned history sessions to reduce interference with answer correctness, which is itself evidence that benchmark version is a load-bearing variable. The Radar does not collapse third-party LongMemEval numbers into an official leaderboard because answerers, retrieval top-k, judges, and dataset revisions often differ. Under a matched protocol, a score supports how much useful long-term evidence the system supplies; it does not isolate the causal effect of memory writing or retrieval.
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-## Fair comparison conditions
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-Lock the dataset/history version, reader or answerer, retrieval budget, and grader. Full-history, retrieval-only, and external-memory systems are different contracts. If the reader or top-k also changes, end-to-end accuracy is packaged-system evidence rather than a memory-component comparison.
+Embed human-curated evidence sessions in timestamped user-assistant histories, then ask 500 questions covering extraction, cross-session synthesis, temporal reasoning, updates and abstention. The framework separates stored values, index keys, retrieval queries and reading. A round is one user message plus its assistant reply.
 
-## Next evaluation coordinate
+Editorial placement: Relative to LoCoMo’s long-dialogue memory, LongMemEval focuses on retrieval representation, temporal reasoning, updates and abstention at different history scales. Its retrieval/reading comparisons are diagnostic, while aggregate QA alone cannot localize the failed component. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-LongMemEval still terminates in QA over history. LongMemEval-V2 later moves to agent-environment trajectories, workflow knowledge, and latency; the next stronger target is whether remembered experience improves future actions directly.
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-<!-- RESEARCH-DECISION:START -->
+S is about 115k tokens/question; M has 500 sessions/about 1.5M tokens. Main memory experiments use Stella V5 1.5B retrieval, Llama3.1 8B Instruct extraction, timestamp-ordered values, JSON and Chain-of-Note. Keys/extraction keep user-side messages; retrieved values retain their chosen granularity. Greedy generation, max 800 tokens. GPT-4o-2024-08-06 judges binary answer correctness with type-specific rubrics.
+<!-- EVIDENCE:setup:END -->
 
-## Research decision card
+<!-- EVIDENCE:result-1:START -->
+## Fact-expanded keys improve retrieval and QA
 
-### When to use it
+Recall and QA fractions,[0,1]. Fact text expands retrieval keys; extracted facts do not replace returned raw rounds. GPT-4o QA gain is 5.0 percentage points.
 
-Use LongMemEval for persistent-assistant failures such as recalling a fact but using its superseded version. Its value lies in separating updates, temporal reasoning, and abstention. Category-level reporting is more diagnostic than treating one overall accuracy as a complete account of memory.
+LongMemEval-M: 500 questions; top 10 retrieved rounds; same values, retriever and reading template within each reader comparison
 
-### What a concrete task looks like
+| System | Recall@10 | GPT-4o QA@10 | Llama3.1-70B QA@10 | Llama3.1-8B QA@10 |
+|---|---|---|---|---|
+| Stella V5 / K=V | 0.692 | 0.67 | 0.624 | 0.534 |
+| Stella V5 / K=V+fact | 0.784 | 0.72 | 0.682 | 0.572 |
 
-Illustrative task: a user states a preference, explicitly revises it several sessions later, and then asks which arrangement now applies. The system must resolve the revision rather than pick between similar passages, and avoid guessing when the history provides insufficient evidence.
+Locator: v2 Table 3, round values · [Source](https://arxiv.org/html/2410.10813v2)
+<!-- EVIDENCE:result-1:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:result-2:START -->
+## Visible evidence does not guarantee reliable full-history reading
 
-Place both old and new facts in retrieved context and compare against a condition containing only the operative fact. Persistent failure with both facts available points beyond recall to conflict resolution or temporal interpretation. Report unanswerable questions separately so always-answer policies cannot hide their cost.
+Judge accuracy,[0,1]. Oracle supplies only evidence sessions; S includes full history. Direct 87.0→60.6 is 26.4 percentage points, 30.3% relative decline. Different evidence volume; not isolated write/retrieval failure.
 
-### Pair with
+500 questions
 
-[statemembench](statemembench.en.md) · [scale-qa](scale-qa.en.md)
+| System | Oracle QA | LongMemEval-S QA |
+|---|---|---|
+| GPT-4o / direct | 0.87 | 0.606 |
+| GPT-4o / Chain-of-Note | 0.924 | 0.64 |
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Locator: v2 Figure 3(b) · [Source](https://arxiv.org/html/2410.10813v2)
+<!-- EVIDENCE:result-2:END -->
 
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:result-3:START -->
+## Temporal filters primarily improve evidence recall
+
+Temporal-subset evidence recall,[0,1]. Stella V5 retrieval; different query time-range extraction models. Recall only, not end-to-end QA.
+
+Temporal-reasoning subset; exact per-cell effective denominator not stated in table
+
+| System | Recall@10 |
+|---|---|
+| No temporal filter | 0.55 |
+| GPT-4o temporal filter | 0.722 |
+| Llama3.1-8B temporal filter | 0.57 |
+
+Locator: v2 Table 4, round values and K=V+fact · [Source](https://arxiv.org/html/2410.10813v2)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
+
+In these fixed cells, expanded keys improve recall and QA; visible evidence still does not guarantee correct reading. A strict recall failure may merely omit superseded facts although the updated answer is correct. The judge accepts off-by-one duration errors and answers containing old plus correct updated information, so the metric is not strict chronology or clean deletion. Oracle is a model-conditioned reference.
+
+v2 Table 9 Stella K=V retrieval cells differ from main Table 3/Table 10, despite related labels; use Table 3 explicitly and do not silently reconcile. Commercial pilot used 97 shortened 3–6-session histories in August 2024, excluded assistant-side recall/abstention and some temporal questions. It is neither 500-question S nor current product evaluation. Main prose/ontology framing is five abilities but seven question types; distinguish ability grouping from type labels.
+
+Next: Hold cleaned-data revision, reader and token budget fixed. Compare raw versus fact-expanded keys while preserving returned values, then supply evidence directly. Pair updates with StateMemBench and implicit-use probes with InMind; report question-type scores and cost separately.
+<!-- EVIDENCE:limitations:END -->

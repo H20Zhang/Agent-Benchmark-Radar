@@ -6,50 +6,78 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](hotpotqa.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](hotpotqa.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://aclanthology.org/D18-1259/)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-HotpotQA contains roughly 113K Wikipedia questions with sentence-level supporting facts. Systems must retrieve complementary evidence across documents and perform multi-hop reasoning, so the benchmark can inspect both the final answer and whether the evidence that supports it was found.
+main sections 1–7; Appendices A–C; Tables 1–9; Table 4–7 PDF rendering verified
 
-## Compared with what
+[EMNLP 2018 — EMNLP 2018 camera-ready](https://aclanthology.org/D18-1259.pdf)
+<!-- EVIDENCE:reading:END -->
 
-Earlier open-domain QA often reduced retrieval and reasoning to a single-hop hit. HotpotQA makes cross-document composition and supporting-fact supervision part of the benchmark contract, becoming an important precursor to MultiHop-RAG, agentic retrieval, and evidence-grounded QA.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Decisive evidence and score boundary
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-Its durable contribution is that answer accuracy and evidence coverage can be observed separately: a correct answer does not imply correct supporting facts. Modern models can also exploit dataset shortcuts, parametric memory, or stronger readers, so high current scores do not by themselves establish a better retriever or multi-hop policy. Without a matched retriever-reader interface, end-to-end EM/F1 is packaged-system evidence.
+Compared with earlier single-passage or single-hop QA, HotpotQA requires cross-paragraph composition and supporting-sentence annotation. The measurement shifts from answer-only correctness to joint answer/evidence correctness, while stopping short of autonomous open-web research.
+<!-- EVIDENCE:placement:END -->
 
-## Fair comparison conditions
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-Align the fullwiki/distractor setting, corpus snapshot, retriever, reader, supporting-fact metric, and candidate budget. Results on static Wikipedia should not be directly ranked against live-web search agents.
+Sample hyperlink-connected paragraphs and comparable entities; crowdworkers supply questions, answers and supporting sentences. Three-fold model filtering separates medium/hard questions; development/test contain hard questions. The baseline jointly predicts answers and support.
+<!-- EVIDENCE:method:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-HotpotQA does not cover web drift, tool state, search cost, or query reformulation. Stronger successors should let the system decide when to continue searching, how to repair the retrieval path, and whether the evidence portfolio actually drives the final answer.
+The corpus contains first paragraphs from English Wikipedia dated 2017-10-01. Training has 90,564 questions and development 7,405; the two test settings have separate sets of 7,405. Distractor supplies two gold and eight tf-idf distractor paragraphs. Fullwiki starts with at most 5,000 inverted-index candidates from roughly five million pages, then selects ten by bigram tf-idf. The baseline is an RNN reader with character representations, self-attention and bidirectional attention, jointly predicting supporting sentences and yes/no/span answers. Joint scoring multiplies answer and support precision/recall before computing per-example F1 and averaging.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Two evidence settings on development
 
-## Research decision card
+The same 7,405 development questions, in percent; answer, supporting-fact and joint metrics are computed per example and averaged. Distractor supplies two gold and eight distractor paragraphs; Fullwiki retrieves from the corpus.
 
-### When to use it
+| Setting | Answer_EM | Answer_F1 | Support_F1 | Joint_F1 |
+|---|---|---|---|---|
+| Distractor dev | 44.44 | 58.28 | 66.66 | 40.86 |
+| Fullwiki dev | 24.68 | 34.36 | 40.98 | 17.73 |
 
-Use HotpotQA as a foundation for multi-document evidence composition, not a complete proxy for live search agents. Distinguish supplied candidate paragraphs from full-corpus retrieval: they impose different demands on retrieval, so answer scores should not be pooled.
+Source: Table 4, section 5.2 · [Paper](https://aclanthology.org/D18-1259.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:result-2:START -->
+## Support supervision and supplied evidence
 
-Illustrative task: one document identifies an intermediate entity and another supplies the final attribute. The system needs both an answer and facts supporting the two steps. Guessing the answer does not establish a correct evidence chain.
+Mean answer F1 in percent on 7,405 distractor development questions; removing support supervision differs from supplying gold evidence.
 
-### Most discriminating experiment
+| Condition | Answer_F1 |
+|---|---|
+| Baseline | 58.28 |
+| No support supervision | 56.19 |
+| Gold paragraphs only | 63.58 |
+| Gold supporting sentences only | 66.98 |
 
-Fix the answerer and compare single-shot retrieval, iterative retrieval, and supplied supporting facts, reporting evidence recall and answer quality separately. Remove a required fact to probe shortcuts. Do not attribute gains from a larger candidate pool entirely to multi-hop planning.
+Source: Table 7 · [Paper](https://aclanthology.org/D18-1259.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-### Pair with
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-[multihop-rag](multihop-rag.en.md) · [browsecomp-plus](browsecomp-plus.en.md)
+Answer and evidence correctness differ: distractor-development answer F1 is 58.28 versus joint 40.86. Test settings use different samples; development is the cleaner paired comparison.
+<!-- EVIDENCE:interpretation:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-<!-- RESEARCH-DECISION:END -->
+Model filtering, first-paragraph corpora and 100-example manual analysis limit generality; 6% were single-hop, 2% unanswerable. Next: fixed-reader, budget-matched iterative retrieval.
+
+No substantive numeric inconsistency found in selected rows. Appendix C truncates missing paragraph ranks at candidate-count+1; mean rank is optimistic, not an unrestricted corpus rank.
+<!-- EVIDENCE:limitations:END -->
+
+Related benchmarks: [multihop-rag](multihop-rag.en.md) · [browsecomp-plus](browsecomp-plus.en.md)

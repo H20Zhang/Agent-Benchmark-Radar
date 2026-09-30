@@ -1,4 +1,4 @@
-# MemGUI-Bench: executable GUI memory across attempts and sessions
+# MemGUI-Bench: separating retries, experience and GUI memory
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-02-03<br>
@@ -6,64 +6,105 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](memgui-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](memgui-bench.md) | **English**
 
-[Paper](https://arxiv.org/abs/2602.06075) · [Project](https://lgy0404.github.io/MemGUI-Bench/) · [Code](https://github.com/lgy0404/MemGUI-Bench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-MemGUI-Bench tests memory inside **mobile GUI action trajectories**. Agents must retain information across steps, applications, repeated attempts, and sessions, then use that experience while navigating real interfaces. The relevant memory can be visual state, a prior interaction outcome, an app-specific procedure, or information observed in another application.
+Substantive main 1–7 and Appendix A.1–A.11 read; all evaluator prompts checked in downloaded 59-page v3 PDF because HTML omits prompt bodies. Table 10 long task catalogue sampled across 1–4 app cases, not independently executed or exhaustively re-annotated; screenshot case text read, graphical curves not digitized. No code audit or rerun.
 
-## What changed relative to prior evaluation
+[arXiv2602.06075v3 (2026-08-27)](https://arxiv.org/html/2602.06075v3)
 
-Most mobile-agent benchmarks emphasize current-screen grounding and one-shot task completion. The benchmark audit behind MemGUI-Bench finds only a small fraction of existing mobile tasks are genuinely memory-dependent and that cross-session learning is largely absent. MemGUI-Bench therefore makes temporal/spatial retention and experience reuse the task property rather than an incidental side effect of a long trajectory.
+The frozen release reference is preserved. Newly reviewed versions and conditions do not replace initial-release results.
+[Fixed-version PDF 2602.06075v3](https://arxiv.org/pdf/2602.06075v3)
+[Official source observed 2026-09-30 (mutable page)](https://memgui-bench.github.io/)
+<!-- EVIDENCE:reading:END -->
 
-## Decisive evidence
+<!-- EVIDENCE:method:START -->
+## Task construction and memory observation
 
-The suite contains 128 tasks across 26 apps and 68 scenarios; 89.8% are classified as memory-intensive. It evaluates 11 agents from five architectural families and uses progressive scrutiny with multiple memory-oriented metrics. The reported results show large headroom even for strong GUI agents, especially when information must cross temporal or application boundaries.
+Execute app tasks in snapshot-resettable Android emulators, retry failures up to three times while allowing persistent agent experience. Mirror pairs share app combinations but vary requirements. Evaluation starts with logs and final three screenshots, adds step descriptions, then requests selected historical screenshots. Information-unit scoring supplements binary success.
 
-## What the score supports
+Editorial placement: Compared with dialogue QA such as LoCoMo, MemGUI-Bench embeds memory demands in app operations, retries and mirror tasks. It adds execution and experience reuse while introducing vision, control and judging into the score. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-Task success and p@k-style repeated-attempt measures support an end-to-end claim about **GUI perception × memory × planning × execution**. They do not isolate a memory module because OCR/vision, app grounding, click execution, and recovery can fail after the correct memory was available.
+<!-- EVIDENCE:setup:START -->
+## Experimental conditions and scoring targets
 
-## Fair comparison contract
+128 tasks / 26 apps: 48 easy, 42 medium, 38 hard; 28/56/34/10 tasks involve 1/2/3/4 apps. Workflow agents share Gemini-2.5-Pro without thinking, but observations and calls differ; end-to-end agents use their own fine-tuned models. Main M2 evaluator uses Gemini-2.5-Flash descriptions and Gemini-2.5-Pro judgments. Step cap=floor(1.4×golden steps+1).
+<!-- EVIDENCE:setup:END -->
 
-Fix device/emulator state, app versions, login/data state, action budget, retry count, observation resolution, and model/harness. Report first-attempt success separately from improvement over repeated attempts; otherwise a stronger base GUI policy can masquerade as better experience reuse.
+<!-- EVIDENCE:result-1:START -->
+## Cumulative success does not isolate learning
 
-## What remains unmeasured
+Gemini-2.5-Pro workflows with step limits; observations, memory and calls differ. SR@3 is cumulative any-success, not third-attempt accuracy.
 
-Live mobile applications drift, so reproducibility depends on environment snapshots. The benchmark does not yet establish long-term retention over weeks or months, privacy-aware memory across apps, or whether learned procedures transfer to unseen app versions.
+SR: 128 tasks; FRR first-attempt failures per system
 
-## Next discriminating validation
+| System | SR@1 (%) | SR@3 (%) | FRR (%) |
+|---|---|---|---|
+| Agent-S2 | 27.3 | 49.2 | 21.5 |
+| M3A | 32.8 | 47.7 | 16.3 |
+| T3A | 22.7 | 42.2 | 20.7 |
 
-Add paired fresh-agent versus experienced-agent runs with identical initial UI states, plus oracle-memory injection. This would quantify the marginal value of retained experience separately from stronger generic GUI competence.
+Locator: Table 2 and 14, selected February snapshot systems · [Source](https://arxiv.org/html/2602.06075v3)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## The 40-task ablation tests LTM removal
 
-## Research decision card
+Separate 40-task subset, same-backbone component ablation; no multi-seed intervals supplied.
 
-### When to use it
+40 tasks: 13 easy/19 medium/8 hard
 
-Use MemGUI-Bench for experience reuse across mobile applications and attempts. More retries independently increase the chance of success, so separate memory transfer from repeated attempts. Perception errors should not all be attributed to memory.
+| Agent-S2 configuration | SR@1 (%) | SR@3 (%) |
+|---|---|---|
+| STM and LTM | 27.5 | 45.0 |
+| Remove LTM | 17.5 | 25.0 |
+| Remove STM and LTM | 5 | 10 |
 
-### What a concrete task looks like
+Locator: Table 3; Appendix A.9.4 · [Source](https://arxiv.org/html/2602.06075v3)
+<!-- EVIDENCE:result-2:END -->
 
-Illustrative task: an interaction reveals a navigation path or failure cause, and a related mirror task appears later. The agent must reuse valid experience while recognizing interface differences rather than replaying the old click sequence verbatim.
+<!-- EVIDENCE:result-3:START -->
+## Validate the deployed judge on this suite
 
-### Most discriminating experiment
+M1 all Gemini-2.5-Pro; deployed M2 substitutes Flash only for descriptions. Validation of success labels, not agent success.
 
-Fix device snapshots, perception backbone, and total attempts; compare no memory, raw trajectories, and distilled experience. Report first-attempt success and per-attempt cost alongside pass@k, sliced by cross-step, cross-application, and cross-session transfer.
+256 trajectories: 128 M3A and 128 T3A; three human annotators/trajectory
 
-### Pair with
+| Evaluator | F1 (%) | Precision (%) | Recall (%) |
+|---|---|---|---|
+| M1 | 93.1 | 92.4 | 93.8 |
+| M2 | 81.2 | 82.5 | 80.0 |
 
-[memoryarena](memoryarena.en.md) · [mem2actbench](mem2actbench.en.md)
+Locator: Table 1B and 12, judge validation · [Source](https://arxiv.org/html/2602.06075v3)
+<!-- EVIDENCE:result-3:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:result-4:START -->
+## Token-budget results reclassify existing trajectories
 
-<!-- RESEARCH-DECISION:END -->
+Threshold=golden steps×9507 tokens; estimated usage=actual steps×agent mean tokens/step. Reclassifies over-budget trajectories; not adaptive-policy execution.
 
-## Genealogy
+128 tasks
 
-`single-session GUI grounding → cross-step retention → cross-session experience reuse`
+| System | Step-budget SR@3 (%) | Estimated token-budget SR@3 (%) |
+|---|---|---|
+| Agent-S2 | 49.2 | 0 |
+| M3A | 47.7 | 21.9 |
 
-MemGUI-Bench turns repeated GUI interaction into a memory-learning problem rather than a longer one-shot trajectory.
+Locator: Table 5, Appendix A.9.5 · [Source](https://arxiv.org/html/2602.06075v3)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Supported conclusions and unresolved questions
+
+This executable GUI suite diagnoses memory-related behavior, not isolated memory-module quality. MTPR is confounded by difficulty and only 13 standard tasks. IRR averages 115 task-level ratios; FRR divides by first-attempt failures and weights first recovery on attempts 2/3 by 1/0.5. Judge prompts permit explaining an impossible task to count as success. The deployed evaluator has 81.2% F1 on this suite; 99% from another evaluator/dataset is not interchangeable.
+
+Main prose gives M3A 5.3 seconds/step versus Table 13 14.7 and Table 14 14.5; do not reuse prose value. Table 1 M2 SPA cost 0.028 versus prose 0.031; use table with scope. Table 1 baseline G1 F1=88.2, prose 92.5 is single-app subset Table 11. Table 6/A.5 mention 12 agents, main/Table 7 show 11. Table 9 percentages are multi-label category instances, not percentages of 128 tasks. Token normalization 9507 described as 11-agent mean, but listed per-step numbers are not consistent with that simple mean; treat as authors’ chosen threshold. Failure-analysis percentages have changing denominators and inconsistent Agent-S2 partial hallucination rates 58.2 vs 66.7; omit causal prevalence claims.
+
+Next experiment: Extend the existing 40-task ablation with actual fixed-token reruns; separate same-task retries from held-out mirror transfer, reset experience by group and disclose order. Human final-state checks and app-state validators can separate memory, vision, execution and judge errors. Pair with MemoryArena groups and Mem2ActBench argument grounding.
+IRR does not directly measure internal memory: successful tasks are assigned 100%, while unsuccessful implicit-decision tasks are assigned 0%; other cases use correctly retained information units divided by required units.
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# CRAG：在 freshness、long-tail 与 abstention 压力下评估 RAG
+# CRAG：检验时效性、长尾知识与拒答能力
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2024-06 · 论文 v1<br>
@@ -7,64 +7,65 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](crag.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](crag.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2406.04744) · [代码](https://github.com/facebookresearch/CRAG)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-CRAG 评估动态事实、entity popularity、问题复杂度、web search、knowledge graph 与 abstention 条件下的 factual RAG。4,409 个 QA 覆盖 5 个 domain、8 类问题，事实变化速度从按年到按秒。
+全文第1–6节及附录A.1–A.4的构造、提示、裁判验证和延迟设置；表5/图2经图像核对。
 
-## 相比此前评测多测了什么
+[v1,2024-06-07](https://arxiv.org/pdf/2406.04744v1)
+<!-- EVIDENCE:reading:END -->
 
-静态 QA 很容易把 model memorization 与 retrieval value 混在一起。CRAG 特意加入新鲜、长尾、动态事实，使 external retrieval 真正必要，并把 hallucination-sensitive correctness 放到核心位置。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 决定性证据
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-论文报告 advanced LLM accuracy 不超过 34%，直接加 RAG 大约到 44%，当时最强 industry RAG 也只有 63% 的问题能在不 hallucinate 的情况下回答。事实越动态、越长尾、越复杂，准确率越低。
+相较HotpotQA/KILT常用的静态、库内可答任务，CRAG增加时间敏感性、长尾实体、错误前提及拒答，并让网页和知识图谱共同供证。谱系意义在于把答得更多与错误更多的风险取舍显式化，而非只扩大量。
+<!-- EVIDENCE:placement:END -->
 
-## 这个分数能证明什么
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-CRAG 能支持其 mock web/KG interface 下 trustworthy factual QA 的判断，也清楚证明 freshness 会改变 retrieval 的价值；但分数仍是系统级的，model cutoff、retrieval stack、source handling 与 answer policy 都在因果链上。
+4409题来自知识图谱模板与人工网页问答，覆盖五领域、八类问题、不同新鲜度和实体热度。提供冻结网页与38个模拟API。任务1用五网页；任务2加知识图谱；任务3扩大至50网页。答对、幻觉与弃答分别计分。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-必须固定 model snapshot/knowledge cutoff、mock API、retrieval budget、KG access 与 grading，并把 hallucination/abstention 与 raw accuracy 分开。激进猜答案不能和“证据不足时正确拒答”混成同一种能力。
+主要结果使用 1335 道公开测试题。GPT-4 Turbo 的网页上下文最多 4000 token、KG 上下文最多 2000 token；实体抽取使用 Llama3-8B-Instruct。自动判分先做精确匹配，再平均 GPT-3.5-turbo 与 Llama3-70B-Instruct 的判断。Scorea 是准确率减幻觉率；人工 Scoreh 则给完全正确 1、可接受 0.5、缺失 0、错误 −1。商业系统采用人工评测，不应与冻结网页的自动基线混排。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 准确率提高不等于风险分提高
 
-mock API 提高 reproducibility，却移除了 live web 的导航、interface variability、authentication 与 search-provider drift；任务也是 factual QA，不是长报告研究或开放式 tool use。
+1335 道公开测试题，GPT-4 Turbo；前三项为回答比例百分数，Scorea 为准确率减幻觉率的百分点分数；网页上下文 4000 token，KG 2000 token。
 
-## 下一步最有判别力的验证
+| GPT-4 Turbo 条件 | 准确率 | 幻觉率 | 未作答率 | 自动风险分数 |
+|---|---|---|---|---|
+| 仅语言模型 | 33.5 | 13.5 | 53.0 | 20.0 |
+| Task1 | 35.9 | 28.2 | 35.9 | 7.7 |
+| Task2 | 41.3 | 25.1 | 33.6 | 16.2 |
+| Task3 | 43.6 | 30.1 | 26.3 | 13.4 |
 
-对同一批 factual target 同时跑 frozen mock API 与 live-web agent，测 source discovery/interface control 带来的额外 gap，定位现代 search agent 的难度到底有多少来自 retriever 之外。
+事实来源：表 5, 节 5.1 · [论文](https://arxiv.org/pdf/2406.04744v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-## 研究决策卡
+应保留核心取舍：检索让GPT-4回答更多问题，也增加错误作答，任务3风险敏感分13.4仍低于闭卷20.0。商业系统不是相同协议的对照。
+<!-- EVIDENCE:interpretation:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-适合研究事实新鲜度、长尾知识和不充分证据下的回答行为。模拟检索接口有利于控制变量，但不能代表完整浏览器交互；模型知道旧答案时，还要区分参数知识与当前证据的贡献。
+商业测试不使用原题目指定查询时间或冻结检索内容，不能和基线直接排序。模拟API不覆盖实时导航。下一步同时间、同来源比较，联合报告错误/弃答。
 
-### 一个具体任务长什么样
+表5的任务3风险分为13.4，而展示值43.6−30.1等于13.5；这是原因未明的展示差异，原文未证明由舍入造成，保留论文报告值。第5.2节有自动/人工评测的前者后者措辞颠倒，实际设置应按第4节、第5.1节及附录A.4解释。
+<!-- EVIDENCE:limitations:END -->
 
-示意任务：用户询问一项会随时间变化的事实，搜索结果与知识图谱提供不同形式的证据。系统需要识别适用时间并判断证据是否足够，而不能因为记得一个看似合理的值就作答。
-
-### 最有判别力的实验
-
-固定检索接口和时间点，比较闭卷、仅网页、仅图谱和组合证据条件，并按动态事实与长尾实体分项。对证据不足问题单独报告弃答与错误作答，防止只靠保守回答降低幻觉指标。
-
-### 建议搭配
-
-[livebrowsecomp](livebrowsecomp.md) · [mtrag-un](mtrag-un.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`static RAG QA → dynamic/long-tail factuality → live information-seeking reliability`
-
-CRAG 把 knowledge freshness 从隐藏数据属性提升成了 RAG 的一等变量。
+相关基准：[livebrowsecomp](livebrowsecomp.md) · [mtrag-un](mtrag-un.md)

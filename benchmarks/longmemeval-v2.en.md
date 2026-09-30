@@ -1,4 +1,4 @@
-# LongMemEval-V2: memory as compressed experience over massive agent histories
+# LongMemEval-V2: workflows and file tools for action-history retrieval
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-05<br>
@@ -6,64 +6,89 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](longmemeval-v2.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](longmemeval-v2.md) | **English**
 
-[Paper](https://arxiv.org/abs/2605.12493) · [Project](https://xiaowu0162.github.io/longmemeval-v2/) · [Code](https://github.com/xiaowu0162/LongMemEval-V2)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-LongMemEval-V2 tests whether a memory system can turn huge collections of **web-agent and enterprise trajectories** into compact evidence useful for later reasoning. It covers static state recall, dynamic state tracking, workflow knowledge, environment-specific gotchas, and premise awareness rather than only conversational facts.
+Substantive main 1–6 and Appendices A–E including annotation, evaluation rubrics, full listed controller/sandbox prompts, ablations, qualitative evidence and limitations. Printed numeric tables inspected; graphical curves and screenshot pixels not independently remeasured. No code/execution run.
 
-## What changed relative to prior evaluation
+[arXiv 2605.12493v1 (2026-05-12)](https://arxiv.org/html/2605.12493v1)
 
-LongMemEval V1 scales user-assistant histories and makes update/temporal reasoning explicit. V2 changes both the source and scale of experience: histories can reach 500 trajectories and 115M tokens, and the useful knowledge includes procedures and environment-specific lessons learned through action. Memory must act as an experience compressor, not merely a chat-history retriever.
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-## Decisive evidence
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-The benchmark contains 451 manually curated questions across web and enterprise settings and five ability categories. AgentRunbook-C reaches 72.5 average accuracy versus 48.5 for the strongest reported RAG baseline and 69.3 for an off-the-shelf coding-agent memory approach. The coding-agent style retrieval also incurs high latency, making the accuracy–latency frontier part of the result rather than a footnote.
+Sequentially insert pre-collected web trajectories, retrieve compact multimodal evidence, then let a fixed reader answer 451 questions. Separate static state, dynamic changes, workflow, gotchas and false-premise awareness. R uses state/event/note pools; C searches files with manifests, workflow instructions and inspection helpers.
 
-## What the score supports
+Editorial placement: LongMemEval-V2 continues long-term memory QA but centers user–agent tool-use histories and compares file/coding workflows with retrieval. It is not merely a longer original dataset; changed questions and controllers prevent direct subtraction of cross-version scores. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-The benchmark supports claims about extracting reusable knowledge from enormous trajectory histories and highlights that active agentic retrieval can outperform passive RAG at substantial cost. It does not isolate the memory component when agentic retrieval changes search depth, reasoning, or tool usage.
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-## Fair comparison contract
+Small has separate domain-shared 100-trajectory haystacks, about 25M tokens; Medium uses roughly 500/question, about 115M. Qwen3.5-9B reader, 200K-token context cap; sampled temperature 0.6/top-p 0.95. R controller Qwen3.5-9B thinking with Qwen3-Embedding-8B; coding controller GPT-5.4-mini xhigh in Codex 0.117.0. Query concurrency capped 3. Structured answers use matching; GPT-5.2 medium judges gotchas/premise answers.
+<!-- EVIDENCE:setup:END -->
 
-Fix history snapshot, backbone, maximum evidence returned, retrieval/tool-call budget, and answer evaluator. Report latency, token/tool cost, and evidence volume together with accuracy. Comparing fixed top-k RAG against unconstrained iterative search without accounting for budget answers a different question.
+<!-- EVIDENCE:result-1:START -->
+## Main comparisons also change the controller
 
-## What remains unmeasured
+Answer accuracy and query latency; not lifecycle cost or browser task success. Shared reader and cap; controller models differ by family. C versus Codex is the closer matched controller comparison.
 
-The final task is still context-gathering QA rather than closed-loop future task completion. Write/update cost for maintaining memory as trajectories arrive, stale procedure handling, and destructive environment change remain underexplored.
+451 questions per tier; overall includes premise questions
 
-## Next discriminating validation
+| System | Small accuracy (%) | Small query latency (s) | Medium accuracy (%) | Medium query latency (s) |
+|---|---|---|---|---|
+| RAG: query→slice+notes | 51.0 | 0.2 | 45.9 | 0.3 |
+| AgentRunbook-R | 58.6 | 26.9 | 57.0 | 25.8 |
+| Codex | 69.9 | 177.2 | 68.7 | 185.8 |
+| AgentRunbook-C | 74.9 | 108.3 | 70.1 | 139.9 |
 
-Convert the five knowledge categories into future executable tasks and compare equal-cost passive retrieval, compiled runbooks, and agentic reacquisition. The key systems trade-off is what experience should be retained versus cheaply rediscovered.
+Locator: Table 2, main methods · [Source](https://arxiv.org/html/2605.12493v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## Helper functions do not improve every split
 
-## Research decision card
+ Same coding controller; helpers improve Small but their removal slightly improves Medium, so no blanket accuracy benefit.
 
-### When to use it
+The subset and protocol are specified above; exact per-cell sample counts are not supplied.
 
-Use LongMemEval-V2 for environment knowledge accumulated from extensive web interaction, including workflows and operational pitfalls. Its key distinction from dialogue memory is the source and object of experience. The readout remains QA, so retrieval quality should not be presented as web-action competence.
+| System | Small accuracy (%) | Medium accuracy (%) |
+|---|---|---|
+| AgentRunbook-C | 74.9 | 70.1 |
+| AgentRunbook-C without workflow | 70.1 | 64.1 |
+| AgentRunbook-C without helper functions | 71.4 | 71.8 |
 
-### What a concrete task looks like
+Locator: Table 2, C ablations · [Source](https://arxiv.org/html/2605.12493v1)
+<!-- EVIDENCE:result-2:END -->
 
-Illustrative task: past trajectories show that an operation requires a particular page state, and the current question asks how to complete that workflow. The system must recover reusable steps from distributed visual and tool records, not merely remember text on one page.
+<!-- EVIDENCE:result-3:START -->
+## Oracle evidence uses a different question subset
 
-### Most discriminating experiment
+ Direct QA, not context-gathering; evidence selection and notes change inputs. Not a hard ceiling for main score.
 
-Hold out environments rather than randomly splitting trajectories from the same site. Compare access to prior experience against no-history and supplied-evidence conditions, measure retrieval latency, and add an execution check. Report accessibility, transfer, and action utility as distinct outcomes.
+Non-premise/ non-abstention subset, distinct from full 451-question main results; exact count not stated in this table
 
-### Pair with
+| System | Direct oracle trajectories (%) | Oracle slices+notes (%) |
+|---|---|---|
+| Qwen3.5-9B (thinking) | 59.6 | 82.5 |
+| GPT-5.4-mini (medium) | 65.3 | 86.3 |
 
-[ama-bench](ama-bench.en.md) · [memoryarena](memoryarena.en.md)
+Locator: Figure 4/tabulated pilot, Appendix B · [Source](https://arxiv.org/html/2605.12493v1)
+<!-- EVIDENCE:result-3:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
 
-<!-- RESEARCH-DECISION:END -->
+File scaffolding improves the measured accuracy/latency tradeoff, yet no live task-execution or lifelong-update gain is tested. Questions are selected to defeat frontier no-history models, limiting natural-traffic prevalence claims. UNKNOWN scores 0; gotchas permit one correct noncontradictory insight, while premise rubric also accepts explicit inability to verify the live instance.
 
-## Genealogy
+Table 1 says 100–498 sessions, prose targets 500; report approximately 500 rather than exact every-item size. Query-generation template includes question_type and original_goals metadata; audit parity with baseline inputs before causal interpretation.
 
-`long chat history → agent trajectory archive → compressed reusable environment knowledge`
-
-V2 makes memory compete directly with reacquisition over histories too large to revisit naively.
+Next: Compare R and C under the same controller and cost budget; separately measure insertion, query and reader costs. Preserve exact Small/Medium evidence seeds, test new environments, then add executable downstream tasks with and without history.
+AgentRunbook-C preserves raw trajectories and gathers evidence rather than compressing the whole archive. It selects at most 20 states and returns at most 200K context tokens. Two-tier means 72.5/69.3/48.5 refer to C/Codex/slice+notes; 48.5 excludes AgentRunbook-R at 57.8.
+<!-- EVIDENCE:limitations:END -->

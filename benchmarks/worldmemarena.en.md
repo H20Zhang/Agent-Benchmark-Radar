@@ -1,4 +1,4 @@
-# WorldMemArena: the full memory lifecycle in evolving multimodal worlds
+# WorldMemArena: auditing multimodal memory with staged questions
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-05-28<br>
@@ -6,64 +6,75 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](worldmemarena.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](worldmemarena.md) | **English**
 
-[Paper](https://arxiv.org/abs/2605.29341) · [Project](https://worldmemarena-mem.github.io/)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-WorldMemArena evaluates multimodal agent memory over **evolving action-world trajectories** and explicitly separates four lifecycle stages: write, maintain, retrieve, and use. Gold memory points, state updates, distractors, and evidence chains make it possible to inspect whether the agent stored the right event, kept it current, surfaced it later, and actually used it for the final decision.
+All substantive main 1–8 and Appendices A–F read; selected setup, metrics and tables crosschecked explicit v2 PDF. Official README and dataset card checked, not implementation audited. Figure curves not digitized. Paper contains no full judge-prompt appendix; no rerun.
 
-## What changed relative to prior evaluation
+[arXiv2605.29341v2 (2026-06-01)](https://arxiv.org/html/2605.29341v2)
 
-Long-memory QA often treats a history as a static corpus and evaluates only final answers. WorldMemArena treats memory as mutable state coupled to a changing world. Its Lifelong Evolution and Agentic Execution regimes make obsolete evidence, visual observations, and state transitions first-class rather than assuming that every past fact remains equally valid.
+The frozen release reference is preserved. Newly reviewed versions and conditions do not replace initial-release results.
+[Fixed-version PDF 2605.29341v2](https://arxiv.org/pdf/2605.29341v2)
+[Official source observed 2026-09-30 (mutable page)](https://github.com/UCSB-AI/WorldMemArena)
+[Official source observed 2026-09-30 (mutable page)](https://huggingface.co/datasets/LCZZZZ/WorldMemArena)
+<!-- EVIDENCE:reading:END -->
 
-## Decisive evidence
+<!-- EVIDENCE:method:START -->
+## Task construction and memory observation
 
-The benchmark contains 400 multi-session multimodal tasks and compares long-context, manually constructed retrieval/external-memory systems, and dedicated memory harnesses. The analysis finds that better writing/storage does not automatically translate into end performance, visual evidence is underused, cross-domain reliability is unstable, and real trajectories are harder than simplified alternatives. This is direct evidence that memory quality is a pipeline property, not a retrieval score.
+Organize recorded GUI/embodied traces and generated evolving-life/project sessions into temporal streams. Annotate memory points, updates, distractors and QA evidence; inspect snapshots, retrieval and answers separately. For example, after plan A changes to B, test whether stale A remains stored and whether later QA still uses it.
 
-## What the score supports
+Editorial placement: Compared with conversation memory such as LoCoMo, WorldMemArena broadens evidence to embodied, GUI, project and personal-life trajectories with images and updates. The core evaluation remains post-trajectory QA, so the extension does not establish closed-loop action competence. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-The final score supports whole-system memory performance, while stage annotations provide stronger diagnostic evidence than end QA alone. Yet causal attribution still requires matched backbones and stage-level intervention: a system can retrieve the right evidence and fail at use, or write a good memory and later overwrite it incorrectly.
+<!-- EVIDENCE:setup:START -->
+## Experimental conditions and scoring targets
 
-## Fair comparison contract
+The v2 body and dataset card report 461 trajectories/8489 sessions/15595 images/24258 QA. Card breakdown: 203 GUI, 220 embodied, 18 project, 20 personal. Table 2 engineered systems use GPT-5.4-nano and its caption names GPT-5.4-mini judge; Appendix A instead says the judge inherits the answer model, unresolved. Retrieval cap 10; 128,000-token context with 8000 reserved; up to 5 images/question and 45 MB; temperature 0 and 16,384 completion tokens.
+<!-- EVIDENCE:setup:END -->
 
-Fix backbone, trajectory, visual observations, session segmentation, memory budget, retrieval budget, and action protocol. Report write/maintenance cost as well as read-time cost. Comparisons should preserve access to the same modalities; converting images into richer captions for only one system changes the evidence channel.
+<!-- EVIDENCE:result-1:START -->
+## More writing coverage need not yield better answers
 
-## What remains unmeasured
+Main text specifies shared GPT-5.4-nano, caption GPT-5.4-mini judge; retain Appendix A conflict. RC is judge-based coverage of top 10, distinct from deterministic Recall@K.
 
-The benchmark remains finite and task-scoped. Policy governance, deletion rights, cross-user boundaries, months-long storage economics, and catastrophic corruption recovery are not its primary target.
+Per-trajectory means; advertised full corpus 461 trajectories/24258 QA; actual valid-label counts not supplied; IntRej only trajectories with interference.
 
-## Next discriminating validation
+| System | Memory recall (%) | Update (%) | Interference rejection (%) | QA-C (%) | Retrieval coverage RC (%) |
+|---|---|---|---|---|---|
+| Qwen3-VL-Embedding-8B | 86.22 | 59.02 | 28.21 | 51.86 | 73.44 |
+| A-Mem | 52.54 | 58.86 | 58.94 | 54.63 | 74.19 |
+| M2A | 86.83 | 56.41 | 23.42 | 50.14 | 64.62 |
 
-Run oracle interventions at each lifecycle stage and measure how much final task success is recovered. The resulting error budget—write versus maintain versus retrieve versus use—would directly guide systems research investment.
+Locator: v2 Table 2, selected columns/rows · [Source](https://arxiv.org/html/2605.29341v2)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## Update gives partial credit to stale-fact coexistence
 
-## Research decision card
+Metric definition, not a new experiment. Half credit for coexistence means Update is not strict correction rate.
 
-### When to use it
+Gold updates pooled within each instance, then averaged across instances
 
-Use WorldMemArena to locate failures in writing, maintenance, retrieval, or use of multimodal memory. Stage metrics are more diagnostic than one aggregate score, but stages depend on one another. A local gain does not automatically establish improved end-to-end action.
+| Post-update state | Update credit |
+|---|---|
+| New fact only | 1.0 |
+| Old and new coexist | 0.5 |
+| Old fact only | 0.0 |
 
-### What a concrete task looks like
+Locator: Appendix B Eq 3, metric definition · [Source](https://arxiv.org/html/2605.29341v2)
+<!-- EVIDENCE:result-2:END -->
 
-Illustrative task: observations and actions change world state, and checkpoint questions require the operative state plus relevant visual evidence. An old observation may be faithfully retained but obsolete, so retrieval hits and memory freshness need separate evaluation.
+<!-- EVIDENCE:limitations:START -->
+## Supported conclusions and unresolved questions
 
-### Most discriminating experiment
+Higher writing coverage need not coincide with higher QA, but this association does not identify a causal bottleneck. Modalities, captions, calls and adapters vary. Metrics aggregate within trajectories then average across them; QA denominators include valid judge labels, with per-system valid counts unspecified. No independent human judge-error validation or oracle-stage intervention results establish a ceiling.
 
-Replace writing, maintenance, or retrieval outputs with correct intermediate artifacts one stage at a time and measure the downstream effect. Fix the visual backbone, budgets, and sample set to identify which stage actually limits the system rather than only comparing local metrics.
+400 on arXiv abstract vs 461 in v2 PDF/body and official dataset card. Main §4.4 says 12 axes, Appendix B/Table 4 enumerate 11. Table 2 GPT-5.4-mini judge versus Appendix A inherited-answer-model judge. Harness prose GPT-5.4 vs Table 3/repository GPT-5.4-nano; table Qwen3.5 plus versus appendix/repo Qwen3.6 plus. Table 2 MemGPT/prose MemoryGPT versus official README MGMemory described as Mem-Gallery text; exact mapping unresolved. Selected evidence avoids this identity. MIRIX Corr/Hallu/Irrel 73.50/5.15/1.58 sum 80.23 despite mutually exclusive nonempty-item formula; no fabricated reconciliation. Dataset card total turns 59239 vs body 59858 steps, and GUI/embodied subcategory counts differ; do not silently combine. Current repository includes 150-sample small split; paper does not explicitly identify per-row completed subset counts.
 
-### Pair with
-
-[memeye](memeye.en.md) · [memprobe](memprobe.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`static history QA → mutable multimodal state → lifecycle-diagnostic memory`
-
-WorldMemArena is important because it makes memory lifecycle decomposition observable instead of treating “memory” as one opaque module.
+Next experiment: Hold trajectories, backbone, images and budget fixed; substitute gold write/update/retrieval artifacts stage by stage on paired QA. Report strict stale-fact removal separately from half-credit coexistence and exact semantic retrieval separately from session-ID matches. Add executable tasks to test transfer from diagnostic gains to action outcomes.
+<!-- EVIDENCE:limitations:END -->

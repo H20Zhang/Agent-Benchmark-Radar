@@ -6,64 +6,76 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](multihop-rag.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](multihop-rag.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2401.15391) · [Code](https://github.com/yixuantt/MultiHop-RAG)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it actually measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-MultiHop-RAG evaluates whether a RAG pipeline can retrieve **multiple mutually necessary pieces of evidence** and reason over their composition. The benchmark provides a news knowledge base, multi-hop queries, ground-truth answers, and supporting evidence, so retrieval and answer reasoning can be inspected separately.
+main sections 1–6 and limitations; Appendix A generation prompts, Appendix B examples; Tables 1–15; Tables 5–6/Figure 3 visually verified
 
-## What changed relative to prior evaluation
+[v1,2024-01-27](https://arxiv.org/pdf/2401.15391v1)
+<!-- EVIDENCE:reading:END -->
 
-Single-hop retrieval can look strong even when the final answer requires evidence that is individually weakly related to the query. MultiHop-RAG makes evidence composition the retrieval target instead of assuming one relevant chunk is sufficient.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Decisive evidence
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-The paper evaluates embedding retrievers and several strong LLM readers and finds both stages unsatisfactory on multi-hop queries. This establishes a useful separation: improving the reader with gold evidence does not fix missing-hop retrieval, while a better retriever cannot compensate for a reader unable to compose the evidence.
+Relative to HotpotQA’s Wikipedia multi-hop QA, this benchmark uses newer news and separates retrieval quality from generation with supplied evidence. It retains evidence composition while adding temporal and null-answer conditions; different corpora and denominators prevent direct predecessor score comparisons.
+<!-- EVIDENCE:placement:END -->
 
-## What the score supports
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-Retrieval metrics support evidence-discovery claims; answer metrics support the combined retriever-reader pipeline. Neither alone identifies adaptive search quality because the corpus and retrieval process are static rather than interactive.
+From 609 news articles, extract facts and generate GPT-4 claims; shared entities/topics bridge 2–4 facts into questions, checked with UniEval/GPT-4. The 2556 questions include inference, comparison, time and 301 null cases.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-Fix corpus snapshot, chunking, embedding/index configuration, top-k budget, and reader model. Report supporting-evidence recall together with answer quality. A larger top-k that increases reader context should be treated as a resource change, not a free retrieval improvement.
+The 609 news articles date from 2023-09-26 to 2023-12-26. Of 2,556 questions, 301 are unanswerable; retrieval evaluation uses 2,255 non-null questions. LlamaIndex creates 256-token chunks, cosine retrieval selects twenty, and bge-reranker-large reranks them. Generation receives the top six voyage-02/reranker chunks, capped at 2,048 tokens. GPT-4 is cited as gpt-4-1106-preview; Mixtral is 8x7B-Instruct. Hits@k means the fraction of gold evidence recovered, rather than the probability of at least one hit.
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Matched retriever with/without reranking
 
-The corpus is static news and the protocol does not require iterative query reformulation, source selection, tool calls, or stopping. It therefore captures multi-evidence composition but not the control loop of modern agentic retrieval.
+Across 2,255 non-null questions, Hits@k is the fraction of gold evidence recovered, on a 0–1 scale; reranking starts from the top 20 candidates.
 
-## Next discriminating validation
+| Pipeline | Hits@10 | Hits@4 |
+|---|---|---|
+| voyage-02 | 0.6506 | 0.4619 |
+| voyage-02+bge-reranker-large | 0.7467 | 0.6625 |
 
-Allow iterative search under a fixed retrieval/token budget and compare one-shot top-k against adaptive hop-by-hop retrieval. The key question is when adaptive control reduces evidence volume rather than merely spending more calls.
+Source: Table 5 · [Paper](https://arxiv.org/pdf/2401.15391v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## Answer results: unequal denominators
 
-## Research decision card
+Answer accuracy on a 0–1 scale; retrieved evidence uses all 2,556 questions while gold evidence uses 2,255 non-null questions, so the difference is not a matched retrieval-loss estimate.
 
-### When to use it
+| Model | Retrieved(all 2556) | Gold(non-null 2255) |
+|---|---|---|
+| GPT-4 | 0.56 | 0.89 |
+| Mixtral-8x7B-Instruct | 0.32 | 0.36 |
 
-Use MultiHop-RAG for multi-hop evidence discovery and composition over a controlled corpus. It is closer to RAG than supplied-context QA, but differs from live web search. Supplied-evidence controls are needed to separate search-chain design from answer reasoning.
+Source: Table 6, section 4.2 · [Paper](https://arxiv.org/pdf/2401.15391v1)
+<!-- EVIDENCE:result-2:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-Illustrative task: several news reports separately provide event, person, and time information, and the answer requires their combination. Finding a topically relevant article is only the first step; later retrieval must recover missing relations rather than repeat similar reports.
+Retrieval and evidence reasoning remain imperfect, but .56→.89 also changes sample composition; it is not a pure retrieval effect. Hits is not complete-chain recovery.
+<!-- EVIDENCE:interpretation:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-Compare single-shot and iterative retrieval on the same corpus with an equal total search budget. Report complete supporting-chain coverage by hop count, then evaluate answering with all supporting facts supplied to locate discovery versus composition bottlenecks.
+At most four evidence pieces, short answers and generator-assisted validation; freshness is historical. Next: matched non-null questions and budgets for retrieval/oracle controls.
 
-### Pair with
+All-query retrieved versus non-null oracle comparison is an explicit protocol asymmetry, not an error to hide. GPT-3.5 is named ChatGPT in Table 6; exact snapshot not clearly supplied.
+<!-- EVIDENCE:limitations:END -->
 
-[hotpotqa](hotpotqa.en.md) · [agenticragtracer](agenticragtracer.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`single-hop relevance → multi-evidence retrieval → adaptive multi-step search`
-
-MultiHop-RAG is a foundation for asking whether retrieval quality should be measured as evidence coverage rather than passage similarity.
+Related benchmarks: [hotpotqa](hotpotqa.en.md) · [agenticragtracer](agenticragtracer.en.md)

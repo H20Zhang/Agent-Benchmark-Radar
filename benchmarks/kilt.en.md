@@ -6,50 +6,65 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](kilt.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](kilt.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2009.02252) · [Code](https://github.com/facebookresearch/KILT)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-KILT maps open-domain QA, fact checking, entity linking, slot filling, and other knowledge-intensive tasks onto one shared Wikipedia snapshot and evaluates downstream task quality together with provenance. A system must not only produce an output but identify where the supporting knowledge came from in the shared source.
+main sections 1–9; Appendix 11: annotation, mapping, retrieval/classifier details, interface; Tables 1–17; Table 4 visually verified
 
-## Compared with what
+[v1,2020-09-04](https://arxiv.org/pdf/2009.02252v1)
+<!-- EVIDENCE:reading:END -->
 
-Earlier task suites commonly used different corpora, retrievers, and evidence definitions, making it hard to tell whether retrieval infrastructure generalized across tasks. KILT introduces one snapshot and one provenance contract, turning “where did the knowledge come from?” into a reusable cross-task coordinate and an important foundation for later RAG evaluation.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Decisive evidence and score boundary
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-KILT's durable evidence is not a modern saturated leaderboard number; it is that task performance and provenance quality can be compared after controlling the retrieval source. A high KILT score supports performance on a fixed snapshot across several knowledge-intensive tasks. It does not support claims about freshness, live search, or agentic retrieval. End-to-end differences between retriever-generator stacks also do not automatically identify the retrieval component.
+KILT maps previously separate knowledge-intensive tasks onto one Wikipedia snapshot. Shared provenance and evidence-gated scoring make comparisons more interpretable, without equalizing training budgets or eliminating incomplete provenance labels.
+<!-- EVIDENCE:placement:END -->
 
-## Fair comparison conditions
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-Lock the KILT Wikipedia snapshot, task split, index, provenance metric, and generator. Updating the corpus or replacing it with external search changes the evaluation object and should not be ranked directly against original KILT results.
+Map 11 datasets/five tasks onto the 2019-08-01 Wikipedia snapshot (5.9M pages), using redirects and highest-BLEU span alignment; filter evaluation mappings below 0.5. Score output, retrieval and provenance-gated KILT metrics separately.
+<!-- EVIDENCE:method:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-KILT controls snapshot differences, but that also removes freshness and environment drift. Stronger successors need time/version change and interactive search control without giving up reproducibility.
+DPR indexes 22,220,793 disjoint 100-word passages. BART+DPR uses the top three passages from a fixed DPR model; RAG uses five and updates the query encoder, so training also differs. KILT metrics retain the answer score only when R-precision=1 for at least one complete gold provenance set. The selected test sets contain 1,444 NQ and 5,569 HotpotQA questions. Scoring is reference- and provenance-based, without an LLM judge.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Answer-versus-provenance gap
 
-## Research decision card
+Test denominators are 1,444 NQ and 5,569 HotpotQA questions; all metrics are percentages, and KILT-EM requires a correct answer plus R-precision=1 for at least one complete provenance set.
 
-### When to use it
+| Dataset / system | Answer_EM | R_precision | KILT_EM |
+|---|---|---|---|
+| NQ / BART+DPR | 41.27 | 54.29 | 30.06 |
+| NQ / RAG | 44.39 | 59.49 | 32.69 |
+| HotpotQA / BART+DPR | 25.18 | 25.04 | 1.96 |
+| HotpotQA / RAG | 26.97 | 30.59 | 3.21 |
 
-Use KILT for reusable retrieval and provenance over a shared knowledge source. Its main contribution is a common evidence coordinate across knowledge-intensive tasks. Higher task quality does not necessarily imply more accurate provenance, so retain both readouts.
+Source: Tables 2–4, Appendix Tables 13–14 · [Paper](https://arxiv.org/pdf/2009.02252v1)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-Illustrative task: the same knowledge base supports fact checking, entity linking, and QA, with outputs tied to supporting pages. Retrieval infrastructure may be shared, but output formats and correctness definitions differ; success on one task does not establish success on all.
+A shared snapshot does not unify abilities: RAG HotpotQA EM 26.97 falls to provenance-gated 3.21. RAG versus fixed DPR also changes training and passage count.
+<!-- EVIDENCE:interpretation:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-Swap retrievers over a fixed knowledge snapshot while preserving each task's generator and evaluator. Report task and provenance scores separately and test whether the retrieval change transfers across tasks. A single-task improvement calls for task-adaptation checks before claims of general reuse.
+All tasks are designed to be answerable inside the knowledge base. Provenance can be incomplete or extended after system outputs are seen. Human provenance annotation agreement is κ=0.3 for NQ and κ=0.1 for ELI5. Next, match passage counts and expand equivalent provenance labels.
 
-### Pair with
+Appendix discusses BERT+DPR classifier whereas one main-text sentence says BART+DPR; use method/table naming.
+<!-- EVIDENCE:limitations:END -->
 
-[beir](beir.en.md) · [crag](crag.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+Related benchmarks: [beir](beir.en.md) · [crag](crag.en.md)

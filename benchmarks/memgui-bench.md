@@ -1,4 +1,4 @@
-# MemGUI-Bench：跨步骤、跨 App、跨 session 的可执行 GUI memory
+# MemGUI-Bench：重试、经验与界面记忆怎样区分
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-02-03<br>
@@ -6,64 +6,105 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](memgui-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](memgui-bench.en.md)
 
-[论文](https://arxiv.org/abs/2602.06075) · [项目页](https://lgy0404.github.io/MemGUI-Bench/) · [代码](https://github.com/lgy0404/MemGUI-Bench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-MemGUI-Bench 把 memory 放进 **真实 mobile GUI action trajectory**：agent 要在多步骤、多个 App、重复尝试乃至跨 session 之间保留信息，并用先前经验继续操作。memory 可能是视觉状态、一次操作结果、某个 App 的 procedure，或者在另一个应用里看到的信息。
+已阅读v3正文第1—7节、附录A.1—A.11及全部裁判提示；HTML缺失的提示从59页PDF补读。长任务目录按单应用至四应用抽查，未逐项执行或重新标注；未审计实现或复现实验。
 
-## 相比此前评测多测了什么
+[arXiv2602.06075v3 (2026-08-27)](https://arxiv.org/html/2602.06075v3)
 
-传统 mobile-agent benchmark 主要看当前屏幕 grounding 和一次性 task completion。MemGUI-Bench 对现有 benchmark 的审计发现，真正依赖 memory 的任务只占很小比例，而且几乎不测 cross-session learning。因此它把 temporal/spatial retention 与 experience reuse 从长 trajectory 的副作用提升成任务本身。
+页首历史参考按原样保留；本页新读版本和实验条件不能代替原始发布成绩。
+[固定版本 PDF 2602.06075v3](https://arxiv.org/pdf/2602.06075v3)
+[官方来源，2026-09-30 所见内容（可变页面）](https://memgui-bench.github.io/)
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 怎么构造任务、怎么观察记忆
 
-套件包含 128 个任务、26 个 App、68 个 scenario，其中 89.8% 被归为 memory-intensive；论文评估 5 类架构下的 11 个 agent，并用 progressive scrutiny 和多个 memory-oriented metric 评估。结果显示即使较强 GUI agent，在跨时间或跨应用的信息依赖上仍有明显空间。
+在可恢复快照的Android模拟器中执行真实应用任务，失败后恢复环境，最多尝试三次，同时允许保留智能体经验。镜像任务保持相似应用组合但改变具体要求。裁判先看动作日志与最后三张截图，不确定时生成逐步描述，再按需补看历史截图；另按信息单元计算保留率。
 
-## 这个分数能证明什么
+定位比较：与LoCoMo式对话问答相比，MemGUI-Bench把记忆需要嵌入应用操作，并观察重试与镜像任务。它新增行动执行和经验复用的观察点，但视觉、控制与裁判也进入分数，不能直接解释为记忆检索进步。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-task success 与 repeated-attempt 指标反映的是 **GUI perception × memory × planning × execution** 整体系统。它不能单独证明某个 memory module 更强，因为 OCR/vision、app grounding、click execution 或 recovery 都可能在 memory 已经取对后继续失败。
+<!-- EVIDENCE:setup:START -->
+## 实验条件与评分对象
 
-## 公平比较契约
+128题，26个应用；难度按人工路径分为48道简单、42道中等、38道困难题。单/双/三/四应用分别28/56/34/10题。工作流系统共用不启用思考模式的Gemini-2.5-Pro，但观察形式和调用数不同；端到端系统使用各自微调模型。主裁判M2以Gemini-2.5-Flash描述截图、Gemini-2.5-Pro判分。步数上限为floor(1.4×人工步数+1)。
+<!-- EVIDENCE:setup:END -->
 
-要固定 device/emulator state、App 版本、账号/数据状态、action budget、retry 数、observation resolution 和 model/harness。首轮成功率应与多次尝试后的提升分开报告，否则更强的基础 GUI policy 容易被误认为更会复用经验。
+<!-- EVIDENCE:result-1:START -->
+## 累计成功不能直接当作学习增益
 
-## 还没有测什么
+Gemini-2.5-Pro工作流，步数限制；观察格式、记忆与调用数不等。三次结果是累计至少一次成功，不是第三次单次准确率。
 
-真实 App 会持续更新，reproducibility 依赖环境 snapshot；benchmark 也还没有证明跨数周/月的 retention、跨 App privacy-aware memory，或 procedure 对新版本界面的迁移能力。
+SR分母为128题；FRR分母为各系统首次尝试失败的题目。
 
-## 下一步最有判别力的验证
+| 系统 | 首次成功SR@1（%） | 最多三次成功SR@3（%） | 失败恢复FRR（%） |
+|---|---|---|---|
+| Agent-S2 | 27.3 | 49.2 | 21.5 |
+| M3A | 32.8 | 47.7 | 16.3 |
+| T3A | 22.7 | 42.2 | 20.7 |
 
-设计完全相同初始 UI state 下的 fresh-agent vs experienced-agent paired run，并加入 oracle-memory injection，直接估计 retained experience 相比 generic GUI competence 的边际贡献。
+定位：表2与表14：二月快照 · [原文](https://arxiv.org/html/2602.06075v3)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 40题消融：移除长期记忆后发生什么
 
-## 研究决策卡
+与128题主结果分开；同骨干组件消融，未提供多随机种子区间。
 
-### 什么时候值得用
+40题：13道简单、19道中等、8道困难题。
 
-适合研究跨应用与跨尝试的经验是否改善移动界面操作。重试次数本身会增加成功机会，因此应区分记忆带来的迁移与单纯多试几次；界面识别错误也不能全部归到记忆模块。
+| Agent-S2配置 | SR@1（%） | SR@3（%） |
+|---|---|---|
+| 保留短期和长期记忆 | 27.5 | 45.0 |
+| 移除长期记忆 | 17.5 | 25.0 |
+| 移除短期和长期记忆 | 5 | 10 |
 
-### 一个具体任务长什么样
+定位：表3、附录A.9.4 · [原文](https://arxiv.org/html/2602.06075v3)
+<!-- EVIDENCE:result-2:END -->
 
-示意任务：一次界面操作暴露了路径或失败原因，后续镜像任务在相关场景中再次出现。系统需要复用有效经验并识别当前界面差异，而不是原样重放旧点击序列。
+<!-- EVIDENCE:result-3:START -->
+## 主用裁判的可靠性要看本套件
 
-### 最有判别力的实验
+M1全部Gemini-2.5-Pro；主实验M2仅描述器换成Flash。这是成功判定的核验，不是智能体成功率。
 
-固定设备快照、视觉骨干和尝试总数，比较无记忆、原始轨迹与提炼经验。除 pass@k 外报告首次成功和每次尝试成本，再按跨步骤、跨应用与跨会话拆分，检查收益发生在哪种迁移距离。
+256条轨迹，M3A与T3A各128条，每条由三位人工标注者核验。
 
-### 建议搭配
+| 裁判配置 | F1（%） | 精确率（%） | 召回率（%） |
+|---|---|---|---|
+| M1 | 93.1 | 92.4 | 93.8 |
+| M2 | 81.2 | 82.5 | 80.0 |
 
-[memoryarena](memoryarena.md) · [mem2actbench](mem2actbench.md)
+定位：表1B与表12：裁判核验 · [原文](https://arxiv.org/html/2602.06075v3)
+<!-- EVIDENCE:result-3:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:result-4:START -->
+## 词元约束是重新判分，不是自适应重跑
 
-<!-- RESEARCH-DECISION:END -->
+每题阈值=人工步数×9507词元；实际消耗估为步数×系统平均每步词元，超限轨迹改判失败，不是新的自适应策略。
 
-## 演化位置
+128题，按每题人工路径长度设预算。
 
-`single-session GUI grounding → cross-step retention → cross-session experience reuse`
+| 系统 | 步数约束SR@3（%） | 估算词元约束SR@3（%） |
+|---|---|---|
+| Agent-S2 | 49.2 | 0 |
+| M3A | 47.7 | 21.9 |
 
-它把重复 GUI 操作真正变成了 memory-learning 问题，而不是更长的一次性轨迹。
+定位：表5、附录A.9.5 · [原文](https://arxiv.org/html/2602.06075v3)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 哪些结论成立，哪些仍待验证
+
+这是一套可执行界面任务与记忆诊断协议，不能把系统排名解读为纯记忆模块排名。普通任务仅13题，MTPR还受任务难度分布影响。IRR按115题逐题平均，FRR以首轮失败题为分母，第二次首次成功权重1、第三次0.5。评价提示允许识别不可能任务后说明原因也判成功；因此成功不总意味着原始操作目标实际完成。主用裁判在本套件的人工对照F1为81.2%，不能用另一个裁判或SPA-Bench的99%替代。
+
+表2把结果标为2026年2月快照，不能把v3修订日期当成运行日期。正文的M3A每步5.3秒与表13的14.7秒、表14的14.5秒不一致；不要混用。表1的SPA基线F1为88.2%，正文92.5%来自单应用子集。表6与框架描述提到12个系统，主表和配置表列11个。失败分类百分比也有分母与数值不一致，不能据此作普遍因果判断。
+
+下一步：沿用已有40题消融，增加固定总词元预算的真正重跑；把同题重试和未见镜像任务迁移分开，经验池按任务组重置并说明顺序。配合人工复核最终状态，以及可直接读取应用状态的检查器，区分记忆、视觉、执行和裁判错误。可与MemoryArena的分组任务及Mem2ActBench的参数填充配对。
+IRR不是对内部记忆的直接测量：成功任务统一记为100%，未成功且属于隐式决策的任务统一记为0%，其他情况才按正确保留信息单元占所需单元的比例评分。
+<!-- EVIDENCE:limitations:END -->

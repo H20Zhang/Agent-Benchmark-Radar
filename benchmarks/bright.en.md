@@ -6,136 +6,92 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](bright.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](bright.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2407.12883) · [Official leaderboard](https://brightbenchmark.github.io/) · **Area: RAG / Retrieval**
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-BRIGHT asks a harder question than whether a retriever understands query semantics: **does recognizing relevance itself require reasoning?** When the query and the correct document have little direct lexical or embedding similarity, one-shot vector matching can fail systematically.
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-## What it actually measures
+main sections 1–6; Appendices A–I, construction/annotation instructions, examples and prompts; Tables 1–49; Table 2 visually verified; PDF filled mirror truncation after Table 18
 
-BRIGHT contains **1,384 real-world queries** spanning economics, psychology, mathematics, coding, and other domains.
+[arXiv v4 (2025-03-26) — v4,2025-03-26, ICLR 2025; NOT initial-release result](https://arxiv.org/pdf/2407.12883v4)
+<!-- EVIDENCE:reading:END -->
 
-Many relevant documents become relevant only after the system understands the problem, infers hidden constraints, or constructs intermediate reasoning. nDCG@10 therefore reflects more than representation similarity; it also exposes whether:
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-- the query is decomposed correctly;
-- implicit constraints are recognized;
-- retrieval needs reasoning-driven expansion;
-- reranking can identify evidence that is logically relevant despite weak surface similarity.
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-## Compared with what
+Compared with BEIR’s heterogeneous zero-shot retrieval, BRIGHT makes relevance depend specifically on solving the query rather than topical or lexical similarity. It targets reasoning-dependent relevance; conversational agents and downstream QA still require separate controls.
+<!-- EVIDENCE:placement:END -->
 
-BEIR emphasizes **zero-shot generalization across domains**: does retrieval remain robust after moving to a new domain?
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-BRIGHT adds a different axis: even within a known domain, **the relevance judgment itself may require reasoning**.
+1384 queries span 12 tasks: seven StackExchange domains use cited and verified evidence; coding/math relevance follows algorithms, syntax or shared theorems. Topically similar negatives are unhelpful; some query-specific candidate exclusions reduce false negatives.
+<!-- EVIDENCE:method:END -->
 
-The two benchmarks are complementary rather than substitutes:
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-- BEIR is primarily a robustness test;
-- BRIGHT is primarily a reasoning-aware relevance test.
+This note uses v4: 1,384 queries across twelve tasks, with equally weighted dataset-macro nDCG@10×100. SFR is SFR-Embedding-Mistral with a 4,096-token limit; Qwen is gte-Qwen1.5-7B-instruct with 8,192 tokens. Reranking compares MS-MARCO MiniLM-L12 with gpt-4-0125-preview, retaining candidate counts. Downstream QA covers only seven StackExchange domains; Claude 3.5 Sonnet both generates and scores reference-content coverage, rather than binary answer accuracy.
+<!-- EVIDENCE:setup:END -->
 
-A retriever may generalize well on BEIR and still struggle on BRIGHT because it cannot infer the hidden relation between query and evidence.
+<!-- EVIDENCE:result-1:START -->
+## Raw-query ranking
 
-## How the evaluation works
+Macro nDCG@10 on a 0–100 scale across 12 datasets; v4 contains 1,384 queries and weights datasets equally.
 
-The endpoint is still a ranking metric such as nDCG@10: how highly are relevant documents ranked?
+| System | Score |
+|---|---|
+| BM25 | 14.5 |
+| SFR | 18.3 |
+| Qwen | 22.5 |
 
-But the pipelines producing that ranking can differ substantially:
+Source: Table 2 · [Paper](https://arxiv.org/pdf/2407.12883v4)
+<!-- EVIDENCE:result-1:END -->
 
-- direct dense retrieval from the raw query;
-- LLM-generated reasoning or query expansion;
-- multi-query retrieval;
-- retrieve-then-rerank;
-- dataset-specific preprocessing.
+<!-- EVIDENCE:result-2:START -->
+## Separate reranking experiment block
 
-A BRIGHT score therefore needs to be reported together with the **reasoning budget, reranking stage, and index setting**.
+Macro nDCG@10 on a 0–100 scale across 12 datasets; this separate experiment block uses a BM25 baseline of 14.3, which must not be mixed with Table 2’s 14.5.
 
-## Decisive evidence and current results
+| BM25 reranker | Candidate_k | Score |
+|---|---|---|
+| None | — | 14.3 |
+| MiniLM-L12 | 100 | 8.3 |
+| GPT-4 | 10 | 17.4 |
 
-The most important result from the original paper was not one absolute score, but the broad degradation of strong retrievers when relevance required reasoning compared with conventional retrieval benchmarks. BRIGHT therefore exposed a genuine blind spot of similarity-based retrieval.
+Source: Table 3/Table 41 · [Paper](https://arxiv.org/pdf/2407.12883v4)
+<!-- EVIDENCE:result-2:END -->
 
-The official leaderboard continues to evolve. Radar tracks the short-document 12-dataset mean nDCG@10 separately. Any “current best” should mean only **the highest verified result for that leaderboard track, at that date, under that protocol**. It should not be generalized to long-document settings, other subsets, or agentic search.
+<!-- EVIDENCE:result-3:START -->
+## Initial downstream evaluation
 
-## What a score supports
+Mean reference-content coverage score on a 0–100 scale over seven StackExchange domains; Claude 3.5 Sonnet generates and judges, with domain query counts in the dataset table; this is not binary accuracy.
 
-A higher BRIGHT nDCG supports the claim that, under the named dataset mixture, document setting, and retrieval pipeline, a system is better at finding reasoning-dependent relevant documents.
+| Retrieval | Average |
+|---|---|
+| None | 77.7 |
+| Qwen | 79.6 |
+| Oracle | 81.8 |
 
-It does not by itself establish:
+Source: Table 4, Table 46 · [Paper](https://arxiv.org/pdf/2407.12883v4)
+<!-- EVIDENCE:result-3:END -->
 
-- stronger multi-step search;
-- better final QA answers;
-- reasoning as the causal source of the gain;
-- better system efficiency.
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-For example, an expensive query-expansion plus reranking pipeline may improve nDCG substantially without being a better production retriever.
+The paper includes initial downstream QA; do not say evidence use is wholly untested. Same-model generation/grading and coverage rubrics do not prove independent factual accuracy or agent-policy causality.
+<!-- EVIDENCE:interpretation:END -->
 
-## Main confounders
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-The first is **reasoning-expansion budget**. A strong LLM generating many candidate queries can itself move the score.
+Relevance remains subjective; GritLM continuation tests one leakage condition without query-document mappings. Next: fixed candidates, version and compute, with separate retrieval/answer evaluation.
 
-The second is **reranking**. A single-stage retriever and a pipeline using an expensive cross-encoder or LLM judge after top-k retrieval operate at very different cost points.
+v1:1398 queries/SFR 18.0; v4:1384/SFR 18.3. v4 Table 2 best row 22.5; caption/text say 24.3. Raw BM25 Table 2=14.5; rerank baseline Table 3/41=14.3. Keep blocks separate. Table 46 places predicted_answer in PROBLEM as well as STUDENT ANSWER; implementation verification required. Table 6 and Table 39 differ for some long-context averages (e.g. OpenAI 21.9 vs 21.3).
+<!-- EVIDENCE:limitations:END -->
 
-The third is **dataset aggregation**. Macro averages can hide severe failures in individual domains.
-
-The fourth is **short versus long document setting**. Changing document granularity changes both retrieval difficulty and indexing cost.
-
-## Fair comparison contract
-
-At minimum, align:
-
-- short/long-document setting;
-- dataset subset;
-- index preprocessing and chunking;
-- whether reasoning expansion or multi-query retrieval is allowed;
-- reranker type and candidate depth;
-- LLM, token, and call budgets;
-- metric and aggregation rule.
-
-When these differ, results should be reported as separate tracks rather than merged into one ranking.
-
-## What is still missing
-
-BRIGHT remains fundamentally a **static ranking benchmark**. It does not fully measure:
-
-- active query reformulation after a failed first retrieval;
-- evidence chaining across multiple search steps;
-- live corpora and newly appearing information;
-- failure localization over a search trajectory;
-- latency, token, tool-call, and index-serving cost;
-- whether the generator actually uses retrieved evidence correctly.
-
-## Most discriminating next test
-
-A high-value extension is to turn BRIGHT from one ranking pass into a **reasoning-controlled retrieval trajectory**. Give agents the same query, allow a limited number of searches or reformulations, and record both newly recovered relevant evidence and cost at every step.
-
-This would separate systems with stronger first-hop retrieval from systems that are better at recognizing a bad first search and correcting it.
-
-<!-- RESEARCH-DECISION:START -->
-
-## Research decision card
-
-### When to use it
-
-Use BRIGHT when relevance itself requires reasoning. It probes query understanding beyond ordinary semantic similarity, but query expansion, long reasoning, and reranking all add computation. Resource-matched comparisons are necessary for efficiency claims.
-
-### What a concrete task looks like
-
-Illustrative task: a query describes a phenomenon, while the useful document explains its underlying principle without repeating the query's vocabulary. The retriever must infer the information need; many topically similar documents may provide no usable explanation.
-
-### Most discriminating experiment
-
-Fix the corpus and relevance judgments and compare raw queries, model-expanded queries, reranking, and hybrid retrieval. Charge expansion and reranking costs separately and slice by domain and reasoning type to distinguish representation quality, extra compute, and parametric knowledge.
-
-### Pair with
-
-[beir](beir.en.md) · [bright-pro](bright-pro.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Evolution position
-
-`semantic-similarity retrieval → reasoning-aware relevance → iterative reasoning-controlled evidence search`
-
-BRIGHT occupies the middle step: it made “relevance requires reasoning” measurable, but does not yet evaluate the full search process.
+Related benchmarks: [beir](beir.en.md) · [bright-pro](bright-pro.en.md)

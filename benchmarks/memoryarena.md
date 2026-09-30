@@ -1,4 +1,4 @@
-# MemoryArena：记忆是否真的改善后续行动
+# MemoryArena：跨会话行动依赖和严格成功率
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-02-18<br>
@@ -6,64 +6,88 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](memoryarena.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](memoryarena.en.md)
 
-[论文](https://arxiv.org/abs/2602.16313) · [项目页](https://memoryarena.github.io/) · [代码](https://github.com/ZexueHe/MemoryArena)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-MemoryArena 测的是 agent 能不能把早期交互经验转化成 **后续更好的决策**。它使用多 session 的 Memory–Agent–Environment 闭环：agent 的 action 会产生 feedback，其中真正有用的经验需要被提炼，并在之后相互依赖的任务里再次使用。这里的 memory 不只是“能否回答历史里出现过什么”，而是“过去经历是否改变下一次怎么做”。
+已阅读正文第1—5节及附录A—C的方法与结果，检查PDF提示8—11和案例12—19的相关内容。长篇数学推导未独立重证；图形曲线未数字化，未复现实验。
 
-## 相比此前评测多测了什么
+[arXiv 2602.16313v2 (2026-09-17)](https://arxiv.org/html/2602.16313v2)
 
-LoCoMo 一类 benchmark 主要测对历史对话的回忆与推理。MemoryArena 把因变量从 retrospective QA 改成 downstream action quality，并覆盖网页导航、带偏好约束的规划、渐进式信息搜索和连续形式推理。因此，有价值的 memory 可能是一条失败路径、环境约束或策略经验，而不是历史中能直接匹配的事实。
+[补充来源 2602.16313v2，2026-09-30 核对](https://arxiv.org/pdf/2602.16313v2)
 
-## 决定性证据
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-论文的关键观察是：一些在 LoCoMo 上已经接近饱和的系统，进入这种 agentic multi-session 场景后仍明显表现不佳。公开 harness 同时覆盖 long-context、词法/向量检索、图检索和专门 memory system，因此这个落差很难简单归结为“少了某一种 retriever”。
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-## 这个分数能证明什么
+每组任务开始时清空记忆，在不同会话依次执行相互依赖的子任务，保存已完成的交互轨迹，再检索后续会话所需信息并继续行动。购物检查兼容性，旅行累积跨成员约束，搜索逐步增加条件，形式推理复用中间推导。
 
-它主要提供固定模型、工具接口、环境和 session protocol 下 **experience-to-action 整体闭环** 的系统级证据。它不能单独证明某个 memory representation、retriever 或 consolidation 算法造成了增益，因为 planning 与 tool execution 也位于因果链上。
+定位比较：与LongMemEval的历史问答相比，MemoryArena把前一子任务产生的经验或状态用于后续行动，并按依赖任务组评测。新增的是跨会话行动依赖，而不是仅更长上下文；某些搜索子题仍需无历史对照来证实依赖。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-比较时应固定 backbone、环境版本、工具接口、session 边界、action budget 与 observation access，并单独报告 memory 写入/更新成本和在线行动成本。如果某个系统拥有更多 observation 或 retry，它测到的是不同的 agent loop，而不是更干净的 memory component 差异。
+v2包含701组任务、4,850个子任务：购物150组、旅行270组、搜索221组、数学40组、物理20组。附录B使用会话开始时检索，通用公式则允许逐行动检索。购物每件上限20轮、输出4,096tokens；旅行每人最多30次工具调用；形式推理输出8,192tokens、温度0。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 同一任务智能体，外部记忆有得有失
 
-它仍是有边界的 benchmark environment，而不是数月开放式部署；governance、删除、隐私边界和跨用户 memory 不是主目标。同时它还不能充分区分：到底是写错了经验、取错了经验，还是取对了但 agent 没有用。
+均为[0,1]比例；进度先计算每组通过子任务比例再平均；软进度进一步对各子任务满足的约束比例取平均。任务智能体均为Claude-Sonnet-4.6，记忆表示与访问方式不同，没有普遍最优者。搜索/形式推理按最终答案评分，购物/旅行要求整体输出有效。
 
-## 下一步最有判别力的验证
+购物150组、旅行270组、搜索221组、数学40组、物理20组；表中为四舍五入比例。
 
-在同一批 trajectory 上加入 oracle-write、oracle-retrieve、oracle-use 三类 counterfactual。这样才能把“系统做不好”进一步定位到 memory lifecycle 的具体断点。
+| 系统 | 购物成功率 | 购物进度 | 旅行成功率 | 旅行软进度 | 搜索成功率 | 数学成功率 | 物理成功率 |
+|---|---|---|---|---|---|---|---|
+| Claude-Sonnet-4.6 / Long context | 0.13 | 0.79 | 0.0 | 0.89 | 0.06 | 0.37 | 0.4 |
+| Claude-Sonnet-4.6 / Text-Embedding-3-Small | 0.04 | 0.55 | 0.0 | 0.42 | 0.27 | 0.37 | 0.63 |
+| Claude-Sonnet-4.6 / MemoRAG | 0.01 | 0.54 | 0.0 | 0.47 | 0.35 | 0.3 | 0.5 |
 
-<!-- RESEARCH-DECISION:START -->
+定位：v2表5、附录C.1 · [原文](https://arxiv.org/html/2602.16313v2)
+<!-- EVIDENCE:result-1:END -->
 
-## 研究决策卡
+<!-- EVIDENCE:result-2:START -->
+## 依赖深度增加，条件通过率下降但非零
 
-### 什么时候值得用
+条件约束通过率，[0,1]。到深度4仍非零。这不是无条件的整趟旅行成功率，也不能证明只有推理环节失败。
 
-适合把记忆的研究主张从‘能回答历史问题’推进到‘能改善后续行动’。关键证据来自前后任务的依赖关系与无记忆对照；如果后续任务可以独立完成，较高成功率就不足以说明经验复用有效。
+团体旅行约束，仅在前序约束正确时统计；各深度的具体样本数未给出。
 
-### 一个具体任务长什么样
+| 条件 | 依赖深度0 | 依赖深度1 | 依赖深度2 | 依赖深度3 | 依赖深度4 |
+|---|---|---|---|---|---|
+| 长上下文记忆 | 0.48 | 0.29 | 0.21 | 0.18 | 0.15 |
 
-示意任务：前一会话中的尝试暴露了环境规则或用户选择，下一会话需要据此更快完成相关操作。记忆应改变搜索顺序或行动参数；把旧轨迹全部复制进上下文并不自动等于有效经验提炼。
+定位：v2表7、附录C.3 · [原文](https://arxiv.org/html/2602.16313v2)
+<!-- EVIDENCE:result-2:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:result-3:START -->
+## 论文已有近似理想记忆干预
 
-用相同起始环境与随机种子配对有记忆、无记忆和原始轨迹回放条件，比较成功率及行动成本。再加入不相关经验，检查负迁移；这样才能区别有效记忆提炼、额外上下文和更多计算带来的收益。
+长上下文任务分数及增量，采用[0,1]尺度。注入前序金标准结果和LLM整理的流程。近似理想条件同时改变证据和呈现方式，并非硬上限。
 
-### 建议搭配
+表8未明确给出干预样本数与模型名称。
 
-[past-bench](past-bench.md) · [mem2actbench](mem2actbench.md)
+| 任务 | 原始分数 | 报告的绝对增量 |
+|---|---|---|
+| 团体旅行 | 0.0 | 0.05 |
+| 渐进搜索 | 0.06 | 0.05 |
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+定位：v2表8、附录C.3 · [原文](https://arxiv.org/html/2602.16313v2)
+<!-- EVIDENCE:result-3:END -->
 
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
 
-## 演化位置
+在同一任务智能体下，外部记忆可能改善搜索，却降低购物表现。严格旅行成功率为零时，仍可能满足相当一部分约束。端到端成绩同时受记忆、行动和推理影响；近似理想记忆的增益可缩小诊断范围，但不能锁定单一原因。
 
-`conversation recall → trajectory memory → experience-conditioned action`
+主表GPT-5.1-mini与正文GPT-5-mini名称不一致，因此本页选取名称清楚的Claude-Sonnet-4.6结果。表7深度4通过率为0.15，不能复述“最终归零”。表8数学原分0.26与主表0.21不同，不合并。方法公式按动作检索，实际附录按会话检索；渐进搜索的分解提示要求子题可独立回答，应追加无历史对照核验必要依赖。
 
-它真正重要的变化，是把成功标准从“记住过去”推进到“改变未来行为”。
+下一步：以相同任务种子配对无历史、原始历史、学习记忆及金标准结果加流程条件，匹配行动/检索预算，区分获取失败和使用失败。可搭配LoCoMo测回忆、MemProbe测受控保留/更新。
+搜索和形式推理的成功率只检查最后一个子任务；购物和旅行要求整体输出满足条件。近似理想记忆是已有诊断，但不能替代严格的匹配干预。
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# InjecMEM
+# InjecMEM: separating memory exposure from output steering
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-24<br>
@@ -6,60 +6,104 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-## What it actually measures
+[中文](injecmem.md) | **English**
 
-InjecMEM measures **targeted persistent-memory injection**. An attacker uses one apparently ordinary interaction to write a malicious record into persistent memory; in a later independent session, a topic-relevant query may retrieve that record and cause the system to produce an attacker-selected target. The measured object therefore spans the full `write → persist/drift → retrieve → generate` trajectory.
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What changed relative to predecessors
+Reviewed the stated paper version, method, experimental setup, key results and limitations; no independent reproduction.
 
-AgentPoison and MINJA emphasize attack methods, while MPBench provides a broader persistent-poisoning taxonomy. InjecMEM narrows the question to **topic-conditioned targeted generation** and separates retrieval success, attack success conditional on retrieval, and end-to-end joint success. That decomposition exposes whether failure occurs in memory exposure or in generation after exposure.
+Substantive main 1–5 and Appendices A–H read, including threat model, metric equations, defenses, corpus construction, transfer procedures/artifacts and qualitative fused-context cases. No attack execution, implementation audit or independent reproduction; note omits operational payloads.
 
-## Decisive evidence
+[arXiv 2608.23471v1 (2026-08-24)](https://arxiv.org/html/2608.23471v1)
 
-Multi-GCG on MemoryOS reports **46.5% RSR, 76.6% conditional ASR, and 35.6% joint ASR**. Several generic filters barely reduce conditional ASR. The combination matters more than a single attack-success number: once the malicious record is retrieved, the generation stage can still follow the target at high rates, while end-to-end success is also constrained by retrieval exposure.
+The frozen release reference is preserved; newer paper results do not replace initial-release scores.
+<!-- EVIDENCE:reading:END -->
 
-## What the score supports
+<!-- EVIDENCE:method:START -->
+## How tasks create memory demands
 
-The results support the claim that, under the tested memory stack and white-box optimization conditions, an attack can traverse persistence, retrieval, and generation. They do not establish black-box transfer to unseen model families or isolate one MemoryOS component as the cause, because the strongest attack assumes backbone access and fused-prompt knowledge.
+This is a memory-injection method and controlled evaluation protocol. One submitted interaction is logged; later topic queries may retrieve it and alter responses. The method separates topic retrieval exposure from generation-side interference optimized on accessible backbones and varied surrogate contexts. Store internals are black-box, but the backbone is white-box and final-prompt format is recovered beforehand. Evaluation separates retrieved-page exposure, target-string generation conditional on retrieval and their joint occurrence.
 
-## Fair comparison contract
+Editorial placement: Compared with direct retrieval-store poisoning such as AgentPoison, InjecMEM uses a logged interaction that later enters memory retrieval and separates exposure from generation steering. This changes the threat model and attack pipeline; conditional attack success is not a general memory-quality score. This is an evaluation-coordinate comparison, not a claim of direct dataset inheritance.
+<!-- EVIDENCE:method:END -->
 
-Comparisons should align backbone, memory-write policy, store/rewrite mechanism, retrieval top-k, trigger queries, attack optimization/token budget, and generation prompt. RSR, conditional ASR, and joint ASR should be reported together; otherwise a defense that merely reduces retrieval exposure can be mistaken for a safer generation policy.
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and scoring targets
 
-## How to use it in research
+Primary backbone Qwen2.5-7B-Instruct, mainly MemoryOS with additional MemGPT evaluation. Synthetic corpus: 944 conversations/3096 user–assistant pages across 19 domains; about 50 held-out queries/domain and 10 full-pipeline seeds. Prefill precedes injection, followed by non-target dialogue drift. RSR measures presence in the fused prompt; ASR-c conditions on retrieval; ASR-j uses all target queries. Success is normalized target-string matching, not successful harmful action. Numeric retrieval capacities/decoding settings are incompletely reported.
+<!-- EVIDENCE:setup:END -->
 
-InjecMEM is useful for testing whether a memory-security design protects only admission or remains robust later in the lifecycle. For a new memory architecture, the most informative ablation replaces admission, rewrite/consolidation, retrieval, and generation defenses separately while tracking joint attack success and benign retrieval utility.
+<!-- EVIDENCE:result-1:START -->
+## Table 3, controlled system comparison
 
-## Next discriminating validation
+Primary Qwen2.5-7B-Instruct; MemGPT reuses the MemoryOS-optimized generation component under a different prompt layout. 76.6% is not end-to-end risk.
 
-The main gaps are rewrite-heavy stores, real deployments, adaptive defenses, and explicit security–utility curves. The highest-value next test is whether high conditional ASR persists across different backbones, memory rewrite policies, and black-box access conditions rather than further optimizing the same white-box attack setting.
+19 domains, about 50 queries/domain, 10 seeds; ASR-c only retrieved cases, exact per-row conditional counts not supplied
 
-<!-- RESEARCH-DECISION:START -->
+| System | Retrieval RSR (%) | Conditional ASR-c (%) | Joint ASR-j (%) |
+|---|---|---|---|
+| MemoryOS | 46.5 | 76.6 | 35.6 |
+| MemGPT | 37.2 | 48.6 | 18.1 |
 
-## Research decision card
+Locator: Table 3, controlled system comparison · [Source](https://arxiv.org/html/2608.23471v1)
+<!-- EVIDENCE:result-1:END -->
 
-### When to use it
+<!-- EVIDENCE:result-2:START -->
+## Table 6, selected retrieve-time defenses
 
-Use InjecMEM to diagnose how one low-privilege interaction can affect later answers through persistent memory. Successful writing, retrieval, and behavioral takeover are separate events. Reporting only success conditional on retrieval overstates end-to-end risk.
+Attack filtering occurs after retrieval; BBR is separately measured at ingestion. Judge detector Qwen2.5-0.5B at threshold 0.5; perplexity threshold selected by sweep. Dashes preserve unreported values; conditional ASR is undefined when RSR=0.
 
-### What a concrete task looks like
+Main controlled queries; BBR uses separate benign ingestion pages, count unspecified
 
-Illustrative task: an external record attempts to blend source instructions into long-term memory, and a later benign query retrieves it. A defense must maintain the trust boundary between content and instructions without blocking legitimate information storage and use.
+| Defense | RSR (%) | ASR-j (%) | ASR-c (%) | Benign write blocking BBR (%) |
+|---|---|---|---|---|
+| No defense | 46.5 | 35.6 | 76.6 | 0 |
+| LLM-as-a-Judge | 36.2 | 27.3 | 75.4 | 0.65 |
+| Perplexity | 0 | — | — | 71.8 |
 
-### Most discriminating experiment
+Locator: Table 6, selected retrieve-time defenses · [Source](https://arxiv.org/html/2608.23471v1)
+<!-- EVIDENCE:result-2:END -->
 
-Measure writing, retrieval, conditional behavioral deviation, and joint success separately, alongside benign blocking for the same defense. Vary writer, answerer, and summarization policy to assess transfer rather than treating one white-box setting as a bound on every deployment.
+<!-- EVIDENCE:result-3:START -->
+## Table 5, joint-training transfer selected metric
 
-### Pair with
+Joint optimization used Qwen and Mistral; Llama is a held-out family. Conditional steering illustrates the transfer boundary, not overall risk.
 
-[mpbench](mpbench.en.md) · [utility-under-attack](utility-under-attack.en.md)
+Retrieved cases only; exact conditional counts not supplied
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+| Test backbone | Jointly optimized ASR-c (%) |
+|---|---|
+| Qwen2.5-7B-Instruct | 70.5 |
+| Mistral-7B-Instruct-v0.3 | 43.2 |
+| Llama-3.1-8B-Instruct | 0 |
 
-<!-- RESEARCH-DECISION:END -->
+Locator: Table 5, joint-training transfer selected metric · [Source](https://arxiv.org/html/2608.23471v1)
+<!-- EVIDENCE:result-3:END -->
 
-## Genealogy
+<!-- EVIDENCE:result-4:START -->
+## Table 8, WildChat-background check
 
-The benchmark pushes memory security from “can malicious content be written?” to the end-to-end **write → drift → retrieve → generate** path; `map_delta=reinforces`. MPBench provides breadth across attack surfaces, while InjecMEM provides finer targeted-generation attribution.
+WildChat provides non-target prefill/drift conversations; other settings follow the main experiment. SD is not a confidence interval or a clinical/financial outcome score.
 
-Primary: https://arxiv.org/abs/2608.23471
+Three seeds/topic; first-query retrieval setting; exact per-seed sample count not separately given
+
+| Topic | RSR@1 mean (%) | ASR-j mean (%) | ASR-j SD (points) |
+|---|---|---|---|
+| Health | 64.7 | 46.0 | 5.29 |
+| Finance | 60.0 | 40.7 | 7.02 |
+
+Locator: Table 8, WildChat-background check · [Source](https://arxiv.org/html/2608.23471v1)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits and next validation
+
+Results expose a vulnerability in raw-interaction-retaining systems under the specified white-box optimization, not an upper risk bound for all memory architectures. Aggressive rewriting remains untested. Retrieval-filter security and write-time benign blocking measure different stages; zero BBR does not prove intact task utility. WildChat supplies benign backgrounds for two topics, not deployment evidence. Held-out-family failure limits transfer; concatenated per-family attacks are not universal zero-shot transfer. Non-target preservation lacks a broad quantitative utility evaluation.
+
+Appendix A table leaves conditional ASR undefined at RSR 0, while threshold prose calls it 0. Preserve undefined denominator rather than claim measured 0. BBR is benign write-time rejection although attack defenses operate at retrieval time. Table 1 RSR@k is over first k topic queries, not retrieval top-k; Table 3 overall 46.5 has a different aggregation and should not be substituted for Table 1@50=35.4. Domain-average metrics should not be assumed to multiply exactly; pooling weights/counts not fully supplied. BadChain comparison adapts/compresses its multistep procedure and omits a fixed victim trigger; 0% is only for this adapted setting. Single poisoning interaction does not count prior prompt-format recovery or offline white-box optimization as free black-box access.
+
+
+
+Next: Measure write retention, retrieval exposure, conditional steering and joint steering separately under matched queries/budgets. Pair per-stage false blocking with benign task success, including rewrite-heavy stores and longer drift. Separate trained backbones, unseen same-family variants and unseen families using non-operational targets.
+<!-- EVIDENCE:limitations:END -->

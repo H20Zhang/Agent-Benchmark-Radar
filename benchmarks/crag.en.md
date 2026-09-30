@@ -7,64 +7,65 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](crag.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](crag.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2406.04744) · [Code](https://github.com/facebookresearch/CRAG)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it actually measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-CRAG evaluates factual RAG across changing facts, entity popularity, question complexity, web search, knowledge-graph access, and abstention. Its 4,409 QA pairs span five domains and eight categories, with temporal dynamism ranging from years to seconds.
+main sections 1–6; Appendix A.1–A.4 including prompts, construction, judge validation, latency; Tables 1–11; Table 5/Figure 2 visually verified
 
-## What changed relative to prior evaluation
+[v1,2024-06-07](https://arxiv.org/pdf/2406.04744v1)
+<!-- EVIDENCE:reading:END -->
 
-Static QA benchmarks blur model knowledge and retrieval value because many answers are already memorized. CRAG stresses facts whose freshness and long-tail nature make external retrieval necessary and makes hallucination-sensitive correctness central.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Decisive evidence
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-The paper reports advanced LLMs at no more than 34% accuracy, straightforward RAG around 44%, and state-of-the-art industry RAG systems answering only 63% of questions without hallucination. Accuracy falls further for more dynamic, less popular, and more complex facts.
+Compared with static, answerable-in-corpus tasks common in HotpotQA/KILT, CRAG adds freshness, long-tail entities, false premises and abstention with web and knowledge-graph evidence. Its contribution is an explicit answer-versus-error tradeoff rather than scale alone.
+<!-- EVIDENCE:placement:END -->
 
-## What the score supports
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-CRAG provides evidence about trustworthy factual QA under its mock web/KG interfaces. The strong freshness effect supports the value of retrieval, but the score remains system-level: model knowledge cutoff, retrieval stack, source handling, and answer policy all matter.
+KG templates and human web questions yield 4409 cases across five domains, eight types, freshness/popularity slices. Frozen pages and 38 mock APIs support Task 1(five pages), Task 2(+KG), Task 3(50 pages+KG). Correctness, hallucination and abstention remain separate.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-Fix model snapshot/knowledge cutoff, mock APIs, retrieval budget, KG access, and grading. Report hallucination/abstention separately from raw accuracy; a system that guesses aggressively should not be equated with one that correctly knows when evidence is insufficient.
+Main results use 1,335 public test questions. GPT-4 Turbo receives at most 4,000 web-context tokens and 2,000 KG tokens, with Llama3-8B-Instruct for entity extraction. Automatic scoring first checks exact match, then averages GPT-3.5-turbo and Llama3-70B-Instruct judgments. Scorea is accuracy minus hallucination. Human Scoreh assigns 1 to perfect, 0.5 to acceptable, 0 to missing and −1 to incorrect answers. Commercial systems use human evaluation and should not be ranked directly against frozen-web automatic baselines.
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Accuracy gains need not improve risk-sensitive score
 
-Mock APIs improve reproducibility but remove much of live-web navigation, interface variability, authentication, and search-provider drift. The benchmark is factual QA rather than long-form research or open-ended tool use.
+GPT-4 Turbo on 1,335 public test questions; the first three metrics are percentages and Scorea is accuracy minus hallucination in percentage points; web context is 4,000 tokens and KG context 2,000 tokens.
 
-## Next discriminating validation
+| GPT-4 Turbo condition | Accuracy | Hallucination | Missing | Scorea |
+|---|---|---|---|---|
+| LLM-only | 33.5 | 13.5 | 53.0 | 20.0 |
+| Task 1 | 35.9 | 28.2 | 35.9 | 7.7 |
+| Task 2 | 41.3 | 25.1 | 33.6 | 16.2 |
+| Task 3 | 43.6 | 30.1 | 26.3 | 13.4 |
 
-Replay the same factual targets through both frozen mock APIs and live-web agents, measuring the gap due to source discovery and interface control. That would isolate how much modern search-agent difficulty lies outside the retriever itself.
+Source: Table 5, section 5.1 · [Paper](https://arxiv.org/pdf/2406.04744v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-## Research decision card
+Retrieval makes GPT-4 Turbo answer more questions but also increases hallucinations. Task 3’s risk-sensitive score of 13.4 remains below the closed-book score of 20.0. Commercial systems use a different protocol.
+<!-- EVIDENCE:interpretation:END -->
 
-### When to use it
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-Use CRAG for factual freshness, long-tail knowledge, and response behavior under insufficient evidence. Mock retrieval interfaces improve control but do not represent full browser interaction. When a model knows an older answer, separate parametric knowledge from current evidence.
+Commercial tests omit original query_time/frozen retrieval; do not rank directly against baselines. Mock APIs omit live navigation. Next: match time/source access and retain error/abstention outcomes.
 
-### What a concrete task looks like
+Table 5 reports Task 3 Scorea as 13.4, while the displayed accuracy minus hallucination, 43.6−30.1, equals 13.5. This is an unexplained display discrepancy; the reviewed source does not establish rounding as its cause. Preserve the reported value with attribution. Section 5.2 reverses former/latter wording in a sentence about automatic and human evaluation; Sections 4 and 5.1 and Appendix A.4 establish the actual settings.
+<!-- EVIDENCE:limitations:END -->
 
-Illustrative task: a query asks for a changing fact, while search results and a knowledge graph supply evidence in different forms. The system must resolve temporal applicability and sufficiency rather than answer with a plausible remembered value.
-
-### Most discriminating experiment
-
-Fix interfaces and the evaluation time, then compare closed-book, web-only, graph-only, and combined evidence. Slice by dynamic facts and long-tail entities and separately report abstention and incorrect answers on insufficient-evidence cases so conservative behavior does not obscure utility.
-
-### Pair with
-
-[livebrowsecomp](livebrowsecomp.en.md) · [mtrag-un](mtrag-un.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`static RAG QA → dynamic/long-tail factuality → live information-seeking reliability`
-
-CRAG made knowledge freshness a first-class RAG variable rather than a hidden dataset property.
+Related benchmarks: [livebrowsecomp](livebrowsecomp.en.md) · [mtrag-un](mtrag-un.en.md)

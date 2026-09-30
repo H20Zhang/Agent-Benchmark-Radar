@@ -1,70 +1,63 @@
 # BIRD：让 text-to-SQL 真正面对大型、脏的 database content
 
 <!-- RELEASE-REFERENCE:START -->
-> **历史论文结果（非首版参考）** · 2023 · 发布论文 v3<br>
-> **ChatGPT — Execution accuracy: 40.08%**<br>
-> 发布论文摘要中的历史模型结果；该页为 v3，未将其冒充已单独复核的 v1。 [原始来源](https://arxiv.org/abs/2305.03111)<br>
+> **历史论文结果（非首版参考）** · 2023-11-15 · 论文 v3<br>
+> **ChatGPT + CoT — Test execution accuracy with evidence: 40.08%**<br>
+> v3 表 2 的 ChatGPT + CoT、给定知识证据、1,789 题测试集结果；不是普通 ChatGPT，也不是摘要中的 GPT-4 54.89%。这是后续版本的选定历史基线，不声称首版最佳。 [原始来源](https://arxiv.org/html/2305.03111v3)<br>
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](bird.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](bird.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2305.03111) · [项目页](https://bird-bench.github.io/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-BIRD 把 **large database content、external knowledge、dirty value 与 query efficiency** 放进 text-to-SQL。数据有 12,751 对 question–SQL、95 个 database，总计 33.4 GB，覆盖 37 个专业领域。
+完整阅读 28 页 v3 的实质正文及附录 A.1–A.7、B.1–B.13，包括提示词、执行与 VES 定义，以及人类评测。
 
-## 相比此前评测多测了什么
+[arXiv 2305.03111v3 · 2023-11-15](https://arxiv.org/pdf/2305.03111v3)
+<!-- EVIDENCE:reading:END -->
 
-Spider 的主难点是 unseen schema，但弱化了 database content。BIRD 加入 value grounding：问题里的表达可能和数据库值不直接匹配，数据可能有噪声，需要 external knowledge 桥接，而且两条都正确的 SQL 也可能有完全不同 execution cost。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+BIRD 评测依赖数据库取值的 SQL，并比较有无专家知识证据。EX 比较结果集合，忽略重复行与顺序。VES 在全部问题上平均“正确性乘以参考／预测运行时间比的平方根”，错误输出记零。
 
-原论文报告 test 上 ChatGPT + CoT 在有 external knowledge 时 execution accuracy 为 40.08%，而 human performance 为 92.96%。它还显式分析 SQL efficiency，不再把所有“能跑对”的 SQL 当成等价。
+<!-- EDITORIAL-METHOD:START -->
+BIRD 从多个领域收集真实数据库，保留非规范取值和实际规模，人工编写问题、SQL 与外部知识说明，再经复核形成参考。示意流程是：用户以业务简称问一类记录的统计量，模型要把简称映射为真实列值、选择过滤及连接，并输出可在 SQLite 执行的查询；给定证据可直接补充这类映射或计算定义。它因此同时考验模式解释与内容依据。效率指标 VES 只在结果正确时奖励较快执行，并在全部题上聚合，不能单独当作运行速度。
 
-## 这个分数能证明什么
+编辑比较：Spider 主要把新模式上的 SQL 结构作为难点，BIRD 增加数据值、外部知识与效率坐标；Spider 2.0 又进一步引入文档、项目代码和交互工作流。BIRD 的大数据库不自动等于已测跨系统发现或生产可靠性。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-BIRD 对现实 database-value comprehension + SQL generation 证据更强，但仍不能证明 enterprise-agent competence：任务一开始已经知道 database，不要求跨系统发现、metadata search 或 multi-step workflow execution。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 公平比较契约
+v3 测试集包含 15 个数据库上的 1,789 道题。GPT-4 使用零样本编程提示与温度 0；ChatGPT+CoT 加入一个伪示例。DIN-SQL 还加入检索、示例和自我修正，但未完整报告 token 与重试预算。
+<!-- EVIDENCE:setup:END -->
 
-应固定 database snapshot、external-knowledge access、schema/value retrieval policy、SQL engine、model 与 execution budget，并把 execution accuracy 与 efficiency 分开报告。value retrieval 本身就是被测能力，不能偷偷换成 oracle match。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 还没有测什么
+v3 表 2；SQLite 测试集；EX 的分母为全部 1,789 题。仅前两行在同名模型下直接比较是否提供证据。
 
-business semantics、permission、schema drift、多数据库系统、write operation 和 clarification 都不在主 protocol。database 很大也不等于 enterprise catalog 很复杂。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| GPT-4 · 无证据 | BIRD 测试集；1,789 题／15 个数据库 | EX（%） | 34.88% | gpt-4-32k；T=0 | 表 2, 第 7 页 |
+| GPT-4 · 有证据 | BIRD 测试集；1,789 题／15 个数据库 | EX（%） | 54.89% | gpt-4-32k；T=0 | 表 2, 第 7 页 |
+| ChatGPT + CoT | BIRD 测试集；1,789 题／15 个数据库 | EX（%） | 40.08% | gpt-3.5-turbo；有证据；T=0 | 表 2, 第 7 页 |
+| GPT-4 + DIN-SQL | BIRD 测试集；1,789 题／15 个数据库 | EX（%） | 55.90% | 有证据；扩展框架 | 表 2, 第 7 页 |
 
-## 下一步最有判别力的验证
+事实来源：[表 2, 第 7 页](https://arxiv.org/pdf/2305.03111v3)
+<!-- EVIDENCE:results:END -->
 
-让同一套 BIRD-optimized schema/value retrieval 不改配置地迁移到 Spider 2.0 与 LiveSQLBench，检查 value grounding 是通用能力还是 benchmark-specific engineering。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-<!-- RESEARCH-DECISION:START -->
+页首保留后续 v3 的选取模型结果：有证据的 ChatGPT+CoT 为 40.08%，并非普通 ChatGPT，也非本版最佳结果。v3 日期为 2023-11-15，不冒充初版。92.96% 的人类参考来自专家纠错前的受训标注者，与模型预算不匹配。EX 可能遗漏排序敏感的错误。
 
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究数据库值、脏数据与外部知识对 SQL 正确性的影响。查询效率应在结果正确的前提下解释；更快执行一条语义错误的查询，不构成数据库问答系统的有效改进。
-
-### 一个具体任务长什么样
-
-示意任务：问题中的业务描述与数据库字段值不直接一致，系统需要查看数据并使用给定知识确定筛选和连接条件。只读模式定义可能无法处理缩写、缺失值或编码差异。
-
-### 最有判别力的实验
-
-固定外部知识、数据库内容与执行预算，比较只看模式、允许值检索和正确值给定。对正确查询单独测运行代价，并复核金标查询争议，避免把标注问题或缓存差异算作方法能力。
-
-### 建议搭配
-
-[spider](spider.md) · [livesqlbench](livesqlbench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`unseen schema → database-value grounding → enterprise metadata/workflow reasoning`
-
-BIRD 是 text-to-SQL 从纯 semantic parsing 开始变成 data retrieval problem 的关键一步。
+<!-- EDITORIAL-NEXT:START -->
+下一步对同题分别给正确值映射、正确业务规则和两者，保留 GPT-4 有无证据这一较干净对照；同时对排序／重复敏感题增加精确验证，并统一 DIN-SQL 的重试与 token 预算。否则“框架更好”可能只是额外指导或计算。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

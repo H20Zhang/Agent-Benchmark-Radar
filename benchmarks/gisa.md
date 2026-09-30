@@ -1,4 +1,4 @@
-# GISA：web search benchmark 也可以有 deterministic structured answers 和 human trajectories
+# GISA：用结构化答案检验网页信息搜集
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-02-06<br>
@@ -6,50 +6,76 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](gisa.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](gisa.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2602.08543) · [代码](https://github.com/RUC-NLPIR/GISA)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-GISA 有 373 个 human-crafted queries，覆盖 10 个 topic groups，并用 item、set、list、table 四种 structured answer formats，同时区分 stable 与 live subsets。每个 query 都保留完整 human search trajectory，最终答案可用 deterministic exact-match 评价并定期刷新 live answers。
+正文第1–8节及附录A–C，包含全部分析、格式归一化、提示、工具与行为指标；未核实动态数据实际更新记录。
 
-## 相比什么前进了
+[arXiv v1；PDF 所印日期为 2026-02-09](https://arxiv.org/pdf/2602.08543v1)
+<!-- EVIDENCE:reading:END -->
 
-很多 deep-search benchmark 依赖短答案或 LLM judge。GISA 同时保留 human process trace 和结构化可验证答案，使 deep lookup 与 broad aggregation 都能在少依赖 judge 的条件下评价。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-structured exact match 支持在当前 answer refresh 与 web snapshot 下的最终信息获取；trajectory overlap 只能说明与 human path 的相似程度，并不代表那是唯一有效策略。live subset 随时间变化，所以 score date 是 evaluation contract 的一部分。
+相较BrowseComp的单个短答案与DeepResearch Bench的长报告偏好，GISA要求可归一化的集合、列表和表格。它把大范围信息搜集转为可确定性比对的结构输出，同时暴露整表匹配对局部错误的敏感性。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-锁定 stable/live split、answer refresh date、search provider、tool interface 与 output normalization。不同 refresh generations 必须分 snapshot。
+15 名信息检索方向研究生从浏览中提出问题，再明确 item/set/list/table 结构与排序约束；只用 Google、人工作答并记录搜索、结果页、点击轨迹，另人检查答案和轨迹是否一致。排除 DeepSeek-V3.2 在无推理无搜索条件下可完整回答的问题，最终为 373 题，其中稳定题 223、动态题 150。回答经 TSV 抽取、大小写/空白/数字格式归一化后，计算完整答案 EM；另报集合 F1、列表内容 F1 与 SequenceMatcher 顺序分、表格行 F1 与单元格 F1。人工轨迹提供过程参照，但与轨迹相似不等于唯一正确搜索路径。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-下一步可利用 human traces 评估 efficiency 与 repair：agent 是否用更少无效搜索达到同等 evidence coverage，而非仅模仿 human sequence。
+四种题型分别22、50、48、253题。ReAct以Google Serper取前10条、Jina读取网页，再用同底座的非思考模式摘要；每题最多30次工具调用，每步最多8192输出 token，禁用并行调用。商业系统内部预算不同，Google AI Mode还经人工转CSV。最终答案是归一化后的确定性评分，无LLM答案裁判；网页摘要仍依赖LLM。动态答案承诺每月维护，但本次未核查实际更新时间记录。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 完整成功与局部信息质量
 
-## 研究决策卡
+分数为百分数；整体 EM 分母为 373 题，表格指标在 253 题上计算；共享 ReAct 工具及 30 次调用上限。
 
-### 什么时候值得用
+| Claude 4.5 Sonnet 模式 | 整体 EM | 表格 EM | 表格行 F1 | 表格单元格 F1 |
+|---|---|---|---|---|
+| 无推理模式 | 16.36 | 9.49 | 47.85 | 63.71 |
+| 推理模式 | 19.3 | 13.04 | 49.92 | 65.17 |
 
-适合研究深查与广搜共同存在的信息获取，尤其是集合、列表和表格答案。结构化输出便于确定性评价，但内容正确与格式正确仍是两层问题；实时部分还必须绑定答案更新时间。
+事实来源：表 3 · [论文](https://arxiv.org/pdf/2602.08543v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 更高分不必更多调用或费用
 
-示意任务：系统需要找出满足多个条件的一组对象，并按要求输出列表或表格，而不是只给一个代表例子。一个对象遗漏、字段不匹配或顺序错误，都可能改变任务是否被完整完成。
+373 题每题平均；费用使用论文当时单价，含主推理与浏览摘要的模型 token，不应解释为现价或完整服务成本。
 
-### 最有判别力的实验
+| Claude 4.5 Sonnet 模式 | 搜索调用 | 浏览调用 | token 费用（美元） |
+|---|---|---|---|
+| 无推理模式 | 10.11 | 5.67 | 1.62 |
+| 推理模式 | 7.57 | 4.63 | 1.37 |
 
-把内容匹配错误与序列化错误分开诊断，在相同搜索后端下比较策略，并将稳定题与实时题分开。利用人工搜索轨迹检查遗漏发生在哪一步，但不把偏离人工路径自动判定为错误。
+事实来源：表 3–4 · [论文](https://arxiv.org/pdf/2602.08543v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-[sgr-bench](sgr-bench.md) · [wandr](wandr.md)
+Claude 4.5 Sonnet thinking 的完整答案 EM 为 19.30%，但表格单元格 F1 达 65.17；严格要求整张表全对与局部信息正确是不同指标。开启 thinking 后整体 EM 从 16.36 到 19.30，论文估算的每题 token 费用却从 1.62 美元降到 1.37，因为调用和输入更少；不能笼统写推理增强必然更贵。商业产品的封闭预算、格式遵循和手工转表也使其结果不能视为纯底座能力排名。
+<!-- EVIDENCE:interpretation:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-<!-- RESEARCH-DECISION:END -->
+动态题较差并不能证明训练污染：题目内容与难度也不同，稳定/动态比较不是随机因果实验。无搜索 DeepSeek 筛选只排除一个模型的一种解题能力，不能保证所有系统必须检索。253/373 为表格题，总 EM 对格式与完整性很敏感；应同时看局部 F1。人工相似度与成功仅相关；错误类别来自 50 个失败样本且允许多标签，百分比不是所有任务的失败概率。下一步固定日期快照及工具预算，独立审查格式纠错前后得分，并用配对干预测试更深入浏览是否带来收益。
+
+结论写最高18.23%，摘要/表3写19.30，本文保留明确表行。图5称抽样40题，但8.90%、22.22%不是1/40步长，分母不明。附录把相邻查询Jaccard称Search Diversity并定义越低越多样，后文又反向解释，本文只采用公式。记录日期2026-02-06与所读arXiv v1的2026-02-09不能自动视为同一发布事件。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[sgr-bench](sgr-bench.md) · [wandr](wandr.md)

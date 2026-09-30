@@ -1,4 +1,4 @@
-# PAST-Bench：Agent Memory / 跨 episode 因果归因
+# PAST-Bench：保留经验的收益与机制证据分开看
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-04<br>
@@ -6,60 +6,101 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](past-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](past-bench.en.md)
 
-[论文](https://arxiv.org/abs/2608.04003) · [代码](https://github.com/Gen-Verse/PAST-Bench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-从可见历史问答转向 persistence 是否因果改善后续 executable task。
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-## 它接在什么之后
+已阅读正文第1—6节及附录A—F，包括26家族明细、轨迹案例、评分公式、人工评分核验、机制敏感性、适配器范围、运行波动、成本与重试设置。未审计实现或复现实验，未把图形坐标估算为精确结果。
 
-前一代评价通常把该问题压成较短的最终分数或单一 proxy。这个评测把 predecessor critique 变成 capability × environment × protocol 的显式差异，并保留可执行或可复核资产。
+[arXiv 2608.04003v1 (2026-08-04)](https://arxiv.org/html/2608.04003v1)
 
-## 实际怎样评测
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-**问题：** 清空上下文后，保留的 state 是否真正造成后续任务收益？
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-**测量对象：** 通过配对持久状态控制，检验跨 episode 经验是否因果改善后续可执行工作的基准。
+把合成任务分成26个家族，每家族按顺序经历冷启动、学习/更新、评估和对照回合。每回合清空临时对话，但在配对的持久化开启条件中允许访问早前保存的记忆、技能、画像与历史；关闭条件屏蔽这些状态。两组提示、工具、模型、种子和评分相同。比如先规定观察员不能收到源文档，再在新会话要求分享资料，看是否重新取出并应用限制。信息搜集家族预先放入证据，专测何时去读取。
 
-**规模与协议：** 26 task families and 204 executable episodes with paired persistence controls. 协议包括 persistence-on-off-pairs, matched-seeds-prompts-graders, artifact-and-trace-evidence。
+定位比较：与LongMemEval式回顾问答相比，PAST直接比较同一任务的持久记忆开启与关闭，并覆盖程序复用、信息获取和更新。它把问题转为记忆对任务的增量效用，但机制一致率不能替代必要性或因果贡献证明。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-## 分数能说明什么
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-26 families、204 episodes 使用 persistence on/off、matched seeds/prompts/graders 与 artifact/trace evidence。 它支持的是该环境、harness、model/tool/resource configuration 下的 system-level evidence；除非其他变量匹配，否则不能把榜单差异归因给单一组件。
+总计204回合：记忆5家族/41回合、流程8/64、信息搜集6/48、更新7/51。得分先在评估回合内按家族平均，再按能力平均，最后四种能力等权；204不是最终分数的直接分母。任务由Codex+GPT-5.4和Claude Code+Opus4.6生成，并人工检查。所选对照固定MiniMax-M2.7；Hermes快照v2026.4.16，最多50次迭代或300秒，超时/崩溃记零。开放式答案由MiniMax-M2.7裁判，温度0、8192输出词元。
+<!-- EVIDENCE:setup:END -->
 
-## 最主要的混杂因素
+<!-- EVIDENCE:result-1:START -->
+## 总体均值略升，但小于运行间波动
 
-generated tasks 与 closely related graders 可能产生 model-family template familiarity；也未覆盖 months-long deployment。 关键混杂包括 task-generator-model-family, grader-coupling, tool-harness。
+所有分数为0–1，Δ为开启减关闭持久化；标准差是运行间波动，不是置信区间。Mech来自表3，Δ统计来自表11。总体0.02差值不能称稳定优越。
 
-## 还没有覆盖什么
+所选两个配置各三次独立运行；按评估回合、家族与能力逐级平均。
 
-生成式任务和评判器可能偏向同源前沿编码模型的模板，也没有覆盖数月级部署。
+| 系统 | 总体Δ均值 | 总体Δ标准差 | 更新Δ均值 | 更新Δ标准差 | Mech |
+|---|---|---|---|---|---|
+| Hermes | 0.13 | 0.04 | 0.12 | 0.01 | 0.64 |
+| Hermes+ | 0.15 | 0.06 | 0.24 | 0.09 | 0.73 |
 
-## 放进演化图怎么看
+定位：表3与表11：MiniMax-M2.7配置 · [原文](https://arxiv.org/html/2608.04003v1)
+<!-- EVIDENCE:result-1:END -->
 
-`map_delta=early_signal`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+<!-- EVIDENCE:result-2:START -->
+## 更新改善与流程退步同时出现
 
-<!-- RESEARCH-DECISION:START -->
+任务得分s=安全门控×(0.8×完成度+0.2×工具错误恢复)，不是二元成功率；无工具错误时恢复项为1。因此安全且无错误但未完成任务也可能获得部分分数。
 
-## 研究决策卡
+四种能力分别5、8、6、7个家族；204个总回合不是直接分母。
 
-### 什么时候值得用
+| 系统 | 记忆得分 | 流程得分 | 信息搜集得分 | 更新得分 | 总体得分 |
+|---|---|---|---|---|---|
+| Hermes | 0.77 | 0.55 | 0.71 | 0.62 | 0.66 |
+| Hermes+ | 0.78 | 0.38 | 0.73 | 0.74 | 0.66 |
 
-适合为‘跨任务持久状态带来收益’提供配对因果证据。重点不是系统能保存文件，而是相同后续任务在保留与不保留先前状态时是否改变结果；生成任务上的结论仍需受任务分布限制。
+定位：表4：开启持久记忆的分项成绩 · [原文](https://arxiv.org/html/2608.04003v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-3:START -->
+## 更强的机制证据需要额外成本
 
-示意任务：前一回合产生可复用经验，新智能体会话处理相关任务。两组拥有相同提示、种子和评分器，唯一关键区别是是否能读取先前状态，因此可以直接观察持久化的净效果。
+MiniMax-M2.7；时间含模型、工具与框架开销，不能把更高Mech看作免费改进。
 
-### 最有判别力的实验
+所有回合的均值；不同于任务得分只统计评估回合。
 
-保留持久状态开关的配对设计，再加入等长度无关状态与原始轨迹两组。报告配对差值、任务族分布和全周期成本；只有在控制额外文本与计算后仍有效，才支持经验内容本身的贡献。
+| 系统 | 输入加输出词元/回合 | 秒/回合 |
+|---|---|---|
+| Hermes | 12615 | 70.5 |
+| Hermes+ | 31859 | 77.4 |
 
-### 建议搭配
+定位：表12：每回合成本 · [原文](https://arxiv.org/html/2608.04003v1)
+<!-- EVIDENCE:result-3:END -->
 
-[memoryarena](memoryarena.md) · [agent-memory-bench-coding](agent-memory-bench-coding.md)
+<!-- EVIDENCE:result-4:START -->
+## 裁判核验应按容差读取
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+这是分数容差内一致比例，不是精确一致率或分类准确率；只检验开放式裁判，不构成完整Mech语义核验。
 
-<!-- RESEARCH-DECISION:END -->
+48个样本，每种能力12个，由两位不知模型/条件的作者评分。
+
+| 比较 | 误差不超过0.25（%） | 误差不超过0.5（%） |
+|---|---|---|
+| 裁判对两位人工均分 | 68.8 | 91.7 |
+
+定位：表8：盲法人工核验 · [原文](https://arxiv.org/html/2608.04003v1)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+配对开关提供较强的系统级控制，但论文明确不把它称为因果证明。Mech检查是否符合预期保存/读取路径，并混合关键词、条目数、答案正确性、更新和远近任务得分；它不是与任务分数完全独立的因果证据，也可能漏掉另一条语义有效的实现路径。Hermes+总体增益均值只多0.02，小于运行波动；更新改善与流程退步共存。冷启动分数不是关闭持久化的基线。基准只覆盖隔离的合成任务家族，没有证明跨家族长期迁移、参数自改或完整递归自我改进。
+
+跨框架比较保留原生循环差异：Agent-Zero超时预算为1200秒，其他为300秒；ZeroClaw采用Python配套工具与LangGraph，而不是Rust执行程序。表4的完整流程Δ为−0.02，表5聚焦子实验为+0.085，不能混用。主表2泛称三次均值，附录D.5只明确列出两个MiniMax配置的三次独立运行，因此本页方差结论只覆盖这两项。
+
+
+
+下一步：保留原有配对开关，再对候选记忆逐个删除、替换或污染，并加入等长度无关状态。分别测内容必要性、可接受的替代路径和全周期成本。对新增未见家族重复测试，报告配对差值分布及区间；与MemoryArena的行动依赖、MemProbe的状态维护诊断配对。
+<!-- EVIDENCE:limitations:END -->

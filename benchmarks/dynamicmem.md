@@ -1,4 +1,4 @@
-# DynamicMem：跨数月维护不断变化的个人状态
+# DynamicMem：画像补全和个性化服务为什么不同步
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-06-22<br>
@@ -6,64 +6,103 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](dynamicmem.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](dynamicmem.en.md)
 
-[论文](https://arxiv.org/abs/2606.22877) · [代码](https://github.com/wenyaxie023/DynamicMem)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-DynamicMem 测 personal-assistant memory 能否从多个应用里分散的行为证据中，推断并维护 **会随时间变化的属性、习惯与偏好**。难点不是找回一个事件，而是判断哪些 observation 应该形成稳定 profile，以及什么时候新证据应该替换旧 belief。
+已阅读v1正文第1—6节及附录A—K，包括构造、回答、评分和失败诊断的全部提示，并核对作者对未报告误差条的说明。采用表中数值与正文明确给出的变化量，未从曲线估算绝对分数；未审计实现或复现实验。
 
-## 相比此前评测多测了什么
+[arXiv2606.22877v1 (2026-06-22)](https://arxiv.org/html/2606.22877v1)
 
-conversation-memory benchmark 通常把显式事实放在一个对话流里。DynamicMem 把弱证据分散到 16 个应用和大约 15 个月里，并在多个时间 checkpoint 上检查 profile，因此 temporal supersession 与 evidence aggregation 成为主要测量对象。
+页首历史参考按原样保留；本页新读版本和实验条件不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 怎么构造任务、怎么观察记忆
 
-每个模拟用户平均约 2.2M token、1,772 个 grounded event，并设置 5 个季度 checkpoint。论文观察到随着历史增长，profile reconstruction 持续下降，而 service-task accuracy 相对平；没有系统能同时很好地保留稳定事实并替换已经变化的事实。进一步的 error analysis 将超过 93% 的失败归到 retrieval，而不是最终 answer model。
+先从人物种子生成属性、习惯、偏好与外部生活事件驱动的变化，再把状态变化转成跨应用事件链和带状态的请求/响应日志。只保留检查点之前证据支持的字段。状态补全直接给出要恢复的状态键；个性化服务只给场景与任务，要求把记忆转成提醒、过滤或配置。五个季度检查点分别使用截至当时的日志。
 
-## 这个分数能证明什么
+定位比较：与LongMemEval的长历史问答相比，DynamicMem围绕会变化的用户画像，把状态补全与场景驱动服务并列测量。它新增时间检查点和任务需求差异，因此可以研究知道某事实与按需使用该事实之间的距离。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-这些结果能支持 benchmark 模拟活动分布下 **dynamic personal-state tracking** 的能力判断。retrieval attribution 比只看 end QA 更进一步，但仍依赖论文的诊断流程，不能直接推出某一种 index structure 就是根因。
+<!-- EVIDENCE:setup:START -->
+## 实验条件与评分对象
 
-## 公平比较契约
+10个PersonaHub人物，1790条事件链、17715个日志事件，平均每人约220万词元。状态补全1824题，服务1810题，总计4994个细粒度评分点。构造模型Gemini-3-Flash-preview；记忆构建与回答模型GPT-5-mini、嵌入text-embedding-3-large、评分GPT-5.4。固定查询与任务文本。RAG/HippoRAG2取20条，A-Mem取5条并扩展5个邻居，MemoryOS与SimpleMem取10条；实际上下文不等。
+<!-- EVIDENCE:setup:END -->
 
-应固定 event stream、checkpoint、backbone、profile schema、retrieval budget，以及该时间点之前可见的 evidence；未来事件绝不能泄漏到早期 checkpoint。稳定属性 retention 与变化属性 replacement 要拆开报告，否则 append-only 系统会在前者看起来很好、在后者持续失败。
+<!-- EVIDENCE:result-1:START -->
+## 记得某个习惯，不代表会在场景中主动用上
 
-## 还没有测什么
+0–100分；每字段s=0.8×Core+0.2×Detail/2，Core∈{0,1}、Detail∈{0,1,2}。同一记忆库但查询不同，不能断言检索内容相同。
 
-真实个人数据还有 missingness、多设备/多账号矛盾、用户显式纠正、privacy constraint 和不确定 ground truth。benchmark 也没有量化 stale profile 相比 missing profile 会造成多大 downstream harm。
+跨五个检查点；总计1824个状态补全问题、1810个服务问题。表未单列习惯类别的评分字段数。
 
-## 下一步最有判别力的验证
+| 系统 | 习惯：状态补全分数 | 习惯：服务分数 | 偏好：服务分数 |
+|---|---|---|---|
+| Vanilla RAG | 53.5 | 5.3 | 65.0 |
+| A-Mem | 56.9 | 7.4 | 64.4 |
+| MemoryOS | 52.3 | 9.6 | 62.5 |
 
-加入带明确 revocation time 的 counterfactual update，并设计只有使用最新状态才能做对的 downstream decision，把 profile maintenance 直接连接到 action utility 与 stale-memory harm。
+定位：表2、第4.3节评分规则 · [原文](https://arxiv.org/html/2606.22877v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 从3个月到15个月：两类任务的变化不同
 
-## 研究决策卡
+原文明确报告的差值，不是从图中估算的绝对分数；历史长度和当前目标状态同时变化。
 
-### 什么时候值得用
+C1对应前3个月，C5对应15个月；每个检查点的可评分字段随状态变化。
 
-适合研究多应用行为怎样变成会更新的用户画像。关键是从分散证据推断当前属性，而非简单抽取明确陈述；画像恢复和个性化服务应分开评价，避免把更多属性记忆误当作更好的帮助。
+| 系统 | 状态补全变化（分） | 服务变化（分） |
+|---|---|---|
+| Vanilla RAG | -4.4 | 2.8 |
+| A-Mem | -8.9 | 4.9 |
+| SimpleMem | -16.7 | -1.5 |
 
-### 一个具体任务长什么样
+定位：第5.1节发现1：C5相对C1的报告变化 · [原文](https://arxiv.org/html/2606.22877v1)
+<!-- EVIDENCE:result-2:END -->
 
-示意任务：用户在多个应用中的行为逐月变化，过去的惯常选择不再代表当前偏好。系统在检查点需要更新画像，并用它处理服务请求；对旧习惯的准确回忆可能导致错误推荐。
+<!-- EVIDENCE:result-3:START -->
+## 相同回答模型，检索上下文仍不等长
 
-### 最有判别力的实验
+回答器GPT-5-mini一致，但输入预算不等；不含统一化写入成本。
 
-比较固定画像、滑动窗口画像与持续更新画像，保持历史信息访问权限一致。按时间检查点同时报告状态恢复和服务质量，并增加生活变化前后的分项，判断系统是在积累信息还是确实适应变化。
+每次查询实际返回的记忆上下文平均长度。
 
-### 建议搭配
+| 系统 | 状态补全上下文（千词元） | 服务上下文（千词元） |
+|---|---|---|
+| Vanilla RAG | 12.6 | 14.6 |
+| A-Mem | 15.6 | 17.0 |
+| SimpleMem | 20.8 | 20.7 |
 
-[lifebench](lifebench.md) · [memprobe](memprobe.md)
+定位：附录I：回答上下文预算 · [原文](https://arxiv.org/html/2606.22877v1)
+<!-- EVIDENCE:result-3:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:result-4:START -->
+## 评分核验只覆盖一个人物和四种配置
 
-<!-- RESEARCH-DECISION:END -->
+A-Mem、HippoRAG2、Oracle、RAG各189项；不能扩展为所有人物/系统的误差保证，也未验证失败原因分类器。
 
-## 演化位置
+用户001，A-Mem、HippoRAG2、Oracle和RAG各189项。
 
-`event recall → personal profile extraction → temporally evolving user state`
+| 范围 | 审计条目 | 不合理判定 | 一致率（%） |
+|---|---|---|---|
+| 用户001，四种配置 | 756 | 28 | 96.3 |
 
-它把瓶颈从“能否找到历史”推进到“现在到底哪个版本的用户状态才是真的”。
+定位：附录I：人工评分核验 · [原文](https://arxiv.org/html/2606.22877v1)
+<!-- EVIDENCE:result-4:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 哪些结论成立，哪些仍待验证
+
+平均画像补全随历史增长下降，但服务得分并非全部平稳：SimpleMem略降。稳定事实保留和最新变化替换应分开看，当前曲线与案例不能单独证明某种压缩或索引机制就是原因。金证据只标事实首次出现，后续复述也可能有效，因此引用召回下降会夸大信息缺失。理想证据是给同一回答器正确日志的条件参考，不是硬上限。10个人物、合成可观测性筛选、无误差条和单用户裁判核验限制泛化。
+
+“93%以上”的分析以每个系统/任务抽取300个非满分且有引用的案例为对象，排除了没有引用的失败。回答提示要求模型自己生成局部证据片段，诊断提示却把这些片段称为全部可见证据；两者是否一致未经核验。因而无法据此证明替换回答模型无益。更新子集按图注使用最近一次出现后刚变化的事实，稳定保留子集才锚定C1。
+
+下一步：冻结相同日志、查询和总预算，比较原始记录、摘要和显式更新状态；在每季度分开报告稳定与变化字段。对失败保存全部检索上下文和回答引用，分别人工判断是否充分，再用理想证据与替换回答器做配对干预。增加真实工具执行任务，检验旧画像导致的实际代价。
+所有应用记录均来自合成环境。服务任务只生成并评分提醒、筛选或配置字段，没有执行工具或检验实际服务效果。
+<!-- EVIDENCE:limitations:END -->

@@ -131,6 +131,20 @@ class RepositoryReleaseReferenceContract(unittest.TestCase):
         self.assertEqual(refs['spider']['source'],'https://arxiv.org/abs/1809.08887v1')
         self.assertEqual(refs['pm-bench']['results'][0]['score'],'79.1%')
 
+    def test_sql_references_preserve_verified_version_and_condition_identity(self):
+        refs=self.data['benchmarks']
+        spider=refs['spider']['results']
+        self.assertEqual([(r['system'],r['metric'],r['score']) for r in spider], [
+            ('SQLNet','Database-split dev exact match','14.3%'),
+            ('SQLNet','Database-split test exact match','14.7%'),
+        ])
+        self.assertEqual(refs['wikisql']['source'],'https://arxiv.org/abs/1709.00103v1')
+        self.assertEqual([r['score'] for r in refs['wikisql']['results']],['60.3%','49.2%'])
+        self.assertEqual(refs['bird']['status'],'later-version')
+        self.assertEqual(refs['bird']['results'][0]['system'],'ChatGPT + CoT')
+        self.assertEqual(refs['bird']['source'],'https://arxiv.org/html/2305.03111v3')
+        self.assertEqual(refs['ds-1000']['results'][0]['metric'],'Insertion pass@1')
+
 
 if __name__=='__main__':
     unittest.main()

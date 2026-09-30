@@ -1,4 +1,4 @@
-# LoCoMo：把长期对话记忆变成可测量对象
+# LoCoMo：长对话中的问答、事件摘要与记忆表示
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2024-02-27 · 论文 v1<br>
@@ -7,56 +7,92 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](locomo.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](locomo.en.md)
 
-[论文](https://aclanthology.org/2024.acl-long.747/) · [代码](https://github.com/snap-research/locomo)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-LoCoMo 把长期对话记忆从短上下文问答拉到真正的多 session 历史：对话平均约 600 turns、16K tokens，最长跨 32 个 sessions，并同时覆盖 QA、event summarization 和 multimodal dialogue generation。关键不只是“能否找回一句话”，还包括跨很远时间间隔的 temporal / causal reasoning 与对整段经历的压缩理解。
+已阅读ACL终版正文第1—9节与附录A—D，包括构造、三种任务、设置、结果、提示与案例；另定点核对2月v1表格以区分历史参考。未独立复现，未将曲线估算为精确数据。
 
-## 相比什么前进了
+[ACL 2024 会议终稿](https://aclanthology.org/2024.acl-long.747.pdf)
 
-此前大量 long-context 测试更接近 needle retrieval 或单文档理解。LoCoMo 的增量是让信息以连贯互动形式逐步积累，并要求模型在多个任务上使用这段历史，因此成为后续 LongMemEval、MemoryAgentBench 等工作的基础参照。它建立的是“长期历史值得单独评测”这个坐标，而不是给某一种 memory architecture 背书。
+[补充来源 2402.17753v1，2026-09-30 核对](https://arxiv.org/html/2402.17753v1)
 
-## 决定性证据与分数边界
+页首历史参考原样保留；正文的新版本结果不能代替原始发布成绩。
+<!-- EVIDENCE:reading:END -->
 
-ACL 论文报告的核心现象是：long-context LLM 与 RAG 都能改善表现，但在理解长对话、长距离 temporal / causal dynamics 上仍明显落后于人类。这个结果支持“扩大 context window 并没有解决长期记忆”这一测量结论；它不能区分收益究竟来自写入、索引、检索、reader 还是 judge。本仓库只有在协议可对齐时才把系统分数放入独立 result track，第三方用不同 judge 或题集规模得到的 LoCoMo 排名不会混成一个榜单。
+<!-- EVIDENCE:method:START -->
+## 任务怎样产生记忆需求
 
-## 公平比较条件
+两个以人设为条件的智能体沿带日期的因果事件图对话；人工修正对话、图像和事件依据的不一致。分别评估历史问答、事件摘要事实覆盖和多模态续写。Observation把话语转为关联说话人与来源轮次的事实陈述。
 
-必须对齐使用的 LoCoMo 问题版本、answerer/reader、retrieval budget、可见历史以及 QA/summary 的评分器。尤其是 LLM-as-judge 与不同问题过滤会显著改变绝对分数，因此只看一个 Overall 数字很容易把 harness 差异误认为 memory gain。
+定位比较：相较较短的多会话对话评测，LoCoMo把同一组人物放进跨度更长、含图像分享的对话，并同时设置问答、事件摘要和对话生成。三个任务的评分不同，后续只复用其问答部分的研究不能声称覆盖原套件全部能力。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 实验设置与评分对象
 
-LoCoMo 主要问“过去发生了什么”。下一步更重要的是验证 remembered experience 是否改变之后的行动、规划与长期用户状态维护，并把 update、forget、conflict 和成本从 end-to-end QA 分数中拆出来。
+10条英文测试对话平均588.2轮、27.2会话、16,618.1tokens。1,986道QA包含单跳841、多跳282、时间321、开放知识96、对抗446道。QA和摘要任务将图像替换为BLIP-2描述。DRAGON检索对话、事实观察或摘要；k表示条目数，并未匹配tokens。评估温度0、top-p1，各模型仅一次推理运行。
+<!-- EVIDENCE:setup:END -->
 
-## 后续对照：查询形式、记忆使用与行动结果
+<!-- EVIDENCE:result-1:START -->
+## 扩大上下文，也可能让拒答变差
 
-[LoCoMo-Conv](locomo-conv.md) 固定历史与证据，改变查询的对话形式；[MemCalib](memcalib.md) 检查已给定记忆命题应该影响回答多少；[DolphinBench](dolphinbench.md) 在冻结记忆和逐题应用重置下测实际动作、成本与延迟。三者分别诊断检索入口、上下文使用与行动落地，不能把总分混成一个榜单。
+分数均为0–100。受限窗口截去较早对话；不同模型及人工条件不代表相同计算预算。
 
-2026-09-23 已完成这些条目的官方协议或数据说明核验并正式入库。各自详情页说明代码和数据的可用边界；这不表示独立复现实验，也不把仅有项目说明的证据冒充论文全文审计。
+1986个问答，其中时间题321个、对抗题446个。总分沿用原表，不从类别均值重新构造。
 
-<!-- RESEARCH-DECISION:START -->
+| 系统与窗口 | 上下文 | 总F1 | 时间题F1 | 对抗题F1 |
+|---|---|---|---|---|
+| gpt-3.5-turbo / 4K | 4K | 23.9 | 15.6 | 34.8 |
+| gpt-3.5-turbo / 16K | 16K | 35.9 | 24.3 | 14.8 |
+| gpt-4-turbo / 128K | 128K | 51.6 | 51.4 | 15.7 |
+| Human | — | 87.9 | 92.6 | 89.4 |
 
-## 研究决策卡
+定位：ACL终版表2 · [原文](https://aclanthology.org/2024.acl-long.747.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-### 什么时候值得用
+<!-- EVIDENCE:result-2:START -->
+## 事实观察、原对话和摘要的检索效果不同
 
-适合把长期对话记忆作为能力起点，但不宜单独支撑‘记忆让智能体越用越好’。选型时先分清要证明的是历史信息可被找回，还是经验能改变未来行为；LoCoMo 主要为前者提供证据。
+分数均为0–100。共用GPT-3.5-turbo回答器与DRAGON检索器，证据表示和上下文长度不同。
 
-### 一个具体任务长什么样
+同一问答套件；摘要召回按相关会话计算，不保证摘要保留了答案事实。
 
-示意任务：早期对话提到一次搬家，后续会话更新工作安排，当前问题要求串起两件事的先后关系。系统需要保留人物、时间与事件联系；仅返回包含相同关键词的一句话可能仍无法回答。
+| 检索配置 | 检索条数k | 总F1 | 证据召回R@k |
+|---|---|---|---|
+| gpt-3.5-turbo + Dialog RAG / k=5 | 5 | 38.8 | 56.7 |
+| gpt-3.5-turbo + Observation RAG / k=5 | 5 | 43.3 | 56.2 |
+| gpt-3.5-turbo + Observation RAG / k=25 | 25 | 42.1 | 67.5 |
+| gpt-3.5-turbo + Summary RAG / k=5 | 5 | 30.9 | 72.1 |
 
-### 最有判别力的实验
+定位：ACL终版表3 · [原文](https://aclanthology.org/2024.acl-long.747.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-固定回答模型与问题集合，比较完整历史、等预算检索片段和所需证据直接给定三种条件，同时记录支持证据召回与最终答案。检索条件落后于证据给定条件，才有理由优先优化记忆访问；两者都差则先检查阅读与时间推理。
+<!-- EVIDENCE:result-3:START -->
+## 事件摘要使用另一套评分
 
-### 建议搭配
+分数均为0–100。增量事件摘要，无RAG；模型和窗口同时变化，不能孤立解释某一个因素。
 
-[longmemeval](longmemeval.md) · [memoryarena](memoryarena.md)
+10条对话，平均每条35.8个金标准事件。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+| 系统 | 上下文 | 原子事实精确率 | 原子事实召回率 | 原子事实F1 |
+|---|---|---|---|---|
+| Llama-3-70B-Instruct | 4K | 40.3 | 35.6 | 37.8 |
+| gpt-4-turbo | 128K | 51.9 | 46.5 | 48.9 |
 
-<!-- RESEARCH-DECISION:END -->
+定位：ACL终版表4 · [原文](https://aclanthology.org/2024.acl-long.747.pdf)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界与下一步验证
+
+证据表示会影响回答质量：top-5证据召回近似时，事实观察的F1更高；增加召回也未必改善回答。只有10条人工修订的合成对话、单次运行、词面评分和图像描述替代，限制了外推；尚未证明单一架构效应或部署收益。
+
+2月v1与ACL终版的模型和结果不同，不能把新表倒填为首版最佳。QA使用归一化词面部分匹配F1，摘要使用原子事实指标；二者不是同一种准确率。原表3一条k值位置有歧义，本页不选该行。
+
+下一步：在采用后续裁判时也保留原始QA F1。固定读取器、题目和token预算，对比原始轮次、事实观察、完整历史和直接给定证据。可搭配LongMemEval检查时间更新，并用MemoryArena检验恢复历史是否改善行动成功。
+QA和摘要测试使用10条人工修订对话；MiniGPT-5续写训练另用50条未人工过滤对话。ACL终版RAG读取器标为gpt-3.5-turbo，不能沿用首版16K型号标签。
+<!-- EVIDENCE:limitations:END -->

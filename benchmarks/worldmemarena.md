@@ -1,4 +1,4 @@
-# WorldMemArena：在演化多模态世界里拆开完整 memory lifecycle
+# WorldMemArena：用阶段问答检查多模态记忆链路
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-05-28<br>
@@ -6,64 +6,75 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](worldmemarena.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](worldmemarena.en.md)
 
-[论文](https://arxiv.org/abs/2605.29341) · [项目页](https://worldmemarena-mem.github.io/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述论文版本的方法、实验设置、关键结果与局限；未独立复现实验。
 
-WorldMemArena 在 **不断变化的多模态 action-world trajectory** 上评估 memory，并明确拆成 write、maintain、retrieve、use 四个 lifecycle stage。通过 gold memory point、state update、distractor 和 evidence chain，可以检查 agent 是否写对、是否保持最新、之后是否取对，以及最终是否真的用上。
+已阅读v2正文第1—8节及附录A—F，用固定版本PDF复核设置、公式与选定表格；另检查官方README和数据卡。论文未提供完整裁判提示附录；未审计实现或复现实验，也未把图形曲线估算为精确成绩。
 
-## 相比此前评测多测了什么
+[arXiv2605.29341v2 (2026-06-01)](https://arxiv.org/html/2605.29341v2)
 
-传统 long-memory QA 往往把 history 当静态 corpus，只看最终答案。WorldMemArena 把 memory 视为和世界一起变化的 mutable state；Lifelong Evolution 与 Agentic Execution 两种 regime 让过时证据、视觉观察和状态转移成为一等对象，而不是默认“过去所有事实一直有效”。
+页首历史参考按原样保留；本页新读版本和实验条件不能代替原始发布成绩。
+[固定版本 PDF 2605.29341v2](https://arxiv.org/pdf/2605.29341v2)
+[官方来源，2026-09-30 所见内容（可变页面）](https://github.com/UCSB-AI/WorldMemArena)
+[官方来源，2026-09-30 所见内容（可变页面）](https://huggingface.co/datasets/LCZZZZ/WorldMemArena)
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 怎么构造任务、怎么观察记忆
 
-benchmark 包含 400 个 multi-session multimodal task，并比较 long-context、人工构造的 retrieval/external memory 与专门 memory harness。分析发现：写得/存得更好并不自动带来更好最终性能；visual evidence 常被低利用；跨 domain 稳定性不足；真实 trajectory 更难。这直接说明 memory quality 是 pipeline property，而不是 retrieval score。
+把既有GUI或具身行动记录、以及隐藏世界状态生成的长期生活/项目会话整理成时间流。每段标注应写入的事实、更新、干扰项与问答证据，再通过记忆快照和检索输出分别分析写入、维护、检索、回答。示意：计划A改为B后，检查存储是否还同时保留A，以及问答是否仍引用旧计划。
 
-## 这个分数能证明什么
+定位比较：与LoCoMo式会话记忆相比，WorldMemArena使用具身、界面、项目和个人生活轨迹，加入图像和状态更新。变化在证据来源与记忆内容；核心仍是轨迹后的问答，不能据此推断闭环行动能力。 这里是评测坐标比较，不表示直接继承了前者的数据。
+<!-- EVIDENCE:method:END -->
 
-最终分数支持 whole-system memory performance，而 stage annotation 比 end QA 提供更强诊断信息。但要做因果 attribution 仍需 matched backbone 与 stage-level intervention：系统可能 retrieve 对了但 use 错，也可能一开始写对后来 maintain 错。
+<!-- EVIDENCE:setup:START -->
+## 实验条件与评分对象
 
-## 公平比较契约
+v2正文与数据卡均为461个轨迹、8489个会话、15595张图、24258个问答。数据卡分为203个GUI、220个具身、18个项目、20个个人轨迹。主表2工程记忆系统使用GPT-5.4-nano，表注明GPT-5.4-mini裁判，但附录A另称裁判继承回答模型，未解决。检索上限10条；有效上下文128000词元、预留8000；最多5张图/题、45MB；回答与裁判温度0、输出预算16384。
+<!-- EVIDENCE:setup:END -->
 
-应固定 backbone、trajectory、visual observation、session segmentation、memory budget、retrieval budget 与 action protocol，同时报告 write/maintenance 和 read-time 成本。不同系统必须看到同样 modality；若只给某一边额外高质量 image caption，证据通道已经不同。
+<!-- EVIDENCE:result-1:START -->
+## 写入覆盖高，不一定回答得更好
 
-## 还没有测什么
+主文称共同GPT-5.4-nano骨干，表注称GPT-5.4-mini裁判；保留附录配置矛盾。RC由裁判评估前10条证据，不是确定性Recall@K。
 
-它仍是有限任务空间；policy governance、deletion rights、跨用户边界、数月级存储经济性和灾难性 corruption recovery 不是主要目标。
+先在每个轨迹内汇总，再跨轨迹平均；公布语料为461个轨迹、24258个问答，各方法实际有效标签数未报告。干扰拒绝仅统计含干扰项的轨迹。
 
-## 下一步最有判别力的验证
+| 系统 | 写入召回（%） | 更新处理（%） | 干扰拒绝（%） | 问答正确QA-C（%） | 检索覆盖RC（%） |
+|---|---|---|---|---|---|
+| Qwen3-VL-Embedding-8B | 86.22 | 59.02 | 28.21 | 51.86 | 73.44 |
+| A-Mem | 52.54 | 58.86 | 58.94 | 54.63 | 74.19 |
+| M2A | 86.83 | 56.41 | 23.42 | 50.14 | 64.62 |
 
-对四个 lifecycle stage 分别注入 oracle intervention，测每个阶段修正后能恢复多少最终 task success，从而形成 write / maintain / retrieve / use 的 error budget，直接指导系统研究投入。
+定位：v2表2：部分指标与系统 · [原文](https://arxiv.org/html/2605.29341v2)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 更新指标允许新旧事实并存得半分
 
-## 研究决策卡
+定义表，不是新的实验结果；新旧并存可得半分，不能把Update读作完全纠正率。
 
-### 什么时候值得用
+每轨迹内的金标准更新项先汇总，再跨轨迹平均。
 
-适合定位多模态记忆在写入、维护、检索还是使用阶段失败。阶段指标比一个总分更接近系统诊断，但阶段之间存在依赖；不能把某个局部指标改善直接解释为端到端行动收益。
+| 更新后状态 | 更新处理权重 |
+|---|---|
+| 只保留新事实 | 1.0 |
+| 新旧事实并存 | 0.5 |
+| 只保留旧事实 | 0.0 |
 
-### 一个具体任务长什么样
+定位：附录B公式3：更新评分 · [原文](https://arxiv.org/html/2605.29341v2)
+<!-- EVIDENCE:result-2:END -->
 
-示意任务：世界状态在观察与行动后变化，检查点问题要求恢复当前状态并使用相关视觉证据。旧观察可能被正确保存却已不再有效；检索命中与记忆新鲜度因此需要分别评价。
+<!-- EVIDENCE:limitations:START -->
+## 哪些结论成立，哪些仍待验证
 
-### 最有判别力的实验
+更高写入覆盖不必对应更高问答得分，但该相关性不能直接定位因果瓶颈。视觉输入、文本描述、调用与适配器不一致，不能据跨系统差异断言视觉无用或harness必然更强。每个轨迹内部先汇总、再跨轨迹平均；问答仅用有效裁判标签作分母，未给各方法实际有效条目数。没有独立裁判人工误差核验或阶段理想干预结果；不存在经验证的硬上限。
 
-逐段用正确中间产物替换写入、维护或检索结果，观察最终答案变化，而不是只比较局部指标。固定视觉骨干与预算，并同时使用统一样本集，才能识别哪个环节真正限制系统性能。
+摘要页面仍写400个任务，v2正文和官方数据卡为461。正文写12个能力轴，附录表4实际列11个。harness正文写GPT-5.4，表3和仓库配置写GPT-5.4-nano；Qwen版本也有3.5/3.6差异。表2的MemGPT与仓库中标为Mem-Gallery文本系统的MGMemory无法确认对应，本页不选该行。MIRIX的三个应互斥记忆质量比例之和仅80.23%，原因未解释。现有证据适合带条件的诊断，不适合无条件跨框架排名。
 
-### 建议搭配
-
-[memeye](memeye.md) · [memprobe](memprobe.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`static history QA → mutable multimodal state → lifecycle-diagnostic memory`
-
-它的重要性在于第一次把 memory lifecycle 的失败位置真正变成可观测对象。
+下一步：固定轨迹、骨干、图像与预算，逐阶段替换金标准写入/更新/检索产物，观察同一批问答。分别报告严格删除旧事实和新旧并存半分的维护指标；检索同时报告事实语义匹配与会话ID命中。再接真实可执行任务，验证诊断改善是否转化为行动收益。
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# SAGE：学术检索要区分“找到指定论文”和“尽可能完整地找齐一组论文”
+# SAGE：分别检验目标论文定位与论文集合发现
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-02-05<br>
@@ -6,50 +6,77 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](sage.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](sage.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2602.05975) · [代码](https://github.com/HughieHu/Sage)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-SAGE 提供 1,200 个 expert queries，覆盖 computer science、healthcare、humanities 与 natural science：600 个 short-form target-paper queries 和 600 个 open-ended discovery queries，基于约 200K papers 的 controlled corpus。前者看 exact paper retrieval，后者用 weighted recall 看是否找全高价值 evidence。
+正文第1–6节、局限及附录A.1–A.6，包括例子、长度分布、跨论文讨论、SearchR1补充实验及提示。
 
-## 相比什么前进了
+[arXiv v1, 2026-02-05](https://arxiv.org/pdf/2602.05975v1)
+<!-- EVIDENCE:reading:END -->
 
-一般 literature search benchmark 常只测 title/known-item retrieval。SAGE 把 targeted lookup 与 open-ended evidence collection 分开，并做 agent-retriever ablation，因此可以观察同一个 search agent 换 backend 后能力如何变化。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-exact-paper/weighted-recall 支持在给定 corpus snapshot、index 与 retrieval budget 下的 scientific discovery quality；开放式 gold set 本身可能不完备，而且 released repo 并未 turnkey 提供完整 200K corpus/environment，因此 artifact packaging 是复现边界。
+相较BRIGHT的固定相关文档检索，SAGE把学术场景拆成指定论文定位与开放集合搜集，并提供代理搜索接口。集合召回强调漏检，仍需额外精度和穷尽性审查才能支持完整文献综述。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-锁定 corpus snapshot、indexing configuration、agent subquery generation、budget 与 gold-set version。short-form 与 open-ended 不能压成一个 SOTA 数字。
+每个领域构造 150 道短题和 150 道开放题，共 1200 题。GPT-5-mini 依据论文元数据、图表信息及共享至少四条参考文献的论文关系生成问题；短题定位唯一种子论文，开放题由两个种子论文及其共同引用构成分级相关集合。短题只检查目标论文是否出现在回答正文或引用中；开放题给种子论文权重 2、共同引用权重 1，以返回相关论文的权重总和除以全部标准论文权重。语料由这些论文及引用扩展，再补充 2020 年以后的开放获取论文。实验区分商业原生网页搜索与 DR Tulu 使用固定论文语料的 MCP 检索工具。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-下一步应接入 citation graph、full text 与动态 scholarly databases，同时明确 completeness ceiling 和 search cost。
+短题与开放题各600题，每领域各150。固定语料实验为DR Tulu/vLLM、最多10次搜索，每次给前5或10篇标题摘要；稠密索引编码论文Markdown前32000 token。网页实验GPT-5系列为medium，Gemini为动态思考。语料增广添加书目元数据与Qwen3-Next-80B-A3B-Instruct生成的8个关键词。表1各领域短题语料计数合计186669，开放题合计180886；两集合重叠未说明，不能把20万当作精确并集。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 同一智能体下的题型反转
 
-## 研究决策卡
+每题型 600 题，DR Tulu、top-10、最多 10 次搜索；分数为四领域平均百分数，搜索为每题平均次数。
 
-### 什么时候值得用
+| 检索器 | 短题 EM | 开放题加权召回 | 短题搜索次数 | 开放题搜索次数 |
+|---|---|---|---|---|
+| BM25 | 81.2 | 30.7 | 6.42 | 4.17 |
+| gte-Qwen2-7B-instruct | 63.0 | 33.0 | 5.88 | 4.54 |
+| ReasonIR | 49.3 | 26.2 | 7.51 | 4.44 |
 
-适合区分科学文献检索中的目标论文定位与开放式证据收集。两者对漏检的容忍度不同：找到一篇正确论文不能证明完成了领域覆盖；复现还取决于完整语料和搜索环境是否实际可得。
+事实来源：表 2, corpus-search block · [论文](https://arxiv.org/pdf/2602.05975v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 语料增广的条件限定增益
 
-示意任务：一类查询用若干线索找出特定论文，另一类要求搜集支持某个研究主题的多篇相关工作。相同检索器可能擅长精确定位，却在宽覆盖收集时反复返回同一研究簇。
+每题型 600 题，固定 DR Tulu、top-5、最多 10 次搜索；两列均为百分数，增益应以百分点表达；未报告增广预处理成本。
 
-### 最有判别力的实验
+| BM25 语料条件 | 短题 EM | 开放题加权召回 |
+|---|---|---|
+| 增广前 | 75.8 | 25.52 |
+| 增广后 | 83.98 | 27.25 |
 
-在同一论文语料上固定搜索接口与预算，分别比较目标命中和加权覆盖。记录论文去重、元数据与全文访问条件，并把完整环境缺失与算法失败区分，避免用不一致索引产生的差异评价检索策略。
+事实来源：表 4; 节 5 · [论文](https://arxiv.org/pdf/2602.05975v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-[autoresearchbench](autoresearchbench.md) · [scholarquest](scholarquest.md)
+BM25 的优势取决于题型。固定 DR Tulu、top-10 时，短题 EM 为 BM25 81.2、gte-Qwen 63.0、ReasonIR 49.3；开放题却是 gte-Qwen 的加权召回 33.0 高于 BM25 的 30.7。语料增广使 top-5 BM25 的短题 EM 从 75.80 到 83.98，即 8.18 个百分点；开放题从 25.52 到 27.25，增益较小。不能将这些条件限定的差异写成所有深度研究智能体中稀疏检索普遍优于稠密检索。
+<!-- EVIDENCE:interpretation:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-<!-- RESEARCH-DECISION:END -->
+开放题标准集合来自两个种子及共同引用，不是专家穷尽搜索；有效但未列入集合的论文得零，召回指标也不惩罚额外无关论文。短题 EM 允许目标出现在长引用列表中，不等于最终答案质量。索引看近全文而智能体只看标题摘要，图表/PDF解析与信息暴露也是变量。关键词型查询导致稠密检索劣势只是有案例支持的解释，SearchR1 的自然语言查询补充实验仍显示短题 BM25 更好。下一步固定可见文本与预算，对查询形式做配对干预，并人工增补开放题相关集合、报告精度及身份规范化规则。
+
+问题由GPT-5-mini构造，本文未找到专家亲自编写或全面人工验证协议，不能称“1200条专家问题”。20万论文是概括数量，非表1可核验的精确并集。关键词提示中的content[:20000]未说明字符还是token。关于BrowseComp-Plus前缀编码的解释是跨论文假说，不是配对消融。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[autoresearchbench](autoresearchbench.md) · [scholarquest](scholarquest.md)
