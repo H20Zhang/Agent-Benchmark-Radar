@@ -1,0 +1,756 @@
+{
+  "schema_version": 1,
+  "activation_date": "2026-09-30",
+  "legacy_baseline_commit": "baa003e6b845a5facefe28828f260203c9029e5a",
+  "purpose": "Primary-source coverage and self-contained note evidence. Metadata and tests do not certify actual reading or factual accuracy. Absent reviews remain an explicit legacy backlog.",
+  "legacy_baseline": {
+    "locomo": {
+      "zh": "ec7a642651ac1756334811d12b7e72e05f0ef451bbc58821e112d6e0c5c7f365",
+      "en": "438cd6ca77693c361d6944af572411117a64d65d89bf251be1d61b7c5af1755e"
+    },
+    "longmemeval": {
+      "zh": "e565abb264ae3bba4787e0d1a990cfb4fef54ddc293e71b573464b9ade4ef9ae",
+      "en": "87f13276abbefdeee98150aa51a5ab536c4e88a35235c05c4449c7085d8b9374"
+    },
+    "membench": {
+      "zh": "e10a942e90f75de2076871df1a2189b19e83fee62b9648223cbe0caaa08f84d8",
+      "en": "b8077e0fbfb66645465116c221c4bdbedaa540a912132461db961ac34686b0b4"
+    },
+    "memoryagentbench": {
+      "zh": "38e5bc4b5c8da7bed5c31e632ea33827e1d8923ab527e4b4c6753dd61e10b5ad",
+      "en": "da1ce7daf76e87fb5523d3db33d8ff4afd43b468142365a82b45ad0c44847eff"
+    },
+    "beam": {
+      "zh": "41ca1ff8c9fec7ad8be3645dd0abc33bf87466b52d9723329569b6fbdf51ccc9",
+      "en": "47762f8cb75b3ae42afb8c318aa1200188404c6ba219c66e6617c3d034a2416f"
+    },
+    "structmemeval": {
+      "zh": "3d3b2bcd36cfc52e833f423f5bb0e1dc415a94df3d1c2ddd19a940759af08a77",
+      "en": "0ec64854807aa99b2e77f8ab98d6f00d489a18c3a90ed6c334b65077a5e76a79"
+    },
+    "ama-bench": {
+      "zh": "e6fe465a2ed3dbd35934ce2b0ac5e2116cd88c7b0d7de1870fa345275639ba82",
+      "en": "7cccfb91f397701bb357a79d582d4dedfbc0539afa5a2bb3cb08c85d1ba34c6a"
+    },
+    "lifebench": {
+      "zh": "fb491a5278819eef1ed131b6455168ec9c61e59522b9e9b42ceb5716e7ca31bf",
+      "en": "17ac0bb2fbf899659d26f4871e888ac9798cd728b8694335e0cdd4d74652b713"
+    },
+    "longmemeval-v2": {
+      "zh": "89e67c14015d8a3b68749ad96b3e987f6b4ceb665406e8f6e9e3068ff580840f",
+      "en": "43ffb8fe69b8182022410a31edd2e3ea983ca04cb60bbbf916f8e718acacfe54"
+    },
+    "lifeside": {
+      "zh": "92e2ef81f9e55a3e81b5b5c5e2dae6d473b447de8849c3274d92faa87c2bb009",
+      "en": "195e24a08bcfe66dd7b08dae15cd2df89185c9b0cc2c69c90ca2bc0b1694d1ec"
+    },
+    "locomo-plus": {
+      "zh": "a6c2d6d7907a6a0277e38ad8bc193fb4903c6a860c1e4066c6331a28d687a26a",
+      "en": "ac5113d9c6e47bb2f4da39f3118162e7b57342ef0475a62bc81b461ccbfdd64a"
+    },
+    "hotpotqa": {
+      "zh": "c745ae1774928d6dc81e47605689401832dd7433ca0cb384149f29bd5169acd5",
+      "en": "33769c25ba65d7d9a36f30b7ec192a73f03b1d9a136c87f862bffe809e579bd7"
+    },
+    "kilt": {
+      "zh": "f6ff978022a3cfd55ed2861c13e481a87193de72d8ba796455dd928806307048",
+      "en": "88b4e8a3dc94311e2d1117f2506b9135413088192f7328f56005bbe56679bd11"
+    },
+    "beir": {
+      "zh": "e756497fa02b3285abc84fb82500d8bf6bb2c704cd24aa01383de67063edf21e",
+      "en": "9e92d58a935b3a5a34e829b5204669fa1f6f5b3cdfd3f6c6c13187049446d34a"
+    },
+    "multihop-rag": {
+      "zh": "21188018c1d435a8dfd41530ff9b9b294c6c75f232355442b7065ee818954052",
+      "en": "46db172d5b545eb2d98ce04d0bc19b4fa924245e119f941d70f8295464f3fd22"
+    },
+    "crag": {
+      "zh": "af977cdeb5dafab1e99d126188d012c0a45b3fcb81ec6bd9dfc9644b02e7010d",
+      "en": "c2095d617bb5a084ea8d0909974abd0994b0c499d9587d95af2380cfb01cb46a"
+    },
+    "ragbench": {
+      "zh": "097ed80ff852e1f68935da0defba80169641bc7667be55ad768fbe978c9b0d88",
+      "en": "90acc2cd6e629664e306b01bda1cb563e27d73e6db30738ecb9de303cd19ff4c"
+    },
+    "browsecomp": {
+      "zh": "1682627a1a9dce4789aa17a3b4362f39e6a5cce9e80d3cda1a81b9ec7ff27c45",
+      "en": "a6f457c036ff307a1b77dd314351ea4f5d54156adc79cec0150294bf6cf2e0c1"
+    },
+    "deepresearch-bench": {
+      "zh": "dc10e108238d58f8bf62c80ac58e4b3ae54dbd6fc3c4926c00b5ed6ea459afee",
+      "en": "9488434a30c43c5ddcc6758b9e9024f01e644d2bea51db0b33bdf6c0ef649c0e"
+    },
+    "ragcap-bench": {
+      "zh": "b68b9dceccd69b5138359017b52eb162db4a42bc09e19d5abe329e4a604b5b93",
+      "en": "a80b32fcc2bc017c97db9a91defa631897e801e4934b0d93fde7b2345bd87a9b"
+    },
+    "agenticragtracer": {
+      "zh": "cd0a657d012cbd4f0e81fc52b09e6843d72571e6bbb8b1962fd7c5043dd96c70",
+      "en": "3fe08fdf9966ba2ece7dc9ea790c13e6dff914fc9ed6563c446edef781c9db99"
+    },
+    "sgr-bench": {
+      "zh": "383f7ffb836371b6f338ce058048a66dd578464fa44f98d4f7413c41c4406895",
+      "en": "f6ed38da8614e81316aebe263f43d31d86d1f6e14b2f46182c197b03de4565e6"
+    },
+    "vakra": {
+      "zh": "9597cc72d43171ab6a1d937eb7d6402e5673717df8f5a2226aaecec72ef5a8ff",
+      "en": "cb43a0b0bfb5e05e998389ece2c50269e0d11415ab66d73ca8282916e50ff077"
+    },
+    "wikisql": {
+      "zh": "1df8c46a9e3ae8c70c123f2dcb4f7a9f8f1865764c9a64b348c4ecaebc5fbf02",
+      "en": "d79bf6c9021ac0b95486a7ed583c5c40b64cc78c3eaa379d71bba885f22159a8"
+    },
+    "spider": {
+      "zh": "906f2d93e6ae51ef3a936336b91d0e51a2f5fba404995fa9ef864f420ec254c4",
+      "en": "298077adb77cbf5081c7fb111ff40720b33991c1f7b3a1ac1155b8215d200c39"
+    },
+    "ds-1000": {
+      "zh": "d959a877d1422c8a0458ed03e01665188b1a215c819e77a3d2d43f190de96b5b",
+      "en": "dce55fdc13838216734e535b019b5b1a7ea4e08fe582e15ad5cc239b08aa9ddb"
+    },
+    "bird": {
+      "zh": "3ae2bf1d893a8ad3caafd1e4b0ecb6e5edd75205e31f30d4b008034db62b8792",
+      "en": "1ad5c318e164d7d76e98cc80d3723c2e1931232aa2e04cecf1805833fee2296e"
+    },
+    "spider-2": {
+      "zh": "56c022b43759759b75fb45005d32ef9990a20162451f76ae2b511813f9628630",
+      "en": "f57c86dd493d85c233d29655752939d31ac72ec658ac7f1c360ac6db6f18a8d3"
+    },
+    "datascibench": {
+      "zh": "4bad506c88e85a9c10046660f789b06f129f6e29c6619f1f3b897f6591e0721e",
+      "en": "c27ede2bac4ea7f08bc3ecb73b70db09af338b7648af8cda9f8963012c617529"
+    },
+    "fdabench": {
+      "zh": "330b7c113f39c89cc9a346bfe27746b04fb05667fe5b0c19b8070733ac8ac902",
+      "en": "551ba396dc5740b2a7b949765a28d21ad54f7b0c6923db87040b5548fcf3839f"
+    },
+    "data-agent-benchmark": {
+      "zh": "e5b714a0028f30bf445638c9a45d3d54a8a9a4d7775ca9f01e677083d392ca15",
+      "en": "d93ca78989910c3908cedbc283da51fdefa528197d3b5355a75a7e41b22d3d68"
+    },
+    "agenticdatabench": {
+      "zh": "bcb9c5f964da154a2156eed2070f0a2987a9d712ecfcf3c51be3a79071728577",
+      "en": "e13eeb9ced7a457e7f61e2d085573d92f7c7fb4c67613089975aee454081474d"
+    },
+    "dataspace": {
+      "zh": "c1c1076c8bfa47facf86aca120cd8be0d836f6d1284abace36347da85b8571a2",
+      "en": "50362999572d776d3e58ca6bbc4cc3a21dd2ea72ab17b2f434f2a9883b0ec1af"
+    },
+    "dsagentbench": {
+      "zh": "307acf9e52639abd5299bb9c991cf3ca8fce00aca5b22dd21fc6ffefd1c08f01",
+      "en": "66fb701e38199a6e5fbdc0e3e0a958f1572a57721ebb2ea0333b6f9e7853a43f"
+    },
+    "beyond-goldfish-memory": {
+      "zh": "91894b47e8583988cbe00dc606e02c04a97c5be357eeb3e490f72e20cef66c2e",
+      "en": "da13a4147563e7df0d2a11e2263f7e71f3fd8440400f9db81a9b094050605b2b"
+    },
+    "mem-gallery": {
+      "zh": "d4cf4186abf574e42b00473250a87a64f8edd14304f268c4077b0fcc4df8c8c4",
+      "en": "3bb23b35db34da9305f664185d881bea09bbc2232f96e935582e7d47910345b3"
+    },
+    "memoryarena": {
+      "zh": "8696f9a21ab27c75ddc9404ead522378981c99acd4717921b1ff5c8d2d928d3d",
+      "en": "6978eceffc8f53adcaf80b309360c11455b130d3a1a08ae6818605c234dbc881"
+    },
+    "memeye": {
+      "zh": "e25392cc34204c646a5fea6e061d2ac1cc918bedce90f43a0124e5644db6aa5d",
+      "en": "9ef786e5cac4535dfd81637dc4cbf67ac5f904c22e348d42d6d6fbd4b0f833f4"
+    },
+    "realmem": {
+      "zh": "489b55472ddb4ea92472996a4fd8f78f9604cb0d355154994a39061c325be6d1",
+      "en": "397f2b72eca7f3c10261cb4e0cca5cceb1dba7c383e4ef62d42188ccc3dd84e2"
+    },
+    "mem2actbench": {
+      "zh": "d00704213be5ed5e5cd2a018e75eff194af27c3d48cfde4cc27efb2ef013bec9",
+      "en": "248f6aa74723f2d54ee408cf745958bd24245c100f524efd655a3f9b417cd126"
+    },
+    "rgb": {
+      "zh": "1fab9ae7a359ecda21bb9556e88919f164fd4bbda115be91424752e0c0bcf350",
+      "en": "521e2b60ed9a753174d12a77ceca1dcd9cd79eee5428c13109b73fa39190eb9e"
+    },
+    "ragtruth": {
+      "zh": "4c0050d45379adb277f1fd63679494440951fd6bcdf10b46ce1a1c77ccce4215",
+      "en": "a9788cc92d570850e0e74c703a103ee524d87a90960f623bc25ab5b09ff26c0c"
+    },
+    "bright": {
+      "zh": "83fd40b2b63d396b645d2a7692d33d10fd28617711c69c8d597f525538b68f7d",
+      "en": "e8a9d70b36c8f28e04ec65061463142d8806562c42552bc1140f4ce2f0cd0d0a"
+    },
+    "browsecomp-plus": {
+      "zh": "b7a96eed3e7ce2832fe0583aba414e3cdbbca3a286fc7d7910ca9bac237b53d3",
+      "en": "94f5948da259baabe2cd4a5c065b2dca9ca9bd284d46faf0b277c2440419d6cd"
+    },
+    "mlagentbench": {
+      "zh": "bcee206cb067c15fa07b477aea7da1e43f4c909b75f50be42993301cba2f1c79",
+      "en": "30fd073ecf8a95e7e6b993d03fff05005de8db8f98091f9f5932288b0f8d55d4"
+    },
+    "insightbench": {
+      "zh": "f4ad9387103387fe3ad30fc781ff5fe92f3baaec9acbdc865bceeae0250b680e",
+      "en": "3d03afc96a8fb0c0a5d00480a0c2a20d5d751d00c1d1407e6290d073d533abe2"
+    },
+    "da-code": {
+      "zh": "a06395b52bdf04f31b986aa556a2dd55aa4dccf8e769546416b951e0701cea4e",
+      "en": "8d9278ce7d99ff4625f0b04bbe8bbcac6f36560a37bf308d9ea2713d17d0152b"
+    },
+    "dacomp": {
+      "zh": "a00fe5921379bbcd7912b38128c740dfb4076424ea37dadf13ee89d5f0db06b2",
+      "en": "a6f2f7b70ef235cb208bf81f6e2309fb995341a5ddb8a1009158ebb820b65947"
+    },
+    "implicitmembench": {
+      "zh": "0a80e150e022132159705a4cecc6dd1184a80411820eca6b11e754d9a4df1904",
+      "en": "03e4843e7d319c50b19b2227c5182e3de1b7fbe471948f98ae6175403c584410"
+    },
+    "memevobench": {
+      "zh": "dceb1b8d7f51e190c65a8d5ce0c27b0282397d3fa7c300b79aa8d2f86d369681",
+      "en": "87a3cb1e914f0e4cdc61f7223dacfaa4392a15305d6cb3b8741ccd2fad9c9495"
+    },
+    "memprobe": {
+      "zh": "263b49232dc4ebc255b932b450d435b034b8e723d50f4d9793e4378563661d5f",
+      "en": "953a310f602f805d9168df1d0559f265a9a9c769e9c693bb951090a38c6812e9"
+    },
+    "gatemem": {
+      "zh": "6fb92b3dbe057dde81c6e77258dd12517cec0ab6b5af1759dd2c4f3e41623c2b",
+      "en": "6f5798b890879d737c33a66f0f0859fd1b03bb2e3c45058bc4a16fa657a491dd"
+    },
+    "came-bench": {
+      "zh": "8c54e6a4fc5bfad2ce51ca54d3530520b4c5bae2e38ae7d1da11b7607ef2753f",
+      "en": "8207f51763b20fc31d99a01ec4924c5df4e71db9069ea4df4f718ba236f5754b"
+    },
+    "memlens": {
+      "zh": "0d8af9c882b8781a0d277c7c524b7f037f9582a0da3b8c3e2b4fea5a3fd370c9",
+      "en": "33878936594e1a7da36df02aa116b7f9841a8909465f573681b4601f83b5e8f8"
+    },
+    "permemsafe": {
+      "zh": "d9e942a2895a156f5b171e9767790b724c47a9049411c4825c10f4574c738b41",
+      "en": "a4c7ac32893545671022c8cb247c9cf991cffc694aebae331513a70c90d3e5da"
+    },
+    "memgui-bench": {
+      "zh": "073a886eeb5d39831da31e98bd7936b9e4ad7a4b44b57a05f87f8b43baeb2f63",
+      "en": "08c32228f00ac753ef3762c9864204d3faafd1f93c3ac4eea0213283039ad47a"
+    },
+    "medmemorybench": {
+      "zh": "2cb29606ea9c81cbbb8e27b514c4c70732313efaea33eabe607800d0b07b2f74",
+      "en": "c1409b78af0dc6f2ba52872d219899c933029e173fb5181eb88fdee755cc16eb"
+    },
+    "groupmembench": {
+      "zh": "afdec1012d360973c37949954eecccbd0bd04dac14960d4b2935615d718c43e6",
+      "en": "af0bcba62f6edd33075a70d1a42897252063030725cb148fb22547905dda26a8"
+    },
+    "worldmemarena": {
+      "zh": "27dd33dd7597089c6aa944961ebf2897f91598ba201cdcf1f6d60d850833966c",
+      "en": "0a1d7b47cd9984aa2970399134f6ed9282d5c00e7c77e93a88bbcbc979c63d12"
+    },
+    "dynamicmem": {
+      "zh": "5d66fb7c359144e5cb3b84ba2f4700745f4f7181d9787d86ab32b37bab61866f",
+      "en": "eaa85636a8e2a52998fb3e71a1bd04acccf770a6489795aa35697cde398327a8"
+    },
+    "inmind": {
+      "zh": "c1beb3b177bfea80c2e7159ae5717c16a4cd2ef52f2ea3b99c45a39a2c6dd4f9",
+      "en": "97777292fd6d5f26fbeb45d585e8a7d87aa6d63dc9f30359446f903c83f06f29"
+    },
+    "evomembench": {
+      "zh": "b6fa7365d018c28f20bdb9503b4ba42f6cdb24ae2e9dd970b9cbcf046bb40062",
+      "en": "d2c78dede998dff542d11e88245b31fc19b8bdea2536b2ab9ea035f7e53a7182"
+    },
+    "kramabench": {
+      "zh": "39d5dfa166edff3a2a9203ba2b8b4bd151827fc892a3ba86076b82f598e332d7",
+      "en": "0fcd06479fd2a843281505928ca64773218096d7ff61ff4459ec2bb2d11ec424"
+    },
+    "dabstep": {
+      "zh": "bb11419af4f09c09c3d3fbc77929f1c5af11d79b9adb2de80071fb1c131b1fe9",
+      "en": "ab3cfa1c7b77f477a1952920cd9bc81323f67e9ef32dec4e1d9631023733a567"
+    },
+    "dataclawbench": {
+      "zh": "ab8878e9da15deab1f9d2f960cc2a0739d47f01d13ed4cf4249984378e6b3e37",
+      "en": "6434f319f3c0d9b8d772d3697b8460e1186f267d0ab4a99c57a7c24e544e63d5"
+    },
+    "tml-bench": {
+      "zh": "19421c00eccf055f12b08eb404e34775b66df80d16e0faa8cc14285f7217526c",
+      "en": "a791137c2b9064238653139ec542e458ba4341abd6a9d9ab27d36e77196d2797"
+    },
+    "dsgym": {
+      "zh": "dbb5448ffcabc2392ad0014162d8eb692020509b71b5bf06ff757d8ee0e668f5",
+      "en": "baa42126516e43db0a92512f1cd669a321278c81eec496cdbd366aeaf1ab7e65"
+    },
+    "dsaeval": {
+      "zh": "401524376bfa3c4c74b65bcba061a001a8363f448537cd20584c93e587141c7e",
+      "en": "13e91b6eefcaa23cdbe1593379063e5ba8f54d5ee99c0972f9ffb4da173c50e7"
+    },
+    "livesqlbench": {
+      "zh": "49895420e5b9a00dcf61cc3e106d32dc5677808ebc52fe7af2b21296a08ba520",
+      "en": "177d34dae4724d24c0b29f2025cccfbf942b40ce385d8be0d434ec696d732b97"
+    },
+    "ddr-bench": {
+      "zh": "4937f6a2a49762e8bac3e7581ab8deec3a46d5a258de94df3fa0198623c20406",
+      "en": "1329777347f9894cd5cdf00e23efcd8de3bfcc625bb8caeecef1e8fbcb332e82"
+    },
+    "dare-bench": {
+      "zh": "b2730d24be5f28d4f9b3875617b4678cf1d128108e42deaa401e79e6874ab805",
+      "en": "10ac9467bcb5125abc75fd273dcb4002c656d9c1e6f39c739adbec940a6557b1"
+    },
+    "agentfuel": {
+      "zh": "7d1cb94df23e5e8ddc57f54a91eafedffed23fcb741086af1b929189e792e31b",
+      "en": "2b1fc82b47c57b62893f1e06c6a29deaac928c76c005e489469bef305225bcb1"
+    },
+    "causalds": {
+      "zh": "ac67123be081959ef5c5e74c73bbd2853d0bb7e11b8eee7f76e291fdb3cdebfd",
+      "en": "1918afe1db60002b9a4d8d2357ae4a708ed07e028dda1537de25c537ddff68d8"
+    },
+    "warehouse-reliability-bench": {
+      "zh": "04c620301e5edd050e09581fb85c09bfb2ba10399eef20c8df6b1690399d8538",
+      "en": "3dbf0726ac88a71b80c7a8794cde3ab951df6a0fb9eba7dc4dbf5ae08a4e954b"
+    },
+    "data-exploration-benchmark": {
+      "zh": "59ce028261a19dbdf791608d19e34b9129e9647413325b98787490453ccfb3bf",
+      "en": "a9cc9f168173f4313ffcc4335d941bb0278baf83bee9c880c36aa9fae77954d7"
+    },
+    "irts-toolbench": {
+      "zh": "3cee6ee59b2e132e0cd565882e236fc13ecba2b89bdd190f8b5e41b2822b2116",
+      "en": "f91e4463f73766d7bd79748c8477673e1b3835bb038507f888afc2ad816c3a75"
+    },
+    "statabench": {
+      "zh": "78f1acbe12c76a727c716fcf171741adf125cb15a73b625bdc0e93074775ccb8",
+      "en": "66b38f4e53c2abb20f2aa6c928fd97fd812196e49d21e2cb0afbcafe09dad564"
+    },
+    "agentds": {
+      "zh": "63469298dc6ef74b1fd6995b4f25ff00cfc37af9f6ea8e08649a4988bb0bde30",
+      "en": "ef976a8d66b39a6a276be62eca002a51565b435315b7501b5f36b700d8da0d08"
+    },
+    "bright-pro": {
+      "zh": "b5b05f25e6d97c9b47137cf3a96e668f307b3c634941a79909eda6edc163a6ee",
+      "en": "0480491018d5e0f95e3c4fc8f314c269b9d89731a235b388f7743222e28a77b3"
+    },
+    "sage": {
+      "zh": "05da76f59e8ced1d7279198d9d5bad883ef6d73d101e65ca4ee4dd0d3e387a31",
+      "en": "22bebfe009578ca94f19495cb68bb40bdca22624d142d9cd1598f4402e73649b"
+    },
+    "gisa": {
+      "zh": "123963267b65782b32a9f0a1ab32f1a7a2a9bc5c6895d82c0c74444fd6357653",
+      "en": "458671719e60e79330ae039c146b29b87309c3b85e42f7adf5a850b28ec1e442"
+    },
+    "mtrag-un": {
+      "zh": "7aa7da54abfba7068b8d37927e2bad95a823354a644c5dfb39e7d4f6de911aaa",
+      "en": "1e6218812225d0174c4fea9759234408026d55b7be193bbb34f777126ecf2270"
+    },
+    "mc-search": {
+      "zh": "1fb7c62433beb6b9e55d95c8466c8c4e873b04e1c37c4df106d6b2f539e3408b",
+      "en": "cfe88fe2df62c4b9e16a00149dc0cc9c741bfcf20f673c389314db823db603b7"
+    },
+    "lit-ragbench": {
+      "zh": "08532df69413d17712778977a9680180763369033d5d0b78ae05f6bbdf6be715",
+      "en": "df4bf75f5d25be5de49fc83464eeeb348d3699254d75db04191aac40239bd310"
+    },
+    "merrin": {
+      "zh": "d529e6c875e80df557453d713cbff6469cc3598d3a0c12c8f2e6a7fb260c2cf5",
+      "en": "d1c553c51ac052b0135d4825d52df3e96df7447356720e125ff613241d799a53"
+    },
+    "mudabench": {
+      "zh": "1ad6aeddeb75c92a41c62b634d8f9d63c15a8162232eecb40a0617e67beed9cb",
+      "en": "24d48a631297e273e546b49ff0c7d79bfcb2ade153eb555c742f8823c418ce0b"
+    },
+    "autoresearchbench": {
+      "zh": "90a5725b36a4c237eab0ec737c0341d940597a2bff074f392c58006682fa15d3",
+      "en": "1654b003532d1ce0a1e5d4bdf6849a665eb96cc786b66ad7b4a3b99256714d27"
+    },
+    "enterpriserag-bench": {
+      "zh": "bf0532f2c72809edeeb1f46cd3c4d807843ae87d8ed7310b6abab72806e45790",
+      "en": "60ec1353aba25407e6730ce61ab32012b3e74cc10ce63137281f168bfc0db290"
+    },
+    "livebrowsecomp": {
+      "zh": "50dbf3b10e8827ca48208dbb640218071db9e668d3ae6b28ede6c17d360dd8a8",
+      "en": "3a27759d090ef35d18338b38bf67d7ef8b2039772f1f9cea26e6d7571802e137"
+    },
+    "lohosearch": {
+      "zh": "ed78474251d368838ee8c01a075f6ef881d5e1752ef4a9688366fae22e55aa38",
+      "en": "29d51904997ee65cf307dbe81a224632cc07cdbabe623c03135736c1aedfc2ea"
+    },
+    "evobrowsecomp": {
+      "zh": "534b1a0ef5360e09fac208413d625aad4c379ddb91ea3fc9c99ac5139c06d8d0",
+      "en": "2b81ed435a3a23466e597ae43cc42dd6d50094c895947fbb808c2d660b9ed120"
+    },
+    "scholarquest": {
+      "zh": "02bb0479e4e1baef3dd76b55db77b7f824c16b8fc2e88f140cefc4c0a75a7d59",
+      "en": "07380501fe82679af980d573a487ad828460e8c3b258618eb5f8acbe8a38f167"
+    },
+    "searchauditbench": {
+      "zh": "fbe2c9abfbe9fa4aa601c256da166433e587099108104cc73d347ea10c59ef92",
+      "en": "d12b67a2cb04a6c675dc08a9870e9ba70038b2c64f39fa45421078b0352b8a23"
+    },
+    "t2-ragbench": {
+      "zh": "d8b0846aeb111895b223753975db3f5ee9e3fde9e22916cf2e751dc228de44d9",
+      "en": "4849d6cce46e6a5c46383fdc023653af78ad7bd40410754137a3eb0441c77b50"
+    },
+    "leakdojo": {
+      "zh": "960c0c6fd5a56845d83857ce1d2cdc601fd67611be80ddaa8f0655c9c4fc7453",
+      "en": "73a1750ebf5093b43384594cf01bd2a18b7804a66dc735d8081d229fed4c7e59"
+    },
+    "memfusebench": {
+      "zh": "0fa357ac6d0742f7f5167100fb317157fccdc984db6270107ef3d6385810e089",
+      "en": "ba0632370000fb524ece374f26ace872fc303f95ae6840d66948112ce3de37a9"
+    },
+    "sp-mem": {
+      "zh": "a180b19fdf0f7e7493a27fc0b5264308223c0971cce714f37fcecf2a70a6a6ee",
+      "en": "2861b2de6b0e76353ea35e4974c9b190937c16839f0c58d66254a641535198f3"
+    },
+    "past-bench": {
+      "zh": "f377e26585508a0dcb80ab22ac28d1d86a83687f6067f5e4e4e8af80072051e9",
+      "en": "dd100e117c75a1a66703fa972e96687873768273c5cd498dcc2e96362586f1d5"
+    },
+    "wandr": {
+      "zh": "611fee87517a5b762586c741574575932c948c59a6dfef3209a846bb5491459d",
+      "en": "034104306528985815bfb3df72f03121aff0525ed609c64dbb01996ca92f6399"
+    },
+    "maple": {
+      "zh": "dfa7c46aef205eddd3c858fb9a98a03cee1648d2746addf5555e6ac74a1e7c95",
+      "en": "b159232294f9cec29b65998e97341ca18c1c57197ad5162c7921315fd97b737e"
+    },
+    "visdocagentbench": {
+      "zh": "cef8db11bcec1c75c293cea9da410b01732271bd7ff83747e65314540af3c656",
+      "en": "fd492e7d2e174876f480e20e9f8838ff169cdb43639e290b02dbb63173011b87"
+    },
+    "das-bench": {
+      "zh": "e1a401dc61d35d9287240368b073f18481076061c97e79bf01d007b6283e1fc3",
+      "en": "b142fdc6600bc0d390bc9d980ed5b9c60e6c192ce4c4a6104974cb3c33523eb3"
+    },
+    "recall-trap": {
+      "zh": "10b2e92955393a51ed8f83cb4d531770314d306fd9fe8ecea4b56689d892dbe5",
+      "en": "12191e9f8678a8cb4dd93c5a6858516215bc1145c0ddec681dcc50173889ffd1"
+    },
+    "commercial-tax": {
+      "zh": "de8485ae7a1f769e7bb360aeb2e85d26c07a7a048e8b814c3d795914000e225e",
+      "en": "2efe6ce6f90ea20243c09b9df61c8b7537dacb7c47fd823f8ae14ee8b5337e85"
+    },
+    "data-eng-bench": {
+      "zh": "3dd1324d412fa9cf3a37d490a192e3bdbd92bd550bfcc41ac3ddcbf45b19e12a",
+      "en": "55b89fdb055f083011232d66da96c6f7656f0e513052dde41c0bcdb492bb659a"
+    },
+    "browsecomp-plus-cm": {
+      "zh": "3f295b8f8132734cc3f4c9d0074b8dfd250db05b5f7b31d1f0d2dd34096c1230",
+      "en": "35eb8d10ceee0ab3df6a72df853b6d33ea706490e292224d2bb7c4b3d6bfcc97"
+    },
+    "deltaml-bench": {
+      "zh": "31fb5541ffef8f42fd3e61c194736d0a5769d32c37d6a3ed70e5ea4b48cc51af",
+      "en": "9248f9714f0ea8c7ed06ae623b2b4a87cd1716d8d36f80769273954b0c544162"
+    },
+    "ai4ai-bench": {
+      "zh": "ed26cee6507a7723c0634e0f5cde2ae09ce825a355198d1c52de80ce305bdc9b",
+      "en": "81697da4ab7f1299c7aa6c48700269e91f3ad9cc56ec322a78e7643605eb2526"
+    },
+    "agent-memory-bakeoff": {
+      "zh": "0fc6e27062d79e345e99c246f68af19298f04a78cc3062c8ea1d59c5523f26aa",
+      "en": "c938e15f45f69c7d29bcb30d1e575ce5fe0f552e6e2712ef25f64d6aa3204b19"
+    },
+    "membench-staleness": {
+      "zh": "94126f8f0c332340a0f9208f143e666fcf98294224d1846ddef2b29376a74b05",
+      "en": "c7eee4183cd4a3f6a83849c97dd99367c46f64d56492393ee70dbcc214cb4c9b"
+    },
+    "agent-memory-bench-coding": {
+      "zh": "075d2203231bb7a71140304cc4eb28bf42026f82eefa504e9d81cb1f2c09940f",
+      "en": "69856eb329b5ca6d1ab673d0a234b26fb3434871c0351f384890687ae1f6e526"
+    },
+    "memtrapbench": {
+      "zh": "247b69194e82e075e51527fcec1f1aebad4d9e7969f69b73831521a25ef46e4c",
+      "en": "e62b323ebd970fccec090a9a0c13bfee2ee4c752f092526f7fb1f5be375121e3"
+    },
+    "statemembench": {
+      "zh": "4c13ab4a936c3279ab9e8d61ce97376637138fbdb2413ebeebb14c6d6c5da7c1",
+      "en": "af461bc64b47419d536dae675b88616e057143c973a10c6e722fa312b373e2f1"
+    },
+    "compaction-cliff": {
+      "zh": "0dffe97f90f95f4ee403c2e5598dbe32c5d83951edffa31f113d3ceaab01a320",
+      "en": "43bad50cf68a43d8cee42dba54c4b56c12fb7131d8c924937b2990b9e684ccb9"
+    },
+    "injecmem": {
+      "zh": "d9ea85fc60f7e5f69e9c6e072dbd72c81ad6268af34b664753e0c870ce2936f6",
+      "en": "288bb960315f612c2d839c91d449cfc7f65c43785fe5a8c16d62f60b60a1415f"
+    },
+    "dreambench-swe": {
+      "zh": "90b351b452d514d7f7ace49d2f8058df98a3f3ad5adb8be7a22bb15c2c5a6c6e",
+      "en": "18d99e175a71275a3e77a6e031d1e9ae42a399c7b73806997bc73968159b9b33"
+    },
+    "utility-under-attack": {
+      "zh": "56d905c44f424db1045b691467251ab6a360222089237a59bb418e8771b0c244",
+      "en": "84f51693d371671697afde3b9599ac334fa126f7ea7e6f1c02211ed4ac82dc3b"
+    },
+    "mpbench": {
+      "zh": "da823132bac819827cc98b3cfa8d89bb022fce3b6fc492e990649ae32076598f",
+      "en": "e6f8045f5d13c748542880f03985eea67bfeb448393a698b423b49f19749a075"
+    },
+    "kbgym": {
+      "zh": "befb52ae8cc56abe07685f0449f0649c1fdc97f0d15413e20eb35ca48178b6d9",
+      "en": "d4adbc2590ae8aba8dc439d1b4782257ad21ac0e3bb7ffba212cd24e04ad7dc2"
+    },
+    "snapshot-compatibility-audit": {
+      "zh": "b1dc700574fd8dccfc099f2c8d4107894b15c86c46458fafe3dfaf4848fdb957",
+      "en": "1d87175804e58f837c3b5327b2344468fda73a23a34fab4bd5f7721beb208f34"
+    },
+    "litreview-arena": {
+      "zh": "14b83207adc8c3368cf574760698c11396e1d0a14b3483d27acf2146d860460b",
+      "en": "ead629ab3f492a5cc74c204959b1e9758544e48987b58b345e7433ee52d3daaa"
+    },
+    "rag-collapse": {
+      "zh": "1a00ce2dbea52cd97655cbbcc68ec5cec8805d3cb950eef2242d1d01f32b7ba3",
+      "en": "edcf6a38817abe30a3ca24dd827f2ee846879aa48302a24d62eb5388cc1e6868"
+    },
+    "mle-bench": {
+      "zh": "af67e466ed2afb26fa4e53a514c0a140f13259c2267cfe842e706e6a6161cef8",
+      "en": "8c6093da45a91fd588f70edfdb977404afeb02d2b169ffdf47205ff74131b27f"
+    },
+    "mle-dojo": {
+      "zh": "8588ef9af1a2135e2522a68098e82bb261cbb42b118a4522fe145bc442449426",
+      "en": "6d59d16548fdbab8f7e4fcba8f81f778b353520ca0afabb016c5532066968320"
+    },
+    "scale-qa": {
+      "zh": "3e836c2f98d63ac480dd6ee21bad504ff040a34ad844931b42c4ff0bd7c9620c",
+      "en": "108758519cc28f8b5ea6073c61c62065775eccc4f141f1091d42f6f849ead2fa"
+    },
+    "claimprobe": {
+      "zh": "0d4b4a9d6e36d1aac40faac1e831134d93eaa7c47b4ecf3647a8a1dd418dd790",
+      "en": "3db9e7a71921c6049ea20df4974a9f1c47d5e2e84e7411149cbaf766c15538d6"
+    },
+    "authmem-bench": {
+      "zh": "7f08a74014e3fea8abf3e4fc502af9c02912ef03fe059f4927b436f55b79127d",
+      "en": "9a78f0f14198de3ed0c5b26df276d7c5b8e53e5d011aac1d3b8b6127e50b2aeb"
+    },
+    "agent-retrieval-bench": {
+      "zh": "6086f14642b6babb802c5e89c6661b37fd79f3e914ca9c46ee8afc7c197c57c5",
+      "en": "b3224d0be46fe93db3d9e46cf929421d577fe78f35dd629485316b60171d8338"
+    },
+    "pm-bench": {
+      "zh": "5a1c0f2083d3b92b515cef673e628c8948a900efcd2f93c70fc59d8219889cf0",
+      "en": "4eb71215e5e77622912397ce6dced86a202fa8a7f20263d910e0c8214ba507ee"
+    },
+    "eal-bench": {
+      "zh": "d948d3da7e58365b24a51297a6953de8a0d2f7b4172fd9d8073c85bc4961decd",
+      "en": "45affd91adfd18aa6bac3d14ad8c9551328376891c9be49b940be4fcee30de88"
+    },
+    "memory-trust-gap": {
+      "zh": "ef6588ae8fcc75e4dc4da3632302d3999450cdf696422c35cae9d8ddcc3ba935",
+      "en": "4ce2ec4e609dd97d2608cdfe1f7d6df411ecf46424430d026171f85e00a7cf21"
+    },
+    "q2d-web": {
+      "zh": "ec21a9105665d31facb4c8885849ee89d195c962e92bf396e620aff7a73d9f76",
+      "en": "e711a3795fbd36e38c425d0e2bd02b9ac1cf492da0a17b67a54f8a91e2d21a92"
+    },
+    "hybrid-deep-research": {
+      "zh": "cfed6fb0ab17f05268e2ce2fa150fd93e9ce0bf1409fc91b8b4dbe581aff60f7",
+      "en": "f235ba64df08002fb375e43a794f4f0c1382cdb1782b5da802c9aa15e72a563c"
+    },
+    "di-bench-data-intelligence": {
+      "zh": "9da46e04c94fad84ad4638ef2e7a6988649bb9f27e61136a3a885fc46f566767",
+      "en": "614819d5d5752f63c52a2644438cf024ac8c1453a8e96c42e18c81aa968cce1a"
+    },
+    "icm-bench": {
+      "zh": "6e0c07d3938a7c204fafc9e9c538cfb563dbb923ad4e4058cc1c757603dfb0de",
+      "en": "6abed458fbe6d593eb48cae66f08fa7e9bc1d7ad7723bd712ef00c01ba8d5266"
+    },
+    "memsecbench": {
+      "zh": "9e487cae84d3a3ba61a7b3f95e6afedaba4e8f3565b3afc22f8aaa789bbca1ed",
+      "en": "672bee33db16307a05c2bc66d0e0f7f06dc15c9e35b3e40603cc24c04b78142f"
+    },
+    "crossmodalqa": {
+      "zh": "6c4ba49ee071cecea6dcfa7183fc64dce15d5f3c78ef1eb816491f9ba7ad51a5",
+      "en": "d90ba7472655f1cbbf9823d913114a696caebc1927f29cfeaed89e1f848cf60c"
+    },
+    "muses-citeroots": {
+      "zh": "403fc36ccd6045704697c5ab356129c71cb16b712c86203544d15767b3ae2edb",
+      "en": "39b59f9dce14353c724c07fd808fd022b38129822807281488a8506a86bfd61a"
+    },
+    "ontologybench": {
+      "zh": "13b15f02b597f9a98b9cf56d493e5813c2d07e6ef2a8ed36e8a490830771bede",
+      "en": "be95b920cedaa41e23e40892a9e0b3fc200ad46b169ccf840fe07a644ec2d156"
+    },
+    "mr-lhdr": {
+      "zh": "8aff4af0c0f33464664280f6bb13ab3655384e7fe30773973a286f030f179ac4",
+      "en": "5f726967cb735e9f4e0576669e28c551012e4cf578051ef28c33d90afe0b0581"
+    },
+    "dolphinbench": {
+      "zh": "037f69d4a3fc5e3a7cc384c9a276d17c6ef0d8731815802a6c59c0cb5be632ee",
+      "en": "8ca986e061bf684aaf5438e1856ea46f8c817583dc9435ed4bb6055fc549bcf0"
+    },
+    "memcalib": {
+      "zh": "b45d295549c3b3434dbfb5e77d5bfa62d4c52fed76b53a81c42ccb2ce7ced59b",
+      "en": "8a6e77bf11691020d60c013fda85df5ce1f0c2a0f468e80aad1849cb85262312"
+    },
+    "chemclir-bench": {
+      "zh": "2d52c6d41e36ade854507357a3a28f2c94e02d8cd9423f44391aeb810f9ef950",
+      "en": "dbaff5344334794d30f57ff679a558f69a453d3c4acfd3fac8512b7530ce471d"
+    },
+    "locomo-conv": {
+      "zh": "4927210314d9ef01b305347e296790898026833aeceadcdc715a509875904d20",
+      "en": "7582423753b2275d88075eaacae20c40fd7d28cf99cbfd537c8ead98de03e389"
+    },
+    "statformbench": {
+      "zh": "eb25e8f87952675d7003c0f8bb738fa6cc5c9cfec9e02903fbf834c3e8884421",
+      "en": "7dab2c003f8206b02853299712ac9319a5fbdddbbf0b5d0e88ac03b3ab1bf0bc"
+    },
+    "livedrbench": {
+      "zh": "4ac5d4c2346aa0bcf87ef2eea2e802c2d90a93e90601d53ff73b835178f180eb",
+      "en": "352f9d3aa2a9ab3418e94e44de092c6a05ddf1a9a88dba387aa4845f4386b6ba"
+    },
+    "memprobe-stability-plasticity": {
+      "zh": "2364c847e5014b08d79f4057e5c689bf06594e7cf340779e5a22e1e105c93cd5",
+      "en": "ebc4e18caa7a75388da8f4a967f1542d9c19bc03bc758e472bcd7eaaa424b070"
+    }
+  },
+  "reviews": {
+    "memprobe-stability-plasticity": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-09-30",
+      "status_text": {
+        "zh": "已阅读全文：论文 v1 的方法、实验设置、主要结果、局限与附录 A–H，并对照固定版本实现说明。未独立复现实验。",
+        "en": "Full text reviewed: paper v1 methods, experimental setup, principal results, limitations and Appendices A–H, checked against pinned implementation details. No independent experiment reproduction."
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/html/2609.30558v1",
+          "version": "arXiv:2609.30558v1",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        },
+        {
+          "url": "https://github.com/jq-ding/MemProbe/blob/9068d8d9a2a47268fe6f7601b99a56a283c37be5/IMPLEMENTATION_DETAILS.md",
+          "version": "9068d8d9a2a47268fe6f7601b99a56a283c37be5",
+          "kind": "official-implementation",
+          "coverage": [
+            "experimental_setup",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "main-results",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "Tables 1–2; §§4.1–4.2, 5.1–5.2",
+          "row_ids": [
+            "Mem0",
+            "Graphiti",
+            "LangMem",
+            "Cognee",
+            "A-MEM",
+            "MemoryOS"
+          ],
+          "conditions": {
+            "zh": "主套件，56 个情节／224 个名义探针；共同最终阅读器为 Gemini-3-Flash-preview。",
+            "en": "Main suite, 56 episodes / 224 nominal probes; shared final reader Gemini-3-Flash-preview."
+          },
+          "metric_labels": {
+            "zh": [
+              "总体准确率（%）及 95% 区间",
+              "更新准确率（%）",
+              "保留准确率（%）"
+            ],
+            "en": [
+              "Overall accuracy (%) and 95% interval",
+              "Update accuracy (%)",
+              "Preserve accuracy (%)"
+            ]
+          }
+        },
+        {
+          "id": "diagnostics",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "Tables 1 and 7; §5.5",
+          "row_ids": [
+            "Naive RAG",
+            "Time-aware RAG",
+            "Full-context",
+            "Oracle RAG"
+          ],
+          "conditions": {
+            "zh": "同一主套件与 Gemini-3-Flash-preview 阅读器；诊断参考使用不同证据输入，不能与记忆系统混排。",
+            "en": "Same main suite and Gemini-3-Flash-preview reader; diagnostic references receive different evidence inputs and are not pooled with memory systems."
+          },
+          "metric_labels": {
+            "zh": [
+              "总体准确率（%）",
+              "证据分散情节准确率（%）"
+            ],
+            "en": [
+              "Overall accuracy (%)",
+              "Split-episode accuracy (%)"
+            ]
+          }
+        },
+        {
+          "id": "probe-reversal",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "§5.2 paragraph following Table 3",
+          "row_ids": [
+            "Graphiti",
+            "LangMem"
+          ],
+          "conditions": {
+            "zh": "主套件、Gemini-3-Flash-preview 阅读器；按探针类型拆分，同一配置的不同测量对象分别报告。",
+            "en": "Main suite and Gemini-3-Flash-preview reader; probe types are reported separately as different measurement targets."
+          },
+          "metric_labels": {
+            "zh": [
+              "当前值准确率（%）",
+              "历史值准确率（%）"
+            ],
+            "en": [
+              "Current-value accuracy (%)",
+              "Previous-value accuracy (%)"
+            ]
+          }
+        },
+        {
+          "id": "reader-sensitivity",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "Table 4; §5.4",
+          "row_ids": [
+            "A-MEM",
+            "Graphiti",
+            "LangMem"
+          ],
+          "conditions": {
+            "zh": "固定已经生成的主套件记忆，只更换最终阅读器；分数为总体准确率（%）。",
+            "en": "Fix the already generated main-suite memories and change only the final reader; scores are overall accuracy (%)."
+          },
+          "metric_labels": {
+            "zh": [
+              "Gemini-3-Flash-preview（%）",
+              "Qwen3-32B（%）"
+            ],
+            "en": [
+              "Gemini-3-Flash-preview (%)",
+              "Qwen3-32B (%)"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "f4eb0b0732f16ac202acb1292e0195c9b869f5c750ef086830a6548b3604f632",
+        "en": "62521302b1e6e07f9067fe426453a1368790fd0c1b7f900a8282aadeb11e320e"
+      }
+    }
+  }
+}

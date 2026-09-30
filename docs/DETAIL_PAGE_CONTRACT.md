@@ -1,6 +1,10 @@
 # Benchmark Detail Page Contract
 
-This contract is additive to `docs/RADAR_AGENT_PROTOCOL.md` and `docs/DAILY_WORKFLOW.md`. It governs the GitHub Pages route `/{lang}/benchmarks/{id}/` and prevents accepted benchmark records from degrading into thin, generic landing pages.
+This contract is additive to `docs/RADAR_AGENT_PROTOCOL.md` and `docs/DAILY_WORKFLOW.md`. The active reader surfaces are the paired Markdown notes linked by the README; the standalone website remains retired under `README_PUBLICATION.md`. This contract prevents accepted benchmark explanations from degrading into thin, generic landing pages.
+
+## Self-contained primary evidence
+
+Every revised note follows [Self-contained note evidence](NOTE_EVIDENCE_CONTRACT.md). Actually read the primary method, experimental settings, load-bearing results and limitations; present the relevant factual evidence and conditions directly in both languages. A table number, headline score or passing validator never substitutes for source reading. The existing detail validator enforces recorded source coverage and bilingual evidence consistency while reporting the untouched legacy backlog.
 
 ## Reader goal
 
@@ -26,13 +30,13 @@ Every canonical benchmark must provide enough structured state to render a subst
 - at least one concrete `confounders` entry;
 - at least one primary artifact URL.
 
-The web research model must turn those fields into benchmark-specific claim support, comparison controls, next validation, and a fallback evidence brief. Generic area-level prose is not a valid replacement.
+Any rendering of the canonical research model must turn those fields into benchmark-specific claim support, comparison controls, next validation, and a fallback evidence brief. Generic area-level prose is not a valid replacement.
 
 If a normalized comparable result set is absent, the page must say so explicitly rather than fabricate a leaderboard or silently leave the result layer empty.
 
-## Result tracking is a GitHub Pages surface, not a README surface
+## Result evidence belongs in benchmark notes, not inventory columns
 
-Current-score tracking belongs on the benchmark detail page through `data/results/<id>.json`. `README.md` and `README.en.md` remain benchmark inventory and research-signal surfaces; they must not grow leaderboard, current-best, SOTA-score, rank, or progress columns. A reader who wants scores follows the benchmark link to the web detail page.
+Result evidence belongs in the paired benchmark notes and `data/results/<id>.json`. `README.md` and `README.en.md` remain benchmark inventory and research-signal surfaces; they must not grow leaderboard, current-best, SOTA-score, rank, or progress columns. A reader who wants scores follows the language-matched authored note. Dormant web code does not restore the website.
 
 Result tracking should be as complete as the evidence permits, but comparability is a harder requirement than visual completeness:
 
@@ -81,3 +85,5 @@ python scripts/validate_reading.py
 ```
 
 `validate_detail_pages.py` hard-fails missing canonical baseline fields, unpaired existing notes, underspecified notes below the safety floor, and post-activation accepted records without paired deep notes. It also reports the historical note backlog so the Daily Agent can continue reducing it over time. Result-set schema and source grounding are validated by the web result loader/tests; result absence remains an explicit evidence/backfill state rather than a reason to fabricate numbers.
+
+The source-coverage checker also rejects a revised legacy note whose evidence review is missing, undisplayed or stale. A reported legacy backlog is not a factual pass or a claim that the archive has been fully read.

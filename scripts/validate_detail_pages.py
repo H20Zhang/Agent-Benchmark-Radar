@@ -6,6 +6,8 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from note_evidence_contract import validate_evidence_state
+
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data" / "benchmarks.json"
@@ -70,6 +72,10 @@ def main() -> int:
             errors.append(
                 f"{record_id}: post-activation accepted record lacks paired benchmark notes"
             )
+
+    evidence_errors, evidence_backlog = validate_evidence_state(records, ROOT)
+    errors.extend(evidence_errors)
+    print(f"primary-reading/self-contained-evidence backlog: {len(evidence_backlog)} record(s); not a factual certification")
 
     if backlog:
         print(f"detail-note backlog: {len(backlog)} record(s)")

@@ -91,6 +91,10 @@ The date selector uses typed public/publication/data events with evidence, then
 explicitly marked legacy dates. Never substitute a scan, verification or commit
 time for the benchmark date. Preserve exact day/month precision.
 
+## Self-contained explanations
+
+Follow [Self-contained note evidence](NOTE_EVIDENCE_CONTRACT.md) for every new or revised note. Read the full primary method, setup, relevant results/ablations and limitations, including load-bearing appendices. Show selected factual tables when conclusions depend on numbers, with model, metric, unit, split, budget and source-version conditions. Keep partial/unavailable coverage explicit; do not fabricate evidence or treat a validator as proof of reading. Continue the full legacy backlog in accepted bilingual batches rather than declaring a few examples complete.
+
 ## Publication validation
 
 Run from the repository root:
