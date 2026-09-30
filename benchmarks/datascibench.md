@@ -1,4 +1,4 @@
-# DataSciBench：用程序化规则评估 multi-step data-science prompt
+# DataSciBench：多步数据科学任务的分项检查与总体成功
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2025-02 · 论文 v1<br>
@@ -7,64 +7,73 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](datascibench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](datascibench.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2502.13897) · [项目页](https://datascibench.github.io/) · [代码](https://github.com/THUDM/DataSciBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-DataSciBench 评估 LLM/agent 对 **multi-step data-science prompt** 的完成能力，覆盖 6 类任务：cleaning/preprocessing、exploration/statistics、visualization、predictive modeling、data mining/pattern recognition、interpretability/report generation。
+完整阅读 40 页正文与附录 A.1–A.13、B，包括代码和示例；核对表 2、5、6。
 
-## 相比此前评测多测了什么
+[arXiv 2502.13897v1 · 2025-02-19](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:reading:END -->
 
-当 output 不再是一段有唯一答案的 code 时，data-science evaluation 很难自动化。DataSciBench 提出 Task–Function–Code (TFC)：用 25 个 aggregate function + programmatic rule，把 222 个 curated prompt 拆成 519 个可验证 ground-truth test case。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+DataSciBench 将数据科学要求拆成任务—功能—检查三层（TFC），用参考解法产生可执行检查。222 题中，167 题来自 BigCodeBench，另外 55 题为其他收集任务；共形成 519 项检查。评测以 DataInterpreter 式规划与执行框架运行 23 个模型，既测结果能否产生，也测是否遵循要求及可视化质量。
 
-benchmark 一共评估 23 个模型：6 个 API model + 17 个 open-source general/code model。真正重要的贡献不是某个 leaderboard 数字，而是 measurement infrastructure：先用 LLM self-consistency + human verification 构造 GT，再由 TFC 多粒度判断 execution outcome。
+[来源](https://arxiv.org/html/2502.13897v1)
 
-## 这个分数能证明什么
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：DS-1000 检查给定上下文中的代码片段，DataSciBench 将终点扩展为多步数据科学请求，并用按任务选择的检查项核对结果。它比单一字符串或执行通过率更细，但分项、图像与总体成功的尺度不同，不能把所有检查视为同一种正确性。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-DataSciBench 支持 TFC ontology 下较广的 data-science task completion，但如果 prompt 已经指定分析目标，它对 autonomous workflow control 的证明有限；visualization/report metric 也比 deterministic transformation 更依赖 evaluator assumption。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 公平比较契约
+每题运行 10 次，SR 估计单次通过所有 TFC 检查的 pass@1，而不是十次中最好一次的成功率。CR 将缺失／失败、完成但不合要求、符合要求分别记为 0／1／2。综合分数把 65% 权重给 CR，再对 SR、视觉评分与五项功能分数各给 5%；视觉裁判为 GPT-4o-mini，其原始量表是 0–5，不能自行按百分制改写。论文未完整报告温度、工具步数、token 或时间上限。
 
-应固定 prompt/data version、execution environment、TFC rule、model、tool access 与 retry budget，并按 task type / aggregate function 报告，而不是只给 final score；routine transform 强可能掩盖 modeling/interpretation 弱。
+[来源](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 全部222题的选定结果，Table2
 
-long-horizon project state、repository maintenance、data discovery、business semantics、collaboration 与 production deployment 都超出 bounded prompt episode。
+全部 222 题、519 项 TFC；每题 10 次，SR 为 pass@1 估计，CR 上限为每项 2 分；DataInterpreter 式框架和 GPT-4o-mini 视觉裁判；其余预算未完整披露。
 
-## 下一步最有判别力的验证
+| 模型 | SR（%） | CR（%） | 综合分数 |
+| --- | --- | --- | --- |
+| GPT-4o-2024-05-13 | 66.31 | 68.44 | 64.51 |
+| Deepseek-Coder-33B-Instruct | 55.86 | 61.23 | 56.76 |
+| o1-mini | 29.77 | 45.26 | 38.78 |
 
-检查 TFC category 是否能预测更长 agent trajectory 的 failure：end-to-end project 做错后，benchmark 能不能正确指出缺的是哪种 primitive capability。
+事实位置：第 3.2–3.3、4.2 节，公式 2–4；表 2，PDF 第 6 页 · [来源](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## GPT-4o同一模型的题源分项，Tables5–6
 
-## 研究决策卡
+同一 GPT-4o-2024-05-13；题源分组，55 与 167 是各自分母，每题十次；不是难度匹配的配对干预。
 
-### 什么时候值得用
+| 模型／题源 | 题数 | SR（%） |
+| --- | --- | --- |
+| GPT-4o-2024-05-13／其他来源 | 55 | 19.82 |
+| GPT-4o-2024-05-13／BigCodeBench 来源 | 167 | 81.62 |
 
-适合评价多种数据科学任务的可执行产物，而不是只评价代码文本。任务特定评分扩大了覆盖，也让指标之间难以直接比较；分析结果时应先看任务类别和验证函数是否真正对应用户目标。
+事实位置：第 3.2、5.2 节；附录 A.8 表 5–6，PDF 第 15 页 · [来源](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-示意任务：一个自然语言请求要求清洗数据、计算结果或生成指定分析产物，系统需要把目标拆成可执行步骤。输出形式满足要求却计算口径错误，可能无法被只检查文件存在的验证方式发现。
+同一 GPT-4o 在 167 道 BigCodeBench 来源题上的 SR 为 81.62%，在其余 55 题上仅 19.82%。这体现题源和难度组成对总分的影响，不能把 64.51 综合分数替代端到端正确率。
 
-### 最有判别力的实验
+视觉分数与其他检查的尺度不同，必须沿用论文公式与各指标单位。题源分组不是匹配难度实验。
 
-固定运行环境与任务函数，按分析、建模和产物类型分别报告。加入正确任务分解或正确中间数据给定条件，检查失败来自计划、代码还是评价函数；对评分边界样本进行独立复核。
+固定框架和预算，按题源与难度分层报告全部检查通过率、部分完成程度和视觉裁判分歧；加入相同底层数据的要求扰动，区分执行能力与要求遵循。
 
-### 建议搭配
-
-[da-code](da-code.md) · [dsgym](dsgym.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`single code task → multi-step data-science prompt → decomposable execution evaluation`
-
-DataSciBench 更持久的贡献，是让复杂分析 output 变得更可程序化验证。
+[来源](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:limitations:END -->

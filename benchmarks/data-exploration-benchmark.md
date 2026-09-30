@@ -1,4 +1,4 @@
-# Data Exploration Benchmark：先探索数据，才能知道后面的分析到底建立在什么 schema 上
+# Data Exploration Benchmark：初步数据发现对后续分析的影响
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-17<br>
@@ -6,50 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](data-exploration-benchmark.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](data-exploration-benchmark.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2608.16045)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-Data Exploration Benchmark 直接评估 agent 在分析前的 data exploration。当前 suite 包含一个真实 Vitamin-D multi-sheet workbook，以及 12 个 DSBench workbook tasks（4 easy、5 medium、3 hard），要求系统理解 sheets、columns、relationships 与 data quality，并生成 schema-fixed JSON exploration artifact。
+完整阅读第 1–8 节、评分公式和案例（9 页，含参考文献；无附录），逐项核对图 3–6 结果热图。
 
-## 相比什么前进了
+[arXiv 2608.16045v1 · 2026-08-17](https://arxiv.org/pdf/2608.16045v1)
+<!-- EVIDENCE:reading:END -->
 
-大量 Data Agent benchmark 默认 agent 已经知道正确 schema 或相关表。这里把“先看清数据是什么”设为单独 stage，并通过 raw/self-exploration/oracle-exploration downstream ablation 检查探索质量是否真的影响后续任务。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+这项评测把“先理解数据”变成独立产物：模型从原始 Excel 生成固定格式的 JSON，描述逻辑表、字段语义、主外键、关系、来源位置和轻量数据剖析。实验包括一个真实 Vitamin D 研究工作簿和专门挑选的 12 个 DSBench 任务，按简单／中等／困难分为 4／5／3 个。主要模型为 Gemini 3.1 Pro、Claude Opus 4.6、GPT 5.4；GPT agent 只测困难组和真实工作簿。
 
-artifact score 与 downstream delta 支持在 workbook-style data、固定 schema 与 evaluator 下的 exploration quality；它不说明 large database/data lake discovery 已解决，且 oracle exploration 只是 upper bound。
+[来源](https://arxiv.org/pdf/2608.16045v1)
 
-## 公平比较条件
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：相较直接给模式和字段含义的分析题，这组任务先测初步发现如何影响后续分析；与 KramaBench 的完整数据旅程相比，它更适合检验小范围的探索或提示干预。演化坐标是分析前的信息形成，不能从少量任务推出通用探索策略或共享记忆收益。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-锁定 workbook release、exploration JSON schema、token/tool budget、downstream agent 与 evaluator。raw/self/oracle conditions 应单独报告。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 下一步评测坐标
+结构评测先做最大权重表匹配、列匹配，再计算表／列／关系 F1、类型、语义、来源和数值剖析得分；摘要的 LLM 评分最多可让总分下降 30%。另一个下游实验保留问题和评分不变：Control 只给原文件，Middle 加入模型自己生成的探索 JSON，Treatment 加入正确元数据；正确元数据不含下游答案。这里没有固定总 token 成本。
 
-下一步要扩到大规模多源 catalog、权限和 schema drift，并测试 exploration artifact 是否能被持续更新而不是一次性生成。
+[来源](https://arxiv.org/pdf/2608.16045v1)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 两个下游案例的正确答案数
 
-## 研究决策卡
+论文第 6.2 节案例；每格为同一案例下正确回答数／问题数，非全基准总分；问题和评分固定，token 与探索工作量未固定；未给出重复运行方差。
 
-### 什么时候值得用
+| 模型 | 任务 | Control（正确／总数） | Middle（正确／总数） | Treatment（正确／总数） |
+| --- | --- | --- | --- | --- |
+| GPT 5.4 | 财务模型 | 15/20 | 16/20 | 17/20 |
+| Claude Opus 4.6 | 仓库分配 | 6/9 | 7/9 | 9/9 |
+| Gemini 3.1 Pro | 仓库分配 | 6/9 | 9/9 | 7/9 |
 
-适合研究先理解数据再分析的中间表征，尤其是混乱工作簿中的逻辑表、键和列语义。规模小且表格特定，适合作为机制诊断；中间摘要写得完整，不等于它对下游任务真正有帮助。
+事实位置：第 6.2 节，PDF 第 7–8 页；干预设置见表 1，第 6 页 · [来源](https://arxiv.org/pdf/2608.16045v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-示意任务：一个工作簿中包含多个逻辑表、合并表头和隐含关系，系统先生成结构化理解，再处理分析问题。若把展示区域误当作数据表，后续查询即使执行正确也可能使用错误数据。
+下面两个具体任务同时展示收益与反例。显式元数据能改善依赖识别，但 Gemini 在调度任务中拿到正确元数据后反而少答对两题，表明提供表示并不保证正确使用。较小、定向的样本和未报告重复运行使这些结果更适合机制假设与案例研究，不能当作生产可靠性或长期共享状态的已验证结论。
 
-### 最有判别力的实验
+GPT agent 未测全部 12 题；图 6 的 DeepAnalyze 仅覆盖一个简单任务、ai-analyst 仅两个，不能与四题主模型组直接排成等分母榜单。摘要裁判模型和重复运行次数未披露。
 
-保留原始数据、系统生成探索结果和 oracle 探索结果三种条件，固定下游分析器。逐项检查键、关系与质量问题，并在不同工作簿上验证；计入探索成本，判断可复用表征何时值得预先构建。
+固定总预算，比较原始文件、自动 JSON、人工修订 JSON 和等长度普通摘要；在多个后续问题及数据变更后测量正确率、重复剖析成本和失效检测，验证可复用表示是否真正改善摊销成本。
 
-### 建议搭配
-
-[kramabench](kramabench.md) · [dataspace](dataspace.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+[来源](https://arxiv.org/pdf/2608.16045v1)
+<!-- EVIDENCE:limitations:END -->

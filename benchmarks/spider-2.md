@@ -1,4 +1,4 @@
-# Spider 2.0：enterprise text-to-SQL 已经变成 agent workflow
+# Spider 2.0：企业数据库中的交互式工作流
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时结果（历史参考，非最佳声明）** · 2024-11-12 · 论文 v1<br>
@@ -7,64 +7,57 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](spider-2.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](spider-2.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2411.07763) · [项目页](https://spider2-sql.github.io/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-Spider 2.0 测 **真实 enterprise text-to-SQL workflow**，而不是一次 query generation。632 个任务来自真实应用数据库，常有 1,000+ column，并使用 BigQuery、Snowflake 等 cloud system；完成任务可能要搜 metadata、查 dialect documentation、读 project code、写多个 query，完整 workflow 甚至超过 100 行 SQL。
+完整阅读 45 页 v1，包括附录 A、B.1–B.8、C.1–C.6 中的评测、标注、数据库、文档、框架、成本、案例与提示词。
 
-## 相比此前评测多测了什么
+[arXiv 2411.07763v1 · 2024-11-12](https://arxiv.org/pdf/2411.07763v1)
+<!-- EVIDENCE:reading:END -->
 
-Spider 1.0 测 unseen schema generalization，BIRD 加入 realistic database value；Spider 2.0 进一步把“工作单位”本身改掉：agent 必须在大型数据环境里导航并构造 multi-step SQL workflow，已经更像 data engineering / analytics，而不是一次 semantic parsing prediction。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+Spider 2.0 结合代码、文档与执行反馈评测数据库工作流。Lite 是另一条 SQL 输出赛道。评测器检查任务指定的输出部分，并非统一比较整张结果表。
 
-原始评估中，基于 o1-preview 的 code agent 在 Spider 2.0 上只有 17.0% success；同一框架在 Spider 1.0 为 91.2%，BIRD 为 73.0%。这个断崖直接说明：旧 benchmark 的高分没有迁移到 enterprise workflow complexity。
+<!-- EDITORIAL-METHOD:START -->
+任务将自然语言请求放入带数据库、文档和项目文件的工作区。代理需要查模式与方言说明、检查数据值、编辑 SQL 或项目代码、运行并据错误调整，最终提交指定产物；Lite 则只要求 SQL。示意流程是阅读指标定义、定位多个表的连接键、编写查询并修正方言错误，再输出所需结果文件。标注的参考流程让“会生成一条 SQL”与“能发现完成任务所需上下文”分开，指定输出检查仍可能忽略未覆盖的副作用或多余内容。
 
-## 这个分数能证明什么
+编辑比较：这是对 Spider／BIRD 静态问题加模式输入的一次工作流扩展，新增文档利用、项目定位和执行反馈。不同轨道与老基准的分数不能组成同模型难度曲线；该坐标变化本身比一个跨协议总分更重要。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-Spider 2.0 支持其环境下 enterprise SQL workflow 的 end-to-end competence，但不能把失败单独归因给 SQL reasoning；metadata retrieval、long-context management、dialect knowledge、code navigation 和 agent scaffold 都在因果链上。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 公平比较契约
+原始 agent 赛道报告 632 题，Lite 为 547 题。Agent 提示要求约 30 步，连续三次重复结果或单动作超过 120 秒时终止。Lite 使用温度 0 和 128K 上下文，省略 BigQuery 取值链接。
+<!-- EVIDENCE:setup:END -->
 
-应 pin database/cloud snapshot、SQL dialect、metadata/codebase access、agent harness、model、execution/retry budget 与 evaluator。给一边预选 relevant table，和让另一边自己发现，已经不是同一道题。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 还没有测什么
+v1；只作赛道内比较。SR 是指定输出的任务成功率，Lite EX 是指定执行结果的一致率。参考计划属于额外提供的特权输入。
 
-business definition、stakeholder ambiguity、governance、permission、production write 与 persistent maintenance 仍只覆盖一部分；真实 warehouse 还会持续变化，而不是一次 benchmark run 内冻结。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Spider-Agent + o1-preview | 原始赛道；报告为 632 题 | SR（%；计数分母不自洽） | 17.01% | 代码、文档与工具；温度设置冲突 | 表 4, 第 7 页; C.1, 第 35 页 |
+| Spider-Agent + GPT-4o | 原始赛道；报告为 632 题 | SR（%） | 10.13% | 同名框架 | 表 4, 第 7 页 |
+| DAIL-SQL + GPT-4o | Spider2.0-lite；547 题 | EX（%） | 5.68% | T=0；采样值与文档；无参考计划 | 表 5/10, 第 7/9 页 |
+| DAIL-SQL + GPT-4o + 参考计划 | Spider2.0-lite；547 题 | EX（%） | 8.78% | T=0；人工参考计划 | 表 10, 第 9 页 |
 
-## 下一步最有判别力的验证
+事实来源：[表 4, 第 7 页; C.1, 第 35 页; 表 4, 第 7 页; 表 5/10, 第 7/9 页; 表 10, 第 9 页](https://arxiv.org/pdf/2411.07763v1)
+<!-- EVIDENCE:results:END -->
 
-通过 oracle intervention 把 performance 拆成 metadata discovery、semantic/schema resolution、workflow planning、query execution、repair，判断 17% 的主要瓶颈到底是 retrieval/context 还是 SQL/program synthesis。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-<!-- RESEARCH-DECISION:START -->
+91.2/73.0/17.0 将先前 GPT-4 方法与 Spider-Agent+o1-preview 并列，不是匹配迁移实验。表 4 的 17.01% 与结论的 18.8% 冲突，也不能在 632 题上还原一致的整数成功数。正文温度 0 与 agent 附录 C.1 的 1.0、top-p 0.9 同样冲突，应保留这些未解决差异。
 
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究企业 SQL 工作流中的元数据搜索、方言与代码库导航，但必须先选定具体轨道。论文原始设置、Snow、Lite 与 DBT 不是同一任务集合；讨论难度或当前成绩时，轨道与版本比‘Spider 2.0’这个总名称更重要。
-
-### 一个具体任务长什么样
-
-示意任务：系统先查看企业数据库元数据和项目说明，再运行多条查询或修改转换项目，最终交付结果文件。正确查询需要同时理解数据模式、执行环境和任务产物，而不是输出一段看起来合理的 SQL。
-
-### 最有判别力的实验
-
-分别报告所选轨道、环境版本、允许访问的元数据与执行预算。把已知正确表的 oracle 条件单列，不与普通发现设置混排；对相同骨干比较元数据检索和工作流策略，定位发现、生成与执行各阶段的收益。
-
-### 建议搭配
-
-[livesqlbench](livesqlbench.md) · [data-eng-bench](data-eng-bench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`single query → complex unseen schema → large enterprise SQL workflow`
-
-到 Spider 2.0，text-to-SQL benchmark 已经明确变成了一个 agent-systems problem。
+<!-- EDITORIAL-NEXT:START -->
+下一步在同一代理轨道固定模型与预算，依次提供正确文件、相关文档或参考计划，记录发现、执行和产物错误。参考计划带来增益的替代解释是直接泄露任务分解，而非可迁移规划能力。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

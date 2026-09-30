@@ -1,4 +1,4 @@
-# AgenticRAGTracer：定位 retrieval-reasoning chain 到底在哪一跳坏掉
+# AgenticRAGTracer：定位检索推理链的失败步骤
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-02<br>
@@ -6,64 +6,78 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](agenticragtracer.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](agenticragtracer.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2602.19127) · [代码](https://github.com/YqjMartin/AgenticRAGTracer)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-AgenticRAGTracer 给 multi-step retrieval reasoning 增加 **hop-aware intermediate validation**。它不只提供 final question/answer，还给出从 atomic evidence need 逐步连接到最终 query 的 intermediate hop question。
+34页主文第1–5节及附录A–E，包含所有构造/评测提示、案例和人工审核；图2数量经PDF图像核对。
 
-## 相比此前评测多测了什么
+[arXiv v1, 2026-02-22](https://arxiv.org/pdf/2602.19127v1)
+<!-- EVIDENCE:reading:END -->
 
-multi-hop answer 做错后，传统 benchmark 无法区分 agent 是停得太早、走了多余分支、取错证据，还是取对后推理错。hop label 让 step allocation 与 chain shape 变成可观测对象。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 决定性证据
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-benchmark 有 1,305 个自动构造实例，覆盖多个 domain，并与主流 benchmark 去重。最难 subset 上 GPT-5 也只有 22.6% exact match。hop-aware diagnosis 发现很多失败来自 distorted chain：要么过早 collapse，要么无必要地 over-extend。
+相较MultiHop-RAG的检索/生成终点分数，这里给多跳过程增加路径和步骤诊断。它旨在定位失败发生在哪里，但计划深度、实际执行步数与最终答案仍是不同量，不能互相替代。
+<!-- EVIDENCE:placement:END -->
 
-## 结论边界：这个分数能证明什么
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-它能诊断 reasoning-chain allocation 与 intermediate retrieval，但因为大量数据由 LLM 自动构造，annotated hop structure 不应被默认成问题唯一的因果分解。
+从 FlashRAG 使用的 Wikipedia 语料采样，按标题排除与既有多跳基准重叠的文档。GPT-4o-mini 生成原子问答，剔除无需证据就能回答或给定证据仍答错的题，再拼成顺序推断与比较两类2–4跳问题。多阶段筛选要求没有中间答案泄露、实体连接合理，并通过删除任一支持文档后不能解题的检查；最后三人逐题决定保留/丢弃，Fleiss κ=0.65。数据保留对应的低跳问题和证据，使最终失败可以与较短问题的表现及实际搜索步数对照。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-应固定 model、tool、step/call budget 与 hop evaluator，同时报告 final EM、hop completion 和 chain length。若一种不同但有效的 reasoning path 仅因不符合生成模板就被判错，测到的是 conformity，不是 search competence。
+1305题分为比较2/3/4跳471/182/64题，推断2/3/4跳393/111/84题。13模型均使用Qwen-Agent/ReAct：先输出完整计划，再按提示每次只执行一个搜索步骤，模型自行选top-k。EM和F1为答案指标；另有GPT-4o-mini温度0裁判，其0/1/2原始分与主表百分数的换算未明确。精确检索器/索引参数、模型日期版本与统一绝对token/步数上限未在所读论文充分给出；不要据统一框架假定等证据或等计算量。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 答案成功率随类型和跳数变化
 
-真实 web research 往往有多条可行 decomposition、uncertain subgoal，甚至边搜边发现路径；自动生成的 hop chain 可能带 construction artifact。
+各行EM分母为本行题数，单位百分数；同一Qwen-Agent框架，但top-k由模型决定，不保证等检索量。
 
-## 下一步最有判别力的验证
+| GPT-5 子集 | 题数 | EM（%） |
+|---|---|---|
+| 比较2跳 | 471 | 76.2 |
+| 比较4跳 | 64 | 26.6 |
+| 推断2跳 | 393 | 48.4 |
+| 推断4跳 | 84 | 22.6 |
 
-人工给一部分题标注多个等价 solution graph，检查 diagnostic conclusion 在 alternative path 下是否仍成立，从而验证“wrong chain”是真推理错误，而不是路径不同。
+事实来源：表 1; 图 2 · [论文](https://arxiv.org/pdf/2602.19127v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 失败既可能过长，也可能过短
 
-## 研究决策卡
+84道四跳推断题，按最终成功/失败分别求步骤数均值；两列条件分母不同，论文未同时给每个诊断分组的精确计数。
 
-### 什么时候值得用
+| 模型 | 成功平均步数 | 失败平均步数 |
+|---|---|---|
+| GPT-5 | 4.48 | 8.25 |
+| DeepSeek-R1 | 4.17 | 2.76 |
 
-适合定位多跳 RAG 在哪一步丢失证据或分配错误步骤。标准轨迹使诊断更细，但它不一定是唯一正确路径；偏离标注步骤与最终无法完成任务，应作为两种不同现象分析。
+事实来源：表 2, 四跳推断 · [论文](https://arxiv.org/pdf/2602.19127v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-示意任务：系统把一个问题拆成多跳子问题，每一跳都有对应证据与中间答案。前一跳实体选错会连锁影响后续检索，因此只看最后答案无法判断应修检索器还是子问题规划。
+GPT-5在推断2跳EM为48.4%，4跳降至22.6%；比较题对应76.2%和26.6%，说明类型与跳数都必须保留。失败轨迹并非总是更长：4跳推断中GPT-5失败平均8.25步、成功4.48步，而DeepSeek-R1失败2.76步、成功4.17步。它能描述过早结束与过度搜索两种关联模式，但不能仅凭按结果分组的均值断言某种步数策略导致失败。
+<!-- EVIDENCE:interpretation:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-逐跳替换为正确中间答案或证据，观察后续恢复程度，并保留原始自主轨迹作为对照。对另一条同样有证据支持的路径进行复核，避免用严格轨迹一致性惩罚有效搜索策略。
+标题去重不能排除语义重复或模型预训练知识；删除文档检验依赖生成/筛选模型，不能证明所有智能体都必须按同样跳数解题。初始完整计划及逐步执行提示会塑造轨迹，模型自选top-k也引入证据预算差异。下一步固定检索器、可见文档和预算，比较允许重新规划的提示，人工标记真实证据链，并公开MaxD公式及逐题轨迹以检验早停/过搜解释。
 
-### 建议搭配
+第4.5节笼统称失败步骤更多，但表2有DeepSeek-R1四跳推断2.76<4.17的反例。表2三跳比较与推断的Steps-I在13个模型上逐行完全相同，需轨迹核验。MaxD的低跳定义与部分均值范围未充分对齐，不能当作实际轨迹正确前缀长度。裁判称近乎完美一致但未给混淆矩阵/区间，0/1/2到百分数的归一化也不清；提示例子还存在把Luigi Nono写成画家的内部问题。
+<!-- EVIDENCE:limitations:END -->
 
-[multihop-rag](multihop-rag.md) · [searchauditbench](searchauditbench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`multi-hop final answer → hop-level trace → causal diagnosis of search allocation`
-
-它把 reasoning chain 的长度和形状本身变成了评测对象。
+相关基准：[multihop-rag](multihop-rag.md) · [searchauditbench](searchauditbench.md)

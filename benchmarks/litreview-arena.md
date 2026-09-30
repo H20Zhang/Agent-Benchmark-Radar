@@ -1,4 +1,4 @@
-# LitReview Arena / LitReviewBench / LitJudge
+# LitReview Arena：以专家偏好评估综述与自动裁判
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时诊断结果（历史参考）** · 2026-07-01 · 论文 v1 快照<br>
@@ -7,60 +7,93 @@
 > 来自此前保存的原论文结果记录，仅作历史参考；本次未重跑实验，也不声明当前最佳。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](litreview-arena.en.md) · [基准库](../library/README.md)
 
-这组 benchmark/evaluator 测的是 **开放式文献综述作为研究 artifact 的真实专家 utility**，而不是只检查 citation 数量或静态 rubric。领域专家做 pairwise preference，评价 coverage、claim support、结构、研究建议与总体 usefulness；与此同时，LitJudge 用这些专家偏好去校准自动 evaluator。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-DeepSurveyBench 等评测通常依赖固定 rubric 或自动 judge，缺少大规模 topic-matched expert preference；SciArena 虽有竞技式比较，但并不专门针对完整 literature review 拆解证据覆盖、claim support 与研究建议。这里的核心增量是让“专家到底更愿意采用哪份综述”成为 ground truth，并单独测试 judge 与专家偏好的一致性。
+21页正文第1–8节、影响说明及附录A.1–A.11全部阅读；第9页图2流程和留出子领域雷达图另经渲染查看。未核验数据/代码，校准划分与生成配置缺口仍在。
 
-## 决定性证据
+[arXiv 2608.21374v1；PDF 页边日期 2026-07-01 与编号月份不一致，尚未厘清](https://arxiv.org/pdf/2608.21374v1)
+<!-- EVIDENCE:reading:END -->
 
-公开结果显示，非人工系统对 human draft 的 **decisive overall win 仅 23.0%**；通用 judge 与专家 utility 的相关性只有 **ρ=.467**，而 LitJudge 提升到 **ρ=.792**。这两个数字分别揭示了 system quality ceiling 和 evaluator mismatch：自动系统在专家偏好下仍明显落后，而 generic judge 也不能可靠代理专家判断。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 这个分数支持什么判断
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-它支持“在该 topic set 与专家标注协议上，expert-calibrated evaluator 更接近专家排序”，以及“当前自动 literature-review system 在专家整体 utility 上仍有明显 headroom”。它不能把 agentic system 与 base model 的差距归因于某种 agent architecture，因为不同系统的 token、tool、search 与 retrieval budget 并未严格匹配。
+相较DeepResearch Bench的自动报告量表和SciArena的一般科学任务，LitReview Arena专门匹配综述主题专家并分维度收集偏好。变化是把组织结构与研究建议作为核心信号，再校准自动裁判；偏好仍需与事实正确性并列。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-比较生成系统时至少要固定 topic、可访问 corpus/search API、token budget、检索轮数、citation policy 与最大运行时间。比较 evaluator 时要固定 pair set、专家群体、维度定义和 tie policy，并报告 held-out calibration，而不是只在训练 LitJudge 的偏好集上给相关性。
+从OpenAlex的2022–2025年AI领域、引用超过50次的3000多篇综述中提取主题，用统一请求生成综述草稿。105名有AI论文写作经验的研究者按领域匹配，匿名随机左右比较，分别对文献覆盖、主张支持、组织结构、研究建议、总体效用投A/B/平局/两者皆差，并写理由；约3000条专家判断各含五维结果，不能当15000个独立专家。冻结battle记录后用BT/Elo类方法聚合。LitJudge以Qwen3-235B为裁判，检索最多三例结构相似battle、三例内容相似battle及三条人工综述研究缺口锚点，后者用MMR兼顾相关与多样性。
+<!-- EVIDENCE:method:END -->
 
-## 研究上怎么用
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-这套评测最有价值的地方是把 deep-research system 的目标从“写得像综述”推进到 **专家是否觉得它覆盖了关键证据、支持了 claim，并产生可用研究判断**。如果研究一个新的 agentic search / report-writing 方法，应同时报告 retrieval evidence quality、最终 report expert preference，以及自动 judge 与专家的 calibration gap，避免只优化 evaluator proxy。
+主模型表为人类加9系统；生成提示、工具/检索配置、模型日期、停止上限、总主题/各对战分母及人工草稿形成成本未完整披露，故不是等预算代理消融。500条battle用于裁判元评测/校准，论文说20%AI子领域留出，但具体battle/主题互斥划分、去自例规则和锚点是否来自同题未清楚给出；图2明确画出对应人工综述供锚点。评分把专家平局/两者皆差统一给0.5信用，不管裁判选什么，因此“准确率”不是普通四分类正确率。Spearman是系统排行榜相关，和专家逐对一致率不同。附录给Elo初始1500、K=32与BT平局半胜，但BothBad如何进入排行榜未完整说明。
+<!-- EVIDENCE:setup:END -->
 
-## 下一步最有价值的验证
+<!-- EVIDENCE:result-1:START -->
+## 专家相对评分与生成token量
 
-当前缺口包括领域规范差异、living review、citation verification、cost matching 与真正 held-out judge validation。最高杠杆问题是：LitJudge 的高相关性能否跨领域、跨 topic distribution 和新系统 family 保持，而不是只在当前专家偏好分布上拟合得更好。
+约3000条五维专家判断，精确各系统对战分母未给；评分是相对BT/Elo量，非百分数；token为作者实测均值但未清楚拆分输入/输出/工具，非等预算比较。
 
-## 谱系位置
+| 系统 | 每题token（千） | 结构评分D3 | 研究建议评分D4 | 总体评分D5 |
+|---|---|---|---|---|
+| 人类 | 未报告 | 1502.5 | 1521.5 | 1668.8 |
+| GPT-5.2 | 38.096 | 1322.4 | 1272.7 | 1449.1 |
+| Sonar Deep Research | 322.08 | 1262.1 | 1322.7 | 1285.9 |
+| Claude Opus 4.5 | 5.49 | 1177.6 | 1099.9 | 1135.5 |
 
-它把 deep-research 评价从结果 rubric 推进到专家偏好校准；`map_delta=early_signal`。如果后续多个独立 benchmark 都证明 generic LLM judge 与专家 research utility 存在系统性偏差，这条线才值得升级为 durable evaluator shift。
+事实来源：表 1 · [论文](https://arxiv.org/pdf/2608.21374v1)
+<!-- EVIDENCE:result-1:END -->
 
-Primary: https://arxiv.org/abs/2608.21374
+<!-- EVIDENCE:result-2:START -->
+## 校准与同例数随机ICL对照
 
-<!-- RESEARCH-DECISION:START -->
+500条battle校准/元评测系列，具体互斥切分未完整说明；单位为排行榜Spearman相关（−1到1），不是battle准确率。随机ICL使用相同示例数量。
 
-## 研究决策卡
+| Qwen3-235B裁判 | D2排名ρ | D3排名ρ | D4排名ρ | D5排名ρ |
+|---|---|---|---|---|
+| 未校准 | 0.442 | 0.467 | 0.43 | 0.467 |
+| 随机少样本ICL | 0.554 | 0.583 | 0.737 | 0.634 |
+| LitJudge | 0.673 | 0.649 | 0.842 | 0.792 |
 
-### 什么时候值得用
+事实来源：附录 A.8 表 5 · [论文](https://arxiv.org/pdf/2608.21374v1)
+<!-- EVIDENCE:result-2:END -->
 
-适合检验自动文献综述评价是否与领域专家判断一致。专家校准提高了评价的实际意义，但模型之间的配对胜率仍会受生成预算、来源与文本风格影响；它不等于某个内部检索组件的分数。
+<!-- EVIDENCE:result-3:START -->
+## 人工与裁判一致性不能混作同一上限
 
-### 一个具体任务长什么样
+所有值0–1；裁判—专家中专家中立标签无条件计0.5。专家与裁判间的精确有效配对数未给；后者是Qwen与DeepSeek-V3.2，不是人工一致性，也非Spearman。
 
-示意任务：同一主题下两份匿名综述由专家比较，分别考虑组织、论证、支持关系等维度，再用这些判断校准自动评价器。文章读起来更顺并不必然意味着文献更完整或研究缺口更可靠。
+| 维度 | 裁判—专家调整准确率 | 专家间准确率 | 裁判间准确率 |
+|---|---|---|---|
+| D3结构 | 0.598 | 0.639 | 0.747 |
+| D4建议 | 0.62 | 0.556 | 0.739 |
+| D5总体 | 0.606 | 0.861 | 0.747 |
 
-### 最有判别力的实验
+事实来源：表 3 · [论文](https://arxiv.org/pdf/2608.21374v1)
+<!-- EVIDENCE:result-3:END -->
 
-在未参与校准的主题与专家上验证评价器，并控制报告长度、来源池和生成预算。将引用核验与专家偏好分开报告，检查模型排名是否在不同学科和评价器下保持，而非只符合校准集偏好。
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-### 建议搭配
+23.0%来自所有非人类系统对人类的208/904决定性对战，不能写成“最强模型只赢23%”；平局已排除。GPT-5.2总体相对评分1449.1、人类1668.8，但Elo数值不能按百分比解释性能，所谓代理优于基座60%以上不应直接由均值比推导。Qwen LitJudge使排行榜D5相关0.467→0.792，随机同例数ICL为0.634；这支持任务匹配校准优于该随机对照，但既不是79.2%逐例准确率，也不等于已达人类一致性。
+<!-- EVIDENCE:interpretation:END -->
 
-[das-bench](das-bench.md) · [deepresearch-bench](deepresearch-bench.md)
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+偏好不替代事实/引用验证，人类综述是本组参考而非绝对上限；相对排名依赖对手、主题、投票分布及聚合方式。约3000投票的精确独立主题数、多人覆盖率及置信区间缺失；107问卷回复不能自动当105有效标注者矛盾。校准可能依赖相应人工综述，未知题目的冷启动能力未证明。生物试点未明确样本量，不能用其表7不明单位成绩作普遍跨域结论。下一步锁定主题互斥校准集，公开锚点来源与去自例规则，匹配生成预算，报告逐实例四分类表现、排名bootstrap及人工事实审查。
 
-<!-- RESEARCH-DECISION:END -->
+摘要“最强系统23%”与正文全部非人类208/904混淆。第5.2节声称专家D3/D4一致率高于裁判，但表3为0.639/0.556对0.747/0.739，方向相反。第6.2节说agreement accuracy，实际0.467→0.792在表5/图2定义为Spearman；与专家逐对一致率比较以称接近人类也非同一量。PDF页边日期7月1日与8月arXiv编号未对齐，本文仅固定v1。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[das-bench](das-bench.md) · [deepresearch-bench](deepresearch-bench.md)

@@ -1,4 +1,4 @@
-# DAComp: data engineering and data analysis are different agent capabilities
+# DAComp: separate evaluations of data engineering, analysis and workflow evolution
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2025-12<br>
@@ -6,64 +6,75 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](dacomp.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dacomp.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2512.04324) · [Project](https://da-comp.github.io/) · [Code](https://github.com/ByteDance-Seed/DAComp)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-DAComp spans the **full data-intelligence lifecycle** with two distinct workloads: repository-level data engineering (DE) and open-ended data analysis (DA). DE requires designing/evolving multi-stage SQL pipelines; DA requires planning, iterative coding, interpreting intermediate results, and producing actionable recommendations.
+Read the complete 41-page v1 main text and Appendices A–F, including metrics, harnesses, prompts, cases, errors and annotation analysis; checked Tables 3–6.
 
-## What changed relative to prior evaluation
+[arXiv 2512.04324v1 · 2025-12-03](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:reading:END -->
 
-Text-to-SQL and code benchmarks isolate local transformations. DAComp treats enterprise data work as a repository/workflow problem and, critically, refuses to collapse engineering correctness and analytical insight into one capability.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Decisive evidence
+DAComp divides 210 tasks into 30 architecture, 30 implementation, 50 evolution and 100 analysis tasks. Stages are evaluated independently rather than as one project lifecycle. Implementation/evolution use DuckDB checks on selected columns. Component Score (CS) evaluates components with gold upstream inputs, whereas Cascading Failure Score (CFS) propagates upstream failures. Architecture and analysis use hierarchical rubrics; analysis combines 60% rubric score with 40% GSB against five baseline reports.
 
-The benchmark contains 210 tasks. State-of-the-art agents achieve under 20% success on DE and average below 40% on DA. The divergence shows that holistic pipeline orchestration and open-ended analytical reasoning remain separate bottlenecks rather than one generic “data agent” ability.
+[Source](https://arxiv.org/pdf/2512.04324v1)
 
-## What the score supports
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: DA-Code places diverse data-science tasks in one framework; DAComp separates engineering, analysis and subsequent workflow evolution. The new coordinate is stage-specific inputs, artifacts and adaptation. Stage success rates and soft scores should not be collapsed into undifferentiated data intelligence.
+<!-- EDITORIAL-METHOD:END -->
+GSB means Good–Same–Bad: the judge compares the candidate analysis with five supplied baseline reports under readability, analytical-depth and visualization-related criteria. The main text defines the score as max(0, number of Good judgments minus number of Bad judgments), divided by the total Good, Same and Bad judgments. It is a nonnegative relative-comparison score, not factual accuracy. DA combines 0.6 times the normalized hierarchical-rubric score with 0.4 times GSB. The appendix comparison prompt outputs −10 to 10 for readability and analytical depth, but the exact conversion thresholds and aggregation into G/S/B are not fully specified; reproduction must pin the scorer. See Section 2.2 and Appendix A.3.2.
 
-Execution-based DE results strongly support repository/workflow correctness. DA scores depend on a validated rubric-guided LLM judge, so claims about analytical quality inherit evaluator assumptions. Aggregate scores should not erase the DE/DA split.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-Fix repository snapshot, environment, agent harness, model, execution budget, and DA judge version. Report DE and DA separately with cost; a scaffold optimized for iterative coding may have different economics from one optimized for report synthesis.
+Engineering tables display weighted component/cascading scores on 0–100. SR@8 uses eight attempts, but main-text and appendix success thresholds conflict. The main table labels the framework DE-Agent while the methods also discuss OpenHands CodeAct and multi-agent implementation, leaving mappings unclear. OpenHands allows 200 rounds, 120 seconds per action and termination after three repeated actions; complex implementation allows 50 steps per SQL agent and 100 validation steps. The custom analysis agent’s global cap is unreported. Gemini-2.5-Flash is the default report judge.
 
-## What remains unmeasured
+[Source](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:setup:END -->
 
-Real enterprise systems add permissions, production writes, incidents, stakeholder negotiation, semantic-layer evolution, and long-running maintenance. Open-ended DA still uses curated rubrics rather than realized business impact.
+<!-- EVIDENCE:result-1:START -->
+## Selected English DE results, Table 3
 
-## Next discriminating validation
+English track: 30 implementation and 50 evolution tasks; engineering total also includes 30 architecture tasks. CS/CFS are weighted scores; SR@8 uses eight attempts, with a conflict between strict main-text success and Appendix CFS≥80. Do not call it strict perfect-task success.
 
-Chain DE and DA tasks: require an agent to build/repair a transformation pipeline and then answer business questions from its outputs. This would test error propagation across the actual data lifecycle.
+| Model | Impl CS | Impl CFS | Evol CFS | Evol SR@8 (%) | DE Score |
+| --- | --- | --- | --- | --- | --- |
+| GPT-5 | 61.98 | 30.79 | 38.75 | 20.00 | 43.45 |
+| Qwen3-Coder | 54.21 | 23.64 | 27.12 | 12.00 | 32.80 |
 
-<!-- RESEARCH-DECISION:START -->
+Source location: Table 3 PDFp6; §2.2; AppendixA.1 pp. 16–17; B.2 pp. 22–23 · [Source](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:result-1:END -->
 
-## Research decision card
+<!-- EVIDENCE:result-2:START -->
+## English 100-task analysis track, Table 5
 
-### When to use it
+100 English analysis tasks; 0.6 normalized rubric +0.4 GSB; Gemini-2.5-Flash judge; reported variability retained; not binary task accuracy.
 
-Use DAComp to cover both data engineering and open-ended analysis, without pooling their tracks into an unexplained average. Repository transformations rely more on executable verification, while analytical reports depend more on rubrics. These mechanisms imply different uncertainty in the conclusions.
+| Model / harness | DA Score (reported 0–100) |
+| --- | --- |
+| GPT-5 / OpenHands | 46.99 |
+| GPT-5 / DA-Agent | 50.84±3.12 |
+| Kimi-K2 / DA-Agent | 41.89±1.78 |
 
-### What a concrete task looks like
+Source location: §2.2,§3.1; Table 5 PDFp7; AppendixA.3/B.1 · [Source](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:result-2:END -->
 
-Illustrative task: an engineering task modifies a data pipeline to produce correct output, while an analysis task explores a business problem and writes a report. The first tests code and state changes; the second also tests analytical framing and evidence interpretation.
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-### Most discriminating experiment
+CS exceeding CFS motivates dependency analysis, but stage scores use different measurements and cannot prove independent engineering/analysis abilities. The prose incorrectly associates 56.14 from a judge-validation table with the main results; the selected analysis score is Table 5’s 50.84±3.12.
 
-Fix engineering test environments and report evaluators separately, showing quality, time, and calls by track. Supply correct edit locations for engineering and intermediate results for analysis to diagnose discovery versus reasoning. Establish gains in each track before claiming generality.
+Main-text evolution success requires every component correct, but the appendix permits CFS≥80. The SR@8 label is retained with that conflict. DuckDB checks selected columns, rounds numbers to two decimals and excludes time columns, not strict equality of every output.
 
-### Pair with
+Harmonize success thresholds, framework mapping and budgets, then connect implementation, change and analysis. Switch between gold and actual upstream outputs to measure propagation and repair benefits.
 
-[data-eng-bench](data-eng-bench.en.md) · [insightbench](insightbench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`local code/SQL → repository data engineering + open-ended analysis → integrated data-intelligence lifecycle`
-
-DAComp shows why “data agent” should be decomposed by work product, not treated as one leaderboard number.
+[Source](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:limitations:END -->

@@ -6,50 +6,93 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](agent-retrieval-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](agent-retrieval-bench.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2607.24882) · [Code and data](https://github.com/eyuansu62/agent-retrieval-bench)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-Agent Retrieval Bench (ARB) isolates the **context-acquisition layer** of coding agents. Given a real workflow signal and a frozen base commit, a retriever must find files the agent needs to read next or abstain when the repository contains no useful local context. Relevance is defined by workflow need rather than query–file textual similarity.
+Read Sections 1–13, all retrieval, budget, selective, trajectory and seed-intervention analyses; appendices inspected: A–E, repository counts, every sample example, checkpoint revisions/tokenizer caveat and closed-tool results. Not performed: No repository/artifact rerun or independent semantic label audit
 
-## What changed relative to prior evaluation
+[arXiv v1, 2026-07-27](https://arxiv.org/pdf/2607.24882v1)
+<!-- EVIDENCE:reading:END -->
 
-Conventional code retrieval often defines gold context through semantic similarity or known edited files. ARB covers code2test, comment2context, trace2code, and edit2ripple workflow relations and adds natural no-gold and wrong-repository counterfactual controls for selective retrieval.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Decisive evidence
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-The current release contains 427 samples across 25 repositories: 345 positive examples, 50 natural no-gold examples, and 32 counterfactual controls. The paper reports no single retrieval family dominating across tasks and metrics; logged agent trajectories miss every gold file on 27–35% of samples.
+Compared with RepoBench’s context-conditioned completion and SWE-bench’s final repair, this isolates workflow-signal-to-next-file retrieval with budgets and natural no-gold abstention. It distinguishes file discovery, useful-line localization and repair; file scores do not replace test success.
+<!-- EVIDENCE:placement:END -->
 
-## What the score supports
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-It supports file-level upstream context-acquisition claims, not the claim that higher recall necessarily improves patch success. The official scope explicitly notes that file hits do not establish function/span localization and the current seed intervention studies context selection rather than full repair success.
+This isolates which repository files a coding agent should read next before editing. The 427 samples span twenty-five repositories: 106 implementation-to-test, eighty review-to-additional-context, 101 failure-trace-to-root-cause and fifty-eight anchored-edit-to-ripple cases, plus fifty naturally externally resolved no-gold cases and thirty-two wrong-repository controls. Positives freeze pre-resolution base commits; given files are excluded from additional targets and exact gold paths, final patches and fix hashes are sanitized. Samples use 271 snapshots, while the reusable manifest has 308 across twenty-nine repositories, about 392,000 files and 7.92 million chunks. Each query searches its own snapshot, not all repositories. Workflow evidence supports labels without exhausting useful files.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-Pin repository/base commits, candidate filtering, token packing, top-k/context budget, selective threshold, and metric version. Disclose release bundles and corpus inventory; legacy packing fields are not canonical BCY.
+SentenceTransformers embeddings use no recommended query instruction, L2 normalization and cosine retrieval; file scores are maximum chunk scores and all files remain candidates. Qwen4B/8B cap at 40,960 tokens and Jina/Nomic/pplx at 32,768. The pplx run omits the recommended fix_mistral_regex option and is provisional. BCY greedily packs ranked files using a regex code tokenizer, charging path headers and prefix-truncating the boundary; one gold content token earns file exposure, not comprehension or model-token coverage. Main static results cover 345 positives; trajectories/fusion/spans use 287. Abstention uses repository-grouped five-fold calibration maximizing balanced accuracy. The forty-five-query seed pilot fixes Codex GPT-5.5 with sixteen calls, twenty turns, eight thousand post-seed read tokens, twelve hundred per file and three final files. Each sample–arm has one trajectory, with no recorded temperature or seed.
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Rankings change with budget and repository weighting
 
-Function/line localization, edit generation, test-passing repair, multi-round tool exploration, and the impact of retrieval cost on complete repair latency.
+345 positives across twenty-five repositories, all values zero-to-one. Recall covers gold files, MRR uses first-gold rank and BCY counts file exposure within eight thousand regex tokens. Repository macro first averages within repositories, then weights them equally.
 
-## Next discriminating validation
+| Retriever | Weighted Recall@20 | Weighted MRR | BCY@8k | Repository macro Recall@20 |
+|---|---|---|---|---|
+| Qwen3-Embedding-4B | 0.6306 | 0.2379 | 0.3409 | 0.6344 |
+| Qwen3-Embedding-8B | 0.7029 | 0.2336 | 0.3732 | 0.6193 |
+| RepoMap | 0.6333 | 0.2158 | 0.3788 | 0.4619 |
 
-Under one repair agent, intervene on initial context with random non-gold, retrieved, and oracle-gold seeds while fixing post-seed exploration budget. Measure both file/context quality and final test-passing repair.
+Source: Tables 4–5 · [Paper](https://arxiv.org/pdf/2607.24882v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
-## Research decision card
-### When to use it
-Use ARB when the claim concerns a context engine, repository retriever, or agent search policy finding the next useful coding context. It enables cleaner attribution than jumping directly to patch benchmarks.
-### What a concrete task looks like
-Illustrative task: a failure trace exposes a test file while the needed next read is a root-cause implementation in another module. Retrieval must bridge the workflow relation rather than match surface vocabulary.
-### Most discriminating experiment
-Fix the repair agent and post-seed exploration budget; replace only initial context with random, retrieved, and oracle-gold seeds, then measure context quality and final tests.
-### Pair with
-[BEIR](beir.en.md) · [The Recall Trap](recall-trap.en.md) · [BrowseComp-Plus_CM](browsecomp-plus-cm.en.md)
-> **Score-reading rule:** file-level retrieval is an upstream coordinate, not end-to-end coding-agent success.
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:result-2:START -->
+## Negative abstention result on natural no-gold cases
 
-## Evolution position
-`semantic code retrieval → workflow-conditioned context acquisition → selective retrieval / downstream intervention`
+345 positives plus fifty natural no-gold cases, rebuilding five folds after excluding thirty-two wrong-repository controls. Zero-to-one rates; success means correct no-gold abstention or an accepted positive with any gold in top twenty, not gold-file recall.
+
+| Ranker | Positive pass rate | No-gold abstention | Selective success@20 | Always-retrieve success |
+|---|---|---|---|---|
+| Lexical | 0.423 | 0.58 | 0.294 | 0.499 |
+| Jina-0.5B | 0.377 | 0.94 | 0.334 | 0.489 |
+| BM25 | 0.188 | 0.98 | 0.22 | 0.463 |
+
+Source: Table 19, natural-only rows · [Paper](https://arxiv.org/pdf/2607.24882v1)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:result-3:START -->
+## Context-seed pilot with fixed tools
+
+Forty-five queries, fifteen per task, one Codex GPT-5.5 trajectory per query/arm. F1 is zero-to-one; other values are query means. Post-seed tokens exclude preload and are not total tokens. The agent submits three files without editing or testing.
+
+| Seed arm | Final File F1 | Tool calls | Post-seed tokens | Seed tokens |
+|---|---|---|---|---|
+| No seed | 0.3222 | 3.71 | 2137.3 | 0 |
+| Random non-gold | 0.3437 | 8.49 | 3681.7 | 2427.8 |
+| RRF | 0.3967 | 5.42 | 1856.7 | 3298.8 |
+| Oracle gold | 0.6337 | 4.18 | 1736.4 | 1781.3 |
+
+Source: Table 16 · [Paper](https://arxiv.org/pdf/2607.24882v1)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
+
+Qwen8B leads sample-weighted Recall@20 at 0.7029, but equal weighting of twenty-five repositories favors Qwen4B at 0.6344 over 0.6193. Rankings depend on task/repository composition. Recalibration on natural no-gold cases alone makes every tested threshold policy worse than always returning files, so easy wrong-repository controls must not mask calibration failure. RRF seeds improve File F1 and reduce post-seed reading versus random context, but total reading must include preloaded seeds. One trajectory per arm cannot resolve small differences statistically or establish improved repair success.
+<!-- EVIDENCE:interpretation:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
+
+Repositories are purposively sampled and Gin contributes 25.5 percent of positives. Zero violations in specified hygiene checks do not prove freedom from training contamination or exhaustive semantic gold. Results lack repeated-seed intervals and model-specific instruction optimization. File hits may remain far from useful lines, whose median evidence occupies only 4.7 percent of the file. PES is a potential first-hit-delay proxy, not causal tool savings; a post-hoc trajectory prefix is not a smaller-budget rerun. Next intervene on executable repair tasks with fixed model/tools/total tokens/sampling and random, retrieval and oracle seeds, jointly measuring tests and file/span localization.
+
+Appendix B’s comment2context example lists tokio/src/sync/mpsc/chan.rs both as required gold and as a negative distractor. Official all-files gold scoring is clear, but this auxiliary label conflict needs artifact verification. General sanitization prose says raw diffs are removed, while edit2ripple intentionally retains the anchor diff; this permitted anchor is distinct from revealing the target ripple patch. Canonical BCY counts regex tokens; Table 12’s span diagnostic instead uses legacy 8,000-character packing and must not be merged into the same-budget leaderboard. No selected main-table numeric inconsistency found; pplx remains explicitly provisional, and high-budget BCY points may be lower bounds.
+<!-- EVIDENCE:limitations:END -->
+
+Related benchmarks: [BEIR](beir.en.md) · [The Recall Trap](recall-trap.en.md) · [BrowseComp-Plus_CM](browsecomp-plus-cm.en.md)

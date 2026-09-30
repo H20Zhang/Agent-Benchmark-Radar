@@ -1,4 +1,4 @@
-# AgenticDataBench：给真实 data-science task 加上细粒度 skill 坐标
+# AgenticDataBench：数据科学任务与细粒度技能评估
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-07<br>
@@ -6,130 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](agenticdatabench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](agenticdatabench.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2607.01647) · [项目页](https://agenticdatabench.github.io/) · [代码](https://github.com/AgenticDataBench/AgenticDataBench) · **领域：Data Agent**
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-AgenticDataBench 的核心价值不是又增加一组 end-to-end data-science tasks，而是给这些任务加上 **fine-grained skill labels**：不仅看“做没做对”，还试图回答“到底是哪类能力在拖后腿”。
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-## 它到底测什么
+完整阅读第 1–7 节及所有方法、设置、结果、技能诊断与预算讨论（14 页，含参考文献；无附录），检查表 4 和图 7–9。
 
-Benchmark 包含 **344 个任务、15 个 domain、97 个真实 dataset**，总数据量约 **27.3 GB / 123.1M rows**，并提供 **433 个 ground-truth skill labels**。
+[arXiv 2607.01647v1 · 2026-07-02](https://arxiv.org/pdf/2607.01647v1)
+<!-- EVIDENCE:reading:END -->
 
-任务仍然是较真实的数据科学工作，但每个任务同时被映射到更细的 competency taxonomy。这样可以从两个层面观察 agent：
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-- end-to-end：任务是否最终成功；
-- diagnostic：失败是否集中在某些 recurring skills。
+AgenticDataBench 先从 6,510 个 Stack Overflow 解法提取 29,602 个步骤描述，再通过嵌入聚类、LLM 拆分合并与专家修订得到 433 项数据技能。它据此选择 102 个真实业务任务，并在公开数据上生成、人工校验 242 个任务，共 344 题、15 个领域。数据处理在 Docker 的 Bash、Python 和数据库环境内完成。四个代理框架分别配对 Qwen3.5-397B-A17B、Kimi-K2.5、Claude Sonnet 4.6；默认温度、不同框架预算：DA-Agent 最多 80 步、保留 15 步历史、每步 1 分钟，Smolagents 最多 40 个编码步骤、每步 5 分钟，Claude Code/CodeX 每题 60 分钟且步骤超时自适应。
 
-这比只给一个 aggregate accuracy 更适合做能力覆盖分析。
+[来源](https://arxiv.org/pdf/2607.01647v1)
 
-## 相比此前评测多测了什么
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：DataSciBench 与 DA-Code 以任务输出为主要终点，AgenticDataBench 进一步用细粒度技能标签描述同一执行任务。它增加的是诊断分辨率，而不是新的统一成功定义；跨框架的预算和软评分差异仍需独立保留。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-很多 data-science benchmark 的一个根本问题是：**task distribution 本身不透明**。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-一个系统总分提高 5 个点，可能只是它擅长的任务比例更高；一个 benchmark 很难，也可能只是被少数特殊任务主导。没有 skill annotation 时，很难回答：
+任务评分结合表格、JSON、文本、图表检查和归一化建模指标，统一到 0–1 后报告百分制总分。另一个 LLM 根据参考解法、技能标注和评分反馈诊断技能使用情况，出现少于三次的技能不进入技能比较。技能诊断是解释层，不是独立的逐步骤可执行真值。
 
-- benchmark 到底覆盖多少数据理解、清洗、统计、建模、调试等能力；
-- agent 的错误是广泛能力缺失，还是一个高频 bottleneck；
-- 新方法改善的是核心能力，还是只针对某一类 task pattern。
+[来源](https://arxiv.org/pdf/2607.01647v1)
+<!-- EVIDENCE:setup:END -->
 
-AgenticDataBench 用显式 taxonomy 把这些问题变成可以统计的对象。
+<!-- EVIDENCE:result-1:START -->
+## 固定 Kimi-K2.5 的框架与成本对照（选取结果）
 
-## 实际怎样评测
+344 个任务；任务分数混合二元与连续评分，完整聚合权重未说明；token 是轨迹均值；成功步骤占比以执行步骤为分母，不是答题正确率；预算随框架不同，不能作为等成本消融。
 
-Benchmark 同时提供 DevSet 与 TestSet。TestSet 使用 sandboxed agent-code execution，并捕获 execution trace，因此评价不只依赖模型最终声称“完成了”，而可以检查实际执行结果。
+| 框架 | 任务总分（0–100） | 每轨迹 token（千） | 成功执行步骤占比（%） |
+| --- | --- | --- | --- |
+| Smolagents | 43.8 | 379.4 | 88.1 |
+| DA-Agent | 44.8 | 145.4 | 94.1 |
+| CodeX | 48.8 | 1091.2 | 59.5 |
 
-解释结果时应同时记录：
+事实位置：表 4–5，PDF 第 9–10 页；第 3.3、6.1 节 · [来源](https://arxiv.org/pdf/2607.01647v1)
+<!-- EVIDENCE:result-1:END -->
 
-- dataset / task version；
-- sandbox 与 package environment；
-- tool availability；
-- model 与 agent harness；
-- execution / retry budget；
-- skill distribution；
-- aggregate metric 与 per-skill breakdown。
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-如果只报告总分，会丢掉这个 benchmark 最重要的 diagnostic value。
+同一 Kimi-K2.5 在不同框架的分数和 token 用量差异很大。CodeX 得分更高，同时平均步骤更多、成功执行步骤占比更低，反映探索与执行效率的取舍，不能仅按报错率排名。不同预算、上下文管理和提示适配共同变化，尚不足以把优势单独归因于技能覆盖或跨步数据复用。
 
-## 决定性证据与分数边界
+表 4 将 Claude Code/Kimi-K2.5 总分记为 44.3，正文一处误写 43.3。本页采用表格。技能裁判模型、人工一致性验证、重复次数和完整总分权重未说明；最多抽十个失败任务的预算干预不能证明普遍预算不敏感。
 
-官方报告 human performance 约 **84–90%**。这个数字的重要含义不是“人类上限是多少”，而是 benchmark 仍有明显 headroom，同时并非完全脱离现实可完成范围。
+固定模型、总时间和 token 预算，在同一框架内分别加入数据概要、跨步骤缓存和技能检索；以任务输出得分为主，同时人工抽检技能诊断准确度，并测量大文件重复读取量与失效缓存问题。
 
-skill-level score 可以支持“某类任务在当前系统上反复失败”这样的诊断；它不能自动支持“模型缺少一个独立 skill module”。
-
-原因是同一个任务往往需要多个能力协同，某个 skill label 只是对任务要求的描述，而不是对系统内部因果机制的分解。
-
-## 最主要的混杂因素
-
-第一是 **skill ontology 本身**。taxonomy 是设计者选择的抽象方式；不同 taxonomy 可能把同一个 failure 切成不同类别。
-
-第二是 **multi-skill interaction**。任务失败可能发生在数据理解，但最终表现为代码执行失败；仅靠标签无法确定真正 root cause。
-
-第三是 **agent harness sensitivity**。相同 model 在不同 scaffold、tool contract、retry policy 下可能暴露完全不同的 skill profile。
-
-第四是 **hidden-set consumption**。如果 TestSet 被反复用于 prompt / tool / policy 调参，skill-level diagnostic 也会逐渐变成 benchmark-specific optimization。
-
-## 公平比较契约
-
-至少应固定：
-
-- task / dataset version；
-- sandbox、依赖和资源限制；
-- tool set 与数据访问接口；
-- model、agent harness 与 system prompt；
-- execution / retry / token budget；
-- evaluator；
-- Dev/Test 使用边界。
-
-除了 aggregate score，最好同时报告每个 skill slice 的样本数、准确率和置信区间，避免用极小 slice 得出过强结论。
-
-## 还没有测什么
-
-AgenticDataBench 已经提升了 coverage transparency，但仍没有完整测量：
-
-- skill label 是否具有真正 causal diagnostic value；
-- business semantics 与含糊需求澄清；
-- longitudinal data / schema change；
-- collaboration 与 review workflow；
-- governance、权限与不可逆 data operation；
-- 不同 skill failure 的严重度是否相同。
-
-此外，真实生产系统最关心的往往不是“平均缺哪个 skill”，而是 **哪个 failure 会让最终决策错误且难以发现**。
-
-## 下一步最有判别力的验证
-
-最值得做的是 **skill intervention test**：构造 matched task pairs，使两组任务只在一个 required competency 上存在系统差异，然后针对该 skill 加一个明确 intervention。
-
-如果 intervention 主要改善预测中的 skill slice，而对其他 slice 影响较小，taxonomy 才更像真正有解释力的诊断坐标，而不是事后分类标签。
-
-进一步还可以构建一个 `skill × harness × backbone` 矩阵，检查所谓 skill weakness 是否跨系统稳定。
-
-<!-- RESEARCH-DECISION:START -->
-
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究数据工作流中技能覆盖与组合，而不只看几个热门任务的平均成功率。技能分类本身也是建模选择；生成任务覆盖了某个标签，并不意味着已覆盖真实业务中该技能的全部难点。
-
-### 一个具体任务长什么样
-
-示意任务：一个业务分析请求同时需要发现数据、转换格式、执行计算和解释结果。系统可能每个孤立技能都能完成，却在组合时丢失状态或采用错误中间假设，因此需要检查技能依赖。
-
-### 最有判别力的实验
-
-将相同技能的单独任务与组合任务配对，按领域留出测试，并固定工具与骨干。分开报告真实业务任务和生成覆盖任务，检查收益是否在新技能组合中保持，而不是只适配既定分类与模板。
-
-### 建议搭配
-
-[datascibench](datascibench.md) · [dsaeval](dsaeval.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`end-to-end data tasks → skill-labeled coverage → causal capability diagnosis → capability-targeted improvement`
-
-AgenticDataBench 完成了第二步：它让“这个 benchmark 到底测了哪些数据工作能力”变得可量化。下一步关键不是增加更多标签，而是验证这些标签能否真的指导系统改进。
+[来源](https://arxiv.org/pdf/2607.01647v1)
+<!-- EVIDENCE:limitations:END -->

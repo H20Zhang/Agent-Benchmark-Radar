@@ -1,4 +1,4 @@
-# DARE-bench: real-world data transformation needs exact outputs, not judge impressions
+# DARE-bench: separating instruction fidelity from predictive quality
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-02-27<br>
@@ -8,46 +8,55 @@
 
 [中文](dare-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-## What it measures
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-The DARE-bench paper describes about 6,300 tasks (5,948 train plus 352 eval), while the current public repository is smaller at roughly 4,274 train and 324 eval. Tasks use exact reference outputs, macro-F1, clipped R², and repeated runs to measure realistic data-transformation and modeling artifacts.
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-## Compared with what
+Read the full substantive 34-page v1 and Appendices A–M, including curation prompts, reference code, tool schemas, RL settings and rejection sampling. Checked the official released-subset counts and results.
 
-Open-ended data-agent benchmarks often depend on LLM judges. DARE-bench is closer to “given raw data, produce a verifiable target artifact,” directly quantifying transformation correctness and stochastic reliability.
+[arXiv 2602.24288v1 · 2026-02-27](https://arxiv.org/pdf/2602.24288v1) · [Official repository documentation · 2026-09-30](https://github.com/Snowflake-Labs/dare-bench#task-types)
+<!-- EVIDENCE:reading:END -->
 
-## Score boundary
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-Exact or numerical metrics support artifact correctness for the current task/data release. The paper/repository size difference requires versioning rather than mixing results across releases.
+DARE separates instruction fidelity, measured by exact reference predictions, from predictive modeling quality. Classification modeling uses macro-F1; regression and forecasting use clipped R². Exact outputs are a reproducibility proxy, not a direct audit of every intermediate operation.
 
-## Fair comparison conditions
+<!-- EDITORIAL-METHOD:START -->
+Tasks provide data and instructions, separating reproduction of prescribed outputs from building a good predictor. In an illustrative workflow, the agent must use specified preprocessing, a model and a seed to generate predictions. Another algorithm may predict better yet fail instruction fidelity; the modeling-quality track instead evaluates predictive metrics. The GRPO variant trains with computable rewards, but gains require checking both fidelity and quality rather than merely executable code.
 
-Align task release, runtime/packages, reference outputs, number of runs, scaffold, and resource budget.
+Editorial placement: DS-1000 emphasizes tested code correctness and MLE-bench predictive outcomes. DARE separates following a prescribed analytical procedure from freely optimizing results. Better prediction therefore need not mean faithful execution of a request.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-The next step adds source discovery, business semantics, and downstream use so matching an output is not confused with solving the correct analytical objective.
+The paper evaluates 352 test tasks, versus 324 in the public subset. Main runs allow five turns, 200 seconds per execution and three repeats. RL uses a GRPO variant without group normalization or KL regularization, with eight rollouts per question.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## Research decision card
+Full-paper classification subsets: 74 tasks per variant × three repeats. IF is exact-output accuracy; MM is mean macro-F1 multiplied by 100.
 
-### When to use it
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| gpt-5 · Classification-IF | 74 tasks × 3 runs | IF accuracy (%) | 69.81% | Prescribed preprocessing/model/seed | Table 5, p. 7 |
+| Claude-Sonnet-3.7 · Classification-MM | 74 tasks × 3 runs | MM macro-F1 × 100 | 61.03 | Open modeling against dataset labels | Table 5, p. 7 |
+| Qwen3-4B Baseline | IF / MM: 74 tasks each × 3 runs | IF (%) / MM macro-F1 × 100 | 3.60% / 5.23 | Untuned model; main harness | Table 6, p. 8 |
+| Qwen3-4B + RL | IF / MM: 74 tasks each × 3 runs | IF (%) / MM macro-F1 × 100 | 38.96% / 39.44 | Training T=1, top-p=0.95; main evaluation | Table 6, p. 8; Table 13, pp. 17–18 |
 
-Use DARE-bench for predictive quality and adherence to prescribed data-science procedures rather than a model metric alone. Ignoring the required process is not success even with a high score. Distinguish the paper's full collection from the public subset.
+Fact source: [Table 5, p. 7; Table 6, p. 8; Table 6, p. 8; Table 13, pp. 17–18](https://arxiv.org/pdf/2602.24288v1)
+<!-- EVIDENCE:results:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-Illustrative task: a user specifies preprocessing or modeling procedures, and the system must produce predictions validated by hidden labels or deterministic outputs. An easier alternative workflow may improve a metric while violating the requested deliverable.
+Section 4.3 misattributes the 69.81% classification-fidelity value to Claude; Table 5 assigns it to GPT-5. Appendix limits also conflict: a task prompt says ten minutes and a tool schema says three calls. Keep full-paper and public-subset results separate. A single overall winner would conceal different metric families.
 
-### Most discriminating experiment
-
-Pin the public release, runtime budget, and package environment, reporting process adherence separately from predictive quality. Test similar outcomes produced through different procedures to verify detection of violations, and keep training and evaluation tasks isolated.
-
-### Pair with
-
-[tml-bench](tml-bench.en.md) · [statabench](statabench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+<!-- EDITORIAL-NEXT:START -->
+Next, audit intermediate operations on the same tasks while pinning libraries, seeds and hardware. Compare outcome-equivalent implementations with different procedures to determine whether exact matching penalizes instruction violations or immaterial numerical variation.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

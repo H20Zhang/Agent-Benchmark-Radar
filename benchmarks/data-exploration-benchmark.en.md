@@ -1,4 +1,4 @@
-# Data Exploration Benchmark: understand the data before pretending to analyze it
+# Data Exploration Benchmark: how initial discovery affects downstream analysis
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-17<br>
@@ -6,50 +6,60 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](data-exploration-benchmark.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](data-exploration-benchmark.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.16045)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-The Data Exploration Benchmark evaluates the stage before analysis. The suite includes one real multi-sheet Vitamin-D workbook and 12 DSBench workbook tasks—four easy, five medium, and three hard—requiring agents to understand sheets, columns, relationships, and data quality and emit a schema-fixed JSON exploration artifact.
+Read Sections 1–8, scoring formulas and case studies (9 pages including references; no appendix), with result heatmaps in Figures 3–6 visually checked.
 
-## Compared with what
+[arXiv 2608.16045v1 · 2026-08-17](https://arxiv.org/pdf/2608.16045v1)
+<!-- EVIDENCE:reading:END -->
 
-Many data-agent benchmarks assume the relevant schema or tables are already known. This benchmark makes exploration a separate stage and uses raw, self-exploration, and oracle-exploration downstream ablations to test whether better data understanding actually changes later performance.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Score boundary
+This evaluation makes pre-analysis understanding an explicit artifact: models convert raw Excel workbooks into schema-fixed JSON describing logical tables, field semantics, keys, relationships, provenance and lightweight profiles. Experiments use one real Vitamin D study workbook and 12 purposively selected DSBench tasks, divided into 4 simple, 5 middle and 3 difficult tasks. Main models are Gemini 3.1 Pro, Claude Opus 4.6 and GPT 5.4; GPT agent is tested only on the difficult group and the real workbook.
 
-Artifact scores and downstream deltas support exploration quality for workbook-style data under the fixed schema and evaluator. They do not establish large database or data-lake discovery, and oracle exploration is only an upper bound.
+[Source](https://arxiv.org/pdf/2608.16045v1)
 
-## Fair comparison conditions
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: unlike analysis tasks that supply schemas and field meanings, this suite examines how initial discovery affects downstream work. Relative to KramaBench’s broader data journey, it is a smaller exploration/guidance intervention. The coordinate is information formation before analysis, not proof of a general exploration policy or shared-memory benefit.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-Align workbook release, exploration JSON schema, token/tool budget, downstream agent, and evaluator. Raw, self, and oracle conditions require separate reporting.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Next evaluation coordinate
+Structural evaluation aligns tables through maximum-weight matching and then aligns columns, scoring table/column/relation F1, types, semantics, provenance and numeric profiles. An LLM-judged summary can reduce the total by up to 30%. A separate downstream intervention holds questions and scoring fixed: Control receives raw files, Middle additionally receives self-generated exploration JSON, and Treatment receives oracle metadata without downstream answers. Total token cost is deliberately not held constant.
 
-The next step scales to multi-source catalogs, permissions, and schema drift and tests whether exploration artifacts can be maintained incrementally rather than generated once.
+[Source](https://arxiv.org/pdf/2608.16045v1)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Correct-answer counts on two downstream cases
 
-## Research decision card
+Section 6.2 case studies; cells are correct answers divided by questions within the case, not overall benchmark scores; questions/scoring are fixed, but tokens and exploration effort are not; repeated-run variance is unreported.
 
-### When to use it
+| Model | Task | Control (correct/total) | Middle (correct/total) | Treatment (correct/total) |
+| --- | --- | --- | --- | --- |
+| GPT 5.4 | Financial model | 15/20 | 16/20 | 17/20 |
+| Claude Opus 4.6 | Depot allocation | 6/9 | 7/9 | 9/9 |
+| Gemini 3.1 Pro | Depot allocation | 6/9 | 9/9 | 7/9 |
 
-Use the Data Exploration Benchmark for intermediate data understanding, especially logical tables, keys, and column semantics in messy workbooks. Its small spreadsheet-specific scope makes it a mechanism diagnostic. A comprehensive-looking exploration artifact is not proof of downstream value.
+Source location: Section 6.2, PDF pp. 7–8; intervention Table 1, p. 6 · [Source](https://arxiv.org/pdf/2608.16045v1)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-Illustrative task: a workbook contains several logical tables, merged headers, and implicit relationships. The agent constructs structured understanding before analysis. Mistaking a presentation region for a data table can invalidate later computations even if they execute correctly.
+The selected cases demonstrate both gains and a counterexample. Explicit metadata can improve dependency recovery, yet Gemini answers two fewer depot-allocation questions with oracle metadata than with its own artifact. Providing a representation does not guarantee correct use. The small targeted sample and unreported repeated runs make these results evidence for a mechanism hypothesis and case study, not established production reliability or long-term shared-state benefits.
 
-### Most discriminating experiment
+GPT agent does not cover all twelve tasks. Figure 6 includes DeepAnalyze on only one simple task and ai-analyst on two, unlike the four-task main-model group. The summary judge and repetition count are undisclosed.
 
-Retain raw-data, self-generated-exploration, and oracle-exploration conditions with a fixed downstream analyst. Inspect keys, relationships, and quality issues and test on other workbooks. Charge exploration cost to determine when a reusable representation justifies preprocessing.
+Under matched total budgets, compare raw files, generated JSON, human-corrected JSON and equally long prose summaries. Across multiple subsequent questions and data changes, measure accuracy, repeated profiling cost and invalidation detection to test whether reusable representations improve amortized cost.
 
-### Pair with
-
-[kramabench](kramabench.en.md) · [dataspace](dataspace.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+[Source](https://arxiv.org/pdf/2608.16045v1)
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# DSAgentBench: End-to-End Data Science in Real Computer Environments
+# DSAgentBench: end-to-end data science through graphical desktops
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08<br>
@@ -6,60 +6,73 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](dsagentbench.md) | **English** · [Back to entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dsagentbench.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.10366) · **Area: Data Agent**
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-> **Measurement delta.** DSAgentBench moves data-agent evaluation from isolated SQL/code/analysis stages to complete data-science workflows inside real computer environments, with multi-tool execution grounded in intermediate outputs.
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-## Predecessor / implicit critique
+Read the complete 23-page main text, limitations and Appendices A–D, covering tasks, environments, grading, every prompt template, results and error analysis; visually checked Tables 3/4/11 and failure screenshots in Figures 6–9.
 
-Earlier benchmarks commonly isolate Text-to-SQL, code generation, analysis answers, or individual tool operations. That misses OS grounding, tool orchestration, long-horizon dependency, and artifact-level verification.
+[arXiv 2608.10366v1 · 2026-08-11](https://arxiv.org/pdf/2608.10366v1)
+<!-- EVIDENCE:reading:END -->
 
-## What it actually measures
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-The benchmark contains **275 tasks** spanning wrangling, exploration, modeling, visualization, and validation. Agents interact with real computing tools such as notebooks, IDEs, terminals, browsers, and databases. Deterministic evaluators verify analytical correctness, visual outputs, and model performance rather than code execution alone.
+DSAgentBench contains 275 human-authored tasks on an OSWorld-based Ubuntu desktop, covering acquisition, exploration, features, modeling, evaluation and visualization. Agents use 1920×1080 screenshots or screenshots plus accessibility trees and operate editors, notebooks, terminals and browsers through PyAutoGUI. Command-line work is reached through desktop interaction. Only 56.7% of tasks are multi-stage; not every task spans the full lifecycle.
 
-## What a score supports
+[Source](https://arxiv.org/pdf/2608.10366v1)
 
-The paper reports **56.70% task success** for the strongest evaluated agent, while open-source agents remain below 1%. This is primarily **end-to-end system-level evidence**: model capability, tool reliability, OS grounding, planning, recovery, and harness all contribute.
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: DA-Code exposes executable data-science tools; DSAgentBench reaches editors, terminals and browsers through a graphical desktop. It adds UI grounding and interaction recovery to analytical quality. GUI success is not pure analysis capability, and only some tasks span multiple lifecycle stages.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-It does not isolate a planning or routing component.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Strongest confounder
+Main runs permit fifteen interaction steps and 1,800 seconds, with temperature 0.1, top-p 0.9, at most 2,000 output tokens per call and a two-second post-action delay. Task evaluators check artifacts, execution and numeric/visual requirements to produce 0–1 scores; scores ≥0.95 count as success, while average score is separate. Approximately 10% of tasks add a visual judge after deterministic checks: usually GPT-4o, replaced by Gemini-2.5-Pro for GPT-4o outputs. Open models are evaluated only on screenshots, without accessibility-tree support.
 
-Harness and computer-use stack are tightly coupled with model capability. Cross-agent leaderboard gaps can therefore reflect scaffolding and recovery policy as much as reasoning. Real-computer realism also introduces environment/tool-version drift.
+[Source](https://arxiv.org/pdf/2608.10366v1)
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Selected within-model success rates across observation interfaces
 
-Persistent multi-session project state, enterprise business semantics, clarification/approval, deployment monitoring, authority/permissions, irreversible actions, and full lifecycle cost remain outside the core protocol.
+275-task benchmark; success requires task score≥0.95; fifteen interaction steps and 1,800 seconds; temperature 0.1, top-p 0.9, 2,000 output tokens/call; percentages reproduced as reported without inferring unpublished raw counts.
 
-<!-- RESEARCH-DECISION:START -->
+| Model | Screenshot success (%) | Screenshot + A11y success (%) |
+| --- | --- | --- |
+| Claude-4.6-Sonnet | 50.55 | 56.70 |
+| GPT-5 | 23.63 | 29.81 |
+| GPT-4o | 19.34 | 24.54 |
 
-## Research decision card
+Source location: Table 3, p. 7; section 5.2; Appendix B.5–B.6, pp. 15–16 · [Source](https://arxiv.org/pdf/2608.10366v1)
+<!-- EVIDENCE:result-1:END -->
 
-### When to use it
+<!-- EVIDENCE:result-2:START -->
+## GPT-4o budget ablation: selected endpoints
 
-Use DSAgentBench for complete data-science work in real computer environments, from tool orchestration to artifact validation. Real interfaces add realism and fragility. Failures can arise from operating systems or tool versions rather than data reasoning alone.
+GPT-4o with screenshot+A11y; Table 11; success threshold 0.95, with mean score a separate metric; not a budget curve for other models.
 
-### What a concrete task looks like
+| Interaction budget | Task success (%) | Mean score (0–1) |
+| --- | --- | --- |
+| 15 steps | 24.54 | 0.55 |
+| 50 steps | 25.81 | 0.57 |
 
-Illustrative task: an agent moves among terminals, notebooks, browsers, and databases to clean, model, visualize, and deliver validated artifacts. Correct code can still fail if it was not run in the target environment or saved correctly.
+Source location: Section 5.4 and Table 11, pp. 8, 15 · [Source](https://arxiv.org/pdf/2608.10366v1)
+<!-- EVIDENCE:result-2:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-Pin environment images, tool versions, and budgets, reporting infrastructure failures without dropping them from the denominator. Compare direct tool interfaces with GUI operation to separate data competence from interface execution. Grade artifacts independently of how smooth the trajectory appears.
+Accessibility metadata helps systems differently, so UI grounding and analytical reasoning should not be collapsed into general data-science ability. GPT-4o gains little from fifteen to fifty steps, but that single-model ablation does not establish budget independence for all agents. Error analysis samples 604 closed-source and 150 open-source runs; limited reruns do not provide variance estimates for every configuration.
 
-### Pair with
+The abstract calls evaluation deterministic, but the main text says roughly 10% of tasks use visual LLM judging after deterministic gates. Appendix Table 15 labels average score as percent although its cells use 0–1. The example JEDI prompt still says 100 steps, unlike the main 15-step experiment; actual budgets require runtime configuration, not template inference. The paper’s characterization of DA-Code/MLAgentBench as only static execution is too broad and is not adopted.
 
-[dsaeval](dsaeval.en.md) · [dsgym](dsgym.en.md)
+Hold data tasks fixed while comparing GUI, terminal API and typed data-tool interfaces under matched wall-clock and model-call budgets. Inject interaction errors at identical intermediate states and separately measure grounding, analysis and recovery.
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy consequence
-
-`executable code → workflow-oriented data-agent evaluation → real-computer end-to-end execution`
-
-DSAgentBench is best read as a frontier environment/protocol shift, not as a clean component-performance coordinate.
+[Source](https://arxiv.org/pdf/2608.10366v1)
+<!-- EVIDENCE:limitations:END -->

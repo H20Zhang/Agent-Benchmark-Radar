@@ -6,52 +6,64 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](chemclir-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](chemclir-bench.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2609.23231) · [Code](https://github.com/MohammadKhodadad/Multi-Lingual-QAC) · [Data](https://huggingface.co/datasets/MehdiAstaraki/multilingual_GP)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-ChemCLIR-Bench compares same-language and cross-language retrieval over chemical-patent material from Google Patents and EPO. The paper evaluates five languages and eight embedding models. The released pipeline additionally reports Recall@10 and MRR@10 by query language, original versus synthetic-translation origin, target language, and language pair. [Paper](https://arxiv.org/abs/2609.23231) · [Official implementation](https://github.com/MohammadKhodadad/Multi-Lingual-QAC/blob/main/README.md)
+Read Complete official HTML Sections 1–5, metrics, uncertainty and limitations, checked with same-version PDF; appendices inspected: A.1–A.4 and all supplemental figures/prompts; HTML omitted prompt bodies S.5–S.9, fully read from recovered PDF; visual checks: PDF Figures 2–3 inspected on rendered pages 6–7. Not performed: No model rerun or independent patent-family equivalence audit
 
-## Compared with what
+[arXiv v1, 2026-09-19](https://arxiv.org/pdf/2609.23231v1)
+<!-- EVIDENCE:reading:END -->
 
-Compared with BEIR's cross-domain retrieval, the controlled contrast is a mismatch between query and evidence language inside technical subject matter. Ranking-depth diagnostics help distinguish missing evidence from evidence that remains recoverable but is ranked too low. One aggregate recall cannot explain that distinction. This is not an iterative-search or end-to-end RAG answer benchmark.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Evaluation protocol
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-The pipeline exports corpus, queries, and qrels in MTEB retrieval format. Its current generation path creates English QAs, checks language, faithfulness, and retrieval quality, and translates them into target languages. Run metadata records dataset sizes, models, Git revision, and per-query results. The configurable repository supports additional translation languages and is not automatically the same as the five-language paper experiment.
+Unlike language-local MIRACL and English-domain ChemTEB, this controls target identity through patent variants and isolates foreign-language routes. It diagnoses parallel-document retrieval rather than complete prior-art search or scientific QA.
+<!-- EVIDENCE:placement:END -->
 
-## Decisive evidence and score boundary
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-The abstract reports a best-model Recall@10 drop from 0.72 in the monolingual setting to 0.53 cross-lingually. That is a source-reported result for its dataset and configuration, not a universal cross-domain effect or a direct estimate of answer degradation. The repository also warns that multilingual descriptions and claims are much sparser than titles and abstracts, with some fields mainly available in English; visible content must therefore be checked per language. [Result source](https://arxiv.org/abs/2609.23231) · [Field limitations](https://github.com/MohammadKhodadad/Multi-Lingual-QAC/blob/main/README.md)
+Relevance links each generated query to language versions of its source patent. Google Patents supplies 23,787 title/abstract versions and 524 queries; EPO supplies 11,315 title/abstract/first-claim versions and 198 queries. EPO covers English/German/French; Google’s Chinese coverage adds 400 GPT-5.5 translations. GPT-5-mini generates three candidates and Sonnet 4.6 selects by faithfulness and query quality. Existing-language, missing-language and all-language modes create both dual-gold and no-home queries. Gold labels recover source versions, not every topically relevant patent.
+<!-- EVIDENCE:method:END -->
 
-## Confounders and remaining coverage gaps
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-The strongest alternative explanation involves English-seeded queries, translation style, and unequal content fields, not only embedding alignment. Patent-family overlap, qrel construction, and filtering also need auditing. Public data availability does not mean these confounders have been eliminated.
+Eight sub-billion embedders lack complete checkpoint, prefix, truncation and index specifications. Recall is language-macro-averaged within eligible same/cross-gold queries; Google’s 261 same-gold versus 524 cross-gold queries are not fully paired. Paired analyses use 261 Google plus 198 EPO dual-gold queries. Pooled depth diagnostics use those 459: the 80th percentiles of first same, first foreign and maximum paired rank, censored beyond 1,000; ± denotes bootstrap standard error. XRC compares depths at equal coverage, RRC is foreign-gold any-hit rate, and ARI partitions the top-K shortfall by what remains missing at 1,000.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Same-language strength need not transfer
 
-## Research decision card
+Language-macro recall on eligible routes; Google 261 same/524 cross queries, EPO 198 dual-gold queries. Source-patent versions define relevance; different denominators prevent a direct paired interpretation.
 
-### When to use it
+| Model | Google same R@10 | Google cross R@10 | EPO same R@10 | EPO cross R@10 |
+|---|---|---|---|---|
+| embeddinggemma | 0.74 | 0.54 | 0.7 | 0.52 |
+| bge-m3 | 0.64 | 0.47 | 0.71 | 0.47 |
+| e5-large-instruct | 0.73 | 0.09 | 0.63 | 0.12 |
 
-Use it for language-pair diagnostics in technical or enterprise retrieval, as a retrieval-layer check before downstream RAG experiments.
+Source: Table 2 · [Paper](https://arxiv.org/pdf/2609.23231v1)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-Illustrative task: a Chinese query describes a chemical process whose supporting patent has a German abstract; finding topically similar Chinese text is not equivalent to locating the evidence.
+Embeddinggemma leads foreign-version recall, while e5’s strong same-language scores conceal weak cross-language retrieval. However, the seven-percent residual beyond the top thousand is only unrecoverable by reranking that fixed pool. It does not prove permanent irretrievability or isolate alignment as the sole cause. Deeper first-stage retrieval, translation, hybrid search and version-equivalence auditing could change it.
+<!-- EVIDENCE:interpretation:END -->
 
-### Most discriminating experiment
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-Fix document fields, patent-family splits, and qrels; compare multilingual dense retrieval, query translation plus BM25, and hybrid retrieval. Report Recall/MRR per language pair, separate original and translated queries, and match retrieval and reranking budgets.
+Patent versions need not be claim-equivalent; language tags do not establish native authorship. The small translation and near-ceiling single-rater quality audits cannot certify all items or poor-query detection. Rank depth is not measured time, tokens or money, and no actual reranker is tested. Next disclose configurations and family/route denominators, audit parallel equivalence, pair content-matched queries and compare translation, lexical/hybrid retrieval and deeper pools.
 
-### Pair with
+Human quality audit is 106/mean 8.40 in the main text,106/mean 8.33 in FigureS.2 and 97 in agreement/limitations. Cohort/mean differences are not reconciled. The general statement that every recall averages five languages does not apply literally to EPO, whose queries are only 72 English,58 German and 68 French. EPO prose calls 11315 granted specifications each a triple, while Table 1 defines 11315 corpus documents as single-language versions; use the table unit, not 11315×3. E5 is excluded by a cross-recall<.10 gate despite EPO .12; the exact corpus/aggregation governing this exclusion is not stated. The source’s alignment-only irreducible floor is operationally a top 1000 miss rate; cause and irreducibility beyond that cutoff are not identified.
+<!-- EVIDENCE:limitations:END -->
 
-[beir](beir.en.md) · [ontologybench](ontologybench.en.md) · [commercial-tax](commercial-tax.en.md)
-
-<!-- RESEARCH-DECISION:END -->
-
----
-
-Evidence checked: 2026-09-23. This note uses paper metadata and the official protocols, implementations, or dataset descriptions identified above. Structural validation is not factual certification, and experiments were not independently reproduced.
+Related benchmarks: [beir](beir.en.md) · [ontologybench](ontologybench.en.md) · [commercial-tax](commercial-tax.en.md)

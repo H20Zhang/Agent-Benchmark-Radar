@@ -1,4 +1,4 @@
-# StatABench: statistical agents need both conceptual judgment and correct tool selection/execution
+# StatABench: statistical judgment, tools and reports
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-06-22<br>
@@ -8,48 +8,56 @@
 
 [中文](statabench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2606.22977)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-StatABench includes Stat-Closed with 404 questions across 18 statistical topics and four formats, 198 practical tool-use tasks over a 35-function statistics toolkit, and Stat-Open with 30 modeling competitions. It jointly measures conceptual judgment, procedure/tool selection, execution, and open modeling.
+Read the complete 28-page PDF: main text, Appendices A–I, all prompts, toolkit functions and both embedded generated reports. The text extraction contains an extra page-break character; physical page count is 28.
 
-## Compared with what
+[arXiv 2606.22977v1 · 2026-06-22](https://arxiv.org/pdf/2606.22977v1)
+<!-- EVIDENCE:reading:END -->
 
-General data-science benchmarks often bury statistics inside coding workflows. StatABench separates statistical reasoning from tool use, distinguishing not knowing the method from knowing it but executing the wrong function or parameters.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Score boundary
+Stat-Closed contains 404 questions, including 198 practical tasks using a 35-function toolkit. Stat-Open contains 30 report-producing modeling tasks. Closed grading mixes exact checks and semantic judgments; open reports receive rubric scores rather than execution-success labels.
 
-Closed, practical, and open scores support statistical competence under their respective topic mixes, toolkits, and competitions. They are distinct evaluation settings and should not be collapsed into one ranking.
+<!-- EDITORIAL-METHOD:START -->
+Closed tasks separate conceptual judgment from practical statistical-tool use; open tasks require modeling, analysis and a report. An illustrative workflow checks assumptions for two sample groups, selects a statistical function and interprets effect and uncertainty, while an open report must justify the method. This exposes gaps between concepts and tool execution but also introduces report-judge preferences. The 198 practical tasks are a subset of the 404 closed tasks, not an additional corpus.
 
-## Fair comparison conditions
+Editorial placement: relative to DS-1000’s functional code checks, StatABench covers conceptual choice, statistical tools and open reports. StatFormBench isolates pre-execution formulation. The added coordinate is statistical judgment rather than merely runnable analysis code.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-Align Stat-Closed/Practical/Open track, toolkit version, data split, runtime, model access, and evaluator; open competitions also require matched compute budgets.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Next evaluation coordinate
+Evaluation uses temperature 0; Qwen3-8B thinking is disabled. The limit is five tool calls per interaction turn, with no clear overall runtime cap. Open comparisons share DeepSeek-V3 and use Gemini 3 Pro as judge.
+<!-- EVIDENCE:setup:END -->
 
-The next step strengthens assumption checking, uncertainty communication, and causal/statistical model criticism rather than only selecting the right function.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-<!-- RESEARCH-DECISION:START -->
+V1 Tables 3–5, printed pp. 7–8. Closed values are question accuracy; open values are judge/human rubric points. Do not pool these metrics.
 
-## Research decision card
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| GPT-5.1 + LangChain MCP | Stat-Closed; 404 questions | Accuracy (%) | 68.6% | T=0; SAToolKit | Table 3, p. 7 |
+| DeepSeek-V3 + LangChain MCP | Practical subset; 198 questions | Accuracy (%) | 53.54% | T=0; shared toolkit | Table 4, p. 7 |
+| DeepSeek-V3 + CrewAI | Practical subset; 198 questions | Accuracy (%) | 85.35% | T=0; changed scaffold | Table 4, p. 7 |
+| DeepSeek-V3 + MathModelAgent | Stat-Open; 30-task suite; human subset count unclear | Mean judge / human rubric score (0–100) | 61.86 / 61.17 | Gemini 3 Pro; seven criteria | Table 5, p. 8 |
+| DeepSeek-V3 + LLM-MM-Agent | Stat-Open; 30-task suite; human subset count unclear | Mean judge / human rubric score (0–100) | 54.29 / 52.62 | Gemini 3 Pro; seven criteria | Table 5, p. 8 |
 
-### When to use it
+Fact source: [Table 3, p. 7; Table 4, p. 7; Table 5, p. 8](https://arxiv.org/pdf/2606.22977v1)
+<!-- EVIDENCE:results:END -->
 
-Use StatABench to connect statistical knowledge, tool use, and complete modeling reports. Closed questions and open reports provide different evidence. A polished report does not establish sound methodology, and choosing a tool name does not establish correct parameters or assumptions.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-### What a concrete task looks like
+The practical/fundamental gap compares different tasks, not a tool-use ablation. Table 5 averages seven displayed criteria despite four high-level rubric dimensions. Human subset size and rater counts are unclear; MathModelAgent’s Practical Science agreement is only κ=0.092. Perturbation-based filtering does not prove decontamination.
 
-Illustrative task: an agent chooses a statistical method, executes tools, and interprets results. Software can return significant-looking outputs despite violated distributional or independence assumptions, so methodological applicability matters beyond successful calls.
-
-### Most discriminating experiment
-
-Report knowledge, tool parameterization, and open reports separately with a fixed toolkit and evaluator. Add data violating statistical assumptions to test whether the agent adapts or withholds a conclusion. Independently review methodology in open reports.
-
-### Pair with
-
-[causalds](causalds.en.md) · [dare-bench](dare-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+<!-- EDITORIAL-NEXT:START -->
+Next, express identical statistical problems as conceptual questions, tool tasks and reports under matched models/budgets. Independent statisticians should blind-review assumptions, effect interpretation and error control to separate knowledge, interface and report-scoring failures.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

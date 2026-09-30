@@ -1,4 +1,4 @@
-# WarehouseReliabilityBench: business truth instead of executable SQL
+# WarehouseReliabilityBench: answerability, abstention and correction in warehouses
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-10<br>
@@ -6,64 +6,73 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](warehouse-reliability-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](warehouse-reliability-bench.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.09254)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-WarehouseReliabilityBench (WRB) evaluates whether an analytics agent returns **business-correct behavior** under standard, ambiguous, unanswerable, schema-drift, and adversarial questions. Roughly half of the 400 frozen tasks over two synthetic warehouses have no correct SQL; the correct action is clarification, abstention, or refusal.
+Read all 20 pages and Appendices A–E, covering construction, prior test exposure, the state machine, all results, six scorer corrections, replay protocol, training gate and metric denominators; visually checked the main result tables.
 
-## What changed relative to prior evaluation
+[arXiv 2608.09254v1 · 2026-08-10](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:reading:END -->
 
-Execution-match assumes every question maps to a query. Production analytics often fails one level earlier: “revenue” has two valid definitions, a requested quantity is absent, or a deprecated column still executes but means the wrong thing. WRB evaluates semantic behavior contracts and false success, not syntax alone.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Decisive evidence
+WarehouseReliabilityBench v0.2.0 has 400 frozen synthetic tasks over e-commerce and SaaS DuckDB warehouses, split by template family into 240 development, 80 validation and 80 test tasks. Required behavior may be answering, clarifying, abstaining or refusing. QueryProof uses a semantic layer and physical catalog to select behavior, asks Qwen2.5-Coder-7B to propose meanings and SQL, and applies static and post-execution checks. The routed version can escalate to a larger model, whose output faces the same checks.
 
-On an 80-task frozen test split, QueryProof improves Business Truth Rate over a direct-prompted 32B baseline by +0.237 with a reported 95% interval [+0.112, +0.375], and reduces false-success rate from 0.754 to 0.351. But the paper explicitly warns that the comparison is scaffold-confounded; template-family resampling widens intervals enough to include zero, so direction is better supported than effect magnitude.
+[Source](https://arxiv.org/pdf/2608.09254v1)
 
-## What the score supports
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: Spider/BIRD generally assume questions should be answered by queries; WarehouseReliabilityBench makes clarification, abstention and refusal valid outcomes. The coordinate shifts from executable SQL to whether answering is justified under the semantics/evidence, with coverage and false-answer risk measured together. Small synthetic warehouses do not establish enterprise governance reliability.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-WRB strongly supports the benchmark claim that **successful execution is not business correctness**. The QueryProof result supports a system-level deterministic semantic/rule-gating direction, not a claim that 7B models outperform 32B models or that any single component caused the gain.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Fair comparison contract
+All six systems use locally quantized Qwen2.5-Coder models at temperature 0, with one run per system on 80 test tasks. Business Truth Rate (BTR) averages over all tasks and rewards correct clarification/abstention/refusal. False Success Rate (FSR) is the fraction of ANSWER outputs that are incorrect or should not have been returned; coverage is restricted to answerable tasks. CPCA divides variable cost on answerable tasks by correct returned answers. Costs assume approximately USD 0.50 per hardware hour, not market API prices, and exclude development.
 
-Fix warehouse seed/snapshot, semantic-layer definitions, physical catalog, task split, model, scaffold, and cost accounting. Report Business Truth Rate, False Success Rate, coverage, abstention/clarification behavior, and cost separately. Never compare model sizes when scaffolding differs.
+[Source](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Selected system results on 80 frozen test tasks
 
-The evidence base is narrow: two synthetic domains, one seed, one model family, one SQL dialect, and disclosed test exposure. Transfer to BIRD/Spider or real warehouses is unproven.
+One test pass per system; BTR denominator 80 tasks; FSR denominators 37, 41 and 65 ANSWER outputs respectively; CPCA is cost on answerable tasks divided by correct answers, not average cost per task; 32B has unmatched scaffolding.
 
-## Next discriminating validation
+| System | BTR (0–1) | FSR (0–1) | CPCA (USD/correct answer) |
+| --- | --- | --- | --- |
+| QueryProof routed | 0.537 | 0.351 | 0.0017 |
+| QueryProof base | 0.562 | 0.366 | 0.0012 |
+| 32B direct | 0.300 | 0.754 | 0.0058 |
 
-Run the same semantic/rule scaffold over the larger baseline model on a fresh unseen warehouse family, then ablate semantic resolution and post-execution checks separately. That is the experiment needed for causal attribution.
+Source location: Table 2 p. 9; Table 7 and Appendix E pp. 18–19 · [Source](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## QueryProof minus 32B BTR by bootstrap unit
 
-## Research decision card
+Same 80-task outcomes; preregistered task-level and exploratory family-level bootstrap; 2,000 resamples; only ten families, making the cluster interval itself unstable rather than a precise effect estimate.
 
-### When to use it
+| Resampling unit | Difference | 95% CI lower | 95% CI upper |
+| --- | --- | --- | --- |
+| Task (80) | 0.237 | 0.112 | 0.375 |
+| Template family (10) | 0.237 | -0.125 | 0.562 |
 
-Use WarehouseReliabilityBench for false successes where executable SQL violates business semantics, and for clarification, abstention, or refusal. The target is semantic reliability rather than syntax and execution alone. Rule-layer quality must be separated from model contribution.
+Source location: Table 8 p. 19; Section 6.3 · [Source](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:result-2:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-Illustrative task: a requested business metric admits several definitions under the schema or lacks necessary data. The agent can generate executable SQL with a result even when the correct behavior is to clarify the definition or explain unanswerability.
+Routed QueryProof makes no numeric error among 24 answers returned to answerable questions, but gives 13 answers where clarification or abstention was required, leaving FSR 13/37. Its BTR 0.537 is below the unrouted 0.562, providing no evidence that routing helps on this test. One author co-designed data, rules and labels; only ten test families and prior test exposure limit the findings to this frozen system experiment.
 
-### Most discriminating experiment
+Retain the author’s disclosure: test content had been exposed during development, and deleting five test-only phrases does not restore a clean holdout. The 0.920 agreement is a blind retest by the same author, not inter-annotator agreement. Section 6.1’s shorthand baseline coverage 1.000/answer accuracy 0.350 does not apply to the 32B row’s 0.900/0.444; system-specific table values take precedence.
 
-Fix business rules and databases, separate answerable tasks from non-answer behavior, and report business correctness and false success. Cross rule layers with models to test whether gains primarily come from hand-authored rules rather than autonomous semantic understanding.
+Collect genuinely unseen families and real warehouses, compare 7B and 32B under identical scaffolding, then separately remove semantic layers, post-execution checks and routing. Report family-clustered intervals together with coverage and false-answer risk.
 
-### Pair with
-
-[livesqlbench](livesqlbench.en.md) · [dabstep](dabstep.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`SQL execution correctness → semantic business truth → reliability-aware analytics agent`
-
-WRB moves evaluation above the query language: sometimes the correct data-agent output is no query at all.
+[Source](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:limitations:END -->

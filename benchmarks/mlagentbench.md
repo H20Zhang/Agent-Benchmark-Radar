@@ -1,4 +1,4 @@
-# MLAgentBench：把机器学习实验迭代本身变成 agent task
+# MLAgentBench：给定基线上的机器学习实验迭代
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2023-10<br>
@@ -6,64 +6,57 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](mlagentbench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](mlagentbench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2310.03302) · [代码](https://github.com/snap-stanford/MLAgentBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-MLAgentBench 评估 agent 能否 **迭代完成 machine-learning experimentation**：读写文件、改代码、执行实验、观察结果、提出新假设，再继续下一轮。13 个任务从 CIFAR-10 到较新的 BabyLM 等挑战。
+完整阅读 39 页 v2 的实质正文与附录 A–F，包括完整示例轨迹。v1 仅核对摘要、方法与实验章节、图 3–6，未声称完整阅读初版。
 
-## 相比此前评测多测了什么
+[arXiv 2310.03302v2 · 2024-04-14](https://arxiv.org/pdf/2310.03302v2) · [arXiv 2310.03302v1 · 2023-10-05](https://arxiv.org/pdf/2310.03302v1)
+<!-- EVIDENCE:reading:END -->
 
-code-generation benchmark 通常只要求一次生成答案；ML experiment 是闭环：选择 intervention、付出 execution cost、解释 noisy feedback、更新 plan。MLAgentBench 因此把 experiment iteration 与 long-term planning 变成 measurement object。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+MLAgentBench 要求 agent 通过代码、实验与研究记录改进给定机器学习任务的基线。论文框架结合近期历史、规划和事实检查；框架比较不能单独识别某一个组件的作用。
 
-被测 agent 中 Claude 3 Opus 平均 success rate 最高，为 37.5%。不同任务跨度极大：成熟旧 dataset 可到 100%，部分较新的 Kaggle challenge 可到 0%；作者也把 long-term planning 与 hallucination 列为主要 failure mode。
+<!-- EDITORIAL-METHOD:START -->
+代理收到任务描述、训练／评估代码和数据，在工作区修改模型或数据处理并运行实验；研究日志保存尝试与观察，再据结果决定下一步。示意流程是检查一个分类基线、选择可修改模块、训练候选配置、读验证输出并交付代码。任务成功以相对各自基线的改善定义，因此同样的百分比不代表各任务绝对难度一致。计划、历史检索与事实检查共同改变代理行为，不能把整个框架的分数差命名为单一记忆收益。
 
-## 这个分数能证明什么
+编辑比较：相较 DS-1000 的独立代码片段，MLAgentBench 把实验选择与反馈迭代纳入任务；MLE-bench 则使用更广的竞赛和奖牌阈值。这里的演化坐标是“改善给定基线”，与“达到历史竞赛档位”应分轨。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-benchmark 支持固定 repository/task 下 end-to-end experimentation 能力，但不能把结果单独归因给 model research skill：scaffold、compute budget、starting code quality 与 benchmark familiarity 都会影响。新旧任务差异也提示 contamination/prior knowledge 风险。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 公平比较契约
+v2 对 13 项任务、每项八次试验的成功率取平均。成功要求比基线至少提升 10%，部分基线只是简单预测。下表对照共用 50 个动作、五小时上限；论文另列的 GPT-4 只有 30 个动作。
+<!-- EVIDENCE:setup:END -->
 
-应固定 repository snapshot、starting baseline、hardware、wall-clock/experiment budget、agent tool、model 与 success threshold，同时报告实验次数与 compute，不应只看最终是否越过 target。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 还没有测什么
+v2 表 3／5；成功率是达到任务提升阈值的试验占比，再对任务平均。下表固定模型比较框架，不是组件消融。
 
-13 个任务 coverage 有限，而且“benchmark 分数提高”不等于科学研究有效：hypothesis novelty、robustness、reproducibility、negative result interpretation 与 anti-gaming 都需要更强评测。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Claude v3 Opus + 论文 agent | 13 项任务 × 8 次试验 | 平均成功率（%） | 37.5% | opus-20240229；50 个动作；5 h | 表 3, 第 7 页; 表 5, 第 15 页 |
+| Claude v3 Opus + LangChain | 13 项任务 × 8 次试验 | 平均成功率（%） | 33.7% | 50 个动作；5 h；ReAct | 表 5, 第 15 页 |
+| GPT-4-turbo + 论文 agent | 13 项任务 × 8 次试验 | 平均成功率（%） | 26.0% | 0125；50 个动作；5 h | 表 3, 第 7 页; 表 5, 第 15 页 |
+| GPT-4-turbo + LangChain | 13 项任务 × 8 次试验 | 平均成功率（%） | 1.0% | 0125；50 个动作；5 h；ReAct | 表 5, 第 15 页 |
 
-## 下一步最有判别力的验证
+事实来源：[表 3, 第 7 页; 表 5, 第 15 页; 表 5, 第 15 页](https://arxiv.org/pdf/2310.03302v2)
+<!-- EVIDENCE:results:END -->
 
-使用隐藏的 post-cutoff repository，在相同 compute 下只改变 planning/recovery mechanism，更好地区分 research-agent competence、pretraining familiarity 与 brute-force experimentation。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-<!-- RESEARCH-DECISION:START -->
+Opus 的 37.5% 来自 2024 年 4 月修订稿，不是 2023 年初版。平均提升会排除无效提交，与成功率的分母不同。附录 CIFAR-10 轨迹反馈测试准确率，不能假定统一隐藏测试分数。基线与任务评测差异也限制了它与 Kaggle 奖牌基准的比较。
 
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究执行反馈驱动的机器学习实验迭代，比一次性代码生成更接近研究工作。但少量任务上的成功并不证明科研创新；需要区分修好环境、调好已知流程和提出有效新方法。
-
-### 一个具体任务长什么样
-
-示意任务：系统修改训练代码、执行实验、查看结果再调整方案。失败日志和验证指标是反馈来源，但反复在同一反馈集上选择方案也可能过拟合，最终评测必须保留独立性。
-
-### 最有判别力的实验
-
-固定计算资源与实验次数，比较一次生成、无记忆迭代和有经验记忆迭代，分别报告有效运行率与模型质量。最终从干净环境复跑选定方案，避免把偶然运行状态或验证集过拟合当作改进。
-
-### 建议搭配
-
-[mle-bench](mle-bench.md) · [deltaml-bench](deltaml-bench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`one-shot ML code → iterative experiment loop → autonomous research engineering`
-
-MLAgentBench 把“做实验”而不是“写代码”确立为一项独立 agent 能力。
+<!-- EDITORIAL-NEXT:START -->
+下一步固定模型、行动数和基线，分别移除日志检索、规划与事实检查；既报告成功率，也报告所有尝试的有效提交率与计算费用。任务集太小和基线过弱是整体均分的主要替代解释。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

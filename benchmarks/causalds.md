@@ -1,4 +1,4 @@
-# CausalDS：让 data agent 真正跨过 Pearl 三层因果推理
+# CausalDS：关联、干预与反事实任务的可识别性
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-07-09<br>
@@ -6,64 +6,57 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](causalds.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](causalds.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2607.08093)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-CausalDS 评估 tool-using data-science agent 在 **Pearl 三个 rung** 上的 causal task。每个 scene 包含 sampled structural causal model、生成的 observational data 与 graph-faithful natural-language story；任务覆盖 prediction、structure recovery、identification、effect estimation、bias diagnosis、counterfactual、mediation、uncertainty 与 warranted abstention。
+完整阅读 55 页 v1 的实质正文及附录 A.1–A.16，覆盖生成与审查、构成、全部计分类型、结果分解、重试、匹配消融、失败、部署与完整提示；另检查表 3／4／24／25。
 
-## 相比此前评测多测了什么
+[arXiv 2607.08093v1 · 2026-07-09](https://arxiv.org/pdf/2607.08093v1)
+<!-- EVIDENCE:reading:END -->
 
-symbolic causal benchmark 常缺真实 data analysis，data-science benchmark 又没有已知 causal ground truth。CausalDS 直接生成 SCM，因此既能 deterministic 地判断因果答案，又要求 agent 面对 imperfect observation、coding 和 tool use。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+CausalDS 结合合成因果模型的故事、观测文件与私有真值。CausalDSScore 综合二元错误、数值损失及图／集合损失，越低越好。拒答会改变计分池；缺失数值答案被排除，因此必须同时查看覆盖率。
 
-论文的 100-task exam 评估 6 个 contemporary agent：symbolic causal reasoning 相对接近解决，而 abstention、uncertainty quantification 与 coding/tool-use efficiency 仍明显拉开模型差距。不可回答问题也被作为一等 scored outcome，而不是 evaluator exception。
+<!-- EDITORIAL-METHOD:START -->
+每个场景从可控结构因果模型生成观测数据、叙述和私有真值，再提出关联、干预或反事实问题。示意流程是从场景说明确定变量关系、判断目标是否可识别、读取样本并估计干预效应或选择弃答，而非仅预测相关性。不同任务分别评估识别结论、数值估计或图／集合答案；合成机制提供真值，但自然语言叙述若引入额外因果含义，仍会改变问题。
 
-## 结论边界：这个分数能证明什么
+编辑比较：相较普通数据分析或预测基准，CausalDS 将“目标能否由给定证据识别”纳入任务，而不是所有题都默认存在可算的正确数值。与 StatFormBench 相近之处是先正确界定问题，新增坐标则是结构因果语义与弃答。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-它对 causal reasoning + tool-grounded analysis 提供非常干净的 ground truth；但 scene 是 synthetic，因此对 algorithmic competence 的证据比对真实 messy observational science 的 ecological validity 更强。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 公平比较契约
+试卷从 953 个场景中抽取 100 个场景／任务。Mini-swe-agent 断网运行，最多 100 步；可计价时上限 $10，均未触及。闭源模型使用高推理强度，开放模型使用服务默认值；Qwen 的 32k 上下文限制可比性。
+<!-- EVIDENCE:setup:END -->
 
-应固定 generated exam seed/version、observation model、tool environment、model、token/tool budget 与 grader，并按 Pearl rung、abstention、uncertainty 分开报告；平均分会掩盖在 non-identifiable query 上危险的过度断言。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 还没有测什么
+主结果：试卷有 100 题，但 Pass Rate 仅覆盖 34 个二元任务，连续答案有效率对应 39 个目标。匹配行每个视图运行一次；配对损失截断于 1，包含缺失、无效与拒答。
 
-真实 causal inference 还有 ambiguous assumption、generator 未覆盖的 measurement error、experiment design、domain expertise，以及“causal graph 本身就有争议”的情况。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Claude Opus 4.8 · 主评测 | 100 题；34 个二元／39 个数值目标 | 分数 ↓／Pass Rate（%）／有效数 | 0.2780 / 82.4% / 38/39 | 高推理强度；自适应思考 | 表 3, 第 10 页; 表 4, 第 12 页 |
+| GPT-5.5 · 主评测 | 100 题；34 个二元／39 个数值目标 | 分数 ↓／Pass Rate（%）／有效数 | 0.5610 / 82.4% / 37/39 | 高推理强度 | 表 3, 第 10 页; 表 4, 第 12 页 |
+| Kimi K2.6 · 难观测减干净观测 | 10 对匹配场景／任务 | 平均损失 Δ ± SD；95% CI | +0.20 ± 0.27; [+0.053, +0.373] | proxy_hard − clean；诊断损失 | 表 24, 第 38 页 |
+| Qwen 3.6-35B · 难观测减干净观测 | 10 对匹配场景／任务 | 平均损失 Δ ± SD；95% CI | +0.33 ± 0.47; [+0.070, +0.626] | proxy_hard − clean；诊断损失 | 表 24, 第 38 页 |
 
-## 下一步最有判别力的验证
+事实来源：[表 3, 第 10 页; 表 4, 第 12 页; 表 24, 第 38 页](https://arxiv.org/pdf/2607.08093v1)
+<!-- EVIDENCE:results:END -->
 
-把 synthetic scene 与 assumption 故意不完整的真实 dataset 配对，测试 agent 会不会主动询问缺失 identification assumption，而不是自己编出来，连接 causal correctness 与 scientific judgment。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-<!-- RESEARCH-DECISION:START -->
+匹配观测消融使用十个选定且可识别的任务，并采用将失败记为一的另一种损失，不是总体效应。故事审查将额外因果陈述视为警告；合成生成并不等于语义完全验证。区间覆盖样本小、分母取决于回答，都限制了宽泛能力排名。
 
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究数据智能体是否知道哪些因果结论可以从给定信息中识别。预测准确不等于因果推断正确；合理弃答和不确定性表达是能力的一部分，不应被一律作答的高覆盖率掩盖。
-
-### 一个具体任务长什么样
-
-示意任务：系统获得带领域故事的观测数据，需要判断能否估计某项干预效果或反事实。相关关系可被准确计算，但缺少识别条件时，给出精确因果数字仍是错误行为。
-
-### 最有判别力的实验
-
-按预测、干预和反事实层级分别报告，把正确图或识别假设给定作为诊断。比较可识别与不可识别的配对场景，联合评分估计误差、区间和弃答；不要以合成数据上的表现替代真实干预验证。
-
-### 建议搭配
-
-[statabench](statabench.md) · [insightbench](insightbench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`symbolic causality ↔ data-science execution → agentic causal analysis with abstention`
-
-它把“知道什么时候因果不可识别”提升到和给出 estimate 同样重要。
+<!-- EDITORIAL-NEXT:START -->
+下一步固定因果图和查询，只改变样本量、叙述措辞与观测可用性；并列报告覆盖率、识别准确率及已回答题的损失。这样可区分正确弃答与利用缺失答案不计分来降低均值。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

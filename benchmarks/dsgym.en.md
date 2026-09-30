@@ -1,4 +1,4 @@
-# DSGym: a data-science agent benchmark that filters shortcut-solvable tasks
+# DSGym: shared execution environments and no-data shortcut filtering
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-01-22<br>
@@ -6,64 +6,57 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](dsgym.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dsgym.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2601.16344) · [Code](https://github.com/fannie1208/DSGym)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-DSGym is both a standardized **execution framework** and a curated suite for evaluating/training data-science agents across analysis, prediction, and domain-specialized tasks in self-contained environments.
+Read all substantive text of the 37-page v1 and Appendices A–E, including refinement, full competition inventory, all cases, failure definitions, training settings and complete prompts. Tables 3–5 and Figure 5 were visually checked.
 
-## What changed relative to prior evaluation
+[arXiv 2601.16344v1 · 2026-01-22](https://arxiv.org/pdf/2601.16344v1)
+<!-- EVIDENCE:reading:END -->
 
-The authors show that a substantial fraction of existing data-science benchmark tasks can be solved without using the supplied data. DSGym explicitly filters shortcut-solvable problems and standardizes environment interfaces, making data grounding and cross-benchmark comparison central.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Decisive evidence
+DSGym standardizes stateful Docker/Jupyter execution. It removes tasks answered correctly without data by at least three of five models. SFT uses 2,000 synthetic query/trajectory pairs filtered by execution-aware judging and semantic diversity.
 
-DSGym refines existing tasks and adds DSBio and DSPredict for bioinformatics and challenging prediction workloads. It also supports execution-verified trajectory synthesis; as a training case study, a 4B model trained on 2,000 generated examples outperforms GPT-4o on standardized analysis benchmarks.
+<!-- EDITORIAL-METHOD:START -->
+The platform standardizes persistent code execution for analysis and prediction. Analysis tasks require computation from files; prediction tasks require models and scorable outputs. An illustrative workflow inspects columns/distributions, cleans and computes in a notebook, repairs through execution feedback and submits. No-data filtering removes questions solved by several models without consulting the files; execution and diversity filters select synthetic trajectories for supervised training. This controls one shortcut class without ruling out others in retained tasks.
 
-## What the score supports
+Editorial placement: rather than connecting suites such as DABStep through different executors, DSGym emphasizes a common environment and no-data shortcut audit. Relative to DataSciBench’s task checks, it also trains on synthetic execution trajectories. Environment, filtering and training effects require separate attribution.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-The benchmark strongly supports whether an agent can plan, implement, and validate analyses in a controlled execution environment. The training result is evidence for the framework's usefulness but not a general claim that smaller models dominate stronger models outside the standardized tasks.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+Evaluation uses CodeAct, temperature 0, no auxiliary tools and exact matching with numeric tolerance. Concrete action/time/hardware limits, tolerance values and repeat count are unspecified. SFT runs six epochs at learning rate 2e-5.
+<!-- EVIDENCE:setup:END -->
 
-Fix Docker/environment image, tools, datasets, metric implementation, agent scaffold, model, and execution budget. Preserve shortcut filters and report pass@k separately from average trajectory score.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+V1 shared scaffold. Analysis accuracy divides by evaluated tasks; DSBio has 90 tasks, while DABStep-hard’s evaluated count is not explicitly stated in the paper.
 
-Standardization trades away some messy production reality: enterprise semantics, permissions, evolving repositories, collaboration, and deployment are not the central focus.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Kimi K2 Instruct · DSBio | DSBio; 90 tasks | Accuracy (%) | 43.33% | Kimi-K2-Instruct-0905; T=0 | Table 3, p. 10 |
+| Qwen3-4B-DSGym-SFT-2k · DSBio | DSBio; 90 tasks | Accuracy (%) | 21.11% | General-analysis SFT; T=0 | Table 5, p. 13 |
+| Qwen3-4B-DSGym-SFT-2k · DABStep-hard | DABStep-hard; count unspecified | Accuracy (%) | 33.07% | Seed tasks include DABStep; T=0 | Table 5, p. 13 |
+| GPT-4o · DABStep-hard | DABStep-hard; count unspecified | Accuracy (%) | 7.41% | gpt-4o-2024-08-06; T=0 | Table 5, p. 13 |
 
-## Next discriminating validation
+Fact source: [Table 3, p. 10; Table 5, p. 13](https://arxiv.org/pdf/2601.16344v1)
+<!-- EVIDENCE:results:END -->
 
-Track performance before and after shortcut filtering for each benchmark source and publish the delta. This quantifies how much apparent data-agent progress was actually benchmark leakage or task solvability without data.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-<!-- RESEARCH-DECISION:START -->
+The trained 4B model beats GPT-4o only on DABStep easy/hard, not all analysis tracks. The no-data filter does not prove contamination absence. DSPredict’s reported percentage denominators do not match corpus counts clearly, while runtime budgets remain unknown. Seed/test independence for same-domain synthesis is also incompletely specified.
 
-## Research decision card
-
-### When to use it
-
-Use DSGym for comparable training and evaluation through a common executable interface, particularly with no-data shortcut checks. Standardization reduces environment variation, while remapped source benchmarks retain different difficulty and semantics. A concatenated total is insufficient.
-
-### What a concrete task looks like
-
-Illustrative task: an agent accesses read-only data in an isolated container with a stateful notebook and writes analysis artifacts to its workspace. Success should depend on reading the data; tasks solvable from prompt knowledge or leaked answers weaken the evaluation.
-
-### Most discriminating experiment
-
-Fix containers and the agent interface, report source-dataset and analysis slices, and repeat no-data controls. Compare transfer with matched training volume on held-out datasets and domain extensions, separating adapter familiarity from general improvement.
-
-### Pair with
-
-[datascibench](datascibench.en.md) · [dsaeval](dsaeval.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`fragmented data-science benchmarks → grounded standardized gym → execution-verified agent training/evaluation`
-
-DSGym treats benchmark validity and environment reproducibility as part of the research contribution.
+<!-- EDITORIAL-NEXT:START -->
+Next, audit shortcuts with models excluded from filtering and split synthesis seeds/test tasks across domains. Under matched CodeAct budgets, compare no training, random-trajectory training and filtered-trajectory training, reporting both original and filtered suites.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

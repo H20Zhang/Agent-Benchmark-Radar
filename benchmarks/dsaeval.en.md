@@ -1,4 +1,4 @@
-# DSAEval: cumulative, multimodal data-science projects
+# DSAEval: multimodal data science in persistent sessions
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-01-20<br>
@@ -6,64 +6,57 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](dsaeval.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dsaeval.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2601.13591) · [Project](https://dsaeval.github.io/DSAEval/)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-DSAEval evaluates agents on **real-world data-science projects** with multimodal environment perception, cumulative multi-query interaction, and separate assessment of reasoning, code, and results. It includes 641 problems grounded in 285 structured and unstructured datasets.
+Read the complete 35-page v3 and Appendices A–K, including validation, every prompt, full code/report examples, all judge tables, the complete weight sweep and error audit. V3 evaluates 13 models, not the older note’s 11.
 
-## What changed relative to prior evaluation
+[arXiv 2601.13591v3 · 2026-09-07](https://arxiv.org/pdf/2601.13591v3)
+<!-- EVIDENCE:reading:END -->
 
-One-shot coding tasks reset state between queries. DSAEval makes later requests depend on earlier analysis and expands observations beyond tables into image/text data, closer to an iterative data-science session.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Decisive evidence
+DSAEval uses persistent, multi-query notebook sessions and report-style outputs. Scores combine reasoning, code and results with weights 0.3/0.3/0.4, then average Claude-Haiku-4.5 and GPT-5.1 judgments. These are rubric points, not execution-success percentages.
 
-Eleven advanced agentic LLMs are evaluated. The paper reports Claude-Sonnet-4.5 strongest overall, GPT-5.2 most efficient, and MiMo-V2-Flash most cost-effective; multimodal perception improves vision-related tasks by 2.04–11.30%. Structured/routine analysis is substantially easier than unstructured workloads.
+<!-- EDITORIAL-METHOD:START -->
+Problems are organized into persistent notebook sessions around datasets, allowing later questions to reuse earlier objects and analysis. Outputs include reasoning, code and result reports rather than only short answers. An illustrative sequence cleans and plots data, answers a dependent statistical question and explains conclusions. Multimodal configurations inspect visual outputs while text-only configurations rely on textual observations, changing available evidence rather than just output format. Two judges assess reasoning, code and results before aggregation.
 
-## What the score supports
+Editorial placement: DS-1000 snippets and DA-Code’s task workflows are useful references. DSAEval adds cumulative multi-query context, visual feedback and report-style grading. Its scores are not directly comparable to binary execution success or evidence of long-term cross-project memory.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-The benchmark supports cumulative project competence and exposes quality–efficiency–cost trade-offs. The model/scaffold is still a combined system, and multi-dimensional grading can contain evaluator assumptions beyond deterministic code execution.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+The suite has 641 problems and 285 datasets. Sessions allow 20 turns, with a one-hour timeout per iteration and four A100 80 GB GPUs. Three PhD candidates calibrated the judges on Gemini-3-Pro’s complete log, not all agent styles.
+<!-- EVIDENCE:setup:END -->
 
-Fix dataset, query order, accumulated workspace state, tool environment, model, budget, and evaluator. Preserve prior-query outputs exactly; resetting or summarizing history differently changes the cumulative task.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+V3 dual-judge protocol; scores range 0–10. CV rows compare the same model with plot observations disabled/enabled. Their category sample counts are not explicitly reported.
 
-Long projects can span weeks, involve stakeholder feedback, data updates, version control, and production deployment. DSAEval's cumulative interactions are still bounded benchmark episodes.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Claude-Sonnet-4.5 · overall | 641 assigned tasks; missing-output policy unclear | Mean overall score (0–10) | 8.164 | Reported main value; dual judges | §5, p. 7 |
+| MiMo-V2-Pro · overall | 641 assigned tasks; missing-output policy unclear | Mean overall score (0–10) | 7.912 | Same session budget; dual judges | §5, p. 7 |
+| Qwen3-VL-30B · CV | CV subset; paired task count unspecified | Text → multimodal (0–10); relative gain; 90% CI of difference | 4.07 → 4.53; +11.30%; [0.0, 0.9] | 10,000 paired bootstrap resamples | Table 2, p. 6; §4.1, p. 7 |
+| GPT-5-nano · CV | CV subset; paired task count unspecified | Text → multimodal (0–10); relative gain; 90% CI of difference | 5.53 → 5.88; +6.33%; [-0.3, 0.9] | 10,000 paired bootstrap resamples | Table 2, p. 6; §4.1, p. 7 |
 
-## Next discriminating validation
+Fact source: [§5, p. 7; Table 2, p. 6; §4.1, p. 7](https://arxiv.org/pdf/2601.13591v3)
+<!-- EVIDENCE:results:END -->
 
-Inject controlled mistakes early in a project and measure downstream recovery versus error propagation. This would test whether agents maintain trustworthy analytical state, not merely accumulate conversation context.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-<!-- RESEARCH-DECISION:START -->
+Multimodal gains are relative changes; several paired confidence intervals include zero. Valid-output handling is not fully specified. Main Claude score 8.164 slightly differs from averaging appendix judge summaries. Public-source contamination and a contradictory time-series reference split remain risks; judge agreement does not establish error-free ground truth.
 
-## Research decision card
-
-### When to use it
-
-Use DSAEval for multimodal data science in cumulative multi-query projects rather than independent questions. Earlier state affects later answers. Falling scores may reflect propagated errors rather than intrinsic difficulty of later queries.
-
-### What a concrete task looks like
-
-Illustrative task: an agent explores tabular, image, or text data and then models and interprets it over successive requests. An early cleaning or interpretation error can persist through the notebook and surface only in the final report.
-
-### Most discriminating experiment
-
-Compare cumulative autonomous execution with supplied-correct-prior-state controls each round, scoring reasoning, code, and results. Pin GPU, notebook environment, and evaluator; slice by modality and query position to isolate cross-turn state management.
-
-### Pair with
-
-[dsagentbench](dsagentbench.en.md) · [agenticdatabench](agenticdatabench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`one-shot data analysis → cumulative multimodal project → persistent analytical state`
-
-DSAEval makes state continuity across analytical requests an explicit capability.
+<!-- EDITORIAL-NEXT:START -->
+Next, match sessions/budgets and intervene on visual observations, textual alternatives and state resets. Combine numerical checks with independent blind review to determine whether multimodal gains correct analytical errors or primarily affect judge preferences.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# MERRIN：先判断需要哪种 modality，再去 noisy web 找证据
+# MERRIN：先识别所需模态，再到网页寻找证据
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-04-15<br>
@@ -6,50 +6,78 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](merrin.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](merrin.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2604.13418) · [代码](https://github.com/HanNight/MERRIN)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-MERRIN 有 162 个 human-annotated short-answer questions，答案依赖 image、video、audio、chart 或多模态组合，而且 query 不显式告诉 agent 应搜索哪种 modality。benchmark 比较 no-search、native-search 与 agentic-search，并分析 resource use。
+19页全文第1–6节及附录A–E，包括所有标注/人工/裁判提示和视频工具消融；未重建人工样本/URL聚合分母。
 
-## 相比什么前进了
+[arXiv v1, 2026-04-15](https://arxiv.org/pdf/2604.13418v1)
+<!-- EVIDENCE:reading:END -->
 
-普通 web-search benchmark 大多是 text-first；multimodal QA 又通常预先给定图像。MERRIN 把 modality inference 放在 retrieval 之前，使“选错搜索媒介”成为独立 failure，而不仅是后续 VLM reasoning 错误。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-short-answer accuracy 支持在当前 live web、search provider 与 multimodal backbone 下的 evidence discovery；它不能稳定代表长期 SOTA，因为 web drift 和 proprietary search interface 会改变候选证据。
+相较BrowseComp的网页文本线索，MERRIN要求系统自行发现图像、视频或音频证据的必要性。它把模态发现纳入开放搜索，但共享多模态工具会影响所有底座的能力归属。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-锁定 result date、search provider、tool interface、backbone、judge 与 allowed modalities。不同 provider 或 web snapshot 应分 track。
+162道人工审核问题用自然语言提出，不直接告诉系统要看哪种附件；要求至少一个步骤依赖非文本证据，并存在唯一短答案。120题从头构造，37题扩展SealQA、5题扩展ChartMuseum。独立复核者先用纯文本Google检索，再带已知答案做最多20次对抗式检索，尽量排除文本捷径；困难度筛选还用带搜索的ChatGPT。基准含文本、图片、视频/音频和表格来源，119题同时涉及多跳与跨模态冲突。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-下一步需要 citation-level multimodal evidence portfolios 与可重放 snapshots，区分 modality selection、retrieval 与 final reasoning 的贡献。
+比较无搜索、模型原生搜索及smolagents多模态代理。后者通过Serper搜索；visit_webpage和watch_video均由Gemini-3-Flash代读网页/YouTube视频音频，因此Qwen等文本模型也获得外部模态解释。最终按BrowseComp式答案等价提示评判，具体裁判模型未在所读设置明确；50例人工抽查全部一致。主结果为162题三次运行均值±标准差，不是置信区间。原生工具支持、上下文上限和平台超时不同，不能当成等预算或单一检索器对照。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 视频工具与完整代理
 
-## 研究决策卡
+162题、三次运行；均值与跨运行标准差均以百分点表示，标准差不是置信区间。工具与搜索编排不同。
 
-### 什么时候值得用
+| Gemini-3.1-Pro 设置 | 准确率均值（%） | 运行标准差 |
+|---|---|---|
+| 原生搜索 | 29.0 | 1.1 |
+| 原生搜索加视频工具 | 37.5 | 2.0 |
+| 完整多模态代理 | 40.1 | 2.8 |
 
-适合研究系统能否在没有模态提示时主动寻找合适的图像、视频或音频证据。它把‘知道该看什么’放进搜索任务；实时网页与专有搜索接口的差异意味着结果通常先是系统级证据。
+事实来源：表 7 · [论文](https://arxiv.org/pdf/2604.13418v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 标准证据干预仍保留显著错误
 
-示意任务：文字问题的答案藏在一段视频画面或图表中，普通文本搜索只提供线索。系统需要选择模态、定位相关片段并核对噪声或冲突材料，而不是把搜索摘要当作最终证据。
+162题、三次运行；单位百分数/百分点。注入仍含实时干扰，gold-only保留处理工具，直接提示改为单次原生多模态输入；不是仅改变检索召回。
 
-### 最有判别力的实验
+| Gemini-3.1-Pro 干预 | 准确率均值（%） | 运行标准差 |
+|---|---|---|
+| 注入标准URL | 43.4 | 3.8 |
+| 仅标准URL | 45.5 | 2.3 |
+| 直接输入标准来源 | 47.7 | 2.0 |
 
-固定多模态骨干和工具，比较自主模态选择、正确模态提示与正确证据给定。记录每种模态的调用与延迟，并保留闭卷条件，区分模态路由、内容理解和参数知识造成的差异。
+事实来源：表 4; 节 4.3 · [论文](https://arxiv.org/pdf/2604.13418v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-[mc-search](mc-search.md) · [browsecomp](browsecomp.md)
+Gemini-3.1-Pro原生搜索29.0%，加视频工具37.5%，完整多模态代理40.1%，说明工具可用性是重要条件。给定标准URL后45.5%，直接给标准多模态输入47.7%，仍有较大失败空间；但40.1→47.7同时改变来源、噪声、工具执行和推理形式，不能严格声称7.6个百分点是搜索错误的数学上界。人类额外时间收益和过度探索分析也是观察性结果，不证明强模型天生更易浪费计算。
+<!-- EVIDENCE:interpretation:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-<!-- RESEARCH-DECISION:END -->
+20次检索不能穷尽证明不存在文本捷径，网页漂移和Google排序影响可重复性。原生搜索不支持的视频/音频由额外Gemini工具补齐，收益混合了外部模型能力；平台超时也计入产品表现。标准来源只是已标集合，低URL重叠不自动等于无用或错误来源。下一步固定时间快照、同一题集、工具解释器及预算，分别干预检索选择和证据理解，并公开超时/失败与实际访问URL口径。
+
+人工称50题但71.4%/59.2%不是50题整数比例，有效分母/平均方式未解释。表3代理40.1与全量结果相同，原生30.9又不同于表2的29.0，人工/代理是否同题比较不明确。URL重叠有“实际访问”与“所有遇到的URL”口径混用，63.6与3.5的差别很大。标准输入提升不能严格界定搜索损失上界。文中一处称文本为主模态，但所列图像35.9%高于文本31.4%。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[mc-search](mc-search.md) · [browsecomp](browsecomp.md)

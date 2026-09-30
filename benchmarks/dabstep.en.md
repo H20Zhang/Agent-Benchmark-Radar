@@ -1,4 +1,4 @@
-# DABstep: multi-step financial analysis with objective final grading
+# DABstep: multi-step financial analysis and final-answer scoring
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2025-06-30 · paper v1<br>
@@ -7,64 +7,60 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](dabstep.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dabstep.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2506.23719) · [Benchmark](https://huggingface.co/spaces/adyen/DABstep)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-DABstep evaluates **realistic multi-step data analysis** derived from a financial analytics platform. More than 450 challenges require code-based processing of transaction data together with contextual reasoning over heterogeneous documentation, cross-source lookup, and precise result reporting.
+Read Sections 1–5 and Appendices A.1–A.4 (26 pages), visually checking Table 1 and all ten execution-trace figures.
 
-## What changed relative to prior evaluation
+[arXiv 2506.23719v1 · 2025-06-30](https://arxiv.org/pdf/2506.23719v1)
+<!-- EVIDENCE:reading:END -->
 
-Many open-ended analytics benchmarks rely heavily on LLM judges. DABstep keeps a longer agentic workflow but ends in factoid-style answers with automatic correctness checks, making objective grading compatible with realistic multi-step analysis.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Decisive evidence
+DABstep v1 contains 450 tasks: 72 Easy and 378 Hard. Anonymized Adyen queries are expanded from 95 core questions, with the Hard instances derived from 23 core questions. Agents combine payment tables, fee and merchant JSON, category and country mappings, and a rule manual in an isolated Python environment to produce short answers. A lightweight tool wrapper normally uses ReAct prompting; o4-mini, o3-mini, o1, R1 and Gemini 2.5 Pro use a reasoning-oriented prompt. Table 1 reports a maximum of ten steps, without a common token cap, time limit or repetition budget.
 
-Even the best evaluated agent achieves only 14.55% accuracy on the hardest tasks. The environment includes transaction records plus fee structures, merchant metadata, category/country lookup tables, and documentation, so success requires both executable data manipulation and semantic cross-referencing.
+[Source](https://arxiv.org/pdf/2506.23719v1)
 
-## What the score supports
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: WikiSQL/Spider primarily produce queries; DABstep requires multi-step financial analysis over business data and documentation. Compared with DA-Code’s heterogeneous artifact scoring, it retains a more explicit final-answer target. Tool composition and business rules enter the task without final correctness certifying every reasoning step.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-DABstep strongly supports end-to-end analytical execution under a bounded financial data workspace. It does not isolate planning, code quality, documentation retrieval, or semantic interpretation, and its synthetic benchmark environment should not be confused with access to real financial systems.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Fair comparison contract
+The metric is binary final-answer accuracy on the hidden test set, reported separately for Easy and Hard. A deterministic, type-aware scorer normalizes numbers, lists and strings without an LLM judge. Its numeric tolerance differs between the prose and pseudocode, making a pinned scorer implementation important. On 75 model answers checked by two annotators, the scorer matched every final human label; this small validation study is not agent task accuracy.
 
-Fix benchmark version, files/documentation, tool interface, model, trajectory/call budget, and final scorer. Report difficulty slices separately. A system preloaded with parsed lookup relations or hand-built semantic mappings is solving an easier cross-source problem.
+[Source](https://arxiv.org/pdf/2506.23719v1)
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Selected baseline results from the release paper
 
-Production financial analytics includes live schemas, permissions, PII, governance, write actions, audit trails, and changing business logic. Factoid grading also does not capture the quality of a complete analyst-facing deliverable.
+Hidden test set: 378 Hard and 72 Easy tasks, each accuracy using its own split denominator; binary final-answer scoring; Table 1 maximum-ten-step wrapper; prompt families differ; no across-seed variance reported.
 
-## Next discriminating validation
+| Model | Hard accuracy (%) | Easy accuracy (%) | Prompt type |
+| --- | --- | --- | --- |
+| o4-mini | 14.55 | 76.39 | Reasoning prompt |
+| Claude 3.7 Sonnet | 13.76 | 75.00 | ReAct prompt |
+| GPT 4.1 | 12.43 | 80.56 | ReAct prompt |
 
-Add deterministic intermediate checkpoints for source selection, joins/mappings, and computed quantities before the final answer. This would retain objective grading while locating where multi-step workflows fail.
+Source location: Table 1, PDF p. 3; sections 3.1–4.1, pp. 5–7; Appendix A.2, pp. 13–14 · [Source](https://arxiv.org/pdf/2506.23719v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-## Research decision card
+o4-mini leads Hard while GPT 4.1 leads Easy; their best scores cannot be combined into one system result. Parameterized instances are not 450 independent workflows, so core-question-level splits would better test generalization. The appendix shows Claude 3.7 Sonnet reading the manual, repairing a JSON-structure mistake and producing a correctly formatted list, yet omitting monthly fraud statistics required to filter fees. This illustrates a difference between executable code and complete business-rule application, but is not a quantitative causal attribution.
 
-### When to use it
+Numeric tolerance is illustrated as 1e-4 in the prose but 1e-2 in Algorithm 1; reproduction must pin scorer code. Historical cost timestamps are also inconsistent and are not treated as current prices.
 
-Use DABstep to test whether documented business rules survive multi-step data analysis. A focused payments domain enables diagnosis but does not establish cross-industry competence. Rule selection and intermediate transformations explain failures better than final string matching alone.
+Split by core question, hold prompts and the ten-step budget fixed, and compare raw manuals, explicit structured rules and gold intermediate statistics. Separately report omitted rules, data-processing errors, formatting errors and execution cost.
 
-### What a concrete task looks like
-
-Illustrative task: an agent combines transaction files with policy documents, applies exceptions, and computes an exact answer. Missing one exception can make the result wrong even when every code step executes successfully.
-
-### Most discriminating experiment
-
-Pin the dataset release and step budget and compare original documentation, structured rules, and supplied-intermediate tables. Slice by difficulty and rule composition, separating formatting from numerical errors to distinguish rule understanding from output compliance.
-
-### Pair with
-
-[warehouse-reliability-bench](warehouse-reliability-bench.en.md) · [dataspace](dataspace.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`single-table analysis → heterogeneous documented workspace → objectively graded multi-step data agent`
-
-DABstep shows that realistic agentic analysis need not require fully subjective evaluation.
+[Source](https://arxiv.org/pdf/2506.23719v1)
+<!-- EVIDENCE:limitations:END -->

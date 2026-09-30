@@ -1,4 +1,4 @@
-# LiveSQLBench: text-to-SQL under schema and business-rule drift
+# LiveSQLBench: evolving cross-database SQL evaluation
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2025-05-28<br>
@@ -6,64 +6,59 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](livesqlbench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](livesqlbench.md) | **English** · [Home](../README.en.md)
 
-[Project](https://livesqlbench.ai/) · [Code](https://github.com/bird-bench/livesqlbench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the stated official protocol, implementation settings and available results; no independent reproduction or full-paper-reading claim.
 
-LiveSQLBench evaluates SQL agents against **evolving industrial databases**, not one frozen schema. It stresses large schemas, long metadata/context, business-rule drift, and both query and management-style interactions.
+Read the official project page, root README, Agent and CLI documentation, and baseline call/configuration source; the official paper link remains Coming Soon.
 
-## What changed relative to prior evaluation
+[Official repository documentation · e15cd221267e06fabfaf6a3d4a69308280ce9a7c · 2026-09-30](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
+<!-- EVIDENCE:reading:END -->
 
-Spider/BIRD largely freeze the database and task distribution. LiveSQLBench makes temporal change part of the benchmark lifecycle: schema complexity grows, business rules change, and agents must use current context rather than rely on benchmark memorization.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Decisive evidence
+LiveSQLBench is a family of recurring releases. Base-Lite contains 18 PostgreSQL databases and 270 tasks (180 queries and 90 management operations); Base-Full v1 has 22 databases and 600 tasks; Large-v1 has 18 and 480. Tasks rely on schemas, column meanings and hierarchical business knowledge. Each release can be frozen for evaluation; continuing releases do not mean one persistent agent must retain state and adapt online across releases.
 
-LiveSQLBench-Large-v1 expands to 18 databases with roughly 1K columns each and 480 tasks, with average prompts around 84K tokens and explicit Business Rule Drift. The project also releases an agent framework with per-task DB isolation and multi-provider support.
+[Source](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
 
-## What the score supports
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: Spider and BIRD provide fixed public sets; LiveSQLBench emphasizes adding databases/queries and tracking versioned SQL performance. The coordinate is refreshed evaluation over time. This is not automatically a controlled schema/business-rule-drift experiment or a guarantee of equal difficulty across releases.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-Results support text-to-SQL/data-agent robustness under the benchmark's evolving snapshots. They do not isolate model reasoning from schema-linking/harness quality, and live versions require careful version pinning before comparing scores.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Fair comparison contract
+Query tasks compare execution results; management tasks check custom postconditions. Model Base means direct SQL generation, while agent and CLI tracks permit tool-based exploration. The current ADK agent spends one step per tool call, defaults to 30 steps and permits one final SQL submission. Historical Agent I uses 20 steps on the website and must be tracked separately. The selected table reports only the root README’s historical Base-Lite model results, not current live-board or cross-release comparisons.
 
-Pin benchmark release, DB snapshot, business-rule documents, SQL dialect, agent framework, model, and execution budget. Never compare scores from different evolving versions as though they came from one static test set.
+[Source](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Selected historical Base-Lite results from the official README
 
-Enterprise analytics also requires semantic definitions, permissions, lineage, clarification, write safety, and artifact delivery. Very large schemas still do not reproduce all organization-specific metadata and governance.
+README historical Base-Lite Model Base results labeled 2025-05-28; 270 PostgreSQL tasks; fraction passing corresponding tests; costs are historical author-reported values. Exact model snapshots, call budgets and repetitions are missing, preventing a matched causal comparison.
 
-## Next discriminating validation
+| Model | Success rate (%) | Mean cost (USD/task) |
+| --- | --- | --- |
+| o3-mini | 47.78 | 0.0233 |
+| GPT-4.1 | 44.10 | 0.0336 |
 
-Create paired tasks immediately before and after a schema/business-rule change and measure update latency: how quickly does an agent stop using obsolete semantics without losing stable knowledge?
+Source location: Root README, Model Performance on LiveSQLBench; official website Discussion: Current Model Performance · [Source](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-## Research decision card
+The official page still marks the paper Coming Soon. This note uses the fully read official protocol documentation and does not claim a full-paper reading. Historical rows lack complete model snapshots, budgets and uncertainty; current code does not reconstruct every row. Refreshing releases and withholding answers mitigate some leakage risks but do not prove absence of contamination.
 
-### When to use it
+Database counts and old setup comments differ between root and Agent documents; explicit release metadata takes precedence. Current baseline code does not directly run every historical model, so a uniform budget is not inferred.
 
-Use LiveSQLBench for industrial schemas, changing knowledge rules, and database-management operations. Continuing releases reduce static-test limitations but change tasks and environments. Compare within a release and track rather than interpreting cross-release score differences as model progress.
+Pin task data, databases, business rules and scorer revisions, then construct paired before/after rule changes for the same tasks. Separately measure query correctness, management postconditions and stale-rule cache invalidation.
 
-### What a concrete task looks like
-
-Illustrative task: an agent interprets a large schema and hierarchical business knowledge, executes queries or management operations, and adapts to rule changes. Syntactically correct SQL does not establish correct state changes; management tasks require postcondition checks.
-
-### Most discriminating experiment
-
-Pin database release, knowledge base, and track, separating base-model and full-agent settings. Evaluate query equivalence, management postconditions, and adaptation to changed rules separately, recording recovery and cost and explicitly tracking errors from cached obsolete rules.
-
-### Pair with
-
-[spider-2](spider-2.en.md) · [warehouse-reliability-bench](warehouse-reliability-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`static text-to-SQL → industrial-scale schema → continuously evolving data environment`
-
-LiveSQLBench makes benchmark freshness itself part of data-agent evaluation.
+[Source](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
+<!-- EVIDENCE:limitations:END -->

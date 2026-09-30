@@ -1,4 +1,4 @@
-# data-eng-bench: Data Agent / executable data engineering
+# Data Engineering Benchmark: executable data-engineering tasks in containers
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-07-29<br>
@@ -6,60 +6,48 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](data-eng-bench.md) | **English** · [Back to the entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](data-eng-bench.md) | **English** · [Home](../README.en.md)
 
-[Benchmark repository](https://github.com/Snowflake-Labs/data-eng-bench) · [Protocol fix](https://github.com/Snowflake-Labs/data-eng-bench/commit/35b83370bd9ae06d9ac8a2beb95d2544c90d88a5)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-Moves code generation into repository-scale dbt transformation with hidden row-level verification.
+Reviewed the stated official protocol, implementation settings and available results; no independent reproduction or full-paper-reading claim.
 
-## What It Follows
+Read the official README, submission protocol, metric-computation source and stated configurations, and checked the repair-commit description; not every one of the 103 tasks was audited and no official paper was identified.
 
-Earlier evaluation usually compressed this problem into a shorter final score or a single proxy. This object turns its predecessor critique into an explicit capability × environment × protocol delta and retains an executable or auditable artifact.
+[Official repository documentation · a3278ad102829a6084dde086244a0ef665a8011c · 2026-09-30](https://github.com/Snowflake-Labs/data-eng-bench/blob/a3278ad102829a6084dde086244a0ef665a8011c/README.md)
 
-## How It Is Evaluated
+Model-result gap: the official Harbor scores could not be retrieved, and the pinned repository contains no model-result rows; task counts and example configurations are not experimental scores.
+<!-- EVIDENCE:reading:END -->
 
-**Question:** Can an agent implement, execute, and repair data transformations under real project constraints?
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-**Measurement object:** Executable data-engineering benchmark for repository-scale dbt transformations with hidden row-level verification on DuckDB and Snowflake.
+data-eng-bench places agents in containerized dbt projects with ticket-style requirements to edit or create models, run transformations and repair failures. Hidden pytest verifiers compare materialized rows against references. The 103 tasks share a synthetic retail warehouse and run either locally on DuckDB or in isolated Snowflake clones, covering analytics, bug fixes, dimensions/snapshots and incremental data engineering.
 
-**Scale and protocol:** 103 dbt tasks with hidden verifier coverage across DuckDB and Snowflake. The protocol includes hidden-pytest-verifiers, row-level-output-comparison, dual-backend-execution.
+[Source](https://github.com/Snowflake-Labs/data-eng-bench/blob/a3278ad102829a6084dde086244a0ef665a8011c/README.md)
 
-## What a Score Can Support
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: compared with SQL-only tasks such as Spider, Data Engineering Benchmark targets engineered artifacts, environment constraints and executable tests, closer to DAComp’s engineering side. It adds implementation/validation workflow, while the accessible evidence supports protocol placement rather than a model ranking.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-Across 103 dbt tasks on DuckDB and Snowflake, hidden row-level verifiers inspect outputs; the August repair exposes evaluator reliability as a measurement condition. It supports system-level evidence under this environment, harness, model/tool, and resource configuration; unmatched variables prevent attribution to one component.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Strongest Confounder
+The submission protocol pins the dataset, requires every task with at least three trials, and counts errors and disqualified trials as zero. Current metric code defines Accuracy as successful trials divided by all trials; task-averaged pass@2/pass@3 are separate. The example Claude Code/Claude Opus 4.8/high configuration uses three attempts and four-way concurrency; it is a runnable configuration, not a measured result. One inspected task allocates 4,000 agent seconds, 3,000 verifier seconds, 2 CPUs and 8,000 MB RAM; these are not asserted as uniform across uninspected tasks.
 
-The Snowflake verifier fix without a rerun means pre-fix leaderboard results are not directly comparable with the repaired environment. The load-bearing confounders are backend-environment-drift, verifier-defects, missing-post-fix-rerun.
+[Source](https://github.com/Snowflake-Labs/data-eng-bench/blob/a3278ad102829a6084dde086244a0ef665a8011c/README.md)
+<!-- EVIDENCE:setup:END -->
 
-## Remaining Gap: What It Still Does Not Measure
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-The August verifier repair has no published post-fix leaderboard rerun, so earlier Snowflake results require qualification.
+This audit fully read the official overview, submission protocol, metric computation and stated configurations, but did not audit every task. No official paper was identified. The linked Harbor leaderboard was unreadable through this retrieval and the repository contains no submitted result rows, leaving model scores and post-fix reruns unverified rather than absent. Confirmed fixes address Snowflake connections and cleanup; compile/parse checks are not end-to-end reproduction.
 
-## Where It Fits in the Map
+One timezone-sensitive DuckDB task is explicitly advisory. Older Harbor versions can silently ignore web-tool disabling; public reference solutions require verified isolation.
 
-`map_delta=early_signal`. One paper is only a signal; a durable direction needs independent records bound to the same canonical direction key.
+Pin verifier and backend revisions, run the same model three times on every task, and separately report trial accuracy, task-level pass@k, environment failures and disqualifications. Rerun identical agents across protocol fixes and isolate public references to reduce leakage.
 
-<!-- RESEARCH-DECISION:START -->
-
-## Research decision card
-
-### When to use it
-
-Use data-eng-bench for repository-level dbt transformation and repair. Hidden row-level verification is stronger than compilation alone, but backend and verifier versions affect scores. A verifier fix does not automatically validate an older leaderboard.
-
-### What a concrete task looks like
-
-Illustrative task: an agent edits a transformation project so models execute on a target database and produce correct rows. Dialect, type, and runtime differences between DuckDB and Snowflake can make the same change behave differently.
-
-### Most discriminating experiment
-
-Pin project, backend, and hidden-verifier commits and re-run the same patch across backends, separating execution failures from output differences. Recompute all compared methods after verifier changes and retain versioned old results rather than attributing environment repairs to agents.
-
-### Pair with
-
-[spider-2](spider-2.en.md) · [dacomp](dacomp.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+[Source](https://github.com/Snowflake-Labs/data-eng-bench/blob/a3278ad102829a6084dde086244a0ef665a8011c/README.md)
+<!-- EVIDENCE:limitations:END -->

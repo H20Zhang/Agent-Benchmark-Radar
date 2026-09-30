@@ -1,4 +1,4 @@
-# FDABench：在异构 evidence 上做完整分析的数据 agent
+# FDABench：异构证据上的分析流程与工具调用评估
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2025-09<br>
@@ -6,64 +6,74 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](fdabench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](fdabench.en.md) · [主入口](../README.md)
 
-[项目页](https://fdabench.github.io/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-FDABench 评估 data agent 能否在 **异构 evidence** 上完成 analytical query：结构化数据库、文档、web、图片、视频、音频都可能参与，并要求 planning、tool use、reflection 或 multi-agent workflow，而不是一次 SQL/code 调用。
+完整阅读 v3 共 12 页及附录 A–D，另读官方五页技术报告；核对表 6、10。
 
-## 相比此前评测多测了什么
+[arXiv 2509.02473v3 · 2026-08-15](https://arxiv.org/pdf/2509.02473v3)
+[官方技术报告 · 2026-09-30](https://github.com/fdabench/FDAbench/blob/main/technical_report.pdf)
+<!-- EVIDENCE:reading:END -->
 
-Text-to-SQL / notebook benchmark 通常只有一种主数据模态。FDABench 把 source selection 与 cross-modal evidence composition 放进 analytical workflow，并同时看最终结果与 reasoning trace。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+FDABench v3 在 139 个数据库及冻结的文档、网页、图像、视频、音频证据上构造 2,007 个任务：579 单选、760 多选、668 报告。作者比较规划、反思、直接工具调用等工作流；部分既有系统由论文重新实现，不是直接运行原版。不能处理原生多模态的系统会获得文本回退输入，因此证据接口也影响比较。
 
-benchmark 有 2,007 个任务、50+ domain、3 类 task type 与多种 heterogeneous source；评测包含 choice correctness、rubric report、DAG trace metric、latency 和 token cost，因此 workflow structure 与资源消耗也成为可见结果。
+[来源](https://arxiv.org/pdf/2509.02473v3)
 
-## 结论边界：这个分数能证明什么
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：与 DA-Code 的交互产物任务相比，FDABench 更集中地组织异构证据上的分析流程，并考察工具选择及调用结果。版本中的工具调用成功率补充了最终产物检查，但它不是端到端分析任务成功率，二者不能替代。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-它能支持给定 scaffold 下 multi-source analytical agent 的 end-to-end 能力，但任务广并不等于能做 component attribution；planning、retrieval、multimodal perception、tool execution 与 backbone 都可能造成差异。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 公平比较契约
+EX 对选择答案评分，RS 对报告的多个质量维度评分，TOS 衡量工具与参考执行结构的一致性；SR 指工具调用执行成功率，不是端到端任务通过率。技术报告给出 Gemini-3-Flash-preview 裁判，温度 0、最多 500 输出 token。代理本身没有完整统一的步数或 token 上限，数据构造模型的限制不能冒充评测预算。
 
-应固定可访问 source、model、toolset、agent scaffold、latency/token budget 与 evaluator，并把 deterministic choice 与 rubric report 分开；否则更昂贵的 scaffold 可以仅靠更多探索取得优势。
+[来源](https://arxiv.org/pdf/2509.02473v3)
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## GPT-5固定的选定工作流结果，v3 Table6
 
-task-local data 仍避开 enterprise longitudinal change、permission、write、collaboration 与 semantic definition 演化；report judge 也带来 evaluator dependence。
+v3，固定 GPT-5；EX 对应 1,339 道选择题，RS 对应 668 份报告，TOS 为工具／结构分数；并非等 token 预算；Cost 是报告的资源结果。
 
-## 下一步最有判别力的验证
+| 模型／工作流 | RS（0–1） | EX（0–1） | TOS（0–1） | 报告的 token 成本 |
+| --- | --- | --- | --- | --- |
+| GPT-5／反思 | 0.418 | 0.628 | 0.331 | 12331 |
+| GPT-5／规划 | 0.409 | 0.610 | 0.412 | 4430 |
+| GPT-5／直接工具调用 | 0.450 | 0.536 | 0.392 | 2587 |
 
-为同一 analytical question 构造 single-source / heterogeneous paired version，再对 source routing 做 intervention，量化真正来自 cross-source integration 的难度，而不是泛化的 reasoning difficulty。
+事实位置：主文第 4.3、5.1、5.3 节与表 6，PDF 第 8 页；技术报告第 1、6、9 节 · [来源](https://arxiv.org/pdf/2509.02473v3)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## 报告评分的一致性样本，v3 Table10
 
-## 研究决策卡
+跨类型抽样 200 题、三个独立专家；报告子集数未披露；一致性系数不是任务正确率。
 
-### 什么时候值得用
+| 对照 | Krippendorff α | ICC(A,1) | Kendall τ-b |
+| --- | --- | --- | --- |
+| 报告：人工—人工 | 0.81 | 0.84 | 0.95 |
+| 报告：人工—LLM | 0.76 | 0.79 | 0.92 |
 
-适合研究跨结构化、文档和多模态来源的分析工作流。它把数据获取、工具使用和报告放在一起，但异构任务的统一总分容易掩盖失败位置；应同时保留正确性、报告质量与资源成本。
+事实位置：主文第 5.5 节与表 10，PDF 第 9 页；逐维度说明见技术报告第 5 节 · [来源](https://arxiv.org/pdf/2509.02473v3)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-示意任务：分析请求需要同时查看表格、文档和媒体材料，系统规划访问顺序并形成结论。缺少一类来源可能导致片面报告；报告写得完整，也不保证支撑结论的计算和证据都正确。
+固定 GPT-5 后，反思、规划和直接工具调用在质量与成本上各有取舍。报告裁判一致性来自总计 200 个跨类型抽样任务，报告子集的确切数量未给出；这不是全体报告的保证。工具参考图可能漏掉合法替代路径。
 
-### 最有判别力的实验
+本文采用 2026 年 8 月 15 日 v3，不应替代 2025 年首发的历史成绩。技术报告是本次读取的官方补充，评分器设置应随代码版本固定。
 
-固定工具与骨干，按来源组合和任务类型拆分，并用正确来源集合给定条件定位发现瓶颈。把选择题、报告评分和轨迹指标分别展示，计入多模态解析成本，避免通过更昂贵的输入处理获得不透明优势。
+固定模型、预算及模态输入，分别消融规划与反思，对替代工具路径进行盲审，并同时报告答案、报告、工具选择和运行失败。
 
-### 建议搭配
-
-[dataspace](dataspace.md) · [kramabench](kramabench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`single-source analytics → heterogeneous evidence workflows → multi-source data-agent orchestration`
-
-它把 data-agent 的评测对象从 query execution 扩成了 evidence orchestration。
+[来源](https://arxiv.org/pdf/2509.02473v3)
+<!-- EVIDENCE:limitations:END -->

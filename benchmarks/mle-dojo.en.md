@@ -1,4 +1,4 @@
-# MLE-Dojo
+# MLE-Dojo: iterative ML with score feedback
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2025-05-12<br>
@@ -6,60 +6,57 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-## What it actually measures
+[中文](mle-dojo.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-MLE-Dojo measures an **interactive ML-engineering trajectory**, not only the final submission. In a Gym-style environment, the agent repeatedly reads the task, executes code, observes errors and HumanRank feedback, changes the experiment, and submits again. The protocol therefore exposes whether each step moves the data/model/experiment state in a useful direction.
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What changed relative to predecessors
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-MLE-bench mostly compresses autonomous ML engineering into a terminal competition submission. MLE-Dojo converts 200+ tasks into a repeatable training/evaluation environment with roughly **150 train and 50 evaluation tasks**. Its main measurement advance is trajectory-level observability: failure can be localized to coding, experiment choice, feedback use, or stopping rather than inferred only from the final score.
+Read all substantive text of the 36-page v1 and Appendices A–I, including the complete task inventory, metric definitions, prompts, examples and both agent integrations.
 
-## Decisive evidence
+[arXiv 2505.07782v1 · 2025-05-12](https://arxiv.org/pdf/2505.07782v1)
+<!-- EVIDENCE:reading:END -->
 
-Under a shared harness, models are compared across four task classes with HumanRank, stepwise progress, and error decomposition. The useful evidence is therefore not one leaderboard position but the ability to compare **whether an agent improves after receiving feedback** and where the improvement loop breaks.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## What the score supports
+MLE-Dojo exposes competition-score feedback in an iterative environment. HumanRank averages relative public/private leaderboard positions; it is not task success. AUP summarizes a cross-task performance profile, not improvement over successive actions.
 
-Results support the capability of a model + scaffold under **visible real-score feedback, a bounded step budget, and best-of-two evaluation**. They are not directly comparable to hidden-score MLE-bench results and do not isolate the base model, because scaffold design, feedback exposure, and search budget are load-bearing conditions.
+<!-- EDITORIAL-METHOD:START -->
+The environment organizes two hundred competitions into resettable tasks where agents submit predictions, receive score feedback and revise them, supporting evaluation and future policy training. An illustrative loop reads data, trains a baseline, submits, uses leaderboard-derived feedback to adjust features and selects a final version. This measures feedback-conditioned optimization, unlike a one-shot submission without final-test scores. HumanRank is relative historical leaderboard position, not a fraction of completed tasks or independently tested experts surpassed.
 
-## Fair comparison contract
+Editorial placement: MLE-bench is the direct competition-delivery reference; MLE-Dojo adds iterative rewards and a train/evaluation task split. Turning evaluation into a potential learning environment is meaningful, but an interface for training is not evidence of demonstrated trained-policy transfer.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-Task version, visible feedback, step budget, best-of-n policy, hardware, executable tools, code scaffold, recovery rules, and HumanRank computation should be matched. Whether real score feedback is visible is a first-order protocol variable: an agent that repeatedly tunes against a score signal and a blind-submission agent are solving different evaluation problems.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## How to use it in research
+Main results use MLE Agent, the better of two runs, at most 15 steps and 12 hours, with a 32 GB GPU-memory limit, 50k input tokens and 8,192 output tokens. The corpus has 150 training and 50 evaluation tasks.
+<!-- EVIDENCE:setup:END -->
 
-For work on planning, debugging, or self-improvement in data/ML agents, MLE-Dojo is more diagnostic than a terminal Kaggle score. Mechanism ablations can remove score feedback, cap retries, fix the scaffold, or disable history/memory and then compare both stepwise progress and final HumanRank, separating orchestration gains from model capability.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## Next discriminating validation
+V1 Table 2; same MLE Agent and best-of-two feedback protocol. HumanRank is a mean leaderboard percentile, higher is better.
 
-The benchmark still does not cover problem formulation, data acquisition, metric design, repair of messy research repositories, or methodological novelty. A key external-validity question is feedback overfitting: does the agent merely hill-climb against repeated task-specific scores, or learn an ML-engineering policy that transfers to genuinely held-out task families?
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Gemini-2.5-Pro · Tabular | Tabular; 10 evaluation tasks | Mean HumanRank (%) | 42.64% | exp-3-25; shared harness | Table 2, p. 9; Table 4, pp. 25–26 |
+| DeepSeek-r1 · Tabular | Tabular; 10 evaluation tasks | Mean HumanRank (%) | 38.13% | Shared harness | Table 2, p. 9; Table 4, pp. 25–26 |
+| Gemini-2.5-Pro · CV | CV; 10 evaluation tasks | Mean HumanRank (%) | 42.83% | exp-3-25; shared harness | Table 2, p. 9; Table 4, p. 25 |
+| o3-mini · CV | CV; 10 evaluation tasks | Mean HumanRank (%) | 35.02% | 2025-01-31; shared harness | Table 2, p. 9; Table 4, p. 25 |
 
-<!-- RESEARCH-DECISION:START -->
+Fact source: [Table 2, p. 9; Table 4, pp. 25–26; Table 2, p. 9; Table 4, p. 25](https://arxiv.org/pdf/2505.07782v1)
+<!-- EVIDENCE:results:END -->
 
-## Research decision card
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-### When to use it
+The split enables future training experiments; the paper does not demonstrate learned-policy transfer. Its MLE-Lite count is inconsistent: a footnote says 22, but the evaluation inventory lists 21. The selected Tabular/CV subsets each have ten tasks. AUP’s formula/reporting discrepancy makes exact AUP comparisons unsafe without clarification.
 
-Use MLE-Dojo for ML-engineering trajectories and training with iterative score feedback. The closer that feedback is to the final target, the more important feedback-overfitting controls become. It does not share the information conditions of terminal-only hidden evaluation.
-
-### What a concrete task looks like
-
-Illustrative task: an agent revises a solution, receives a score, and continues exploring before choosing a submission. The process exposes learning signals but can encourage adaptation to a fixed scorer rather than transferable modeling experience.
-
-### Most discriminating experiment
-
-Compare immediate, delayed, and independent-validation feedback under equal budgets with a fixed hidden final set. Separate training tasks from evaluation competitions and report best-attempt and first-attempt results separately so best-of-k and feedback access do not jointly inflate gains.
-
-### Pair with
-
-[mle-bench](mle-bench.en.md) · [dsgym](dsgym.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-After MLE-bench, MLE-Dojo moves evaluation from terminal scoring to a trainable interactive trajectory; `map_delta=reinforces`. Together with DeltaML and AI4AI, it pushes Data Agent evaluation from “submit an artifact” toward the complete research/engineering loop.
-
-Primary: https://arxiv.org/abs/2505.07782
+<!-- EDITORIAL-NEXT:START -->
+Next, compare no-score, public-validation-only and full-feedback conditions on identical tasks with matched steps/hardware and an independent final holdout. Replace oracle best-of-two reporting with a prespecified selection rule to separate feedback overfitting from transferable improvement.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

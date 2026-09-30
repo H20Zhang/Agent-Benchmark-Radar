@@ -1,4 +1,4 @@
-# InsightBench: from answering queries to discovering business insights
+# InsightBench: insight discovery and coverage in multi-step business analysis
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2024-07<br>
@@ -6,64 +6,60 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](insightbench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](insightbench.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2407.06423) · [Code](https://github.com/ServiceNow/insight-bench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-InsightBench evaluates **end-to-end business analytics**: formulate useful questions, run analyses, interpret results, synthesize insights, and propose actionable next steps. It contains 100 datasets representing business use cases such as finance and incident management, each with curated planted insights.
+Read all 33 pages of v4 and Appendices A–D, including all ten prompt templates; checked Table 1.
 
-## What changed relative to prior evaluation
+[arXiv 2407.06423v4 · 2025-02-27](https://arxiv.org/pdf/2407.06423v4)
+<!-- EVIDENCE:reading:END -->
 
-Most data-analysis benchmarks hand the model a precise query. InsightBench moves agency upstream: the agent must decide what to investigate and communicate a coherent set of findings, not merely compute a requested statistic.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Decisive evidence
+InsightBench’s 100 synthetic business datasets use ServiceNow-inspired schemas and contain 475 planted reference insights. AgentPoirot inspects schemas, develops three root questions with four follow-ups each, and summarizes up to fifteen insights. Python and custom cba tools support analysis and plotting. Controls include a modified iterative Pandas Agent and the same AgentPoirot framework with a generic goal.
 
-Because open-ended insight generation lacks one deterministic answer, the benchmark introduces a two-way LLaMA-3-based evaluator and extensive dataset quality assurance. AgentPoirot, the proposed end-to-end baseline, outperforms approaches such as Pandas Agent that focus on resolving single queries.
+[Source](https://arxiv.org/pdf/2407.06423v4)
 
-## What the score supports
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: fixed-question data QA specifies the target answer; InsightBench lets agents propose analyses around a business objective. It adds exploration and insight coverage. Soft matching to reference insights does not establish causal discovery, business value or exhaustive annotation. DDR-Bench offers another hidden-fact-coverage reference.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-The benchmark supports discovering benchmark-authored business insights and packaging them into analysis. It is weaker evidence for genuinely novel or decision-useful discovery because the planted-insight set defines what counts as relevant and evaluator judgments mediate credit.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Fair comparison contract
+Experiments use temperature 0 and report means and standard deviations across five seeds. LLaMA-3-70B selects the best matching prediction for each reference insight and separately grades summaries. This is reference-based soft similarity, not bidirectional precision/recall or business impact. Judge prompts use 1–10 while tables report normalized soft scores. Matched token or wall-clock caps are not given.
 
-Fix datasets, agent starting prompt, toolset, exploration budget, evaluator model/version, and report format. Report planted-insight coverage separately from presentation quality; otherwise fluent summaries can obscure missed evidence.
+[Source](https://arxiv.org/pdf/2407.06423v4)
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Selected GPT-4o controls, Table 1
 
-Real business insight depends on stakeholder objectives, causal validity, opportunity cost, and whether a recommendation changes a decision. A planted insight can be statistically recoverable yet economically unimportant.
+100 datasets and 475 reference insights; GPT-4o; mean ± standard deviation across five seeds, not confidence intervals; AgentPoirot produces up to fifteen insights; LLaMA-3-70B judge; no matched token/time cap.
 
-## Next discriminating validation
+| Agent / condition | Insight LLaMA-3-Eval (mean±SD) | Summary LLaMA-3-Eval (mean±SD) |
+| --- | --- | --- |
+| Pandas Agent / GPT-4o | 0.54±0.01 | 0.40±0.04 |
+| AgentPoirot / GPT-4o | 0.60±0.03 | 0.44±0.03 |
+| AgentPoirot / GPT-4o / Generic goal | 0.40±0.03 | 0.33±0.12 |
 
-Add blinded domain-expert scoring of unseen insights and downstream decision tasks. The key test is whether an agent finds something worth acting on, not only whether it rediscovers what benchmark designers planted.
+Source location: §2.2,§3.1–3.2, Table 1 PDFp8; AppendixD Prompts1–10 · [Source](https://arxiv.org/pdf/2407.06423v4)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-## Research decision card
+Specific goals outperform generic ones, but one metric’s advantage does not extend to every metric: on GPT-4o insight ROUGE-1, Pandas Agent scores 0.35 and AgentPoirot 0.32. Synthetic trends and reference coverage limit generalization to open business discovery.
 
-### When to use it
+Hardware descriptions conflict: one section gives four A100s while reproducibility gives two 80 GB A100s; no uniform configuration is inferred.
 
-Use InsightBench for autonomous question formulation and insight extraction rather than only answering specified queries. Planted insights provide checkable targets, but recovering them differs from discovering real business value. Persuasiveness alone is not a measure of recommendation quality.
+Fix insight counts and compute, add no-planted-trend data and previously unknown trends, and blind-review evidence, correctness and value. Separate reference coverage from false-discovery rates.
 
-### What a concrete task looks like
-
-Illustrative task: an agent receives business data, chooses changes worth examining, explores them, and recommends action. Finding an association does not provide evidence for causation; moving from an observation to an intervention requires additional justification.
-
-### Most discriminating experiment
-
-Measure insight coverage, factual accuracy, and actionable recommendations separately, using data without planted patterns to detect spurious discovery. Fix analysis budgets and compare supplied questions with autonomous question formulation to isolate goal selection from execution.
-
-### Pair with
-
-[ddr-bench](ddr-bench.en.md) · [causalds](causalds.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`answer a data query → discover a set of insights → decision-oriented business analysis`
-
-InsightBench moves data agents from execution toward analytical agenda setting.
+[Source](https://arxiv.org/pdf/2407.06423v4)
+<!-- EVIDENCE:limitations:END -->

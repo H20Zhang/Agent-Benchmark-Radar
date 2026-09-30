@@ -1,4 +1,4 @@
-# The Commercial Tax：RAG / deployment validity
+# The Commercial Tax：检索成绩的许可与成本条件
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-17<br>
@@ -6,60 +6,93 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](commercial-tax.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](commercial-tax.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2608.16096) · [代码](https://github.com/Toryx-AI/commercial-tax-multihop-retrieval) · [复现实验](https://doi.org/10.5281/zenodo.21972866)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-把 raw retrieval number 重新绑定到 license、query format、index construction 与 recurring cost。
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-## 它接在什么之后
+23页正文第1–7节、利益冲突及附录A–E全部阅读，包含统计推断、完整面板、复测、语料规模和回答提示；未复现或独立核验当前许可证与价目。
 
-前一代评价通常把该问题压成较短的最终分数或单一 proxy。这个评测把 predecessor critique 变成 capability × environment × protocol 的显式差异，并保留可执行或可复核资产。
+[arXiv v1, 2026-08-17](https://arxiv.org/pdf/2608.16096v1)
+<!-- EVIDENCE:reading:END -->
 
-## 实际怎样评测
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-**问题：** 一个 benchmark embedding score 能否在许可、格式与成本约束下迁移到生产？
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-**测量对象：** 把原始 embedder 分数绑定到许可、query format、索引构造与部署成本的检索复现性审计。
+该审计沿用MuSiQue/HippoRAG-2的固定检索协议，增加许可、格式与成本条件，而非新增推理题型。它说明同一召回数只有绑定部署条件才可比较，但没有测完整多步RAG系统的净效用。
+<!-- EVIDENCE:placement:END -->
 
-**规模与协议：** Thirteen embedders on the same 11,656-passage, 1,000-question retrieval floor. 协议包括 exact-cosine-search, paired-bootstrap, license-provenance, separate-construction-query-cost。
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-## 分数能说明什么
+这不是新问答题集，而是对MuSiQue/HippoRAG-2固定协议的检索与披露审计。1000道已发布开发题共享11656段Wikipedia材料，每段统一标题加正文，13个嵌入模型做精确余弦穷举，禁用查询分解、改写、重排和图增强。Recall@k逐题计算找回标准支持段落的比例，再平均，不是找齐整条链的成功率。每题成对bootstrap十万次估计差值区间；面板多重比较用Holm，另给领先模型参考的同时区间。文献披露审计为有目的滚雪球样本：三篇依赖NV-Embed-v2的系统加KET-RAG，成本再加GraphRAG；其缺失计数不能外推整个领域。
+<!-- EVIDENCE:method:END -->
 
-13 embedders 使用 paired bootstrap、license provenance 与 separated construction/query cost，显示接近的 raw recall 不等于相同部署含义。 它支持的是该环境、harness、model/tool/resource configuration 下的 system-level evidence；除非其他变量匹配，否则不能把榜单差异归因给单一组件。
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-## 最主要的混杂因素
+NV-Embed-v2选四种查询指令中最好者，Qwen也扫格式，Nemotron-8B和API各单配置；区间没有涵盖不等调参选择偏差。各API使用其查询/文档非对称模式，BGE-M3仅稠密模式。精确检索排除了ANN损失，但也不等于生产召回。成本回答器固定gpt-4o-mini，温度0、最多32输出token、每题一次，接前5或10段并要求短答、无证据时猜测；表5只有12模型，纠正索引后未重跑NV回答。价格为作者2026-07-21所用历史费率，美元成本不是当前报价。构建和嵌入按语料量外推，回答按查询量外推；未测所有审计系统的查询时检索LLM成本。
+<!-- EVIDENCE:setup:END -->
 
-uneven format tuning、hosted drift 与 single corpus 限制了跨模型、跨系统和长期可迁移性。 关键混杂包括 uneven-query-format-search, hosted-endpoint-drift, single-corpus。
+<!-- EVIDENCE:result-1:START -->
+## 同协议召回与成对不确定性
 
-## 还没有覆盖什么
+1000题、11656段、精确余弦；Recall为逐题标准段落召回均值×100。差值为模型减NV、单位百分点，十万次成对bootstrap；Nemotron p=0.69，Gemini主比较p=0.001未校正。不能用边际区间重叠代替成对检验。
 
-不均衡的 query-format 调优、会漂移的托管端点与单一主语料，使结论仅适用于原始 exact-search retrieval。
+| 嵌入模型 | Recall@5（%） | Recall@10（%） | 相对NV的Recall@5差（点） | 成对95%区间 |
+|---|---|---|---|---|
+| NV-Embed-v2 | 69.55 | 78.12 | 0 | 参考项 |
+| Nemotron-3-Embed-8B | 69.79 | 77.54 | 0.24 | [-0.94, +1.43] |
+| Gemini embedding-001 | 67.24 | 76.35 | -2.31 | [-3.71, -0.91] |
 
-## 放进演化图怎么看
+事实来源：表 1; 节 4.2–4.3 · [论文](https://arxiv.org/pdf/2608.16096v1)
+<!-- EVIDENCE:result-1:END -->
 
-`map_delta=reinforces`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+<!-- EVIDENCE:result-2:START -->
+## 语料格式的配对影响
 
-<!-- RESEARCH-DECISION:START -->
+同1000题与查询配置；Recall单位%，格式差为百分点；次要分析未单独校正。增益和匹配格式重跑漂移是不同量，例如OpenAI重跑漂移−0.54点。
 
-## 研究决策卡
+| 嵌入模型 | 标题加正文Recall@5 | 仅正文Recall@5 | 格式增益（点） | 成对95%区间 |
+|---|---|---|---|---|
+| NV-Embed-v2 | 69.55 | 67.09 | 2.46 | [1.59, 3.35] |
+| Nemotron-3-Embed-8B | 69.79 | 67.25 | 2.54 | [1.72, 3.38] |
+| text-embedding-3-large | 59.48 | 58.69 | 0.79 | [-0.11, +1.71] |
 
-### 什么时候值得用
+事实来源：附录 D 表 9–10 · [论文](https://arxiv.org/pdf/2608.16096v1)
+<!-- EVIDENCE:result-2:END -->
 
-适合把嵌入检索分数放回许可、查询格式与部署成本的实际约束中理解。精确检索条件下的原始模型比较有其价值，但单语料和不均等调参不能直接给出所有生产场景的模型排名。
+<!-- EVIDENCE:result-3:START -->
+## 构建情景与回答成本应分开
 
-### 一个具体任务长什么样
+前两行由5.64MB语料第三方报告2.30/24.94美元按比例外推，1TB=1048576MB，非实测；后两行是实际token用量乘历史batch费率，不含检索基础设施与模型服务费用。两类不可直接相除成为通用成本倍数。
 
-示意任务：多个嵌入模型在相同语料上建立索引，使用统一相似度搜索回答查询。模型质量之外，文档编码成本、在线查询成本和许可适用范围，都可能改变实际选型。
+| 条件 | 美元金额 | 分母与性质 |
+|---|---|---|
+| GraphRAG低成本构建 | 428000 | 每一二进制TB；线性外推情景 |
+| GraphRAG高性能构建 | 4637000 | 每一二进制TB；线性外推情景 |
+| Nemotron-8B检索，k=5 | 0.058 | 每1000条gpt-4o-mini回答；batch费率 |
+| Nemotron-8B检索，k=10 | 0.112 | 每1000条gpt-4o-mini回答；batch费率 |
 
-### 最有判别力的实验
+事实来源：表 3与5; 附录 E · [论文](https://arxiv.org/pdf/2608.16096v1)
+<!-- EVIDENCE:result-3:END -->
 
-为各模型提供相同查询格式调参预算，冻结版本与索引，再分别报告构建和查询成本。补充第二个分布不同的语料及近似检索条件，检查原始精确检索排名在实际延迟约束下是否保持。
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-### 建议搭配
+Nemotron-8B与NV的Recall@5差为+0.24点，95%区间[-0.94,+1.43]，p=0.69；这表示本实验未分开二者，不能证明等价或“商用税为零”。约1.7点的最小可检测差及±0.5点等价检验失败是关键限定。2Wiki试点的Gemini与NV差仅−0.12点且不显著，表明此前MuSiQue的2.31点差不普适。自托管的0美元/token仅指无供应商按token收费，不是零算力、电力、人工或总拥有成本；百万美元图构建数是小语料线性情景外推，不是实测生产账单。
+<!-- EVIDENCE:interpretation:END -->
 
-[beir](beir.md) · [bright](bright.md)
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+不等格式搜索、单主语料、托管漂移及选择性厂商面板限制排名外推；2Wiki仅三模型试点。bootstrap只描述题目重采样，不覆盖部署域与调参选择。许可证结论归属论文所查模型卡，正式部署需重新核验具体版本及条款；不能根据训练数据推导普遍法律结论。成本缺电力、运维、人工和各系统查询时检索推理，32-token短答也不代表深度研究报告。GraphRAG跨模型token费率重建与二进制/十进制语料单位须分清。下一步用独立调参集、多个真实领域、固定模型版本和ANN实测，联合报告证据召回、回答质量及完整成本。
 
-<!-- RESEARCH-DECISION:END -->
+附录D开头称所有模型都有仅正文实验，但表9及局限明确三种缓存模型没有，完整格式消融只有10个。主比较未外部预注册，内部7月18/22日均晚于模型7月16日发布，不能说在模型存在前已确定。摘要/引言称厂商中立，方法承认13个中5个NVIDIA而非中立。回答成本实际12行，非全部13个。要求无证据时猜测不能保证回答F1只反映证据支持，参数知识仍可能贡献。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[beir](beir.md) · [bright](bright.md)

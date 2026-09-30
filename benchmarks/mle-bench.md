@@ -1,4 +1,4 @@
-# MLE-bench
+# MLE-bench：竞赛预测交付与历史奖牌阈值
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2024-10-09 · 论文 v1<br>
@@ -7,60 +7,57 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](mle-bench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-MLE-bench 测的是 **从竞赛描述和原始数据出发，独立完成端到端 machine-learning engineering 并交付可评分预测文件**的能力。agent 需要理解任务、检查数据、写代码、训练/验证模型、迭代实验并提交结果；最终用重建测试集和历史 private-leaderboard 门槛判断是否达到 bronze / silver / gold 等 human-relative contract。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-MLAgentBench 只有约 13 个任务，而且不少场景带有 baseline 或更强的起始结构。MLE-bench 扩到 **75 个 from-scratch competition**，并用真实竞赛历史分布定义 medal threshold，因此把 Data Agent 的测量对象从“能否完成一个研究脚本”推进到更接近真实 ML competition 的完整工程过程。
+完整阅读 27 页 v1 的实质正文与附录 A.1–A.8，包括完整竞赛划分清单、框架配置及混淆任务示例。
 
-## 决定性证据
+[arXiv 2410.07095v1 · 2024-10-09](https://arxiv.org/pdf/2410.07095v1)
+<!-- EVIDENCE:reading:END -->
 
-同一个 GPT-4o 在 MLAB、OpenHands、AIDE scaffold 下的 **Any Medal 分别只有 0.8%、4.4%、8.7%**；同时 pass@6 明显高于 pass@1。这个结果最重要的含义不是某个 scaffold 排第一，而是最终能力对 scaffold 与 retry budget 高度敏感：同一 backbone 在不同 orchestration 下可以有数量级差异。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 这个分数支持什么判断
+MLE-bench 用历史私有排行榜奖牌阈值评测最终预测文件。提交检查器只反馈格式是否有效，不反馈测试成绩。AIDE 搜索候选方案，即使生成模型不同，也使用 GPT-4o 提供反馈。
 
-MLE-bench 的 headline score 测的是 **model + scaffold + retry + compute/resource system**，不是纯基础模型能力。尤其当 best-of-n、运行时长、GPU、工具、prompt assistance 或代码模板变化时，medal rate 的变化不能直接归因于 reasoning 或 coding capability。
+<!-- EDITORIAL-METHOD:START -->
+该基准重新打包 75 场 Kaggle 竞赛，让代理读取描述和训练数据、进行本地实验并输出 submission 文件，再用隐藏评测和原竞赛奖牌线判断结果。AIDE 在候选代码树中调试、扩展及改善方案；OpenHands 则按交互式软件工作流操作。示意任务是根据训练标签构建预测器、在本地验证集选方案、最后生成与测试行对齐的预测。验证器只检查提交格式，所以代理不能借它反复查询隐藏分数；历史网页知识与公开方案仍可能影响结果。
 
-## 公平比较条件
+编辑比较：MLAgentBench 侧重相对给定基线的提升，MLE-bench 转向完整竞赛交付及历史奖牌档位；MLE-Dojo 又显式提供迭代分数反馈。这里要区分无隐藏分数反馈的最终交付与可反复看分的优化环境。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-公平比较至少要对齐 competition version、数据访问、scaffold、工具接口、最大运行时长、GPU/CPU 资源、retry/best-of-n、是否允许外部搜索、prompt assistance 和最终 submission selection。官方后续暂停 leaderboard 处理公平性与版本问题，本身就说明 protocol drift 是 load-bearing variable，而不是维护细节。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 研究上怎么用
+每次运行允许 24 小时，配置一张 24 GB 显存的 A10、36 个 vCPU 和 440 GB 宿主机内存。OpenHands 子容器额度为 100 GiB。正文规定 AIDE 的 500 个节点，附录配置却列出 2,000 步，两者关系未明确。
+<!-- EVIDENCE:setup:END -->
 
-MLE-bench 更适合评估 **autonomous ML engineering system**，而不是做 foundation-model leaderboard。如果研究想证明 planning、memory、multi-agent 或 search 有价值，必须在相同 backbone、相同工具和相同 compute budget 下做 matched ablation，否则 package-level gain 无法归因。最好同时报告 pass@1、pass@k、资源消耗以及失败类型。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 下一步最有价值的验证
+v1；75 项竞赛。Any Medal 为至少达到铜牌的运行占比，并跨种子平均；报告均值 ± SEM。
 
-它仍没有覆盖问题定义、数据/指标设计、杂乱研究仓库、方法新颖性与人类协作。另一个关键缺口是 cost-normalized performance：如果一个系统靠更多 retry 和更多 GPU 获得 medal，研究者需要知道每单位 token / wall-clock / compute 的成功率是否真正更高。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| o1-preview + AIDE | 75 项竞赛 × 16 个种子 | Any Medal（%） | 16.9 ± 1.1% | 24 h；GPT-4o 反馈 | 表 2, 第 6 页 |
+| GPT-4o + AIDE | 75 项竞赛 × 36 个种子 | Any Medal（%） | 8.7 ± 0.5% | 2024-08-06；24 h | 表 2, 第 6 页 |
+| GPT-4o + OpenHands | 75 项竞赛 × 3 个种子 | Any Medal（%） | 4.4 ± 1.4% | 2024-08-06；24 h；100 GiB | 表 2, 第 6 页; A.6.2, 第 18 页 |
+| GPT-4o + AIDE · pass@6 | 75 项竞赛；由 36 个种子估计 | 任一次成功的覆盖率（%） | 17.0% | 6 次独立尝试 × 24 h | 第 3.2 节, 第 6 页; 图 3, 第 7 页 |
 
-## 谱系位置
+事实来源：[表 2, 第 6 页; 表 2, 第 6 页; A.6.2, 第 18 页; 第 3.2 节, 第 6 页; 图 3, 第 7 页](https://arxiv.org/pdf/2410.07095v1)
+<!-- EVIDENCE:results:END -->
 
-MLE-bench 补齐 Data Agent 的自主 ML engineering 分支：`MLAgentBench → MLE-bench → MLE-Dojo → DeltaML / AI4AI`；`map_delta=splits`。它建立了大规模 terminal outcome coordinate，后续工作再逐步把 trajectory、研究过程和验证环纳入评测。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-Primary: https://arxiv.org/abs/2410.07095
+奖牌率包含失败运行；SEM 描述种子间变异。pass@6 表示任一次成功的覆盖率，不是经过验证的提交选择策略。重建留出集与后来的方法，使历史人类对照更复杂。不同框架和内存额度也不支持单组件因果归因。
 
-<!-- RESEARCH-DECISION:START -->
-
-## 研究决策卡
-
-### 什么时候值得用
-
-适合评价从数据到有效竞赛提交的端到端机器学习工程。奖牌阈值是历史人类参照，不是同期、等预算的人机对照；排行榜提交次数、计算资源和智能体框架都可能改变结论。
-
-### 一个具体任务长什么样
-
-示意任务：系统在本地重建的竞赛环境中探索数据、训练模型并提交预测，由隐藏测试标签评分。完成预测文件只是底线，模型质量、规则遵从和是否存在泄露仍需要一起审查。
-
-### 最有判别力的实验
-
-固定硬件、时间、重试次数与数据切分，分别报告有效提交率和达到质量阈值的比例。比较相同骨干下的框架，并将所有失败运行保留在统计中；历史人类成绩只作参照，不宣称等条件超越。
-
-### 建议搭配
-
-[mle-dojo](mle-dojo.md) · [deltaml-bench](deltaml-bench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+<!-- EDITORIAL-NEXT:START -->
+下一步在相同模型、硬件和预算下比较候选树搜索与线性修改，评估不依赖隐藏成绩的候选选择策略；在新竞赛或去标识版本上复验。pass@6 的覆盖优势不能替代部署时如何挑选六个结果的证据。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

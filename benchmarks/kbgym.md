@@ -1,4 +1,4 @@
-# KBGym / Training a Knowledge Base
+# KBGym：训练知识库结构并检验迁移范围
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-22<br>
@@ -6,60 +6,79 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](kbgym.en.md) · [基准库](../library/README.md)
 
-KBGym 把知识库从“预先构建好的静态索引”变成一个**可以被监督经验训练、随后冻结并独立评测的持久状态对象**。curator 在看到监督问答与 gold answer 后编辑知识库；冻结后由独立 reader 回答训练内和不同 coverage 层级的未见问题。核心问题不是单次 retrieval，而是训练阶段对知识表示的修改能否迁移到未来 query。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-HippoRAG 等结构化检索通常从完整 corpus 无监督地产生图或索引。KBGym 则显式使用 `(question, answer)` 作为训练信号，并把“这个监督信号覆盖了多少未来问题所需的 answer key”作为分析维度，因此能区分 memorizing trained questions、利用共享 key 迁移和真正超出训练覆盖的泛化。
+全文第I–VIII节、图1–4和表I–V均已阅读；所读PDF无独立附录。未复现、未进行删边因果消融或跨模型阅读器验证。
 
-## 决定性证据
+[arXiv v1, 2026-08-22](https://arxiv.org/pdf/2608.21829v1)
+<!-- EVIDENCE:reading:END -->
 
-v2 修订后的结果显示：trained-question 上约 **25% action saving 与 +0.294 F1**；未见问题按 answer-key coverage 分层后，**both-key 为 +0.176 F1，one-key 为 +0.059，neither-key 无收益**。同时只有 **27.6% corpus** 被训练过程实际覆盖。最重要的结论是收益随覆盖关系显著衰减，而不是“编辑知识库后所有问题都更好”。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 这个分数支持什么判断
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-它支持“在该 synthetic atomic-document 设置中，监督问答可以训练一个持久知识状态，并且收益与未来问题是否共享训练 answer key 强相关”。它不支持普遍的 knowledge-base improvement：低 corpus coverage、单 seed、同模型家族 curator/reader 都限制了外推。
+相较冻结库RAG和离线图索引，KBGym让监督问题驱动知识库结构更新，再冻结给同一阅读器考试。它把可迁移结构质量与重复题收益分开测量，不能将训练题效率自动视为持久通用记忆。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-比较方法时需要固定 curator/reader 模型、允许的 edit actions、训练 question 数量、冻结时点、reader action budget、document construction 与 evaluation coverage split。必须分别报告 trained、both-key、one-key、neither-key，而不能只给一个平均分掩盖 coverage dependence。
+把知识库作为可训练对象：监督题先由固定阅读器搜索/读取并提交一次答案，之后才揭示标准答案与F1；独立整理阶段允许增删改文档和链接。考试冻结库，阅读器看不到金标或写工具。KBGym生成500人的虚构关系世界，5864个原子句、初始无链接，10题类26模板；官方PhantomWiki另作外部生成器复核。索引文档仅命名键、以链接指向成员，read一次同时返回该文档与所有一跳目标全文。评测同时看答案F1、动作成本及可精确追踪的结构覆盖/链接质量。
+<!-- EVIDENCE:method:END -->
 
-## 研究上怎么用
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-KBGym 对 **self-improving representation / learned retrieval state** 很有价值，因为它第一次把“agent 从历史问答中应该怎样改变知识库”变成可测对象。对于新方法，比最终 F1 更重要的是画出 benefit vs. supervision coverage 曲线，并比较结构编辑是否比简单 cache / exemplar accumulation 提供超出共享 key 的泛化。
+标称330题划分150训练/100同模板测试/50留模板测试/30评估，但主运行实际取100训练题重复两轮。训练器与阅读器均gpt-5-mini-2025-08-07，温度0.3、low、每步最多12000输出token；前向/考试15动作，整理30动作，FIFO记忆30对。Chroma默认ONNX MiniLM搜索每页5篇，一页计一动作；link_many最多40边也仅一动作，这种工具计价是结果条件。主梯度对六种双槽模板构造四组各30题：训练原题、两键见过、仅一键、均未见。SQuAD归一化token F1，无答案LLM裁判；去重写入另有LLM防护。B2/B3只是GraphRAG/HippoRAG风格结构改造，B3不用PageRank，不能当完整原系统复现。
+<!-- EVIDENCE:setup:END -->
 
-## 下一步最有价值的验证
+<!-- EVIDENCE:result-1:START -->
+## 精度泛化与动作泛化分离
 
-当前缺口包括跨模型迁移、多 seed、自然语料与 online/prequential evaluation。真正高杠杆的问题是：当 curator 和 reader 不再共享模型家族、文档不是 synthetic atomic facts、问题分布持续变化时，训练出的知识结构是否仍然在 **neither-key** 区域产生可复现增益。
+每组30题，同阅读器与15动作上限；F1为0–1，动作比为训练库/平面库、越低越好。训练原题95%bootstrap区间[0.52,0.84]；两键/一键区间含1。未见键0.904在KBGym显著，但外部PhantomWiki不复现。
 
-## 谱系位置
+| 探针组 | 平面库F1 | 训练库F1 | 训练库动作比 |
+|---|---|---|---|
+| 训练原题 | 0.7 | 0.8 | 0.686 |
+| 两键均见过 | 0.6 | 0.767 | 0.935 |
+| 仅一键见过 | 0.767 | 0.867 | 1.032 |
+| 两键均未见 | 0.833 | 0.833 | 0.904 |
 
-KBGym 让 corpus 从静态输入变成可训练且可冻结审计的状态对象；`map_delta=early_signal`。它更接近“representation can learn from query history”的 benchmark，而不是普通 RAG retrieval leaderboard。
+事实来源：表 IV; 节 VII-B · [论文](https://arxiv.org/pdf/2608.21829v1)
+<!-- EVIDENCE:result-1:END -->
 
-Primary: https://arxiv.org/abs/2608.21829
+<!-- EVIDENCE:result-2:START -->
+## 绝对成绩与结构覆盖
 
-<!-- RESEARCH-DECISION:START -->
+120道梯度题合并，F1为0–1，动作按题平均；覆盖分母5864原始句，至少被一个作者索引直接链接。B3是词法实体中心结构适配而非原始HippoRAG-2完整算法。
 
-## 研究决策卡
+| 知识库 | 语料覆盖（%） | 每题动作 | F1 |
+|---|---|---|---|
+| 平面库 | 0 | 9.8 | 0.725 |
+| HippoRAG2风格B3 | 100 | 7.3 | 0.908 |
+| 监督训练库 | 27.6 | 8.7 | 0.817 |
 
-### 什么时候值得用
+事实来源：表 III; 节 VII-B · [论文](https://arxiv.org/pdf/2608.21829v1)
+<!-- EVIDENCE:result-2:END -->
 
-适合研究优化对象从模型参数转向可编辑知识库时，收益究竟发生在哪些覆盖范围。最关键的不是修改后总体分数提高，而是未见问题、未覆盖键和新结构上是否仍有收益；训练答案写回需要显式防泄漏。
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-### 一个具体任务长什么样
+训练原题动作比0.686且F1从0.700到0.800；未见题的精度增益可随键覆盖延伸，但两键/一键动作比分别0.935/1.032，不支持普遍效率泛化。全120题B3绝对F1为0.908、7.3动作，训练库仅0.817、8.7动作；所谓1.6倍/1.8倍是按已覆盖语料比例归一化的收益，不是绝对优于B3。去掉训练原题后动作归一化优势反成0.6倍。约3400题回本仅适用于重复已训练分布；400新题即可补全覆盖只是早期斜率外推。
+<!-- EVIDENCE:interpretation:END -->
 
-示意任务：整理者根据训练期问题与反馈编辑持久文档库，之后冻结该库，由固定读者回答测试问题。新增表征可能加速访问，也可能只把训练答案提前保存，两种机制需要不同对照。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-### 最有判别力的实验
+单种子、同族训练/阅读模型、每梯度仅30题，合成原子句不等于真实文档；官方PhantomWiki也没有离线基线和支持集诊断。一跳read可免费展开大量文本，动作节省不必等比例转化为token、延迟或金钱节省。完整实体索引覆盖100%而监督库27.6%，按覆盖归一化并未控制覆盖对象难度与边数成本，也没有证明补全覆盖后优势仍在。持续在线部署、并发维护和动态事实变化未实测。下一步固定可见token和延迟预算，做多种子及跨模型测试、删除索引边的干预，并真实训练更多新键验证覆盖外推。
 
-按问题、实体键和关系结构分别留出测试，比较原库、答案缓存、等预算结构改写与随机编辑。冻结读者，计入整理成本并测试跨读者迁移；只有覆盖外收益才支持超越答案缓存的表征改进。
+标称训练150题与主运行100题两遍须分开。图2讨论训练组初始F1为0.633，而表IV为0.700，具体运行/抽样未对齐。正文分类287份新增文档，图3–4却标284索引且把存活作者文档统称索引，区别于242个真正索引。表V总计220个可评分索引，五类行合计217，缺3个归属不明。只有训练组省动作在两基准都显著，但KBGym未见键组0.904也显著，不能绝对说任何未见题都无节省。
+<!-- EVIDENCE:limitations:END -->
 
-### 建议搭配
-
-[structmemeval](structmemeval.md) · [snapshot-compatibility-audit](snapshot-compatibility-audit.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+相关基准：[structmemeval](structmemeval.md) · [snapshot-compatibility-audit](snapshot-compatibility-audit.md)

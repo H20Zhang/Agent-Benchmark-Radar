@@ -7,78 +7,74 @@
 > Original-paper history only; later validators, hints, and task-specific prompts change comparability.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](data-agent-benchmark.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](data-agent-benchmark.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2603.20576) · [Project](https://ucbepic.github.io/DataAgentBench/) · [Code](https://github.com/ucbepic/DataAgentBench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-DAB evaluates whether agents can answer enterprise data questions when relevant information is **fragmented across multiple heterogeneous database systems**, references are inconsistent, and useful context may be buried in unstructured fields.
+Read the complete 22-page main text and Appendices A–C, including all 54 questions, system/judge prompts and failure cases; also read the current official README and its rescoring events. The externally linked full raw trajectories were not downloaded.
 
-## What changed relative to prior evaluation
+[arXiv 2603.20576v1 · 2026-03-21](https://arxiv.org/pdf/2603.20576v1)
+[Official repository documentation · 2026-09-30](https://github.com/ucbepic/DataAgentBench/blob/main/README.md)
+<!-- EVIDENCE:reading:END -->
 
-Text-to-SQL assumes one database and a known schema. DAB moves the target to integration, transformation, and analysis across PostgreSQL, MongoDB, SQLite, and DuckDB, making data-location discovery and cross-system reconciliation part of the task.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Decisive evidence
+DAB derives four challenges from enterprise interviews across six industries: multi-database integration, mismatched join keys, text extraction and domain rules. Public data plus controlled perturbations yield 54 queries across twelve datasets, nine domains and four DBMSs, with every query spanning at least two databases. The proprietary enterprise data are not released. To retain deterministic references, the authors explicitly exclude open-ended analysis and changing external APIs.
 
-DAB contains 54 queries across 12 datasets, nine domains, and four DBMSes, derived from a formative study of enterprise workloads across six industries. The paper's initial experiment reports 38% pass@1 for Gemini-3-Pro. This is a historical result under that experiment's model and protocol, not a current capability ceiling.
+[Source](https://arxiv.org/pdf/2603.20576v1)
 
-## What the score supports
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: Spider/BIRD mainly target supplied relational databases; DAB combines cross-database integration, mismatched join keys, text extraction and domain rules within queries. It adds heterogeneous access/integration. Excluding open-ended analysis means it does not replace InsightBench discovery or DSAgentBench desktop interaction.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-The benchmark is evidence for end-to-end enterprise data-question answering under a heterogeneous backend. It cannot attribute failure to semantic mapping, integration, transformation, SQL/NoSQL generation, or answer synthesis without trajectory analysis.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Fair comparison contract
+Five models run fifty trials per query, totaling 13,500 trials. A ReAct scaffold provides database listing, read-only queries, Python execution and answer submission. Trials allow 100 iterations and one hour, with 600 seconds per tool; dataset descriptions and hints are supplied, and provider-default temperature/reasoning settings are used. Tool outputs beyond 10,000 characters are stored in files with context previews. pass@1 is averaged within each dataset and then equally across twelve datasets, not micro-averaged over 54 queries or best-of-fifty. Original answer checks favor recall and can accept extra incorrect values.
 
-Fix database snapshots, credentials/access, tool interfaces, model, retry policy, and number of trials; the leaderboard asks for at least five trials per query. Report pass@1 and variance, since stochastic agents can look substantially different under best-of-n evaluation.
+[Source](https://arxiv.org/pdf/2603.20576v1)
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Selected original-paper ReAct results
 
-The suite is small and read-oriented. Production agents face permissions, writes, lineage, semantic layers, changing schemas, cost constraints, and ambiguous business definitions.
+Original v1 validators; 54 queries ×50 trials per model, equally macro-averaged over twelve datasets; hints supplied; ReAct; 100 iterations/one hour/600 seconds per tool; costs cover all 2,700 trials, not one query.
 
-## Next discriminating validation
+| Model | pass@1 (0–1) | Cost across 2,700 trials (USD) |
+| --- | --- | --- |
+| Gemini-3-Pro | 0.38 | 1355 |
+| GPT-5-mini | 0.30 | 67 |
+| GPT-5.2 | 0.25 | 283 |
 
-Annotate each query with a ground-truth integration/semantic plan and score intermediate relation resolution before final execution. That would reveal whether heterogeneous data access or business semantics is the dominant bottleneck.
+Source location: Tables 3–4, PDF p. 9; section 3.1, pp. 6–7 · [Source](https://arxiv.org/pdf/2603.20576v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- PROTOCOL-AUDIT-20260923:START -->
+<!-- EVIDENCE:result-2:START -->
+## Separate same-model system comparison with Claude-Opus-4.6
 
-## 2026-09-23 protocol audit: inspect denominators, hints, and validator versions
+Table 7; 54 queries, five trials each, dataset-macro average; same Claude-Opus-4.6; separate from the five-model main experiment; private orchestration and semantic layer vary together.
 
-Official Pass@1 first averages repeated-run pass rates per query, then within each dataset, and finally across datasets. It is **not success on at least one of five attempts**. Submissions require five runs per query and execution traces; missing, contaminated, or unsupported runs must not simply disappear from the denominator. [Official methodology and submission rules](https://github.com/ucbepic/DataAgentBench/blob/main/README.md)
+| System | pass@1 (0–1) |
+| --- | --- |
+| PromptQL | 0.51 |
+| ReAct | 0.44 |
 
-The leaderboard separates `Tuned prompt` and `Hints`. For example, the official table records Permute EQ at 0.9467 dated 2026-09-11 and Scout at 0.9062 dated 2026-09-08; both declare tuned prompts, hints, and five trials. These are conditional source snapshots, not isolated backbone effects, and should not be subtracted directly from the historical paper's 38% result.
+Source location: Section 3.4 and Table 7, PDF p. 11 · [Source](https://arxiv.org/pdf/2603.20576v1)
+<!-- EVIDENCE:result-2:END -->
 
-Validators changed materially. The official methodology records a 2026-06-12 rescore with updated validators and regenerated PATENTS references. On 2026-08-18, DEPS_DEV_V1 query 1 was corrected to accept any of 95 packages tied at fifth place rather than one package in the old reference. **A changed score can reflect repaired labels or validators rather than improved systems.** Preserve database and validator versions, complete per-query outputs, prompts, and traces before comparing results.
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-This update preserves DAB's original release date and citation snapshot. The date 2026-09-23 identifies this Radar's protocol verification, not a new benchmark release. Official submissions were not independently rerun.
+The separate PromptQL comparison uses the same Claude-Opus-4.6 model and five trials per query. Its semantic layer, private prompts and orchestration change together, so 0.44→0.51 cannot be attributed solely to shared representations. The 85% error claim concerns 1,147 sampled completed-but-wrong trajectories classified by GPT-5, excluding non-submissions and runtime errors; it is not the fraction of all failures.
 
-<!-- PROTOCOL-AUDIT-20260923:END -->
+On June 12, 2026, the authors rescored stored submissions with revised validators and regenerated PATENTS references; on August 18, DEPS_DEV_V1 accepted any valid package tied at fifth place. The v1 values above therefore describe the historical protocol, especially not current unsolvability of patents. The live board distinguishes tuned prompts, hints, missing and contaminated trials; newer high scores do not isolate a component’s causal effect.
 
-<!-- RESEARCH-DECISION:START -->
+Pin current validators, prompts, model and budget, compare no hints with fixed hints, and separately add typed text extraction or reusable data profiles. Report exact complete-answer correctness, legacy recall-oriented checks, costs and dataset-macro scores so evaluator changes are not mistaken for agent progress.
 
-## Research decision card
-
-### When to use it
-
-Use the Data Agent Benchmark for discovery, transformation, and analysis across database systems rather than single-query SQL. On a small task set, hints, tuning, repeated trials, and grader versions materially affect rankings. Treat original-paper scores as historical evidence, not current ceilings.
-
-### What a concrete task looks like
-
-Illustrative task: an analysis reads several database systems, normalizes formats, joins records, and converts semi-structured content into computable fields. Connecting to the databases is only the beginning; field semantics and result validation determine success.
-
-### Most discriminating experiment
-
-Pin data and validator versions, disclose hints and task-specific tuning, and report repeated runs using the official aggregation. Retain missing, failed, and contaminated trials in the denominator. Compare raw access, static derived representations, and online updates to distinguish representation gains from answer or query caching.
-
-### Pair with
-
-[dataspace](dataspace.en.md) · [spider-2](spider-2.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`single-database text-to-SQL → cross-database integration → enterprise data agent`
-
-DAB makes backend heterogeneity a first-class evaluation property.
+[Source](https://arxiv.org/pdf/2603.20576v1)
+<!-- EVIDENCE:limitations:END -->

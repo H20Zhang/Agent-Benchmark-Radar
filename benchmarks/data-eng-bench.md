@@ -1,4 +1,4 @@
-# data-eng-bench：Data Agent / 可执行数据工程
+# Data Engineering Benchmark：容器内可执行的数据工程任务
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-07-29<br>
@@ -6,60 +6,48 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](data-eng-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](data-eng-bench.en.md) · [主入口](../README.md)
 
-[基准仓库](https://github.com/Snowflake-Labs/data-eng-bench) · [协议修复](https://github.com/Snowflake-Labs/data-eng-bench/commit/35b83370bd9ae06d9ac8a2beb95d2544c90d88a5)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-把 code generation 推到 repository-scale dbt transformation 与 hidden row-level verification。
+已核对下述官方协议、实现配置和可获得结果；未独立复现实验，未声称完整论文阅读。
 
-## 它接在什么之后
+完整读取官方 README、提交协议、指标计算源码与所述配置，核对修复提交说明；没有逐个审计全部 103 个任务，也未找到官方论文。
 
-前一代评价通常把该问题压成较短的最终分数或单一 proxy。这个评测把 predecessor critique 变成 capability × environment × protocol 的显式差异，并保留可执行或可复核资产。
+[官方仓库文档 · a3278ad102829a6084dde086244a0ef665a8011c · 2026-09-30](https://github.com/Snowflake-Labs/data-eng-bench/blob/a3278ad102829a6084dde086244a0ef665a8011c/README.md)
 
-## 实际怎样评测
+模型结果缺口：本次未能读取官方 Harbor 成绩，固定提交内也没有模型结果行；不以任务数量或配置示例冒充实验成绩。
+<!-- EVIDENCE:reading:END -->
 
-**问题：** Agent 能否在真实项目约束下实现、执行并修复数据转换？
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-**测量对象：** 面向仓库规模 dbt 转换的可执行数据工程基准，在 DuckDB 与 Snowflake 上做隐藏行级核验。
+data-eng-bench 将代理放入容器化 dbt 项目，给出工单式需求，要求修改或创建模型、运行转换并修复问题。隐藏 pytest 验证器逐行比较已物化数据与参考结果。103 个任务共享一个合成零售仓库，既可在本地 DuckDB 上运行，也可在 Snowflake 隔离克隆库中运行；覆盖分析模型、错误修复、维度／快照和增量数据工程。
 
-**规模与协议：** 103 dbt tasks with hidden verifier coverage across DuckDB and Snowflake. 协议包括 hidden-pytest-verifiers, row-level-output-comparison, dual-backend-execution。
+[来源](https://github.com/Snowflake-Labs/data-eng-bench/blob/a3278ad102829a6084dde086244a0ef665a8011c/README.md)
 
-## 分数能说明什么
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：与 Spider 一类只交 SQL 的任务相比，Data Engineering Benchmark 以容器中的工程产物、环境约束与可执行测试为终点，更接近 DAComp 的工程侧。它增加实现与验证工作流，但当前可核验材料不足以填入模型结果，因此这里只定位协议，不推断系统排名。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-103 dbt tasks 覆盖 DuckDB/Snowflake；hidden row-level verifiers 检查产物，而 8 月修复揭示 evaluator reliability 本身也是测量条件。 它支持的是该环境、harness、model/tool/resource configuration 下的 system-level evidence；除非其他变量匹配，否则不能把榜单差异归因给单一组件。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 最主要的混杂因素
+官方提交协议要求固定数据集版本、覆盖全部任务、每题至少三次，错误和被判定违规的运行都计零。当前指标源码中，Accuracy 是成功运行数除以全部运行数；另算按任务平均的 pass@2/pass@3，不能混用。示例配置使用 Claude Code/Claude Opus 4.8/high、三次尝试和四路并发，它是可运行配置，不是已测成绩。一个实际任务配置规定代理 4,000 秒、验证器 3,000 秒、2 CPU 和 8,000 MB 内存；不能未核对全部任务就宣称是统一预算。
 
-Snowflake verifier fix without rerun 意味着修复前 leaderboard 不能直接与修复后环境比较。 关键混杂包括 backend-environment-drift, verifier-defects, missing-post-fix-rerun。
+[来源](https://github.com/Snowflake-Labs/data-eng-bench/blob/a3278ad102829a6084dde086244a0ef665a8011c/README.md)
+<!-- EVIDENCE:setup:END -->
 
-## 还没有覆盖什么
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-8 月 verifier 修复后尚无公开榜单重跑，因此更早的 Snowflake 结果需要加注限制。
+本次完整读取官方总说明、提交协议、指标计算与上述配置，但未逐个审计全部任务。未找到官方论文；链接的 Harbor 榜单本次无法读取，仓库内也没有已提交结果行，因此没有足够证据填入模型成绩或宣称修复后无人重跑。已确认的修复涉及 Snowflake 连接及清理；仅编译／解析通过不能替代端到端复验。
 
-## 放进演化图怎么看
+官方说明将一个时区敏感的 DuckDB 任务标为建议性结果。旧版 Harbor 还可能静默忽略禁用网页工具的选项；参考解法已经公开，必须验证隔离实际生效。
 
-`map_delta=early_signal`。一篇论文只是一项 signal；持久方向判断必须由绑定同一 canonical direction key 的独立记录支撑。
+固定验证器和后端版本，对同一模型做完整三次运行，分别报告运行级准确率、任务级 pass@k、环境故障和被取消成绩；对协议修复前后用相同代理重跑，并隔离公开参考答案以减少泄露。
 
-<!-- RESEARCH-DECISION:START -->
-
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究仓库级 dbt 转换的实现与修复。隐藏逐行验证比只看 SQL 编译更接近正确产物，但后端环境和验证器版本会改变成绩；修复验证器之后，旧排行榜不能自动视为已重新核验。
-
-### 一个具体任务长什么样
-
-示意任务：系统修改转换项目，使模型在目标数据库运行并产生与要求一致的行级输出。DuckDB 与 Snowflake 的方言、类型和运行环境差异，可能让同一修改在两个后端表现不同。
-
-### 最有判别力的实验
-
-固定项目、后端与隐藏验证器提交，对同一补丁跨后端重跑，区分执行失败与结果差异。验证器发生修订时重算全部被比较方法，保留原版本结果，不把环境修复收益归因给智能体。
-
-### 建议搭配
-
-[spider-2](spider-2.md) · [dacomp](dacomp.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+[来源](https://github.com/Snowflake-Labs/data-eng-bench/blob/a3278ad102829a6084dde086244a0ef665a8011c/README.md)
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# DSGym：先过滤“不看数据也能做”的 data-science benchmark
+# DSGym：统一执行环境与无数据捷径过滤
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-01-22<br>
@@ -6,64 +6,57 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](dsgym.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](dsgym.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2601.16344) · [代码](https://github.com/fannie1208/DSGym)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-DSGym 同时是标准化 **execution framework** 和经过筛选的 task suite，用 self-contained environment 评估/训练 data-science agent 的分析、prediction 与 domain-specialized workflow。
+完整阅读 37 页 v1 的实质正文与附录 A–E，包括筛选、全部竞赛清单、案例、失败定义、训练设置与完整提示词；另检查表 3–5 和图 5。
 
-## 相比此前评测多测了什么
+[arXiv 2601.16344v1 · 2026-01-22](https://arxiv.org/pdf/2601.16344v1)
+<!-- EVIDENCE:reading:END -->
 
-作者发现现有 data-science benchmark 有相当一部分任务即使不使用给定数据也能答。DSGym 显式过滤 shortcut-solvable problem，并标准化 environment interface，把 data grounding 与 cross-benchmark comparability 放到中心。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+DSGym 统一有状态 Docker/Jupyter 执行。五个模型中至少三个无需数据就能答对的任务会被剔除。SFT 使用 2,000 对合成问题与轨迹，经执行感知评审和语义多样性筛选。
 
-DSGym 清洗既有任务，并新增 DSBio 与 DSPredict，覆盖 bioinformatics 和更难的 prediction；它还支持 execution-verified trajectory synthesis。作为 training case，2,000 个生成样本训练出的 4B model 在标准化 analysis benchmark 上超过 GPT-4o。
+<!-- EDITORIAL-METHOD:START -->
+平台为数据分析与预测提供统一、持续的代码执行状态。分析题要求代理从实际文件计算答案；预测题要求建立模型并生成可评分输出。示意流程是查看数据列与分布、在 notebook 中清洗和计算、利用执行反馈修正，再提交结果。无数据过滤先让多个模型不读数据尝试答题，将易被知识或猜测解决的题剔除；合成轨迹再经执行和多样性筛选用于监督训练。这控制了一类捷径，但保留下来的题仍可能存在其他捷径。
 
-## 这个分数能证明什么
+编辑比较：相较把 DABStep 等题集分别接入不同执行器，DSGym 强调统一环境与无数据捷径审查；和 DataSciBench 的任务级分项检查相比，它也引入用合成执行轨迹训练的环节。环境统一、题目筛选与训练收益应分开归因。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-它对“agent 是否真的会在受控 environment 中 plan、implement、validate analysis”证据较强。4B training result 说明 framework 可用于训练，但不能推出小模型在 benchmark 外普遍优于更强模型。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 公平比较契约
+评测采用 CodeAct、温度 0，不启用额外工具，以允许数值容差的完全匹配计分。具体动作、时间、硬件限制、容差与重复次数未写明。SFT 训练六个 epoch，学习率为 2e-5。
+<!-- EVIDENCE:setup:END -->
 
-应固定 Docker/environment image、tool、dataset、metric implementation、agent scaffold、model 与 execution budget，保留 shortcut filter，并把 pass@k 与 average trajectory score 分开报告。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 还没有测什么
+v1 统一框架。分析准确率以实际评测任务为分母；DSBio 为 90 题，论文未明确 DABStep-hard 的实际评测数量。
 
-标准化也牺牲了一部分生产 messy reality：enterprise semantics、permission、evolving repository、collaboration 与 deployment 不是核心对象。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Kimi K2 Instruct · DSBio | DSBio；90 题 | 准确率（%） | 43.33% | Kimi-K2-Instruct-0905；T=0 | 表 3, 第 10 页 |
+| Qwen3-4B-DSGym-SFT-2k · DSBio | DSBio；90 题 | 准确率（%） | 21.11% | 一般分析 SFT；T=0 | 表 5, 第 13 页 |
+| Qwen3-4B-DSGym-SFT-2k · DABStep-hard | DABStep-hard；数量未明确 | 准确率（%） | 33.07% | 种子含 DABStep；T=0 | 表 5, 第 13 页 |
+| GPT-4o · DABStep-hard | DABStep-hard；数量未明确 | 准确率（%） | 7.41% | gpt-4o-2024-08-06；T=0 | 表 5, 第 13 页 |
 
-## 下一步最有判别力的验证
+事实来源：[表 3, 第 10 页; 表 5, 第 13 页](https://arxiv.org/pdf/2601.16344v1)
+<!-- EVIDENCE:results:END -->
 
-对每个 benchmark source 公布 shortcut filtering 前后的 performance delta，直接量化过去看似的 data-agent progress 有多少其实来自 benchmark leakage 或“不用数据也能答”。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-<!-- RESEARCH-DECISION:START -->
+训练后的 4B 模型仅在 DABStep 简单／困难子集上超过 GPT-4o，并未胜过所有分析赛道。无数据筛选不能证明没有污染。DSPredict 报告比例的分母与语料规模关系不清楚，运行预算也未明确。同领域合成任务的种子与测试独立性同样未完整说明。
 
-## 研究决策卡
-
-### 什么时候值得用
-
-适合在统一可执行接口中比较和训练数据科学智能体，尤其需要排除不看数据也能作答的捷径。接口统一减少环境差异，但重映射的来源基准仍有不同难度与语义，不能只看拼接总分。
-
-### 一个具体任务长什么样
-
-示意任务：智能体在隔离容器与有状态笔记本中访问只读数据，并在可写工作区进行分析。题目应该要求实际读取数据；仅凭题干常识或泄露答案就能完成的任务会削弱评价。
-
-### 最有判别力的实验
-
-固定容器和智能体接口，按来源数据集与分析类型报告，并重跑无数据对照。比较相同训练量下的跨任务迁移，在未见数据集和容器扩展上检查收益，避免把标准化适配当作通用能力提升。
-
-### 建议搭配
-
-[datascibench](datascibench.md) · [dsaeval](dsaeval.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`fragmented data-science benchmarks → grounded standardized gym → execution-verified agent training/evaluation`
-
-它把 benchmark validity 与 environment reproducibility 本身当成研究贡献。
+<!-- EDITORIAL-NEXT:START -->
+下一步用未参与过滤的新模型复查捷径，并跨领域划分合成种子与测试题；在相同 CodeAct 与预算下比较未训练、随机轨迹训练和筛选轨迹训练，同时报告原始与过滤后题集表现。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

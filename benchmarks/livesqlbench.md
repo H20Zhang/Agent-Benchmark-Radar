@@ -1,4 +1,4 @@
-# LiveSQLBench：在 schema 与 business-rule drift 下评估 SQL agent
+# LiveSQLBench：持续更新的跨数据库 SQL 评测
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2025-05-28<br>
@@ -6,64 +6,59 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](livesqlbench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](livesqlbench.en.md) · [主入口](../README.md)
 
-[项目页](https://livesqlbench.ai/) · [代码](https://github.com/bird-bench/livesqlbench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对下述官方协议、实现配置和可获得结果；未独立复现实验，未声称完整论文阅读。
 
-LiveSQLBench 面向 **持续演化的 industrial database**，而不是一份冻结 schema。它强调超大 schema、长 metadata/context、business-rule drift，以及 query 与 management-style interaction。
+完整读取官方项目页、根 README、Agent 和 CLI 文档，以及基线调用与配置源码；官方论文链接仍标为 Coming Soon。
 
-## 相比此前评测多测了什么
+[官方仓库文档 · e15cd221267e06fabfaf6a3d4a69308280ce9a7c · 2026-09-30](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
+<!-- EVIDENCE:reading:END -->
 
-Spider/BIRD 主要冻结 database 与 task distribution；LiveSQLBench 把 temporal change 放进 benchmark lifecycle：schema complexity 增长、business rule 改变，agent 必须读取当前 context，而不能依赖 benchmark memorization。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+LiveSQLBench 是持续发布的数据集家族。Base-Lite 包含 18 个 PostgreSQL 数据库和 270 题（180 查询、90 管理操作）；Base-Full v1 为 22 库、600 题；Large-v1 为 18 库、480 题。问题依赖数据库模式、列解释与分层业务知识。每个发布可以固定下来运行；“持续更新”不意味着同一个代理必须跨多次发布保留状态并在线适应。
 
-LiveSQLBench-Large-v1 扩展到 18 个 database、每个约 1K column、480 个任务，平均 prompt 约 84K token，并显式加入 Business Rule Drift；项目还发布 per-task DB isolation、multi-provider 的 agent framework。
+[来源](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
 
-## 这个分数能证明什么
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：Spider 和 BIRD 提供固定公开题集，LiveSQLBench 强调持续加入数据库与查询，并允许分版本观察 SQL 能力。演化坐标是测试集合的更新及时间可追踪性；这不自动等于对同一数据库模式／业务规则漂移做了受控实验，也不保证每版难度相同。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-结果支持特定 evolving snapshot 下 text-to-SQL/data-agent robustness，但不能拆开 model reasoning、schema linking 与 harness quality；live benchmark 的不同版本也必须严格 pin 住才能比较。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 公平比较契约
+查询题比较执行结果，管理题检查定制后置条件。官方 Model Base 表示直接生成 SQL；Agent 和 CLI 则允许工具探索。当前 ADK 版本每次工具调用消耗一步、默认 30 步、最终 SQL 只提交一次；历史网站 Agent I 写 20 步，应分开记录。以下只引用根 README 明示的 Base-Lite 历史模型结果，不与当前动态榜或其他发布混合。
 
-应固定 benchmark release、DB snapshot、business-rule document、SQL dialect、agent framework、model 与 execution budget。不同演化版本的分数不能假装来自同一个 static test set。
+[来源](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 官方 README 的 Base-Lite 历史结果（选取）
 
-enterprise analytics 还包括 semantic definition、permission、lineage、clarification、write safety 与 artifact delivery；超大 schema 也无法完全复刻组织内部 metadata/governance。
+README 标为 2025-05-28 的 Base-Lite Model Base 结果；270 题，PostgreSQL；通过对应测试的任务占比；费用为历史作者报告值。确切模型快照、调用预算和重复次数缺失，不能据此做公平因果比较。
 
-## 下一步最有判别力的验证
+| 模型 | 成功率（%） | 平均费用（美元／题） |
+| --- | --- | --- |
+| o3-mini | 47.78 | 0.0233 |
+| GPT-4.1 | 44.10 | 0.0336 |
 
-为 schema/business rule 更新前后构造 paired task，测 update latency：agent 多快能停止使用 obsolete semantics，同时保留不该变化的稳定知识。
+事实位置：根目录 README 的模型表现部分；官方项目页的当前模型表现讨论 · [来源](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-## 研究决策卡
+项目官网仍将论文标为 Coming Soon，本页依据已完整读取的官方协议文档，不声称读完不存在的论文。历史结果没有完整的模型快照、预算和方差，且当前代码不足以独立重建所有行。版本刷新和隐藏答案降低某些泄露风险，但不是从未污染的证明。
 
-### 什么时候值得用
+根文档与 Agent 文档的数据库数／旧注释冲突，优先采用明确发布数据。当前基线代码不能直接运行所有历史模型行，故不擅自赋予统一预算。
 
-适合研究工业规模模式、知识规则变化与数据库管理操作。持续发布有助于减少静态题集局限，但新版本改变了任务与环境；应在同一发布和轨道内比较，不能把版本间分数差直接解释为模型进步。
+固定任务、数据库、业务规则与评分器提交，在同一批任务上构造规则变化前后配对实验；分别测查询、管理后置条件和旧规则缓存失效。
 
-### 一个具体任务长什么样
-
-示意任务：智能体需要理解大型模式与分层业务知识，执行查询或管理操作，并在规则变化后调整行为。SQL语法正确不保证状态修改符合要求，管理类任务需要独立测试后置条件。
-
-### 最有判别力的实验
-
-固定数据库发布、知识库和轨道，区分模型基础能力与完整智能体设置。分别测查询等价、管理后置条件和规则变化适应，记录失败恢复与成本；旧规则缓存带来的错误应单独归类。
-
-### 建议搭配
-
-[spider-2](spider-2.md) · [warehouse-reliability-bench](warehouse-reliability-bench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`static text-to-SQL → industrial-scale schema → continuously evolving data environment`
-
-它把 benchmark freshness 本身变成了 data-agent 评测的一部分。
+[来源](https://github.com/bird-bench/livesqlbench/blob/e15cd221267e06fabfaf6a3d4a69308280ce9a7c/README.md)
+<!-- EVIDENCE:limitations:END -->

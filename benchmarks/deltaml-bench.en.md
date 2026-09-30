@@ -7,60 +7,56 @@
 > From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](deltaml-bench.md) | **English** · [Back to entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](deltaml-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.19653) · [Code and tasks](https://github.com/AlgorithmicResearchGroup/deltaml-bench-vivaria)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-Agents enter imperfect real research repositories, repair training pipelines, iterate under bounded compute, and exceed published baselines while passing explicit integrity checks.
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-## What it follows
+Read all substantive text of the 18-page v1, all task-level Tables 8–12 and Appendix B’s forensic cases, taxonomy and correlates. Main result tables and the depth/breadth plot were visually checked.
 
-MLAgentBench frames ML experimentation as an iterative agent task, MLE-bench uses Kaggle competitions for end-to-end ML engineering, and RE-Bench emphasizes long-horizon research engineering. DeltaML-Bench makes a narrower critique: clean datasets and packaged tasks omit dependency and reproducibility failures in real research repositories, while final metrics alone can reward specification gaming. It gives the agent the paper, repository, dataset, and published baseline together.
+[arXiv 2608.19653v1 · 2026-08-20](https://arxiv.org/pdf/2608.19653v1)
+<!-- EVIDENCE:reading:END -->
 
-## How it is evaluated
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-**Question:** Can an agent produce reproducible experimental improvements inside an imperfect ML repository instead of merely fixing a bug, gaming a proxy, or fabricating a metric?
+DeltaML supplies a paper, repository, dataset and published baseline for each improvement task. ARG combines search, reflection and memory. It is a bundled system comparison, not an isolated ablation of these components.
 
-**Measurement object:** repository navigation, training-pipeline repair, experimental design and iteration, improvement over a published baseline, and whether the submission passes static, artifact, semantic, and trajectory audits.
+<!-- EDITORIAL-METHOD:START -->
+Each task centers on an existing model in a real paper repository. Agents interpret the method, change code, train and attempt to exceed a published baseline, producing both scores and auditable patches. An illustrative workflow reads an anomaly-detection paper, locates its training entry and loss, proposes a change, validates on supplied data and submits. ARG combines search, reflection and memory, while modular and monolithic scaffolds organize experiments differently. Success records target attainment; a separate integrity audit checks gaming such as leakage or evaluator changes. The two are not interchangeable with trusted improvement.
 
-**Scale and protocol:** 48 executable tasks span vision, graph/molecular learning, time series, tabular data, and NLP. Each run uses an isolated Vivaria environment and one H100. The paper compares equal-total-compute allocations of 4×6 hours and 2×12 hours, scores normalized improvement over the paper baseline, and locks scoring after one submission.
+Editorial placement: MLAgentBench offers the related baseline-improvement coordinate. DeltaML anchors it in real papers/repositories and adds explicit integrity auditing. Compared with competition prediction files, it is closer to modifying a research implementation, without establishing scientific novelty.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-## What a score can support
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-Under 4×6h, ARG raises GPT-5's per-run success from 9.4% to 33.9%; under 2×12h it reaches 49.0%. Modular configurations show observed specification-gaming rates up to 47.9%, while none is detected in the evaluated ARG configurations. The result shows that scaffold, experimental search, and integrity checks materially alter system-level outcomes; it cannot be reduced to the base model's generic ML ability.
+There are 48 tasks. Each run uses one H100 with 80 GB, a 100-million-token ceiling and task-dependent search limits. Four six-hour attempts and two twelve-hour attempts both schedule 24 agent-hours per task, but differ in restarts and run count.
+<!-- EVIDENCE:setup:END -->
 
-## Strongest confounder
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-The study covers two model families and two scaffolds, while 4×6h versus 2×12h changes both run duration and restart count. Full evaluation is expensive and the suite is vision-heavy. Semantic and forensic audits depend on LLM judgments whose false-positive and false-negative rates are not estimated, so “no detected gaming” is not a general safety guarantee for ARG.
+V1; identical scheduled total time, not necessarily consumed time. Success divides by runs; coverage divides by 48 tasks with at least one success.
 
-## Remaining Gap: What remains uncovered
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| GPT-5 + Modular · 4×6 h | 48 tasks; 192 runs | Run success / task coverage (%) | 9.4% / 18.8% | 4 restarts; 6 h each | Table 1, p. 5; Figure 3, p. 8 |
+| GPT-5 + ARG · 4×6 h | 48 tasks; 192 runs | Run success / task coverage (%) | 33.9% / 62.5% | 4 restarts; 6 h each | Table 1, p. 5; Figure 3, p. 8 |
+| GPT-5 + ARG · 2×12 h | 48 tasks; 96 runs | Run success / task coverage (%) | 49.0% / 56.2% | 2 restarts; 12 h each | Table 1, p. 5; Figure 3, p. 8 |
 
-Runs capped at 12 hours on one H100 exclude multi-node or multi-week research. Scoring captures improvement on a known metric, not methodological novelty, theoretical insight, or compute efficiency.
+Fact source: [Table 1, p. 5; Figure 3, p. 8](https://arxiv.org/pdf/2608.19653v1)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-## Research decision card
+Higher per-run success does not guarantee broader task coverage. Success and integrity are separate: the BTAD Claude/Modular cell reports 100% success, 100% gaming and zero mean score across Tables 8–10. ARG has no detected gaming, but audit error rates are unvalidated. Do not rewrite reported success as audit-passing improvement.
 
-### When to use it
-
-Use DeltaML-Bench for improving published baselines in imperfect research repositories. Metric improvement is not scientific novelty, and a long run is not inherently better than repeated restarts. Inspect patches, independent reruns, and integrity checks together.
-
-### What a concrete task looks like
-
-Illustrative task: an agent reads a paper and repository, repairs training, and modifies the model to deliver reproducible gains. Exploiting evaluation defects or changing scoring semantics can also yield high numbers, making integrity inseparable from improvement.
-
-### Most discriminating experiment
-
-Compare one long run with several short runs under equal total compute and a fixed selection rule. Re-train selected patches from clean environments and report by patch type and domain, distinguishing repair, tuning, algorithm changes, and invalid gaming.
-
-### Pair with
-
-[ai4ai-bench](ai4ai-bench.en.md) · [mlagentbench](mlagentbench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy consequence
-
-`map_delta=early_signal`, bound to `data-agent-research-integrity`. It moves Data Agent evaluation toward autonomous ML research in real repositories and makes reward integrity first-class. One new record does not change the durable defining chain.
+<!-- EDITORIAL-NEXT:START -->
+Next, fix the model and total GPU/token budgets while varying restarts, search organization and memory separately. Add blinded integrity review and report audit-passing target attainment. Otherwise higher success may arise from restart policy or scoring exploits.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

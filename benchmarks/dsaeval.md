@@ -1,4 +1,4 @@
-# DSAEval：累积式、多模态 data-science project
+# DSAEval：持续会话中的多模态数据科学
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-01-20<br>
@@ -6,64 +6,57 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](dsaeval.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](dsaeval.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2601.13591) · [项目页](https://dsaeval.github.io/DSAEval/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-DSAEval 评估 **真实 data-science project**：包含 multimodal environment perception、cumulative multi-query interaction，并分别评分 reasoning、code 与 result。共有 641 个问题、285 个 structured/unstructured dataset。
+完整阅读 35 页 v3 与附录 A–K，包括验证、全部提示、完整代码／报告示例、所有评审表、完整权重扫描与错误审查。v3 评测 13 个模型，不是旧笔记中的 11 个。
 
-## 相比此前评测多测了什么
+[arXiv 2601.13591v3 · 2026-09-07](https://arxiv.org/pdf/2601.13591v3)
+<!-- EVIDENCE:reading:END -->
 
-one-shot coding task 每题都会 reset；DSAEval 让后续 query 依赖此前分析，并把 observation 从 table 扩展到 image/text data，更接近连续的数据科学工作 session。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+DSAEval 使用持久化、多问题 notebook 会话，并输出报告。分数按 0.3/0.3/0.4 综合推理、代码与结果，再平均 Claude-Haiku-4.5 和 GPT-5.1 的评审；它是量表分数，不是执行成功百分比。
 
-论文评估 11 种先进 agentic LLM：Claude-Sonnet-4.5 overall 最强，GPT-5.2 efficiency 最好，MiMo-V2-Flash cost-effectiveness 最好；multimodal perception 对 vision-related task 带来 2.04–11.30% 提升。structured/routine analysis 明显比 unstructured workload 容易。
+<!-- EDITORIAL-METHOD:START -->
+问题按数据集组织成持续 notebook 会话，前面生成的数据对象与分析可被后续问题使用；输出不只短答案，还包括推理、代码和结果报告。示意流程是先清洗数据并画图，再回答依赖前一步处理的统计问题，最后解释结论。多模态配置允许模型查看图像输出，纯文本配置只能利用对应文本信息，因此比较涉及可用观测而不只是同一答案格式。双裁判分别看推理、代码和结果，再组合评分。
 
-## 结论边界：这个分数能证明什么
+编辑比较：DS-1000 的独立片段与 DA-Code 的单任务流程是相近参照；DSAEval 新增累积式多问题上下文及图像反馈，并使用报告式评分。该坐标不能直接与二元执行成功率比较，也不等于长期跨项目记忆。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-benchmark 支持 cumulative project competence，并暴露 quality–efficiency–cost trade-off；但 model/scaffold 仍是一个组合系统，multi-dimensional grading 也可能包含 deterministic execution 之外的 evaluator assumption。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 公平比较契约
+语料包含 641 题、285 个数据集。会话最多 20 轮，每轮执行超时为一小时，提供四张 A100 80 GB。三位博士候选人使用 Gemini-3-Pro 的完整日志校准评审，并未覆盖全部 agent 风格。
+<!-- EVIDENCE:setup:END -->
 
-应固定 dataset、query order、accumulated workspace state、tool environment、model、budget 与 evaluator，并精确保留 prior-query output；如果不同系统采用不同 reset/summary 策略，累计任务本身已经变了。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 还没有测什么
+v3 双评审协议，分数范围 0–10。CV 行在同一模型下比较关闭／启用图像观察，论文未明确这些类别的样本数。
 
-真实项目会跨数周，有 stakeholder feedback、data update、version control 与 production deployment；这里的 cumulative interaction 仍是 bounded benchmark episode。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Claude-Sonnet-4.5 · 总体 | 641 个分配任务；缺失输出规则不清楚 | 平均总分（0–10） | 8.164 | 采用正文报告值；双评审 | 第 5 节, 第 7 页 |
+| MiMo-V2-Pro · 总体 | 641 个分配任务；缺失输出规则不清楚 | 平均总分（0–10） | 7.912 | 相同会话预算；双评审 | 第 5 节, 第 7 页 |
+| Qwen3-VL-30B · CV | CV 子集；配对任务数未明确 | 文本 → 多模态（0–10）；相对增益；差值的 90% CI | 4.07 → 4.53; +11.30%; [0.0, 0.9] | 10,000 次配对 bootstrap 重采样 | 表 2, 第 6 页; 第 4.1 节, 第 7 页 |
+| GPT-5-nano · CV | CV 子集；配对任务数未明确 | 文本 → 多模态（0–10）；相对增益；差值的 90% CI | 5.53 → 5.88; +6.33%; [-0.3, 0.9] | 10,000 次配对 bootstrap 重采样 | 表 2, 第 6 页; 第 4.1 节, 第 7 页 |
 
-## 下一步最有判别力的验证
+事实来源：[第 5 节, 第 7 页; 表 2, 第 6 页; 第 4.1 节, 第 7 页](https://arxiv.org/pdf/2601.13591v3)
+<!-- EVIDENCE:results:END -->
 
-在早期分析里人为注入可控错误，测后续 recovery 与 error propagation，验证 agent 是否维护可信 analytical state，而不只是累积 conversation context。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-<!-- RESEARCH-DECISION:START -->
+多模态提升是相对变化，部分配对置信区间包含零。无效输出处理未完整说明；正文 Claude 的 8.164 与附录两位评审汇总的平均值略有差别。公开来源污染与一个时间序列参考划分矛盾仍是风险；评审一致不代表真值无误。
 
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究累积多问题项目中的多模态数据科学，而不只是独立单题。前面步骤产生的状态会影响后面回答；总分下降可能来自早期错误传播，而不是后续问题自身更难。
-
-### 一个具体任务长什么样
-
-示意任务：系统在同一项目中先探索表格、图像或文本数据，再根据连续请求建模和解释结果。若早期清洗或理解错误，后续笔记本可能继续沿用错误状态，直到最终报告才暴露问题。
-
-### 最有判别力的实验
-
-比较连续自主执行与每轮给定正确前序状态，分别评推理、代码和结果。固定 GPU、笔记本环境与评价器，按模态和问题位置拆分，识别跨轮状态管理是否真正改善了后续任务。
-
-### 建议搭配
-
-[dsagentbench](dsagentbench.md) · [agenticdatabench](agenticdatabench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`one-shot data analysis → cumulative multimodal project → persistent analytical state`
-
-它把跨请求的 state continuity 变成 data-agent 的显式能力。
+<!-- EDITORIAL-NEXT:START -->
+下一步固定同一会话和预算，对图像观察、文本替代描述及会话状态重置作配对干预；用自动数值校验与独立盲审并列评分，检查多模态增益是更正分析错误还是迎合报告裁判。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

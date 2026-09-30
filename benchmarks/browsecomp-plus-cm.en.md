@@ -7,60 +7,79 @@
 > From a previously curated original-paper record, for historical reference; not rerun in this update and not current SOTA.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](browsecomp-plus-cm.md) | **English** · [Back to entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](browsecomp-plus-cm.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.20317) · [Code](https://github.com/castorini/cmass) · [Data](https://huggingface.co/datasets/castorini/cmass)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-It keeps the BrowseComp-Plus questions and BM25 tool interface while replacing a roughly 100K-document, query-built collection with 553 million independently assembled ClimbMix documents.
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-## What it follows
+Read Sections 1–7, all projection stages, failure cases, paired corpus and closed-book evaluations; appendices inspected: A–B, complete corpus duplication analysis, examples and evaluation/judge prompts. Not performed: No data/code rerun or private hop-label inspection
 
-BrowseComp places deep search on the live web, where opaque search APIs, page drift, and answer leakage confound the agent, retriever, and environment. BrowseComp-Plus freezes the corpus, but gathers both positives and hard negatives around the test questions and contains only about 100K documents. BrowseComp-Plus_CM retains the 830 questions and accepts a projection only when every hop is grounded in ClimbMix and survives independent-agent and human review; 57 questions remain with question-level qrels.
+[arXiv v1, 2026-08-20](https://arxiv.org/pdf/2608.20317v1)
+<!-- EVIDENCE:reading:END -->
 
-## How it is evaluated
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-**Question:** When the question, agent, search/document interface, and judge stay fixed, how much harder does evidence discovery become in a much larger independently built corpus?
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-**Measurement object:** agentic retrieval of all evidence needed for multi-hop questions over a fixed 400B-token, 553M-document web corpus, reported through answer accuracy, evidence recall, and tool calls.
+It directly projects BrowseComp-Plus questions onto independent ClimbMix, retaining a fully grounded subset. The corpus-first design replaces query-conditioned document selection, while also changing selection bias and relevance-set denominators.
+<!-- EVIDENCE:placement:END -->
 
-**Scale and protocol:** the pipeline starts from 830 questions, retains 326 after answerability checks, 65 after automatic all-hop verification, and 57 after human review. The controlled comparison swaps only the BM25 index between BrowseComp-Plus and ClimbMix while keeping the agent, search/get_document tools, and GPT gold-answer judge fixed.
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-## What a score can support
+BrowseComp-Plus questions are retained while their evidence is projected onto independently assembled ClimbMix: about 553 million documents and nominally 400 billion tokens, measured at 410.6 billion with Llama-2 tokenization, in a 559-GB Lucene index. GPT-5.5/Codex decomposes questions using gold answers and original support as hints, then grounds atomic facts through BM25 search and full-document reading. Of 830 questions, 326 are answerable; requiring evidence for both necessary and redundant confirmatory hops leaves 65. Independent PIIKA/GPT-5.5 answers all 65 with supplied evidence; author review of qualifiers such as dates leaves 57. Opus 5 pools candidates, removes unsupported hop associations and expands exact and verified near duplicates into question-level qrel unions.
+<!-- EVIDENCE:method:END -->
 
-For the same GPT-5.6 Sol agent, evidence recall falls from 84.3% to 21.4% and mean retrieval calls rise from 60.2 to 98.3, while answer accuracy falls only from 86.0% to 80.7%. This supports the claim that a small query-built corpus can substantially understate evidence-discovery difficulty, and that final-answer accuracy cannot replace retrieval-process metrics. It does not establish the general superiority of one retriever or agent architecture.
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-## Strongest confounder
+The same 57 questions are paired across the original roughly hundred-thousand-document corpus and ClimbMix. PIIKA uses Pyserini BM25 and full-document tools with GPT–5.6 Sol at max effort, Gemma 4 31B IT and Qwen 3.5 9B. A GPT judge checks final-answer semantic equivalence; the exact judge version, common absolute token/call cap and sampling configuration are not fully specified. Recall averages relevant documents shown in search results, not documents actually read, used or required-hop coverage. Closed-book runs disable tools at execution level. Only completed runs count; three initially incomplete GPT ClimbMix queries were rerun under the same setup and all failed, yielding 46/57. Construction revisits near misses at k=500, which is not a documented universal evaluation depth.
+<!-- EVIDENCE:setup:END -->
 
-The 57 questions are a projection-survivor subset, and GPT-5.6 Sol already answers 70.2% of them closed-book. Hop decomposition, support judgments, and qrel expansion also use GPT-5.5 / Claude Opus 5 judgments, while the released comparison exposes only a BM25 interface. The current Hugging Face card also says both that `qrels` has 6,695 rows and that duplicate expansion should produce 12,140 rows; the downloadable size and reproduction guide point to 6,695, so the expansion version is unresolved. The corpus-swap result is strong, but cross-retriever, cross-model, and contamination generalization remains limited.
+<!-- EVIDENCE:result-1:START -->
+## Paired questions across corpora
 
-## Remaining Gap: What remains uncovered
+The same 57 tasks, GPT at max effort. Accuracy is final-answer correctness; recall macro-averages coverage of each corpus’s own qrels, whose denominators differ. Calls are mean retrieval calls. Only completed runs are included; no confidence intervals are given.
 
-The result needs replication on larger independently authored question sets, more retrieval interfaces, and protocols that require explicit citations—especially to separate evidence exposure, evidence use, and parametric recall.
+| Model / corpus | Accuracy percent | Qrel recall percent | Calls per query |
+|---|---|---|---|
+| GPT–5.6 Sol / BrowseComp-Plus | 86.0 | 84.3 | 60.2 |
+| GPT–5.6 Sol / ClimbMix | 80.7 | 21.4 | 98.3 |
+| Gemma 4 31B IT / BrowseComp-Plus | 26.3 | 24.9 | 24.5 |
+| Gemma 4 31B IT / ClimbMix | 15.8 | 2.8 | 23.4 |
 
-<!-- RESEARCH-DECISION:START -->
+Source: Table 1; Section 6 · [Paper](https://arxiv.org/pdf/2608.20317v1)
+<!-- EVIDENCE:result-1:END -->
 
-## Research decision card
+<!-- EVIDENCE:result-2:START -->
+## Closed-book success and projection selection
 
-### When to use it
+All tools are disabled at execution level; only the question is supplied, with the same answer-equivalence judge. Denominators are 830 and 57, not independent identically distributed samples. Correctness does not prove memorization of the exact benchmark item.
 
-Use BrowseComp-Plus_CM to examine how evidence discovery changes when fixed questions move to an independently assembled large corpus. Scaling changes coverage as well as distraction. Projection selection and closed-book solvability limit generalization to web search overall.
+| Model | All 830 accuracy percent | Projected 57 accuracy percent |
+|---|---|---|
+| GPT–5.6 Sol (max) | 46.1 | 70.2 |
+| Gemma 4 31B IT | 0.8 | 1.8 |
+| Qwen 3.5 9B | 0.1 | 0.0 |
 
-### What a concrete task looks like
+Source: Table 2 · [Paper](https://arxiv.org/pdf/2608.20317v1)
+<!-- EVIDENCE:result-2:END -->
 
-Illustrative task: retain a question and search agent while replacing the candidate corpus with a much larger independent collection. The agent may face more distractors or lack the original evidence, so question projections and relevance judgments must be checked together.
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-### Most discriminating experiment
+The strongest model shifts from 86.0 to 80.7 percent accuracy, 84.3 to 21.4 percent recall and 60.2 to 98.3 calls. However, ClimbMix qrel sets are larger and unevenly redundant, changing the recall denominator: the 62.9-point drop is not the same amount of necessary evidence lost. The same model answers 70.2 percent of these tasks closed-book, so correct answers do not prove evidence retrieval, and instructions banning internal knowledge cannot guarantee compliance. Only 57 of 830 questions survive and this subset is substantially easier closed-book. Conclusions apply to the selected subset and BM25, without isolating corpus size or proving general deployment behavior.
+<!-- EVIDENCE:interpretation:END -->
 
-Hold questions, agent, search API, and budget fixed while swapping only the corpus, reporting evidence-coverage changes separately. Run closed-book checks on retained projections and separate known-answer from unknown-answer cases so memorization does not hide large-scale search failure.
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-### Pair with
+The 57 tasks are strongly selected and lack reported confidence intervals. Construction and validation share a model family; author review has no annotation-agreement estimate. Failing to find a hop does not prove absence from 553 million documents; lexical access and agent budgets constrain construction. Of 347 question–hop pairs, forty have at most two supporting documents while roughly a quarter exceed forty, biasing union recall toward redundant hops; hop labels are withheld. A question-independent corpus is neither contamination-free nor an unfiltered natural web distribution. Next compare dense/hybrid retrieval under controlled corpus sizes and matched budgets, reporting required-hop coverage, citation support and closed-book gains, with independently auditable hidden-label scoring.
 
-[browsecomp-plus](browsecomp-plus.en.md) · [livebrowsecomp](livebrowsecomp.en.md)
+The prose names get_document while the released evaluation prompt uses read_document; these may be wrapper aliases, but exact executable schemas are not in the paper. The conclusion attributes perfect supplied-evidence answering to the evaluated strong agent, whereas the explicitly specified independent validation stage uses GPT-5.5 on 65 tasks and the main evaluation uses GPT–5.6 Sol on 57; exact oracle-run configuration is not fully reconciled. The original BrowseComp-Plus 86.5% evidence-in-top-five-prefix finding is restated as truncation removing necessary evidence for 13.5% of questions; that stronger causal necessity claim does not follow directly from the original audit. Closed-book success demonstrates answers available without retrieval but does not identify whether the exact benchmark question was memorized, its source facts learned or constraints solved from prior knowledge.
+<!-- EVIDENCE:limitations:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy consequence
-
-`map_delta=revises`, bound to `retrieval-harness-validity`. Its matched corpus swap directly qualifies the durable BrowseComp-Plus claim: a fixed corpus is necessary for drift control and attribution, but query-conditioned construction, scale, and qrels remain load-bearing variables. The map receives only that smallest qualification; one projection is not promoted into a universal trend.
+Related benchmarks: [browsecomp-plus](browsecomp-plus.en.md) · [livebrowsecomp](livebrowsecomp.en.md)

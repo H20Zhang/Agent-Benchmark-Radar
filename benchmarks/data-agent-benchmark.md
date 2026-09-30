@@ -1,4 +1,4 @@
-# Data Agent Benchmark (DAB)：跨异构数据库回答企业数据问题
+# Data Agent Benchmark（DAB）：异构数据库上的企业数据问答
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2026-03-21 · 论文 v1<br>
@@ -7,78 +7,74 @@
 > 仅为原论文口径的历史参考。后续验证器、hints 和专用提示变化后的成绩不直接对比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](data-agent-benchmark.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](data-agent-benchmark.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2603.20576) · [项目页](https://ucbepic.github.io/DataAgentBench/) · [代码](https://github.com/ucbepic/DataAgentBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-DAB 评估 enterprise data question 在 **多个异构 database system** 之间分散、引用不一致、部分信息还藏在 unstructured field 时，agent 能不能完成整合、转换与分析。
+完整阅读 22 页正文和附录 A–C，包括全部 54 个问题、系统与裁判提示和失败案例；另完整读取官方当前 README，核对重新评分事件。未下载外链的全部原始轨迹。
 
-## 相比此前评测多测了什么
+[arXiv 2603.20576v1 · 2026-03-21](https://arxiv.org/pdf/2603.20576v1)
+[官方仓库文档 · 2026-09-30](https://github.com/ucbepic/DataAgentBench/blob/main/README.md)
+<!-- EVIDENCE:reading:END -->
 
-Text-to-SQL 通常假设一个 database 和已知 schema。DAB 同时覆盖 PostgreSQL、MongoDB、SQLite、DuckDB，把“数据到底在哪、不同系统里的 reference 怎么对应”也变成 task。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+DAB 根据六个行业的企业访谈挑出跨数据库整合、错配连接键、文本字段提取与领域规则四类困难，用公开数据及受控扰动构造 54 个查询、12 个数据集、9 个领域、4 种数据库。每题跨至少两库；公开扰动用来模拟业务数据，原始企业数据没有公开。为保证确定真值，作者主动排除了开放式分析问题和动态外部 API。
 
-benchmark 有 54 个 query、12 个 dataset、9 个 domain、4 类 DBMS，设计来自 6 个行业 enterprise workload 的 formative study。论文初始实验报告 Gemini-3-Pro 的 pass@1 为 38%；这是当时模型与协议下的历史结果，不是当前能力上限。
+[来源](https://arxiv.org/pdf/2603.20576v1)
 
-## 这个分数能证明什么
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：Spider／BIRD 主要围绕给定关系数据库，DAB 将企业访谈中的跨数据库整合、连接键错配、文本提取和领域规则纳入同一道查询。它新增异构数据访问与整合坐标；开放式分析被排除，因此不替代 InsightBench 的主动发现或 DSAgentBench 的桌面操作。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-它支持 heterogeneous backend 下 enterprise data QA 的 end-to-end 判断，但不能直接说失败来自 semantic mapping、integration、transformation、SQL/NoSQL generation 还是 answer synthesis，除非进一步看 trajectory。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 公平比较契约
+主要实验为五种模型各做每题 50 次，共 13,500 次；ReAct 框架给出数据库列举、只读查询、Python 执行和提交答案工具。每次最多 100 轮、1 小时，单工具 600 秒；提供数据集说明和 hints，温度与推理强度用提供方默认值；超过 10,000 字符的工具结果保存到文件并在上下文留预览。pass@1 先按题计算，再按数据集平均，最后对 12 个数据集等权平均，不是 54 题直接微平均或 best-of-50。原版答案检查偏召回，容许夹带错误值。
 
-必须固定 database snapshot、credentials/access、tool interface、model、retry policy 与 trial 数；leaderboard 本身要求每题至少 5 次。应报告 pass@1 和 variance，不能用 best-of-n 掩盖 stochastic instability。
+[来源](https://arxiv.org/pdf/2603.20576v1)
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 原始论文 ReAct 主实验（选取）
 
-任务数量小、主要是 read。生产 data agent 还会遇到 permission、write、lineage、semantic layer、schema evolution、成本约束与 business ambiguity。
+v1 原始验证器；54 题×50 次／模型，按 12 数据集等权宏平均；有 hints；ReAct；100 轮／1 小时／单工具 600 秒；费用是 2,700 次总和，不是单题价格。
 
-## 下一步最有判别力的验证
+| 模型 | pass@1（0–1） | 全部 2,700 次运行费用（美元） |
+| --- | --- | --- |
+| Gemini-3-Pro | 0.38 | 1355 |
+| GPT-5-mini | 0.30 | 67 |
+| GPT-5.2 | 0.25 | 283 |
 
-给每题增加 ground-truth integration/semantic plan，在最终 execution 之前单独评分 relation resolution，区分主要瓶颈到底是 heterogeneous access 还是 business semantics。
+事实位置：表 3–4，PDF 第 9 页；第 3.1 节，第 6–7 页 · [来源](https://arxiv.org/pdf/2603.20576v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- PROTOCOL-AUDIT-20260923:START -->
+<!-- EVIDENCE:result-2:START -->
+## 相同 Claude-Opus-4.6 的独立系统对照
 
-## 2026-09-23 协议核验：先看分母、提示和评分版本
+表 7；54 题，每题五次，按数据集宏平均；同一 Claude-Opus-4.6；与上表五模型主实验不同；私有框架与语义层共同变化。
 
-官方 Pass@1 是**先计算每题的重复运行通过率，再在数据集内平均，最后对数据集平均**，不是 5 次中成功一次就算成功。提交要求每题 5 次并提供轨迹；缺失、污染或无可验证推导的运行不能从分母中任意删除。[官方方法与提交规则](https://github.com/ucbepic/DataAgentBench/blob/main/README.md)
+| 系统 | pass@1（0–1） |
+| --- | --- |
+| PromptQL | 0.51 |
+| ReAct | 0.44 |
 
-榜单明确分开 `Tuned prompt` 与 `Hints`。例如官方表中 2026-09-11 的 Permute EQ 记录为 0.9467，2026-09-08 的 Scout 为 0.9062；两者都标注专门调过提示、使用 hints、5 次运行。这里只记录带条件的来源快照，不把系统差异归因给单个模型，也不将其与旧论文的 38% 直接相减。
+事实位置：第 3.4 节与表 7，PDF 第 11 页 · [来源](https://arxiv.org/pdf/2603.20576v1)
+<!-- EVIDENCE:result-2:END -->
 
-评分器也发生过实质修订：官方说明 2026-06-12 按更新的验证器及 PATENTS 标准答案重算旧提交；2026-08-18 又修正 DEPS_DEV_V1 第 1 题，接受第 5 名并列的 95 个 package，而不是只接受旧标准答案中的一个。**分数变化可以来自标签与验证器修正，而不是系统进步。** 应保存数据和验证器版本、完整逐题结果、提示与轨迹，才能公平比较。
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-这次更新保持 DAB 原有首发日期和引用快照不变。上述 2026-09-23 是本 Radar 的协议核验日期，不是新基准发布日期；未独立复跑官方提交。
+PromptQL 对照使用相同 Claude-Opus-4.6、每题五次，属于独立系统对照。其语义层与私有提示／编排同时变化，0.44→0.51 不能单独归因于共享表示。错误分析的 85% 来自 1,147 条“已提交但错误”的抽样轨迹，经 GPT-5 分类，排除了不提交与运行错误，因此不是全部失败的占比。
 
-<!-- PROTOCOL-AUDIT-20260923:END -->
+2026 年 6 月 12 日官方用新验证器及重生成的 PATENTS 真值重新评分；8 月 18 日又允许 DEPS_DEV_V1 并列第五名的任一合法包。所以下面的 v1 数字是历史协议结果，尤其不能继续将 patents 的旧零分解释为当前不可解。当前榜还区分提示定制、hints、缺失及污染运行，不能用新版高分直接做单组件因果结论。
 
-<!-- RESEARCH-DECISION:START -->
+固定当前验证器、提示、模型和预算，比较无 hints／固定 hints，并单独增加有类型的文本提取或可复用数据概要；同时报告精确完整答案、召回式旧检查、费用和跨数据集宏平均，防止评分器变化被当成代理进步。
 
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究多数据库之间的发现、转换与分析，而不只是单条 SQL。小题集上的排名很容易受提示、调参、重复次数和评分版本影响；旧论文成绩应保留为历史证据，不能当作当前能力上限。
-
-### 一个具体任务长什么样
-
-示意任务：同一分析问题需要跨不同数据库读取数据，统一格式后连接，并把半结构化内容转换成可计算字段。数据库连接成功只是起点；字段语义和结果验证才决定问题是否完成。
-
-### 最有判别力的实验
-
-固定数据和验证器版本，明确是否使用提示及任务特定调参，按官方聚合规则报告多次运行。对缺失、失败和污染运行保留分母，再比较无派生表示、静态派生表示与在线更新，检验收益是否超越答案或查询缓存。
-
-### 建议搭配
-
-[dataspace](dataspace.md) · [spider-2](spider-2.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`single-database text-to-SQL → cross-database integration → enterprise data agent`
-
-它第一次把 backend heterogeneity 真正放进 data-agent 评测核心。
+[来源](https://arxiv.org/pdf/2603.20576v1)
+<!-- EVIDENCE:limitations:END -->

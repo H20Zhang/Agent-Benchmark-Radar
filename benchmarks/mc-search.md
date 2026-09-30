@@ -1,4 +1,4 @@
-# MC-Search：multimodal agentic RAG 需要同时测 planning、modality choice 与每一 hop evidence
+# MC-Search：联合评估跨模态检索计划与证据路径
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-02-22<br>
@@ -6,50 +6,76 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](mc-search.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](mc-search.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2603.00873) · [代码](https://github.com/YennNing/MC-Search)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-MC-Search 包含 3,333 个 tasks、平均约 3.7 hops、五种 reasoning topologies，并为每一步标注 subquestion、retrieval modality、supporting evidence 与 intermediate answer。paper 描述的 KB 含约 389,750 张图片和 784,473 段文本；当前 released artifact 规模更小，因此 artifact version 本身需要记录。
+35页正文第1–6节及附录A–P全部阅读；包括训练、软HPS、top-k、裁判验证及全部提示；公式5和表4经图像核验。
 
-## 相比什么前进了
+[arXiv 2603.00873v1，2026-03-01；PDF 标注 ICLR 2026](https://arxiv.org/pdf/2603.00873v1)
+<!-- EVIDENCE:reading:END -->
 
-普通 multimodal QA 只看最终答案；普通 agentic search 又常缺 gold trajectory。MC-Search 提供 hop-level retrieval、planning accuracy、gold-evidence answering 与 rollout deviation，使 over/under-retrieval、modality error 和 chain drift 可分开。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-高 planning/retrieval score 支持和 benchmark gold trajectory 的一致性，但 single-gold trajectory 可能惩罚其他有效路径。paper/released artifact 的 KB scale mismatch 也意味着结果必须绑定具体 version，不能混成一个 leaderboard。
+相较文本多跳问答，MC-Search让中间步骤跨文本和图像，并标注多种路径拓扑。变化是模态选择与证据路径也成为评分对象，而不只看最终答案；训练增益仍需独立划分与路径等价性核验。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-锁定 KB artifact、multimodal backbone、hop budget、judge 与 trajectory policy。gold-evidence 与 free-search conditions 应独立 track。
+从Wikipedia同页或相关页的图文知识簇生成约2.1万条问题，覆盖纯文本链、图像起始链、文本起始链、图文并行分叉和多图分叉。HAVE逐跳删除证据，测答案F1下降；若没有贡献，还检查中间实体是否用于后续子问题，以保留导航步骤。Qwen2.5-VL-7B初筛、Gemini-Pro缩短/修订、Gemini-Flash复核后留下3333题，平均3.79跳。智能体每轮选文本查文本、文本查图或以图查图，本地检索后生成中间答案并决定继续或停止。Search-Align用这些经筛链构造对话式过程监督来微调开放模型。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-下一步要允许 multiple valid trajectories，并将 modality choice 与真实 latency/cost 及 final evidence sufficiency 联合评价。
+知识库含389750图像和784473文本；五拓扑样本分别945纯文本、1306图像起始、169文本起始、680图文并行、233多图。主实验每轮top-1，统一提示；文中声称统一最大迭代数和解码参数，但没有完整列出具体值，闭源思考预算使用默认值。答案F1为token重叠×100；HPS为找回标准步骤证据的比例×100、重复只算一次；RD为预测和标准步数差的绝对值，不是带符号ΔStep。Gemini-2.5-Pro以0–5分判断答案/实体覆盖/连贯/步骤对齐。Search-Align使用LlamaFactory、4×A100，InternVL学习率1e-5一轮，Qwen1e-4两轮；论文只提validation split，未明确给训练/评测划分规模与去重协议。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 图像起始链的过程监督结果
 
-## 研究决策卡
+图像起始链类别共1306题；具体训练/验证分母未给出。top-1；F1/HPS为0–100分，RD为平均绝对步数差。结果是原表报告，不宣称已核验无泄漏。
 
-### 什么时候值得用
+| Qwen2.5-VL-7B 条件 | 答案F1 | HPS | RD |
+|---|---|---|---|
+| 原模型 | 26.3 | 16.51 | 4.04 |
+| 过程监督微调 | 45.7 | 33.59 | 0.7 |
 
-适合诊断多模态搜索链中选错模态、缺少证据或规划偏离的环节。每跳标注提供可定位信号，但标准轨迹不是唯一可能路径；论文所述语料与公开子集的差异也会改变复现实验对象。
+事实来源：表 3; 附录 I · [论文](https://arxiv.org/pdf/2603.00873v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 严格证据身份与语义匹配
 
-示意任务：文字证据指出需要查看某幅图，视觉细节又决定下一轮应搜索哪个对象。系统必须在文字与图像之间切换；只使用文本检索或只评最终答案，会掩盖具体模态选择失误。
+纯文本类别945题，表中具体评测子集规模未重述；HPS为找回标准步骤证据比例×100，软匹配阈值降低会提高得分，不等于新增真实检索能力。
 
-### 最有判别力的实验
+| Gemini-2.5-Pro 纯文本匹配规则 | HPS |
+|---|---|
+| 严格匹配 | 21.59 |
+| 相似度至少0.85 | 41.26 |
 
-固定公开语料版本，分别给定正确模态、正确中间证据和正确子问题，观察最终恢复。对可行的替代路径做证据检查，并分开报告论文规模与公开子集，避免将资源差异归因于策略。
+事实来源：附录 J 表 13 · [论文](https://arxiv.org/pdf/2603.00873v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-[merrin](merrin.md) · [visdocagentbench](visdocagentbench.md)
+在图像起始链，Qwen2.5-VL-7B经Search-Align后F1从26.30到45.70，HPS从16.51到33.59，RD从4.04到0.70；支持该报告设置中的收益，但训练/验证划分尚待核实。HPS不是通用事实正确率：Gemini-Pro纯文本链由严格命中21.59提高到相似度阈值0.85下41.26，表明不少错误来自标准证据身份不匹配。训练也并非所有过程指标都提升：InternVL纯文本HPS为21.81→20.54，虽F1提高。
+<!-- EVIDENCE:interpretation:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-<!-- RESEARCH-DECISION:END -->
+多阶段筛选依赖少数模型家族，且为确保唯一链而移除同簇替代证据，会使真实开放搜索的等价路径受惩罚。HAVE的效用阈值、训练/评测隔离及完整检索配置仍需实现核验。人工验证只覆盖100个Gemini-Pro输出，不能保证所有系统的裁判公平；原文跨裁判研究也只重判该底座。下一步公布明确划分及替代证据集合，在匹配预算下检验跨领域迁移，并用真实token、延迟和人工来源充分性补充步数指标。
+
+表4的InternVL图像覆盖分子977+7应为984，整体却写861，部分比例也不匹配；不据此给整体结论。Qwen多图对齐后top-1 HPS表3为38.01、表14为41.20；Gemini-Flash严格HPS表13与主表也不一致。Golden F1只是给定标准信息的条件结果，不是数学上界。五拓扑完备性只在链或单分叉等假设下成立。固定两跳普遍优于单跳的措辞也有表中反例。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[merrin](merrin.md) · [visdocagentbench](visdocagentbench.md)

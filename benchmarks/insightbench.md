@@ -1,4 +1,4 @@
-# InsightBench：从“回答一个 query”走向“自己发现 business insight”
+# InsightBench：多步业务分析中的洞察发现与覆盖
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2024-07<br>
@@ -6,64 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](insightbench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](insightbench.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2407.06423) · [代码](https://github.com/ServiceNow/insight-bench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-InsightBench 评估 **end-to-end business analytics**：自己提出值得分析的问题、执行分析、解释结果、综合 insight、给出 actionable next step。100 个 dataset 覆盖 finance、incident management 等 business use case，每个都有人为 curated planted insight。
+完整阅读 v4 共 33 页及附录 A–D，包括全部十个提示模板；核对表 1。
 
-## 相比此前评测多测了什么
+[arXiv 2407.06423v4 · 2025-02-27](https://arxiv.org/pdf/2407.06423v4)
+<!-- EVIDENCE:reading:END -->
 
-多数 data-analysis benchmark 已经把 query 写得很明确。InsightBench 把 agency 前移：agent 需要决定“什么值得查”，并最终交付一组 coherent finding，而不是只计算用户指定的 statistic。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+InsightBench 的 100 组合成业务数据借鉴 ServiceNow 模式，植入 475 个参考洞察。AgentPoirot 先读取模式，根据高层目标提出三个主问题，每个再做四次跟进，最多形成 15 项洞察后汇总。它通过 Python 与定制 cba 工具分析和绘图；对照包括修改过的迭代式 Pandas Agent，以及改用泛化目标的同框架版本。
 
-open-ended insight 没有唯一 deterministic answer，因此 benchmark 设计 two-way LLaMA-3 evaluator，并对数据做较严格 quality assurance。提出的 AgentPoirot end-to-end baseline 优于主要解决单 query 的 Pandas Agent 等方案。
+[来源](https://arxiv.org/pdf/2407.06423v4)
 
-## 这个分数能证明什么
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：固定问题的数据问答给定要找的答案，InsightBench 让代理围绕业务目标自行提出分析问题并发现洞察。它新增的是探索与见解覆盖坐标；软匹配参考洞察不证明因果发现、商业价值或不存在未标注的正确新发现。DDR-Bench 可作为另一种隐藏事实覆盖参照。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-它能支持 agent 是否发现 benchmark 作者定义的 business insight 并组织成分析；但对 truly novel / decision-useful discovery 的证明较弱，因为 planted-insight set 预先定义了“什么算重要”，且 credit 经过 evaluator judge。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 公平比较契约
+实验温度为 0，报告五个种子的均值与标准差。LLaMA-3-70B 裁判为每条参考洞察寻找最相符的预测，另行比较摘要；这是带参考的软相似度，不是双向精确率／召回率或商业收益。裁判提示使用 1–10，结果表报告归一化软分。未给出各框架匹配的 token 或时间上限。
 
-应固定 dataset、agent starting prompt、toolset、exploration budget、evaluator model/version 与 report format，并把 planted-insight coverage 和 presentation quality 分开；否则流畅 summary 会掩盖 evidence 漏失。
+[来源](https://arxiv.org/pdf/2407.06423v4)
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## GPT-4o控制组的选定软评分，Table1
 
-真实 business insight 取决于 stakeholder objective、causal validity、opportunity cost，以及 recommendation 是否真的改变决策。某个 planted insight 即使统计上能找出来，也可能经济上并不重要。
+100 组数据、475 项参考洞察；GPT-4o；五个种子的均值±标准差，不是置信区间；AgentPoirot 最多 15 项洞察，裁判 LLaMA-3-70B；无匹配的 token／时间上限。
 
-## 下一步最有判别力的验证
+| 代理／条件 | 洞察 LLaMA-3-Eval（均值±SD，0–1） | 摘要 LLaMA-3-Eval（均值±SD，0–1） |
+| --- | --- | --- |
+| Pandas Agent / GPT-4o | 0.54±0.01 | 0.40±0.04 |
+| AgentPoirot / GPT-4o | 0.60±0.03 | 0.44±0.03 |
+| AgentPoirot / GPT-4o／泛化目标 | 0.40±0.03 | 0.33±0.12 |
 
-加入 blinded domain expert 对 checklist 外新 insight 的评分，再接 downstream decision task。真正应该测的是“是否找到值得行动的东西”，而不是只复现 benchmark 设计者预埋的发现。
+事实位置：第 2.2、3.1–3.2 节；表 1，PDF 第 8 页；附录 D 提示模板 1–10 · [来源](https://arxiv.org/pdf/2407.06423v4)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-## 研究决策卡
+特定业务目标优于泛化目标，但不能把一个指标上的优势推广到所有指标：GPT-4o 的洞察 ROUGE-1 中，Pandas Agent 为 0.35，AgentPoirot 为 0.32。合成趋势与参考洞察覆盖限制了对开放业务发现的外推。
 
-### 什么时候值得用
+算力描述有两处不一致：正文写四块 A100，复现部分写两块 80 GB A100，不能拼成确定的统一硬件配置。
 
-适合研究系统能否主动提出有用分析问题并提炼洞察，而不是只回答已指定查询。预设洞察提供可检查目标，但发现预设模式与发现真实业务价值不同；建议质量也不能仅靠文字说服力评价。
+固定洞察数量与计算预算，加入没有预埋趋势的数据和专家未知的新趋势，盲审新洞察的证据、正确性与价值，并区分参考覆盖率和错误发现率。
 
-### 一个具体任务长什么样
-
-示意任务：系统拿到业务数据后，自行决定值得分析的变化，执行探索并给出建议。它可能发现相关性，却缺少支持因果解释的证据；把观察描述升级为干预建议需要额外论证。
-
-### 最有判别力的实验
-
-分别测洞察覆盖、事实正确性和建议可执行性，并用不含预设模式的对照数据检查幻觉发现。固定分析预算，比较用户给定问题与自主提出问题，判断收益来自探索目标选择还是执行能力。
-
-### 建议搭配
-
-[ddr-bench](ddr-bench.md) · [causalds](causalds.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`answer a data query → discover a set of insights → decision-oriented business analysis`
-
-InsightBench 把 data agent 从执行推进到 analytical agenda setting。
+[来源](https://arxiv.org/pdf/2407.06423v4)
+<!-- EVIDENCE:limitations:END -->

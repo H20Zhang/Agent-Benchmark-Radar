@@ -1,4 +1,4 @@
-# AgenticDataBench: fine-grained skills behind realistic data-science tasks
+# AgenticDataBench: data-science tasks and fine-grained skill evaluation
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-07<br>
@@ -6,130 +6,60 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](agenticdatabench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](agenticdatabench.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2607.01647) · [Project](https://agenticdatabench.github.io/) · [Code](https://github.com/AgenticDataBench/AgenticDataBench) · **Area: Data Agent**
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-AgenticDataBench is valuable not merely because it adds more end-to-end data-science tasks, but because it attaches **fine-grained skill labels** to them. The goal is to move from “did the task succeed?” toward “which recurring capability is actually failing?”
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-## What it actually measures
+Read Sections 1–7 and all method, setup, result, skill-diagnosis and budget discussions (14 pages including references; no appendix), checking Table 4 and Figures 7–9.
 
-The benchmark contains **344 tasks across 15 domains and 97 real-world datasets**, totaling about **27.3 GB / 123.1M rows**, with **433 ground-truth skill labels**.
+[arXiv 2607.01647v1 · 2026-07-02](https://arxiv.org/pdf/2607.01647v1)
+<!-- EVIDENCE:reading:END -->
 
-Each realistic data-science task is therefore evaluated at two levels:
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-- end-to-end: did the task succeed?
-- diagnostic: do failures cluster around particular required competencies?
+AgenticDataBench extracts 29,602 step descriptions from 6,510 Stack Overflow solutions and uses embedding clustering, LLM splitting/merging and expert review to obtain 433 data-science skills. These guide the selection of 102 real business tasks and the generation and human validation of 242 additional tasks, yielding 344 tasks in 15 domains. Docker provides Bash, Python and database execution. Four harnesses are paired with Qwen3.5-397B-A17B, Kimi-K2.5 and Claude Sonnet 4.6, using default temperatures and different budgets: DA-Agent has 80 steps, a 15-step history and a one-minute action timeout; Smolagents has 40 coding steps and five minutes per action; Claude Code and CodeX receive 60 minutes per task with adaptive action timeouts.
 
-This is much more useful for capability coverage analysis than a single aggregate accuracy alone.
+[Source](https://arxiv.org/pdf/2607.01647v1)
 
-## What changed relative to prior evaluation
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: DataSciBench and DA-Code emphasize task outputs; AgenticDataBench adds fine-grained skill labels to executing such tasks. The added coordinate is diagnostic resolution, not a universal success definition. Harness budgets and soft-score differences remain separate comparison constraints.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-A central weakness of many data-science benchmarks is that the **task distribution itself is opaque**.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-A five-point score gain may come mostly from task-mix effects. A benchmark may look difficult because a small number of unusual task patterns dominate failures. Without skill annotations it is hard to ask:
+Task scores combine table, JSON, text and chart checks with normalized modeling metrics, mapped to 0–1 and reported on a 0–100 scale. A separate LLM diagnoses skill applications using reference solutions, skill annotations and scoring feedback; skills with fewer than three applications are excluded from skill comparisons. This diagnostic layer is not independent executable ground truth for each step.
 
-- how much data understanding, cleaning, statistics, modeling, debugging, and other work is represented;
-- whether an agent has a broad capability gap or one high-frequency bottleneck;
-- whether a new method improves core competence or one benchmark-specific task pattern.
+[Source](https://arxiv.org/pdf/2607.01647v1)
+<!-- EVIDENCE:setup:END -->
 
-AgenticDataBench turns these questions into measurable objects through an explicit taxonomy.
+<!-- EVIDENCE:result-1:START -->
+## Selected harness and cost comparison with Kimi-K2.5 fixed
 
-## How the evaluation works
+344 tasks; task scores include binary and continuous grading, with complete aggregation weights unspecified; tokens are trajectory means; successful-step ratio uses execution steps as its denominator, not questions; budgets differ by harness, preventing an equal-cost ablation.
 
-The benchmark provides both a DevSet and a TestSet. The TestSet executes agent code in a sandbox and captures execution traces, so evaluation can verify actual execution rather than trusting a model's final claim of completion.
+| Harness | Overall task score (0–100) | Tokens per trajectory (thousands) | Successful-step ratio (%) |
+| --- | --- | --- | --- |
+| Smolagents | 43.8 | 379.4 | 88.1 |
+| DA-Agent | 44.8 | 145.4 | 94.1 |
+| CodeX | 48.8 | 1091.2 | 59.5 |
 
-Interpreting results requires recording:
+Source location: Tables 4–5, PDF pp. 9–10; sections 3.3 and 6.1 · [Source](https://arxiv.org/pdf/2607.01647v1)
+<!-- EVIDENCE:result-1:END -->
 
-- task and dataset version;
-- sandbox and package environment;
-- tool availability;
-- model and agent harness;
-- execution and retry budget;
-- skill distribution;
-- aggregate metrics and per-skill breakdowns.
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-Reporting only the total score discards the benchmark's most distinctive diagnostic value.
+The same Kimi-K2.5 model has substantially different scores and token consumption across harnesses. CodeX scores higher while taking more steps and having a lower successful-step ratio, illustrating an exploration/efficiency tradeoff rather than a simple error-rate ranking. Budgets, context management and prompt adaptation vary together, so the advantage cannot be attributed solely to skill coverage or cross-step data reuse.
 
-## Decisive evidence and score boundary
+Table 4 gives Claude Code/Kimi-K2.5 a total of 44.3, while one paragraph says 43.3; the table is used. The skill-judge model, human agreement, repeats and full aggregation weights are unspecified. A budget intervention on at most ten failures cannot establish general budget insensitivity.
 
-Human performance is reported around **84–90%**. The key implication is not a literal universal human ceiling, but that the benchmark preserves substantial headroom while remaining within a realistic range of solvable work.
+Within one harness, fix the model, wall-clock time and token budget, then separately add data profiles, cross-step caching and skill retrieval. Evaluate final task outputs, manually audit skill-diagnosis accuracy, and measure redundant large-file reads and stale-cache failures.
 
-Per-skill results can support a diagnosis such as “this class of task repeatedly fails under the current system.” They do not prove that the model lacks an independent internal skill module.
-
-A single task often requires several capabilities, and a skill label describes task requirements rather than causally decomposing the system's internal mechanism.
-
-## Main confounders
-
-The first is the **skill ontology itself**. The taxonomy is a benchmark-design choice; different ontologies can partition the same failure differently.
-
-The second is **multi-skill interaction**. A failure originating in data understanding may surface as code-execution failure, so labels alone do not identify root cause.
-
-The third is **agent-harness sensitivity**. The same model can expose very different skill profiles under different scaffolds, tool contracts, or retry policies.
-
-The fourth is **hidden-set consumption**. Repeated tuning against the TestSet can turn skill diagnostics into benchmark-specific optimization.
-
-## Fair comparison contract
-
-At minimum, align:
-
-- task and dataset version;
-- sandbox, dependencies, and resource limits;
-- tool set and data-access interface;
-- model, agent harness, and system prompt;
-- execution, retry, and token budgets;
-- evaluator;
-- Dev/Test usage boundary.
-
-Alongside aggregate scores, report sample counts and uncertainty for each skill slice; tiny slices should not support strong conclusions.
-
-## What remains unmeasured
-
-AgenticDataBench improves coverage transparency but does not fully measure:
-
-- whether skill labels have causal diagnostic value;
-- business semantics and ambiguous-requirement clarification;
-- longitudinal data and schema changes;
-- collaboration and review workflows;
-- governance, permissions, and irreversible data operations;
-- whether different skill failures have comparable severity.
-
-Production systems ultimately care not only about average weakness, but **which failures silently corrupt downstream decisions**.
-
-## Next discriminating validation
-
-A high-value next step is a **skill intervention test**: construct matched task pairs that differ systematically in one required competency, then add a targeted intervention for that skill.
-
-If the intervention primarily improves the predicted slice while leaving unrelated slices mostly unchanged, the taxonomy becomes a more credible diagnostic coordinate rather than merely a post-hoc labeling scheme.
-
-A further extension is a `skill × harness × backbone` matrix to test whether observed skill weaknesses remain stable across system choices.
-
-<!-- RESEARCH-DECISION:START -->
-
-## Research decision card
-
-### When to use it
-
-Use AgenticDataBench for skill coverage and composition in data workflows rather than averages over a few popular tasks. The skill taxonomy is itself a modeling choice. Generated tasks carrying a label do not establish coverage of all real business difficulties associated with it.
-
-### What a concrete task looks like
-
-Illustrative task: a business request combines discovery, transformation, computation, and interpretation. A system may solve each skill in isolation yet lose state or adopt wrong intermediate assumptions when composing them, motivating dependency-level inspection.
-
-### Most discriminating experiment
-
-Pair isolated and composed tasks for the same skills, hold out domains, and fix tools and backbone. Report real business and generated-coverage tasks separately and test new skill compositions rather than only fitting the taxonomy and templates.
-
-### Pair with
-
-[datascibench](datascibench.en.md) · [dsaeval](dsaeval.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`end-to-end data tasks → skill-labeled coverage → causal capability diagnosis → capability-targeted improvement`
-
-AgenticDataBench completes the second step. The next challenge is not adding more labels, but proving that those labels genuinely guide system improvement.
+[Source](https://arxiv.org/pdf/2607.01647v1)
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# WarehouseReliabilityBench：SQL 能执行，不代表 business truth 是对的
+# WarehouseReliabilityBench：数据仓库中的可答性判断、拒答与修正
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-10<br>
@@ -6,64 +6,73 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](warehouse-reliability-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](warehouse-reliability-bench.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2608.09254)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-WarehouseReliabilityBench (WRB) 评估 analytics agent 在 standard、ambiguous、unanswerable、schema-drift、adversarial question 下能不能给 **business-correct behavior**。两个 synthetic warehouse 共 400 个 frozen task，其中大约一半根本没有正确 SQL，正确行为应是 clarification、abstention 或 refusal。
+完整阅读 20 页正文和附录 A–E，涵盖构造、先前测试暴露、状态机、全部结果、六项评分修正、重放协议、训练门槛与指标分母；核对主结果表。
 
-## 相比此前评测多测了什么
+[arXiv 2608.09254v1 · 2026-08-10](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:reading:END -->
 
-execution-match 默认每个问题都应该映射到 query；生产 analytics 的失败往往更早发生：“revenue”有两个合法定义、warehouse 根本算不出某个指标，或者 deprecated column 仍能执行但 business meaning 已错。WRB 因此测 semantic behavior contract 与 false success，而不只测 syntax。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+WarehouseReliabilityBench v0.2.0 有 400 个冻结合成任务，来自电商与 SaaS 两个 DuckDB 仓库，按模板族分为 240 开发、80 验证、80 测试。任务要求可能是给答案、澄清、弃答或拒绝。QueryProof 用语义层和物理目录决定行为，用 Qwen2.5-Coder-7B 提议含义与 SQL，再经过静态和执行后校验；路由版本可升级到大模型，但升级结果仍受同样规则约束。
 
-80-task frozen test split 上，QueryProof 相比 direct-prompted 32B baseline 的 Business Truth Rate 高 +0.237，论文给出的 95% 区间是 [+0.112, +0.375]；False Success Rate 从 0.754 降到 0.351。但论文主动承认这个比较被 scaffold confound，按 template family 重采样后区间会包含 0，因此“方向”比“具体 effect size”更可信。
+[来源](https://arxiv.org/pdf/2608.09254v1)
 
-## 这个分数能证明什么
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：Spider／BIRD 默认请求可以通过查询回答，WarehouseReliabilityBench 将澄清、弃答和拒绝也纳入正确行为。它把“SQL 能执行”推进到“在当前语义和证据下是否应该回答”，同时用答案覆盖与错误风险约束谨慎程度；小型合成仓库不等于真实企业治理验证。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-WRB 很强地支持一个 benchmark claim：**成功执行 SQL ≠ business correctness**。QueryProof 结果支持 deterministic semantic/rule gating 这一系统方向，但不能推出“7B 模型胜过 32B”，也不能说某个单一 component 导致了提升。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 公平比较契约
+六个系统均来自 Qwen2.5-Coder 家族、本地量化运行、温度 0；80 道测试题每系统仅运行一次。BTR（业务正确率）以全部任务为分母，正确澄清／弃答／拒绝也得分；FSR（错误成功率）是返回 ANSWER 的输出中错误或本不该回答的比例；覆盖率仅看可回答题中是否回答；CPCA 是可回答题的总可变成本除以正确答案数。成本按约每小时 0.50 美元的摊销硬件模型估算，不是 API 市价，也不含开发成本。
 
-必须固定 warehouse seed/snapshot、semantic-layer definition、physical catalog、task split、model、scaffold 与成本核算，并分别报告 Business Truth Rate、False Success Rate、coverage、abstention/clarification 与 cost。scaffold 不同的时候禁止做 model-size 因果结论。
+[来源](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 80 道冻结测试题上的系统结果（选取）
 
-证据基座很窄：两个 synthetic domain、一个 seed、一个 model family、一个 SQL dialect，而且 test exposure 已被披露；对 BIRD/Spider 或真实 warehouse 的 transfer 未被证明。
+每系统一次测试；BTR 分母80题；FSR 分母分别37、41、65个 ANSWER 输出；CPCA 为可回答题上的总成本／正确返回数，非每题平均费用；32B 没有匹配框架。
 
-## 下一步最有判别力的验证
+| 系统 | BTR（0–1） | FSR（0–1） | CPCA（美元／正确答案） |
+| --- | --- | --- | --- |
+| QueryProof／路由 | 0.537 | 0.351 | 0.0017 |
+| QueryProof／无路由 | 0.562 | 0.366 | 0.0012 |
+| 32B／直接提示 | 0.300 | 0.754 | 0.0058 |
 
-在全新 unseen warehouse family 上，把同一个 semantic/rule scaffold 加到更大的 baseline model，再分别 ablate semantic resolution 与 post-execution check，这才是做 causal attribution 所需的实验。
+事实位置：表 2，第 9 页；表 7 与附录 E，第 18–19 页 · [来源](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## QueryProof 对 32B 的 BTR 差值及重采样单位
 
-## 研究决策卡
+同一80题结果；预注册任务级与探索性模板族级重采样；2,000次重采样；只有十个族，后者本身也不稳定，不能声称精确效应已确定。
 
-### 什么时候值得用
+| 重采样单位 | 差值 | 95% 区间下限 | 95% 区间上限 |
+| --- | --- | --- | --- |
+| 任务（80） | 0.237 | 0.112 | 0.375 |
+| 模板族（10） | 0.237 | -0.125 | 0.562 |
 
-适合检查 SQL 成功执行却违背业务口径的假成功，以及应澄清、弃答或拒绝的情况。它针对的是语义可靠性，不只是语法与执行；规则层的质量本身会影响结果，需要与模型贡献分开。
+事实位置：表 8，第 19 页；第 6.3 节 · [来源](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-示意任务：用户要求一个业务指标，但可用模式允许多种口径，或缺少必须的数据。系统可能生成可执行且有结果的 SQL，正确行为却应该是澄清定义或说明无法回答。
+路由 QueryProof 在可回答题实际返回的 24 个答案中没有错数，但还对 13 个应澄清或弃答的问题给了答案，所以 FSR 仍为 13/37。取消路由的 BTR 为 0.562，高于路由版 0.537，未证明升级策略有收益。单人共同设计数据、规则和标签，只有十个测试模板族，又有既往测试暴露，结论应限于这次冻结系统实验。
 
-### 最有判别力的实验
+必须保留作者披露：测试内容在开发中曾被看到，删除五个测试专属词条并不能恢复干净留出集；标签由同一作者二次盲判，0.920 一致率不是独立标注者一致性。第 6.1 节概括基线覆盖率 1.000、答案准确率 0.350，不适用于表 2 中 32B 的 0.900／0.444。本文采用逐系统表值。
 
-固定业务规则与数据库，将可回答和需要非回答行为的任务分开，报告业务正确率与假成功。再替换规则层和模型做交叉实验，检查可靠性收益是否主要来自人工规则，而非自主语义理解。
+先收集从未用于开发的独立模板与真实仓库，用同一框架分别运行 7B 和 32B；再分别移除语义层、执行后校验和路由，按模板族报告区间，并同时展示弃答覆盖和错误答案风险。
 
-### 建议搭配
-
-[livesqlbench](livesqlbench.md) · [dabstep](dabstep.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`SQL execution correctness → semantic business truth → reliability-aware analytics agent`
-
-它把评测提升到 query language 之上：有时正确的 data-agent 输出就是“不应该执行 SQL”。
+[来源](https://arxiv.org/pdf/2608.09254v1)
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# TML-Bench：自动 ML agent 的比较必须锁定 wall-clock budget
+# TML-Bench：短时预算下的自动建模与预测交付
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-03-05<br>
@@ -6,50 +6,57 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](tml-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](tml-bench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2603.05764)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-TML-Bench 基于 4 个 Kaggle competitions，比较 10 个 open-source LLMs，并设定 240/600/1200 秒三种 wall-clock budgets、每种 5 次 successful runs。evaluation 检查 valid submission、private holdout score 与跨运行稳定性，强调 agent 在时间限制内迭代建模。
+完整阅读 19 页 v1 与附录 A–F，包括计分、框架运行与竞赛规模；逐一检查全部结果图。
 
-## 相比什么前进了
+[arXiv 2603.05764v1 · 2026-03-05](https://arxiv.org/pdf/2603.05764v1)
+<!-- EVIDENCE:reading:END -->
 
-MLAgentBench 有实验循环，但 compute/time 仍容易被忽略。TML-Bench 把 wall-clock budget 明确变成 track，避免“多跑十倍实验”被当作纯 agent intelligence gain。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+TML-bench 在较短的 agent 执行期限内测量预测质量。Kilo Code 离线运行，检查预测文件，再于结束后评测隐藏留出集。主汇总为每个模型选择各竞赛中归一化成绩最好的预算。
 
-holdout score 支持具体 competition、hardware/runtime 与 time budget 下的 autonomous modeling；不同 budget/hardware 不是 apples-to-apples，也不应只看最好一次 run。
+<!-- EDITORIAL-METHOD:START -->
+每个竞赛给出训练数据和测试输入，代理在离线环境中建立模型并写出规定预测文件；截止后才由隐藏留出集评分。示意流程是载入表格、建立训练／验证划分、在有限时间内选择预处理和算法、输出所有测试行的预测。短截止时间同时测建模质量、工具执行速度及能否及时交付；作者的成功运行中位数把“交付可靠性”与“成功交付后的质量”分开了。
 
-## 公平比较条件
+编辑比较：MLE-bench 的长时竞赛流程是相近参照，TML-Bench 将墙钟时间收紧为显式主变量。它改变的是短时可交付建模的测量条件，不是把较高归一化分数直接解释为更强通用科研能力。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-锁定 240/600/1200s budget、hardware、competition data、submission validator、model/scaffold 与 run count，并报告 stability。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 下一步评测坐标
+每项成绩取最早五次成功运行的中位数，不是五次总尝试。主比较只纳入覆盖全部 12 种设置的模型。1,200 秒条件额外强调 XGBoost，因此预算与提示同时变化。
+<!-- EVIDENCE:setup:END -->
 
-下一步要同时看 experiment efficiency、reproducible artifacts 与 invalid-result detection，而不仅是 leaderboard score。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-<!-- RESEARCH-DECISION:START -->
+v1 §3.6；采用隐藏留出集的原生指标，每格取五次成功运行的中位数。期限约束 agent 阶段，不含后续计分。
 
-## 研究决策卡
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| MiniMax-M2.1-TEE · 240 s | 客流预测；10,289 条留出记录 | RMSE ↓ | 0.066846 | Kilo Code；240 s | 第 3.6 节, 第 6 页; 表 2, 第 19 页 |
+| MiniMax-M2.1-TEE · 600 s | 客流预测；10,289 条留出记录 | RMSE ↓ | 0.065770 | Kilo Code；600 s | 第 3.6 节, 第 6 页; 表 2, 第 19 页 |
+| MiniMax-M2.1-TEE · 1200 s | 客流预测；10,289 条留出记录 | RMSE ↓ | 0.065489 | Kilo Code；1200 s；XGBoost 提示 | 第 3.6 节, 第 6 页; 表 2, 第 19 页 |
+| GPT OSS120B TEE · 1200 s | 银行客户流失；3,000 条留出记录 | AUC ↑（0–1） | 0.928000 | Kilo Code；1200 s；XGBoost 提示 | 第 3.6 节, 第 6 页; 表 2, 第 19 页 |
 
-### 什么时候值得用
+事实来源：[第 3.6 节, 第 6 页; 表 2, 第 19 页](https://arxiv.org/pdf/2603.05764v1)
+<!-- EVIDENCE:results:END -->
 
-适合检验固定时间内交付有效表格机器学习结果的可靠性。任务数量少时，稳定性与失败率尤其重要；只对成功运行取中位数可能隐藏难以完成的配置，必须同时报告全部尝试。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-### 一个具体任务长什么样
+MiniMax-M2.1-TEE 领先的是相对的最佳预算汇总，不是准确率，也不代表固定预算下处处领先。仅从成功运行中取中位数，使该分数不包含完成可靠性。论文未提供精确硬件及 token 使用量，时间扩展结果也不能单独归因于更多计算。
 
-示意任务：系统在有限时间内查看训练数据、选择特征和模型，输出满足提交格式的预测文件。高质量模型若未生成有效文件，就未完成交付；更长预算也不保证每次运行更稳定。
-
-### 最有判别力的实验
-
-保持硬件与指令相同，只改变时间预算，记录所有尝试的有效率、隐藏集质量和波动。把提示随预算变化的条件单独列出，防止把指令改变误当作时间扩展收益。
-
-### 建议搭配
-
-[dare-bench](dare-bench.md) · [mle-bench](mle-bench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+<!-- EDITORIAL-NEXT:START -->
+下一步固定提示、硬件和网络条件，只改变截止时间；将超时、无效提交全部纳入分母，并给成功条件下的质量作补充。这样可分离 XGBoost 指导、时间增加与筛选成功样本带来的效果。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

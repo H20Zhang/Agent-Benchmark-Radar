@@ -1,4 +1,4 @@
-# RAG Collapse
+# RAG Collapse：检索自写文章时的回答多样性反馈
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-22<br>
@@ -6,60 +6,78 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](rag-collapse.en.md) · [基准库](../library/README.md)
 
-RAG Collapse 不是在测一次检索是否找到了相关文档，而是在测一个**固定模型 + 递归检索语料**形成反馈环以后，独立来源会不会被模型自己生成的来源逐轮挤出。它把 model-collapse 研究里的递归机制从“训练数据 → 新模型”迁移到“检索语料 → 上下文 → 新来源”，因此测量对象是 corpus provenance 与 retrieval feedback dynamics，而不是基础模型权重退化。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-最近的概念前身是 recursive-training / model-collapse 工作；那些研究关注模型在反复训练于合成数据后的分布退化。这里保持模型权重固定，只让后续检索越来越可能读到先前模型生成的内容，因此能单独问：**即使模型本身没有继续训练，retrieval context 是否也会自我收缩。**
+36页正文第1–17节及附录A.1–A.3全部阅读；附录图29–31另查看渲染页，其余图结合完整正文和图注解释。未复现原始数据，未作人工裁判验证或真实网页部署测量。
 
-## 决定性证据
+[arXiv 2608.22118v1；页边日期 2026-08-22，标题页日期 2026-08-25](https://arxiv.org/pdf/2608.22118v1)
+<!-- EVIDENCE:reading:END -->
 
-论文报告 1,528 次 simulation 中总体 collapse 率为 **79.6%**；Replace-All、Replace-One 与 Search 三类协议均出现高比例 collapse。真正重要的不是某个单点 accuracy，而是多个 corpus-update protocol 下都观察到 independent-source displacement，说明反馈现象不依赖单一替换策略。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 这个分数支持什么判断
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-它支持“在论文构造的 synthetic recursive-retrieval loop 中，self-authored source feedback 足以造成来源多样性坍缩”。它**不支持**“live web 已经发生同样规模的 RAG collapse”，也不能把 collapse 归因于某个 retrieval algorithm：同一模型家族同时承担写入和后续读取，collapse/quality 还依赖 model judge。
+与递归训练导致模型退化的研究不同，此处固定权重，只让回答衍生文章反复进入检索上下文。它把评测从单次答案质量推进到时间上的多样性反馈，但模拟坍缩不能等同真实网络或知识正确性的退化。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-比较不同系统时至少要固定模型家族、初始 corpus、source replacement/search policy、循环轮数、生成预算和 collapse evaluator。只要这些条件变化，结果首先是 system-level evidence。尤其需要区分“模型偏好自己的写作风格”与“语义内容真正被反馈放大”这两个 competing explanations。
+研究固定模型是否因反复检索自己写的文章而失去回答多样性，不训练模型权重。每轮对同一问题生成10个答案，删去引用后由同一模型扩写成不改变原答案的文章。三种反馈机制：Replace All每轮替换全部参考；Replace One每轮替换一个原参考；Search把自写文章逐个加入保留原材料的池中，再搜索前10块。原材料来自2026年1月ChatGPT或Google AI Overview引用并抓取正文，去URL和随机排序减少来源/位置提示。共1019个独立问题、1528次模拟，主要为实体比较和开放建议问题。
+<!-- EVIDENCE:method:END -->
 
-## 研究上怎么用
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-这个 benchmark 更适合作为 **RAG validity / deployment-regression coordinate**，而不是常规 answer-quality leaderboard。若研究声称长期运行的 agentic retrieval 可以持续从开放语料学习，应同时报告 provenance diversity、independent-source survival 和最终任务质量，否则平均 QA 分数可能掩盖语料来源逐步单一化。
+Replace All最多10轮，Replace One20轮，Search30轮；后两者新增文章取一个回答，Replace All取10个。至少5参考，替换实验最多保留10篇最长参考并用LLM抽相关内容；Search用全文、OpenAI vector stores默认分块，精确分块版本/嵌入设置未写。温度默认1.0；GPT-5.2 Chat主比较，额外大样本用GPT-5.2，Gemini3 Pro/Claude Sonnet4.5只做Replace One。每题通常仅一次模拟。GPT-5.2判改写等价、抽实体、评质量；每轮45种答案对仅抽10对。实体坍缩要求10答实体集合相同，开放建议坍缩为抽样10对全部改写等价；大样本连续4轮同答率100%就提前停止。
+<!-- EVIDENCE:setup:END -->
 
-## 下一步最有价值的验证
+<!-- EVIDENCE:result-1:START -->
+## 同模型下三种反馈机制
 
-最关键的缺口是 longitudinal live-web evidence、cross-model authorship、style/content 分离以及人工 provenance 标签。真正能改变结论的实验不是再增加一种 synthetic replacement rule，而是证明在真实刷新语料、不同作者模型和真实搜索排序下仍存在超出自然语料漂移的 excess collapse。
+GPT-5.2 Chat，每轮10答；实体为集合相同，开放建议为10个抽样答案对全等价。各机制轮数和上下文单位不同，不能解释为单一等预算干预；起始时无新增自写材料。
 
-## 谱系位置
+| 机制／题型 | 题数 | 起始坍缩（%） | 终止坍缩（%） |
+|---|---|---|---|
+| 全部替换／实体 | 101 | 2.97 | 88.12 |
+| 逐个替换／实体 | 101 | 2.97 | 88.12 |
+| 搜索／实体 | 101 | 1.98 | 77.23 |
+| 搜索／开放建议 | 57 | 31.58 | 75.44 |
 
-它把 corpus provenance 与反馈动态变成 RAG validity coordinate；当前 `map_delta=reinforces`。它补强的是“语料随 agent 运行而变化时，静态 benchmark score 不够”的方向，而不是替代传统 retrieval relevance 评测。
+事实来源：表 3; 节 8–9.2 · [论文](https://arxiv.org/pdf/2608.22118v1)
+<!-- EVIDENCE:result-1:END -->
 
-Primary: https://arxiv.org/abs/2608.22118
+<!-- EVIDENCE:result-2:START -->
+## 额外问题的大样本搜索模拟
 
-<!-- RESEARCH-DECISION:START -->
+GPT-5.2而非Chat版本；最多30轮，连续4轮同答率100%提前停止。每题一次模拟，定义同上；不是同题模型版本配对实验。
 
-## 研究决策卡
+| 题型 | 题数 | 起始坍缩（%） | 终止坍缩（%） |
+|---|---|---|---|
+| 实体比较 | 742 | 7.01 | 73.85 |
+| 开放建议 | 102 | 7.84 | 83.33 |
 
-### 什么时候值得用
+事实来源：表 3; 节 9.4 · [论文](https://arxiv.org/pdf/2608.22118v1)
+<!-- EVIDENCE:result-2:END -->
 
-适合研究模型自产内容回流语料后的递归反馈，而不是模型参数训练造成的退化。关键变量是独立证据是否被逐步挤出；质量下降可能同时涉及来源同质化、检索偏好和生成风格，不能只归因于一个环节。
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-### 一个具体任务长什么样
+79.6%=1216/1528是异质模拟的终止坍缩比例，不是独立问题比例、相对起始新增坍缩率或真实互联网概率。实体题Replace One在第二轮一篇自写材料后已22.8%坍缩，但这表示该实验中的风险，不证明任意一篇都必然导致坍缩。质量匹配193篇中自写引用率38.2%、原文13.3%；八维回归的自写系数+0.26仍是控制已测变量后的关联，不能排除答案直接性、风格或未测质量混杂。
+<!-- EVIDENCE:interpretation:END -->
 
-示意任务：系统检索材料生成回答，随后这些回答又成为下一轮可检索来源。多轮后，系统可能越来越依赖自己的说法；表面上有更多文档和引用，独立证据的数量却可能减少。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-### 最有判别力的实验
+模拟持续加入同一问题的模型衍生文，不同时加入新的人类/独立信息；两种替换机制强制自写内容进入上下文，Search也只在有限池中竞争。题目来自营销相关检索词并筛掉不触发搜索/少参考者，不能代表所有问题；确定事实本来就可能合理地低多样性。未测真实多轮自主搜索、跨模型递归、去重/多样性干预效果，且大多无重复种子。建议下一步保留新外源流入、控制文章风格与答案内容，盲人工核验等价和事实质量，重复多种检索器与种子，联合报告多样性与正确性。
 
-固定模型和问题，对照独立来源、同模型生成来源与跨模型生成来源，独立改变回流比例和检索策略。逐轮报告事实质量、来源多样性和独立证据占比，避免用同一模型的风格偏好充当退化判据。
+v1页边8月22日与题页8月25日不同。100%同答率仅指45对中抽10对全相同，不是全输出分布退化证明。第9.3节跨模型只用交集41实体/45开放建议题，与表3完整分母不同且初始材料来源也异。原始材料已有自写内容“只会让效应保守”是未验证的方向假设。AI文章来源比例依赖GPTZero预测，不是经确认的作者身份。
+<!-- EVIDENCE:limitations:END -->
 
-### 建议搭配
-
-[snapshot-compatibility-audit](snapshot-compatibility-audit.md) · [kbgym](kbgym.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+相关基准：[snapshot-compatibility-audit](snapshot-compatibility-audit.md) · [kbgym](kbgym.md)

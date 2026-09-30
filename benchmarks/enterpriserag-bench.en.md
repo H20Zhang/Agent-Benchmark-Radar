@@ -6,50 +6,76 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](enterpriserag-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](enterpriserag-bench.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2605.05253) · [Code](https://github.com/onyx-dot-app/EnterpriseRAG-Bench)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-EnterpriseRAG-Bench constructs roughly 500K coherent synthetic documents across nine enterprise source types and 500 questions in ten diagnostic categories. It evaluates document recall, answer alignment/completeness, source constraints, conflict resolution, and not-found behavior.
+Read Sections 1–8, all evaluation and limitation discussion; appendices inspected: A–D, artifact/harness description, generation and question-type procedures, exact corpus and gold statistics. Not performed: No benchmark run, implementation audit or public leaderboard lookup
 
-## Compared with what
+[arXiv v1, 2026-05-05](https://arxiv.org/pdf/2605.05253v1)
+<!-- EVIDENCE:reading:END -->
 
-General RAG often looks like one question and one evidence source. Enterprise workspaces contain duplicated, conflicting, or absent facts across email, tickets, wikis, and documents. A coherent cross-source ontology makes those cases part of one reusable contract.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Score boundary
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-The combined score supports enterprise-style RAG under the synthetic company ontology, chunking/indexing, and judge. It does not establish real deployment robustness because permissions, organizational drift, and proprietary data distributions are not reproduced.
+Compared with public-web or single-source QA, this combines enterprise source types, conflicting versions, constraints and no-answer requests in one synthetic company. It measures work-document organization without testing permission enforcement or task execution.
+<!-- EVIDENCE:placement:END -->
 
-## Fair comparison conditions
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-Align generated corpus version, chunking/index, reader, judge, source constraints, and question category. Different corpus generations require distinct snapshots.
+The synthetic Redwood Inference company begins with organizational, initiative, employee, directory and document-format scaffolds. High-coherence project documents form a core, while topic-controlled generation supplies background volume. Completeness questions distribute facts across four to ten mutually visible documents. Noise includes five percent random misfiling, three percent model-selected plausible misfiling, conflicting near-duplicates and informal files. The final 511,962 documents span nine enterprise source types and support 500 questions in ten categories. Questions are back-generated from documents, discovered through corpus tools or tied to designed document clusters; BM25, vector and Bash-agent pools help check gold labels. This is a synthetic enterprise-style file corpus, not live application interaction.
+<!-- EVIDENCE:method:END -->
 
-## Next evaluation coordinate
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-The next step adds real authorization, versioned artifacts, and writes, testing whether conflict resolution updates or contaminates shared knowledge state.
+BM25 uses an OpenSearch standard analyzer over concatenated text; vector search uses 3,072-dimensional text-embedding-3-large with Qdrant cosine similarity. Both return a fixed top ten. The GPT-5.4-low Bash agent iterates through directory tools for up to ten minutes and returns a variable number of documents. Answer generation and evaluation use GPT-5.4 medium throughout. Correctness is binary semantic alignment; completeness independently checks each atomic fact, after removing citation formatting. Document recall and invalid extras cover only the 470 questions with gold IDs, excluding ten High Level and twenty Info Not Found questions. Leaderboard scores average per-question completeness gated by correctness, not the product of two overall means.
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Separate correctness from completeness
 
-## Research decision card
+Answer metrics cover 500 tasks; invalid extras apply only to 470 tasks with gold IDs and count documents rather than a proportion. BM25 returns ten, while Bash has up to ten minutes and variable output volume; GPT-5.4 medium generates/judges.
 
-### When to use it
+| System | Correctness percent | Completeness percent | Invalid extra documents |
+|---|---|---|---|
+| BM25 | 68.8 | 56.0 | 9.0 |
+| Bash Agent | 60.6 | 61.1 | 2.0 |
 
-Use EnterpriseRAG-Bench for noise, duplicates, conflicts, and missing information within a coherent enterprise-style corpus. A synthetic company enables cross-document reasoning but does not automatically provide real permissions or organizational semantics. High scores do not establish deployment reliability.
+Source: Table 6; Section 6.1 · [Paper](https://arxiv.org/pdf/2605.05253v1)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:result-2:START -->
+## Completeness tasks: more recall need not mean correctness
 
-Illustrative task: project decisions are distributed across documents, messages, and other enterprise sources, with duplicates and conflicting versions. The agent must identify operative evidence and answer the full scope; one supporting passage does not show conflict resolution.
+Twenty completeness questions with an average of 6.5 gold documents, range two to ten. Percentages measure gold-set recall and final-answer correctness, with unequal system budgets.
 
-### Most discriminating experiment
+| System | Correctness percent | Document recall percent |
+|---|---|---|
+| BM25 | 40.0 | 46.5 |
+| Bash Agent | 35.0 | 59.0 |
 
-Fix the corpus snapshot and chunking, then report source-constrained, conflict, completeness, and not-found slices. Add a supplied-correct-document-set condition and scale the corpus to distinguish cross-source reasoning, index coverage, and adaptation to the synthetic company.
+Source: Table 7, Completeness row · [Paper](https://arxiv.org/pdf/2605.05253v1)
+<!-- EVIDENCE:result-2:END -->
 
-### Pair with
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-[gatemem](gatemem.en.md) · [mudabench](mudabench.en.md)
+BM25 correctness, 68.8%, exceeds the Bash agent’s 60.6%, while Bash completeness, 61.1%, exceeds BM25’s 56.0% and includes fewer invalid extra documents. On the twenty completeness questions, Bash recall is higher, 59.0% versus 46.5%, but correctness is lower, 35.0% versus 40.0%. More required documents do not guarantee correct synthesis. Bash also has up to ten minutes of exploration rather than fixed top-ten retrieval, making this a system-level tradeoff rather than a matched-budget algorithm comparison.
+<!-- EVIDENCE:interpretation:END -->
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-<!-- RESEARCH-DECISION:END -->
+A single technology company is simulated, and flattened JSON omits real thread trees, rich media and access-control constraints. Bulk background documents have weaker coherence than the high-fidelity core. Similar local embedding density to the authors’ Onyx sample does not establish broad realism. Pooling uses retrieval systems also evaluated as baselines, potentially influencing judgments. Perfect results on twenty missing-information questions do not establish robust abstention. The paper leaves true sequential clue discovery, multimodality, recency and people-centric questions to future work. Next, freeze gold versions, expand to independent enterprise corpora and blinded human review, and match latency/token budgets.
+
+Constrained questions are described as requiring exactly one gold document in Sections 2/4.4/C.2, but Table 11 and Appendix D.3 report a mean of 1.4, range one to two. Treat the exact gold-file snapshot as authoritative when reproducing. Section 5 discusses correction-aware scoring, while the explicit leaderboard note freezes gold within a release; distinguish experimental comparative correction from published within-version leaderboard scoring. The headline approximately 500,000 and Table 1 approximate source counts differ from exact released total 511,962 in Table 9; use the exact total for reproducibility. High Level generation explicitly does not guarantee every question is fully answerable from the released document set, despite references being produced from company scaffolding.
+<!-- EVIDENCE:limitations:END -->
+
+Related benchmarks: [gatemem](gatemem.en.md) · [mudabench](mudabench.en.md)

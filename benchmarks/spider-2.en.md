@@ -1,4 +1,4 @@
-# Spider 2.0: enterprise text-to-SQL becomes an agent workflow
+# Spider 2.0: interactive enterprise-database workflows
 
 <!-- RELEASE-REFERENCE:START -->
 > **Release result (historical reference; not a best claim)** · 2024-11-12 · paper v1<br>
@@ -7,64 +7,57 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](spider-2.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](spider-2.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2411.07763) · [Project](https://spider2-sql.github.io/)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-Spider 2.0 evaluates **real-world enterprise text-to-SQL workflows**, not isolated query generation. Its 632 problems use real application databases, often with more than 1,000 columns and cloud systems such as BigQuery and Snowflake; solving them can require metadata search, dialect documentation, project code, multiple queries, and workflows exceeding 100 SQL lines.
+Read the complete 45-page v1, including evaluation, annotation, databases, documentation, harnesses, costs, cases and prompts in Appendices A, B.1–B.8 and C.1–C.6.
 
-## What changed relative to prior evaluation
+[arXiv 2411.07763v1 · 2024-11-12](https://arxiv.org/pdf/2411.07763v1)
+<!-- EVIDENCE:reading:END -->
 
-Spider 1.0 asks for generalization to unseen schemas; BIRD adds realistic database values. Spider 2.0 changes the unit of work itself: an agent must navigate a large data environment and construct a multi-step SQL workflow, closer to data engineering/analytics than one semantic-parsing prediction.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Decisive evidence
+Spider 2.0 evaluates database workflows using code, documentation and execution feedback. Lite is a different SQL-output track. Focused judges check task-designated outputs rather than universal whole-table equality.
 
-The original evaluation reports an o1-preview-based code agent at only 17.0% success on Spider 2.0, versus 91.2% on Spider 1.0 and 73.0% on BIRD. The collapse is direct evidence that prior benchmark saturation did not transfer to enterprise workflow complexity.
+<!-- EDITORIAL-METHOD:START -->
+Tasks place natural-language requests inside workspaces containing databases, documentation and project files. An agent discovers schemas and dialect conventions, inspects values, edits SQL or project code, runs it and responds to errors before submitting the required artifact; Lite asks only for SQL. An illustrative workflow reads a metric definition, locates join keys, fixes a dialect error and produces the result file. Reference workflows distinguish generating one query from discovering the context needed to finish a task, while focused output checks can leave side effects or extraneous content unexamined.
 
-## What the score supports
+Editorial placement: this extends Spider/BIRD’s static question-plus-schema setting toward document use, project navigation and execution feedback. Different tracks and older benchmarks do not form a matched model-difficulty curve; the change in workflow requirements is the stronger comparison.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-Spider 2.0 supports end-to-end competence at enterprise SQL workflow construction under its environment. It does not isolate SQL reasoning from metadata retrieval, long-context management, dialect knowledge, code navigation, or agent scaffold quality.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+The original agent track reports 632 tasks; Lite has 547. The agent receives a heuristic 30-step request and stops after three repeated results or an action exceeding 120 seconds. Lite uses temperature 0 and 128K context; BigQuery value linking is omitted.
+<!-- EVIDENCE:setup:END -->
 
-Pin database/cloud snapshots, SQL dialects, metadata and codebase access, agent harness, model, execution/retry budget, and evaluator. A system given preselected relevant tables is solving a materially easier task than one required to discover them.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+V1; within-track comparisons only. SR is focused-output task success; Lite EX is focused execution agreement. Reference plans are privileged inputs.
 
-Business definitions, ambiguous stakeholder intent, governance, permission, production writes, and persistent maintenance remain only partially represented. Real warehouses also evolve continuously rather than staying frozen for one benchmark run.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Spider-Agent + o1-preview | Original track; 632 reported tasks | SR (%; inconsistent count denominator) | 17.01% | Code/docs/tools; temperature conflict | Table 4, p. 7; C.1, p. 35 |
+| Spider-Agent + GPT-4o | Original track; 632 reported tasks | SR (%) | 10.13% | Same named scaffold | Table 4, p. 7 |
+| DAIL-SQL + GPT-4o | Spider2.0-lite; 547 tasks | EX (%) | 5.68% | T=0; sampled values/docs; no reference plan | Tables 5/10, pp. 7/9 |
+| DAIL-SQL + GPT-4o + reference plan | Spider2.0-lite; 547 tasks | EX (%) | 8.78% | T=0; human reference plan | Table 10, p. 9 |
 
-## Next discriminating validation
+Fact source: [Table 4, p. 7; C.1, p. 35; Table 4, p. 7; Tables 5/10, pp. 7/9; Table 10, p. 9](https://arxiv.org/pdf/2411.07763v1)
+<!-- EVIDENCE:results:END -->
 
-Decompose performance into metadata discovery, semantic/schema resolution, workflow planning, query execution, and repair using oracle interventions. This would tell whether the 17% bottleneck is mostly retrieval/context or SQL/program synthesis.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-<!-- RESEARCH-DECISION:START -->
+The 91.2/73.0/17.0 comparison combines earlier GPT-4 methods with Spider-Agent+o1-preview; it is not matched transfer. Table 4’s 17.01% conflicts with the conclusion’s 18.8% and cannot yield a consistent integer numerator over 632. Main-text temperature 0 conflicts with agent Appendix C.1’s 1.0/top-p 0.9. Preserve these unresolved discrepancies.
 
-## Research decision card
-
-### When to use it
-
-Use Spider 2.0 for metadata search, dialects, and repository navigation in enterprise SQL workflows, but identify the track first. The original paper setting, Snow, Lite, and DBT are not one task set. Track and version matter more than the umbrella name when interpreting difficulty or scores.
-
-### What a concrete task looks like
-
-Illustrative task: an agent inspects metadata and project documentation, runs several queries or modifies a transformation project, and delivers a result artifact. Correctness depends on schema, execution environment, and deliverable requirements rather than plausible-looking SQL alone.
-
-### Most discriminating experiment
-
-Report track, environment version, accessible metadata, and execution budget separately. Keep oracle-table conditions outside ordinary discovery rankings. Under a fixed backbone, compare metadata retrieval and workflow policies to locate discovery, generation, and execution gains.
-
-### Pair with
-
-[livesqlbench](livesqlbench.en.md) · [data-eng-bench](data-eng-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`single query → complex unseen schema → large enterprise SQL workflow`
-
-Spider 2.0 is where text-to-SQL evaluation becomes unmistakably an agent-systems problem.
+<!-- EDITORIAL-NEXT:START -->
+Next, fix model and budget within the agent track, separately supply the correct files, relevant documentation or reference plan, and classify discovery, execution and artifact failures. A plan’s benefit may come from privileged decomposition rather than transferable planning ability.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

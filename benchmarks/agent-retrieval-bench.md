@@ -1,4 +1,4 @@
-# Agent Retrieval Bench：coding agent 在写 patch 之前，先得找到真正该读的代码
+# Agent Retrieval Bench：检验代码代理下一步该读哪些文件
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-07-27<br>
@@ -6,50 +6,93 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](agent-retrieval-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](agent-retrieval-bench.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2607.24882) · [代码与数据](https://github.com/eyuansu62/agent-retrieval-bench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-Agent Retrieval Bench（ARB）隔离 coding agent 的 **context-acquisition layer**：给定真实 workflow signal 与冻结 base commit，检索器要找到智能体下一步真正需要阅读的文件，或者在仓库不存在有用本地上下文时正确弃答。相关性由 workflow need 定义，不等于 query 与文件文字相似。
+29页正文第1–13节及附录A–E全部阅读，包含各样例、检查点与分词器警告、上下文种子干预及封闭工具实验；未复现或独立审查语义标签。
 
-## 相比此前评测多测了什么
+[arXiv v1, 2026-07-27](https://arxiv.org/pdf/2607.24882v1)
+<!-- EVIDENCE:reading:END -->
 
-传统 code retrieval 常以 query-file 相似性或已知修改文件定义 gold；ARB 使用 code2test、comment2context、trace2code、edit2ripple 四类真实工作流关系，并加入 natural no-gold 与 wrong-repository counterfactual，直接测 selective retrieval。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 决定性证据
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-当前发布包含 427 个样本、25 个仓库；正例 345 个，另有 50 个 natural no-gold 与 32 个 counterfactual control。论文报告没有一种 retrieval family 在所有任务和指标上占优；logged agent trajectories 在 27–35% 样本上一个 gold file 都没找到。
+相较RepoBench的上下文补全与SWE-bench的最终修复，这里把工作流信号到下一步文件的检索独立出来，并加入预算与自然无金标拒答。它能区分找到文件、找到关键行和修好代码三个阶段，不能用文件分数替代测试通过率。
+<!-- EVIDENCE:placement:END -->
 
-## 这个分数能证明什么
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-它支持 file-level upstream context acquisition 的判断，不支持“更高 Recall 一定带来更高 patch success”。官方范围也明确：file hit 不等于 function/span localization，当前 seed intervention 测的是 context-selection behavior，不是完整 repair success。
+把代码代理改代码前“下一步该读哪些文件”单独评测。25仓库427样本：106个实现→测试、80个评论→额外上下文、101个失败栈→根因源码、58个锚点修改→连带文件；另50个维护者证实外部解决的自然无金标和32个错仓库对照。正例在解决前base commit冻结，已给文件不算额外目标；清除精确金标路径、最终补丁和修复提交等捷径。实际样本用271快照，完整复用清单308快照/29仓库约39.2万文件和792万块，不是每题都搜所有仓库。工作流证据支持标签，但不穷尽所有有用文件。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-固定 repository/base commit、candidate filter、token packing、top-k/context budget、selective threshold 与 metric version。不同 release bundle 的 corpus inventory 和 evaluated snapshots 也要明确，不能混用 legacy packing 指标与 canonical BCY。
+嵌入经SentenceTransformers不加模型推荐查询提示、L2归一化、余弦检索，文件取块最大分；所有候选文件可选。Qwen4B/8B序列上限40960，Jina/Nomic/pplx32768；pplx的fix_mistral_regex未启用，成绩暂定。BCY按正则代码token贪心装完整文件、边界截前缀，路径头计预算，金标正文见到1个token即算文件暴露；不是模型token或读懂文件。主表345正例，轨迹/融合/跨度仅287题。选择拒答按仓库分组5折，训练折选最大平衡准确率阈值。45题种子试验固定Codex GPT-5.5、最多16调用/20轮/8000后续读取token/单文件1200token，最后交3文件；每样本每组仅一轨迹，无记录温度或随机种子。
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 排行随预算和仓库权重改变
 
-函数/行级定位、编辑生成、测试通过率、跨多轮工具探索，以及检索成本对完整修复时延的影响。
+345正例、25仓库，全值0–1；Recall为标准文件召回比例，MRR看首个金标，BCY为8000正则token内金标文件暴露。仓库宏平均先库内平均，再25库等权。
 
-## 下一步最有判别力的验证
+| 检索器 | 样本加权Recall@20 | 样本加权MRR | BCY@8k | 仓库宏平均Recall@20 |
+|---|---|---|---|---|
+| Qwen3-Embedding-4B | 0.6306 | 0.2379 | 0.3409 | 0.6344 |
+| Qwen3-Embedding-8B | 0.7029 | 0.2336 | 0.3732 | 0.6193 |
+| RepoMap | 0.6333 | 0.2158 | 0.3788 | 0.4619 |
 
-在同一 repair agent 下做 `random seed context / retrieved context / oracle gold context` 干预，并固定后续探索预算；最终用测试通过率和新增探索量同时检验 file retrieval 是否真正改善修复。
+事实来源：表 4–5 · [论文](https://arxiv.org/pdf/2607.24882v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
-## 研究决策卡
-### 什么时候值得用
-如果你的 claim 是 context engine、repo retrieval 或 agent search 帮 coding agent 找到下一步所需上下文，ARB 比直接跑 patch benchmark 更容易做因果归因。
-### 一个具体任务长什么样
-示意任务：失败 trace 暴露的是测试文件，但真正需要阅读的是另一个模块里的 root-cause implementation；检索器必须跨表面词汇定位下一步工作所需文件。
-### 最有判别力的实验
-固定 repair agent 和 post-seed exploration budget，只替换初始上下文为 random、retrieved 与 oracle gold，再看 file F1 与最终 tests。
-### 建议搭配
-[BEIR](beir.md) · [The Recall Trap](recall-trap.md) · [BrowseComp-Plus_CM](browsecomp-plus-cm.md)
-> **读分数的原则：** file-level retrieval 是上游坐标，不应直接包装为 end-to-end coding-agent success。
-<!-- RESEARCH-DECISION:END -->
+<!-- EVIDENCE:result-2:START -->
+## 自然无金标下阈值拒答的负结果
 
-## 演化位置
-`semantic code retrieval → workflow-conditioned context acquisition → selective retrieval / downstream intervention`
+345正例+50自然无金标题，排除32错库对照后重建5折。0–1比例；成功为无金标正确拒答或正例放行且前20至少命中一标准文件，不是标准文件召回。
+
+| 排序器 | 正例放行率 | 无金标拒答率 | 选择成功率@20 | 始终检索成功率 |
+|---|---|---|---|---|
+| Lexical | 0.423 | 0.58 | 0.294 | 0.499 |
+| Jina-0.5B | 0.377 | 0.94 | 0.334 | 0.489 |
+| BM25 | 0.188 | 0.98 | 0.22 | 0.463 |
+
+事实来源：表 19, 仅自然无金标行 · [论文](https://arxiv.org/pdf/2607.24882v1)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:result-3:START -->
+## 固定工具策略的上下文种子试验
+
+45题，每任务15题，每组每题单次Codex GPT-5.5轨迹；F1为0–1，其他为每题均值。后续token不含预装种子，不能称总token。仅提交3文件，无编辑/测试动作。
+
+| 种子组 | 最终文件F1 | 工具调用 | 种子后token | 预装种子token |
+|---|---|---|---|---|
+| 无种子 | 0.3222 | 3.71 | 2137.3 | 0 |
+| 随机非金标 | 0.3437 | 8.49 | 3681.7 | 2427.8 |
+| RRF | 0.3967 | 5.42 | 1856.7 | 3298.8 |
+| 标准文件种子 | 0.6337 | 4.18 | 1736.4 | 1781.3 |
+
+事实来源：表 16 · [论文](https://arxiv.org/pdf/2607.24882v1)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
+
+样本加权Recall@20由Qwen8B领先0.7029，但25仓库等权后Qwen4B为0.6344、高于8B的0.6193；排行依赖任务/仓库权重。自然无金标单独校准后，三个阈值策略的选择成功率都低于始终返回文件，不能用混入错仓库的漂亮拒答率掩盖。种子干预中RRF比随机上下文有更高文件F1、更少后续读取，但总读取还须加预装种子，且单次轨迹不能证明小组差异显著，更不能推出修复成功提升。
+<!-- EVIDENCE:interpretation:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
+
+有目的挑选25仓库，Gin占正例25.5%；自动质量检查零违规只针对指定捷径，不保证无训练污染或完整语义金标。原始分数未给稳定的多种子区间，嵌入提示也未按各模型优化。文件命中可能离关键行仍远：中位证据只占文件4.7%。PES是潜在首命中延迟的上界代理，不是实际省调用的因果估计；事后轨迹前缀不等于低预算重跑。下一步在可执行修复任务上固定模型/工具/总token/采样并配对随机、检索、oracle种子，联合测测试通过和文件/跨度定位。
+
+附录B评论样例的tokio/src/sync/mpsc/chan.rs同时列为必要金标和负干扰项，辅助标签冲突需工件核验。通用去补丁措辞须为edit2ripple保留锚点diff作例外，它不同于泄露连带目标的最终补丁。表12跨度诊断用旧8000字符装包，不能混成正则token预算BCY。所选主表数值未发现明显冲突；pplx及高预算下界仍按原文限定。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[BEIR](beir.md) · [The Recall Trap](recall-trap.md) · [BrowseComp-Plus_CM](browsecomp-plus-cm.md)

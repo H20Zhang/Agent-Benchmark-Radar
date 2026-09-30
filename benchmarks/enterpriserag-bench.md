@@ -1,4 +1,4 @@
-# EnterpriseRAG-Bench：企业 RAG 的难点是跨源冲突、约束与“找不到”
+# EnterpriseRAG-Bench：检验企业资料中的冲突、约束与无答案
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-04-14<br>
@@ -6,50 +6,76 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](enterpriserag-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](enterpriserag-bench.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2605.05253) · [代码](https://github.com/onyx-dot-app/EnterpriseRAG-Bench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-EnterpriseRAG-Bench 构造约 500K coherent synthetic documents，覆盖 9 类 enterprise source types，并设计 500 个 questions、10 个 diagnostic categories。它同时测 document recall、answer alignment/completeness、source constraints、conflict resolution 与 not-found behavior。
+20页正文第1–8节及附录A–D全部阅读，含全部问题生成流程、评测、金标修订、精确语料/金标统计；未运行系统或核验实时榜单。
 
-## 相比什么前进了
+[arXiv v1, 2026-05-05](https://arxiv.org/pdf/2605.05253v1)
+<!-- EVIDENCE:reading:END -->
 
-通用 RAG benchmark 往往是一问一证据。企业场景中同一事实可能在 email、ticket、wiki、document 中重复、冲突或缺失；EnterpriseRAG-Bench 把这种 coherent cross-source workspace 设为统一 ontology，使 conflict 和 absence 进入 contract。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-combined score 支持在 synthetic company ontology、chunking/indexing 与 judge 下的 enterprise-style RAG；它不证明真实企业 deployment，因为 permissions、organizational drift 与 proprietary distributions 都没有被复现。
+相较公开网页或单库问答，这里将多种企业来源、相互冲突的版本、限定条件和无答案任务放入统一合成公司。它把真实工作资料组织方式纳入测量，但资料检索仍不等于权限管理或任务执行。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-锁定 generated corpus version、chunking/index、reader、judge、source constraints 与 question category。不同 corpus generator/version 应单独 snapshot。
+合成Redwood Inference公司，先建立公司、战略、人员、目录与文档规范，再生成高一致性项目核心及按主题控制的海量背景文件。完整性题用4–10篇互相可见的文档分散事实；噪声包含5%随机错放、3%模型选择的合理错放、事实冲突近重复及杂项。最终511962篇文档覆盖九种企业来源，500题分十类。问答由单文档反向生成、工具探索语料或预设文档簇构造，再以BM25/向量/Bash代理结果池补查金标；它是企业风格合成文件库，不是接入真实企业应用执行任务。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-下一步应加入真实 authorization、versioned artifacts 与 write operations，验证冲突解决后系统是否会更新或污染共享知识状态。
+BM25使用OpenSearch标准分析器和拼接文本字段；向量为text-embedding-3-large的3072维、Qdrant余弦检索，两者固定top-10。Bash代理用GPT-5.4 low，在目录中迭代grep/find/read，限时10分钟、文档数可变；各系统答案生成和评判均用GPT-5.4 medium。正确性是二元语义对齐，完整性是逐原子事实覆盖比例，二者独立判定且先去引用格式。文档召回与无效额外文档只覆盖470道有金标ID的题；另外10道High Level与20道Info Not Found不算文档召回。榜单按每题“正确时的完整性，否则0”再平均，不等于两个总体均值相乘。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 正确性与完整性分开比较
 
-## 研究决策卡
+答案指标覆盖500题；无效文档数只对470道有金标ID的题计分，单位为篇而非比例。BM25固定10篇，Bash最多10分钟、返回量可变；GPT-5.4 medium生成/评判。
 
-### 什么时候值得用
+| 系统 | 正确率（%） | 完整性（%） | 无效额外文档数 |
+|---|---|---|---|
+| BM25 | 68.8 | 56.0 | 9.0 |
+| Bash Agent | 60.6 | 61.1 | 2.0 |
 
-适合在统一企业式语料中研究噪声、重复、冲突和缺失信息。连贯的合成公司比互不关联文档更利于交叉推理，但组织权限与真实业务语义仍不是自动获得的；高分不能直接解释为企业部署可靠性。
+事实来源：表 6; 节 6.1 · [论文](https://arxiv.org/pdf/2605.05253v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 完整性题：召回更多不保证答对
 
-示意任务：项目决定分散在文档、消息与其他企业来源中，其中有重复版本和相互冲突的描述。系统需要识别有效证据并回答完整范围；找出一个支持片段并不代表已经处理了冲突。
+20道完整性问题，平均6.5个标准文档、范围2–10；百分数，召回按每题标准集合，正确率按最终回答；两系统预算不等。
 
-### 最有判别力的实验
+| 系统 | 正确率（%） | 文档召回率（%） |
+|---|---|---|
+| BM25 | 40.0 | 46.5 |
+| Bash Agent | 35.0 | 59.0 |
 
-固定语料快照与切块方式，分别测来源受限、冲突、完整性和无答案问题。加入正确文档集合给定条件，再按语料规模扩展，检验收益来自跨来源推理、索引覆盖还是对合成公司的适配。
+事实来源：表 7, 完整性行 · [论文](https://arxiv.org/pdf/2605.05253v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-[gatemem](gatemem.md) · [mudabench](mudabench.md)
+BM25正确率68.8%高于Bash代理60.6%，但Bash完整性61.1%高于BM25的56.0%，无效额外文档也更少；不能用一个数字概括全面领先。20道完整性题中，Bash召回59.0%高于BM25的46.5%，正确率却35.0%低于40.0%，说明找回更多必要文件仍不保证汇总正确。Bash还拥有最多10分钟探索而非固定top-10，结果是系统级取舍，不是等预算检索算法对照。
+<!-- EVIDENCE:interpretation:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-<!-- RESEARCH-DECISION:END -->
+只模拟一家科技公司，扁平JSON不包含真实线程树、富媒体或权限约束；批量背景文档的一致性低于高质量核心。局部嵌入密度接近Onyx内部样本不等于全面现实有效性，且对照来自作者公司。构造池与基线共享检索系统可能影响相关性标注；无答案题20例全部系统100%不能证明可靠拒答。未来工作明确仍包括真正的逐步线索发现、多模态、时效与人员关系。下一步固定金标版本，扩展独立企业语料与人工盲评，并在同延迟/token预算下测试系统。
+
+Constrained在正文和生成流程中要求唯一金标文档，但表11/附录D.3给均值1.4、范围1–2；复现需锁定实际问题文件。金标可修订的比较实验与同版本榜单固定金标必须区分。约50万与表1近似分布不是精确规模，表9为511962。High Level流程明确不能保证每题都能由发布文档完整回答，参考答案却来自公司框架资料。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[gatemem](gatemem.md) · [mudabench](mudabench.md)

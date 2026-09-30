@@ -1,4 +1,4 @@
-# FDABench: analytical data agents over heterogeneous evidence
+# FDABench: analytical workflows and tool-call evaluation over heterogeneous evidence
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2025-09<br>
@@ -6,64 +6,74 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](fdabench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](fdabench.md) | **English** · [Home](../README.en.md)
 
-[Project](https://fdabench.github.io/)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-FDABench evaluates data agents that answer analytical questions over **heterogeneous evidence**: structured databases, documents, web content, images, video, and audio. Tasks can require planning, tool use, reflection, and multi-agent workflows rather than one SQL/code call.
+Read all 12 pages of v3 including Appendices A–D, plus the complete five-page official technical report; checked Tables 6 and 10.
 
-## What changed relative to prior evaluation
+[arXiv 2509.02473v3 · 2026-08-15](https://arxiv.org/pdf/2509.02473v3)
+[Official technical report · 2026-09-30](https://github.com/fdabench/FDAbench/blob/main/technical_report.pdf)
+<!-- EVIDENCE:reading:END -->
 
-Text-to-SQL and notebook benchmarks usually start from one dominant data modality. FDABench makes source selection and cross-modal evidence composition part of the analytical workflow, then evaluates both outcomes and reasoning traces.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Decisive evidence
+FDABench v3 contains 2,007 tasks over 139 databases and frozen document, web, image, video and audio evidence: 579 single-choice, 760 multiple-choice and 668 report tasks. Authors compare planning, reflection, direct tool use and other workflows. Some prior systems are reimplementations, not original releases. Systems lacking native multimodality receive text fallbacks, creating an input-interface confound.
 
-The benchmark contains 2,007 tasks across 50+ domains, three task types, and multiple heterogeneous data sources. Its evaluation includes choice correctness, rubric-scored reports, DAG-based trace metrics, latency, and token cost, making resource use and workflow structure visible alongside answer quality.
+[Source](https://arxiv.org/pdf/2509.02473v3)
 
-## What the score supports
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: compared with DA-Code’s interactive artifact tasks, FDABench organizes analytical workflows over heterogeneous evidence and evaluates tool selection/calls. Tool-call success complements final-artifact evaluation but is not interchangeable with end-to-end analytical task success.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-FDABench supports an end-to-end claim about multi-source analytical agents under a given scaffold. Its breadth does not isolate whether gains come from planning, retrieval, multimodal perception, tool execution, or the backbone model.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Fair comparison contract
+EX scores choices, RS grades report dimensions, and TOS measures tool/reference-structure agreement. SR means successful tool execution, not end-to-end task success. The technical report specifies Gemini-3-Flash-preview judging at temperature 0 with at most 500 output tokens. A complete common agent step/token cap is not given; construction-model limits must not be substituted for evaluation budgets.
 
-Fix accessible data sources, model, toolset, agent scaffold, latency/token budget, and evaluator. Separate deterministic choice tasks from rubric-scored report tasks and report trace/cost metrics; otherwise an expensive scaffold can dominate via more exploration.
+[Source](https://arxiv.org/pdf/2509.02473v3)
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Selected workflows with GPT-5 fixed, v3 Table 6
 
-Task-local data avoids longitudinal enterprise changes, permissions, writes, collaborative operations, and evolving semantic definitions. LLM-judged reports also introduce evaluator dependence.
+V3 with GPT-5 fixed; EX covers 1,339 choice tasks, RS covers 668 reports, and TOS is a tool/structure score; token budgets are not equalized; Cost is a reported resource outcome.
 
-## Next discriminating validation
+| Model / workflow | RS (0–1) | EX (0–1) | TOS (0–1) | Cost (tokens, reported) |
+| --- | --- | --- | --- | --- |
+| GPT-5 / Reflection | 0.418 | 0.628 | 0.331 | 12331 |
+| GPT-5 / Planning | 0.409 | 0.610 | 0.412 | 4430 |
+| GPT-5 / Tool-use | 0.450 | 0.536 | 0.392 | 2587 |
 
-Construct matched single-source and heterogeneous versions of the same analytical question and intervene on source routing. This would quantify the marginal difficulty created by cross-source integration rather than generic reasoning complexity.
+Source location: Main§4.3,§5.1,§5.3/Table 6 PDFp8; technical report§1,§6,§9 · [Source](https://arxiv.org/pdf/2509.02473v3)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## Report-grading agreement sample, v3 Table 10
 
-## Research decision card
+200 sampled tasks across types and three independent experts; report-subset size unspecified; agreement coefficients are not task accuracy.
 
-### When to use it
+| Comparison | Krippendorff alpha | ICC(A,1) | Kendall tau-b |
+| --- | --- | --- | --- |
+| Report: Human vs Human | 0.81 | 0.84 | 0.95 |
+| Report: Human vs LLM | 0.76 | 0.79 | 0.92 |
 
-Use FDABench for analytical workflows across structured, document, and multimodal sources. Combining discovery, tools, and reporting improves breadth, but an aggregate across heterogeneous tasks can hide failure location. Preserve correctness, report quality, and resource-cost readouts.
+Source location: Main§5.5, Table 10 PDFp9; technical report§5 gives per-dimension detail · [Source](https://arxiv.org/pdf/2509.02473v3)
+<!-- EVIDENCE:result-2:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-Illustrative task: an analysis needs tables, documents, and media, requiring an access plan and a synthesized conclusion. Missing a source type can produce a one-sided report, while a complete-looking report can still contain unsupported calculations or claims.
+With GPT-5 fixed, workflows trade quality against cost. Judge agreement is validated on 200 sampled tasks across types, with the report-only count unspecified; it does not guarantee all report grades. Reference tool graphs may omit valid alternative paths.
 
-### Most discriminating experiment
+This note uses v3 dated August 15, 2026, not the initial 2025 release results. The official technical report supplements the reading; scorer settings should be pinned with code revisions.
 
-Fix tools and backbone, slice by source combination and task type, and supply correct source sets to diagnose discovery. Keep choice, report, and trajectory scores separate and charge multimodal parsing costs so expensive preprocessing does not create an opaque advantage.
+Fix model, budget and modality inputs, ablate planning and reflection separately, blind-review alternative tool paths and jointly report answers, reports, tool selection and runtime failures.
 
-### Pair with
-
-[dataspace](dataspace.en.md) · [kramabench](kramabench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`single-source analytics → heterogeneous evidence workflows → multi-source data-agent orchestration`
-
-FDABench broadens the measurement object from query execution to evidence orchestration.
+[Source](https://arxiv.org/pdf/2509.02473v3)
+<!-- EVIDENCE:limitations:END -->

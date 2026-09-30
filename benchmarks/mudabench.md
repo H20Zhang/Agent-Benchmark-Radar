@@ -1,4 +1,4 @@
-# MuDABench：从“找几篇支持文档”推进到 collection-wide extraction + aggregation
+# MuDABench：跨文档集合提取与汇总证据
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-04-19<br>
@@ -6,50 +6,90 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](mudabench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](mudabench.en.md) · [基准库](../library/README.md)
 
-[论文](https://aclanthology.org/2026.findings-acl.341/) · [代码](https://github.com/Zhanli-Li/MuDABench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-MuDABench 包含 332 个 financial analytical questions，覆盖超过 80K report pages；当前仓库组织 166 simple + 166 complex questions 与 589 source PDFs。任务要求跨大量文档做 extraction、aggregation 与 numerical/code-assisted reasoning，并提供 intermediate-fact coverage 诊断。
+22页全文第1–6节及附录A.1–A.8，包含同子集人工对照、数据/模型来源、合并策略及全部提示与例子；未重建运行分母。
 
-## 相比什么前进了
+[ACL 2026 Findings, pp. 6877–6898](https://aclanthology.org/2026.findings-acl.341.pdf)
+<!-- EVIDENCE:reading:END -->
 
-Multi-document QA 常只需两三份 supporting documents。MuDABench 把 candidate collection 扩到真正的 report collection，使系统必须先找到一组分散事实，再进行汇总或计算。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-final accuracy 与 intermediate-fact coverage 支持在当前 document release、PDF extraction 与 harness 下的 collection-scale analysis。annotation 与 document coverage 仍在演化，因此不同 release 的数字必须绑定版本。
+与只需少量支持段落的多跳问答相比，MuDABench要求遍历给定文档集合并提取、计算和汇总表格。测量重心从找到一条证据链转为集合覆盖和计算完整性；它仍不等同全档案发现。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-锁定 PDF corpus、annotation version、extraction pipeline、retrieval budget、agent harness 与 numerical evaluator。修订 annotation 后不应和旧 snapshot 混排。
+589份中美上市公司年报、ESG及公告构成超过8万页语料；每个分析问题配5–38份PDF，平均14.8份。文档元数据记录股票代码、财年和类型，金融结构数据库中的指标经专家转为自然语言中间事实，再以模板构成332道简单/复杂分析题。提出的工作流先按元数据生成单文档问题模板，逐文档RAG抽取，再分批归一为统一扁平JSON，最后让代码代理对全量记录计算。它面向限定文档集合的筛选、聚合和跨年计算，不是只检索少数相关片段。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-下一步应评价 evidence completeness 的置信度与 missing-document detection：系统何时知道自己的 collection 不完整，而不是只输出一个数字。
+标准RAG用OpenAI File Search与GPT-4o-2024-11-20，检索块预算为文档数|D|的1/1.5/2/2.5倍，API最多50块。工作流规划/代码为DeepSeek-R1-0528，归一为V3-0324，单文档QA主要GPT-4.1-mini-2025-04-14，每文档3或5块；另有GPT-4o大块设置，不能混成同底座等预算比较。所有温度0。Kimi K2评最终及其他判断，DeepSeek-V3.2评对齐单元格。标准RAG过程分取覆盖率与1−漏错率的较小值；工作流过程分是对齐行的正确指标单元格比例。Full要求过程全对且答案对；数值容差通常只要求整数和第一位小数一致。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 更多片段不保证更好最终答案
 
-## 研究决策卡
+0–1，复杂题标准RAG；块预算按每题文档数倍数、最多50块。本文不从小数反推未明列的有效运行分母。
 
-### 什么时候值得用
+| GPT-4o 检索预算 | 过程分 | 最终准确率 | Full准确率 |
+|---|---|---|---|
+| 1倍文档数 | 0.1459 | 0.0482 | 0.0181 |
+| 2.5倍文档数 | 0.2623 | 0.0482 | 0.012 |
 
-适合研究跨大量文档的抽取与聚合，而不只是找到几篇相关材料。分析型问题需要覆盖应纳入计算的整个集合；高 top-k 相关性可能仍漏掉改变汇总结果的文档。
+事实来源：表 2, 无元数据的标准RAG，复杂题 · [论文](https://aclanthology.org/2026.findings-acl.341.pdf)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 同一人工子集的最终答案比较
 
-示意任务：需要从多份财务报告提取同口径数字，按实体与时期对齐后做计算。单篇报告抽取正确还不够，漏掉一个范围内对象或混入不同口径，就可能得到貌似精确的错误结果。
+0–1，仅表5同一选定人工评测子集；两名志愿者，原文未清楚报告该子集及各行有效任务数。不可当作全332题的人类准确率。
 
-### 最有判别力的实验
+| 系统 | 简单题最终准确率 | 复杂题最终准确率 |
+|---|---|---|
+| 工作流 GPT-4.1-mini 每文档5块 | 0.2 | 0.3333 |
+| 人工志愿者 | 0.8334 | 0.7334 |
 
-把文档覆盖、字段抽取和最终聚合分别评分，加入完整文档集合给定与正确中间表给定条件。核对标注修订及 PDF 解析版本，判断瓶颈是在发现、解析还是运算，而不是统称为推理失败。
+事实来源：附录 A.1 表 5 · [论文](https://aclanthology.org/2026.findings-acl.341.pdf)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:result-3:START -->
+## 抽取是小样本诊断中的主要弱项
 
-[t2-ragbench](t2-ragbench.md) · [dataspace](dataspace.md)
+5块工作流随机30例，独立检查每个阶段；此列不是“此前步骤全对”条件下的准确率。
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+| 阶段 | 独立准确率（%） |
+|---|---|
+| 规划 | 90.0 |
+| 抽取 | 30.0 |
+| 代码 | 93.3 |
 
-<!-- RESEARCH-DECISION:END -->
+事实来源：表 4; 节 5.3 · [论文](https://aclanthology.org/2026.findings-acl.341.pdf)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
+
+增加检索块可提升过程覆盖，却未可靠改善答案：复杂题标准RAG从|D|到2.5|D|，过程分0.1459→0.2623，最终仍0.0482，Full反而0.0181→0.0120。工作流与人工应使用附录同子集表5，而非把主表不同范围直接相减。30例阶段审查中，抽取独立准确率30.0%明显低于规划90.0%和代码93.3%；这是小样本诊断信号，不是证明所有错误都由检索引起。
+<!-- EVIDENCE:interpretation:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
+
+事实表达颗粒度会影响过程分，例如增长率与两年原值可能等价但不被同样计数；数值容差也非精确金融计算验证。中文/英文文档、类型与长度同时变化，长度相关不是纯因果干预。单题已给文件集合，不能证明能从全企业档案正确选出所有文件。下一步公开逐运行分母与成本，统一底座/抽取预算，配对替换规划和抽取组件，并以程序校验关键数值和完整列表。
+
+标准RAG与工作流过程分使用不同单位和裁判协议，不能直接当作同一种检索召回率。各设置实际完成的简单/复杂题分母未清楚列出，不能一律按332题解释。人工仅评子集，应使用附录表5配对。附录数据来源包含商业Wind/CSMAR，公开披露文件与结构化金标来源需区分。图8案例同时有2023问题/2021过滤条件冲突，不能只归因为schema。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[t2-ragbench](t2-ragbench.md) · [dataspace](dataspace.md)

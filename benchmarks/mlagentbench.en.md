@@ -1,4 +1,4 @@
-# MLAgentBench: iterative machine-learning experimentation as an agent task
+# MLAgentBench: iterative experiments over supplied ML baselines
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2023-10<br>
@@ -6,64 +6,57 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](mlagentbench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](mlagentbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2310.03302) · [Code](https://github.com/snap-stanford/MLAgentBench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-MLAgentBench evaluates agents that **iteratively conduct machine-learning experiments**: read/write files, modify code, execute experiments, inspect outputs, form hypotheses, and try again. Its 13 tasks range from CIFAR-10 to more recent challenges such as BabyLM.
+Read all substantive text of the 39-page v2 and Appendices A–F, including the complete example trajectory. V1 was checked only for its abstract, method/experiment sections and Figures 3–6; no full v1 reading is claimed.
 
-## What changed relative to prior evaluation
+[arXiv 2310.03302v2 · 2024-04-14](https://arxiv.org/pdf/2310.03302v2) · [arXiv 2310.03302v1 · 2023-10-05](https://arxiv.org/pdf/2310.03302v1)
+<!-- EVIDENCE:reading:END -->
 
-Code-generation benchmarks ask for a solution once. ML experimentation is a closed loop: choose an intervention, pay execution cost, interpret noisy feedback, and update the plan. MLAgentBench therefore makes experiment iteration and long-term planning the evaluation object.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Decisive evidence
+MLAgentBench asks an agent to improve a supplied ML task baseline through code, experiments and recorded research steps. The paper agent combines recent history, planning and fact checking; the scaffold comparison does not isolate any one component.
 
-Among the evaluated agents, Claude 3 Opus reaches the highest average success rate at 37.5%. Performance varies from 100% on well-established older datasets to 0% on some recent Kaggle challenges, while the authors identify long-term planning and hallucination as central failure modes.
+<!-- EDITORIAL-METHOD:START -->
+Agents receive a task description, training/evaluation code and data, modify modeling or preprocessing in a workspace, run experiments and retain observations in a research log. An illustrative workflow inspects a classifier baseline, changes a permitted module, trains a candidate, reads validation feedback and delivers code. Success is improvement relative to each task’s own baseline, so equal relative thresholds need not imply equal difficulty. Planning, history retrieval and fact checking jointly alter behavior; a whole-scaffold score difference is not a standalone memory benefit.
 
-## What the score supports
+Editorial placement: compared with DS-1000 snippets, MLAgentBench adds experimental choices and feedback loops. MLE-bench uses broader competitions and medal thresholds. Improving a supplied baseline and reaching historical competition tiers are separate evaluation coordinates.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-The benchmark supports end-to-end experimentation ability under a fixed repository/task setup. It cannot isolate model research skill from scaffold, compute budget, starting code quality, or benchmark familiarity; the age-dependent result also warns about contamination/prior-knowledge effects.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+V2 averages success across 13 tasks with eight trials each. Success requires at least 10% baseline improvement; some baselines are trivial predictions. The selected comparisons share a 50-action, five-hour cap. GPT-4 elsewhere receives only 30 actions.
+<!-- EVIDENCE:setup:END -->
 
-Fix repository snapshot, starting baseline, hardware, wall-clock/experiment budget, agent tools, model, and success threshold. Report number of experiments and compute consumed, not only whether the final score crosses the target.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+V2 Tables 3/5; success is percent of trials meeting the task-specific improvement threshold, averaged over tasks. Matched backbone comparisons, not component ablations.
 
-Thirteen tasks provide limited coverage, and benchmark success is not equivalent to scientifically valid research: hypothesis novelty, robustness, reproducibility, negative-result interpretation, and anti-gaming safeguards need stronger treatment.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Claude v3 Opus + paper agent | 13 tasks × 8 trials | Mean success (%) | 37.5% | opus-20240229; 50 actions; 5 h | Table 3, p. 7; Table 5, p. 15 |
+| Claude v3 Opus + LangChain | 13 tasks × 8 trials | Mean success (%) | 33.7% | 50 actions; 5 h; ReAct | Table 5, p. 15 |
+| GPT-4-turbo + paper agent | 13 tasks × 8 trials | Mean success (%) | 26.0% | 0125; 50 actions; 5 h | Table 3, p. 7; Table 5, p. 15 |
+| GPT-4-turbo + LangChain | 13 tasks × 8 trials | Mean success (%) | 1.0% | 0125; 50 actions; 5 h; ReAct | Table 5, p. 15 |
 
-## Next discriminating validation
+Fact source: [Table 3, p. 7; Table 5, p. 15; Table 5, p. 15](https://arxiv.org/pdf/2310.03302v2)
+<!-- EVIDENCE:results:END -->
 
-Use hidden post-cutoff repositories and hold compute fixed while varying only planning/recovery mechanisms. This would better separate research-agent competence from pretrained familiarity and brute-force experimentation.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-<!-- RESEARCH-DECISION:START -->
+The 37.5% Opus result is from the April 2024 revision, not the 2023 release. Average improvement excludes invalid submissions, unlike success. The appendix CIFAR-10 trace exposes test accuracy, so uniform hidden-score isolation cannot be assumed. Baseline choice and task-specific evaluation limit comparisons with Kaggle medal benchmarks.
 
-## Research decision card
-
-### When to use it
-
-Use MLAgentBench for execution-feedback-driven ML experimentation, closer to research practice than one-shot code generation. Success on a small task set does not establish scientific novelty. Distinguish environment repair, tuning known workflows, and effective methodological changes.
-
-### What a concrete task looks like
-
-Illustrative task: an agent edits training code, runs experiments, inspects results, and revises its plan. Logs and validation metrics provide feedback, but repeated selection on the same feedback set can overfit, requiring an independent final evaluation.
-
-### Most discriminating experiment
-
-Match compute and experiment counts across one-shot generation, memoryless iteration, and experience-aware iteration, reporting valid-run rate and model quality separately. Re-run the selected solution from a clean environment to exclude transient state and validation overfitting.
-
-### Pair with
-
-[mle-bench](mle-bench.en.md) · [deltaml-bench](deltaml-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`one-shot ML code → iterative experiment loop → autonomous research engineering`
-
-MLAgentBench established experimentation—not code generation—as a distinct agent capability.
+<!-- EDITORIAL-NEXT:START -->
+Next, hold model, action cap and baselines fixed while separately removing log retrieval, planning and fact checking. Report valid-submission rate and compute cost over all attempts alongside success; small task coverage and weak baselines are important alternative explanations for aggregate gains.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

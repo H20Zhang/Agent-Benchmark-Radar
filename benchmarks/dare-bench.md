@@ -1,4 +1,4 @@
-# DARE-bench：real-world data transformation 需要 exact outputs，而不是 judge impression
+# DARE-bench：区分指令忠实度与预测质量
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-02-27<br>
@@ -6,48 +6,57 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](dare-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](dare-bench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-## 它在测什么
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-DARE-bench 的 paper 描述约 6,300 tasks（5,948 train + 352 eval），当前 public repo 规模较小（约 4,274 train + 324 eval）。任务来自真实数据变换/建模需求，并用 exact reference outputs、macro-F1 或 clipped-R² 等 executable/data metrics，多次运行观察稳定性。
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-## 相比什么前进了
+完整阅读 34 页 v1 的实质正文与附录 A–M，包括构建提示、参考代码、工具模式、RL 设置与拒绝采样；另核对官方公开子集规模及结果。
 
-开放式 Data Agent benchmark 常依赖 LLM judge。DARE-bench 更接近“给定 raw data，产出可验证 target artifact”，使 transformation correctness 与 stochastic agent behavior 可以直接量化。
+[arXiv 2602.24288v1 · 2026-02-27](https://arxiv.org/pdf/2602.24288v1) · [官方仓库文档 · 2026-09-30](https://github.com/Snowflake-Labs/dare-bench#task-types)
+<!-- EVIDENCE:reading:END -->
 
-## 分数边界
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-exact/numerical metrics 支持当前 task/data release 下的 artifact correctness；paper/public repo 规模差异本身要求版本化，不能把结果跨 release 混排。
+DARE 将指令忠实度与预测建模质量分开。前者比较预测是否与参考完全一致；分类建模使用 macro-F1，回归与预测使用截断 R²。输出一致只是复现代理指标，不会直接审查全部中间操作。
 
-## 公平比较条件
+<!-- EDITORIAL-METHOD:START -->
+任务提供数据和操作说明，区分“照指定过程得到参考输出”与“自由建立较好预测器”。示意流程是按给定预处理、模型与随机种子生成预测：即使另一个算法的测试性能更高，只要违背指定操作，也不能算指令忠实；建模质量轨道则关心预测指标。GRPO 变体用可计算奖励训练模型，但训练增益需要同时检查忠实度与任务质量，不能只看是否产生可运行代码。
 
-锁定 task release、runtime/packages、reference outputs、number of runs、agent scaffold 与 resource budget。
+编辑比较：DS-1000 强調代码在测试上的正确性，MLE-bench 强调预测结果；DARE 将“遵循指定分析过程”与“自由优化结果”拆成两个测量目标。这个分离提醒使用者：更高预测分数不必然代表执行了用户要求。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-下一步应在 exact artifact 之外加入 source discovery、business semantics 与 downstream use，避免只验证“输出匹配”而忽略分析目标是否正确。
+论文评测 352 项测试任务，公开子集则有 324 项。主实验最多五轮，每次执行 200 秒，每题重复三次。RL 使用不做组归一化和 KL 正则的 GRPO 变体，每题八条轨迹。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 研究决策卡
+论文完整版分类子集：每种任务 74 题，各重复三次。IF 为输出完全一致的准确率；MM 为平均 macro-F1 乘以 100。
 
-### 什么时候值得用
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| gpt-5 · Classification-IF | 74 题 × 3 次运行 | IF 准确率（%） | 69.81% | 指定预处理、模型与随机种子 | 表 5, 第 7 页 |
+| Claude-Sonnet-3.7 · Classification-MM | 74 题 × 3 次运行 | MM macro-F1 × 100 | 61.03 | 自由建模，与数据标签比较 | 表 5, 第 7 页 |
+| Qwen3-4B Baseline | IF／MM：各 74 题 × 3 次运行 | IF（%）／MM macro-F1 × 100 | 3.60% / 5.23 | 未微调模型；主评测框架 | 表 6, 第 8 页 |
+| Qwen3-4B + RL | IF／MM：各 74 题 × 3 次运行 | IF（%）／MM macro-F1 × 100 | 38.96% / 39.44 | 训练 T=1、top-p=0.95；按主协议评测 | 表 6, 第 8 页; 表 13, 第 17–18 页 |
 
-适合检验预测质量与数据科学过程遵从，而不是只追求一个好看的模型指标。规定流程被忽略时，偶然高分不代表任务完成；论文完整集合与公开子集也应明确区分。
+事实来源：[表 5, 第 7 页; 表 6, 第 8 页; 表 6, 第 8 页; 表 13, 第 17–18 页](https://arxiv.org/pdf/2602.24288v1)
+<!-- EVIDENCE:results:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-示意任务：用户要求使用特定数据处理或建模流程，系统需按要求生成预测，并由隐藏标签或确定性结果验证。换用另一条更容易的流程可能提高指标，却违反了实际交付要求。
+§4.3 将分类忠实度 69.81% 误写为 Claude 的成绩，表 5 对应模型实际为 GPT-5。附录限制也不一致：任务提示写十分钟，工具模式写三次调用。完整论文集与公开子集应分开；单一总冠军会掩盖不同指标的含义。
 
-### 最有判别力的实验
-
-固定公开版本、运行预算与包环境，分别报告过程遵从和预测质量。设计结果相似但过程不同的对照，确认验证器能识别违规；训练与评测数据严格隔离，防止把训练任务效果当成泛化。
-
-### 建议搭配
-
-[tml-bench](tml-bench.md) · [statabench](statabench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+<!-- EDITORIAL-NEXT:START -->
+下一步在同题上加入中间操作日志与不依赖最终精确预测的过程审查，并冻结库、随机种子和硬件；与结果等价但流程不同的正确实现对照，检验严格匹配到底惩罚了违令还是非实质数值差异。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# LIT-RAGBench：先把 retriever 拿掉，单独测 generator 会不会用 RAG context
+# LIT-RAGBench：给定证据后检验阅读与拒答
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2025-10-22<br>
@@ -6,50 +6,77 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](lit-ragbench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](lit-ragbench.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2603.06198) · [代码](https://github.com/Koki-Itai/LIT-RAGBench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-LIT-RAGBench 有 114 个 human-constructed Japanese questions，并提供 machine-translated、human-curated English counterparts。它直接提供 positive/negative chunks，按 Logic、Integration、Table、Reasoning、Abstention 五类能力评价 generator，而不把 retrieval quality 混进结果。
+已读全文第1–7节、全部结果与局限；此PDF无独立附录，提示另置代码库，本次未核验；图3/表2经图像检查。
 
-## 相比什么前进了
+[arXiv 2603.06198v1，2026-03-06；PDF 标注 LREC 2026](https://arxiv.org/pdf/2603.06198v1)
+<!-- EVIDENCE:reading:END -->
 
-很多 RAG benchmark 的 final answer 失败同时可能来自 retriever 和 generator。LIT-RAGBench 控制 context，让“证据已经在眼前，但模型仍不会整合、推理或拒答”的 failure 独立可测。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 分数边界
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-category-wise accuracy 支持 generator 在 supplied-context contract 下的 context-use ability；它不支持 retriever 或 agentic-search claim。114 个问题规模较小，translation 与 fictional-task design 也可能改变语言间 difficulty。
+LIT-RAGBench与RGB同属受控证据使用评测，但用虚构信息、逻辑、表格和证据删除组合强化诊断。它刻意移除检索器，因而适合定位阅读器错误，却不能给搜索系统整体排名。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-锁定 supplied chunks、prompt template、generator、judge 与语言版本，并分 capability category 与语言报告。
+针对生成器而非检索器，三名日语母语作者设计虚构公司、产品、人物的问答和证据，用GPT-5辅助并由两人独立复核。54道主任务覆盖整合、推理、逻辑和表格，其中42题组合两种能力、12题单能力；移除标准证据得到54道不足证据题，再各添3道矛盾证据和不完整分块题，共每语言114题。英文由GPT-5翻译并按摘要所述人工整理。每题直接提供打乱顺序的相关/干扰块，至少8块，每块约512 token，要求只依据文档回答、证据不足时弃答。
+<!-- EVIDENCE:method:END -->
 
-## 下一步评测坐标
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-下一步应把这些 generator diagnostics 接回真实 retrieval loop，验证识别到 integration/abstention failure 后能否主动补搜或修正 context。
+GPT-4.1-2025-04-14按生成答案与参考答案的语义一致性给0/1分；没有报告本数据上的人工裁判一致性。所选GPT-5版本2025-08-07、o4-mini为2025-04-16、Claude-Sonnet-4为2025-05-14。可配置模型温度0、top_p=1，推理模型用最大生成长度。类别可重叠，组合题会在两个类别都计分；Main是四主类别均值，弃答类别60题，过度弃答在54道可答主任务上算比例。总体聚合公式与图3数值不完全一致，因此本文优先展示可定位类别分数。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 弃答正确与过度弃答的取舍
 
-## 研究决策卡
+均为0–1；Main是54道主任务所属四类别的均值，类别重叠；弃答分母60题，过度弃答分母54题，GPT-4.1裁判。
 
-### 什么时候值得用
+| 英语模型 | Main均值 | 弃答正确率 | 过度弃答率 |
+|---|---|---|---|
+| Claude-Sonnet-4 | 0.65 | 0.967 | 0.37 |
+| o4-mini | 0.839 | 0.9 | 0.074 |
+| GPT-5 | 0.828 | 0.933 | 0.093 |
 
-适合在不混入检索器差异的条件下诊断证据整合、表格、逻辑与弃答。其范围是给定上下文中的生成能力；较高分不能支持索引、检索或多步工具调度的改进主张。
+事实来源：表 2–3 · [论文](https://arxiv.org/pdf/2603.06198v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:result-2:START -->
+## 同一模型的语言差异
 
-示意任务：给定文本与表格片段，模型需要联合条件推出答案，或在信息不够时拒绝猜测。每个片段都可见并不保证模型能执行跨片段逻辑，正是这一点使生成器诊断有意义。
+0–1；每语言114题，推理与表格仅各自重叠子集，过度弃答为54题；英文是同场景翻译，不是独立抽样基准。
 
-### 最有判别力的实验
+| Claude-Sonnet-4 语言 | 推理正确率 | 表格正确率 | 过度弃答率 |
+|---|---|---|---|
+| 日语 | 0.783 | 0.677 | 0.148 |
+| 英语 | 0.565 | 0.516 | 0.37 |
 
-在相同上下文上独立改变片段顺序、干扰比例与语言，保持评分器一致。逐能力报告并复核语言版本差异；若研究目标是 RAG 系统，应再连接真实检索结果，检验局部优势是否保留。
+事实来源：表 2–3 · [论文](https://arxiv.org/pdf/2603.06198v1)
+<!-- EVIDENCE:result-2:END -->
 
-### 建议搭配
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-[rgb](rgb.md) · [t2-ragbench](t2-ragbench.md)
+弃答能力必须与可答时的拒答代价一起读。Claude-Sonnet-4英文弃答正确率0.967，但54道主任务过度弃答率0.370，Main均值只有0.650；o4-mini英文弃答0.900、过度弃答0.074、Main0.839。这说明谨慎与有用性分离，也说明同一模型的日英差异不能忽略。它不测检索排序、工具选择或自主多轮搜索；未来Agentic RAG是扩展方向而非已验证能力。
+<!-- EVIDENCE:interpretation:END -->
 
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-<!-- RESEARCH-DECISION:END -->
+样本少且不平衡；同一54个场景衍生的不足证据题并非114个独立场景。虚构实体减少记忆依赖，但不能排除语言/合成风格偏差。多能力标签重叠，类别比较不是纯单因子干预；打乱文档顺序也不证明已消除所有位置偏差。下一步公开可重算的聚合规则、做文档顺序多种子重复和人工裁判抽查，扩充矛盾/分块题，并在相同检索结果下比较生成器。
+
+第5.2节称总体为五类别等权均值，但GPT-5日语表2五项均值约0.862，不是图3的0.872；不替原文暗定聚合方式。第5.3节称Qwen Thinking成绩0.821，但图3是日语0.840/英语0.859，0.821实际是表2日语Main均值。弃答34.6%/1.9%/1.9%也不是114个唯一问题的占比。矛盾与不完整分块各仅3题，不能把全对外推为稳定能力。
+<!-- EVIDENCE:limitations:END -->
+
+相关基准：[rgb](rgb.md) · [t2-ragbench](t2-ragbench.md)

@@ -1,4 +1,4 @@
-# DataClawBench: long data work needs a progress curve, not only the last answer before timeout
+# DataClawBench: evaluating final outcomes and milestone progress separately
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-05-04<br>
@@ -6,50 +6,60 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](dataclawbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](dataclawbench.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2605.02503)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it measures
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-DataClawBench contains 492 tasks across seven categories, each with 2–9 gold milestones, over roughly 2.06M real records and a maximum agent budget around 1,200 seconds. Evaluation tracks milestone progress, final correctness, and efficiency so long-task stagnation becomes observable.
+Read all 25 pages of v3 and Appendices A–F, including configurations, category results, costs, anonymization, annotation, three complete prompts and four case studies; visually checked Tables 4–5.
 
-## Compared with what
+[arXiv 2605.02503v3 · 2026-05-27](https://arxiv.org/pdf/2605.02503v3)
+<!-- EVIDENCE:reading:END -->
 
-Many data-agent benchmarks return only binary final success. DataClawBench distinguishes an agent that discovered and cleaned the data but failed late from one that never entered a correct workflow.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Score boundary
+DataClawBench v3 provides approximately 2.06 million enterprise, industry and policy records in eighteen files, preserving missingness, naming and unit inconsistencies. Its 492 tasks comprise 131 easy, 286 medium and 75 hard tasks without task-specific source hints, complete schemas or noise descriptions. Experts and agents establish reference answers and milestones in a cleaned environment. Eight models use OpenClaw with read-only Docker workspaces and 1,200 seconds per task; only International Comparison tasks permit web search.
 
-Progress, final, and efficiency metrics support long-horizon performance under the current milestone annotations, records, and time budget. Gold milestones are not necessarily the only valid workflow, so path-sensitive interpretation requires care.
+[Source](https://arxiv.org/pdf/2605.02503v3)
 
-## Fair comparison conditions
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: DA-Code/DataSciBench center final artifacts; DataClawBench additionally uses milestones and time discounting to describe progress. It diagnoses how far failed runs get, but process scores on separate correct/incorrect subsets cannot replace accuracy or be treated as paired comparisons across models.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-Align time/step/tool budget, task data, milestone version, runtime, scaffold, and final evaluator.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Next evaluation coordinate
+GLM-5 grades Acc against reference answers, averaging sub-question scores for multi-part tasks; it is not necessarily binary whole-task accuracy. EE, computed only on correct tasks, divides reference steps by agent steps. GPR, computed only on incorrect tasks, measures milestone achievement, including upstream achievements inferred from correct downstream results. TPE discounts first-achievement times with γ=0.9 over achieved milestones only, so it does not measure completeness alone. Provider defaults and maximum contexts vary; GPT-5.4 thinking is off while Claude and Gemini use high effort, preventing matched-compute interpretation.
 
-The next step allows multiple valid workflows and uses counterfactual intervention to determine which milestones are genuinely necessary for final success.
+[Source](https://arxiv.org/pdf/2605.02503v3)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## Selected outcome and process measures with different populations
 
-## Research decision card
+All 492 v3 tasks; Acc averages within-task parts; EE uses each model’s correct tasks, while GPR/TPE use its incorrect tasks, whose exact counts are not separately given; GLM-5 judge, γ=0.9, OpenClaw with 1,200 seconds per task; reasoning settings differ by model.
 
-### When to use it
+| Model | Acc (%) | EE (ratio) | GPR (%) | TPE (0–1) |
+| --- | --- | --- | --- | --- |
+| Claude Opus 4.6 | 63.4 | 0.42 | 45.1 | 0.59 |
+| Gemini 3.1 Pro Preview | 45.8 | 0.32 | 33.6 | 0.41 |
+| GPT-5.4 | 23.4 | 0.46 | 18.5 | 0.75 |
 
-Use DataClawBench for autonomous exploration with little prior guidance and noisy raw data. Milestones distinguish productive investigation from aimless tool use, but reaching them does not guarantee correct conclusions. Domain and temporal concentration limit external validity.
+Source location: Tables 4–5, p. 6; equations 1–2, p. 3; Appendix A Table 7, p. 12; Appendix E, pp. 20–21 · [Source](https://arxiv.org/pdf/2605.02503v3)
+<!-- EVIDENCE:result-1:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-Illustrative task: an agent enters an unfamiliar financial-data environment, discovers tables, documents, and policies, and develops a verifiable conclusion. It can find the right source yet misread fields or stop early, motivating both progress and endpoint assessment.
+GPT-5.4 has high EE and TPE but low Acc and GPR, illustrating that quick termination or a few early achievements can appear efficient. Models have different failed-task subsets, so GPR is not a paired same-task comparison. The environment intervention reruns only thirty previously failed tasks and bundles noise removal with source pruning, leaving separate causal contributions unidentified.
 
-### Most discriminating experiment
+Section 3.2 mentions deterministic evaluation, but actual outcomes and milestones are judged by GLM-5. Table 16 lists 3,934 total tasks although eight rows of 492 imply 3,936. Case 2 claims that changing a shared denominator changes rankings after per-indicator min-max normalization; a common positive scaling factor would cancel under standard min-max, so that causal explanation requires code inspection rather than repetition.
 
-Fix tools, web policy, and time budget and compare autonomous runs with correct-source and correct-schema hints. Report milestones, final correctness, and time, reviewing high-progress but wrong-answer cases to locate the break between exploration and reasoning.
+Match reasoning effort and budgets, independently intervene on noise, source selection and schema guidance over identical tasks, and repeat runs. Blind-review both correct and incorrect trajectories, measuring exact final outputs, milestone recall and falsely inferred progress.
 
-### Pair with
-
-[kramabench](kramabench.en.md) · [ddr-bench](ddr-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
+[Source](https://arxiv.org/pdf/2605.02503v3)
+<!-- EVIDENCE:limitations:END -->

@@ -1,4 +1,4 @@
-# DAComp：Data Engineering 和 Data Analysis 不是同一种 agent 能力
+# DAComp：数据工程、分析与流程演化的分阶段评估
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2025-12<br>
@@ -6,64 +6,75 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](dacomp.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](dacomp.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2512.04324) · [项目页](https://da-comp.github.io/) · [代码](https://github.com/ByteDance-Seed/DAComp)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-DAComp 覆盖 **完整 data-intelligence lifecycle** 的两个不同 workload：repository-level Data Engineering (DE) 和 open-ended Data Analysis (DA)。DE 要设计/演化多阶段 SQL pipeline；DA 要规划、迭代 coding、解释中间结果并给 actionable recommendation。
+完整阅读 v1 共 41 页正文与附录 A–F，包括评分定义、框架、提示、案例、错误和标注分析；核对表 3–6。
 
-## 相比此前评测多测了什么
+[arXiv 2512.04324v1 · 2025-12-03](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:reading:END -->
 
-Text-to-SQL / code benchmark 主要评局部 transformation。DAComp 把 enterprise data work 变成 repository/workflow problem，更关键的是它没有把 engineering correctness 与 analytical insight 混成一种能力。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+DAComp 的 210 题分为架构设计 30、工程实现 30、工程演化 50、数据分析 100。四阶段独立评估，没有串成一次项目生命周期。实现与演化在 DuckDB 检查指定列；组件得分（Component Score，CS） 用正确上游输入评价单组件，级联失效得分（Cascading Failure Score，CFS） 让上游错误向后传播。架构和分析用层次评分规则，分析总分合成 60% 规则分与 40% 相对五份基线报告的 GSB。
 
-benchmark 有 210 个任务。SOTA agent 在 DE 上 success rate 低于 20%，DA 平均也低于 40%。两边的差异说明 holistic pipeline orchestration 与 open-ended analytical reasoning 是两个独立瓶颈，而不是一个模糊的“data agent ability”。
+[来源](https://arxiv.org/pdf/2512.04324v1)
 
-## 这个分数能证明什么
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：DA-Code 把多种数据科学任务放在一个框架中，DAComp 进一步把数据工程、分析和后续流程演化拆开评测。新增坐标是不同阶段的输入、产物和变化适应，不应把某阶段的成功率或软分直接混成“统一数据智能”。
+<!-- EDITORIAL-METHOD:END -->
+GSB 全称 Good–Same–Bad（更好／相当／更差）：裁判按可读性、分析深度及可视化相关准则，把候选分析报告与五份预先提供的基线报告比较。主文定义 GSB 分数为 max(0，G 的次数减 B 的次数) 除以 G、S、B 次数总和，因此是截断为非负的相对胜负分，不是报告事实正确率；DA 再以 0.6 的规范化层级准则分加 0.4 的 GSB 分合成。附录的比较提示对可读性和深度分别输出 −10 至 10 分，但这些分数转成 G／S／B 的确切阈值与汇总步骤没有完整写出，复现时需进一步固定评分实现。见第 2.2 节与附录 A.3.2。
 
-DE 的 execution-based result 对 repository/workflow correctness 证据较强；DA 依赖经过验证的 rubric-guided LLM judge，所以 analytical quality claim 会继承 evaluator assumption。aggregate score 不应掩盖 DE/DA split。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-应固定 repository snapshot、environment、agent harness、model、execution budget 与 DA judge version，并分别报告 DE/DA 和成本；擅长 iterative coding 的 scaffold 与擅长 report synthesis 的 scaffold 可能有完全不同 economics。
+工程表按 0–100 展示加权组件／级联分，SR@8 则采用八次尝试的成功指标，但正文与附录对成功阈值有冲突。主表框架称 DE-Agent，正文／附录又涉及 OpenHands CodeAct 和多代理实现，应保留映射不明确的限定。OpenHands 最多 200 轮，每动作 120 秒，连续重复三次结束；复杂实现另给每个 SQL 代理 50 步、验证代理 100 步；自定义分析代理总上限未给出。默认报告裁判为 Gemini-2.5-Flash。
 
-## 还没有测什么
+[来源](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:setup:END -->
 
-生产 enterprise system 还有 permission、production write、incident、stakeholder negotiation、semantic-layer evolution 与长期 maintenance；open-ended DA 也仍以 rubric 为主，而不是真实 business impact。
+<!-- EVIDENCE:result-1:START -->
+## 英文DE轨道选定结果，Table3
 
-## 下一步最有判别力的验证
+英文轨道：30 实现、50 演化；工程总分还包括 30 架构题。CS/CFS 为加权分数；SR@8 为八次尝试指标，正文全组件正确定义与附录 CFS≥80 阈值冲突，不能称为严格全对率。
 
-把 DE 与 DA 串起来：先要求 agent build/repair transformation pipeline，再从其产出回答 business question，直接测试真实 data lifecycle 中的 error propagation。
+| 模型 | 实现 CS（0–100） | 实现 CFS（0–100） | 演化 CFS（0–100） | 演化 SR@8（%） | 工程总分（0–100） |
+| --- | --- | --- | --- | --- | --- |
+| GPT-5 | 61.98 | 30.79 | 38.75 | 20.00 | 43.45 |
+| Qwen3-Coder | 54.21 | 23.64 | 27.12 | 12.00 | 32.80 |
 
-<!-- RESEARCH-DECISION:START -->
+事实位置：表 3，PDF 第 6 页；第 2.2 节；附录 A.1 第 16–17 页、B.2 第 22–23 页 · [来源](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:result-1:END -->
 
-## 研究决策卡
+<!-- EVIDENCE:result-2:START -->
+## 英文100题分析轨道，Table5
 
-### 什么时候值得用
+英文分析轨道 100 题；0.6 归一化规则分+0.4 GSB；Gemini-2.5-Flash 裁判；保留作者报告的变动范围，不是二元任务正确率。
 
-适合在同一研究中同时覆盖数据工程与开放式分析，但两条轨道不宜用未经解释的均分合并。仓库转换主要依赖可执行验证，分析报告更依赖评分标准；不同评价机制决定了结论的不确定性。
+| 模型／框架 | 分析分数（0–100） |
+| --- | --- |
+| GPT-5 / OpenHands | 46.99 |
+| GPT-5 / DA-Agent | 50.84±3.12 |
+| Kimi-K2 / DA-Agent | 41.89±1.78 |
 
-### 一个具体任务长什么样
+事实位置：第 2.2、3.1 节；表 5，PDF 第 7 页；附录 A.3、B.1 · [来源](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:result-2:END -->
 
-示意任务：工程任务要求修改数据管道并产生正确输出，分析任务则要求探索业务问题并形成报告。前者测试状态与代码变化，后者还涉及选择分析角度和解释证据，失败模式不能互换。
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-### 最有判别力的实验
+CS 高于 CFS 提示依赖传播值得诊断，但不同阶段分数不是相同量纲，不能用差值证明工程与分析能力独立。论文正文把另一裁判验证表的 56.14 误关联为主结果；这里采用表 5 的 50.84±3.12。
 
-分别固定工程测试环境与报告评分器，按轨道展示质量、时间和调用代价。对工程任务给定正确修改位置，对分析任务给定正确中间结果，诊断发现与推理瓶颈；跨轨道优势应分别成立再讨论通用性。
+正文将演化成功定义为所有组件正确，附录却采用 CFS≥80；本页保留 SR@8 原标签并披露冲突。DuckDB 检查选定列、数值保留两位小数且排除时间列，不能称为全输出严格等价。
 
-### 建议搭配
+先统一成功阈值、框架映射与预算，再把实现、变更和分析串联，在固定上游真值与真实上游输出之间切换，测量错误传播和修复收益。
 
-[data-eng-bench](data-eng-bench.md) · [insightbench](insightbench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`local code/SQL → repository data engineering + open-ended analysis → integrated data-intelligence lifecycle`
-
-它说明“data agent”应该按 work product 分解，而不是只看一个 leaderboard number。
+[来源](https://arxiv.org/pdf/2512.04324v1)
+<!-- EVIDENCE:limitations:END -->

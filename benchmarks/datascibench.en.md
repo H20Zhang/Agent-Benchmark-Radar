@@ -1,4 +1,4 @@
-# DataSciBench: programmatic evaluation for multi-step data-science prompts
+# DataSciBench: component checks and overall success in multi-step data science
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (historical reference)** · 2025-02 · paper v1<br>
@@ -7,64 +7,73 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](datascibench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](datascibench.md) | **English** · [Home](../README.en.md)
 
-[Paper](https://arxiv.org/abs/2502.13897) · [Project](https://datascibench.github.io/) · [Code](https://github.com/THUDM/DataSciBench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-DataSciBench evaluates LLMs/agents on **multi-step data-science prompts** spanning six task types: cleaning/preprocessing, exploration/statistics, visualization, predictive modeling, data mining/pattern recognition, and interpretability/report generation.
+Read the complete 40-page main text and Appendices A.1–A.13 and B, including code and examples; checked Tables 2, 5 and 6.
 
-## What changed relative to prior evaluation
+[arXiv 2502.13897v1 · 2025-02-19](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:reading:END -->
 
-Data-science evaluation is difficult once outputs are not single code snippets with obvious ground truth. DataSciBench introduces Task–Function–Code (TFC): 25 aggregate functions plus programmatic rules map complex outputs into 519 ground-truth test cases over 222 curated prompts.
+<!-- EVIDENCE:method:START -->
+## Method and measurement target
 
-## Decisive evidence
+DataSciBench decomposes requirements into task–function–check (TFC) units and uses reference solutions to build executable checks. It has 222 prompts: 167 from BigCodeBench and 55 otherwise collected prompts, producing 519 checks. A DataInterpreter-style planning/execution framework evaluates 23 models on output completion, requirement adherence and visualization quality.
 
-The benchmark evaluates 23 models: six API models and 17 open-source general/code models. Its key contribution is measurement infrastructure rather than a single leaderboard number: LLM self-consistency plus human verification is used to construct ground truth, then TFC evaluates execution outcomes at multiple granularities.
+[Source](https://arxiv.org/html/2502.13897v1)
 
-## What the score supports
+<!-- EDITORIAL-METHOD:START -->
+Editorial placement: DS-1000 tests snippets in supplied context; DataSciBench extends the endpoint to multi-step data-science requests with task-specific checks. This is finer than a single string/execution pass rate, but component, visual and overall metrics have different scales rather than one universal correctness meaning.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-DataSciBench supports broad data-science task completion under the TFC ontology. It does not fully measure autonomous workflow control if the prompt already specifies the analysis goal, and visualization/report metrics still have more evaluator subjectivity than deterministic transformations.
+<!-- EVIDENCE:setup:START -->
+## Scoring and experimental conditions
 
-## Fair comparison contract
+Ten runs per prompt estimate SR as single-sample pass@1 for satisfying all TFC checks, not best-of-ten success. CR assigns 0 to missing/failed outputs, 1 to completed but noncompliant outputs and 2 to compliant outputs. The composite weights CR at 65% and SR, visual quality and five function scores at 5% each. GPT-4o-mini supplies visual grades on a raw 0–5 scale; that scale should not silently be converted to percentages. Temperature, tool steps, token and wall-clock limits are incompletely reported.
 
-Fix prompt/data versions, execution environment, TFC rules, model, tool access, and retry budget. Report task-type and aggregate-function results rather than only a final score; a system can pass routine transformations while failing modeling or interpretation.
+[Source](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:setup:END -->
 
-## What remains unmeasured
+<!-- EVIDENCE:result-1:START -->
+## Selected results across 222 prompts, Table 2
 
-Long-horizon project state, repository maintenance, data discovery, business semantics, collaboration, and production deployment are beyond the bounded prompt episodes.
+All 222 prompts and 519 TFC checks; ten runs per prompt; SR estimates pass@1 and CR has two points per check; DataInterpreter-style harness with GPT-4o-mini visual judging; other budgets incompletely reported.
 
-## Next discriminating validation
+| Model | SR (%) | CR (%) | Composite Score |
+| --- | --- | --- | --- |
+| GPT-4o-2024-05-13 | 66.31 | 68.44 | 64.51 |
+| Deepseek-Coder-33B-Instruct | 55.86 | 61.23 | 56.76 |
+| o1-mini | 29.77 | 45.26 | 38.78 |
 
-Measure whether TFC categories predict failure in longer agent trajectories: when an end-to-end project fails, can the benchmark correctly identify the missing primitive capability?
+Source location: §3.2–3.3,§4.2 Eqs2–4; Table 2 PDFp6 · [Source](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:result-1:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-2:START -->
+## Source slices for the same GPT-4o, Tables5–6
 
-## Research decision card
+Same GPT-4o-2024-05-13; source groups have denominators 55 and 167, with ten runs per prompt; not difficulty-matched paired interventions.
 
-### When to use it
+| Model / source | Prompts | SR (%) |
+| --- | --- | --- |
+| GPT-4o-2024-05-13 / Other collected prompts | 55 | 19.82 |
+| GPT-4o-2024-05-13 / BigCodeBench source | 167 | 81.62 |
 
-Use DataSciBench to evaluate executable outputs across diverse data-science tasks rather than code text alone. Task-specific scoring broadens coverage but complicates aggregation. Inspect task categories and whether validation functions capture the user's objective before interpreting totals.
+Source location: §3.2; §5.2; AppendixA.8 Tables5/6, PDFp15 · [Source](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:result-2:END -->
 
-### What a concrete task looks like
+<!-- EVIDENCE:limitations:START -->
+## Interpretation, source limitations and next experiment
 
-Illustrative task: a natural-language request asks for cleaning, computation, or an analysis artifact, requiring executable decomposition. An output can have the expected format but the wrong semantics, which file-existence checks alone would miss.
+The same GPT-4o has SR 81.62% on the 167 BigCodeBench-derived prompts but 19.82% on the remaining 55. Source and difficulty composition strongly affect totals, and the 64.51 composite score is not end-to-end accuracy.
 
-### Most discriminating experiment
+Visual and other check scales differ; preserve the paper’s formula and metric units. Source slices are not difficulty-matched experiments.
 
-Fix runtime and task functions, report analysis, modeling, and artifact slices, and add supplied-task-decomposition or intermediate-data controls. Distinguish planning, code, and evaluator failures, reviewing borderline scores independently.
+Fix the harness and budget, report all-check success, partial completion and visual-judge disagreement by source and difficulty, and vary requirements over the same underlying data to separate execution from adherence.
 
-### Pair with
-
-[da-code](da-code.en.md) · [dsgym](dsgym.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`single code task → multi-step data-science prompt → decomposable execution evaluation`
-
-DataSciBench's durable contribution is making complex analysis outputs more mechanically testable.
+[Source](https://arxiv.org/html/2502.13897v1)
+<!-- EVIDENCE:limitations:END -->

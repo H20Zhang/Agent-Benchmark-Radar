@@ -1,4 +1,4 @@
-# DDR-Bench：data agent 能不能自己决定“什么值得查”
+# DDR-Bench：实体驱动的自由数据探索与发现覆盖
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2025-11-30<br>
@@ -6,64 +6,57 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](ddr-bench.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](ddr-bench.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2602.02039) · [代码](https://github.com/thinkwee/DDR_Bench)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-DDR-Bench 测 **investigatory intelligence**：agent 拿到 data/entity context，但没有预定义 analytical question，需要自己设 goal、探索并发现可验证 insight。这和用户已经告诉你“请做什么分析”的 executional intelligence 不同。
+完整阅读 37 页 v2 与附录 A–I，包括全部清单示例、框架消融、交互／洞察／时间图、检查器提示及所提供的轨迹片段。这是 5 月修订稿，不是 2 月初版。
 
-## 相比此前评测多测了什么
+[arXiv 2602.02039v2 · 2026-05-15](https://arxiv.org/pdf/2602.02039v2)
+<!-- EVIDENCE:reading:END -->
 
-大多数 data-agent benchmark 都从 well-formed task 开始，而真实 analyst 经常从“这里到底发生了什么？”开始。DDR 把 problem formulation 放进 agent loop，并用 checklist-based evaluation 让 open-ended discovery 仍有部分可验证 ground truth。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 决定性证据
+DDR 从实体与数据库开始，不向探索过程提供清单问题。GPT-5-mini 检查收集到的洞察能否支持隐藏事实。逐轮洞察由同一模型另行调用生成，不在 agent 轨迹内；最终报告则总结完整轨迹。
 
-benchmark 覆盖 healthcare record、SEC 10-K/XBRL financial data 与 behavioral data 等真实 domain。论文发现 frontier model 已出现一定 autonomous exploration 能力，但 long-horizon exploration 仍困难，而且表现不只由 scaffold 大小或模型规模决定，还依赖 agent 本身的探索策略。
+<!-- EDITORIAL-METHOD:START -->
+代理只收到实体和数据库，自主决定查询哪些内容并积累发现；评测者事后用不可见的事实清单检查发现覆盖率。示意流程是从某家公司出发查看财务记录，提出异常或趋势假设，执行查询、修正并形成有证据的见解；并没有逐条告诉代理应该回答哪些问题。每轮另调用同一模型抽取见解用于评分，最终报告再概括整条轨迹，所以分数涉及探索、见解抽取及裁判三个环节。
 
-## 这个分数能证明什么
+编辑比较：InsightBench 也关注主动洞察，DDR 更明确地区分实体起点的自由探索与隐藏事实覆盖，并提供逐轮分析。它把“回答已给问题”改成“选择值得调查的问题”，但有限清单不能穷尽所有有效发现。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-DDR-Bench 能支持 checklist 范围内 autonomous exploration 的判断，但不能等价于真正 novel discovery：任何 checklist 都预先定义了一组期待发现，open-ended credit 也会受到 evaluator/judge 影响。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 公平比较契约
+MIMIC、GLOBEM 与 10-K 共包含 291 个实体、2,058 个清单项。ReAct 使用 SQL／Python 接口和完整历史。模型通常自行结束，但循环运行会在 100 轮强制停止，并从图中排除。采样及上下文上限未明确。
+<!-- EVIDENCE:setup:END -->
 
-应固定 data snapshot、starting metadata、toolset、model、exploration budget 与 evaluator。不能给一边额外 candidate goal/schema interpretation，并要同时报告 insight coverage、成本和 exploration depth。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 还没有测什么
+v2；下列 10-K 结果按 100 家公司、849 个清单项汇总支持率。逐轮洞察与最终报告分别计分；响应式对照获得显式问题。
 
-business value、causal validity、checklist 外 novelty 与 stakeholder relevance 没有被完整测量；真实 investigation 还需要交互 clarification 和“证据什么时候已经够了”的 stopping judgment。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Claude 4.5 Sonnet · ReAct | 10-K；100 个实体／849 项 | 逐轮洞察／最终报告支持率（%） | 77.27% / 61.25% | 仅提供实体起点；GPT-5-mini 检查 | 表 2, 第 6 页 |
+| DeepSeek-V3.2 · ReAct | 10-K；100 个实体／849 项 | 逐轮洞察／最终报告支持率（%） | 60.66% / 38.16% | 仅提供实体起点；GPT-5-mini 检查 | 表 2, 第 6 页 |
+| Qwen3-Next-80B-A3B · 主动探索 | 10-K；100 个实体／849 项 | 逐轮洞察／最终报告支持率（%） | 45.58% / 31.10% | 无显式清单问题 | 表 5, 第 11 页 |
+| Qwen3-Next-80B-A3B · 响应式 | 10-K；100 个实体／849 项 | 显式问题支持率（%） | 70.55% | 每个清单项转为用户问题 | 表 5, 第 11 页 |
 
-## 下一步最有判别力的验证
+事实来源：[表 2, 第 6 页; 表 5, 第 11 页](https://arxiv.org/pdf/2602.02039v2)
+<!-- EVIDENCE:results:END -->
 
-混合 planted verifiable insight 与真正 unlabeled dataset，再由 blinded domain expert 评 novelty。关键是区分 agent 会不会寻找 important unknown，而不是只会找回 benchmark 作者预埋的 checklist item。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-<!-- RESEARCH-DECISION:START -->
+清单覆盖率不会测量全部无依据陈述，也不能穷尽有效发现。显式问题对照改变了任务，跨训练世代比较仍有混杂。幻觉审查测量的是事实正确但依据不忠实的内容，不是所有事实错误。表内存在超过 5% 的数值，与正文概括冲突；不能排除污染。
 
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究只给目标实体和数据元信息时，系统是否知道什么值得调查。它比回答指定查询更接近自主研究，但检查清单只能代表部分可验证发现；更多文字和更多工具调用都不等于更有价值的洞察。
-
-### 一个具体任务长什么样
-
-示意任务：系统拿到一个实体后自主建立假设、查询相关数据、检验异常并形成报告。何时停止也是任务的一部分；找到一个看似异常的数值后，应继续验证而不是立即编写结论。
-
-### 最有判别力的实验
-
-在相同实体与预算下比较自主目标设定和人工研究问题给定，分别统计已验证发现与无支持主张。固定终止规则或单列自终止成本，并复核检查器漏掉的有效发现，避免只优化预设清单。
-
-### 建议搭配
-
-[insightbench](insightbench.md) · [dataclawbench](dataclawbench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`answer a specified query → choose analytical subgoals → autonomous data investigation`
-
-它把 agency 从执行阶段前移到了“决定要分析什么”。
+<!-- EDITORIAL-NEXT:START -->
+下一步固定实体、数据库和预算，比较自由探索、完整目标清单及部分清单；单独更换见解抽取器与裁判，并让专家审核清单外的新发现和无依据陈述。将强制截停运行纳入结果，避免只看自愿结束的轨迹。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

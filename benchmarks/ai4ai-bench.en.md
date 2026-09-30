@@ -1,4 +1,4 @@
-# AI4AI-Bench: learning-algorithm design behind a source-patch boundary
+# AI4AI-Bench: clean replay of learning-system source changes
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-08-20<br>
@@ -6,60 +6,58 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](ai4ai-bench.md) | **English** · [Back to entry](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](ai4ai-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2608.20318) · [Code and tasks](https://github.com/Einsia/AI4AI-Bench) · [Released trajectories](https://lab.einsia.ai/ai4ai/trajectories/)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-Agents explore a cheap proxy for four hours, submit only a source patch, and then face a fresh formal training run whose frozen evaluator was unavailable during exploration.
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-## What it follows
+Read all substantive text of the 19-page v1, Appendix A’s ten task protocols and Appendix B’s complete RAGEN contract. Also checked the official evaluation/replay documentation on the stated date.
 
-MLAgentBench measures iterative ML experimentation; MLE-bench and MLE-Dojo broaden end-to-end ML engineering. AI4AI-Bench makes a narrower critique: an unrestricted final score does not show whether an agent improved the learning algorithm or only tuned run-side settings and infrastructure. It freezes ten real training repositories and makes the source patch the boundary between exploration and evaluation.
+[arXiv 2608.20318v1 · 2026-08-20](https://arxiv.org/pdf/2608.20318v1) · [Official repository documentation · 2026-09-30](https://github.com/Einsia/AI4AI-Bench#evaluation-and-replay)
+<!-- EVIDENCE:reading:END -->
 
-## How it is evaluated
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-**Question:** Can an agent diagnose and improve a learning algorithm rather than merely optimize the way an existing implementation is run?
+AI4AI separates exploration from formal replay: only source changes carry into a fresh run. Scores normalize the baseline to 0.1 and the target optimum to 1. Best configuration and averages across reasoning levels are different summaries.
 
-**Measurement object:** repository diagnosis, experimental iteration, source-level algorithm modification, clean-start training performance, and the submitted patch's run-side versus learning-side classification.
+<!-- EDITORIAL-METHOD:START -->
+Agents inspect training code, try modifications and observe proxy evaluation during exploration. Formal evaluation applies only the source patch in a fresh environment and retrains or reevaluates, excluding exploration-generated weights and caches. An illustrative workflow changes an optimizer or learning algorithm, performs a short trial and relies on clean replay for validation. This separates source-level algorithm changes from state accumulated in one run, while remaining dependent on the supplied data, evaluator and compute.
 
-**Scale and protocol:** ten repositories span ten algorithm families. Each agent explores for four hours on one B300 with a cheap proxy; only its source patch enters a fresh formal environment for up to twelve hours. The shipped baseline is rerun with the same hardware, budget, evaluator, and assets. Heterogeneous task metrics are normalized so 0 is uninformative, 0.1 is the shipped baseline, and 1 is a stated optimum. All 290 evaluated trajectories are public.
+Editorial placement: relative to DeltaML’s research-repository improvement, AI4AI more explicitly restricts the phase boundary to source patches. The coordinate is reproducibility in a fresh run rather than a high-scoring exploration checkpoint, not automatic certification of algorithmic novelty.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-## What a score can support
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-Across 290 cells, the mean normalized score is 0.166, the best system averages 0.250, and 124 cells fall below the shipped baseline. Among 263 changed submissions, learning-side patches average 0.226 versus 0.126 for run-side-only patches. These are system-level and selected-group differences: they show that the protocol exposes substantial room beyond run configuration, not that a learning-side edit causally adds 0.100.
+Exploration lasts four hours on one B300; formal replay allows up to twelve hours. Eight training tasks evaluate the best of up to three latest valid checkpoints. Proxy and final evaluation are not always sample-disjoint. The main grid has 29 configurations over ten tasks.
+<!-- EVIDENCE:setup:END -->
 
-## Strongest confounder
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-Learning-side submissions are observationally selected: stronger systems reach that layer more often, and the paper explicitly disclaims a causal interpretation. A separate LLM classifies patch families without reported reliability. Systems bundle model, harness, and reasoning effort; proxy and final stages are separated by access and time but are not always sample-disjoint.
+V1; normalized σ is unitless, not accuracy. Each task/configuration has one scored cell; no repeated-seed confidence interval is supplied.
 
-## Remaining Gap: What remains uncovered
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Claude Opus 5 / Claude Code / medium | 10 tasks; 10 cells | Mean σ (0–1) | 0.288 | Best reported configuration | Table 3, p. 8 |
+| Claude Opus 5 / Claude Code / all efforts | 10 tasks × 5 efforts; 50 cells | Mean σ (0–1) | 0.250 | Across-effort system average | §3.2, p. 6; Figure 2, p. 8 |
+| GPT-5.6 Sol / Codex / max | 10 tasks; 10 cells | Mean σ (0–1) | 0.245 | Model and harness both differ | Table 3, p. 8 |
+| Learning-side patch cohort | 122 of 263 changed submissions | Mean σ (0–1) | 0.226 | Five systems; Kimi K3 excluded | Table 4, p. 9 |
+| Run-side-only patch cohort | 141 of 263 changed submissions | Mean σ (0–1) | 0.126 | Five systems; Kimi K3 excluded | Table 4, p. 9 |
 
-Ten B300-scale tasks are expensive, there is no human baseline, and the common score encodes heterogeneous task utility. The repository supports self-hosted final evaluation but currently operates no blind service, so third parties cannot reproduce the official hidden-boundary enforcement.
+Fact source: [Table 3, p. 8; §3.2, p. 6; Figure 2, p. 8; Table 4, p. 9](https://arxiv.org/pdf/2608.20318v1)
+<!-- EVIDENCE:results:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-## Research decision card
+Learning-side patches average 0.226 versus 0.126 for run-side-only patches, but this is an observational classification of changed submissions, excluding Kimi K3; it is not causal evidence for editing strategy. Model and harness changes are also confounded. The official release currently supports self-hosted scoring, not a blind evaluation service.
 
-### When to use it
-
-Use AI4AI-Bench for learning-algorithm modification rather than unrestricted score optimization. Source patches and clean-start formal training help isolate durable changes, while independence between proxy feedback and formal evaluation still needs scrutiny. A small expensive task set limits statistical confidence.
-
-### What a concrete task looks like
-
-Illustrative task: an agent diagnoses training and edits code in a proxy environment, then hands off only source patches for fresh formal training. Temporary files and trained state cannot substitute for code changes without changing the evaluation object.
-
-### Most discriminating experiment
-
-Match proxy and formal-training budgets, pin baseline reruns and patch boundaries, and verify multiple seeds. Treat patch categories as descriptive rather than causal. Algorithmic mechanism claims still require targeted ablations and transfer to independent tasks.
-
-### Pair with
-
-[deltaml-bench](deltaml-bench.en.md) · [mle-bench](mle-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy consequence
-
-`map_delta=early_signal`, bound to `data-agent-research-integrity`. It isolates learning-algorithm design more tightly than broad ML-agent suites, but one record does not change the durable defining chain.
+<!-- EDITORIAL-NEXT:START -->
+Next, replay identical patches across seeds with independently held-out final samples. Match models/scaffolds and separately permit run-configuration versus learning-algorithm edits. Observed correlations between patch type and score do not replace this intervention.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

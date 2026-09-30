@@ -1,4 +1,4 @@
-# DDR-Bench: can a data agent decide what is worth investigating?
+# DDR-Bench: entity-driven exploration and discovery coverage
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2025-11-30<br>
@@ -6,64 +6,57 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](ddr-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](ddr-bench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2602.02039) · [Code](https://github.com/thinkwee/DDR_Bench)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-DDR-Bench targets **investigatory intelligence**: the agent is given data/entity context but not a predefined analytical question, and must set goals, explore, and discover verifiable insights. This differs from executional intelligence, where the user already specifies what analysis to perform.
+Read the complete 37-page v2 and Appendices A–I, including every checklist example, framework ablation, interaction/insight/time plot, checker prompt and provided trajectory excerpt. This is the May revision, not the February initial paper.
 
-## What changed relative to prior evaluation
+[arXiv 2602.02039v2 · 2026-05-15](https://arxiv.org/pdf/2602.02039v2)
+<!-- EVIDENCE:reading:END -->
 
-Most data-agent benchmarks start with a well-formed task. Real analysts often begin with “what is happening here?” DDR makes problem formulation itself part of the agent loop and uses checklist-based evaluation to keep open-ended discovery partially verifiable.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Decisive evidence
+DDR begins with an entity and database rather than checklist questions. GPT-5-mini checks whether collected insights support hidden facts. Per-turn insights come from separate same-model calls outside the agent trace; final reports summarize the full trajectory.
 
-The benchmark covers real-world data domains including healthcare records, SEC 10-K/XBRL financial data, and behavioral data. The paper reports emerging capability in frontier models but persistent difficulty with long-horizon exploration; performance depends on intrinsic agentic strategies rather than only larger scaffolds or scale.
+<!-- EDITORIAL-METHOD:START -->
+Agents receive an entity and database, choose their own questions and accumulate discoveries. Hidden factual checklists are used afterward to score coverage. An illustrative workflow explores a company’s financial records, proposes a trend or anomaly, queries and revises it, then records evidence-backed insights without being told every target question. Separate calls to the same model extract per-round insights, while a final report summarizes the trajectory. Scores therefore combine exploration, insight extraction and judging.
 
-## What the score supports
+Editorial placement: InsightBench also evaluates proactive insight discovery; DDR more explicitly pairs entity-started exploration with hidden-fact coverage and per-round analysis. It shifts from answering supplied questions to choosing investigations, while a finite checklist cannot exhaust valid discoveries.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-DDR-Bench can support claims about autonomous exploration under its checklist of target insights. It does not prove genuinely novel discovery: any checklist necessarily defines a latent set of expected findings, and evaluator/judge choices influence open-ended credit.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+There are 291 entities and 2,058 checklist items across MIMIC, GLOBEM and 10-K. ReAct uses SQL/Python interfaces and full history. Models normally self-terminate, but looping runs are forcibly stopped at 100 rounds and omitted from plots. Sampling and context caps are unspecified.
+<!-- EVIDENCE:setup:END -->
 
-Fix data snapshot, starting metadata, toolset, model, exploration budget, and evaluator. Do not provide one agent with candidate goals or schema interpretations absent from another. Report discovered-insight coverage together with cost and exploration depth.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+V2; selected 10-K results use item-averaged checklist support over 849 items from 100 companies. Message-wise and final-report outputs are scored separately; the reactive control is given explicit questions.
 
-Business value, causal validity, novelty beyond the checklist, and stakeholder relevance are not fully captured. Real investigations also include interactive clarification and decisions about when evidence is sufficient.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Claude 4.5 Sonnet · ReAct | 10-K; 100 entities / 849 items | Message-wise / final-report support (%) | 77.27% / 61.25% | Entity-only start; GPT-5-mini checker | Table 2, p. 6 |
+| DeepSeek-V3.2 · ReAct | 10-K; 100 entities / 849 items | Message-wise / final-report support (%) | 60.66% / 38.16% | Entity-only start; GPT-5-mini checker | Table 2, p. 6 |
+| Qwen3-Next-80B-A3B · proactive | 10-K; 100 entities / 849 items | Message-wise / final-report support (%) | 45.58% / 31.10% | No explicit checklist questions | Table 5, p. 11 |
+| Qwen3-Next-80B-A3B · reactive | 10-K; 100 entities / 849 items | Explicit-query support (%) | 70.55% | Each checklist item becomes a user query | Table 5, p. 11 |
 
-## Next discriminating validation
+Fact source: [Table 2, p. 6; Table 5, p. 11](https://arxiv.org/pdf/2602.02039v2)
+<!-- EVIDENCE:results:END -->
 
-Mix planted verifiable insights with genuinely unlabeled datasets and use blinded expert review for novelty. The key distinction is whether an agent can hunt for important unknowns, not merely rediscover benchmark authors' checklist items.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-<!-- RESEARCH-DECISION:START -->
+Checklist coverage does not measure all unsupported claims or exhaust valid discoveries. Explicit-query controls change the task, while training-generation comparisons remain confounded. The hallucination audit measures correct-but-unfaithful facts, not every factual error. Its table contains rates above 5%, contrary to the prose; contamination is not ruled out.
 
-## Research decision card
-
-### When to use it
-
-Use DDR-Bench to study whether an agent can decide what is worth investigating from an entity and database metadata. It is closer to autonomous inquiry than specified-query answering, but checklists capture only part of verifiable discovery. More text or calls do not imply more valuable insight.
-
-### What a concrete task looks like
-
-Illustrative task: an agent receives an entity, forms hypotheses, queries data, tests anomalies, and reports findings. Stopping is part of the task; a suspicious value should trigger validation rather than immediate narrative conclusions.
-
-### Most discriminating experiment
-
-Compare autonomous goal setting with supplied research questions for matched entities and budgets, separating verified findings from unsupported claims. Fix stopping rules or report self-termination cost, and review valid discoveries missed by the checker to avoid merely optimizing its checklist.
-
-### Pair with
-
-[insightbench](insightbench.en.md) · [dataclawbench](dataclawbench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`answer a specified query → choose analytical subgoals → autonomous data investigation`
-
-DDR-Bench shifts agency upstream from execution into deciding what to analyze.
+<!-- EDITORIAL-NEXT:START -->
+Next, compare free exploration, full checklists and partial checklists on identical entities/data/budgets. Vary insight extraction and judging separately, and have experts audit novel off-checklist findings and unsupported claims. Include forcibly stopped runs rather than analyzing only voluntarily terminated trajectories.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

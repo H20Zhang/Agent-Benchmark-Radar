@@ -1,4 +1,4 @@
-# IRTS-ToolBench：irregular time series 的难点是先把时间轴处理对，再谈分析
+# IRTS-ToolBench：不规则时间序列的工具辅助推理
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-06-13<br>
@@ -6,50 +6,61 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](irts-toolbench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](irts-toolbench.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2606.15107)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-IRTS-ToolBench 包含 1,700 个 questions、10 种 tasks、13 个 domains，并提供 30 个 tools：7 个 irregularity-handling operations 与 23 个 analytical tools。agent 需要先处理不规则采样、缺失/时间对齐，再完成统计或预测分析。
+完整阅读正文第 1–6 节及附录 A–E（15 页），涵盖所有任务定义、构造流程、工具、结果和三个图示案例；核对表 2。
 
-## 相比什么前进了
+[arXiv 2606.15107v1 · 2026-06-13](https://arxiv.org/pdf/2606.15107v1)
+<!-- EVIDENCE:reading:END -->
 
-普通 time-series benchmark 往往给已规整矩阵。IRTS-ToolBench 把 preprocessing/tool routing 设为 agent responsibility，使“时间序列本身没处理对”与后续 analytical method failure 可以区分。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+IRTS-ToolBench 将两个既有时序问答资源中的规则序列，通过 LLM 选择缺失机制、生成参数并执行变换，构造 1,700 道不规则单变量时序题，覆盖 10 类任务和 13 个领域。问题以选择题或判断题输出；生成与质量筛选使用 GPT-5.1、Claude Sonnet 4.5、Gemini 2.5 Flash。工具库有 7 个不规则采样算子和 23 个分析工具。工具参考集合由三个模型投票形成，无多数时取并集，因此它是约定的参考集合，不是数学证明的最小必需集合。
 
-task success 支持当前 irregularity generator、tool library 与 data domains 下的 tool-use competence；它不证明对真实 sensor/finance systems 的 robustness，因为 drift、streaming 和 operational latency 被弱化。
+[来源](https://arxiv.org/pdf/2606.15107v1)
 
-## 公平比较条件
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：一般数据分析基准往往弱化时间采样的特殊性，IRTS-ToolBench 专门要求处理不规则时间序列并选择相关工具。与预测任务相比，它还覆盖规则性、统计和其他推理目标；测量变化在于时间结构与工具适配，而非所有工具调用都会提高预测。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-锁定 task/domain split、tool library/version、irregularity pattern、agent budget、runtime 与 grader。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 下一步评测坐标
+最终答案严格匹配选项，报告按样本加权的总正确率及分类正确率；工具集合的完全／部分／不匹配比例另算，不参与答案分数。下面选择完整报告全部类别的两组模型，以避免 Claude 两个无工具配置的缺项影响比较。论文报告零样本评测，但未给出完整步数、token、温度或重复运行设置。
 
-下一步应加入 streaming updates、concept drift 与 delayed labels，评价 agent 是否能维护持续时间状态而非一次性清洗数据。
+[来源](https://arxiv.org/pdf/2606.15107v1)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 有无工具的同模型对照（选取指标）
 
-## 研究决策卡
+表 2 完整 10 类结果，总分以 1,700 题为分母，子类分母见表头；选项精确匹配；零样本；工具开关是论文对照条件，但预算、重跑和具体封装未完整披露。
 
-### 什么时候值得用
+| 模型 | 总正确率（%） | 异常检测（%，250 题） | 缺失密度区间（%，150 题） |
+| --- | --- | --- | --- |
+| Qwen3.6-27B / 无工具 | 78.59 | 96.80 | 58.00 |
+| Qwen3.6-27B / 有工具 | 74.41 | 99.60 | 81.33 |
+| DeepSeek-V4-Flash / 无工具 | 60.29 | 59.20 | 31.33 |
+| DeepSeek-V4-Flash / 有工具 | 74.00 | 96.40 | 98.67 |
 
-适合检验不规则采样时序中的时间推理与工具选择。规则网格上的方法可能隐含插值或同步假设；答案正确之外，还要确认选择的工具没有抹掉具有信息量的观测间隔。
+事实位置：附录 C 表 2，第 11 页；题数见附录 A 表 1，第 7 页；指标见第 4 节，第 3–4 页 · [来源](https://arxiv.org/pdf/2606.15107v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-示意任务：观测时间间隔不均匀，系统需判断变化趋势或事件模式，并选择适用的分析工具。直接把相邻记录当作等时间间隔，可能得到计算可运行但时间含义错误的结果。
+工具对模型和任务的影响并不一致：DeepSeek 的缺失密度判断显著改善，总分也提高；Qwen 的异常检测改善，但总分下降，尤其规则性判别下降。生成的缺失机制和语境可使答案反映构造规则；这些结果不能直接证明真实传感器缺失原因的因果识别能力。
 
-### 最有判别力的实验
+Claude 的两个无工具行缺少预测和规则性判别成绩，整体分母不透明，未放入此处比较。主文所说 Qwen“所有设置都更好”也过强：其工具总分 74.41 低于 Claude 工具配置的 76.00。两名人工评审仅抽查约 2%，不代表全基准人类对照。
 
-对同一底层信号改变采样模式，比较原时间戳、规则化插值与不规则工具，保持问题和预算一致。评分时允许功能等价的工具组合，并区分工具选择错误、参数错误与问题格式捷径。
+固定同一模型与提示、总预算和工具选择入口，分别报告数值计算、规则性识别和机制归因；加入自然产生的不规则序列，并允许多种等价正确工具路径，检验参考工具集是否误罚有效解法。
 
-### 建议搭配
-
-[agentfuel](agentfuel.md) · [statabench](statabench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+[来源](https://arxiv.org/pdf/2606.15107v1)
+<!-- EVIDENCE:limitations:END -->

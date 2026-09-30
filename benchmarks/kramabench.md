@@ -1,4 +1,4 @@
-# KramaBench：真实 Data Agent 先要在 data lake 里找到、清理并整合数据
+# KramaBench：噪声数据湖中的发现、清洗与整合
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2025-06-06<br>
@@ -6,50 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](kramabench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](kramabench.en.md) · [主入口](../README.md)
 
-[项目页](https://kramabench.org/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-KramaBench 含 104 个 tasks、633 subtasks、1,764 files（约 1.7GB）、24 个 sources、6 个 domains。agent 需要在 data lake 中 discovery、cleaning、integration、analysis、modeling，而不是预先得到一张整理好的表。
+完整阅读正文第 1–6 节、伦理与复现声明以及附录 A–H（30 页）；核对表 5 的版面。
 
-## 相比什么前进了
+[arXiv 2506.06541v3 · 2026-03-05](https://arxiv.org/pdf/2506.06541v3)
+<!-- EVIDENCE:reading:END -->
 
-多数 benchmark 从“data 已经找到”开始。KramaBench 把 file/source discovery 和 heterogeneous integration 放在 workflow 前半段，使 data selection 错误与 downstream analysis 错误都可被观察。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+KramaBench v3 从六个领域的 1,764 个文件、24 个来源构造 104 个端到端任务，并提供 633 个子任务。它同时检查最终答案、代码覆盖关键操作的比例，以及在正确文件已给定时完成子任务的能力。DS-Guru 先对每个文件取样，再生成 Python；few-shot 版本依据执行错误修复。smolagents DR 则迭代读文件、执行代码和调整计划；Reflexion 额外加入评估与反思代理。Full 提供整个文件湖，Oracle 只给正确文件，Trimmed 受最多十个上传文件约束。开源实验断网，商业网页工具无法保证完全禁用联网，因此两类结果不能直接当作同协议模型排名。
 
-subtask/task completion 支持该 data-lake artifact、tooling 与 harness 下的 end-to-end workflow；它不直接说明哪种 catalog/retrieval/cleaning mechanism 因果更优。
+[来源](https://arxiv.org/pdf/2506.06541v3)
 
-## 公平比较条件
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：DS-1000 提供已有代码与局部上下文，DA-Code 增加交互式分析；KramaBench 则把从噪声数据湖发现、清洗和整合输入放到测量中心。它在这些相近基准之间新增的是输入准备与源选择成本，并非已经验证了跨任务记忆复用。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-锁定 file corpus、source connectors、tool set、subtask definitions、agent budget 与 evaluator。给 agent 额外 schema/catalog hints 会改变 measurement object。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 下一步评测坐标
+端到端每题先得到 0–1 分，再对任务求均值并乘 100：精确字符串或数值为二元匹配，近似数值按相对绝对误差给分，列表按 F1 给分，部分语义匹配依赖 LLM。因此表中的百分制分数并不等于全对任务率。非星号结果通常为三次运行的均值与标准差；Full/Oracle 同一系统的对照比跨框架总榜更适合解释检索影响。论文没有完整统一的代理步数或 token 上限，DS-Guru 的迭代与采样消融另行列出。
 
-下一步应增加 access control、schema drift、incremental data updates 与 derived artifact lineage，使 data lake 更接近长期生产环境。
+[来源](https://arxiv.org/pdf/2506.06541v3)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 相同模型下的输入与框架对照（选取结果）
 
-## 研究决策卡
+104 个任务；每题答案分数的均值×100，非二元完成率；三次运行的均值±标准差；开源系统断网；同一行比较 Full 与 Oracle。
 
-### 什么时候值得用
+| 系统 | 模型 | Full 分数（0–100） | Oracle 分数（0–100） |
+| --- | --- | --- | --- |
+| DS-Guru few-shot | GPT-o3 | 24.98 ± 1.25 | 43.71 ± 1.94 |
+| smolagents DR | Claude-3.7 | 55.83 ± 3.41 | 60.67 ± 1.23 |
+| smolagents Reflexion | Claude-3.7 | 55.37 ± 3.36 | 62.81 ± 3.10 |
 
-适合从混乱异构文件湖出发研究数据发现与流程构造。完整输入、裁剪输入和 oracle 输入代表不同发现难度；只在相关文件已经筛好的条件下提升，不能证明系统更善于理解真实数据湖。
+事实位置：表 5，PDF 第 7 页；评分定义见表 3 和附录 G.1，第 4、29 页 · [来源](https://arxiv.org/pdf/2506.06541v3)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-示意任务：请求的答案需要从许多文件中找到相关数据，清洗并连接后构造分析流程。某个子任务的代码写对了，但选错文件或误解列含义，仍会让整个数据到洞察链路失败。
+上述同模型对照显示，筛出正确文件确实有帮助，但收益随框架而变；Reflexion 在 Full 下与单代理 DR 接近，不能据此证明所有多代理设计无效。论文的模糊答案评分、版本间方法变动和部分正文／表格矛盾必须随结果披露。
 
-### 最有判别力的实验
+来源中有几处需保留的冲突：表 5／11 的 OpenAI DR 裁剪输入结果为 52.18，正文误写成另一系统的 58.12；“Oracle 只提升 0–7 点”不能覆盖 DS-Guru/GPT-o3 的 18.73 点提升；附录表 9 的一个 GPT-o3 行与主表不一致。隐去真实名称的输入究竟覆盖 20% 还是全部任务，正文也不一致，因此不据此给出精确因果结论。人类对照的完整题数与裁判模型未完整说明。
 
-对相同任务比较完整文件湖、正确文件集合和正确中间表三种输入，逐子任务记录产物。固定模型与预算，计算发现成本和重复查询的摊销收益，检验预构建表示是否真正提高后续任务效率。
+固定模型、动作与 token 预算，在 Full／Oracle／正确中间表三个条件下同时比较迭代检索和预构建目录；记录逐操作错误、增量更新成本与重复任务复用收益。
 
-### 建议搭配
-
-[dataspace](dataspace.md) · [data-exploration-benchmark](data-exploration-benchmark.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+[来源](https://arxiv.org/pdf/2506.06541v3)
+<!-- EVIDENCE:limitations:END -->

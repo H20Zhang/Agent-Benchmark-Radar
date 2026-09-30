@@ -7,117 +7,76 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](autoresearchbench.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](autoresearchbench.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2604.25256) · [Code](https://github.com/CherYou/AutoResearchBench) · **Area: RAG / Agentic Retrieval**
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-AutoResearchBench separates scholarly search into two fundamentally different problems: **finding one target paper** and **discovering a relevant set whose true size is unknown**. The second makes “when should the search stop?” a first-class evaluation target.
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-## What it actually measures
+Read Sections 1–5, construction, metrics, experiments and analysis; appendices inspected: A–G, limitations, statistics, verification, runtime/tool details, results, errors and both full system prompts/case traces. Not performed: No code/data audit, rerun or resolution of task-denominator and verification inconsistencies
 
-The benchmark contains **1,000 queries across eight computer-science areas**:
+[arXiv v1, 2026-04-28](https://arxiv.org/pdf/2604.25256v1)
+<!-- EVIDENCE:reading:END -->
 
-- 600 Deep Research tasks seek one target paper;
-- 400 Wide Research tasks collect an unknown-size relevant set.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-Search runs over a fixed DeepXiv corpus with more than **3M full-text papers**. The frozen corpus improves reproducibility while retaining a large and realistic scholarly search space.
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-## Compared with what
+Like SAGE’s target/open-set distinction, AutoResearchBench adds adversarial difficulty filtering, no-answer cases and set IoU to emphasize exact constraints and extra-paper penalties. It stresses scholarly retrieval while compressed tool evidence and denominator gaps constrain interpretation.
+<!-- EVIDENCE:placement:END -->
 
-Known-item retrieval has an easy stopping rule: stop when the target is found. Many deep-research benchmarks also emphasize the final answer rather than separately measuring literature-collection coverage.
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-AutoResearchBench adds **unknown-size set discovery**. The agent must reason about:
+Over more than three million arXiv papers accessible through DeepXiv, the benchmark constructs 600 Deep and 400 Wide queries. Deep tasks identify one paper through full-text details, citation relations and lexical obfuscation; sixty no-answer cases perturb a core constraint. Questions easily solved by GPT-5.4 query rewrites, Sonnet/Flash agents or ten-minute human searches are removed. Wide tasks derive conjunctive conditions from topical candidates, expand them and audit full texts, yielding two to thirty-four gold papers per query, averaging 9.23. Deep accuracy requires exact predicted/gold set equality; Wide averages per-query intersection-over-union, penalizing omissions and extra papers.
+<!-- EVIDENCE:method:END -->
 
-- whether important papers remain undiscovered;
-- whether one more search is worth the cost;
-- whether query expansion has covered the major terminology and subtopics;
-- when stopping is justified rather than premature or exhaustive.
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-This makes search stopping, coverage estimation, and breadth management independently researchable.
+The main ReAct loop exposes only search: at most thirty turns, a 110,000-token soft context budget, 4,096 new tokens per completion, temperature 0.6 and ten papers per default call, via official APIs or SGLang. Although DeepXiv stores full text, the agent sees search_evidence compressed by an auxiliary LLM from the first available body-section snippet; no separate full-paper open tool is exposed. Errors and context/turn caps terminate runs. End-to-end products use a separate random fifty-query sample. Repeated sampling reports Deep pass@k and Wide oracle best@k; the latter is not deployable gold-free selection.
+<!-- EVIDENCE:setup:END -->
 
-## How the evaluation works
+<!-- EVIDENCE:result-1:START -->
+## Reported main-track scores and cost
 
-The Deep track is closer to target finding and naturally supports hit-style metrics. The Wide track uses set metrics such as IoU and recall to measure coverage.
+Nominally 600 Deep and 400 Wide queries; effective Deep denominators remain unresolved and values are attributed to the table. Time is mean seconds per query; IoU is mean per-query set overlap×100. The search-only ReAct interface is shared but model reasoning implementations differ.
 
-Interpreting results requires a fixed corpus snapshot, gold-set version, search/index backend, agent harness, and budget. Search-call and token budgets directly influence Wide-track recall, so a higher score can simply reflect more search expenditure.
+| Model | Deep accuracy percent | Deep seconds | Wide IoU percent | Wide seconds |
+|---|---|---|---|---|
+| GPT-5.4 | 7.44 | 72.5 | 8.12 | 115.98 |
+| Gemini-3.1-Pro-Preview | 7.93 | 1221.4 | 9.31 | 235.3 |
 
-Deep and Wide should not be collapsed into one headline score because they reward very different policies: precise localization versus coverage and stopping.
+Source: Table 2; Appendix Tables 8–9 · [Paper](https://arxiv.org/pdf/2604.25256v1)
+<!-- EVIDENCE:result-1:END -->
 
-## What a score supports
+<!-- EVIDENCE:result-2:START -->
+## Literature-search backend swap within one framework
 
-Deep accuracy supports a claim about whether an agent can find a target paper through multi-step search in the fixed scholarly corpus. Wide recall or IoU supports a claim about coverage relative to the current reference set.
+Same ReAct and nominal 600/400 tasks, with the Deep denominator gap noted above. Units are percentages and calls per query. Jina open-web search is arXiv-biased; DeepXiv indexing and evidence presentation differ.
 
-The Wide track has a fundamental boundary: **the gold set may itself be incomplete**. If the construction process misses genuinely relevant work, a system can discover correct extra papers and still be penalized as if they were false positives.
+| Gemini-3.1-Pro backend | Deep accuracy percent | Wide IoU percent | Wide calls |
+|---|---|---|---|
+| Open web | 6.82 | 7.37 | 2.92 |
+| DeepXiv | 7.93 | 9.31 | 3.49 |
 
-Wide Research should therefore be interpreted as coverage and precision relative to a reference set, not as proof that the system has exhaustively found a research topic.
+Source: Table 3 · [Paper](https://arxiv.org/pdf/2604.25256v1)
+<!-- EVIDENCE:result-2:END -->
 
-## Main confounders
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-The first is **gold-set completeness**. Unknown-size discovery is precisely the setting where exhaustive ground truth is difficult.
+Results must be scoped to interfaces and samples. In the main ReAct track, Opus reports 9.39% Deep accuracy and Gemini-Pro 9.31% Wide IoU, while GPT Deep Research answers eleven of fifty in a separate product sample. Not every system is below ten percent. With ten percent empty-gold Deep tasks and exact set matching, an always-empty predictor would score ten percent under the stated formula. The paper does not report that baseline or resolve effective denominators, so the “best only 9.39%” interpretation needs this caveat. Full-text-detail tasks paired with compressed-snippet access also prevent attributing low scores solely to scientific reasoning.
+<!-- EVIDENCE:interpretation:END -->
 
-The second is the **retrieval backend**. Different indexes, metadata fields, citation graphs, or full-text parsing can materially affect outcomes independently of the agent policy.
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-The third is **budget sensitivity**. More searches can often improve recall, but may not be practically worthwhile; systems with very different latency and API cost should not be ranked on recall alone.
+Model/human difficulty filtering deliberately selects adversarial tasks rather than a representative distribution of literature requests. Finite searches cannot formally prove absence or exhaustive sets. The audit claiming 96% invalid extra predictions omits its sample size and does not guarantee gold completeness. Auxiliary summarization, candidate accumulation and temporal corpus boundaries affect scores. Next, publish per-question denominators, an empty-set baseline and the actual verification protocol, add matched-budget full-paper reading, and have humans review valid unlisted papers.
 
-The fourth is corpus scope. A fixed DeepXiv snapshot excludes paywalls, live scholarly APIs, newly released papers, non-CS literature, and an evolving citation graph.
+Nominal Deep count is 600 with 60 no-answer tasks; several main accuracies including 9.39% do not fit a single 600-question binary average. Effective counts, exclusions or repeated-run aggregation are unspecified. The always-empty baseline would be 10% if the stated set metric includes all 600. Main Section 2.2.2 says newly admitted Wide papers require unanimous three-model consensus and meticulous final human audit; Appendix D.2 says majority vote, fifty-percent human sampling and a 75% precision threshold. These are materially different verification protocols. Wide supplementation statistics use 704 queries/4,887 passing papers, while the final benchmark has 400 queries/3,692 gold papers; transition/filtering details are not fully reconciled. Sonnet Wide IoU is 5.83% in Table 2 but 4.96% in Appendix Table 9; DeepSeek non-thinking Wide is 7.70% in Table 2 and 5.96% in Table 4. Appendix error analysis calls Claude Opus 4.5 while main experiments name 4.6; do not transfer exact error percentages across versions. The related-work claim that SAGE lacks an interactive agent environment conflicts with SAGE’s explicit DR Tulu MCP experiments.
+<!-- EVIDENCE:limitations:END -->
 
-## Fair comparison contract
-
-At minimum, align:
-
-- DeepXiv or corpus snapshot;
-- query and gold-set version;
-- index, metadata, and full-text visibility;
-- whether citation or graph navigation is allowed;
-- model, harness, and tool interface;
-- search-call, token, and wall-clock budgets;
-- whether stopping is agent-controlled.
-
-A system with citation-graph access and one limited to keyword search should be treated as a different tool setting.
-
-## What is still missing
-
-AutoResearchBench does not yet fully measure:
-
-- live literature drift and newly released work;
-- value-weighted relevance rather than equal value for all relevant items;
-- uncertainty in the gold set itself;
-- duplicates, versions, surveys, and original-work relationships;
-- evidence extraction, disagreement handling, and synthesis after retrieval;
-- real search cost under a fixed quality target.
-
-## Most discriminating next test
-
-A high-value extension is **marginal-value stopping**. After every search step, record the number and value of newly discovered important papers, and ask the system to estimate how much important evidence likely remains.
-
-This yields a coverage–cost curve instead of a single terminal recall. A stronger research agent should not only find more, but know **when another search is worth doing and when the evidence is already sufficient**.
-
-<!-- RESEARCH-DECISION:START -->
-
-## Research decision card
-
-### When to use it
-
-Use AutoResearchBench to distinguish locating a target paper from collecting an unknown-sized relevant set. Stopping and set completeness matter beyond ranking one paper. Results over a static computer-science corpus do not establish comprehensive literature research across disciplines.
-
-### What a concrete task looks like
-
-Illustrative task: a deep-search task follows clues to one work, while a wide-search task collects a qualifying paper set and decides when to stop. The same loop may find its first hit quickly yet miss another research branch.
-
-### Most discriminating experiment
-
-Fix corpus and budget and track first target discovery, set recall, and set IoU against calls. Review missing papers at stopping time to distinguish incomplete gold sets from search omissions, and test whether citation expansion over-concentrates on one research cluster.
-
-### Pair with
-
-[sage](sage.en.md) · [scholarquest](scholarquest.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Evolution position
-
-`known-item scholarly retrieval → unknown-size literature discovery → value-aware, live, cost-sensitive research search`
-
-AutoResearchBench is important in the middle step: it makes coverage and stopping first-class evaluation objects.
+Related benchmarks: [sage](sage.en.md) · [scholarquest](scholarquest.en.md)

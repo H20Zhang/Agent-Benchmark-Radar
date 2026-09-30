@@ -1,4 +1,4 @@
-# CausalDS: data agents across all three rungs of causal reasoning
+# CausalDS: identifiability in association, intervention and counterfactual tasks
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-07-09<br>
@@ -6,64 +6,57 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](causalds.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](causalds.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2607.08093)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-## What it actually measures
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-CausalDS evaluates tool-using data-science agents on **causal tasks across all three of Pearl's rungs**. Each scene contains a sampled structural causal model, generated observational data, and a graph-faithful natural-language story; tasks include prediction, structure recovery, identification, effect estimation, bias diagnosis, counterfactuals, mediation, uncertainty, and warranted abstention.
+Read the complete substantive 55-page v1 and Appendix A.1–A.16: generation/audits, composition, every scoring family, all breakdowns, restarts, matched ablations, failures, deployment and full prompts. Tables 3/4/24/25 were visually verified.
 
-## What changed relative to prior evaluation
+[arXiv 2607.08093v1 · 2026-07-09](https://arxiv.org/pdf/2607.08093v1)
+<!-- EVIDENCE:reading:END -->
 
-Symbolic causal benchmarks often omit realistic data analysis, while data-science benchmarks lack known causal ground truth. CausalDS generates the SCM itself, allowing deterministic evaluation of causal correctness while still forcing agents to work with imperfect observations and code/tools.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Decisive evidence
+CausalDS combines narrated synthetic causal models, observational files and private ground truth. CausalDSScore is a lower-is-better loss combining binary errors, numeric losses and graph/set loss. Abstention changes scoring pools; missing numeric answers are excluded, so coverage must accompany loss.
 
-A reported 100-task exam across six contemporary agents finds symbolic causal reasoning comparatively strong while abstention, uncertainty quantification, and coding/tool-use efficiency still separate models. Non-answerable questions are first-class scored outcomes rather than evaluation errors.
+<!-- EDITORIAL-METHOD:START -->
+Each scene derives observational data, narrative and private ground truth from a controlled structural causal model, then poses associational, interventional or counterfactual questions. An illustrative workflow identifies relationships from the story, judges identifiability, inspects observations and estimates an intervention effect or abstains rather than merely predicting correlation. Tasks score identification decisions, numeric estimates or graph/set outputs. Synthetic mechanisms provide ground truth, but unintended causal claims in the narrative can still change the question.
 
-## What the score supports
+Editorial placement: compared with generic analysis/prediction benchmarks, CausalDS explicitly asks whether the evidence identifies the target rather than assuming every task has a computable numeric answer. Like StatFormBench it requires problem formulation, adding structural causal semantics and abstention.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-The benchmark provides unusually clean ground truth for causal reasoning and tool-grounded analysis. Because scenes are synthetic, it supports algorithmic competence more strongly than ecological validity on messy observational science.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## Fair comparison contract
+The exam samples 100 scene/tasks from 953 scenes. Mini-swe-agent runs offline with 100 steps and a $10 cap where priced, never reached. Closed models use high reasoning; open models use serving defaults. Qwen’s 32k context limits comparability.
+<!-- EVIDENCE:setup:END -->
 
-Fix generated exam seed/version, observation model, tool environment, model, token/tool budget, and grader. Report Pearl rung and abstention/uncertainty metrics separately; average score can hide dangerous overclaiming on non-identifiable queries.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-## What remains unmeasured
+Main: 100-task exam, but Pass Rate covers 34 binary tasks and continuous validity has 39 targets. Matched rows: one run per view; paired loss capped at 1, including missing/invalid/abstained answers.
 
-Real causal inference includes ambiguous assumptions, measurement error not captured by the generator, experiment design, domain expertise, and disputes about the causal graph itself.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Claude Opus 4.8 · main | 100 tasks; 34 binary / 39 numeric targets | Score ↓ / Pass Rate (%) / valid count | 0.2780 / 82.4% / 38/39 | High reasoning; adaptive thinking | Table 3, p. 10; Table 4, p. 12 |
+| GPT-5.5 · main | 100 tasks; 34 binary / 39 numeric targets | Score ↓ / Pass Rate (%) / valid count | 0.5610 / 82.4% / 37/39 | High reasoning | Table 3, p. 10; Table 4, p. 12 |
+| Kimi K2.6 · hard minus clean | 10 matched scene/task pairs | Mean loss Δ ± SD; 95% CI | +0.20 ± 0.27; [+0.053, +0.373] | proxy_hard − clean; diagnostic loss | Table 24, p. 38 |
+| Qwen 3.6-35B · hard minus clean | 10 matched scene/task pairs | Mean loss Δ ± SD; 95% CI | +0.33 ± 0.47; [+0.070, +0.626] | proxy_hard − clean; diagnostic loss | Table 24, p. 38 |
 
-## Next discriminating validation
+Fact source: [Table 3, p. 10; Table 4, p. 12; Table 24, p. 38](https://arxiv.org/pdf/2607.08093v1)
+<!-- EVIDENCE:results:END -->
 
-Pair synthetic scenes with real datasets whose assumptions are deliberately underspecified, scoring whether the agent asks for missing identification assumptions rather than inventing them. This bridges causal correctness and scientific judgment.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-<!-- RESEARCH-DECISION:START -->
+The matched observation ablation uses ten selected identifiable tasks and a different loss that assigns one to failures. It is not a population effect. Story audits treat extra causal claims as warnings; synthetic generation is not perfect semantic validation. Small interval-coverage samples and answer-dependent denominators limit broad capability rankings.
 
-## Research decision card
-
-### When to use it
-
-Use CausalDS to test whether data agents recognize which causal conclusions are identifiable from available information. Predictive accuracy is not causal validity. Warranted abstention and uncertainty are capabilities that an always-answer policy can obscure.
-
-### What a concrete task looks like
-
-Illustrative task: an agent receives observational data with a domain story and must assess an intervention effect or counterfactual. It may compute associations accurately while lacking identification conditions, making a precise causal estimate inappropriate.
-
-### Most discriminating experiment
-
-Report prediction, intervention, and counterfactual levels separately, using supplied graphs or identification assumptions as controls. Pair identifiable and non-identifiable scenes and jointly evaluate estimation error, intervals, and abstention. Synthetic performance does not replace real intervention validation.
-
-### Pair with
-
-[statabench](statabench.en.md) · [insightbench](insightbench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`symbolic causality ↔ data-science execution → agentic causal analysis with abstention`
-
-CausalDS makes “knowing when causality is not identified” as important as producing an estimate.
+<!-- EDITORIAL-NEXT:START -->
+Next, hold causal graphs/queries fixed while varying sample size, narrative wording and observational access. Report coverage, identification accuracy and answered-task loss together, distinguishing justified abstention from lower averages obtained through excluded missing answers.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

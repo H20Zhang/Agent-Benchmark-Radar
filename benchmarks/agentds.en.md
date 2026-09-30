@@ -1,4 +1,4 @@
-# AgentDS: data-agent evaluation should compare human-only, AI-only, and human-AI collaboration
+# AgentDS: AI-allowed teams versus later autonomous baselines
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2025-10-18<br>
@@ -8,106 +8,55 @@
 
 [中文](agentds.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2603.19005) · **Area: Data Agent**
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and versions
 
-AgentDS is useful not because it adds another agent leaderboard, but because it places **AI-only, human-only, and human-AI collaboration** inside the same evaluation question: how much work can AI replace, where does human judgment remain load-bearing, and when does collaboration outperform AI alone?
+Full substantive paper and appendix reading completed for the stated primary version; experiments were not independently reproduced.
 
-## What it actually measures
+Read the complete 21-page v3, including the disclosure and Appendices A.1–A.3 and B: full prompts, data previews, manual repair policy, inference settings and agent deployment. The June revision follows the October 2025 competition.
 
-AgentDS uses **17 data-science challenges across six industries with 29 teams / 80 participants**, synthetic enterprise-pattern data, and hidden leaderboard evaluation of complete analysis or modeling outcomes.
+[arXiv 2603.19005v3 · 2026-06-03](https://arxiv.org/pdf/2603.19005v3)
+<!-- EVIDENCE:reading:END -->
 
-The object is therefore broader than isolated SQL, code generation, or statistics questions. More importantly, the **mode of work** is itself part of the comparison: the same class of challenge may be attempted by AI alone or by a human working with AI.
+<!-- EVIDENCE:method:START -->
+## What the method measures
 
-## Compared with what
+AgentDS compares AI-allowed competition teams with later AI baselines on 17 synthetic multimodal challenges. It has no controlled human-only arm. Scores are participant-relative quantiles, averaged within domains and then equally across six domains; they are not success rates.
 
-Benchmarks such as MLE-bench, DSAgentBench, and DataSpace mainly ask whether an agent can complete an end-to-end task. AgentDS asks an additional adoption-oriented question:
+<!-- EDITORIAL-METHOD:START -->
+Seventeen synthetic challenges span six application domains and modalities including tables, text and images, with difficulty calibrated against generic pipelines. Teams may use AI, choose tools and submit repeatedly; autonomous agents and direct-prompt baselines are evaluated afterward. An illustrative team workflow interprets multimodal inputs, chooses features/models and revises submissions using feedback, while agent baselines deliver under much shorter deadlines. Scores become participant-relative quantiles, so changing the comparison population can change the relative score of an unchanged solution.
 
-- Is AI-only already useful?
-- Does human-AI collaboration reliably beat AI-only?
-- Does AI improve outcome quality or mainly reduce execution effort?
-- Which bottlenecks still require problem framing, result judgment, or domain expertise rather than code execution?
+Editorial placement: unlike MLE-bench’s autonomous agents and historical medal thresholds, AgentDS includes AI-allowed competition teams in the outcome distribution. It describes a collaborative ecosystem but lacks budget-/population-matched human-only controls needed for causal collaboration claims.
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-That makes AgentDS more informative for **augmentation / substitution** claims than for pure model ranking.
+<!-- EVIDENCE:setup:START -->
+## Experimental setup
 
-## How the evaluation works
+Teams had ten days and up to 100 submissions per challenge. Agentic tools share Claude Opus 4.7, receive ten minutes and report their best submitted score. Direct prompting uses one call, later code execution and limited manual repairs; its default execution timeout is one hour.
+<!-- EVIDENCE:setup:END -->
 
-An interpretable AgentDS result must align the challenge release, data version, hidden evaluator, AI tools and models, time budget, participant selection, and collaboration rules.
+<!-- EVIDENCE:results:START -->
+## Selected quantitative evidence
 
-AI-only, human-only, and human-AI should be treated as separate tracks. In the human-AI condition, whether the AI can act autonomously, whether humans must approve each step, and whether participants can freely choose tools can all materially change the result.
+V3; all 17 challenges, six equally weighted domain scores. Quantiles use each challenge’s successful-submitter pool; non-submissions score zero. Human and AI conditions are deliberately shown separately.
 
-The protocol therefore matters almost as much as the headline score.
+| System / comparison | Dataset / denominator | Metric / unit | Result | Conditions | Source |
+| --- | --- | --- | --- | --- | --- |
+| Claude Opus 4.7 + MorphMind | 17 challenges / 6 domains | Overall quantile (0–1) | 0.510 | 10 min; best submitted result | §2.6.2/Figure 2, p. 6 |
+| Claude Opus 4.7 + Claude Code | 17 challenges / 6 domains | Overall quantile (0–1) | 0.458 | 10 min; CLI 2.1.30; best submitted result | §2.6.2, p. 6; Appendix B, p. 21 |
+| GPT-5.5 · direct prompting | 17 challenges / 6 domains | Overall quantile (0–1) | 0.415 | One call; limited manual code repair | §2.6.2, p. 6; Appendix A.2, p. 20 |
+| Best human–AI team | 17 challenges / 6 domains; 29-team competition | Overall quantile (0–1) | 0.860 | 10 days; up to 100 submissions/challenge | Figure 5, p. 9; §2.5, p. 5 |
 
-## What a score supports
+Fact source: [§2.6.2/Figure 2, p. 6; §2.6.2, p. 6; Appendix B, p. 21; §2.6.2, p. 6; Appendix A.2, p. 20; Figure 5, p. 9; §2.5, p. 5](https://arxiv.org/pdf/2603.19005v3)
+<!-- EVIDENCE:results:END -->
 
-A challenge score supports a claim about task outcome quality under the current participant pool, data, tools, time budget, and hidden tests.
+<!-- EVIDENCE:limitations:START -->
+## Limits and interpretation
 
-It does **not** directly support a claim such as “AI replaces data scientists.” Substitution also depends on human time, review burden, error severity, problem selection, communication, and long-term maintenance cost.
+Time, retries, compute and participant selection are unmatched, so the gap cannot establish a causal collaboration benefit or replacement claim. Domains are equally weighted, not individual challenges. Synthetic difficulty is deliberately calibrated against generic pipelines. The authors disclose affiliations with MorphMind’s developer.
 
-Likewise, human-AI beating AI-only does not automatically prove that human expertise caused the gain. Extra time, more retries, stronger prompting, or humans handling evaluator-sensitive final steps may explain part of the difference.
-
-## Main confounders
-
-**Human variance is the major additional source of uncertainty relative to pure-agent benchmarks.** Participants differ in data-science experience, tool familiarity, and collaboration strategy.
-
-A second limitation is synthetic enterprise-pattern data. It enables controlled and verifiable tasks, but real enterprise analytics also contains dirty schemas, permissions, inherited metric definitions, organizational knowledge, and business-value judgments that are hard to encode in an evaluator.
-
-Cross-paper comparisons therefore need much more than model name and final score.
-
-## Fair comparison contract
-
-At minimum, align:
-
-- challenge and hidden-test version;
-- participant selection and experience distribution;
-- AI model, tool access, and agent harness;
-- time and retry budgets for every track;
-- the human-AI collaboration contract;
-- evaluator and any feedback visible during the run.
-
-When these differ, report separate protocol cells rather than one merged leaderboard.
-
-## What is still missing
-
-AgentDS brings the question “do humans still matter?” into benchmark design, but it does not yet fully measure:
-
-- whether productivity gains persist with long-term use;
-- whether review and correction effort cancels automation savings;
-- low-frequency but high-severity errors;
-- whether better benchmark outcomes improve real business decisions;
-- how persistent AI use changes human verification behavior and skill.
-
-## Most discriminating next test
-
-The highest-value extension is not simply more static challenges, but a **longitudinal controlled deployment**. Run human-only, AI-only, and human-AI modes over the same teams and task distribution while jointly tracking output quality, human minutes, rework, severe errors, and downstream decision impact.
-
-That would separate “agents score better on benchmarks” from “agents actually reduce data-team workload.”
-
-<!-- RESEARCH-DECISION:START -->
-
-## Research decision card
-
-### When to use it
-
-Use AgentDS to study domain expertise and human–AI collaboration in predictive tasks. Team performance combines expertise, time, and tooling, so it is not a direct autonomous-agent baseline. Specify whether the comparison concerns systems, teams, or collaboration modes.
-
-### What a concrete task looks like
-
-Illustrative task: industry data combines structured fields, time series, or context, and participants select features and models for prediction. Experts may benefit from understanding business processes and metrics, distinct from coding competence alone.
-
-### Most discriminating experiment
-
-Compare autonomous agents, humans, and human–AI teams on matched tasks with controlled time, compute, and information access, documenting expertise. Report industry and metric slices rather than compressing different levels of human intervention into an AI-capability score.
-
-### Pair with
-
-[tml-bench](tml-bench.en.md) · [mle-bench](mle-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
-
-<!-- RESEARCH-DECISION:END -->
-
-## Evolution position
-
-`isolated data task → end-to-end data-science agent → human–AI team effectiveness`
-
-AgentDS occupies the last step: it moves the research question from “can the agent do the task?” to “**what incremental value appears when the agent enters a real work organization?**”
+<!-- EDITORIAL-NEXT:START -->
+Next, randomize similarly experienced teams to no-AI, standardized-AI and unrestricted-tool conditions with matched time, submissions and compute; give autonomous agents the same resources. Normalize against fixed external references to avoid participant-composition score drift.
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

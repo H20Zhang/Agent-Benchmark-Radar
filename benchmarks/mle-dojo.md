@@ -1,4 +1,4 @@
-# MLE-Dojo
+# MLE-Dojo：带评分反馈的迭代机器学习环境
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2025-05-12<br>
@@ -6,60 +6,57 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](mle-dojo.en.md) · [首页](../README.md) · [基准库](../library/README.md)
 
-MLE-Dojo 测的是 **交互式 ML engineering trajectory**，不是只看最终提交文件。智能体在 Gym-style 环境中反复读取任务、执行代码、看到错误和 HumanRank 反馈、修改实验方案并再次提交；因此可以观察每一步是否让模型、数据处理或实验状态朝正确方向推进。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已完整阅读所列主版本的实质正文与附录；未独立复现实验。
 
-MLE-bench 主要把 autonomous ML engineering 压缩成最终 competition submission；MLE-Dojo 将 200+ 任务改造成可训练、可重复交互的环境，并划分约 **150/50 train/eval**。增量在于把 terminal score 变成 trajectory-level signal：失败可以定位到 coding error、实验选择、反馈利用或停止策略。
+完整阅读 36 页 v1 的实质正文与附录 A–I，包括完整任务清单、指标定义、提示词、示例与两种 agent 集成。
 
-## 决定性证据
+[arXiv 2505.07782v1 · 2025-05-12](https://arxiv.org/pdf/2505.07782v1)
+<!-- EVIDENCE:reading:END -->
 
-共享 harness 下，不同模型在四类任务上的 HumanRank、stepwise progress 与错误类型被统一记录。这个 benchmark 的关键证据不是某个模型的单一 leaderboard 名次，而是同一交互协议下可以比较“拿到反馈之后能不能持续改善”，以及失败究竟发生在哪一步。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 这个分数支持什么判断
+MLE-Dojo 在迭代环境中提供竞赛分数反馈。HumanRank 平均公榜与私榜的相对排名，不是任务成功率。AUP 汇总跨任务性能分布，不是连续动作带来的提升曲线。
 
-MLE-Dojo 的结果支持 model + scaffold 在 **带真实 score feedback、有限 step budget 和 best-of-two 设置**下的交互式 ML engineering 能力。它不能和隐藏 score 的 MLE-bench 数字直接横比，也不能把提升纯归因于基础模型，因为 scaffold、feedback exposure 与 search budget 都是 load-bearing 条件。
+<!-- EDITORIAL-METHOD:START -->
+环境将 200 个竞赛组织为可重置任务，代理提交预测后获得评分反馈并继续修改；因此既可用于评测，也为未来策略训练提供接口。示意流程是读取数据、训练初始模型、提交、据公开／私有榜单映射后的反馈调整特征，再选择最终版本。这个循环测反馈条件下的优化，和不知道最终测试分数的单次提交不同。HumanRank 衡量相对历史参与者的位置，不能理解为完成了多少任务或超过了多少独立专家。
 
-## 公平比较条件
+编辑比较：MLE-bench 是最直接的竞赛交付参照，MLE-Dojo 增加可迭代奖励和训练／评估任务划分。演化含义是将评测环境同时变为潜在学习环境，但存在训练接口不代表论文已经证明训练后迁移。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-需要固定任务版本、可见反馈、step budget、best-of-n、硬件、可执行工具、代码 scaffold、错误恢复规则和 HumanRank 计算。尤其要把真实 score feedback 是否可见作为一级变量：能反复依据 leaderboard signal 调参的 agent 与 blind submission agent 测的是不同问题。
+<!-- EVIDENCE:setup:START -->
+## 实验设置
 
-## 研究上怎么用
+主结果采用 MLE Agent，两次运行取优，最多 15 步、12 小时，GPU 显存上限 32 GB，输入上限 50k token、输出上限 8,192 token。语料包含 150 项训练任务、50 项评测任务。
+<!-- EVIDENCE:setup:END -->
 
-如果研究关注 data/ML agent 的 planning、debugging 或 self-improvement，MLE-Dojo 比只看最终 Kaggle 分数更适合做 mechanism ablation。可以比较：移除 score feedback、限制 retry、固定 scaffold、关闭 history/memory 后，stepwise progress 与最终 HumanRank 分别怎么变，从而区分模型能力和 orchestration benefit。
+<!-- EVIDENCE:results:START -->
+## 精选定量证据
 
-## 下一步最有价值的验证
+v1 表 2；同一 MLE Agent 与两次取优反馈协议。HumanRank 为平均排行榜百分位，越高越好。
 
-它仍没有覆盖问题定义、数据获取、指标设计、研究仓库修复和方法新颖性。更重要的外推问题是 feedback overfitting：agent 是否只是利用同一任务的连续真实分数爬坡，还是学到了能迁移到 held-out task family 的 ML engineering policy。
+| 系统／比较项 | 数据集／分母 | 指标／单位 | 结果 | 条件 | 来源 |
+| --- | --- | --- | --- | --- | --- |
+| Gemini-2.5-Pro · Tabular | 表格数据；10 项评测任务 | 平均 HumanRank（%） | 42.64% | exp-3-25；统一框架 | 表 2, 第 9 页; 表 4, 第 25–26 页 |
+| DeepSeek-r1 · Tabular | 表格数据；10 项评测任务 | 平均 HumanRank（%） | 38.13% | 统一框架 | 表 2, 第 9 页; 表 4, 第 25–26 页 |
+| Gemini-2.5-Pro · CV | 视觉；10 项评测任务 | 平均 HumanRank（%） | 42.83% | exp-3-25；统一框架 | 表 2, 第 9 页; 表 4, 第 25 页 |
+| o3-mini · CV | 视觉；10 项评测任务 | 平均 HumanRank（%） | 35.02% | 2025-01-31；统一框架 | 表 2, 第 9 页; 表 4, 第 25 页 |
 
-## 谱系位置
+事实来源：[表 2, 第 9 页; 表 4, 第 25–26 页; 表 2, 第 9 页; 表 4, 第 25 页](https://arxiv.org/pdf/2505.07782v1)
+<!-- EVIDENCE:results:END -->
 
-在 MLE-bench 之后，MLE-Dojo 把终局评分推进到可训练的交互轨迹；`map_delta=reinforces`。它和后续 DeltaML / AI4AI 一起推动 Data Agent evaluation 从“交一个结果”走向“评估完整研究/工程循环”。
+<!-- EVIDENCE:limitations:START -->
+## 局限与解释边界
 
-Primary: https://arxiv.org/abs/2505.07782
+该划分为后续训练实验提供条件，但论文没有展示学到的策略迁移。MLE-Lite 数量不一致：脚注写 22，评测清单列 21。下表的表格数据与视觉子集各有十项任务。AUP 的公式与报告口径也有差异，澄清前不宜作精确比较。
 
-<!-- RESEARCH-DECISION:START -->
-
-## 研究决策卡
-
-### 什么时候值得用
-
-适合研究带迭代评分反馈的机器学习工程轨迹与训练。在线得到的评分越接近最终目标，越需要防止对反馈集过拟合；它与只在终点查看隐藏结果的评测不是相同信息条件。
-
-### 一个具体任务长什么样
-
-示意任务：智能体每轮修改方案并收到评分，据此继续探索，最终选择一个提交。多轮过程使学习信号可见，也可能让系统围绕固定评分器试错，而不是获得可迁移的建模经验。
-
-### 最有判别力的实验
-
-在相同总预算下比较有反馈、延迟反馈与独立验证反馈，固定最终隐藏集。训练任务和评测竞赛分开，并分别报告最优尝试与首次尝试，避免 best-of-k 和反馈可见性共同夸大提升。
-
-### 建议搭配
-
-[mle-bench](mle-bench.md) · [dsgym](dsgym.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+<!-- EDITORIAL-NEXT:START -->
+下一步对同一任务比较不看分、仅看公开验证分和完整反馈三种条件，统一步数及硬件，并用独立最终留出集验证。将 best-of-two 改为预先规定的选择策略，区分反馈过拟合与可迁移改进。
+<!-- EDITORIAL-NEXT:END -->
+<!-- EVIDENCE:limitations:END -->

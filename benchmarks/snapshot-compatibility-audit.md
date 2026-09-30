@@ -1,4 +1,4 @@
-# Snapshot Compatibility Audit
+# Snapshot Compatibility Audit：扣除重复噪声后审计改答
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-08-24<br>
@@ -6,60 +6,78 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-## 它到底测什么
+**中文** | [English](snapshot-compatibility-audit.en.md) · [基准库](../library/README.md)
 
-这个 audit 测的不是“更大的 corpus 平均分是否更高”，而是 **RAG corpus snapshot 增长之后，同一个 agent 对同一问题的答案是否出现超出自身采样波动的稳定翻转**。因此它把部署中的 corpus version 当成一个显式 regression variable：即使 aggregate accuracy 几乎不变，个体 query 也可能发生大量不兼容变化。
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 相比前身多测了什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-Stable-RAG / Con-RAG 一类工作通常控制固定证据扰动；这里使用 nested corpus snapshot 模拟真实部署中的索引升级，并用 within-snapshot disagreement 估计 agent 自己的随机波动，再从跨 snapshot churn 中扣掉这部分噪声。这样问的是 **excess churn**，而不是把所有答案变化都归因于 corpus 更新。
+正文第1–7节、公式1–8、全部结果表图和伦理/有效性说明已全文阅读；PDF无独立附录，详细可执行提示在另行发布工件，本次未运行或核验该工件。
 
-## 决定性证据
+[arXiv v1, 2026-08-24](https://arxiv.org/pdf/2608.22856v1)
+<!-- EVIDENCE:reading:END -->
 
-在 NQ 上，报告的 excess churn 为 **6.438pp exact** 与 **10.250pp semantic**，即使 aggregate EM 只变化 **−1.50pp**。其中 **40 个稳定翻转贡献了 10.00pp semantic churn**。这说明“平均 benchmark 分数接近”并不意味着两个 corpus snapshot 对用户是行为兼容的。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 结论边界：这个分数支持什么判断
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-它支持“在所测 nested-snapshot 升级中存在超出同 snapshot 随机波动的 compatibility failure”。它不支持“所有翻转都是事实性伤害”：有些回答可能只是等价表达、合理更新或从错误变正确，因此 churn 需要和 correctness / harm 分开解释。
+相较RGB等受控噪声测试和只报告扩库准确率的实验，该审计改变固定语料访问范围并显式测同状态重复噪声。新增坐标是行为兼容性：平均效用近似不变时，回答分布仍可能变动。
+<!-- EVIDENCE:placement:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-必须固定 generator、retriever、query set、sampling configuration、snapshot nesting rule 和 semantic evaluator。尤其需要报告 temperature / top-p 等生成参数；否则 within-snapshot disagreement 本身都可能变化。不同 shard ordering 或不同文档进入顺序也会改变“snapshot growth”实际代表的干预。
+审计同一单轮检索—生成器换语料快照后答案是否改变。每题在小/大快照各独立生成两次，先算两个快照内部重复答案相似度的平均w，再算四种跨快照配对相似度平均c，逐题平均w−c得到额外答案变动D。它扣除普通重复调用噪声，是一致率差而非改答题目比例。标准化字符串相等与盲语义等价为共同主指标；精确相等下总体D为答案分布平方差的一半，语义裁判未保证正半定/传递性，不能一概解释成MMD。另事后定义严格稳定翻转：两端内部都语义一致、四种跨端配对全部不同。
+<!-- EVIDENCE:method:END -->
 
-## 研究上怎么用
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-这个指标适合作为生产 RAG 的 **compatibility regression test**。当系统更新 corpus、embedding 或 index 时，只报告整体 accuracy 可能漏掉用户级 breakage；更合理的 release gate 是同时报告 aggregate quality、within-snapshot variance、cross-snapshot excess churn，以及稳定翻转中有多少是 harmful / beneficial。
+确认性NQ400题先排除2400开发ID再按哈希选取；支持性TriviaQA独立200题。DeepResearchGym的FineWeb固定嵌套前缀为0/1/3/7分片，每个非零状态取原问题的前8篇，每篇最多1200压缩空白后的字符；不是迭代代理，也非真实时间刷新。主生成器deepseek-v4-flash通过Claude CLI的DeepSeek适配器独立单例运行，low、无工具/会话，温度及top-p未设置且提供商默认数值未记。每答案最多512 UTF-8字节。语义裁判先看每题匿名8答案的28对，不知规模、证据、金标；之后才解锁金标算EM/F1。50000次整题bootstrap保留组内重复。确认门槛同时要求精确D≥3点及两种D单侧95%下界均正。
+<!-- EVIDENCE:setup:END -->
 
-## 下一步最有价值的验证
+<!-- EVIDENCE:result-1:START -->
+## 扣除重复噪声后的额外变动
 
-当前缺口包括 live refresh、多步 agent trajectory、对具体 document 的因果 attribution 与 harm measurement。最高杠杆的下一步，是把“哪个新增/重排文档造成了稳定翻转”定位出来，并区分正确更新、无害表述变化与真正 regression。
+NQ400题、TriviaQA200题；deepseek-v4-flash，1→7分片、每状态两次独立生成，整题50000次bootstrap。前两列是一致比例，后两列是差值百分点；TriviaQA仅支持性，不与NQ合并。
 
-## 谱系位置
+| 研究／相似度 | 状态内一致率（%） | 跨状态一致率（%） | 额外变动（百分点） | 双侧95%区间（百分点） |
+|---|---|---|---|---|
+| NQ／精确 | 25.25 | 18.813 | 6.438 | [4.188, 8.750] |
+| NQ／语义 | 89.125 | 78.875 | 10.25 | [7.188, 13.438] |
+| TriviaQA／语义 | 96.75 | 94.625 | 2.125 | [0.125, 4.500] |
 
-它把 corpus version 本身纳入 RAG regression contract；`map_delta=reinforces`。这条线补的是传统静态 benchmark 很少测量的 **deployment compatibility**，不是替代常规 answer quality。
+事实来源：表 2 · [论文](https://arxiv.org/pdf/2608.22856v1)
+<!-- EVIDENCE:result-1:END -->
 
-Primary: https://arxiv.org/abs/2608.22856
+<!-- EVIDENCE:result-2:START -->
+## 相近平均效用掩盖不同答案
 
-<!-- RESEARCH-DECISION:START -->
+EM为两次回答上的标准化精确匹配，变化/额外变动单位百分点；严格翻转是题数比例且为事后诊断。V4-Pro为事后同族模型与服务配置共同替换，EM差95%区间[-2.00,8.50]，不是显著改善的证明。
 
-## 研究决策卡
+| 研究／生成器 | 题数 | EM变化（点） | 语义额外变动（点） | 严格语义翻转 |
+|---|---|---|---|---|
+| NQ／V4-Flash | 400 | -1.5 | 10.25 | 40/400 |
+| TriviaQA／V4-Flash | 200 | 1.25 | 2.125 | 5/200 |
+| NQ子集／V4-Pro | 100 | 3.0 | 8.75 | 6/100 |
 
-### 什么时候值得用
+事实来源：节 5.2–5.4; 表 4 · [论文](https://arxiv.org/pdf/2608.22856v1)
+<!-- EVIDENCE:result-2:END -->
 
-适合研究语料增长是否在总体准确率稳定时仍改变具体答案。跨快照不一致既可能是正确更新，也可能是错误翻转；只有减去同快照随机波动并检查答案方向，才能讨论真实版本兼容性。
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-### 一个具体任务长什么样
+NQ语义跨状态不一致为21.125%，同状态重复不一致已达10.875%，相减才是10.250个百分点；不能把全部21.125%归因于扩库，也不能说恰有10.25%题确定改答。EM净降仅1.50点，却由800个同重复号配对中的46次匹配→不匹配与34次反向变化抵消而来；另155对在两个不同EM不匹配答案间切换。严格稳定语义翻转另为40/400，35题四个答案全不匹配，故EM完全看不见这些变化。变动包含改善、别名、歧义与错误，不等同伤害或应阻止发布。
+<!-- EVIDENCE:interpretation:END -->
 
-示意任务：同一问题在旧语料和包含更多文档的新语料上重复回答，总体正确率差不多，但部分样本稳定地改成另一个答案。系统需要判断变化是新证据纠正旧错，还是新增干扰造成退化。
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-### 最有判别力的实验
+只有一条固定分片路径，规模与新增文档身份/排名同时改变；两次重复仅最低可识别设计，不能精确恢复每题答案分布。bootstrap只表示所选题目的抽样不确定性，不覆盖不同路径、日期或模型。主配置所有检索状态EM均低于闭卷，不能代表优化后生产RAG。输出EM不匹配不代表错误，语义裁判也可能受风格影响且无人工验证。下一步随机多条语料路径、增加重复次数并固定解码参数，跨模型家族及真实刷新复核，再让人工判高影响翻转的事实与业务风险。
 
-在每个快照内重复采样，并把跨快照翻转拆为正确到错误、错误到正确和其他变化。固定生成参数与检索预算，再移除新增的可疑文档，定位语料变化的实际原因，而不只报告不一致比例。
+所选主表未发现决定性数值冲突。提供商默认温度/top-p未记录，分片的绝对文档/token量和检索编码/排序完整配置在所读正文中未给，不能补写为普遍七倍语料效应。50题跨模型裁判审计不是人工验证，其原始执行轨迹未保留。V4-Pro同时改变生成器与服务接口，裁判输入包也由8答案变4答案，不是单独模型消融。
+<!-- EVIDENCE:limitations:END -->
 
-### 建议搭配
-
-[crag](crag.md) · [rag-collapse](rag-collapse.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+相关基准：[crag](crag.md) · [rag-collapse](rag-collapse.md)

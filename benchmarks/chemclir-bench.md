@@ -1,4 +1,4 @@
-# ChemCLIR-Bench：把跨语言技术检索的失败拆到语言对和排名深度
+# ChemCLIR-Bench：区分化学专利的同语与跨语检索
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-09-19<br>
@@ -6,52 +6,64 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](chemclir-bench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](chemclir-bench.en.md) · [基准库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2609.23231) · [代码](https://github.com/MohammadKhodadad/Multi-Lingual-QAC) · [数据](https://huggingface.co/datasets/MehdiAstaraki/multilingual_GP)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。
 
-ChemCLIR-Bench 在 Google Patents 与 EPO 化学专利材料上比较同语言与跨语言检索。论文评测五种语言、八个 embedding 模型；检索脚本另提供按查询语言、原生或合成翻译来源、目标语言及语言对拆分的 Recall@10 / MRR@10 分析。[论文](https://arxiv.org/abs/2609.23231) · [官方实现](https://github.com/MohammadKhodadad/Multi-Lingual-QAC/blob/main/README.md)
+官方HTML正文第1–5节及附录A.1–A.4全部阅读；HTML漏掉的S.5–S.9提示正文已从同版PDF补齐，图2–3经渲染核验。未复现或独立审查专利语言版本等价性。
 
-## 相比什么前进了
+[arXiv v1, 2026-09-19](https://arxiv.org/pdf/2609.23231v1)
+<!-- EVIDENCE:reading:END -->
 
-相较 BEIR 的跨领域检索，这里的关键变量是专业领域中查询语言和证据语言不一致。更深的排名诊断可以区分“相关证据完全未找到”和“仍可找到但排得太低”，因此一个总体 Recall 不足以解释系统退化。它不是迭代式搜索或完整 RAG 问答评测。
+<!-- EVIDENCE:placement:START -->
+## 与相邻评测相比改变了什么
 
-## 实际怎样评测
+以下为基于所读协议的编辑比较，不表示论文宣称直接继承。
 
-公开流水线导出 MTEB 格式的 corpus、queries 和 qrels。当前生成路径先为文档产生英语问答，经过语言、忠实度与检索质量检查，再翻译到目标语言；运行记录保存数据规模、模型、Git 版本与逐题结果。仓库允许更多翻译语言，不能把当前配置直接等同于论文的五语言实验。
+相较MIRACL的各语言内检索和ChemTEB的英文领域表示，这里用同一专利的语言版本控制目标身份，单独测跨语路线与候选深度。它是平行文档诊断，尚非完整专利查新或最终科研问答。
+<!-- EVIDENCE:placement:END -->
 
-## 决定性证据与分数边界
+<!-- EVIDENCE:method:START -->
+## 任务与证据如何构造
 
-论文摘要报告最佳模型的 Recall@10 从同语言 0.72 降至跨语言 0.53。这是该数据与配置下的结果，不是跨领域通用幅度，更不能直接推算下游答案损失。仓库还明确说明多语言正文和权利要求比标题、摘要稀疏，部分字段主要有英语；不同语言的可见内容必须检查。[结果来源](https://arxiv.org/abs/2609.23231) · [字段限制](https://github.com/MohammadKhodadad/Multi-Lingual-QAC/blob/main/README.md)
+把来源专利的各语言版本设为相关文档，检验同语与跨语召回。Google Patents为23787份标题/摘要语言版本、524查询，EPO为11315份标题/摘要/首条权利要求版本、198查询。五种查询语言中，EPO只覆盖英德法三种；Google数据中文原无覆盖，另用GPT-5.5翻译400份。gpt-5-mini每文档生成三问，Sonnet4.6依支持性和技术/概念查询质量选最好。查询可用已有语言、缺失语言或全语言生成，因此部分无同语金标。标签只认源专利版本，不是所有主题相关专利的穷尽标注。
+<!-- EVIDENCE:method:END -->
 
-## 主要混杂与尚未覆盖的能力
+<!-- EVIDENCE:setup:START -->
+## 复现时必须保留的条件
 
-最强替代解释是英语种子查询、翻译风格和各语言内容字段不等价，而不只是 embedding 对齐能力。还应检查专利家族重叠、相关性标签构造与样本过滤。公开数据的存在不代表这些混杂已经被完全排除。
+八个小于10亿参数的嵌入模型，未完整列精确检查点、输入前缀、最大长度和近邻索引参数。R@10分别在有同语/跨语金标的查询上计算，并先语言内再语言间平均；Google同语261查询与跨语524查询不能直接当完全配对。配对检验用Google261+EPO198双金标题。深度指标合并这459题：找首个同语、首个跨语及两者较深秩的80百分位，超过1000右删失；±是2000次bootstrap标准误而非95%区间。XRC为相同覆盖率下跨语/同语深度比，RRC@K为前K有至少一跨语金标的比例，ARI为前K缺口中前1000仍缺失的占比。
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 同语强不代表跨语强
 
-## 研究决策卡
+0–1语言宏平均；Google同语261、跨语524查询，EPO198双金标题；相关对象为源专利语言版本。不同路由分母须保留，不能把差值直接当同题效应。
 
-### 什么时候值得用
+| 模型 | Google同语R@10 | Google跨语R@10 | EPO同语R@10 | EPO跨语R@10 |
+|---|---|---|---|---|
+| embeddinggemma | 0.74 | 0.54 | 0.7 | 0.52 |
+| bge-m3 | 0.64 | 0.47 | 0.71 | 0.47 |
+| e5-large-instruct | 0.73 | 0.09 | 0.63 | 0.12 |
 
-适合多语言企业知识库或技术检索中的语言对诊断，作为下游 RAG 实验的检索层检查。
+事实来源：表 2 · [论文](https://arxiv.org/pdf/2609.23231v1)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:interpretation:START -->
+## 这些比较支持什么结论
 
-示意：中文查询描述一个化学工艺，相关专利只有德文摘要；只在中文结果中命中类似主题并不等于找到支持证据。
+embeddinggemma跨语R@10为Google0.54/EPO0.52；e5-large-instruct同语接近前列却跨语0.09/0.12，说明不能用同语榜单代替跨语验证。但“前1000找不到”的7%仅是固定截断下重排救不回，不证明永久不可检索或唯一病因是对齐。扩大首阶段深度、翻译查询、混合检索和核验版本等价性都可能改变这一余量，不能把alignment-only当作已识别因果机制。
+<!-- EVIDENCE:interpretation:END -->
 
-### 最有判别力的实验
+<!-- EVIDENCE:limitations:START -->
+## 局限、来源冲突与下一步
 
-固定文档字段、专利家族划分和 qrels，比较多语言 dense、查询翻译加 BM25 与 hybrid；逐语言对报告 Recall/MRR，并把原生问题和翻译问题分开，控制相同检索与重排预算。
+来源版本并非逐权利要求保证等价，Google语言标签不保证母语原作，也未使用Google机器翻译研究表；仅中文400篇是作者新增翻译。40篇中文审查仅34篇接受，不能称翻译全通过。97例评分几乎全在高质量区，96.9%一致/AC1=0.97不证明能识别差题，且只有一位人工评分者。深度比不是实际阅读时间、token或成本，没运行真实重排器。建议先公布准确配置与语言/专利族分母，再做同族等价核验、配对同内容查询、翻译/稀疏/混合对照和更深候选曲线。
 
-### 建议搭配
+人工审查正文106例/8.40均分，图S.2为106例/8.33，一致性及局限写97例，队列差异未说明。每指标五语言平均的概括不适用于仅72英/58德/68法查询的EPO。EPO正文11315个专利各三语与表1单语言文档单位混淆，本文不乘三。e5因跨语<0.10剔除但EPO为0.12，排除规则所用聚合范围不明。所谓对齐不可救余量实际只表示前1000漏检。
+<!-- EVIDENCE:limitations:END -->
 
-[beir](beir.md) · [ontologybench](ontologybench.md) · [commercial-tax](commercial-tax.md)
-
-<!-- RESEARCH-DECISION:END -->
-
----
-
-证据核验：2026-09-23。本条依据论文元数据、官方协议及上述公开实现或数据说明；不把结构校验当作事实认证，也未独立复现实验。
+相关基准：[beir](beir.md) · [ontologybench](ontologybench.md) · [commercial-tax](commercial-tax.md)

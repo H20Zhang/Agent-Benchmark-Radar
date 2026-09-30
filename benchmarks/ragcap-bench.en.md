@@ -6,66 +6,89 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](ragcap-bench.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](ragcap-bench.md) | **English** · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2510.13910)
+<!-- EVIDENCE:reading:START -->
+## Reading scope and version
 
-## What it actually measures
+Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction.
 
-RAGCap-Bench evaluates intermediate tasks inside agentic RAG rather than only the final answer: planning, evidence extraction, grounded reasoning, and noise robustness. Its multiple-choice questions come from system trajectories and recurring failure patterns, making an end-to-end failure easier to diagnose.
+Read Sections 1–6, taxonomy, construction, metrics and experiments; appendices inspected: A–H, source datasets, error examples, all supplied generation/evaluation prompts, MCQ examples and bare-prompt results. Not performed: No dataset/code audit, no rerun; exact downstream graph values not digitized
 
-## What changed relative to prior evaluation
+[arXiv v1, 2025-10-15](https://arxiv.org/pdf/2510.13910v1)
+<!-- EVIDENCE:reading:END -->
 
-End-to-end RAG scores turn planning, retrieval, reasoning, and intermediate decision errors into one black box. RAGCap-Bench makes those latent abilities explicit so a failure can be associated with a capability class rather than inferred from the final answer alone.
+<!-- EVIDENCE:placement:START -->
+## What changes relative to nearby evaluations
 
-## Decisive evidence
+The following is an editorial protocol comparison, not an assertion of direct inheritance unless stated.
 
-Under the paper v2 informative-prompt protocol (Table 3), DeepSeek-R1 records the highest Overall F1 in the reported comparison, 81.05%. Strict exact match tells a different story: evidence extraction reaches 42.02% with Gemini-3.1-Pro, while grounded reasoning reaches 57.23% with Qwen3-235B-A22B. Aggregate F1 above 80% therefore does not mean that a model completes intermediate steps without errors.
+Compared with end-to-end search such as BrowseComp, RAGCap-Bench tests abstention, evidence and planning judgments on context snapshots through multiple choice. It diagnoses component capabilities rather than replacing completion rates on dynamic trajectories.
+<!-- EVIDENCE:placement:END -->
 
-The reported correlation with end-to-end agentic RAG supports diagnostic relevance, not a causal guarantee that improving one micro-task improves the deployed system. [Versioned source: Table 3](https://arxiv.org/html/2510.13910v2#S4.T3).
+<!-- EVIDENCE:method:START -->
+## Task and evidence construction
 
-## What the score supports
+The benchmark constructs 255 Chinese/English multiple-choice questions from existing research queries and trajectories produced by WebThinker, HiRA, WebSailor and WebDancer. It probes planning, evidence selection, grounded reasoning and noise robustness. Planning separates convergent and divergent strategies; noise separates abstention and source reliability. GPT-4o, Qwen-Plus and DeepSeek-V3 format questions or generate error-guided distractors, followed by removal of unanimously answered easy cases and malformed items. Experts determine gold answers by majority vote. The main task selects an option set given an intermediate state rather than autonomously executing search for all 255 questions.
+<!-- EVIDENCE:method:END -->
 
-Capability scores can diagnose likely weaknesses and compare models under standardized micro-tasks. They do not prove that improving one capability will causally improve a deployed RAG system; interface, tools, and orchestration determine whether the capability is realized.
+<!-- EVIDENCE:setup:START -->
+## Conditions needed to interpret the results
 
-## Fair comparison contract
+Main Table 3 uses informative prompts with typical-error examples; Appendix Table 6 uses bare prompts. EM requires an exact option-set match. F1 is averaged per instance and then within groups; overall scores equally weight four capabilities rather than micro-averaging 255 questions. Divergent planning and noise abstention report only EM, so EM and F1 cover different subcomponents. Downstream validation has three Qwen3 sizes, 8B/32B/235B, in WebThinker and HiRA on InfoDeepSeek/BrowseComp-Zh with at most ten Google calls. A separate study samples 500 WebThinker trajectories: the three models score each step from one to ten, average across steps, and correlate with final binary correctness. There are no human process-quality gold scores.
+<!-- EVIDENCE:setup:END -->
 
-Fix prompts, evaluation version, and run count. Paper v2 Table 3 uses informative prompts and averages three runs; bare prompts are a different setting. When relating these capabilities to end-to-end performance, also align the agent framework, tools, and resource budget. A larger scaffold can otherwise improve both scores without establishing component-level causality.
+<!-- EVIDENCE:result-1:START -->
+## Two noise capabilities are not interchangeable
 
-## What remains unmeasured
+Percentages within each noise subgroup; exact subgroup counts are not printed in the main table for the 255-question benchmark. Abstention is a binary choice and reliability may be multi-select, so difficulty is not matched.
 
-Capability decomposition may miss emergent coordination effects, and benchmark micro-tasks can become easier than the messy state in real trajectories. Cost, stopping, and error recovery remain system-level properties.
+| Model | Noise-abstain EM | Noise-reliability EM | Noise-reliability F1 |
+|---|---|---|---|
+| GPT-4o | 97.3 | 10.0 | 65.96 |
+| DeepSeek-R1 | 70.27 | 35.0 | 80.92 |
 
-## Next discriminating validation
+Source: Table 3, informative prompts · [Paper](https://arxiv.org/pdf/2510.13910v1)
+<!-- EVIDENCE:result-1:END -->
 
-Intervene on one weak capability while holding the rest of the agent fixed, then test whether predicted end-to-end failures decrease. That is the needed step from correlation to causal diagnostic value.
+<!-- EVIDENCE:result-2:START -->
+## Error-example prompts can help overall but hurt a component
 
-<!-- RESEARCH-DECISION:START -->
+Same model and 255 questions, in percent; overall scores equally weight four capabilities and component columns average only their respective task types.
 
-## Research decision card
+| Qwen3-235B prompt | Overall EM | Evidence-selection EM | Grounded-reasoning EM |
+|---|---|---|---|
+| Bare | 46.56 | 42.03 | 52.83 |
+| Informative | 51.57 | 39.13 | 56.6 |
 
-### When to use it
+Source: Table 3 and Appendix F Table 6 · [Paper](https://arxiv.org/pdf/2510.13910v1)
+<!-- EVIDENCE:result-2:END -->
 
-Use RAGCap-Bench to isolate intermediate capabilities in agentic RAG. Their practical value depends on predicting behavior in real workflows. Higher scores on decomposed tasks should not be presented as better end-to-end search without a transfer check.
+<!-- EVIDENCE:result-3:START -->
+## Process-rating correlation is not human agreement
 
-### What a concrete task looks like
+Five hundred WebThinker trajectories; per-step 1–10 ratings are averaged within each trajectory and point-biserially correlated with final binary success. Correlation r is unitless; the paper reports p<0.05 without human process gold labels.
 
-Illustrative task: a system solves a local retrieval-planning, intermediate-reasoning, or evidence-assessment problem rather than an entire user request. Such tasks improve diagnosis but may remove error accumulation and state dependence present in the full workflow.
+| Evaluator | Evidence rating vs outcome r | Reasoning rating vs outcome r |
+|---|---|---|
+| Qwen3-8B | 0.21 | 0.291 |
+| Qwen3-235B | 0.528 | 0.338 |
 
-### Most discriminating experiment
+Source: Table 4; Section 4.5 · [Paper](https://arxiv.org/pdf/2510.13910v1)
+<!-- EVIDENCE:result-3:END -->
 
-Hold a complete system fixed and replace only a component improved on one local capability. Test whether local and end-to-end scores move together. Evaluate on system-generated intermediate states as well as reference states to expose sensitivity to upstream errors.
+<!-- EVIDENCE:interpretation:START -->
+## What the comparisons establish
 
-### Pair with
+RAGCap exposes uneven capabilities: GPT-4o reaches 97.30% noise-abstention EM but only 10.00% exact source-reliability selection. Knowing when to abstain differs from identifying reliable sources. Prompt gains are not uniform either: Qwen3-235B overall EM rises from 46.56 to 51.57 while evidence-selection EM falls from 42.03 to 39.13. The 0.528 value from 500 trajectories is a correlation between process ratings and final correctness, not agreement with human process judgments or proof that MCQ scores replace end-to-end evaluation.
+<!-- EVIDENCE:interpretation:END -->
 
-[agenticragtracer](agenticragtracer.en.md) · [browsecomp-plus](browsecomp-plus.en.md)
+<!-- EVIDENCE:limitations:START -->
+## Limits, source discrepancies and next test
 
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Multiple choice measures recognition among supplied options, not plan generation or tool execution. Option counts differ across categories, affecting exact-match difficulty. Model-consensus filtering induces model dependence, and source questions overlap in benchmark families with downstream validation, requiring sample-independence checks. Source reliability includes normative choices rather than direct truth verification. Next, use disjoint questions with fixed backbones and budgets, intervene on intermediate modules, and obtain human evidence/answer judgments to test causal diagnostic value.
 
-<!-- RESEARCH-DECISION:END -->
+The paper says evidence-extraction F1 generally exceeds 70%, but informative Qwen3-32B is 62.97; retain per-model rows rather than universal prose. The strong downstream-surrogate claim relies on three model sizes and two frameworks, with Figure 4 rather than a reported broad correlation coefficient/confidence interval. Table 4 coefficients quantify evaluator ratings versus final binary correctness on 500 trajectories, not the correlation of MCQ scores with human process labels. The source-reliability prompt categorically lists promotional company pages and user-upload sites as less credible; this operational definition can penalize informative primary sources and should be visible. No inter-annotator agreement number or explicit annotator count is given for expert majority-vote labels in the reviewed paper.
+<!-- EVIDENCE:limitations:END -->
 
-## Genealogy
-
-`final RAG score → capability decomposition → intervention-based agent diagnosis`
-
-RAGCap-Bench is useful insofar as its intermediate coordinates predict what to fix.
+Related benchmarks: [agenticragtracer](agenticragtracer.en.md) · [browsecomp-plus](browsecomp-plus.en.md)

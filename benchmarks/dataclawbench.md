@@ -1,4 +1,4 @@
-# DataClawBench：长时间 data work 应该看 progress curve，而不只是超时前最后一答
+# DataClawBench：分别评估最终结果与里程碑进展
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-05-04<br>
@@ -6,50 +6,60 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](dataclawbench.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](dataclawbench.en.md) · [主入口](../README.md)
 
-[论文](https://arxiv.org/abs/2605.02503)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它在测什么
+已完整阅读下述版本的正文与可用附录，并核对所用结果；未独立复现实验。
 
-DataClawBench 有 492 个 tasks、7 个 categories，每题包含 2–9 个 gold milestones，底层约 2.06M 条真实 records，并给 agent 最长约 1,200 秒 budget。evaluation 同时看 milestone progress、final correctness 与 efficiency，因此可以观察长任务在何处停滞。
+完整阅读 v3 共 25 页正文与附录 A–F，包括配置、分类结果、费用、匿名化、标注、三个完整提示和四个案例；核对表 4–5。
 
-## 相比什么前进了
+[arXiv 2605.02503v3 · 2026-05-27](https://arxiv.org/pdf/2605.02503v3)
+<!-- EVIDENCE:reading:END -->
 
-很多 Data Agent benchmark 只给 binary final success。DataClawBench 把 partial progress 变成显式信号，使“已经完成数据发现/清洗但卡在最后分析”和“从一开始就没走对”不再同为 0。
+<!-- EVIDENCE:method:START -->
+## 方法与测量对象
 
-## 分数边界
+DataClawBench v3 提供约 206 万条企业、行业和政策记录，组织为 18 个文件，保留缺失、异名、单位不一致等问题。492 个任务按简单／中等／困难分为 131／286／75；不预先指出相关源、完整模式或噪声。参考答案与里程碑由专家和代理在清洗过的数据上共同建立。八个模型使用 OpenClaw、只读 Docker 工作区、每题 1,200 秒；只有国际比较题允许网络搜索。
 
-progress/final/efficiency 支持当前 milestone annotations、records 与 time budget 下的 long-horizon performance；gold milestones 不是唯一有效 workflow，因此 path-sensitive interpretation要谨慎。
+[来源](https://arxiv.org/pdf/2605.02503v3)
 
-## 公平比较条件
+<!-- EDITORIAL-METHOD:START -->
+编辑比较：DA-Code／DataSciBench 以最终产物为核心，DataClawBench 另用里程碑与时间折扣描述过程。它新增“失败前走到了哪里”的诊断，但过程指标按正确／错误任务分别计算，不能替代最终准确率；某模型的失败集合也不是另一模型的同一比较样本。
+<!-- EDITORIAL-METHOD:END -->
+<!-- EVIDENCE:method:END -->
 
-锁定 1,200s/step/tool budget、task data、milestone version、runtime、agent scaffold 与 final evaluator。
+<!-- EVIDENCE:setup:START -->
+## 评分与实验条件
 
-## 下一步评测坐标
+Acc 由 GLM-5 比较答案，多子问题按分项平均，因此不一定是整题二元正确率。EE 仅在答对的题上计算“参考步骤数／代理步骤数”。GPR 仅在答错题上测已达成里程碑比例；裁判可从正确下游结果推断上游里程碑。TPE 再按首次达成时间作 γ=0.9 的折扣，只针对已经达成的里程碑，不能单独表示完成程度。配置保留提供方默认参数及最大上下文；GPT-5.4 thinking 关闭，Claude 和 Gemini 为 high，计算预算并未匹配。
 
-下一步应允许 multiple valid workflows，并用 counterfactual intervention 判断哪些 milestone 真正决定 final success。
+[来源](https://arxiv.org/pdf/2605.02503v3)
+<!-- EVIDENCE:setup:END -->
 
-<!-- RESEARCH-DECISION:START -->
+<!-- EVIDENCE:result-1:START -->
+## 结果与过程的不同测量对象（选取结果）
 
-## 研究决策卡
+v3 全部 492 题；Acc 对题内分项先平均；EE 只在该模型答对题上算，GPR/TPE 只在其答错题上算，具体子集数量未单独给出；GLM-5 裁判、γ=0.9、OpenClaw 每题1,200秒；不同模型推理设置不相同。
 
-### 什么时候值得用
+| 模型 | Acc（%） | EE（比例） | GPR（%） | TPE（0–1） |
+| --- | --- | --- | --- | --- |
+| Claude Opus 4.6 | 63.4 | 0.42 | 45.1 | 0.59 |
+| Gemini 3.1 Pro Preview | 45.8 | 0.32 | 33.6 | 0.41 |
+| GPT-5.4 | 23.4 | 0.46 | 18.5 | 0.75 |
 
-适合研究在先验提示很少、原始数据有噪声时的自主探索。里程碑进度可以区分有效调查与无目的调用，但命中里程碑并不必然意味着最终结论正确；领域与时间范围也限制外推。
+事实位置：表 4–5，第 6 页；公式 1–2，第 3 页；附录 A 表 7，第 12 页；附录 E，第 20–21 页 · [来源](https://arxiv.org/pdf/2605.02503v3)
+<!-- EVIDENCE:result-1:END -->
 
-### 一个具体任务长什么样
+<!-- EVIDENCE:limitations:START -->
+## 结果解读、来源限定与下一步
 
-示意任务：系统进入陌生金融数据环境，自主发现表、文档和相关政策，再逐步形成可验证结论。探索过程中可能找到正确来源，却误解字段或过早停止，需同时观察中间进度和终点。
+GPT-5.4 的 EE 与 TPE 高，却准确率和 GPR 低，说明迅速停止或只完成少量早期步骤也可能显得“高效”。不同模型的失败子集不同，GPR 不能当作同题配对比较。噪声／源数量／模式提示的干预只重跑 30 道原先失败题，且先合并移除噪声和无关源，不能据此给出各因素独立贡献。
 
-### 最有判别力的实验
+第 3.2 节提及确定性评估，但实际结果和里程碑由 GLM-5 判分。附录表 16 的总任务数写 3,934，而八行各 492 合计应为 3,936。案例 2 称公共分母变化会在逐指标 min-max 后改变排名；若确实只改变共同正比例因子，标准 min-max 应将其抵消，所以这一因果解释需要原始代码复核，不能照抄。
 
-固定工具、网页访问政策和时间预算，比较完全自主、正确来源提示与正确模式提示。联合报告里程碑进度、最终正确性和时间，并复核高进度低正确率样本，定位探索与推理之间的断点。
+固定推理强度与预算，在相同任务集合上分别只去噪、只筛源、只加模式，增加重复运行；对正确和错误轨迹都做盲审，记录精确最终结果、里程碑召回与错误推断，检验过程分数是否预测后续可靠性。
 
-### 建议搭配
-
-[kramabench](kramabench.md) · [ddr-bench](ddr-bench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
-
-<!-- RESEARCH-DECISION:END -->
+[来源](https://arxiv.org/pdf/2605.02503v3)
+<!-- EVIDENCE:limitations:END -->
