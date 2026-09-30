@@ -12048,5 +12048,87 @@
       "status": "unmatched",
       "note": "No verified Semantic Scholar count was obtained for this addition. Unknown is not zero; existing citation snapshots are retained."
     }
+  },
+  {
+    "id": "memprobe-stability-plasticity",
+    "name": "MemProbe (stability–plasticity)",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-09-24",
+    "importance": 4,
+    "status": "active",
+    "summary": "Diagnoses whether agent memory incorporates valid updates while preserving facts against unreliable evidence, with separate stability, plasticity, and provenance probes.",
+    "capabilities": [
+      "memory-update",
+      "interference-resistance",
+      "source-monitoring",
+      "temporal-order",
+      "stability-plasticity"
+    ],
+    "environment": [
+      "controlled-english-text-episodes",
+      "fresh-per-episode-memory-store",
+      "synthetic-and-adapted-dialogue"
+    ],
+    "protocol": [
+      "sequential-session-ingestion",
+      "fixed-final-reader",
+      "typed-field-probe-scoring",
+      "update-preserve-probes",
+      "episode-bootstrap"
+    ],
+    "scale": "Main suite: 56 episodes, 1,246 sessions and 224 probes; 14 episodes per interference, misinformation, consolidation and reconsolidation paradigm. A separate 40-episode suite changes generator, reader and episode construction.",
+    "measurement_strength": "Separates valid updating from resistance to weak evidence and from history/source/temporal fidelity under reusable controlled episode specifications.",
+    "coverage_gap": "Small controlled English-text suites do not establish open-world lifelong utility; retrieved-context failures do not isolate storage loss, and adapter-specific budgets and ingestion failures prevent causal architecture rankings.",
+    "confounders": [
+      "unequal-retrieval-and-context-budgets",
+      "different-embeddings",
+      "adapter-patches",
+      "skipped-ingestions",
+      "reader-model",
+      "potential-privileged-session-metadata",
+      "correlated-paradigm-axes"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.30558v1",
+      "code": "https://github.com/jq-ding/MemProbe",
+      "data": "https://github.com/jq-ding/MemProbe/tree/9068d8d9a2a47268fe6f7601b99a56a283c37be5/data/suite56"
+    },
+    "last_verified": "2026-09-30",
+    "published_at": "2026-09-24T21:10:36Z",
+    "first_seen_at": "2026-09-30T09:09:27Z",
+    "radar_published_at": "2026-09-30T09:27:56Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-24",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.30558v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-09-30",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Released main-suite data, adapter/evaluator code, raw reports and bootstrap scripts; inspected, not independently executed. Main code/suite MIT; separate suite40 and derived outputs CC BY-NC 4.0.",
+    "identity_note": "Jiaqi Ding and Guorong Wu, arXiv:2609.30558. Distinct from Ma et al. arXiv:2606.24595 / sora1998/MemProbe, whose existing canonical id remains memprobe.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.30558v1",
+      "checked_at": "2026-09-30",
+      "protocol_source": "https://github.com/jq-ding/MemProbe/blob/9068d8d9a2a47268fe6f7601b99a56a283c37be5/IMPLEMENTATION_DETAILS.md",
+      "result_source": "https://github.com/jq-ding/MemProbe/blob/9068d8d9a2a47268fe6f7601b99a56a283c37be5/results/suite56/analysis/bootstrap_ci.json",
+      "score_ceiling": "Scores describe published adapters on this suite with a shared reader, not a controlled ranking of intrinsic memory architectures. Oracle removes distractors and does not identify a universal upper bound.",
+      "next_control": "Match ingestion success, retrieved evidence/token budget, embeddings and metadata access; audit storage and retrieval separately before interpreting stability/plasticity differences.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-09-30",
+      "status": "unmatched",
+      "note": "No verified Semantic Scholar count in this update; unknown is not zero."
+    }
   }
 ]

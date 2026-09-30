@@ -10,6 +10,7 @@
 
 | 时间 | Benchmark | 领域 | 角色 | 这次改变了什么 |
 |---:|---|---|---|---|
+| 2026-09-24 | [MemProbe (stability–plasticity)](https://arxiv.org/abs/2609.30558v1) <!-- benchmark-id:memprobe-stability-plasticity --> | Agent Memory | 🔭 前沿 | 把有效更新、抗干扰保留与来源追溯拆成可复用受控探针；共同阅读器不等于匹配的上游预算。 |
 | 2026-09-21 | [DolphinBench](https://arxiv.org/abs/2609.24971) <!-- benchmark-id:dolphinbench --> | Agent Memory | 🔭 前沿 | 相较显式历史问答，把记忆效用落到应用中的实际动作，并要求联合报告生命周期成本与延迟。 |
 | 2026-09-21 | [MemCalib](https://arxiv.org/abs/2609.24259) <!-- benchmark-id:memcalib --> | Agent Memory | 🔭 前沿 | 把记忆影响不足与过度影响分开，形成命题级、依赖当前问题的记忆使用校准诊断。 |
 | 2026-09-19 | [ChemCLIR-Bench](https://arxiv.org/abs/2609.23231) <!-- benchmark-id:chemclir-bench --> | RAG / Agentic Retrieval | 🔭 前沿 | 在异构领域检索之外，把技术文献的语言对差异、翻译来源和相关文档排名深度显式化。 |
@@ -221,6 +222,7 @@
 | 🔭 前沿 | [LoCoMo-Conv](https://arxiv.org/abs/2609.03467) <!-- benchmark-id:locomo-conv --> | 2026-09-03 | 保留 LoCoMo 的历史和证据，将问题改为对话、隐式、反事实及组合查询，分别测检索与回答。 | 固定历史与标准证据，检查显式问答措辞是否泄露了应检索的记忆，并区分检索成功与回答落地。 |
 | 🔭 前沿 | [DolphinBench](https://arxiv.org/abs/2609.24971) <!-- benchmark-id:dolphinbench --> | 2026-09-21 | 在模拟工作应用中，以冻结记忆、历史依赖对照和逐题状态重置，测任务行动、总成本与延迟。 | 相较显式历史问答，把记忆效用落到应用中的实际动作，并要求联合报告生命周期成本与延迟。 |
 | 🔭 前沿 | [MemCalib](https://arxiv.org/abs/2609.24259) <!-- benchmark-id:memcalib --> | 2026-09-21 | 对上下文中每条记忆命题，测它是否按当前问题所需被忽略、局部使用或作为决定性约束。 | 把记忆影响不足与过度影响分开，形成命题级、依赖当前问题的记忆使用校准诊断。 |
+| 🔭 前沿 | [MemProbe (stability–plasticity)](https://arxiv.org/abs/2609.30558v1) <!-- benchmark-id:memprobe-stability-plasticity --> | 2026-09-24 | 诊断记忆能否接受有效更新、抵抗不可靠证据的覆盖，并分别保留历史、来源与时间信息。 | 把有效更新、抗干扰保留与来源追溯拆成可复用受控探针；共同阅读器不等于匹配的上游预算。 |
 
 <!-- COMPLETE-MAP:agent-memory:END -->
 

@@ -3230,6 +3230,31 @@
         "en": "No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results."
       },
       "initial_release": null
+    },
+    "memprobe-stability-plasticity": {
+      "status": "release-reference",
+      "period": {
+        "zh": "2026-09-24 · 论文首版",
+        "en": "2026-09-24 · paper v1"
+      },
+      "scope": {
+        "zh": "主套件 56 情节、224 探针；A-MEM 适配配置，Gemini-3-Flash-preview 最终阅读器。选录历史结果，不声明跨系统最佳。",
+        "en": "Main suite, 56 episodes and 224 probes; A-MEM adapter with Gemini-3-Flash-preview final reader. Selected historical result, not a cross-system best claim."
+      },
+      "results": [
+        {
+          "system": "A-MEM (Gemini-3-Flash-preview reader)",
+          "metric": "Overall probe accuracy",
+          "score": "88.4%"
+        }
+      ],
+      "source": "https://arxiv.org/abs/2609.30558v1",
+      "locator": "Paper v1 Table 1; protocol §4.1–4.2 and adapter limitations Appendix A / IMPLEMENTATION_DETAILS.md.",
+      "caveat": {
+        "zh": "不同适配器的检索预算、摄入失败和元数据访问并未统一；此结果不证明架构的因果优势，也不代表当前排行榜。",
+        "en": "Retrieval budgets, ingestion failures and metadata access differ across adapters; this result establishes neither a causal architecture advantage nor a current leaderboard."
+      },
+      "initial_release": true
     }
   }
 }

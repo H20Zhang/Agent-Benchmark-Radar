@@ -10,6 +10,7 @@ Start with time to see what recently became measurable, then use area timelines 
 
 | Time | Benchmark | Area | Role | What changed |
 |---:|---|---|---|---|
+| 2026-09-24 | [MemProbe (stability–plasticity)](https://arxiv.org/abs/2609.30558v1) <!-- benchmark-id:memprobe-stability-plasticity --> | Agent Memory | 🔭 Frontier | Separates valid updating, preservation and provenance through reusable controlled probes; a shared reader does not match upstream budgets. |
 | 2026-09-21 | [DolphinBench](https://arxiv.org/abs/2609.24971) <!-- benchmark-id:dolphinbench --> | Agent Memory | 🔭 Frontier | Moves beyond explicit historical QA by checking recorded actions under a frozen memory checkpoint and requiring lifecycle cost and latency alongside accuracy. |
 | 2026-09-21 | [MemCalib](https://arxiv.org/abs/2609.24259) <!-- benchmark-id:memcalib --> | Agent Memory | 🔭 Frontier | Separates too much memory influence from too little, rather than treating memory access or aggregate answer quality as calibrated use. |
 | 2026-09-19 | [ChemCLIR-Bench](https://arxiv.org/abs/2609.23231) <!-- benchmark-id:chemclir-bench --> | RAG / Agentic Retrieval | 🔭 Frontier | Extends heterogeneous retrieval evaluation to language-pair and retrieval-depth failures in industrial technical text. |
@@ -221,6 +222,7 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [LoCoMo-Conv](https://arxiv.org/abs/2609.03467) <!-- benchmark-id:locomo-conv --> | 2026-09-03 | Recasts LoCoMo into dialog, implicit, counterfactual, and composed queries while separating source-evidence recall from conversational response quality. | Holds source histories and evidence fixed while exposing whether explicit QA wording was revealing what memory to retrieve. |
 | 🔭 Frontier | [DolphinBench](https://arxiv.org/abs/2609.24971) <!-- benchmark-id:dolphinbench --> | 2026-09-21 | Tests history-dependent actions in simulated work apps with frozen memory checkpoints, paired history certification, and accuracy, total cost, and latency reporting. | Moves beyond explicit historical QA by checking recorded actions under a frozen memory checkpoint and requiring lifecycle cost and latency alongside accuracy. |
 | 🔭 Frontier | [MemCalib](https://arxiv.org/abs/2609.24259) <!-- benchmark-id:memcalib --> | 2026-09-21 | Tests whether each supplied memory proposition is ignored, used as bounded support, or allowed to control a response at its query-specific target level. | Separates too much memory influence from too little, rather than treating memory access or aggregate answer quality as calibrated use. |
+| 🔭 Frontier | [MemProbe (stability–plasticity)](https://arxiv.org/abs/2609.30558v1) <!-- benchmark-id:memprobe-stability-plasticity --> | 2026-09-24 | Diagnoses whether agent memory incorporates valid updates while preserving facts against unreliable evidence, with separate stability, plasticity, and provenance probes. | Separates valid updating, preservation and provenance through reusable controlled probes; a shared reader does not match upstream budgets. |
 
 <!-- COMPLETE-MAP:agent-memory:END -->
 

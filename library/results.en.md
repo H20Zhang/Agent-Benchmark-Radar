@@ -2,10 +2,11 @@
 
 [Back to the main README](../README.en.md#result-snapshots) · [中文](results.md)
 
-44 benchmarks have structured results. Open each note for scores, conditions, and limitations; JSON preserves the source and recorded conditions for each track. Verification dates are not live refresh times, and one recorded result is not a current best.
+45 benchmarks have structured results. Open each note for scores, conditions, and limitations; JSON preserves the source and recorded conditions for each track. Verification dates are not live refresh times, and one recorded result is not a current best.
 
 | Benchmark | Source type | Tracks | Result verified | Raw record |
 |---|---|---:|---|---|
+| [MemProbe (stability–plasticity)](../benchmarks/memprobe-stability-plasticity.en.md) <!-- benchmark-id:memprobe-stability-plasticity --> | Paper snapshot | 6 | 2026-09-30 | [JSON](../data/results/memprobe-stability-plasticity.json) |
 | [SCALE-QA](../benchmarks/scale-qa.en.md) <!-- benchmark-id:scale-qa --> | Paper snapshot | 1 | 2026-08-31 | [JSON](../data/results/scale-qa.json) |
 | [The Compaction Cliff](../benchmarks/compaction-cliff.en.md) <!-- benchmark-id:compaction-cliff --> | Paper snapshot | 1 | 2026-08-31 | [JSON](../data/results/compaction-cliff.json) |
 | [Agent Memory Bakeoff](../benchmarks/agent-memory-bakeoff.en.md) <!-- benchmark-id:agent-memory-bakeoff --> | Leaderboard snapshot | 2 | 2026-08-31 | [JSON](../data/results/agent-memory-bakeoff.json) |

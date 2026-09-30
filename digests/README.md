@@ -8,6 +8,7 @@ Every digest states its inclusive dates, synthesis time, accepted supporting ide
 
 ## Published digests
 
+- **2026-W39:** [中文](weekly/2026-W39.md) · [English](weekly/2026-W39.en.md)
 - **2026-W38:** [中文](weekly/2026-W38.md) · [English](weekly/2026-W38.en.md)
 - **2026-W37:** [中文](weekly/2026-W37.md) · [English](weekly/2026-W37.en.md)
 - **2026-W36:** [中文](weekly/2026-W36.md) · [English](weekly/2026-W36.en.md)

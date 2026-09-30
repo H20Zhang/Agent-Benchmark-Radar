@@ -1,0 +1,221 @@
+{
+  "benchmark_id": "memprobe-stability-plasticity",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-09-30",
+  "scope_note": {
+    "zh": "逐个配置记录主套件论文首版结果；每轨道只有一项，不构成跨适配器排名。日期是报告日期，实验执行日期未知。",
+    "en": "Per-configuration records of the main-suite paper-v1 results; one entry per track, with no cross-adapter ranking. Dates identify the report, not an established experiment execution date."
+  },
+  "tracks": [
+    {
+      "track_id": "suite56-amem-gemini3flash",
+      "primary": true,
+      "label": {
+        "zh": "主套件56 · A-MEM 单项适配结果",
+        "en": "Suite56 · A-MEM single adapter result"
+      },
+      "task": "Update, preservation, history, source and temporal probes",
+      "split": "56 episodes / 224 probes; main suite only",
+      "protocol_version": "arXiv:2609.30558v1 §4.1–4.2/Table 1; Gemini-3-Flash-preview final reader; Gemini-2.5-Flash internal memory calls; Top-15 memory notes; session-type tags/categories exposed to adapter; embeddings and writer setup follow Appendix A.",
+      "metric": {
+        "id": "overall-probe-accuracy",
+        "family": "accuracy",
+        "label": "Overall probe accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "amem-paper-v1",
+          "method": "A-MEM",
+          "model": "Gemini-3-Flash-preview (reader); Gemini-2.5-Flash (internal memory calls)",
+          "score": 88.4,
+          "date": "2026-09-24",
+          "date_basis": "arXiv v1 report date; experiment execution date not established",
+          "source": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "Table 1, main-suite overall probe accuracy; rounded as reported",
+          "comparison_scope": "This adapter and suite only; unequal evidence budgets, ingestion reliability and metadata access prevent causal cross-system ranking."
+        }
+      ]
+    },
+    {
+      "track_id": "suite56-cognee-gemini3flash",
+      "primary": false,
+      "label": {
+        "zh": "主套件56 · Cognee 单项适配结果",
+        "en": "Suite56 · Cognee single adapter result"
+      },
+      "task": "Update, preservation, history, source and temporal probes",
+      "split": "56 episodes / 224 probes; main suite only",
+      "protocol_version": "arXiv:2609.30558v1 §4.1–4.2/Table 1; Gemini-3-Flash-preview final reader; Gemini-2.5-Flash internal memory calls; Top-15 graph context; system-specific graph/embedding pipeline and patches follow Appendix A.",
+      "metric": {
+        "id": "overall-probe-accuracy",
+        "family": "accuracy",
+        "label": "Overall probe accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "cognee-paper-v1",
+          "method": "Cognee",
+          "model": "Gemini-3-Flash-preview (reader); Gemini-2.5-Flash (internal memory calls)",
+          "score": 81.7,
+          "date": "2026-09-24",
+          "date_basis": "arXiv v1 report date; experiment execution date not established",
+          "source": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "Table 1, main-suite overall probe accuracy; rounded as reported",
+          "comparison_scope": "This adapter and suite only; unequal evidence budgets, ingestion reliability and metadata access prevent causal cross-system ranking."
+        }
+      ]
+    },
+    {
+      "track_id": "suite56-graphiti-gemini3flash",
+      "primary": false,
+      "label": {
+        "zh": "主套件56 · Graphiti 单项适配结果",
+        "en": "Suite56 · Graphiti single adapter result"
+      },
+      "task": "Update, preservation, history, source and temporal probes",
+      "split": "56 episodes / 224 probes; main suite only",
+      "protocol_version": "arXiv:2609.30558v1 §4.1–4.2/Table 1; Gemini-3-Flash-preview final reader; Gemini-2.5-Flash internal memory calls; Top-15 edge.fact records; approximately 178 of roughly 1,100 session additions skipped after malformed JSON; different ingestion success.",
+      "metric": {
+        "id": "overall-probe-accuracy",
+        "family": "accuracy",
+        "label": "Overall probe accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "graphiti-paper-v1",
+          "method": "Graphiti",
+          "model": "Gemini-3-Flash-preview (reader); Gemini-2.5-Flash (internal memory calls)",
+          "score": 62.5,
+          "date": "2026-09-24",
+          "date_basis": "arXiv v1 report date; experiment execution date not established",
+          "source": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "Table 1, main-suite overall probe accuracy; rounded as reported",
+          "comparison_scope": "This adapter and suite only; unequal evidence budgets, ingestion reliability and metadata access prevent causal cross-system ranking."
+        }
+      ]
+    },
+    {
+      "track_id": "suite56-langmem-gemini3flash",
+      "primary": false,
+      "label": {
+        "zh": "主套件56 · LangMem 单项适配结果",
+        "en": "Suite56 · LangMem single adapter result"
+      },
+      "task": "Update, preservation, history, source and temporal probes",
+      "split": "56 episodes / 224 probes; main suite only",
+      "protocol_version": "arXiv:2609.30558v1 §4.1–4.2/Table 1; Gemini-3-Flash-preview final reader; Gemini-2.5-Flash internal memory calls; All final memory facts passed to reader; no matched top-k or token budget with other adapters.",
+      "metric": {
+        "id": "overall-probe-accuracy",
+        "family": "accuracy",
+        "label": "Overall probe accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "langmem-paper-v1",
+          "method": "LangMem",
+          "model": "Gemini-3-Flash-preview (reader); Gemini-2.5-Flash (internal memory calls)",
+          "score": 65.2,
+          "date": "2026-09-24",
+          "date_basis": "arXiv v1 report date; experiment execution date not established",
+          "source": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "Table 1, main-suite overall probe accuracy; rounded as reported",
+          "comparison_scope": "This adapter and suite only; unequal evidence budgets, ingestion reliability and metadata access prevent causal cross-system ranking."
+        }
+      ]
+    },
+    {
+      "track_id": "suite56-memoryos-gemini3flash",
+      "primary": false,
+      "label": {
+        "zh": "主套件56 · MemoryOS 单项适配结果",
+        "en": "Suite56 · MemoryOS single adapter result"
+      },
+      "task": "Update, preservation, history, source and temporal probes",
+      "split": "56 episodes / 224 probes; main suite only",
+      "protocol_version": "arXiv:2609.30558v1 §4.1–4.2/Table 1; Gemini-3-Flash-preview final reader; Gemini-2.5-Flash internal memory calls; Published MemoryOS adapter configuration in Appendix A; do not assume matched evidence/token budget or ingest implementation.",
+      "metric": {
+        "id": "overall-probe-accuracy",
+        "family": "accuracy",
+        "label": "Overall probe accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "memoryos-paper-v1",
+          "method": "MemoryOS",
+          "model": "Gemini-3-Flash-preview (reader); Gemini-2.5-Flash (internal memory calls)",
+          "score": 60.3,
+          "date": "2026-09-24",
+          "date_basis": "arXiv v1 report date; experiment execution date not established",
+          "source": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "Table 1, main-suite overall probe accuracy; rounded as reported",
+          "comparison_scope": "This adapter and suite only; unequal evidence budgets, ingestion reliability and metadata access prevent causal cross-system ranking."
+        }
+      ]
+    },
+    {
+      "track_id": "suite56-mem0-gemini3flash",
+      "primary": false,
+      "label": {
+        "zh": "主套件56 · Mem0 单项适配结果",
+        "en": "Suite56 · Mem0 single adapter result"
+      },
+      "task": "Update, preservation, history, source and temporal probes",
+      "split": "56 episodes / 224 probes; main suite only",
+      "protocol_version": "arXiv:2609.30558v1 §4.1–4.2/Table 1; Gemini-3-Flash-preview final reader; Gemini-2.5-Flash internal memory calls; All final memory facts passed to reader; no matched top-k or token budget with other adapters.",
+      "metric": {
+        "id": "overall-probe-accuracy",
+        "family": "accuracy",
+        "label": "Overall probe accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "mem0-paper-v1",
+          "method": "Mem0",
+          "model": "Gemini-3-Flash-preview (reader); Gemini-2.5-Flash (internal memory calls)",
+          "score": 41.5,
+          "date": "2026-09-24",
+          "date_basis": "arXiv v1 report date; experiment execution date not established",
+          "source": "https://arxiv.org/html/2609.30558v1",
+          "source_locator": "Table 1, main-suite overall probe accuracy; rounded as reported",
+          "comparison_scope": "This adapter and suite only; unequal evidence budgets, ingestion reliability and metadata access prevent causal cross-system ranking."
+        }
+      ]
+    }
+  ]
+}

@@ -2,10 +2,11 @@
 
 [返回主入口](../README.md#result-snapshots) · [English](results.en.md)
 
-44 个基准已有结构化结果。点击基准名称阅读分数、适用条件及局限；JSON 保留各轨道的原始来源与已记录条件。核验日期不等于榜单实时更新，单条结果不代表当前最佳。
+45 个基准已有结构化结果。点击基准名称阅读分数、适用条件及局限；JSON 保留各轨道的原始来源与已记录条件。核验日期不等于榜单实时更新，单条结果不代表当前最佳。
 
 | Benchmark | 来源类型 | 轨道数 | 结果核验 | 原始记录 |
 |---|---|---:|---|---|
+| [MemProbe (stability–plasticity)](../benchmarks/memprobe-stability-plasticity.md) <!-- benchmark-id:memprobe-stability-plasticity --> | 论文快照 | 6 | 2026-09-30 | [JSON](../data/results/memprobe-stability-plasticity.json) |
 | [SCALE-QA](../benchmarks/scale-qa.md) <!-- benchmark-id:scale-qa --> | 论文快照 | 1 | 2026-08-31 | [JSON](../data/results/scale-qa.json) |
 | [The Compaction Cliff](../benchmarks/compaction-cliff.md) <!-- benchmark-id:compaction-cliff --> | 论文快照 | 1 | 2026-08-31 | [JSON](../data/results/compaction-cliff.json) |
 | [Agent Memory Bakeoff](../benchmarks/agent-memory-bakeoff.md) <!-- benchmark-id:agent-memory-bakeoff --> | 榜单快照 | 2 | 2026-08-31 | [JSON](../data/results/agent-memory-bakeoff.json) |
