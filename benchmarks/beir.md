@@ -1,4 +1,4 @@
-# BEIR：把 retriever 的 zero-shot generalization 拉到异构领域
+# BEIR：跨域检索要同时看质量、成本与标注偏差
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2021-04<br>
@@ -6,123 +6,95 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](beir.en.md) · [返回入口](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](beir.en.md) · [主入口](../README.md) · [基准资料库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2104.08663) · [代码](https://github.com/beir-cellar/beir) · **领域：RAG / Retrieval**
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-BEIR 的历史价值是把一个长期被忽略的问题变成标准测试：**一个在熟悉数据上很强的 retriever，换到完全不同的领域后还能不能工作？** 它让 cross-domain zero-shot robustness 从附加实验变成 retrieval 的核心指标。
+已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。
 
-## 它到底测什么
+v4主文第1—7节及附录中的数据集、模型、语料和实验设置；关键表3、9、10和图3—4经PDF检查。
 
-BEIR 最初汇集 **18 个 retrieval datasets**，覆盖不同领域、任务类型、query 风格和 document 分布，并用统一 ranking protocol 比较 retriever。
+[arXiv:2104.08663v4](https://arxiv.org/pdf/2104.08663v4)
 
-它关心的不是某个模型在单一训练/测试分布上的极致分数，而是：
+下列表格重新组织了有来源的选定事实。页首历史参考与正文采用的版本、切分和模型可能不同，不能跨表混合成绩。
+<!-- EVIDENCE:reading:END -->
 
-- 不针对目标 domain 重新训练时，ranking quality 是否还能保持；
-- lexical、dense、sparse-dense hybrid 和 reranking 方法在不同 domain 上如何取舍；
-- 一个方法的收益是不是只来自特定 dataset 的词汇、长度或训练数据重叠。
+<!-- EVIDENCE:method:START -->
+## 测量对象、方法与比较
 
-这使 BEIR 成为“retrieval method 是否真的泛化”的基础坐标。
+把语料、查询和相关性标签统一成检索输入，跨18个英语数据集测试训练分布外排序；MS MARCO只作为域内参照。主指标nDCG@10兼容二元和分级相关性。检索、后重排及域适配的资源设置需分别保留。
 
-## 相比此前评测多测了什么
+[原文](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:method:END -->
 
-早期 dense retrieval 进展大量围绕 MS MARCO 等少数 benchmark 报告。一个模型可以在训练分布附近显著领先，却未必在 biomedical、finance、argument retrieval 或 fact verification 等领域继续领先。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与分母
 
-BEIR 的关键变化是 **heterogeneous suite**：不再问“这个模型能不能把一个 benchmark 做好”，而是问“这个 retrieval inductive bias 在不同信息需求下是否稳定”。
+主指标nDCG@10（0—1），采用pytrec_eval，无LLM评判器。MS MARCO作为域内参照，其余跨域检索按原数据集相关性标签评分。BM25使用Anserini的k=0.9、b=0.4；TAS-B为在MS MARCO训练的DistilBERT；BM25+CE用MiniLM-L6重排前100条。多数神经模型截取前512个wordpiece，ColBERT另有300长度设置。硬件、语料和截断必须随分数一起看。
 
-它也让 BM25 重新成为重要基线：dense retrieval 的提升如果不能稳定超过 lexical baseline，就很难声称是普遍的 retrieval 改进。
+[设置来源](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:setup:END -->
 
-## 实际怎样评测
+<!-- EVIDENCE:result-1:START -->
+## 域内优势不保证跨域优势
 
-典型 BEIR evaluation 会对每个 dataset 单独构建或使用其 corpus / query / relevance judgments，计算 nDCG、Recall 等 ranking metrics，再按指定规则汇总多个 datasets。
+原论文表2的选定数据集，nDCG@10范围0—1；只在同一行内比较，不把不同数据集绝对分数当统一难度。 三个切分的查询数依次为6,980、500、49；nDCG@10按查询求平均。
 
-解释 aggregate score 时必须知道：
+| 数据集／切分 | BM25 nDCG@10 | TAS-B nDCG@10 | BM25+CE nDCG@10 |
+|---|---|---|---|
+| MS MARCO 开发集 | 0.228 | 0.408 | 0.413 |
+| BioASQ 测试集 | 0.465 | 0.383 | 0.523 |
+| Touché-2020 测试集 | 0.367 | 0.162 | 0.271 |
 
-- 实际用了哪些 BEIR datasets；
-- corpus preprocessing 与 indexing 方式；
-- 是否加入 reranker；
-- retriever 是否在目标 benchmark 或相近数据上训练过；
-- 最终 aggregate 是 macro average 还是其他汇总方式。
+TAS-B在域内MS MARCO优于BM25，但在这两个跨域例子反向。结论是迁移需要测试，不是“稠密检索永远更差”。
 
-“BEIR 分数”不是一个天然唯一的数字；不同 subset、训练数据和 reranking setting 可能对应不同研究问题。
+事实来源：表2, 第5节 · [原文](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:result-1:END -->
 
-## 决定性证据与分数边界
+<!-- EVIDENCE:result-2:START -->
+## 原论文实际测了延迟和索引体积
 
-BEIR 最重要的早期结论之一是：**在单一 benchmark 上强的 dense retriever，并不保证 zero-shot 跨域仍然占优；BM25 等 lexical baseline 在若干 domain 仍非常有竞争力。**
+100万篇DBpedia文档，Xeon8168／8核CPU与V100 GPU；稠密检索使用精确搜索，横线为未报告。
 
-因此 BEIR 的主要证据价值是 cross-domain ranking robustness，而不是“dense 一定优于 sparse”或反过来。
+| 系统 | CPU延迟（ms） | GPU延迟（ms） | 索引（GB） |
+|---|---|---|---|
+| BM25 | 20 | — | 0.4 |
+| TAS-B | 125 | 14 | 3 |
+| BM25+CE | 6100 | 450 | 0.4 |
 
-现代 leaderboard 已经历大量更强 backbone、合成训练数据、instruction tuning 和 reranker 更新，所以今天的 aggregate nDCG 只能支持：在指定 dataset mixture、训练数据和 index protocol 下的 ranking quality。
+因此不能把延迟／索引占用列成完全未测项。仍需在现代硬件、索引实现和实际工作负载下重新验证。
 
-它不能直接推出 end-to-end RAG answer quality，也不能证明 iterative / agentic search 更好。
+事实来源：表3, 第5节.1 · [原文](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:result-2:END -->
 
-## 最主要的混杂因素
+<!-- EVIDENCE:result-3:START -->
+## 补标会改变关于检索器的判断
 
-第一是 **training-data overlap**。现代 retriever 的训练语料规模远大于 BEIR 时代，所谓 zero-shot 可能并不等于数据意义上的 unseen。
+TREC-COVID，另加980条人工查询—文档标注；同一数据集下换标注集合，指标仍为nDCG@10。
 
-第二是 **subset selection**。只挑若干容易或适合自己方法的数据集，会显著改变平均分。
+| 系统 | 原标注nDCG@10 | 扩充标注nDCG@10 |
+|---|---|---|
+| BM25 | 0.656 | 0.668 |
+| ANCE | 0.654 | 0.735 |
 
-第三是 **reranking budget**。bi-encoder + expensive reranker 与单阶段 retriever 的最终 nDCG 可以接近，但 latency 和系统成本完全不同。
+ANCE从略低于BM25变为更高，说明结果受原标注池偏向词法检索的影响。补标本身也不是所有未标相关文档的穷尽真值。
 
-第四是 **query / corpus preprocessing**。document chunking、title 拼接、normalization、index 参数都可能改变结果。
+事实来源：表4, 第6节 · [原文](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:result-3:END -->
 
-## 公平比较条件
+<!-- EVIDENCE:limitations:START -->
+## 结论边界、缺口与下一步
 
-至少对齐：
+这是检索排序证据，不能直接推导多轮搜索或RAG最终答案质量。正文称docT5query在11/18项胜过BM25，而图3显示12/18，本文不暗中调和。相比仅优化单一数据集，BEIR强调跨域、资源和标注条件；下一步固定语料、截断、硬件和判定集，做成本匹配对比并补标。
 
-- BEIR dataset subset 与版本；
-- corpus / query preprocessing；
-- retriever training data；
-- index 和 search parameters；
-- reranker 是否允许及候选深度；
-- metric 与 aggregation rule；
-- latency / hardware / cost 是否属于比较目标。
-
-Partial-suite average 不应与 full-suite average 直接排在同一个榜单。
-
-## 还没有覆盖什么
-
-BEIR 本质上仍是 **static retriever-only benchmark**。它没有完整测量：
-
-- agent 根据中间结果主动 reformulate query；
-- multi-step evidence discovery；
-- corpus 随时间变化；
-- retrieval 结果是否真正被 downstream generator 正确使用；
-- latency、token、index size 和 serving cost；
-- 失败时 agent 是否知道需要继续搜索。
-
-## 下一步最有判别力的验证
-
-对现代 agentic retrieval 来说，最有价值的做法不是放弃 BEIR，而是把它当作 **retrieval floor**：先验证单步跨域 retrieval 没有退化，再在同一 domain 上增加 iterative search / reformulation / evidence-use 评测。
-
-如果一个复杂 agent 在最终 QA 上变好，却在 BEIR-style first-hop retrieval 上更差，就需要解释增益来自哪里，而不是把所有提升归功于“更强搜索”。
+[原始证据](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:limitations:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
-## 研究决策卡
+上述方法、对照与局限一起决定何时适合使用这个基准；表格不构成跨协议排行榜，结构校验也不证明事实正确或完成复现。
 
-### 什么时候值得用
-
-适合回答检索器能否跨领域工作，而不是只适配一个训练分布。对系统研究，BM25 是有实际意义的比较基线；平均排序分数之外，最差领域、索引代价和查询延迟往往会改变方案排序。
-
-### 一个具体任务长什么样
-
-示意任务：同一个检索器不为每个领域重新训练，就要处理词汇、文档长度与相关性标准不同的查询。一个模型在熟悉领域表现好，可能在术语密集或分布不同的领域输给词法检索。
-
-### 最有判别力的实验
-
-固定各数据集版本与统一超参数选择规则，比较 BM25、向量检索和混合检索，逐数据集报告而非只报均值。把每个领域单独调参的结果与零样本结果分开，并在相同延迟或成本约束下重新比较。
-
-### 建议搭配
-
-[bright](bright.md) · [commercial-tax](commercial-tax.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+相关测量与对照：[BRIGHT](bright.md) · [RAGBench](ragbench.md) · [KILT](kilt.md)
 
 <!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`single-domain retrieval → heterogeneous zero-shot retrieval → reasoning-intensive retrieval → iterative / agentic evidence search`
-
-BEIR 是第二步的基础 benchmark：它定义了后来很多 retrieval 系统必须先回答的 baseline question——**你的方法离开训练分布后还成立吗？**

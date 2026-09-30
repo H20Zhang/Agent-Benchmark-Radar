@@ -1,4 +1,4 @@
-# InMind：真正相关的 memory 可能和 query 一点也不像
+# InMind：直接记得，不代表间接问题会用上
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时诊断结果（历史参考）** · 2026-07 · 论文 v1<br>
@@ -7,64 +7,100 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](inmind.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](inmind.en.md) · [主入口](../README.md) · [基准资料库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2607.24368) · [项目页](https://keep-it-inmind.github.io/) · [代码](https://github.com/imlrz/InMind)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。
 
-InMind 针对一个 **implicit-association retrieval blind spot**：真正影响当前 query 的个人 memory，表面语义可能和 query 很远；只有把个人事实与外部 world knowledge 结合起来，才知道它其实相关。benchmark 因而明确拆开“模型看到 memory 后会不会用”与“memory system 能不能意识到应该把它找出来”。
+主文第1—8节、补充第9—18节及PDF提示图，包括注入协议、适配器差异和人工评分审计。
 
-## 相比此前评测多测了什么
+[arXiv:2607.24368v1](https://arxiv.org/html/2607.24368v1)
 
-多数 memory retrieval 依赖 lexical/embedding similarity，多数 benchmark 也奖励 direct fact recall。InMind 对同一个个人事实构造 direct / indirect paired control；indirect query 的 relevance 必须经过外部知识桥接，而不是靠表面相似度。
+下列表格重新组织了有来源的选定事实。页首历史参考与正文采用的版本、切分和模型可能不同，不能跨表混合成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 测量对象、方法与比较
 
-套件包含 10 个 domain 的 125 个专家验证任务，其中 113 个由公开来源 grounding。当 decisive memory 直接放入 context 时，backbone 对 indirect question 的正确率达到 84.0%；但要求 memory system 自己 retrieve 后，6 类 vector / graph / agentic memory 方法最高只有 14.4%，而 direct recall 可以达到 100%。让 memory 始终可见的 diagnostic probe 能恢复大部分差距。
+每道题包含个人事实、直接回忆问题，以及需要外部常识桥接的间接问题。内容过滤去掉明显词面或语义线索，再由专家核验关联和正确性。分别测量直接回忆、实际回答上下文是否包含目标事实，以及回答是否应用该事实。
 
-## 这个分数能证明什么
+[原文](https://arxiv.org/html/2607.24368v1)
+原文案例说明这种落差：系统能在直接追问时说出用户的坚果过敏信息，却在间接的点心推荐中没有正确应用它。关键是让与当前措辞不相似的旧事实进入回答上下文。
 
-这是很强的证据：瓶颈可能位于 **query-to-memory interface**，而不是 storage capacity 或 answer reasoning。它也不能推出 similarity retrieval 应该被淘汰，因为 benchmark 本身就是有意选择“相似度不够”的 case。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置与分母
 
-应固定 background memory trace、backbone、world-knowledge access、retrieval budget 与 direct/indirect paired task，并一起报告 oracle-in-context、target recall、end-answer accuracy。没有 oracle 条件时，retrieval failure 和 answerer failure 会再次混在一起。
+125道英文题覆盖10个领域，其中113道有公共来源依据，12道由专家编写。背景是同一条47会话LongMemEval-s轨迹。回答与裁判均为GPT-5-mini，多数记忆构建器为GPT-4o-mini。Naive RAG取5个原始片段，A-Mem取10条，其他系统预算不同。Always-in-State由GPT-5-mini更新，状态上限为200行、25,000字节。
 
-## 还没有测什么
+[设置来源](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:setup:END -->
 
-数据规模不大，而且专门针对 similarity 的弱点；真实 personal-agent workload 中这种 indirect relevance 的占比还未知。主动 world-knowledge search 还可能引入明显成本与 hallucination risk。
+<!-- EVIDENCE:result-1:START -->
+## 同一题集里，直接回忆和间接应用分开看
 
-## 下一步最有判别力的验证
+125题、GPT-5-mini回答与二元评判；目标召回不看生成答案。直接提供目标的骨干参考和各适配器证据访问不同。
 
-先在真实个人 agent log 中测 indirect relevance 的发生率，再在 equal-cost 下比较 query expansion、world-knowledge-conditioned retrieval 与 agentic search。系统层真正的问题是：能不能用一个便宜 trigger 判断什么时候普通 similarity retrieval 已经不可信。
+| 配置 | 直接回忆（%） | 目标召回（%） | 应用（%） |
+|---|---|---|---|
+| Naive RAG (emb3-large) | 97.6 | 6.4 | 16.0 |
+| MemoryOS (emb3-large) | 96.8 | 7.2 | 14.4 |
+| A-Mem (emb3-large) | 100.0 | 12.0 | 9.6 |
+| Backbone (GPT-5-mini) | — | 100.0 | 84.0 |
+
+六种记忆框架最高14.4%与单独Naive RAG对照16.0%是不同范围，并不矛盾。应用高于目标召回也不证明记忆被正确使用，评判器可能把泛化提醒误判为个性化应用。
+
+事实来源：表 1; §4.2–4.4 · [原文](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:result-1:END -->
+
+<!-- EVIDENCE:result-2:START -->
+## 始终可见状态是另一种干预
+
+同一125题；Always-in-State使用GPT-5-mini更新器，200行／25,000字节状态预算，不是只切换检索开关。
+
+| 配置 | 直接回忆（%） | 应用（%） |
+|---|---|---|
+| Always-in-State | 98.4 | 68.8 |
+
+68.8%是该模型与可见状态组合的结果，不能将其与16.0%的全部差距归因于查询条件化。
+
+事实来源：表 2; §5.2 · [原文](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:result-3:START -->
+## 评分自身有多大误差
+
+附录14.2各抽查100条记录；这些是评分审计计数，不是125题的模型准确率。
+
+| 判定对象 | 人工审计条目数 | 一致条目数 | 假阳性条目数 |
+|---|---|---|---|
+| 目标召回 | 100 | 97 | 3 |
+| 原应用指标 | 100 | 85 | 15 |
+
+原应用评分15/100的假阳性需要和主表一起阅读；不能只用“有个性化的回答”反推成功检索了个人事实。
+
+事实来源：附录 14.2 human audit · [原文](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界、缺口与下一步
+
+这些结果揭示了特意构造的困难关联中，直接回忆与间接使用之间的明显落差，但不能估计日常流量中的发生率，也不能证明某种架构普遍更优。84.0%的骨干模型结果是模型条件下的参考值，而非硬上限；事后仅答案评分与主表应用指标应分别列出。
+
+主文把目标经历38个后续会话讲得较宽，但附录中A-Mem、HippoRAG 2使用预建库加原始目标的适配路径。不能把所有行都描述成同样的长期摄入干预。相比LongMemEval中的显式回忆测试，这里将需要常识桥接的间接应用单独作为受控目标。
+
+可与LongMemEval的显式回忆测试配对；固定记忆库与回答模型，仅改变检索扩展或同预算的可见状态策略。分别报告目标召回和应用，人工核验假阳性；在归因前匹配更新模型与目标暴露方式。
+
+[原始证据](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:limitations:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
-## 研究决策卡
+上述方法、对照与局限一起决定何时适合使用这个基准；表格不构成跨协议排行榜，结构校验也不证明事实正确或完成复现。
 
-### 什么时候值得用
-
-适合研究相关性必须借助常识才能成立的记忆检索。它尤其能挑战‘向量相似就足够’的前提；但间接问题失败也可能因为骨干缺少连接知识，不能未经对照就判定检索器有问题。
-
-### 一个具体任务长什么样
-
-示意任务：历史保存了一条个人事实，新问题使用完全不同的概念，只有理解二者的常识联系才知道应调出该事实。直接问原事实可以成功，却不能说明系统会在需要时主动检索它。
-
-### 最有判别力的实验
-
-对同一事实配对直接和间接查询，并补充事实已放在上下文中的条件。先检查骨干能否在证据给定时完成连接，再比较检索路由；另加不相关但词面相似的干扰，检验方法是否只是扩大召回。
-
-### 建议搭配
-
-[locomo-plus](locomo-plus.md) · [came-bench](came-bench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+相关测量与对照：[LongMemEval](longmemeval.md) · [LoCoMo](locomo.md) · [LoCoMo-Plus](locomo-plus.md)
 
 <!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`semantic recall → query-conditioned retrieval → knowledge-mediated relevance discovery`
-
-它挑战的是一个很基础的假设：当前 query 并不总是一个足够好的 retrieval key。

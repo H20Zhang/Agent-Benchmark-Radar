@@ -1,4 +1,4 @@
-# AgentFuel: stateful analysis must prove its value through reuse across queries
+# AgentFuel: evaluating single-turn temporal-state and incident queries
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-03-12<br>
@@ -8,119 +8,64 @@
 
 [中文](agentfuel.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2603.12483) · **Area: Data Agent / Stateful Analysis**
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-AgentFuel asks a narrow but important question: **when a data agent receives a sequence of related analytical queries, does carrying forward analytical state actually help?** Instead of treating memory as an implementation detail, it turns cross-query state reuse into an explicit experimental variable.
+Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction.
 
-## What it actually measures
+Main Sections 1–7 and Appendices A–D (32 pages), including query construction, main experiments, per-query outcomes and failure code.
 
-AgentFuel currently contains **72 queries across three time-series domains**, 24 per domain with 12 stateless and 12 stateful or incident-oriented queries, over about 13.5 MB of generated data.
+[arXiv:2603.12483v1](https://arxiv.org/pdf/2603.12483v1)
 
-It compares two modes:
+The tables reorganize selected sourced facts. The title-level historical reference may use a different version, split or model; do not pool scores across those settings.
+<!-- EVIDENCE:reading:END -->
 
-- each query starts from scratch;
-- the agent can retain notebook state, context, intermediate findings, or other analytical state for later queries.
+<!-- EVIDENCE:method:START -->
+## Measurement, method and comparison
 
-The target is therefore not single-query competence, but whether **state reuse reduces repeated exploration and improves later incident analysis**.
+Starting from a domain schema or samples, generate synthetic time series with specified patterns/incidents, construct corresponding reference questions and answers, then check a data agent end to end. Stateful refers to event order or state-machine semantics within one analysis, such as counting views while a cart is full. It is not memory retained from an earlier user question. Section 3.1 excludes multi-turn dialogue and historical context; Section 5.1 uses one-shot request/response.
 
-## Compared with what
+[Primary source](https://arxiv.org/pdf/2603.12483v1)
+<!-- EVIDENCE:method:END -->
 
-Most data-agent benchmarks treat each task as an independent episode. Even when a system internally uses memory, aggregate task scores rarely reveal whether that memory caused the improvement.
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and denominators
 
-AgentFuel moves toward a cleaner comparison by evaluating matched stateless/stateful conditions and elevating persistence from an implementation choice to a measurable factor.
+There are 24 questions per domain: e-commerce, IoT and telecom. Six configurations use Databricks Genie defaults, Snowflake Cortex Analyst defaults, Nao/GPT-4.1, and PandasAI with o4-mini-2025-04-16, Claude Sonnet 4.6 or Claude Opus 4.6. Each question/configuration is run independently three times. Main responses are manually checked against reference answers; incorrect answers and runtime errors fail. Models, tools and budgets are not matched. The separate GEPA pilot changes to GPT-4o-mini judging and restricted output, so it is not pooled with the main experiment.
 
-It is particularly useful for asking whether:
+[Setup source](https://arxiv.org/pdf/2603.12483v1)
+The design has 36 stateless, 24 non-incident stateful and 12 incident questions. Multiplying six configurations by three runs gives design volumes of 648/432/216 responses. The paper does not separately disclose the exact weighting formula for the 73/34/10 aggregates; these derived volumes are not asserted effective statistical denominators.
 
-- intermediate findings from one query help the next;
-- state avoids repeated data exploration;
-- gains come from remembering results versus remembering process;
-- incident analysis improves as useful history accumulates.
+<!-- EVIDENCE:setup:END -->
 
-## How the evaluation works
+<!-- EVIDENCE:result-1:START -->
+## Differences across query categories
 
-An interpretable result must record query order, persistence policy, data generator, agent scaffold, model, token/tool budget, and evaluator.
+Pooled query-category results across three domains and six configurations; three runs per question/configuration, with different category denominators rather than one model's scores.
 
-**Query order is part of the protocol.** If later queries depend strongly on earlier ones, ordering changes the value of state. Conversely, if an agent can preserve the full history verbatim, the gain may collapse to simple context carry-over rather than a more structured memory mechanism.
+| Query category | Accuracy (%) |
+|---|---|
+| Stateless | 73 |
+| Stateful (no incident) | 34 |
+| Incident-specific | 10 |
 
-Matched stateless/stateful pairs are therefore more informative than one aggregate headline score.
+The 73→34→10 pattern points to temporal semantics and incident-window interpretation, not a memory-module effect. Categories are not difficulty-matched randomized interventions.
 
-## What a score supports
+Fact source: §5.1–5.2,pp7–8;Figures6–8,p9 · [Source](https://arxiv.org/pdf/2603.12483v1)
+<!-- EVIDENCE:result-1:END -->
 
-If the stateful condition consistently beats the stateless condition, the supported claim is: under the current synthetic time-series distribution, query sequence, and harness, **retaining analytical state has practical value**.
+<!-- EVIDENCE:limitations:START -->
+## Limitations, remaining gaps and next experiment
 
-That does not yet prove the system learned semantic memory or workflow experience. The gain may come from:
+The generator is not fully public; released datasets do not reproduce generation. Commercial systems have unmatched internal models/tools. Single-turn analysis is evaluated; cross-question memory, clarification dialogue and long-lived project maintenance are not. File size is artifact-version metadata, not inferred from this paper. Compared with ordinary table QA, the contribution is customizable event/temporal conditions. Next, fix model/tools and separately supply the correct incident window or state machine to distinguish discovery from calculation failures.
 
-- cached computed values;
-- preserved notebook cells;
-- copied prior natural-language outputs;
-- genuinely abstracted reusable semantics or analysis strategies.
-
-These mechanisms have very different research significance, and the final score alone cannot separate them.
-
-## Main confounders
-
-The first is **cache versus memory**. Avoiding recomputation demonstrates reuse, but not necessarily a stronger long-term representation.
-
-The second is **state freshness**. Production analysis includes data updates, hypothesis reversals, and closed incidents; stale state can become actively harmful.
-
-The third is reproducibility: incomplete public generation or environment details can shift task difficulty across implementations.
-
-## Fair comparison contract
-
-At minimum, align:
-
-- query sequence and matched pairs;
-- what state may persist across queries;
-- state capacity, compression, and deletion rules;
-- data snapshot or generator;
-- model, harness, and tools;
-- retry, token, and execution budgets;
-- evaluator and failure handling.
-
-Methods with full-history access and methods restricted to structured state should not be merged into one track.
-
-## What is still missing
-
-AgentFuel does not yet fully separate:
-
-- cache, structured semantic state, and learned workflow experience;
-- robustness to stale state after data changes;
-- long-horizon state growth, contamination, and contradiction;
-- when the agent should forget or rebuild state;
-- whether latency/token/storage savings justify state-maintenance cost.
-
-## Most discriminating next test
-
-A high-value extension is a **state intervention matrix**: run the same sequential queries with only raw cache, structured semantic state, workflow summaries, or full history, then inject data updates or hypothesis reversals.
-
-If structured state remains better than raw history or cache under freshness stress, that provides much stronger evidence that the representation itself—not merely retaining more context—creates value.
+[Primary evidence](https://arxiv.org/pdf/2603.12483v1)
+<!-- EVIDENCE:limitations:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
-## Research decision card
+Use the method, comparisons and limitations together to decide whether this benchmark fits a claim. These tables are not a cross-protocol leaderboard; structural checks do not certify factual correctness or reproduction.
 
-### When to use it
-
-Use AgentFuel for domain-specific time-series query evaluation, particularly state and incident reasoning. Released queries and a customizable generation framework are different artifacts. Establish whether data, environments, or a generator are actually available before treating the design as turnkey software.
-
-### What a concrete task looks like
-
-Illustrative task: an agent determines when a state changed or how metrics behaved during an incident. A stateless aggregate cannot replace state-transition analysis, and timestamp semantics during loading can determine the answer.
-
-### Most discriminating experiment
-
-Pin the raw time series and temporal rules, separating stateless, stateful, and incident queries. Have connectors read equivalently validated data before comparing agents, excluding loading-semantics differences. Generated-task claims additionally need held-out domains.
-
-### Pair with
-
-[irts-toolbench](irts-toolbench.en.md) · [dabstep](dabstep.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Related measurements and controls: [DA-Code](da-code.en.md) · [DataSciBench](datascibench.en.md) · [Data Agent Benchmark (DAB)](data-agent-benchmark.en.md)
 
 <!-- RESEARCH-DECISION:END -->
-
-## Evolution position
-
-`independent data query → cross-query state reuse → updateable and forgettable long-term analytical state`
-
-AgentFuel occupies the middle step: it makes statefulness measurable, but does not yet fully evaluate dynamic, long-lived, self-correcting analytical memory.

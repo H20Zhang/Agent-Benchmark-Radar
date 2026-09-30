@@ -1,4 +1,4 @@
-# MEMPROBE：直接审计最终 memory artifact 里到底留下了什么
+# MEMPROBE / MemAudit：任务做完后，记忆里究竟留下了什么
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-06-23<br>
@@ -6,64 +6,78 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](memprobe.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](memprobe.en.md) · [主入口](../README.md) · [基准资料库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2606.24595) · [代码](https://github.com/sora1998/MemProbe)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。
 
-MEMPROBE 直接评估 **memory artifact 本身**。agent 为一个模拟用户完成常规 assistance 后，benchmark 检查能否仅从留下的 persistent memory 中重建用户的隐藏结构化状态。评测对象因此从“某一道下游题答没答对”变成了 representation coverage。
+论文v2主文与附录A—K，包含PDF提示及案例；另核对官方复现指南和结果说明。
 
-## 相比此前评测多测了什么
+[arXiv:2606.24595v2](https://arxiv.org/html/2606.24595v2) · [main@2026-09-30](https://github.com/sora1998/MEMAUDIT-bench/blob/main/docs/reproduction.md) · [main@2026-09-30](https://github.com/sora1998/MEMAUDIT-bench)
 
-end-task success 会掩盖弱 memory：强模型可能仅靠当前 context 就把任务做对，即使长期 memory 几乎没有保留下关键用户状态。MEMPROBE 把两条轴拆开：先看 assistance，再独立 probe 持久化 artifact 对 hidden user state 的覆盖。
+下列表格重新组织了有来源的选定事实。页首历史参考与正文采用的版本、切分和模型可能不同，不能跨表混合成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 测量对象、方法与比较
 
-benchmark 包含 50 个模拟用户、每个 31 个隐藏维度，共 1,550 个 recovery target，并比较 5 种代表性 memory 条件/系统。即使 memoryless 条件下 assistance 也接近饱和，而 memory 的 category-balanced recovery 仍大约只有 0.6，并且在 top-k access 下进一步下降。核心结论是：**看起来会做事，不等于长期状态真的被保存好了**。
+MEMPROBE 是六月基准名称，论文在九月v2改名为 MemAudit；它与另一篇九月 MemProbe 稳定性—可塑性论文不是同一身份。交互先让智能体帮助一个模拟用户完成普通任务，随后冻结留下的最终记忆，再用两种访问方式恢复用户的隐藏结构化状态：完整存储读取，或每个目标检索前5条。这样把“当时任务做得如何”和“后来能从记忆恢复什么”分开。
 
-## 结论边界：这个分数能证明什么
+[原文](https://arxiv.org/html/2606.24595v2)
+<!-- EVIDENCE:method:END -->
 
-recovery score 能说明 **哪些信息真正进入了可查询的持久 memory representation**，尤其适合定位 write/compression loss。但它不意味着“保留得越多越好”：privacy、data minimization 与 task relevance 都可能让主动不保存成为正确策略。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与分母
 
-## 公平比较契约
+50名模拟用户，每人31个目标，共1,550个目标；交互上限25轮，重建读取和评判使用GPT-5.4-mini。恢复指标B先对各类目标求平均，再对5类等权平均；不是全部目标直接合并的二元准确率。表中SD是用户间标准差，不是置信区间。官方发表的Mem-T条件为memt_memonly：Mem-T-4B处理记忆，最终回答仍由共同骨干模型给出。
 
-应固定 interaction history、hidden-state schema、write budget、memory access policy 和 reconstruction model，并分别报告 full-artifact 与 top-k recovery，否则 representation failure 与 retrieval-interface failure 会混在一起。coverage 还应配套 memory size / cost。
+[设置来源](https://arxiv.org/html/2606.24595v2)
+<!-- EVIDENCE:setup:END -->
 
-## 还没有测什么
+<!-- EVIDENCE:result-1:START -->
+## 同一最终存储，不同访问方式
 
-它没有直接证明这些被恢复的信息会改善未来行动，也没有判断某项信息是否应该被长期保存。conflict resolution、temporal supersession、provenance 和 deletion correctness 需要单独评估。
+论文v2表2，50用户×31目标；五类等权恢复分数，同一轨迹结束后的同一存储分别完整读取与前5条读取。
 
-## 下一步最有判别力的验证
+| 系统 | 完整存储B（0–1） | 完整存储SD | 前5条B（0–1） | 前5条SD |
+|---|---|---|---|---|
+| amem | 0.611 | 0.062 | 0.54 | 0.062 |
+| longctx_full | 0.624 | 0.067 | 0.503 | 0.075 |
+| mem0 | 0.613 | 0.06 | 0.473 | 0.079 |
 
-给每个 hidden-state dimension 同时标注 downstream utility 与 privacy requirement，测 recoverability、未来任务收益、存储成本、data minimization 的 Pareto frontier，而不是单纯最大化 retention。
+完整读取和检索读取都可能失分，但不能把全部差距等同于存储删除：表示形式、读出、查询和截断都参与。longctx_full存的是原始对话，仍不是完美恢复。
+
+事实来源：v2 表 2 · [原文](https://arxiv.org/html/2606.24595v2)
+<!-- EVIDENCE:result-1:END -->
+
+<!-- EVIDENCE:result-2:START -->
+## 即时任务完成与持久恢复不是同一个指标
+
+v2表2的无记忆对照；完成率和类别平衡恢复分数有不同测量对象与汇总，不能互换。
+
+| 配置 | 任务完成率（%） | 完整存储B（0–1） |
+|---|---|---|
+| nomem | 99.935 | 0.0 |
+
+这是一条诊断证据：普通协助接近完成，并不意味着记住了用户状态。未报告的无记忆前5条结果不能填成零。
+
+事实来源：v2 表 2 · [原文](https://arxiv.org/html/2606.24595v2)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界、缺口与下一步
+
+恢复分数是按细则重建用户状态，不是对纯存储保真的直接测量；模拟用户、可披露属性筛选与分叉交互轨迹限制泛化和因果归因。Mem-T完整读取有上下文溢出，不能据此给它排“记忆最差”；论文v2报0.130±0.251，官方README报0.131±0.251，来源差异未解决。Mem-T还可用最多6步ReAct搜索，不是相同的单次近邻读取。官方说明当前main模拟器不同于paper-v1归档，不能把新的main运行叫做原实验重放。相比下游成功率，它补的是记忆产物审计；下一步固定轨迹、存储和读取预算，再同时观察恢复与后续个性化效用。页首首版历史参考与本节v2结果保持分开。
+
+[原始证据](https://arxiv.org/html/2606.24595v2)
+<!-- EVIDENCE:limitations:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
-## 研究决策卡
+上述方法、对照与局限一起决定何时适合使用这个基准；表格不构成跨协议排行榜，结构校验也不证明事实正确或完成复现。
 
-### 什么时候值得用
-
-适合检查写入后究竟留下了什么，以及留下的信息能否被检索访问。它把记忆产物本身变成审计对象；恢复更多用户信息并不天然更好，还要另问这些信息是否必要、获准保存且对任务有用。
-
-### 一个具体任务长什么样
-
-示意任务：普通协助结束后，只给审计者最终记忆文件，要求恢复其中隐含的用户状态。全量读取可以成功而 top-k 检索失败，意味着信息尚在，但访问路径没有把它带到当前问题。
-
-### 最有判别力的实验
-
-对同一记忆产物分别使用全库读取和受限检索，固定恢复模型，报告两者差距。再以实际下游任务检验被恢复属性的效用，避免把不必要的画像收集优化成主要目标。
-
-### 建议搭配
-
-[dynamicmem](dynamicmem.md) · [gatemem](gatemem.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+相关测量与对照：[LoCoMo](locomo.md) · [LongMemEval](longmemeval.md) · [MemProbe (stability–plasticity)](memprobe-stability-plasticity.md)
 
 <!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`task success → persistent-memory artifact → representation coverage audit`
-
-它暴露了一个容易被忽略的事实：agent 表面上很能干，背后的长期状态却可能非常差。

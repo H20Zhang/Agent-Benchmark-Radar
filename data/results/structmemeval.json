@@ -28,11 +28,11 @@
         "range": [0,100]
       },
       "entries": [
-        {"id":"retrieval","method":"Retrieval","model":"Gemini 3.1 Pro","score":6.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
-        {"id":"emem","method":"EMem","model":"Gemini 3.1 Pro","score":17.5,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
-        {"id":"emem-g","method":"EMem-G","model":"Gemini 3.1 Pro","score":19.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
-        {"id":"mem-agent","method":"Mem-agent","model":"Gemini 3.1 Pro","score":66.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
-        {"id":"mem0","method":"Mem0","model":"Gemini 3.1 Pro","score":39.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"}
+        {"id":"retrieval","method":"Retrieval","model":"Gemini 3.1 Pro","score":6.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"},
+        {"id":"emem","method":"EMem","model":"Gemini 3.1 Pro","score":17.5,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"},
+        {"id":"emem-g","method":"EMem-G","model":"Gemini 3.1 Pro","score":19.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"},
+        {"id":"mem-agent","method":"Mem-agent","model":"Gemini 3.1 Pro","score":66.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"},
+        {"id":"mem0","method":"Mem0","model":"Gemini 3.1 Pro","score":39.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"}
       ]
     },
     {
@@ -59,11 +59,11 @@
         "range": [0,100]
       },
       "entries": [
-        {"id":"gemini-3-0-flash","method":"Mem-agent","model":"Gemini 3.0 Flash","score":53.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
-        {"id":"gemini-3-1-pro","method":"Mem-agent","model":"Gemini 3.1 Pro","score":66.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
-        {"id":"gpt-5-5","method":"Mem-agent","model":"GPT-5.5","score":35.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
-        {"id":"deepseek-v4-flash","method":"Mem-agent","model":"DeepSeek-V4-Flash","score":46.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"},
-        {"id":"deepseek-v4-pro","method":"Mem-agent","model":"DeepSeek-V4-Pro","score":47.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243"}
+        {"id":"gemini-3-0-flash","method":"Mem-agent","model":"Gemini 3.0 Flash","score":53.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"},
+        {"id":"gemini-3-1-pro","method":"Mem-agent","model":"Gemini 3.1 Pro","score":66.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"},
+        {"id":"gpt-5-5","method":"Mem-agent","model":"GPT-5.5","score":35.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"},
+        {"id":"deepseek-v4-flash","method":"Mem-agent","model":"DeepSeek-V4-Flash","score":46.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"},
+        {"id":"deepseek-v4-pro","method":"Mem-agent","model":"DeepSeek-V4-Pro","score":47.0,"date":"2026-05-22","source":"https://arxiv.org/abs/2602.11243v2"}
       ]
     }
   ]

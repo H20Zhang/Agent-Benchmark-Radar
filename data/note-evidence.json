@@ -751,6 +751,940 @@
         "zh": "f4eb0b0732f16ac202acb1292e0195c9b869f5c750ef086830a6548b3604f632",
         "en": "62521302b1e6e07f9067fe426453a1368790fd0c1b7f900a8282aadeb11e320e"
       }
+    },
+    "agentfuel": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-09-30",
+      "status_text": {
+        "zh": "已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。",
+        "en": "Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction."
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/pdf/2603.12483v1",
+          "version": "arXiv:2603.12483v1",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/pdf/2603.12483v1",
+          "source_locator": "§5.1–5.2,pp7–8;Figures6–8,p9",
+          "row_ids": [
+            "Stateless",
+            "Stateful (no incident)",
+            "Incident-specific"
+          ],
+          "row_labels": {
+            "zh": {
+              "Stateless": "无状态查询",
+              "Stateful (no incident)": "有状态、无异常事件查询",
+              "Incident-specific": "异常事件查询"
+            },
+            "en": {
+              "Stateless": "Stateless",
+              "Stateful (no incident)": "Stateful (no incident)",
+              "Incident-specific": "Incident-specific"
+            }
+          },
+          "conditions": {
+            "zh": "三领域、六配置的查询类别汇总；每题每配置3次运行，类别分母不同，不是单个模型的分数。",
+            "en": "Pooled query-category results across three domains and six configurations; three runs per question/configuration, with different category denominators rather than one model's scores."
+          },
+          "metric_labels": {
+            "zh": [
+              "准确率（%）"
+            ],
+            "en": [
+              "Accuracy (%)"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "4565c78244971dd65ddfc6e839b5bd3b95d35d4f77ba247b71513669994d03f2",
+        "en": "42aeaac5fecb87b22606c393383448ef1ad849d999eb0e9210e42406c5ab081d"
+      }
+    },
+    "da-code": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-09-30",
+      "status_text": {
+        "zh": "已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。",
+        "en": "Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction."
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/html/2410.07331v1",
+          "version": "arXiv:2410.07331v1",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2410.07331v1",
+          "source_locator": "§3.4;§5.1;Table3,PDFp7",
+          "row_ids": [
+            "GPT-4 / DA-Agent",
+            "GPT-4o / DA-Agent",
+            "Qwen2.5-72B / DA-Agent"
+          ],
+          "row_labels": {
+            "zh": {
+              "GPT-4 / DA-Agent": "GPT-4 / DA-Agent",
+              "GPT-4o / DA-Agent": "GPT-4o / DA-Agent",
+              "Qwen2.5-72B / DA-Agent": "Qwen2.5-72B / DA-Agent"
+            },
+            "en": {
+              "GPT-4 / DA-Agent": "GPT-4 / DA-Agent",
+              "GPT-4o / DA-Agent": "GPT-4o / DA-Agent",
+              "Qwen2.5-72B / DA-Agent": "Qwen2.5-72B / DA-Agent"
+            }
+          },
+          "conditions": {
+            "zh": "完整500题、DA-Agent；最多20步、15步历史、每动作300秒。完成率与代码可执行率的分母不同。",
+            "en": "Full 500 tasks with DA-Agent; 20-step cap, 15-step history and 300 seconds/action. Completion and executable-code rates have different denominators."
+          },
+          "metric_labels": {
+            "zh": [
+              "混合总分（0–100）",
+              "完成率（%）",
+              "代码可执行率（%）"
+            ],
+            "en": [
+              "Mixed Total score (0–100)",
+              "Completion (%)",
+              "Executable code (%)"
+            ]
+          }
+        },
+        {
+          "id": "result-2",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2410.07331v1",
+          "source_locator": "§5.2–5.3;Table4,PDFp7",
+          "row_ids": [
+            "OpenDevin",
+            "DA-Agent (Table4: DA-Code)",
+            "DA-Agent + Reference Plan"
+          ],
+          "row_labels": {
+            "zh": {
+              "OpenDevin": "OpenDevin",
+              "DA-Agent (Table4: DA-Code)": "DA-Agent（原表4：DA-Code）",
+              "DA-Agent + Reference Plan": "DA-Agent + Reference Plan"
+            },
+            "en": {
+              "OpenDevin": "OpenDevin",
+              "DA-Agent (Table4: DA-Code)": "DA-Agent (paper Table 4: DA-Code)",
+              "DA-Agent + Reference Plan": "DA-Agent + Reference Plan"
+            }
+          },
+          "conditions": {
+            "zh": "随机选出的DA-Code-100子集；模型GPT-4。参考计划是额外任务指导，不能与完整500题总分直接拼接。",
+            "en": "Random DA-Code-100 subset with GPT-4. A reference plan supplies additional task guidance; these scores are not pooled with full-500 results."
+          },
+          "metric_labels": {
+            "zh": [
+              "混合总分（0–100）",
+              "完成率（%）"
+            ],
+            "en": [
+              "Mixed Total score (0–100)",
+              "Completion (%)"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "1862d5714f5902af0f7823aa3cdc41287bda4c019862e6d18e7b6c128b51ef1b",
+        "en": "d54eabcdb8cbfaece6560727b8bbd59b1d89f8dcedd477ab7b7d89849ab6b0f0"
+      }
+    },
+    "inmind": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-09-30",
+      "status_text": {
+        "zh": "已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。",
+        "en": "Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction."
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/html/2607.24368v1",
+          "version": "arXiv:2607.24368v1",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2607.24368v1",
+          "source_locator": "Table 1; §4.2–4.4",
+          "row_ids": [
+            "Naive RAG (emb3-large)",
+            "MemoryOS (emb3-large)",
+            "A-Mem (emb3-large)",
+            "Backbone (GPT-5-mini)"
+          ],
+          "row_labels": {
+            "zh": {
+              "Naive RAG (emb3-large)": "Naive RAG (emb3-large)",
+              "MemoryOS (emb3-large)": "MemoryOS (emb3-large)",
+              "A-Mem (emb3-large)": "A-Mem (emb3-large)",
+              "Backbone (GPT-5-mini)": "Backbone (GPT-5-mini)"
+            },
+            "en": {
+              "Naive RAG (emb3-large)": "Naive RAG (emb3-large)",
+              "MemoryOS (emb3-large)": "MemoryOS (emb3-large)",
+              "A-Mem (emb3-large)": "A-Mem (emb3-large)",
+              "Backbone (GPT-5-mini)": "Backbone (GPT-5-mini)"
+            }
+          },
+          "conditions": {
+            "zh": "125题、GPT-5-mini回答与二元评判；目标召回不看生成答案。直接提供目标的骨干参考和各适配器证据访问不同。",
+            "en": "125 tasks with GPT-5-mini answering/binary judging; target recall is answer-blind. The supplied-target backbone and adapters have different evidence access."
+          },
+          "metric_labels": {
+            "zh": [
+              "直接回忆（%）",
+              "目标召回（%）",
+              "应用（%）"
+            ],
+            "en": [
+              "Direct recall (%)",
+              "Target recall (%)",
+              "Application (%)"
+            ]
+          }
+        },
+        {
+          "id": "result-2",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2607.24368v1",
+          "source_locator": "Table 2; §5.2",
+          "row_ids": [
+            "Always-in-State"
+          ],
+          "row_labels": {
+            "zh": {
+              "Always-in-State": "Always-in-State"
+            },
+            "en": {
+              "Always-in-State": "Always-in-State"
+            }
+          },
+          "conditions": {
+            "zh": "同一125题；Always-in-State使用GPT-5-mini更新器，200行／25,000字节状态预算，不是只切换检索开关。",
+            "en": "Same 125 tasks; Always-in-State uses a GPT-5-mini updater and 200-line/25,000-byte state budget, not a retrieval-only toggle."
+          },
+          "metric_labels": {
+            "zh": [
+              "直接回忆（%）",
+              "应用（%）"
+            ],
+            "en": [
+              "Direct recall (%)",
+              "Application (%)"
+            ]
+          }
+        },
+        {
+          "id": "result-3",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2607.24368v1",
+          "source_locator": "Appendix 14.2 human audit",
+          "row_ids": [
+            "Target recall",
+            "Original application"
+          ],
+          "row_labels": {
+            "zh": {
+              "Target recall": "目标召回",
+              "Original application": "原应用指标"
+            },
+            "en": {
+              "Target recall": "Target recall",
+              "Original application": "Original application"
+            }
+          },
+          "conditions": {
+            "zh": "附录14.2各抽查100条记录；这些是评分审计计数，不是125题的模型准确率。",
+            "en": "Appendix 14.2 audits 100 records for each judgment; these are scorer-audit counts, not model accuracy on the 125 tasks."
+          },
+          "metric_labels": {
+            "zh": [
+              "人工审计条目数",
+              "一致条目数",
+              "假阳性条目数"
+            ],
+            "en": [
+              "Human-audited records",
+              "Agreement count",
+              "False-positive count"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "78db996809a035a103655b83929bf02a5ebf14ac55e725636380c336c33fcf56",
+        "en": "16340a910ca900cbd0ccba81469381d58778ba35088eb44940c1ed199aa33f6a"
+      }
+    },
+    "structmemeval": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-09-30",
+      "status_text": {
+        "zh": "已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。",
+        "en": "Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction."
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/html/2602.11243v3",
+          "version": "arXiv:2602.11243v3",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        },
+        {
+          "url": "https://arxiv.org/html/2602.11243v2",
+          "version": "arXiv:2602.11243v2",
+          "kind": "paper-excerpt",
+          "coverage": [
+            "results",
+            "experimental_setup"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2602.11243v3",
+          "source_locator": "v3 Table 1",
+          "row_ids": [
+            "Retrieval",
+            "Mem-agent",
+            "Mem0"
+          ],
+          "row_labels": {
+            "zh": {
+              "Retrieval": "Retrieval",
+              "Mem-agent": "Mem-agent",
+              "Mem0": "Mem0"
+            },
+            "en": {
+              "Retrieval": "Retrieval",
+              "Mem-agent": "Mem-agent",
+              "Mem0": "Mem0"
+            }
+          },
+          "conditions": {
+            "zh": "v3主集51个场景／问题实例；Gemini-3.1-Pro、无提示。Total是四类等权均值，不是51题直接合并的准确率。",
+            "en": "v3 main set of 51 problems; Gemini-3.1-Pro, no hints. Total equally weights four categories rather than pooling all 51 problems."
+          },
+          "metric_labels": {
+            "zh": [
+              "状态正确率（0–1）",
+              "树结构正确率（0–1）",
+              "计数正确率（0–1）",
+              "推荐正确率（0–1）",
+              "四类等权总分（0–1）"
+            ],
+            "en": [
+              "State correctness (0–1)",
+              "Tree correctness (0–1)",
+              "Counting correctness (0–1)",
+              "Recommendation correctness (0–1)",
+              "Equal-category Total (0–1)"
+            ]
+          }
+        },
+        {
+          "id": "result-2",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2602.11243v3",
+          "source_locator": "v3 Appendix, Table 6",
+          "row_ids": [
+            "Retrieval (top 20)",
+            "Mem-agent",
+            "Mem0"
+          ],
+          "row_labels": {
+            "zh": {
+              "Retrieval (top 20)": "Retrieval (top 20)",
+              "Mem-agent": "Mem-agent",
+              "Mem0": "Mem0"
+            },
+            "en": {
+              "Retrieval (top 20)": "Retrieval (top 20)",
+              "Mem-agent": "Mem-agent",
+              "Mem0": "Mem0"
+            }
+          },
+          "conditions": {
+            "zh": "v3扩展状态跟踪42个场景，Gemini-2.5-Pro；检索取前20条，检索行没有提示干预，横线为未报告。",
+            "en": "42 extended state-tracking scenarios, Gemini-2.5-Pro; retrieval takes top 20 and has no hint intervention. A dash means unreported."
+          },
+          "metric_labels": {
+            "zh": [
+              "无提示正确率（%）",
+              "有提示正确率（%）"
+            ],
+            "en": [
+              "No-hint correctness (%)",
+              "Hint correctness (%)"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "9ade6ece0c56afab3efd91501428a5a731fea6cbc0e9fd944e38b64aabfdb2f1",
+        "en": "12289fad88de3173ae3fd3ee32ba5ac813373224f33a8eb65a12749620eaaee0"
+      }
+    },
+    "claimprobe": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-09-30",
+      "status_text": {
+        "zh": "已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。",
+        "en": "Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction."
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/html/2608.28643v1",
+          "version": "arXiv:2608.28643v1",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2608.28643v1",
+          "source_locator": "Table2, sections4–5.2",
+          "row_ids": [
+            "Default",
+            "ClaimWriter"
+          ],
+          "row_labels": {
+            "zh": {
+              "Default": "原写作模块",
+              "ClaimWriter": "ClaimWriter"
+            },
+            "en": {
+              "Default": "Default",
+              "ClaimWriter": "ClaimWriter"
+            }
+          },
+          "conditions": {
+            "zh": "EDR宿主、GPT-5.5写作、GPT-5.4-mini评判，100题微平均；默认指标接受部分支持，严格版另算。",
+            "en": "EDR host, GPT-5.5 writing, GPT-5.4-mini judging, 100-task micro-average; default metrics accept partial support, with strict variants separate."
+          },
+          "metric_labels": {
+            "zh": [
+              "Hall（%，越低越好）",
+              "Mis（%，越低越好）",
+              "Rec（%，越高越好）",
+              "严格Hall（%，越低越好）",
+              "严格Rec（%，越高越好）"
+            ],
+            "en": [
+              "Hall (%, lower better)",
+              "Mis (%, lower better)",
+              "Rec (%, higher better)",
+              "Strict Hall (%, lower better)",
+              "Strict Rec (%, higher better)"
+            ]
+          }
+        },
+        {
+          "id": "result-2",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2608.28643v1",
+          "source_locator": "Table1, section5.1",
+          "row_ids": [
+            "EDR",
+            "AI-Q",
+            "ODR"
+          ],
+          "row_labels": {
+            "zh": {
+              "EDR": "EDR",
+              "AI-Q": "AI-Q",
+              "ODR": "ODR"
+            },
+            "en": {
+              "EDR": "EDR",
+              "AI-Q": "AI-Q",
+              "ODR": "ODR"
+            }
+          },
+          "conditions": {
+            "zh": "RACE、GPT-5.5评判；原文题量50／100冲突未解决。每行只比较同一宿主的原写作模块和ClaimWriter。",
+            "en": "RACE with GPT-5.5 judging; the source's 50/100 task-count conflict is unresolved. Each row compares the original writer and ClaimWriter within one host."
+          },
+          "metric_labels": {
+            "zh": [
+              "原整体分（0–1）",
+              "ClaimWriter整体分（0–1）",
+              "原可读性（0–1）",
+              "ClaimWriter可读性（0–1）"
+            ],
+            "en": [
+              "Original Overall (0–1)",
+              "ClaimWriter Overall (0–1)",
+              "Original Readability (0–1)",
+              "ClaimWriter Readability (0–1)"
+            ]
+          }
+        },
+        {
+          "id": "result-3",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2608.28643v1",
+          "source_locator": "Table7,AppendixE",
+          "row_ids": [
+            "Default",
+            "ClaimWriter"
+          ],
+          "row_labels": {
+            "zh": {
+              "Default": "原写作模块",
+              "ClaimWriter": "ClaimWriter"
+            },
+            "en": {
+              "Default": "Default",
+              "ClaimWriter": "ClaimWriter"
+            }
+          },
+          "conditions": {
+            "zh": "EDR、GPT-5.5，每份报告的写作阶段平均；不含搜索、工具、查询或计划生成成本。",
+            "en": "EDR with GPT-5.5, per-report writing-stage averages; excludes search, tools, query generation and planning."
+          },
+          "metric_labels": {
+            "zh": [
+              "输入词元／报告",
+              "输出词元／报告"
+            ],
+            "en": [
+              "Input tokens / report",
+              "Output tokens / report"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "2f0b0a4660962e5834b23f7d088c29f4b55cf4053b8023a32b8e7ca40fe914a5",
+        "en": "522d0e26e9eb07c6aeb8ef372bd53c3b43ba49b242b8d84672bc22c26ed481ce"
+      }
+    },
+    "beir": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-09-30",
+      "status_text": {
+        "zh": "已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。",
+        "en": "Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction."
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/pdf/2104.08663v4",
+          "version": "arXiv:2104.08663v4",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/pdf/2104.08663v4",
+          "source_locator": "Table2, section5",
+          "row_ids": [
+            "MS MARCO dev",
+            "BioASQ test",
+            "Touché-2020 test"
+          ],
+          "row_labels": {
+            "zh": {
+              "MS MARCO dev": "MS MARCO 开发集",
+              "BioASQ test": "BioASQ 测试集",
+              "Touché-2020 test": "Touché-2020 测试集"
+            },
+            "en": {
+              "MS MARCO dev": "MS MARCO dev",
+              "BioASQ test": "BioASQ test",
+              "Touché-2020 test": "Touché-2020 test"
+            }
+          },
+          "conditions": {
+            "zh": "原论文表2的选定数据集，nDCG@10范围0—1；只在同一行内比较，不把不同数据集绝对分数当统一难度。 三个切分的查询数依次为6,980、500、49；nDCG@10按查询求平均。",
+            "en": "Selected datasets from Table 2, nDCG@10 on 0–1; compare within rows rather than treating absolute scores across datasets as a common difficulty scale. Query counts for the three splits are 6,980, 500 and 49 respectively; nDCG@10 is averaged over queries."
+          },
+          "metric_labels": {
+            "zh": [
+              "BM25 nDCG@10",
+              "TAS-B nDCG@10",
+              "BM25+CE nDCG@10"
+            ],
+            "en": [
+              "BM25 nDCG@10",
+              "TAS-B nDCG@10",
+              "BM25+CE nDCG@10"
+            ]
+          }
+        },
+        {
+          "id": "result-2",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/pdf/2104.08663v4",
+          "source_locator": "Table3, section5.1",
+          "row_ids": [
+            "BM25",
+            "TAS-B",
+            "BM25+CE"
+          ],
+          "row_labels": {
+            "zh": {
+              "BM25": "BM25",
+              "TAS-B": "TAS-B",
+              "BM25+CE": "BM25+CE"
+            },
+            "en": {
+              "BM25": "BM25",
+              "TAS-B": "TAS-B",
+              "BM25+CE": "BM25+CE"
+            }
+          },
+          "conditions": {
+            "zh": "100万篇DBpedia文档，Xeon8168／8核CPU与V100 GPU；稠密检索使用精确搜索，横线为未报告。",
+            "en": "One million DBpedia documents, Xeon 8168 / 8 CPU cores and V100 GPU; dense retrieval uses exact search and a dash means unreported."
+          },
+          "metric_labels": {
+            "zh": [
+              "CPU延迟（ms）",
+              "GPU延迟（ms）",
+              "索引（GB）"
+            ],
+            "en": [
+              "CPU latency (ms)",
+              "GPU latency (ms)",
+              "Index (GB)"
+            ]
+          }
+        },
+        {
+          "id": "result-3",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/pdf/2104.08663v4",
+          "source_locator": "Table4, section6",
+          "row_ids": [
+            "BM25",
+            "ANCE"
+          ],
+          "row_labels": {
+            "zh": {
+              "BM25": "BM25",
+              "ANCE": "ANCE"
+            },
+            "en": {
+              "BM25": "BM25",
+              "ANCE": "ANCE"
+            }
+          },
+          "conditions": {
+            "zh": "TREC-COVID，另加980条人工查询—文档标注；同一数据集下换标注集合，指标仍为nDCG@10。",
+            "en": "TREC-COVID with 980 added human query-document judgments; judgment sets change on the same dataset, still using nDCG@10."
+          },
+          "metric_labels": {
+            "zh": [
+              "原标注nDCG@10",
+              "扩充标注nDCG@10"
+            ],
+            "en": [
+              "Original-judgment nDCG@10",
+              "Expanded-judgment nDCG@10"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "785b3f7e3920442122abd3da74903c3003effe215d11baace1b14c1127496f1b",
+        "en": "9dbe29a355530b7ae91001dac480c197242f629c277491a468f2a812df8c6faa"
+      }
+    },
+    "memprobe": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-09-30",
+      "status_text": {
+        "zh": "已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。",
+        "en": "Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction."
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/html/2606.24595v2",
+          "version": "arXiv:2606.24595v2",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        },
+        {
+          "url": "https://github.com/sora1998/MEMAUDIT-bench/blob/main/docs/reproduction.md",
+          "version": "main@2026-09-30",
+          "kind": "official-documentation",
+          "coverage": [
+            "experimental_setup",
+            "limitations"
+          ]
+        },
+        {
+          "url": "https://github.com/sora1998/MEMAUDIT-bench",
+          "version": "main@2026-09-30",
+          "kind": "official-documentation",
+          "coverage": [
+            "experimental_setup",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2606.24595v2",
+          "source_locator": "v2 Table 2",
+          "row_ids": [
+            "amem",
+            "longctx_full",
+            "mem0"
+          ],
+          "row_labels": {
+            "zh": {
+              "amem": "amem",
+              "longctx_full": "longctx_full",
+              "mem0": "mem0"
+            },
+            "en": {
+              "amem": "amem",
+              "longctx_full": "longctx_full",
+              "mem0": "mem0"
+            }
+          },
+          "conditions": {
+            "zh": "论文v2表2，50用户×31目标；五类等权恢复分数，同一轨迹结束后的同一存储分别完整读取与前5条读取。",
+            "en": "Paper v2 Table 2, 50 users × 31 targets; five-category-balanced recovery, probing the same final store from one trajectory through full-store or top-5 access."
+          },
+          "metric_labels": {
+            "zh": [
+              "完整存储B（0–1）",
+              "完整存储SD",
+              "前5条B（0–1）",
+              "前5条SD"
+            ],
+            "en": [
+              "Full-store B (0–1)",
+              "Full-store SD",
+              "Top-5 B (0–1)",
+              "Top-5 SD"
+            ]
+          }
+        },
+        {
+          "id": "result-2",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2606.24595v2",
+          "source_locator": "v2 Table 2",
+          "row_ids": [
+            "nomem"
+          ],
+          "row_labels": {
+            "zh": {
+              "nomem": "nomem"
+            },
+            "en": {
+              "nomem": "nomem"
+            }
+          },
+          "conditions": {
+            "zh": "v2表2的无记忆对照；完成率和类别平衡恢复分数有不同测量对象与汇总，不能互换。",
+            "en": "No-memory control from v2 Table 2; completion and category-balanced recovery have different targets/aggregation and are not interchangeable."
+          },
+          "metric_labels": {
+            "zh": [
+              "任务完成率（%）",
+              "完整存储B（0–1）"
+            ],
+            "en": [
+              "Task completion (%)",
+              "Full-store B (0–1)"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "eb9099731296f073062a97191c6f25e5ed9f915d496f06f83c120fef51d0f109",
+        "en": "269ac5e59650f71025d0fe251c95b1a6c9472d908b0c6d10333de5bc96edfc05"
+      }
     }
   }
 }

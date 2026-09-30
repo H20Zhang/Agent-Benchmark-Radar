@@ -1,4 +1,4 @@
-# StructMemEval: evaluating how agents organize memory
+# StructMemEval: where memory structure helps, and what remains unsolved
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2026-02<br>
@@ -6,64 +6,86 @@
 > No substitution from a live board, a single baseline, or a later paper; unknown is neither zero nor a claim that the authors reported no results.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](structmemeval.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](structmemeval.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2602.11243)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction.
 
-StructMemEval asks whether an agent can choose and maintain a **task-appropriate memory structure**—for example a transaction ledger, to-do list, or tree—rather than only retrieving facts from an undifferentiated store. The central capability is representation organization.
+v3 main text and Appendices A–F; use printed table values, without digitizing graphical curves into exact results.
 
-## What changed relative to prior evaluation
+[arXiv:2602.11243v3](https://arxiv.org/html/2602.11243v3) · [arXiv:2602.11243v2](https://arxiv.org/html/2602.11243v2)
 
-Fact-retention, multi-hop recall, and temporal-update benchmarks can often be attacked with generic retrieval-augmented context. StructMemEval constructs tasks whose natural solution depends on a particular organization, making memory structure itself observable rather than treating storage layout as an implementation detail.
+The tables reorganize selected sourced facts. The title-level historical reference may use a different version, split or model; do not pool scores across those settings.
+<!-- EVIDENCE:reading:END -->
 
-## Decisive evidence
+<!-- EVIDENCE:method:START -->
+## Measurement, method and comparison
 
-The paper's initial experiments show simple retrieval-augmented LLMs struggle on the structured tasks. Memory agents can solve them reliably when explicitly prompted with the appropriate organization, but modern LLMs do not consistently recognize the needed structure without such hints. This separates **executing a known representation** from **discovering the right representation**.
+Synthetic conversation streams test whether an agent maintains structures needed for state updates, hierarchical relations, aggregation/counting and recommendations. Compare retrieval and memory-writing systems, with and without hints about useful organization.
 
-## What the score supports
+[Primary source](https://arxiv.org/html/2602.11243v3)
+Illustrative task: after a user moves, neighbor relations change with location; matching the word “neighbor” can return people from the old address unless the relevant relations are maintained.
 
-The benchmark can show whether a system benefits from structured state and whether it can instantiate a requested organization. It is weaker evidence for autonomous representation learning if the task or prompt reveals the intended structure.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and denominators
 
-Fix backbone, task instructions, whether structure hints are available, memory operations, and token/storage budget. Results with an oracle structure hint should be reported separately from autonomous structure selection; otherwise the main research question is hidden.
+Main set: 51 hard problems (10 tree, 15 counting, 14 state, 12 recommendation), each at least 250 messages. Extended set: 207 scenarios and over 2,000 questions. Main selected rows share Gemini-3.1-Pro without hints; GPT-4o-mini judges factual correctness. Main retrieval uses text-embedding-3-large, top 10; extended state retrieval below uses top 20 and a different backbone.
 
-## What remains unmeasured
+[Setup source](https://arxiv.org/html/2602.11243v3)
+<!-- EVIDENCE:setup:END -->
 
-The task suite is intentionally narrow and uses human-interpretable structures. Real agents may need hybrid or learned representations whose utility is only visible through future queries/actions, and they may need to migrate structure as workloads change.
+<!-- EVIDENCE:result-1:START -->
+## Main set: same backbone, no hints
 
-## Next discriminating validation
+v3 main set of 51 problems; Gemini-3.1-Pro, no hints. Total equally weights four categories rather than pooling all 51 problems.
 
-Hide structure identity, introduce tasks with multiple plausible organizations, and measure adaptation when query distributions shift. The key question is not whether an agent can use a ledger, but whether it knows when a ledger is the right representation.
+| Configuration | State correctness (0–1) | Tree correctness (0–1) | Counting correctness (0–1) | Recommendation correctness (0–1) | Equal-category Total (0–1) |
+|---|---|---|---|---|---|
+| Retrieval | 0.0 | 0.0 | 0.0 | 0.22 | 0.06 |
+| Mem-agent | 0.84 | 0.98 | 0.0 | 0.37 | 0.55 |
+| Mem0 | 0.29 | 0.72 | 0.0 | 0.18 | 0.3 |
+
+Writable memory helps some structural tasks, but counting is zero in these rows. The table does not support claiming that hints reliably solve the entire benchmark.
+
+Fact source: v3 Table 1 · [Source](https://arxiv.org/html/2602.11243v3)
+<!-- EVIDENCE:result-1:END -->
+
+<!-- EVIDENCE:result-2:START -->
+## Extended state set: hints help under different conditions
+
+42 extended state-tracking scenarios, Gemini-2.5-Pro; retrieval takes top 20 and has no hint intervention. A dash means unreported.
+
+| Configuration | No-hint correctness (%) | Hint correctness (%) |
+|---|---|---|
+| Retrieval (top 20) | 26 | — |
+| Mem-agent | 64 | 79 |
+| Mem0 | 62 | 81 |
+
+Backbone, dataset, units and retrieval budget differ from the main table; 79 or 81 does not mean the main set is solved.
+
+Fact source: v3 Appendix, Table 6 · [Source](https://arxiv.org/html/2602.11243v3)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limitations, remaining gaps and next experiment
+
+Under the main tested configuration, writable memory improves several structure-sensitive categories, while counting remains unsolved in these rows. Hints can help extended state tracking but are not a universal remedy. Synthetic tasks, default/minimally tuned adapters, different retrieval budgets and distinct main/extended backbones limit architecture-wide rankings.
+
+Compared with retrieving raw chunks, writable memory can maintain task-relevant structure during ingestion; this does not mean all differences have been isolated by matched budgets. The existing structured result file retains a v2 snapshot (Mem-agent Total 66.0%, Mem0 39.0%); the tables here use v3 and do not overwrite old-version scores. Only v2 Tables 1–2 were rechecked here, not the entire older version.
+
+Pair with ordinary long-conversation recall to separate retrieval from maintaining usable structure. Use a fixed backbone, token budget and stream; compare no hint versus hint and raw notes versus structured state. Report every category and the exact averaging rule, plus counting behavior as the stream grows.
+
+[Primary evidence](https://arxiv.org/html/2602.11243v3)
+<!-- EVIDENCE:limitations:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
-## Research decision card
+Use the method, comparisons and limitations together to decide whether this benchmark fits a claim. These tables are not a cross-protocol leaderboard; structural checks do not certify factual correctness or reproduction.
 
-### When to use it
-
-Use StructMemEval to test whether explicit memory organization affects task completion, particularly for tables, lists, and trees. Distinguish operating a prescribed structure from discovering a suitable structure autonomously. Scores with structure hints do not establish the latter.
-
-### What a concrete task looks like
-
-Illustrative task: a stream adds, retracts, and revises items, requiring a queryable operative state. An append-only transcript preserves all utterances but may not support later operations as directly as a ledger or tree.
-
-### Most discriminating experiment
-
-Separate no-hint, autonomous-structure-selection, and supplied-correct-structure conditions. Hold the input constant while changing later query types, then test whether the representation adapts. Include migration cost and repair of incorrect state when assessing adaptation.
-
-### Pair with
-
-[memoryagentbench](memoryagentbench.en.md) · [kbgym](kbgym.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Related measurements and controls: [LongMemEval](longmemeval.en.md) · [MemoryAgentBench](memoryagentbench.en.md) · [StateMemBench](statemembench.en.md)
 
 <!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`retrieve facts → maintain structured state → autonomously choose memory representation`
-
-StructMemEval exposes representation selection as an independent memory capability.

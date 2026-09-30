@@ -1,4 +1,4 @@
-# BEIR: testing zero-shot retriever generalization across heterogeneous domains
+# BEIR: retrieval quality, cost and judgment bias across domains
 
 <!-- RELEASE-REFERENCE:START -->
 > **Best at release (not yet verified)** · Benchmark recorded date: 2021-04<br>
@@ -8,121 +8,93 @@
 
 [中文](beir.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2104.08663) · [Code](https://github.com/beir-cellar/beir) · **Area: RAG / Retrieval**
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-BEIR's historical importance is that it turned an often-neglected question into a standard test: **does a retriever that is strong on familiar data still work after moving to very different domains?** It made cross-domain zero-shot robustness a core retrieval criterion rather than an optional appendix experiment.
+Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction.
 
-## What it actually measures
+v4 main Sections 1–7 plus appendix dataset/model/corpus inventories and experimental settings; key Tables 3, 9, 10 and Figures 3–4 checked in the PDF.
 
-BEIR originally combines **18 retrieval datasets** spanning different domains, task types, query styles, and document distributions under a common ranking protocol.
+[arXiv:2104.08663v4](https://arxiv.org/pdf/2104.08663v4)
 
-The goal is not maximum performance on one familiar train/test distribution, but whether:
+The tables reorganize selected sourced facts. The title-level historical reference may use a different version, split or model; do not pool scores across those settings.
+<!-- EVIDENCE:reading:END -->
 
-- ranking quality survives without target-domain retraining;
-- lexical, dense, hybrid, and reranking methods trade off differently across domains;
-- gains are specific to one dataset's vocabulary, length distribution, or training overlap.
+<!-- EVIDENCE:method:START -->
+## Measurement, method and comparison
 
-That makes BEIR a foundational coordinate for asking whether a retrieval method truly generalizes.
+Corpus, queries and relevance labels form one retrieval interface across 18 English evaluation datasets. MS MARCO is the in-domain reference. nDCG@10 accommodates binary/graded relevance; retrieval, reranking and adaptation retain distinct resource settings.
 
-## Compared with what
+[Primary source](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:method:END -->
 
-Early dense-retrieval progress was heavily centered on benchmarks such as MS MARCO. A model could dominate near its training distribution and still fail to retain that advantage in biomedical, finance, argument retrieval, or fact-verification settings.
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and denominators
 
-BEIR's key change is the **heterogeneous suite**. The question becomes not “can this model optimize one benchmark?” but “does this retrieval inductive bias remain useful across distinct information needs?”
+Main metric is nDCG@10 (0–1), computed with pytrec_eval and no LLM judge. MS MARCO is the in-domain reference; out-of-domain retrieval uses each dataset's relevance judgments. BM25 uses Anserini k=0.9, b=0.4; TAS-B is MS-MARCO-trained DistilBERT; BM25+CE reranks the first 100 hits with MiniLM-L6. Most neural inputs use the first 512 wordpieces; ColBERT has a separate length-300 setting. Hardware, corpus and truncation belong with the scores.
 
-It also re-established BM25 as an important baseline: if a dense method cannot consistently beat lexical retrieval across domains, it is hard to claim a universal retrieval improvement.
+[Setup source](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:setup:END -->
 
-## How the evaluation works
+<!-- EVIDENCE:result-1:START -->
+## In-domain advantage does not guarantee transfer
 
-A standard BEIR evaluation builds or uses each dataset's corpus, queries, and relevance judgments, computes ranking metrics such as nDCG and Recall per dataset, then aggregates results under a chosen rule.
+Selected datasets from Table 2, nDCG@10 on 0–1; compare within rows rather than treating absolute scores across datasets as a common difficulty scale. Query counts for the three splits are 6,980, 500 and 49 respectively; nDCG@10 is averaged over queries.
 
-Any aggregate score must be interpreted together with:
+| Dataset / split | BM25 nDCG@10 | TAS-B nDCG@10 | BM25+CE nDCG@10 |
+|---|---|---|---|
+| MS MARCO dev | 0.228 | 0.408 | 0.413 |
+| BioASQ test | 0.465 | 0.383 | 0.523 |
+| Touché-2020 test | 0.367 | 0.162 | 0.271 |
 
-- the exact BEIR subset;
-- corpus and query preprocessing;
-- reranker use;
-- whether the retriever was trained on the target benchmark or related data;
-- the aggregation rule.
+TAS-B beats BM25 on in-domain MS MARCO but reverses on these two out-of-domain examples. Transfer needs testing; this is not a universal claim against dense retrieval.
 
-A “BEIR score” is therefore not one uniquely defined number. Different subsets, training regimes, and reranking settings correspond to different experimental questions.
+Fact source: Table 2, section5 · [Source](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:result-1:END -->
 
-## Decisive evidence and score boundary
+<!-- EVIDENCE:result-2:START -->
+## The paper did measure latency and index size
 
-One durable early finding is that **strong dense retrieval on a single benchmark does not guarantee zero-shot superiority across domains; lexical baselines such as BM25 remain highly competitive in several datasets.**
+One million DBpedia documents, Xeon 8168 / 8 CPU cores and V100 GPU; dense retrieval uses exact search and a dash means unreported.
 
-BEIR therefore provides evidence about cross-domain ranking robustness, not a blanket conclusion that dense retrieval beats sparse retrieval or vice versa.
+| System | CPU latency (ms) | GPU latency (ms) | Index (GB) |
+|---|---|---|---|
+| BM25 | 20 | — | 0.4 |
+| TAS-B | 125 | 14 | 3 |
+| BM25+CE | 6100 | 450 | 0.4 |
 
-Modern results also mix stronger backbones, synthetic training data, instruction tuning, and rerankers. An aggregate nDCG today supports ranking quality only under the named dataset mixture, training data, and indexing protocol.
+Latency/index size are not wholly unmeasured gaps. They still need revalidation with modern hardware, indexing and workloads.
 
-It does not directly establish end-to-end RAG answer quality or better iterative / agentic search.
+Fact source: Table 3, section5.1 · [Source](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:result-2:END -->
 
-## Main confounders
+<!-- EVIDENCE:result-3:START -->
+## Additional judgments change the interpretation
 
-The first is **training-data overlap**. Modern retrievers train on far larger corpora than early BEIR systems, so “zero-shot” need not mean genuinely unseen in a data-provenance sense.
+TREC-COVID with 980 added human query-document judgments; judgment sets change on the same dataset, still using nDCG@10.
 
-The second is **subset selection**. Evaluating only the datasets favorable to one method can materially change the average.
+| System | Original-judgment nDCG@10 | Expanded-judgment nDCG@10 |
+|---|---|---|
+| BM25 | 0.656 | 0.668 |
+| ANCE | 0.654 | 0.735 |
 
-The third is **reranking budget**. A bi-encoder plus an expensive reranker and a single-stage retriever may reach similar nDCG with very different latency and system cost.
+ANCE moves from just below BM25 to above it, demonstrating sensitivity to lexical annotation-pool bias. The expanded judgments are not exhaustive ground truth for every unjudged relevant document.
 
-The fourth is **query/corpus preprocessing**. Chunking, title concatenation, normalization, and index parameters can all move the result.
+Fact source: Table 4, section6 · [Source](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:result-3:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:limitations:START -->
+## Limitations, remaining gaps and next experiment
 
-At minimum, align:
+These are retrieval-ranking results, not direct evidence of multi-step search or final RAG answer quality. Text says docT5query beats BM25 on 11/18 while Figure 3 shows 12/18; no reconciliation is invented. Compared with single-dataset optimization, BEIR foregrounds domains, resources and judgments. Next, fix corpus/truncation/hardware/judgments, match cost and expand relevance assessment.
 
-- BEIR dataset subset and version;
-- corpus/query preprocessing;
-- retriever training data;
-- index and search parameters;
-- whether reranking is allowed and at what candidate depth;
-- metric and aggregation rule;
-- latency, hardware, and cost when efficiency is part of the claim.
-
-Partial-suite averages should not be ranked directly against full-suite averages.
-
-## What is still missing
-
-BEIR remains fundamentally a **static retriever-only benchmark**. It does not fully measure:
-
-- agents reformulating queries based on intermediate evidence;
-- multi-step evidence discovery;
-- corpus drift over time;
-- whether downstream generators actually use retrieved evidence correctly;
-- latency, token, index-size, and serving cost;
-- whether a system knows when the first retrieval step was insufficient.
-
-## Most discriminating next test
-
-For modern agentic retrieval, the highest-value use of BEIR is not to discard it but to treat it as a **retrieval floor**. First verify that first-hop cross-domain retrieval has not regressed, then add iterative search, reformulation, and evidence-use evaluation over the same domains.
-
-If a complex agent improves final QA while weakening BEIR-style first-hop retrieval, the system should explain where the gain comes from rather than attributing everything to “better search.”
+[Primary evidence](https://arxiv.org/pdf/2104.08663v4)
+<!-- EVIDENCE:limitations:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
-## Research decision card
+Use the method, comparisons and limitations together to decide whether this benchmark fits a claim. These tables are not a cross-protocol leaderboard; structural checks do not certify factual correctness or reproduction.
 
-### When to use it
-
-Use BEIR to ask whether a retriever generalizes across domains rather than fits one training distribution. BM25 is a meaningful systems baseline. Worst-domain performance, indexing cost, and query latency can change the ranking of approaches beyond average retrieval quality.
-
-### What a concrete task looks like
-
-Illustrative task: one retriever handles domains with different vocabulary, document lengths, and relevance definitions without retraining for each. A model strong on familiar text may lose to lexical retrieval in terminology-heavy or shifted domains.
-
-### Most discriminating experiment
-
-Fix dataset versions and the hyperparameter-selection rule; compare BM25, dense, and hybrid retrieval with per-dataset results. Separate per-domain tuning from zero-shot evaluation and repeat the comparison under matched latency or cost constraints.
-
-### Pair with
-
-[bright](bright.en.md) · [commercial-tax](commercial-tax.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Related measurements and controls: [BRIGHT](bright.en.md) · [RAGBench](ragbench.en.md) · [KILT](kilt.en.md)
 
 <!-- RESEARCH-DECISION:END -->
-
-## Evolution position
-
-`single-domain retrieval → heterogeneous zero-shot retrieval → reasoning-intensive retrieval → iterative / agentic evidence search`
-
-BEIR defines the second step and the baseline question many later retrieval systems should still answer: **does the method remain valid once it leaves its training distribution?**

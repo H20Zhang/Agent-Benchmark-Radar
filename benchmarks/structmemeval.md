@@ -1,4 +1,4 @@
-# StructMemEval：评估 agent 如何组织 memory，而不只是找事实
+# StructMemEval：维护信息结构能解决哪些问题，哪些仍为零
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（待核验）** · 基准记录日期：2026-02<br>
@@ -6,64 +6,86 @@
 > 不以最新榜单、单条基线或后续论文成绩代替；未知不代表零分或原作者未报告。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](structmemeval.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](structmemeval.en.md) · [主入口](../README.md) · [基准资料库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2602.11243)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。
 
-StructMemEval 测 agent 能否选择并维护 **适合任务的 memory structure**，例如 transaction ledger、to-do list、tree，而不是把所有信息塞进无结构 store 后再做通用 retrieval。这里真正被测的是 representation organization。
+v3主文与附录A—F；只采用印刷表中的数值，未把图形曲线坐标估计成精确结果。
 
-## 相比此前评测多测了什么
+[arXiv:2602.11243v3](https://arxiv.org/html/2602.11243v3) · [arXiv:2602.11243v2](https://arxiv.org/html/2602.11243v2)
 
-fact retention、multi-hop recall、temporal update 很多时候都可以用 generic RAG 解。StructMemEval 专门选择天然依赖某种组织方式的任务，让 memory structure 本身变成可观测能力，而不再只是 implementation detail。
+下列表格重新组织了有来源的选定事实。页首历史参考与正文采用的版本、切分和模型可能不同，不能跨表混合成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 测量对象、方法与比较
 
-论文初步实验显示 simple retrieval-augmented LLM 在这些结构任务上较弱；如果显式提示正确 organization，memory agent 可以可靠完成，但现代 LLM 在没有提示时并不总能识别应该采用哪种结构。这把 **执行已知 representation** 和 **发现正确 representation** 两件事拆开了。
+通过合成对话流，测试智能体能否维护状态更新、层级关系、聚合计数和推荐所需的信息结构。比较检索与记忆写入系统，并考察是否提供组织方式提示。
 
-## 这个分数能证明什么
+[原文](https://arxiv.org/html/2602.11243v3)
+示意任务：用户搬家后，邻居关系也随地点变化；只检索“邻居”一词可能把旧住址的人带入当前答案，需要维护与时间／位置相符的关系。
 
-benchmark 能证明 structured state 是否有用、系统是否能实例化指定结构；如果 prompt 已经透露正确 structure，它对 autonomous representation learning 的证明就比较弱。
+<!-- EVIDENCE:method:END -->
 
-## 公平比较契约
+<!-- EVIDENCE:setup:START -->
+## 实验设置与分母
 
-应固定 backbone、task instruction、是否提供 structure hint、memory operation 与 token/storage budget，并把 oracle structure hint 与 autonomous selection 分开报告，否则最重要的研究问题会被掩盖。
+主集包含51个困难问题（树结构10、计数15、状态14、推荐12），每个至少250条消息。扩展集有207个场景、超过2,000个问题。下列主表行使用相同的Gemini-3.1-Pro且无提示，GPT-4o-mini评判事实正确性。主检索基线使用text-embedding-3-large取前10条；下列扩展状态实验取前20条，骨干模型也不同。
 
-## 还没有测什么
+[设置来源](https://arxiv.org/html/2602.11243v3)
+<!-- EVIDENCE:setup:END -->
 
-任务集有意偏窄，结构也都是人类可解释的。真实 agent 可能需要 hybrid / learned representation，并且 workload 变化后还要迁移结构；这些能力尚未覆盖。
+<!-- EVIDENCE:result-1:START -->
+## 主集：同一骨干、无提示
 
-## 下一步最有判别力的验证
+v3主集51个场景／问题实例；Gemini-3.1-Pro、无提示。Total是四类等权均值，不是51题直接合并的准确率。
 
-隐藏 structure identity，加入多种合理 representation 都能工作的任务，并在 query distribution shift 后测 adaptation。真正的问题不是“会不会用 ledger”，而是“知不知道什么时候 ledger 才是正确表示”。
+| 配置 | 状态正确率（0–1） | 树结构正确率（0–1） | 计数正确率（0–1） | 推荐正确率（0–1） | 四类等权总分（0–1） |
+|---|---|---|---|---|---|
+| Retrieval | 0.0 | 0.0 | 0.0 | 0.22 | 0.06 |
+| Mem-agent | 0.84 | 0.98 | 0.0 | 0.37 | 0.55 |
+| Mem0 | 0.29 | 0.72 | 0.0 | 0.18 | 0.3 |
+
+可写记忆改善了部分结构任务，但这些行的计数结果都是零。“给出提示就能稳定解决整个基准”不受该表支持。
+
+事实来源：v3 表 1 · [原文](https://arxiv.org/html/2602.11243v3)
+<!-- EVIDENCE:result-1:END -->
+
+<!-- EVIDENCE:result-2:START -->
+## 扩展状态集：提示能帮忙，但不是同一主实验
+
+v3扩展状态跟踪42个场景，Gemini-2.5-Pro；检索取前20条，检索行没有提示干预，横线为未报告。
+
+| 配置 | 无提示正确率（%） | 有提示正确率（%） |
+|---|---|---|
+| Retrieval (top 20) | 26 | — |
+| Mem-agent | 64 | 79 |
+| Mem0 | 62 | 81 |
+
+这里的模型、题集、单位和检索预算不同于主表，不能把79或81当成主集已被解决。
+
+事实来源：v3 附录, 表 6 · [原文](https://arxiv.org/html/2602.11243v3)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界、缺口与下一步
+
+在主实验配置下，可写记忆改善了若干依赖结构的任务类别，但上述各行计数得分仍为零。提示可以改善扩展状态跟踪，却不是通用解法。合成任务、默认或少量调参的适配器、不同检索预算及主集与扩展集的模型差异，都限制了跨架构排名的解释。
+
+相比只找回原始片段的对照，可写记忆允许在摄入时维护任务所需结构；这不意味着所有差异都已由匹配预算排除了其他解释。已有结构化成绩文件保留的是v2快照（Mem-agent总分66.0%、Mem0为39.0%）；本文表格取v3，不能把新版本数值写成旧版成绩。v2这里只定点核对表1—2，并未重新通读整个版本。
+
+与普通长对话回忆测试配对，区分找回信息与维护可用结构。固定骨干模型、词元预算和输入流，对比有无提示、原始笔记与结构化状态。逐类报告结果与平均规则，并考察流长度增长时的计数表现。
+
+[原始证据](https://arxiv.org/html/2602.11243v3)
+<!-- EVIDENCE:limitations:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
-## 研究决策卡
+上述方法、对照与局限一起决定何时适合使用这个基准；表格不构成跨协议排行榜，结构校验也不证明事实正确或完成复现。
 
-### 什么时候值得用
-
-适合检验记忆组织是否影响任务完成，尤其适合表、清单、树等显式结构研究。最重要的区分是‘会使用已指定的结构’与‘能自主发现适合的结构’；带结构提示的成绩不能替代后者。
-
-### 一个具体任务长什么样
-
-示意任务：多轮输入包含新增、撤销与调整事项，系统需要维持一份可查询的有效状态。流水记录保存了所有话语，却未必像交易账本或树结构那样直接支持后续运算。
-
-### 最有判别力的实验
-
-分开报告无结构提示、自主选择结构与给定正确结构三种条件。让输入内容相同，只改变后续查询类型，观察系统是否迁移结构；将迁移成本和错误状态修复纳入评价，才能判断组织机制是否真正自适应。
-
-### 建议搭配
-
-[memoryagentbench](memoryagentbench.md) · [kbgym](kbgym.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+相关测量与对照：[LongMemEval](longmemeval.md) · [MemoryAgentBench](memoryagentbench.md) · [StateMemBench](statemembench.md)
 
 <!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`retrieve facts → maintain structured state → autonomously choose memory representation`
-
-它把 representation selection 单独提升成了一项 memory 能力。

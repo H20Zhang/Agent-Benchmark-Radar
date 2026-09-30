@@ -1,4 +1,4 @@
-# DA-Code：在真实数据上生成 grounded executable data-science code
+# DA-Code：交互式数据科学、反馈纠错与产物评分
 
 <!-- RELEASE-REFERENCE:START -->
 > **发布时最佳结果（历史参考）** · 2024-10-09 · 论文 v1<br>
@@ -7,64 +7,82 @@
 > 仅供了解当时难度，不代表当前最佳；不同任务、版本和实验条件不能直接混比。
 <!-- RELEASE-REFERENCE:END -->
 
-**中文** | [English](da-code.en.md) · [返回 Radar](../README.md) · [Benchmark Library](../library/README.md)
+**中文** | [English](da-code.en.md) · [主入口](../README.md) · [基准资料库](../library/README.md)
 
-[论文](https://arxiv.org/abs/2410.07331) · [项目页](https://da-code-bench.github.io/)
+<!-- EVIDENCE:reading:START -->
+## 阅读范围与版本
 
-## 它到底测什么
+已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。
 
-DA-Code 在真实、diverse data 上评估 **grounded executable data-science code**，覆盖较难的 data wrangling、exploratory analysis 与 machine-learning operation，并放在可控 execution environment 中验证。
+主文第1—7节与局限，附录A—E，包括完整11步调试并生成产物的轨迹。
 
-## 相比此前评测多测了什么
+[arXiv:2410.07331v1](https://arxiv.org/html/2410.07331v1)
 
-DS-1000 更偏 realistic library-level coding problem；DA-Code 把工作单位往 agentic analysis 推进：任务必须 grounded 到给定 dataset，规划多步 operation，并通过较复杂的数据科学程序产出目标答案，而不只是补一个局部 code hole。
+下列表格重新组织了有来源的选定事实。页首历史参考与正文采用的版本、切分和模型可能不同，不能跨表混合成绩。
+<!-- EVIDENCE:reading:END -->
 
-## 决定性证据
+<!-- EVIDENCE:method:START -->
+## 测量对象、方法与比较
 
-benchmark 的 evaluation suite 由 annotator 仔细设计，以保证 executable checking 的准确与鲁棒。论文实验里即使用当时最强 LLM，accuracy 也只有 30.5%，说明在可客观执行验证的任务上仍有很大 gap。
+任务不是一次生成代码就结束。DA-Agent 在 Docker 环境里观察文件，通过 Bash、Python、SQL 执行动作，读取错误或结果，再调整下一步，最终输出可检查的表格、图表或机器学习产物。中间检查和迭代纠错就在评测对象之内；“有可执行代码”“按步数上限产出结果”和“结果质量”必须分开。
 
-## 这个分数能证明什么
+[原文](https://arxiv.org/html/2410.07331v1)
+<!-- EVIDENCE:method:END -->
 
-DA-Code 支持 bounded analysis task 上 grounded program synthesis，但仍不等于完整 data-agent loop：发现问题、长期观察中间结果、维护 project state、交付用户 artifact 都不是核心对象。
+<!-- EVIDENCE:setup:START -->
+## 实验设置与分母
 
-## 公平比较契约
+500题包括100道数据整理、100道机器学习和300道探索分析。贪心生成，最多20步，保留最多15步历史，每个动作限时300秒。表格和图表按任务匹配规则计分；机器学习指标经归一化、截断到[0,1]后与其他任务汇总。因此30.5是混合总分的0—100显示，不是500道题共享一个二元成功定义的通过率。具体模型快照和运行包版本未在所读设置中完整列出。
 
-应固定 data file、runtime/library version、allowed language/tool、execution budget、retry policy 与 answer evaluator，并区分 one-shot generation 与 iterative repair；给 execution feedback 会实质改变任务。
+[设置来源](https://arxiv.org/html/2410.07331v1)
+完成率以任务为分母；代码可执行率以生成代码为分母。表格只核对指定列，图表评分从绘图脚本提取数值与参数检查，不是完整视觉质量评分。表4在100题子集印出99.5%完成率，却未明确重跑或汇总方式，因此不能反推成功任务数。
 
-## 还没有测什么
+<!-- EVIDENCE:setup:END -->
 
-repository-scale engineering、heterogeneous documentation、business semantics、long-lived state 与 open-ended insight discovery 都超出核心 benchmark。
+<!-- EVIDENCE:result-1:START -->
+## 同一框架下的模型结果
 
-## 下一步最有判别力的验证
+完整500题、DA-Agent；最多20步、15步历史、每动作300秒。完成率与代码可执行率的分母不同。
 
-构造 paired task：同一目标分别要求 one monolithic program 与 multi-step inspect-and-repair workflow，直接测 agentic iteration 相比更强 code generation 的额外价值。
+| 模型／框架 | 混合总分（0–100） | 完成率（%） | 代码可执行率（%） |
+|---|---|---|---|
+| GPT-4 / DA-Agent | 30.5 | 99.4 | 76.8 |
+| GPT-4o / DA-Agent | 29.1 | 97.4 | 77.7 |
+| Qwen2.5-72B / DA-Agent | 22.6 | 93.8 | 72.2 |
+
+GPT-4 的99.4%完成率不意味着99.4%的任务做对：产出某个结果与混合质量总分30.5是两件事。
+
+事实来源：§3.4;§5.1;表3,PDFp7 · [原文](https://arxiv.org/html/2410.07331v1)
+<!-- EVIDENCE:result-1:END -->
+
+<!-- EVIDENCE:result-2:START -->
+## 规划提示是在另一子集上的对照
+
+随机选出的DA-Code-100子集；模型GPT-4。参考计划是额外任务指导，不能与完整500题总分直接拼接。
+
+| 框架／条件 | 混合总分（0–100） | 完成率（%） |
+|---|---|---|
+| OpenDevin | 26.2 | 96.0 |
+| DA-Agent（原表4：DA-Code） | 31.5 | 99.5 |
+| DA-Agent + Reference Plan | 39.7 | 97.7 |
+
+参考计划伴随31.5→39.7的得分变化，但不是对通用规划能力的独立认证。论文表4把自身框架行写为DA-Code，而正文称DA-Agent，此处保留对应关系。
+
+事实来源：§5.2–5.3;表4,PDFp7 · [原文](https://arxiv.org/html/2410.07331v1)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## 结论边界、缺口与下一步
+
+原论文已经测了交互、反馈纠错和产物核验，不能把这些写成完全未覆盖。尚未证明的是长期项目维护、企业治理与多应用迁移。难度表中的105/292/103题与其印刷百分比不一致，不能暗中补一个解释；这里仅采用明确的总题量与实验表。相比静态代码题，它增加真实数据下的规划和执行；下一步应固定预算，分别给正确数据摘要、参考计划，在独立任务上复验。
+
+[原始证据](https://arxiv.org/html/2410.07331v1)
+<!-- EVIDENCE:limitations:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
-## 研究决策卡
+上述方法、对照与局限一起决定何时适合使用这个基准；表格不构成跨协议排行榜，结构校验也不证明事实正确或完成复现。
 
-### 什么时候值得用
-
-适合研究面向真实数据的规划与可执行代码，而不是只评语言形式。清洗、探索和建模的结果类型不同；一个总体正确率不足以说明方法改善的是数据理解、代码生成还是故障恢复。
-
-### 一个具体任务长什么样
-
-示意任务：系统根据任务数据构造处理流程，可能先修正类型或缺失值，再进行分析或训练。代码能运行却悄悄丢弃关键行，仍可能使最终结果偏离要求。
-
-### 最有判别力的实验
-
-固定数据与运行环境，按清洗、探索和机器学习分别报告，并加入正确数据摘要给定条件。限制并对齐调试次数，单独记录代码成功执行和结果正确，防止把运行率当作分析质量。
-
-### 建议搭配
-
-[ds-1000](ds-1000.md) · [datascibench](datascibench.md)
-
-> **读分数的原则：** 先对齐 task / split、模型与 harness、工具与环境版本、资源预算、停止与重试规则以及 evaluator。协议不同的总分首先是系统级证据；没有 matched intervention / ablation 时，不把差异直接归因给单个组件。
+相关测量与对照：[DS-1000](ds-1000.md) · [DataSciBench](datascibench.md) · [Data Agent Benchmark (DAB)](data-agent-benchmark.md)
 
 <!-- RESEARCH-DECISION:END -->
-
-## 演化位置
-
-`library-level code → grounded multi-operation analysis code → iterative data-analysis agent`
-
-DA-Code 是 executable coding benchmark 与完整 data-agent workflow 之间的一座桥。

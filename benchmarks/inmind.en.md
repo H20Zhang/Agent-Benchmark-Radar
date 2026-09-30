@@ -1,4 +1,4 @@
-# InMind: when relevant memory is not similar to the query
+# InMind: direct recall does not guarantee indirect use
 
 <!-- RELEASE-REFERENCE:START -->
 > **Release diagnostic (historical reference)** · 2026-07 · paper v1<br>
@@ -7,64 +7,100 @@
 > Historical difficulty reference, not current SOTA; tasks, versions, and experimental conditions are not interchangeable.
 <!-- RELEASE-REFERENCE:END -->
 
-[中文](inmind.md) | **English** · [Back to Radar](../README.en.md) · [Benchmark Library](../library/README.en.md)
+[中文](inmind.md) | **English** · [Home](../README.en.md) · [Benchmark Library](../library/README.en.md)
 
-[Paper](https://arxiv.org/abs/2607.24368) · [Project](https://keep-it-inmind.github.io/) · [Code](https://github.com/imlrz/InMind)
+<!-- EVIDENCE:reading:START -->
+## Reading coverage and version
 
-## What it actually measures
+Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction.
 
-InMind targets an **implicit-association retrieval blind spot**: the memory that matters for a query may be semantically dissimilar to the query, and its relevance becomes visible only after combining the personal fact with outside world knowledge. The benchmark therefore separates “the model could use this memory if shown” from “the memory system can discover that it should be shown.”
+Main Sections 1–8, supplementary Sections 9–18 and PDF prompt images, including injection, adapter-specific protocols and human scoring audits.
 
-## What changed relative to prior evaluation
+[arXiv:2607.24368v1](https://arxiv.org/html/2607.24368v1)
 
-Most memory retrieval is query-conditioned by lexical or embedding similarity, and many benchmarks reward direct fact recall. InMind creates paired direct and indirect controls over the same underlying personal facts. The indirect version requires an association such as a preference or constraint becoming relevant through external knowledge rather than surface similarity.
+The tables reorganize selected sourced facts. The title-level historical reference may use a different version, split or model; do not pool scores across those settings.
+<!-- EVIDENCE:reading:END -->
 
-## Decisive evidence
+<!-- EVIDENCE:method:START -->
+## Measurement, method and comparison
 
-The suite contains 125 expert-verified tasks across 10 domains, with 113 tasks grounded in public sources. When the decisive memory is placed directly in context, the backbone answers 84.0% of indirect questions; when a memory system must retrieve it, six vector-, graph-, and agentic-memory approaches reach at most 14.4%, while direct recall can reach 100%. A diagnostic probe that keeps the memory visible recovers most of the gap.
+Each item pairs a personal fact with a direct recall query and an indirect query requiring an unstated world-knowledge bridge. Content filtering removes obvious lexical/semantic cues; expert review checks relevance and correctness. Compare direct recall, whether the actual answer context contains the target, and whether the answer applies it.
 
-## What the score supports
+[Primary source](https://arxiv.org/html/2607.24368v1)
+A paper case illustrates the gap: the system recalls a tree-nut allergy on direct request but fails to apply it during an indirect dessert recommendation. The challenge is surfacing a fact whose wording is unlike the current question.
 
-This is unusually strong evidence that the bottleneck can lie in the **query-to-memory interface**, not storage capacity or answer reasoning. It still does not prove that similarity retrieval should be discarded: the benchmark is constructed specifically around cases where similarity is insufficient.
+<!-- EVIDENCE:method:END -->
 
-## Fair comparison contract
+<!-- EVIDENCE:setup:START -->
+## Experimental settings and denominators
 
-Use the same background memory trace, backbone, world-knowledge access, retrieval budget, and paired direct/indirect tasks. Report oracle-in-context, target-recall, and end-answer accuracy together. Without the oracle condition, retrieval failure and answerer failure are confounded.
+125 English tasks across 10 domains: 113 public-source grounded and 12 expert-authored. One fixed 47-session LongMemEval-s background trace. GPT-5-mini answers and judges all tasks; most memory builders use GPT-4o-mini. Naive RAG retrieves five raw chunks; A-Mem retrieves ten, while other budgets differ. Always-in-State uses a GPT-5-mini updater with a 200-line/25,000-byte state budget.
 
-## What remains unmeasured
+[Setup source](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:setup:END -->
 
-The benchmark is small and intentionally adversarial to direct similarity. Real workload prevalence of such indirect relevance is not yet established, and active search over world knowledge can add substantial cost and hallucination risk.
+<!-- EVIDENCE:result-1:START -->
+## Separate direct recall from indirect application
 
-## Next discriminating validation
+125 tasks with GPT-5-mini answering/binary judging; target recall is answer-blind. The supplied-target backbone and adapters have different evidence access.
 
-Measure how often indirect relevance occurs in real personal-agent logs and compare three interfaces under equal cost: query expansion, world-knowledge-conditioned retrieval, and agentic search. The systems question is whether a cheap trigger can detect when ordinary similarity retrieval is unsafe.
+| Configuration | Direct recall (%) | Target recall (%) | Application (%) |
+|---|---|---|---|
+| Naive RAG (emb3-large) | 97.6 | 6.4 | 16.0 |
+| MemoryOS (emb3-large) | 96.8 | 7.2 | 14.4 |
+| A-Mem (emb3-large) | 100.0 | 12.0 | 9.6 |
+| Backbone (GPT-5-mini) | — | 100.0 | 84.0 |
+
+The 14.4% maximum among six memory frameworks and 16.0% for the separate Naive RAG reference have different scopes. Application above target recall does not prove memory use: generic caution can receive false-positive personalized-application credit.
+
+Fact source: Table 1; §4.2–4.4 · [Source](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:result-1:END -->
+
+<!-- EVIDENCE:result-2:START -->
+## Always-visible state is a different intervention
+
+Same 125 tasks; Always-in-State uses a GPT-5-mini updater and 200-line/25,000-byte state budget, not a retrieval-only toggle.
+
+| Configuration | Direct recall (%) | Application (%) |
+|---|---|---|
+| Always-in-State | 98.4 | 68.8 |
+
+68.8% belongs to this updater/visible-state configuration; the entire gap from 16.0% cannot be attributed solely to query conditioning.
+
+Fact source: Table 2; §5.2 · [Source](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:result-2:END -->
+
+<!-- EVIDENCE:result-3:START -->
+## The scorer's own errors
+
+Appendix 14.2 audits 100 records for each judgment; these are scorer-audit counts, not model accuracy on the 125 tasks.
+
+| Judgment | Human-audited records | Agreement count | False-positive count |
+|---|---|---|---|
+| Target recall | 100 | 97 | 3 |
+| Original application | 100 | 85 | 15 |
+
+Read the original application scorer's 15/100 false positives alongside the main table; a personalized-looking response does not establish successful personal-fact retrieval.
+
+Fact source: Appendix 14.2 human audit · [Source](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:result-3:END -->
+
+<!-- EVIDENCE:limitations:START -->
+## Limitations, remaining gaps and next experiment
+
+The selected results expose a substantial direct-recall versus indirect-use gap on deliberately difficult associations. They do not establish how often such failures occur in normal traffic or prove one architecture universally superior. The 84.0% backbone is a model-conditioned reference, not a hard ceiling; the answer-only post-hoc metric is separate from the main application metric.
+
+The main text describes 38 subsequent sessions broadly, but appendices document prebuilt-bank/raw-target paths for A-Mem and HippoRAG 2. Do not describe every row as the same longitudinal ingestion intervention. Compared with explicit-recall cases in LongMemEval, this benchmark separately controls indirect use requiring a world-knowledge bridge.
+
+Pair with LongMemEval for explicit recall, then freeze a memory bank and answerer while varying retrieval expansion or an equally budgeted visible-state policy. Report target recall and application separately, audit false positives, and match updater model and target exposure before attributing causality.
+
+[Primary evidence](https://arxiv.org/html/2607.24368v1)
+<!-- EVIDENCE:limitations:END -->
 
 <!-- RESEARCH-DECISION:START -->
 
-## Research decision card
+Use the method, comparisons and limitations together to decide whether this benchmark fits a claim. These tables are not a cross-protocol leaderboard; structural checks do not certify factual correctness or reproduction.
 
-### When to use it
-
-Use InMind when relevance depends on a world-knowledge bridge rather than semantic similarity. It challenges the assumption that similarity retrieval suffices. Failure on an indirect query may also reflect missing bridge knowledge in the backbone, so controls are needed before blaming retrieval.
-
-### What a concrete task looks like
-
-Illustrative task: a personal fact is stored in history, while a new query uses different concepts whose relation requires world knowledge. Direct recall may succeed without the system knowing when to retrieve the fact proactively.
-
-### Most discriminating experiment
-
-Pair direct and indirect queries for each fact and add an in-context-fact condition. First test whether the backbone can make the bridge with evidence supplied, then evaluate retrieval routing. Add lexically similar but irrelevant distractors to check whether a method merely broadens recall.
-
-### Pair with
-
-[locomo-plus](locomo-plus.en.md) · [came-bench](came-bench.en.md)
-
-> **How to read scores:** align task / split, model and harness, tools and environment versions, resource budget, stopping and retry rules, and evaluator. Aggregate scores from different protocol cells are system-level evidence first; without a matched intervention or ablation, do not attribute the gap directly to one component.
+Related measurements and controls: [LongMemEval](longmemeval.en.md) · [LoCoMo](locomo.en.md) · [LoCoMo-Plus](locomo-plus.en.md)
 
 <!-- RESEARCH-DECISION:END -->
-
-## Genealogy
-
-`semantic recall → query-conditioned retrieval → knowledge-mediated relevance discovery`
-
-InMind exposes a structural limit of treating the current query as a sufficient retrieval key.
