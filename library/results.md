@@ -2,7 +2,7 @@
 
 [返回主入口](../README.md#result-snapshots) · [English](results.en.md)
 
-45 个基准已有结构化结果。点击基准名称阅读分数、适用条件及局限；JSON 保留各轨道的原始来源与已记录条件。核验日期不等于榜单实时更新，单条结果不代表当前最佳。
+47 个基准已有结构化结果。点击基准名称阅读分数、适用条件及局限；JSON 保留各轨道的原始来源与已记录条件。核验日期不等于榜单实时更新，单条结果不代表当前最佳。
 
 | Benchmark | 来源类型 | 轨道数 | 结果核验 | 原始记录 |
 |---|---|---:|---|---|
@@ -32,6 +32,7 @@
 | [RAGCap-Bench](../benchmarks/ragcap-bench.md) <!-- benchmark-id:ragcap-bench --> | 论文快照 | 3 | 2026-09-03 | [JSON](../data/results/ragcap-bench.json) |
 | [BrowseComp-Plus](../benchmarks/browsecomp-plus.md) <!-- benchmark-id:browsecomp-plus --> | 来源快照 | 1 | 2026-09-02 | [JSON](../data/results/browsecomp-plus.json) |
 | [MemoryAgentBench](../benchmarks/memoryagentbench.md) <!-- benchmark-id:memoryagentbench --> | 来源快照 | 2 | 2026-09-02 | [JSON](../data/results/memoryagentbench.json) |
+| [DABstep](../benchmarks/dabstep.md) <!-- benchmark-id:dabstep --> | 论文快照 | 6 | 2026-10-02 | [JSON](../data/results/dabstep.json) |
 | [DeepResearch Bench](../benchmarks/deepresearch-bench.md) <!-- benchmark-id:deepresearch-bench --> | 论文快照 | 3 | 2026-09-04 | [JSON](../data/results/deepresearch-bench.json) |
 | [LiveSQLBench](../benchmarks/livesqlbench.md) <!-- benchmark-id:livesqlbench --> | 榜单快照 | 1 | 2026-09-02 | [JSON](../data/results/livesqlbench.json) |
 | [T²-RAGBench](../benchmarks/t2-ragbench.md) <!-- benchmark-id:t2-ragbench --> | 榜单快照 | 1 | 2026-09-03 | [JSON](../data/results/t2-ragbench.json) |
@@ -47,6 +48,7 @@
 | [RAGTruth](../benchmarks/ragtruth.md) <!-- benchmark-id:ragtruth --> | 论文快照 | 2 | 2026-09-03 | [JSON](../data/results/ragtruth.json) |
 | [BIRD](../benchmarks/bird.md) <!-- benchmark-id:bird --> | 榜单快照 | 2 | 2026-09-02 | [JSON](../data/results/bird.json) |
 | [DS-1000](../benchmarks/ds-1000.md) <!-- benchmark-id:ds-1000 --> | 来源快照 | 1 | 2026-09-02 | [JSON](../data/results/ds-1000.json) |
+| [BEIR](../benchmarks/beir.md) <!-- benchmark-id:beir --> | 论文快照 | 4 | 2026-10-02 | [JSON](../data/results/beir.json) |
 | [KILT](../benchmarks/kilt.md) <!-- benchmark-id:kilt --> | 论文快照 | 5 | 2026-09-03 | [JSON](../data/results/kilt.json) |
 | [HotpotQA](../benchmarks/hotpotqa.md) <!-- benchmark-id:hotpotqa --> | 来源快照 | 2 | 2026-09-02 | [JSON](../data/results/hotpotqa.json) |
 | [Spider](../benchmarks/spider.md) <!-- benchmark-id:spider --> | 来源快照 | 2 | 2026-09-03 | [JSON](../data/results/spider.json) |

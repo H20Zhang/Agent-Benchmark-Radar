@@ -1,0 +1,216 @@
+{
+  "benchmark_id": "dabstep",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-10-02",
+  "verification_timezone": "Asia/Shanghai",
+  "comparability_notes": {
+    "zh": "六条单项轨道保存论文表1的模型与难度分组结果。精确模型版本、实际运行日期和历史代码配置未核实；不跨轨道排名。论文基准构成不自动证明各模型实际评分分母。",
+    "en": "Six singleton tracks preserve Table 1 model-by-difficulty results. Exact model revisions, execution dates and historical code configurations are unverified; no cross-track ranking. Benchmark composition does not independently establish each evaluated denominator."
+  },
+  "tracks": [
+    {
+      "track_id": "paper-v1-o4-mini-hard",
+      "primary": true,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · o4-mini · 困难任务（Hard）",
+        "en": "Paper v1 · o4-mini · Hard"
+      },
+      "task": "Financial data analysis",
+      "split": "Table 1 hidden-test Hard; exact evaluated denominator unverified",
+      "protocol_version": "arxiv-2506.23719v1-table1-reasoning-max10steps",
+      "metric": {
+        "id": "hard-accuracy",
+        "family": "accuracy",
+        "label": "Hard accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "o4-mini",
+          "method": "Paper baseline; reasoning prompt; maximum 10 steps",
+          "model": "o4-mini",
+          "score": 14.55,
+          "date": "2025-06-30",
+          "date_basis": "paper-version-publication; experiment execution date unverified",
+          "source": "https://arxiv.org/html/2506.23719v1"
+        }
+      ]
+    },
+    {
+      "track_id": "paper-v1-o4-mini-easy",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · o4-mini · 简单任务（Easy）",
+        "en": "Paper v1 · o4-mini · Easy"
+      },
+      "task": "Financial data analysis",
+      "split": "Table 1 hidden-test Easy; exact evaluated denominator unverified",
+      "protocol_version": "arxiv-2506.23719v1-table1-reasoning-max10steps",
+      "metric": {
+        "id": "easy-accuracy",
+        "family": "accuracy",
+        "label": "Easy accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "o4-mini",
+          "method": "Paper baseline; reasoning prompt; maximum 10 steps",
+          "model": "o4-mini",
+          "score": 76.39,
+          "date": "2025-06-30",
+          "date_basis": "paper-version-publication; experiment execution date unverified",
+          "source": "https://arxiv.org/html/2506.23719v1"
+        }
+      ]
+    },
+    {
+      "track_id": "paper-v1-claude-3-7-sonnet-hard",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · Claude 3.7 Sonnet · 困难任务（Hard）",
+        "en": "Paper v1 · Claude 3.7 Sonnet · Hard"
+      },
+      "task": "Financial data analysis",
+      "split": "Table 1 hidden-test Hard; exact evaluated denominator unverified",
+      "protocol_version": "arxiv-2506.23719v1-table1-react-max10steps",
+      "metric": {
+        "id": "hard-accuracy",
+        "family": "accuracy",
+        "label": "Hard accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "claude-3-7-sonnet",
+          "method": "Paper baseline; react prompt; maximum 10 steps",
+          "model": "Claude 3.7 Sonnet",
+          "score": 13.76,
+          "date": "2025-06-30",
+          "date_basis": "paper-version-publication; experiment execution date unverified",
+          "source": "https://arxiv.org/html/2506.23719v1"
+        }
+      ]
+    },
+    {
+      "track_id": "paper-v1-claude-3-7-sonnet-easy",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · Claude 3.7 Sonnet · 简单任务（Easy）",
+        "en": "Paper v1 · Claude 3.7 Sonnet · Easy"
+      },
+      "task": "Financial data analysis",
+      "split": "Table 1 hidden-test Easy; exact evaluated denominator unverified",
+      "protocol_version": "arxiv-2506.23719v1-table1-react-max10steps",
+      "metric": {
+        "id": "easy-accuracy",
+        "family": "accuracy",
+        "label": "Easy accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "claude-3-7-sonnet",
+          "method": "Paper baseline; react prompt; maximum 10 steps",
+          "model": "Claude 3.7 Sonnet",
+          "score": 75.0,
+          "date": "2025-06-30",
+          "date_basis": "paper-version-publication; experiment execution date unverified",
+          "source": "https://arxiv.org/html/2506.23719v1"
+        }
+      ]
+    },
+    {
+      "track_id": "paper-v1-gpt-4-1-hard",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · GPT 4.1 · 困难任务（Hard）",
+        "en": "Paper v1 · GPT 4.1 · Hard"
+      },
+      "task": "Financial data analysis",
+      "split": "Table 1 hidden-test Hard; exact evaluated denominator unverified",
+      "protocol_version": "arxiv-2506.23719v1-table1-react-max10steps",
+      "metric": {
+        "id": "hard-accuracy",
+        "family": "accuracy",
+        "label": "Hard accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "gpt-4-1",
+          "method": "Paper baseline; react prompt; maximum 10 steps",
+          "model": "GPT 4.1",
+          "score": 12.43,
+          "date": "2025-06-30",
+          "date_basis": "paper-version-publication; experiment execution date unverified",
+          "source": "https://arxiv.org/html/2506.23719v1"
+        }
+      ]
+    },
+    {
+      "track_id": "paper-v1-gpt-4-1-easy",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · GPT 4.1 · 简单任务（Easy）",
+        "en": "Paper v1 · GPT 4.1 · Easy"
+      },
+      "task": "Financial data analysis",
+      "split": "Table 1 hidden-test Easy; exact evaluated denominator unverified",
+      "protocol_version": "arxiv-2506.23719v1-table1-react-max10steps",
+      "metric": {
+        "id": "easy-accuracy",
+        "family": "accuracy",
+        "label": "Easy accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "entries": [
+        {
+          "id": "gpt-4-1",
+          "method": "Paper baseline; react prompt; maximum 10 steps",
+          "model": "GPT 4.1",
+          "score": 80.56,
+          "date": "2025-06-30",
+          "date_basis": "paper-version-publication; experiment execution date unverified",
+          "source": "https://arxiv.org/html/2506.23719v1"
+        }
+      ]
+    }
+  ]
+}

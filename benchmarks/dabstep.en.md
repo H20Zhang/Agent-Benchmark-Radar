@@ -14,7 +14,7 @@
 
 Read the stated version’s complete main text and available appendices and checked the selected results; no independent experiment reproduction.
 
-Read Sections 1–5 and Appendices A.1–A.4 (26 pages), visually checking Table 1 and all ten execution-trace figures.
+This review read the complete extracted Sections 1–5 and Appendices A.1–A.4, Table 1 and scoring pseudocode, and checked official task files and baseline code. The ten execution-trace figures were not newly visually inspected; the earlier 2026-09-30 figure-reading record is not claimed as new visual verification.
 
 [arXiv 2506.23719v1 · 2025-06-30](https://arxiv.org/pdf/2506.23719v1)
 <!-- EVIDENCE:reading:END -->
@@ -42,7 +42,7 @@ The metric is binary final-answer accuracy on the hidden test set, reported sepa
 <!-- EVIDENCE:result-1:START -->
 ## Selected baseline results from the release paper
 
-Hidden test set: 378 Hard and 72 Easy tasks, each accuracy using its own split denominator; binary final-answer scoring; Table 1 maximum-ten-step wrapper; prompt families differ; no across-seed variance reported.
+Table 1 hidden test, with Hard and Easy scored separately; the released task file contains 378 Hard and 72 Easy tasks, but per-model evaluated and excluded counts were not independently verified. Binary final-answer scoring; maximum ten steps; prompt families differ; no across-seed variance reported.
 
 | Model | Hard accuracy (%) | Easy accuracy (%) | Prompt type |
 | --- | --- | --- | --- |

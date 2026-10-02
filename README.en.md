@@ -5,9 +5,9 @@
 
 Find agent benchmarks by date and research area, with direct links to papers, code, and evaluation notes.
 
-[中文](README.md) · **English** · **147 benchmarks** · Discovery scan **2026-09-30**
+[中文](README.md) · **English** · **148 benchmarks** · Discovery scan **2026-10-02**
 
-[Recent timeline](#release-timeline) · [Agent Memory (55)](#registry-memory) · [RAG / Agentic Retrieval (53)](#registry-rag) · [Data Agents (39)](#registry-data)
+[Recent timeline](#release-timeline) · [Agent Memory (55)](#registry-memory) · [RAG / Agentic Retrieval (54)](#registry-rag) · [Data Agents (39)](#registry-data)
 
 Names open reading notes; papers, code, and data are directly accessible.
 
@@ -17,19 +17,20 @@ Names open reading notes; papers, code, and data are directly accessible.
 <a id="timeline"></a><a id="latest"></a><a id="periods"></a>
 ## Last six months
 
-**2026-03-30 — 2026-09-30** · 89 records; month-only boundary records are included by interval overlap.
+**2026-04-02 — 2026-10-02** · 87 records; month-only boundary records are included by interval overlap.
 
-[2026-09](#month-2026-09) · [2026-08](#month-2026-08) · [2026-07](#month-2026-07) · [2026-06](#month-2026-06) · [2026-05](#month-2026-05) · [2026-04](#month-2026-04) · [2026-03](#month-2026-03)
+[2026-09](#month-2026-09) · [2026-08](#month-2026-08) · [2026-07](#month-2026-07) · [2026-06](#month-2026-06) · [2026-05](#month-2026-05) · [2026-04](#month-2026-04)
 
 Dates link to sources. **†** marks a historical date, not a verified first release; month-only dates retain their precision.
 
 <!-- TABLE-FIRST:RECENT:START -->
 
 <a id="month-2026-09"></a>
-### 2026-09 · 13 records
+### 2026-09 · 14 records
 
 | Time | Benchmark | What it measures | Sources |
 |---|---|---|---|
+| [2026-09-30](https://arxiv.org/abs/2609.39026v1) | [CESS / Evidence-selection audit](benchmarks/cess-evidence-selection.en.md) <!-- benchmark-id:cess-evidence-selection --><br><sub>Retrieval</sub> | Audits whether adaptively selected evidence represents a fixed document pool, separating pool-direction estimation from paired search-policy effects. | [Paper](https://arxiv.org/abs/2609.39026v1) |
 | [2026-09-24](https://arxiv.org/abs/2609.30558v1) | [MemProbe (stability–plasticity)](benchmarks/memprobe-stability-plasticity.en.md) <!-- benchmark-id:memprobe-stability-plasticity --><br><sub>Memory</sub> | Diagnoses whether agent memory incorporates valid updates while preserving facts against unreliable evidence, with separate stability, plasticity, and provenance probes. | [Paper](https://arxiv.org/abs/2609.30558v1) · [Code](https://github.com/jq-ding/MemProbe) · [Data](https://github.com/jq-ding/MemProbe/tree/9068d8d9a2a47268fe6f7601b99a56a283c37be5/data/suite56) |
 | [2026-09-21](https://arxiv.org/abs/2609.24971) | [DolphinBench](benchmarks/dolphinbench.en.md) <!-- benchmark-id:dolphinbench --><br><sub>Memory</sub> | Tests history-dependent actions in simulated work apps with frozen memory checkpoints, paired history certification, and accuracy, total cost, and latency reporting. | [Paper](https://arxiv.org/abs/2609.24971) · [Code](https://github.com/mem0ai/dolphinbench) · [Project](https://dolphinbench.ai) |
 | [2026-09-21](https://arxiv.org/abs/2609.24259) | [MemCalib](benchmarks/memcalib.en.md) <!-- benchmark-id:memcalib --><br><sub>Memory</sub> | Tests whether each supplied memory proposition is ignored, used as bounded support, or allowed to control a response at its query-specific target level. | [Paper](https://arxiv.org/abs/2609.24259) · [Data](https://huggingface.co/datasets/ZiLaotou/MemCalib) · [Project](https://quark-medical.github.io/MemCalib-Project/) |
@@ -135,7 +136,7 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 | [2026-05†](https://arxiv.org/abs/2605.22219) | [SGR-Bench](benchmarks/sgr-bench.en.md) <!-- benchmark-id:sgr-bench --><br><sub>Retrieval</sub> | Benchmarks search agents when answer-bearing evidence appears only after the agent establishes the correct site-specific retrieval state. | [Paper](https://arxiv.org/abs/2605.22219) · [Data](https://huggingface.co/datasets/PKUAIWeb/SGR-BENCH) |
 
 <a id="month-2026-04"></a>
-### 2026-04 · 8 records
+### 2026-04 · 7 records
 
 | Time | Benchmark | What it measures | Sources |
 |---|---|---|---|
@@ -146,15 +147,6 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 | [2026-04-14†](https://arxiv.org/abs/2605.05253) | [EnterpriseRAG-Bench](benchmarks/enterpriserag-bench.en.md) <!-- benchmark-id:enterpriserag-bench --><br><sub>Retrieval</sub> | Evaluates enterprise-style RAG over a coherent synthetic company corpus containing multiple source types, duplicates, noise, conflicts, and absent information. | [Paper](https://arxiv.org/abs/2605.05253) · [Code](https://github.com/onyx-dot-app/EnterpriseRAG-Bench) · [Data](https://huggingface.co/datasets/onyx-dot-app/EnterpriseRAG-Bench) |
 | [2026-04-09†](https://aclanthology.org/2026.acl-long.1301/) | [ImplicitMemBench](benchmarks/implicitmembench.en.md) <!-- benchmark-id:implicitmembench --><br><sub>Memory</sub> | Evaluates whether learned procedures, priming, and conditioned associations automatically alter an agent's first behavior without an explicit recall request. | [Paper](https://aclanthology.org/2026.acl-long.1301/) · [Code](https://github.com/qinchonghanzuibang/ImplicitMemBench) · [Data](https://huggingface.co/datasets/J017athan/ImplicitMemBench) |
 | [2026-04-07†](https://aclanthology.org/2026.findings-acl.287/) | [LeakDojo](benchmarks/leakdojo.en.md) <!-- benchmark-id:leakdojo --><br><sub>Retrieval</sub> | Provides a configurable diagnostic framework for measuring extraction of private RAG database content across attacks, models, corpora, pipeline choices, and defenses. | [Paper](https://aclanthology.org/2026.findings-acl.287/) · [Code](https://github.com/yeasen-z/LeakDojo) |
-| [2026-04-01†](https://arxiv.org/abs/2604.25256) | [AutoResearchBench](benchmarks/autoresearchbench.en.md) <!-- benchmark-id:autoresearchbench --><br><sub>Retrieval</sub> | Evaluates autonomous scientific literature discovery through targeted paper finding and exhaustive set collection in a controlled full-text corpus. | [Paper](https://arxiv.org/abs/2604.25256) · [Code](https://github.com/CherYou/AutoResearchBench) · [Data](https://huggingface.co/datasets/Lk123/AutoResearchBench) |
-
-<a id="month-2026-03"></a>
-### 2026-03 · 2 records
-
-| Time | Benchmark | What it measures | Sources |
-|---|---|---|---|
-| [2026-03†](https://arxiv.org/abs/2603.20576) | [Data Agent Benchmark (DAB)](benchmarks/data-agent-benchmark.en.md) <!-- benchmark-id:data-agent-benchmark --><br><sub>Data</sub> | Evaluates enterprise data agents on questions requiring integration, transformation, and analysis across multiple heterogeneous database systems. | [Paper](https://arxiv.org/abs/2603.20576) · [Code](https://github.com/ucbepic/DataAgentBench) |
-| [2026-03†](https://arxiv.org/abs/2603.03781) | [LifeBench](benchmarks/lifebench.en.md) <!-- benchmark-id:lifebench --><br><sub>Memory</sub> | Evaluates long-horizon multi-source memory spanning declarative and non-declarative information such as habits and procedures. | [Paper](https://arxiv.org/abs/2603.03781) · [Code](https://github.com/1754955896/LifeBench) |
 
 <!-- TABLE-FIRST:RECENT:END -->
 
@@ -163,7 +155,7 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 <a id="field-map"></a><a id="all-benchmarks"></a>
 ## All benchmarks by area
 
-All 147 benchmarks remain on this page, newest first. Older benchmarks are retained.
+All 148 benchmarks remain on this page, newest first. Older benchmarks are retained.
 
 <!-- CITATION-META:START -->
 
@@ -239,12 +231,13 @@ Citations come from Semantic Scholar; matched records were checked **2026-09-03*
 [Back to top](#top)
 
 <a id="benchmark-rag"></a><a id="registry-rag"></a>
-### RAG / Agentic Retrieval · 53
+### RAG / Agentic Retrieval · 54
 
 <!-- TABLE-FIRST:AREA:rag:START -->
 
 | Time | Benchmark | What it measures | Sources | Citations (S2) |
 |---|---|---|---|---:|
+| [2026-09-30](https://arxiv.org/abs/2609.39026v1) | [CESS / Evidence-selection audit](benchmarks/cess-evidence-selection.en.md) <!-- benchmark-id:cess-evidence-selection --> | Audits whether adaptively selected evidence represents a fixed document pool, separating pool-direction estimation from paired search-policy effects. | [Paper](https://arxiv.org/abs/2609.39026v1) | — |
 | [2026-09-19](https://arxiv.org/abs/2609.23231) | [ChemCLIR-Bench](benchmarks/chemclir-bench.en.md) <!-- benchmark-id:chemclir-bench --> | Tests chemical-patent retrieval across query and document languages, with language-pair, query-origin, ranking-depth, and recoverability diagnostics. | [Paper](https://arxiv.org/abs/2609.23231) · [Code](https://github.com/MohammadKhodadad/Multi-Lingual-QAC) · [Data](https://huggingface.co/datasets/MehdiAstaraki/multilingual_GP) | — |
 | [2026-09-10](https://arxiv.org/abs/2609.11318v1) | [Mr.LHDR](benchmarks/mr-lhdr.en.md) <!-- benchmark-id:mr-lhdr --> | Tests long-horizon multimodal research with final-answer accuracy and explicitly dependency-conditioned intermediate-conclusion coverage. | [Paper](https://arxiv.org/abs/2609.11318) · [Code](https://github.com/minghaoguo20/Mr-LHDR) · [Data](https://huggingface.co/datasets/Henryeahhh/Mr-LHDR) | — |
 | [2026-09-08](https://arxiv.org/abs/2609.08174v1) | [OntologyBench](benchmarks/ontologybench.en.md) <!-- benchmark-id:ontologybench --> | Tests whether dense retrieval satisfies ontology-defined concepts, relations and conjunctive phenotype constraints rather than semantic similarity alone. | [Paper](https://arxiv.org/abs/2609.08174) · [Code](https://github.com/cindyzhangxy/OntologyBench) · [Data](https://huggingface.co/datasets/cxyzhang/OntologyBench) | — |
@@ -367,7 +360,7 @@ These are reading aids, not benchmark quality rankings. Check tasks, models, too
 **Research observations and capability maps:** [Editorial guide](docs/reading-guide.en.md)
 
 <a id="result-snapshots"></a>
-**Result sources:** [Source index for 45 benchmarks](library/results.en.md). Read scores with their experimental conditions in the notes and original sources; no cross-benchmark score table is shown here.
+**Result sources:** [Source index for 47 benchmarks](library/results.en.md). Read scores with their experimental conditions in the notes and original sources; no cross-benchmark score table is shown here.
 
 <a id="library"></a>
 **Historical context and related methods:** [Full Library](library/README.en.md) · [Memory](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) · [Retrieval](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) · [Data](https://github.com/H20Zhang/Data-Agent-Radar#field-map)

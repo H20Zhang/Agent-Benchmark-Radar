@@ -43,10 +43,10 @@ EDR is Enterprise Deep Research, AI-Q is NVIDIA AI-Q, and ODR is OpenDeepResearc
 
 EDR host, GPT-5.5 writing, GPT-5.4-mini judging, 100-task micro-average; default metrics accept partial support, with strict variants separate.
 
-| Writer | Hall (%, lower better) | Mis (%, lower better) | Rec (%, higher better)  Strict Hall (%, lower better) | Strict Rec (%, higher better) |
-|---|---|---|--- --- | --- |
-| Default | 15.89 | 18.94 | 36.83  54.05 | 13.67 |
-| ClaimWriter | 5.02 | 5.43 | 45.85  28.55 | 24.48 |
+| Writer | Hall (%, lower better) | Mis (%, lower better) | Rec (%, higher better) | Strict Hall (%, lower better) | Strict Rec (%, higher better) |
+|---|---|---|---|---|---|
+| Default | 15.89 | 18.94 | 36.83 | 54.05 | 13.67 |
+| ClaimWriter | 5.02 | 5.43 | 45.85 | 28.55 | 24.48 |
 
 This supports writer-side faithfulness gains with fixed sources, not improved retrieval coverage or a deployment-wide hallucination rate.
 

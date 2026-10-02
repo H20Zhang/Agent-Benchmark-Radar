@@ -12130,5 +12130,83 @@
       "status": "unmatched",
       "note": "No verified Semantic Scholar count in this update; unknown is not zero."
     }
+  },
+  {
+    "id": "cess-evidence-selection",
+    "name": "CESS / Evidence-selection audit",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-09-30",
+    "importance": 3,
+    "status": "active",
+    "summary": "Audits whether adaptively selected evidence represents a fixed document pool, separating pool-direction estimation from paired search-policy effects.",
+    "capabilities": [
+      "evidence-selection-audit",
+      "adaptive-search",
+      "selection-bias",
+      "policy-intervention"
+    ],
+    "environment": [
+      "fixed-ms2-and-perspectrum-document-pools",
+      "logged-positive-selection-probabilities",
+      "controlled-ranking-interventions"
+    ],
+    "protocol": [
+      "equal-document-weighted-evidence-direction",
+      "sequential-probability-correction",
+      "paired-selection-stopping-interventions",
+      "question-level-resampling"
+    ],
+    "scale": "Public-agent experiment: 36 PERSPECTRUM tasks, two rankings, three paired seeds, 216 four-search trajectories; primary result uses first two selections. Separate ten-round analysis: 267 tuning and 36 evaluation questions.",
+    "measurement_strength": "Separates estimation of a prespecified candidate-pool evidence direction from causal effects of changing selection and stopping policies.",
+    "coverage_gap": "Known-pool labels and logged probabilities do not establish open-web truth or report quality; exact fixtures, calibration implementation and executable release remain unverified.",
+    "confounders": [
+      "positive-support-assumption",
+      "probability-logging-correctness",
+      "equal-document-weighting",
+      "outcome-prediction-and-shrinkage",
+      "clipping-order",
+      "different-sensitivity-aggregation",
+      "unverified-task-and-calibration-artifacts"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.39026v1"
+    },
+    "last_verified": "2026-10-02",
+    "published_at": "2026-09-30T05:30:51Z",
+    "first_seen_at": "2026-10-01T21:24:26Z",
+    "radar_published_at": "2026-10-02T00:05:34Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-30",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.39026v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-10-02",
+        "status": "checked"
+      }
+    },
+    "artifact_access": "Full primary paper inspected. Author implementation, exact task IDs, calibration artifacts and trajectory logs not independently located; no runnable-release claim.",
+    "identity_note": "Causal Evidence Selection Correction (CESS), arXiv:2609.39026v1, Search Shapes Conclusions. Accepted as a paper-defined diagnostic protocol, not a new released dataset.",
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.39026v1",
+      "checked_at": "2026-10-02",
+      "protocol_source": "https://arxiv.org/html/2609.39026v1",
+      "result_source": "https://arxiv.org/html/2609.39026v1",
+      "score_ceiling": "Reported controlled-pool estimation diagnostics, not report accuracy, open-web truth or universal estimator superiority.",
+      "next_control": "Release fixed fixtures and probability logs; match predictor and shrinkage budgets; evaluate estimation and policy effects separately.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-10-02",
+      "status": "unmatched",
+      "note": "No independently verified Semantic Scholar count; unknown is not zero."
+    }
   }
 ]

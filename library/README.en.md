@@ -10,6 +10,7 @@ Start with time to see what recently became measurable, then use area timelines 
 
 | Time | Benchmark | Area | Role | What changed |
 |---:|---|---|---|---|
+| 2026-09-30 | [CESS / Evidence-selection audit](https://arxiv.org/abs/2609.39026v1) <!-- benchmark-id:cess-evidence-selection --> | RAG / Agentic Retrieval | 🔭 Frontier | Extends report/citation evaluation to fixed-pool evidence representativeness; the formula-defined protocol is reusable, while executable release is unverified. |
 | 2026-09-24 | [MemProbe (stability–plasticity)](https://arxiv.org/abs/2609.30558v1) <!-- benchmark-id:memprobe-stability-plasticity --> | Agent Memory | 🔭 Frontier | Separates valid updating, preservation and provenance through reusable controlled probes; a shared reader does not match upstream budgets. |
 | 2026-09-21 | [DolphinBench](https://arxiv.org/abs/2609.24971) <!-- benchmark-id:dolphinbench --> | Agent Memory | 🔭 Frontier | Moves beyond explicit historical QA by checking recorded actions under a frozen memory checkpoint and requiring lifecycle cost and latency alongside accuracy. |
 | 2026-09-21 | [MemCalib](https://arxiv.org/abs/2609.24259) <!-- benchmark-id:memcalib --> | Agent Memory | 🔭 Frontier | Separates too much memory influence from too little, rather than treating memory access or aggregate answer quality as calibrated use. |
@@ -287,6 +288,7 @@ Start with time to see what recently became measurable, then use area timelines 
 | 🔭 Frontier | [Q2D-Web](https://arxiv.org/abs/2609.08887) <!-- benchmark-id:q2d-web --> | 2026-09-08 | Tests document retrieval for agent-rewritten queries against a large production-derived corpus, with citation, production-ranking, and pooled relevance labels. | Shifts retrieval evaluation toward the distribution of queries actually emitted by search agents; it is not an end-to-end agent benchmark. |
 | 🔭 Frontier | [Mr.LHDR](https://arxiv.org/abs/2609.11318) <!-- benchmark-id:mr-lhdr --> | 2026-09-10 | Tests long-horizon multimodal research with final-answer accuracy and explicitly dependency-conditioned intermediate-conclusion coverage. | Compared with answer-only deep-research grading, makes prerequisite-consistent partial progress a scored object. |
 | 🔭 Frontier | [ChemCLIR-Bench](https://arxiv.org/abs/2609.23231) <!-- benchmark-id:chemclir-bench --> | 2026-09-19 | Tests chemical-patent retrieval across query and document languages, with language-pair, query-origin, ranking-depth, and recoverability diagnostics. | Extends heterogeneous retrieval evaluation to language-pair and retrieval-depth failures in industrial technical text. |
+| 🔭 Frontier | [CESS / Evidence-selection audit](https://arxiv.org/abs/2609.39026v1) <!-- benchmark-id:cess-evidence-selection --> | 2026-09-30 | Audits whether adaptively selected evidence represents a fixed document pool, separating pool-direction estimation from paired search-policy effects. | Extends report/citation evaluation to fixed-pool evidence representativeness; the formula-defined protocol is reusable, while executable release is unverified. |
 
 <!-- COMPLETE-MAP:rag:END -->
 

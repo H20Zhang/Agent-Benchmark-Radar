@@ -2,7 +2,7 @@
 
 [Back to the main README](../README.en.md#result-snapshots) · [中文](results.md)
 
-45 benchmarks have structured results. Open each note for scores, conditions, and limitations; JSON preserves the source and recorded conditions for each track. Verification dates are not live refresh times, and one recorded result is not a current best.
+47 benchmarks have structured results. Open each note for scores, conditions, and limitations; JSON preserves the source and recorded conditions for each track. Verification dates are not live refresh times, and one recorded result is not a current best.
 
 | Benchmark | Source type | Tracks | Result verified | Raw record |
 |---|---|---:|---|---|
@@ -32,6 +32,7 @@
 | [RAGCap-Bench](../benchmarks/ragcap-bench.en.md) <!-- benchmark-id:ragcap-bench --> | Paper snapshot | 3 | 2026-09-03 | [JSON](../data/results/ragcap-bench.json) |
 | [BrowseComp-Plus](../benchmarks/browsecomp-plus.en.md) <!-- benchmark-id:browsecomp-plus --> | Source snapshot | 1 | 2026-09-02 | [JSON](../data/results/browsecomp-plus.json) |
 | [MemoryAgentBench](../benchmarks/memoryagentbench.en.md) <!-- benchmark-id:memoryagentbench --> | Source snapshot | 2 | 2026-09-02 | [JSON](../data/results/memoryagentbench.json) |
+| [DABstep](../benchmarks/dabstep.en.md) <!-- benchmark-id:dabstep --> | Paper snapshot | 6 | 2026-10-02 | [JSON](../data/results/dabstep.json) |
 | [DeepResearch Bench](../benchmarks/deepresearch-bench.en.md) <!-- benchmark-id:deepresearch-bench --> | Paper snapshot | 3 | 2026-09-04 | [JSON](../data/results/deepresearch-bench.json) |
 | [LiveSQLBench](../benchmarks/livesqlbench.en.md) <!-- benchmark-id:livesqlbench --> | Leaderboard snapshot | 1 | 2026-09-02 | [JSON](../data/results/livesqlbench.json) |
 | [T²-RAGBench](../benchmarks/t2-ragbench.en.md) <!-- benchmark-id:t2-ragbench --> | Leaderboard snapshot | 1 | 2026-09-03 | [JSON](../data/results/t2-ragbench.json) |
@@ -47,6 +48,7 @@
 | [RAGTruth](../benchmarks/ragtruth.en.md) <!-- benchmark-id:ragtruth --> | Paper snapshot | 2 | 2026-09-03 | [JSON](../data/results/ragtruth.json) |
 | [BIRD](../benchmarks/bird.en.md) <!-- benchmark-id:bird --> | Leaderboard snapshot | 2 | 2026-09-02 | [JSON](../data/results/bird.json) |
 | [DS-1000](../benchmarks/ds-1000.en.md) <!-- benchmark-id:ds-1000 --> | Source snapshot | 1 | 2026-09-02 | [JSON](../data/results/ds-1000.json) |
+| [BEIR](../benchmarks/beir.en.md) <!-- benchmark-id:beir --> | Paper snapshot | 4 | 2026-10-02 | [JSON](../data/results/beir.json) |
 | [KILT](../benchmarks/kilt.en.md) <!-- benchmark-id:kilt --> | Paper snapshot | 5 | 2026-09-03 | [JSON](../data/results/kilt.json) |
 | [HotpotQA](../benchmarks/hotpotqa.en.md) <!-- benchmark-id:hotpotqa --> | Source snapshot | 2 | 2026-09-02 | [JSON](../data/results/hotpotqa.json) |
 | [Spider](../benchmarks/spider.en.md) <!-- benchmark-id:spider --> | Source snapshot | 2 | 2026-09-03 | [JSON](../data/results/spider.json) |

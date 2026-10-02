@@ -1,0 +1,164 @@
+{
+  "benchmark_id": "beir",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-10-02",
+  "verification_timezone": "Asia/Shanghai",
+  "comparability_notes": {
+    "zh": "表4的标注敏感性诊断。各方法与标注版本分别记录，不构成成本配平的模型排名；980是新增查询—文档判定数，不是查询分母。",
+    "en": "Table 4 judgment-sensitivity diagnostic. Methods and judgment versions are recorded separately, not a cost-matched model ranking; 980 counts additional query-document judgments, not the query denominator."
+  },
+  "tracks": [
+    {
+      "track_id": "v4-trec-covid-original-qrels-bm25-ndcg10",
+      "primary": true,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v4 表4 · TREC-COVID · 原始标注 · BM25",
+        "en": "Paper v4 Table 4 · TREC-COVID · original judgments · BM25"
+      },
+      "task": "TREC-COVID biomedical retrieval using query descriptions",
+      "split": "50 test queries; CORD-19 2020-07-16, 171332 documents; original relevance judgments",
+      "protocol_version": "arxiv-2104.08663v4-table4-trec-covid-original-qrels-bm25",
+      "metric": {
+        "id": "ndcg10",
+        "family": "ranking",
+        "label": "nDCG@10",
+        "unit": "",
+        "direction": "higher",
+        "range": [
+          0,
+          1
+        ]
+      },
+      "conditions": {
+        "zh": "Anserini BM25，k=0.9、b=0.4，标题与正文分别建字段。使用原始最终累计相关性标注，未判定文档仍保留。未报告误差区间或总计算量。",
+        "en": "Anserini BM25 k=0.9/b=0.4 with separate title/passage fields. Original final cumulative judgments; unjudged documents remain. No error bars or total compute reported."
+      },
+      "entries": [
+        {
+          "id": "bm25-original-qrels",
+          "method": "BM25",
+          "model": "BM25",
+          "score": 0.656,
+          "date": "2021-10-21",
+          "date_basis": "paper-version-publication; experiment execution date unreported",
+          "source": "https://arxiv.org/pdf/2104.08663v4"
+        }
+      ]
+    },
+    {
+      "track_id": "v4-trec-covid-expanded-qrels-bm25-ndcg10",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v4 表4 · TREC-COVID · 扩充标注 · BM25",
+        "en": "Paper v4 Table 4 · TREC-COVID · expanded judgments · BM25"
+      },
+      "task": "TREC-COVID biomedical retrieval using query descriptions",
+      "split": "50 test queries; CORD-19 2020-07-16, 171332 documents; expanded relevance judgments",
+      "protocol_version": "arxiv-2104.08663v4-table4-trec-covid-expanded-qrels-bm25",
+      "metric": {
+        "id": "ndcg10",
+        "family": "ranking",
+        "label": "nDCG@10",
+        "unit": "",
+        "direction": "higher",
+        "range": [
+          0,
+          1
+        ]
+      },
+      "conditions": {
+        "zh": "Anserini BM25，k=0.9、b=0.4，标题与正文分别建字段。在原标注上增加980条受测系统前10个结果中的未判定项；并非穷尽相关性真值。未报告误差区间或总计算量。",
+        "en": "Anserini BM25 k=0.9/b=0.4 with separate title/passage fields. Adds 980 judgments for unjudged top-10 hits across evaluated systems, not exhaustive relevance truth. No error bars or total compute reported."
+      },
+      "entries": [
+        {
+          "id": "bm25-expanded-qrels",
+          "method": "BM25",
+          "model": "BM25",
+          "score": 0.668,
+          "date": "2021-10-21",
+          "date_basis": "paper-version-publication; experiment execution date unreported",
+          "source": "https://arxiv.org/pdf/2104.08663v4"
+        }
+      ]
+    },
+    {
+      "track_id": "v4-trec-covid-original-qrels-ance-ndcg10",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v4 表4 · TREC-COVID · 原始标注 · ANCE",
+        "en": "Paper v4 Table 4 · TREC-COVID · original judgments · ANCE"
+      },
+      "task": "TREC-COVID biomedical retrieval using query descriptions",
+      "split": "50 test queries; CORD-19 2020-07-16, 171332 documents; original relevance judgments",
+      "protocol_version": "arxiv-2104.08663v4-table4-trec-covid-original-qrels-ance",
+      "metric": {
+        "id": "ndcg10",
+        "family": "ranking",
+        "label": "nDCG@10",
+        "unit": "",
+        "direction": "higher",
+        "range": [
+          0,
+          1
+        ]
+      },
+      "conditions": {
+        "zh": "ANCE：在 MS MARCO 训练 600K 步的 RoBERTa 检查点，文档截取前512个子词。使用原始最终累计相关性标注，未判定文档仍保留。未报告误差区间或总计算量。",
+        "en": "ANCE RoBERTa checkpoint trained for 600K MS MARCO steps; documents use first 512 wordpieces. Original final cumulative judgments; unjudged documents remain. No error bars or total compute reported."
+      },
+      "entries": [
+        {
+          "id": "ance-original-qrels",
+          "method": "ANCE",
+          "model": "sentence-transformers/msmarco-roberta-base-ance-firstp",
+          "score": 0.654,
+          "date": "2021-10-21",
+          "date_basis": "paper-version-publication; experiment execution date unreported",
+          "source": "https://arxiv.org/pdf/2104.08663v4"
+        }
+      ]
+    },
+    {
+      "track_id": "v4-trec-covid-expanded-qrels-ance-ndcg10",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v4 表4 · TREC-COVID · 扩充标注 · ANCE",
+        "en": "Paper v4 Table 4 · TREC-COVID · expanded judgments · ANCE"
+      },
+      "task": "TREC-COVID biomedical retrieval using query descriptions",
+      "split": "50 test queries; CORD-19 2020-07-16, 171332 documents; expanded relevance judgments",
+      "protocol_version": "arxiv-2104.08663v4-table4-trec-covid-expanded-qrels-ance",
+      "metric": {
+        "id": "ndcg10",
+        "family": "ranking",
+        "label": "nDCG@10",
+        "unit": "",
+        "direction": "higher",
+        "range": [
+          0,
+          1
+        ]
+      },
+      "conditions": {
+        "zh": "ANCE：在 MS MARCO 训练 600K 步的 RoBERTa 检查点，文档截取前512个子词。在原标注上增加980条受测系统前10个结果中的未判定项；并非穷尽相关性真值。未报告误差区间或总计算量。",
+        "en": "ANCE RoBERTa checkpoint trained for 600K MS MARCO steps; documents use first 512 wordpieces. Adds 980 judgments for unjudged top-10 hits across evaluated systems, not exhaustive relevance truth. No error bars or total compute reported."
+      },
+      "entries": [
+        {
+          "id": "ance-expanded-qrels",
+          "method": "ANCE",
+          "model": "sentence-transformers/msmarco-roberta-base-ance-firstp",
+          "score": 0.735,
+          "date": "2021-10-21",
+          "date_basis": "paper-version-publication; experiment execution date unreported",
+          "source": "https://arxiv.org/pdf/2104.08663v4"
+        }
+      ]
+    }
+  ]
+}

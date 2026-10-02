@@ -439,5 +439,8 @@
   },
   "memprobe-stability-plasticity": {
     "summary": "诊断记忆能否接受有效更新、抵抗不可靠证据的覆盖，并分别保留历史、来源与时间信息。"
+  },
+  "cess-evidence-selection": {
+    "summary": "审计自适应选择的证据能否代表固定文献池，区分候选池证据方向估计与搜索策略配对干预的效应。"
   }
 }
