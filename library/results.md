@@ -2,7 +2,7 @@
 
 [返回主入口](../README.md#result-snapshots) · [English](results.en.md)
 
-47 个基准已有结构化结果。点击基准名称阅读分数、适用条件及局限；JSON 保留各轨道的原始来源与已记录条件。核验日期不等于榜单实时更新，单条结果不代表当前最佳。
+49 个基准已有结构化结果。点击基准名称阅读分数、适用条件及局限；JSON 保留各轨道的原始来源与已记录条件。核验日期不等于榜单实时更新，单条结果不代表当前最佳。
 
 | Benchmark | 来源类型 | 轨道数 | 结果核验 | 原始记录 |
 |---|---|---:|---|---|
@@ -45,7 +45,9 @@
 | [RAGBench](../benchmarks/ragbench.md) <!-- benchmark-id:ragbench --> | 论文快照 | 3 | 2026-09-03 | [JSON](../data/results/ragbench.json) |
 | [CRAG](../benchmarks/crag.md) <!-- benchmark-id:crag --> | 来源快照 | 2 | 2026-09-02 | [JSON](../data/results/crag.json) |
 | [LoCoMo](../benchmarks/locomo.md) <!-- benchmark-id:locomo --> | 来源快照 | 1 | 2026-09-02 | [JSON](../data/results/locomo.json) |
+| [MultiHop-RAG](../benchmarks/multihop-rag.md) <!-- benchmark-id:multihop-rag --> | 论文快照 | 2 | 2026-10-03 | [JSON](../data/results/multihop-rag.json) |
 | [RAGTruth](../benchmarks/ragtruth.md) <!-- benchmark-id:ragtruth --> | 论文快照 | 2 | 2026-09-03 | [JSON](../data/results/ragtruth.json) |
+| [RGB](../benchmarks/rgb.md) <!-- benchmark-id:rgb --> | 论文快照 | 2 | 2026-10-03 | [JSON](../data/results/rgb.json) |
 | [BIRD](../benchmarks/bird.md) <!-- benchmark-id:bird --> | 榜单快照 | 2 | 2026-09-02 | [JSON](../data/results/bird.json) |
 | [DS-1000](../benchmarks/ds-1000.md) <!-- benchmark-id:ds-1000 --> | 来源快照 | 1 | 2026-09-02 | [JSON](../data/results/ds-1000.json) |
 | [BEIR](../benchmarks/beir.md) <!-- benchmark-id:beir --> | 论文快照 | 4 | 2026-10-02 | [JSON](../data/results/beir.json) |

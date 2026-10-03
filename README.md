@@ -5,9 +5,9 @@
 
 按时间与领域查找 Agent 评测基准，直接进入论文、代码与评测解读。
 
-**中文** · [English](README.en.md) · **148 个基准** · 发现扫描 **2026-10-02**
+**中文** · [English](README.en.md) · **149 个基准** · 发现扫描 **2026-10-03**
 
-[近期时间轴](#release-timeline) · [Agent Memory (55)](#registry-memory) · [RAG / Agentic Retrieval (54)](#registry-rag) · [Data Agents (39)](#registry-data)
+[近期时间轴](#release-timeline) · [Agent Memory (56)](#registry-memory) · [RAG / Agentic Retrieval (54)](#registry-rag) · [Data Agents (39)](#registry-data)
 
 名称链接到解读；论文、代码和数据可直接访问。
 
@@ -17,7 +17,7 @@
 <a id="timeline"></a><a id="latest"></a><a id="periods"></a>
 ## 最近六个月
 
-**2026-04-02 — 2026-10-02** · 87 项；月份精度的边界记录按区间重叠纳入。
+**2026-04-03 — 2026-10-03** · 88 项；月份精度的边界记录按区间重叠纳入。
 
 [2026-09](#month-2026-09) · [2026-08](#month-2026-08) · [2026-07](#month-2026-07) · [2026-06](#month-2026-06) · [2026-05](#month-2026-05) · [2026-04](#month-2026-04)
 
@@ -26,11 +26,12 @@
 <!-- TABLE-FIRST:RECENT:START -->
 
 <a id="month-2026-09"></a>
-### 2026-09 · 14 项
+### 2026-09 · 15 项
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 |
 |---|---|---|---|
 | [2026-09-30](https://arxiv.org/abs/2609.39026v1) | [CESS / Evidence-selection audit](benchmarks/cess-evidence-selection.md) <!-- benchmark-id:cess-evidence-selection --><br><sub>检索</sub> | 审计自适应选择的证据能否代表固定文献池，区分候选池证据方向估计与搜索策略配对干预的效应。 | [论&#8288;文](https://arxiv.org/abs/2609.39026v1) |
+| [2026-09-26](https://arxiv.org/abs/2609.32574v1) | [CUE-Mem](benchmarks/cue-mem.md) <!-- benchmark-id:cue-mem --><br><sub>记忆</sub> | 在合成多会话历史中，根据反复出现的背景图像与环境声音线索回忆、归纳、个性化推荐，并在证据不足时拒答。 | [论&#8288;文](https://arxiv.org/abs/2609.32574v1) · [代&#8288;码](https://github.com/yulinlp/CUE-MEM) · [数&#8288;据](https://huggingface.co/datasets/Kkryptonite/CUE-Mem) |
 | [2026-09-24](https://arxiv.org/abs/2609.30558v1) | [MemProbe (stability–plasticity)](benchmarks/memprobe-stability-plasticity.md) <!-- benchmark-id:memprobe-stability-plasticity --><br><sub>记忆</sub> | 诊断记忆能否接受有效更新、抵抗不可靠证据的覆盖，并分别保留历史、来源与时间信息。 | [论&#8288;文](https://arxiv.org/abs/2609.30558v1) · [代&#8288;码](https://github.com/jq-ding/MemProbe) · [数&#8288;据](https://github.com/jq-ding/MemProbe/tree/9068d8d9a2a47268fe6f7601b99a56a283c37be5/data/suite56) |
 | [2026-09-21](https://arxiv.org/abs/2609.24971) | [DolphinBench](benchmarks/dolphinbench.md) <!-- benchmark-id:dolphinbench --><br><sub>记忆</sub> | 在模拟工作应用中，以冻结记忆、历史依赖对照和逐题状态重置，测任务行动、总成本与延迟。 | [论&#8288;文](https://arxiv.org/abs/2609.24971) · [代&#8288;码](https://github.com/mem0ai/dolphinbench) · [项&#8288;目](https://dolphinbench.ai) |
 | [2026-09-21](https://arxiv.org/abs/2609.24259) | [MemCalib](benchmarks/memcalib.md) <!-- benchmark-id:memcalib --><br><sub>记忆</sub> | 对上下文中每条记忆命题，测它是否按当前问题所需被忽略、局部使用或作为决定性约束。 | [论&#8288;文](https://arxiv.org/abs/2609.24259) · [数&#8288;据](https://huggingface.co/datasets/ZiLaotou/MemCalib) · [项&#8288;目](https://quark-medical.github.io/MemCalib-Project/) |
@@ -155,7 +156,7 @@
 <a id="field-map"></a><a id="all-benchmarks"></a>
 ## 按领域浏览全部基准
 
-全部 148 个基准均在本页，按日期倒序；旧基准不会因时间较早而被移除。
+全部 149 个基准均在本页，按日期倒序；旧基准不会因时间较早而被移除。
 
 <!-- CITATION-META:START -->
 
@@ -164,12 +165,13 @@
 <!-- CITATION-META:END -->
 
 <a id="benchmark-memory"></a><a id="registry-memory"></a>
-### Agent Memory · 55
+### Agent Memory · 56
 
 <!-- TABLE-FIRST:AREA:agent-memory:START -->
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 | 引用数 (S2) |
 |---|---|---|---|---:|
+| [2026-09-26](https://arxiv.org/abs/2609.32574v1) | [CUE-Mem](benchmarks/cue-mem.md) <!-- benchmark-id:cue-mem --> | 在合成多会话历史中，根据反复出现的背景图像与环境声音线索回忆、归纳、个性化推荐，并在证据不足时拒答。 | [论&#8288;文](https://arxiv.org/abs/2609.32574v1) · [代&#8288;码](https://github.com/yulinlp/CUE-MEM) · [数&#8288;据](https://huggingface.co/datasets/Kkryptonite/CUE-Mem) | — |
 | [2026-09-24](https://arxiv.org/abs/2609.30558v1) | [MemProbe (stability–plasticity)](benchmarks/memprobe-stability-plasticity.md) <!-- benchmark-id:memprobe-stability-plasticity --> | 诊断记忆能否接受有效更新、抵抗不可靠证据的覆盖，并分别保留历史、来源与时间信息。 | [论&#8288;文](https://arxiv.org/abs/2609.30558v1) · [代&#8288;码](https://github.com/jq-ding/MemProbe) · [数&#8288;据](https://github.com/jq-ding/MemProbe/tree/9068d8d9a2a47268fe6f7601b99a56a283c37be5/data/suite56) | — |
 | [2026-09-21](https://arxiv.org/abs/2609.24971) | [DolphinBench](benchmarks/dolphinbench.md) <!-- benchmark-id:dolphinbench --> | 在模拟工作应用中，以冻结记忆、历史依赖对照和逐题状态重置，测任务行动、总成本与延迟。 | [论&#8288;文](https://arxiv.org/abs/2609.24971) · [代&#8288;码](https://github.com/mem0ai/dolphinbench) · [项&#8288;目](https://dolphinbench.ai) | — |
 | [2026-09-21](https://arxiv.org/abs/2609.24259) | [MemCalib](benchmarks/memcalib.md) <!-- benchmark-id:memcalib --> | 对上下文中每条记忆命题，测它是否按当前问题所需被忽略、局部使用或作为决定性约束。 | [论&#8288;文](https://arxiv.org/abs/2609.24259) · [数&#8288;据](https://huggingface.co/datasets/ZiLaotou/MemCalib) · [项&#8288;目](https://quark-medical.github.io/MemCalib-Project/) | — |
@@ -360,7 +362,7 @@
 **研究观察与能力地图：** [编辑解读，单独阅读](docs/reading-guide.md)
 
 <a id="result-snapshots"></a>
-**结果资料：** [47 个基准的来源索引](library/results.md)。成绩与实验条件在各基准解读和原始来源中查看，不在首页混排。
+**结果资料：** [49 个基准的来源索引](library/results.md)。成绩与实验条件在各基准解读和原始来源中查看，不在首页混排。
 
 <a id="library"></a>
 **历史演进与专题方法：** [完整 Library](library/README.md) · [Memory](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) · [Retrieval](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) · [Data](https://github.com/H20Zhang/Data-Agent-Radar#field-map)

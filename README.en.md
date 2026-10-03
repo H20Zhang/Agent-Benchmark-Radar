@@ -5,9 +5,9 @@
 
 Find agent benchmarks by date and research area, with direct links to papers, code, and evaluation notes.
 
-[中文](README.md) · **English** · **148 benchmarks** · Discovery scan **2026-10-02**
+[中文](README.md) · **English** · **149 benchmarks** · Discovery scan **2026-10-03**
 
-[Recent timeline](#release-timeline) · [Agent Memory (55)](#registry-memory) · [RAG / Agentic Retrieval (54)](#registry-rag) · [Data Agents (39)](#registry-data)
+[Recent timeline](#release-timeline) · [Agent Memory (56)](#registry-memory) · [RAG / Agentic Retrieval (54)](#registry-rag) · [Data Agents (39)](#registry-data)
 
 Names open reading notes; papers, code, and data are directly accessible.
 
@@ -17,7 +17,7 @@ Names open reading notes; papers, code, and data are directly accessible.
 <a id="timeline"></a><a id="latest"></a><a id="periods"></a>
 ## Last six months
 
-**2026-04-02 — 2026-10-02** · 87 records; month-only boundary records are included by interval overlap.
+**2026-04-03 — 2026-10-03** · 88 records; month-only boundary records are included by interval overlap.
 
 [2026-09](#month-2026-09) · [2026-08](#month-2026-08) · [2026-07](#month-2026-07) · [2026-06](#month-2026-06) · [2026-05](#month-2026-05) · [2026-04](#month-2026-04)
 
@@ -26,11 +26,12 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 <!-- TABLE-FIRST:RECENT:START -->
 
 <a id="month-2026-09"></a>
-### 2026-09 · 14 records
+### 2026-09 · 15 records
 
 | Time | Benchmark | What it measures | Sources |
 |---|---|---|---|
 | [2026-09-30](https://arxiv.org/abs/2609.39026v1) | [CESS / Evidence-selection audit](benchmarks/cess-evidence-selection.en.md) <!-- benchmark-id:cess-evidence-selection --><br><sub>Retrieval</sub> | Audits whether adaptively selected evidence represents a fixed document pool, separating pool-direction estimation from paired search-policy effects. | [Paper](https://arxiv.org/abs/2609.39026v1) |
+| [2026-09-26](https://arxiv.org/abs/2609.32574v1) | [CUE-Mem](benchmarks/cue-mem.en.md) <!-- benchmark-id:cue-mem --><br><sub>Memory</sub> | Tests recovery and use of recurring background visual and acoustic cues across synthetic conversation histories, alongside refusal under insufficient evidence. | [Paper](https://arxiv.org/abs/2609.32574v1) · [Code](https://github.com/yulinlp/CUE-MEM) · [Data](https://huggingface.co/datasets/Kkryptonite/CUE-Mem) |
 | [2026-09-24](https://arxiv.org/abs/2609.30558v1) | [MemProbe (stability–plasticity)](benchmarks/memprobe-stability-plasticity.en.md) <!-- benchmark-id:memprobe-stability-plasticity --><br><sub>Memory</sub> | Diagnoses whether agent memory incorporates valid updates while preserving facts against unreliable evidence, with separate stability, plasticity, and provenance probes. | [Paper](https://arxiv.org/abs/2609.30558v1) · [Code](https://github.com/jq-ding/MemProbe) · [Data](https://github.com/jq-ding/MemProbe/tree/9068d8d9a2a47268fe6f7601b99a56a283c37be5/data/suite56) |
 | [2026-09-21](https://arxiv.org/abs/2609.24971) | [DolphinBench](benchmarks/dolphinbench.en.md) <!-- benchmark-id:dolphinbench --><br><sub>Memory</sub> | Tests history-dependent actions in simulated work apps with frozen memory checkpoints, paired history certification, and accuracy, total cost, and latency reporting. | [Paper](https://arxiv.org/abs/2609.24971) · [Code](https://github.com/mem0ai/dolphinbench) · [Project](https://dolphinbench.ai) |
 | [2026-09-21](https://arxiv.org/abs/2609.24259) | [MemCalib](benchmarks/memcalib.en.md) <!-- benchmark-id:memcalib --><br><sub>Memory</sub> | Tests whether each supplied memory proposition is ignored, used as bounded support, or allowed to control a response at its query-specific target level. | [Paper](https://arxiv.org/abs/2609.24259) · [Data](https://huggingface.co/datasets/ZiLaotou/MemCalib) · [Project](https://quark-medical.github.io/MemCalib-Project/) |
@@ -155,7 +156,7 @@ Dates link to sources. **†** marks a historical date, not a verified first rel
 <a id="field-map"></a><a id="all-benchmarks"></a>
 ## All benchmarks by area
 
-All 148 benchmarks remain on this page, newest first. Older benchmarks are retained.
+All 149 benchmarks remain on this page, newest first. Older benchmarks are retained.
 
 <!-- CITATION-META:START -->
 
@@ -164,12 +165,13 @@ Citations come from Semantic Scholar; matched records were checked **2026-09-03*
 <!-- CITATION-META:END -->
 
 <a id="benchmark-memory"></a><a id="registry-memory"></a>
-### Agent Memory · 55
+### Agent Memory · 56
 
 <!-- TABLE-FIRST:AREA:agent-memory:START -->
 
 | Time | Benchmark | What it measures | Sources | Citations (S2) |
 |---|---|---|---|---:|
+| [2026-09-26](https://arxiv.org/abs/2609.32574v1) | [CUE-Mem](benchmarks/cue-mem.en.md) <!-- benchmark-id:cue-mem --> | Tests recovery and use of recurring background visual and acoustic cues across synthetic conversation histories, alongside refusal under insufficient evidence. | [Paper](https://arxiv.org/abs/2609.32574v1) · [Code](https://github.com/yulinlp/CUE-MEM) · [Data](https://huggingface.co/datasets/Kkryptonite/CUE-Mem) | — |
 | [2026-09-24](https://arxiv.org/abs/2609.30558v1) | [MemProbe (stability–plasticity)](benchmarks/memprobe-stability-plasticity.en.md) <!-- benchmark-id:memprobe-stability-plasticity --> | Diagnoses whether agent memory incorporates valid updates while preserving facts against unreliable evidence, with separate stability, plasticity, and provenance probes. | [Paper](https://arxiv.org/abs/2609.30558v1) · [Code](https://github.com/jq-ding/MemProbe) · [Data](https://github.com/jq-ding/MemProbe/tree/9068d8d9a2a47268fe6f7601b99a56a283c37be5/data/suite56) | — |
 | [2026-09-21](https://arxiv.org/abs/2609.24971) | [DolphinBench](benchmarks/dolphinbench.en.md) <!-- benchmark-id:dolphinbench --> | Tests history-dependent actions in simulated work apps with frozen memory checkpoints, paired history certification, and accuracy, total cost, and latency reporting. | [Paper](https://arxiv.org/abs/2609.24971) · [Code](https://github.com/mem0ai/dolphinbench) · [Project](https://dolphinbench.ai) | — |
 | [2026-09-21](https://arxiv.org/abs/2609.24259) | [MemCalib](benchmarks/memcalib.en.md) <!-- benchmark-id:memcalib --> | Tests whether each supplied memory proposition is ignored, used as bounded support, or allowed to control a response at its query-specific target level. | [Paper](https://arxiv.org/abs/2609.24259) · [Data](https://huggingface.co/datasets/ZiLaotou/MemCalib) · [Project](https://quark-medical.github.io/MemCalib-Project/) | — |
@@ -360,7 +362,7 @@ These are reading aids, not benchmark quality rankings. Check tasks, models, too
 **Research observations and capability maps:** [Editorial guide](docs/reading-guide.en.md)
 
 <a id="result-snapshots"></a>
-**Result sources:** [Source index for 47 benchmarks](library/results.en.md). Read scores with their experimental conditions in the notes and original sources; no cross-benchmark score table is shown here.
+**Result sources:** [Source index for 49 benchmarks](library/results.en.md). Read scores with their experimental conditions in the notes and original sources; no cross-benchmark score table is shown here.
 
 <a id="library"></a>
 **Historical context and related methods:** [Full Library](library/README.en.md) · [Memory](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) · [Retrieval](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) · [Data](https://github.com/H20Zhang/Data-Agent-Radar#field-map)

@@ -12208,5 +12208,81 @@
       "status": "unmatched",
       "note": "No independently verified Semantic Scholar count; unknown is not zero."
     }
+  },
+  {
+    "id": "cue-mem",
+    "name": "CUE-Mem",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-09-26",
+    "importance": 4,
+    "status": "active",
+    "summary": "Tests recovery and use of recurring background visual and acoustic cues across synthetic conversation histories, alongside refusal under insufficient evidence.",
+    "capabilities": [
+      "implicit-multimodal-memory",
+      "cross-session-evidence",
+      "personalization",
+      "abstention"
+    ],
+    "environment": [
+      "synthetic-text-image-audio-conversations",
+      "twenty-user-profiles",
+      "textualized-or-native-multimodal-context"
+    ],
+    "protocol": [
+      "four-option-question-answering",
+      "explicit-and-implicit-unpaired-sets",
+      "task-macroaverage-excluding-refusal",
+      "separate-oracle-and-native-access-controls"
+    ],
+    "scale": "20 synthetic users, 648 sessions, 2674 questions; 1401 explicit and 1273 implicit.",
+    "measurement_strength": "Makes recurring peripheral visual and acoustic cues a memory target and separates representation, retrieval and evidence-use interventions.",
+    "coverage_gap": "Synthetic Chinese histories and unpaired evidence conditions do not establish real-user generalization or a causal implicitness penalty.",
+    "confounders": [
+      "question-only-filtering-with-evaluated-backbones",
+      "4096-word-full-memory-cap",
+      "oracle-synthesis-prompts",
+      "privileged-clean-audio-stems",
+      "answer-option-caption-changes",
+      "limited-repeat-audit"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.32574v1",
+      "code": "https://github.com/yulinlp/CUE-MEM",
+      "data": "https://huggingface.co/datasets/Kkryptonite/CUE-Mem"
+    },
+    "last_verified": "2026-10-03",
+    "published_at": "2026-09-26T12:49:02Z",
+    "first_seen_at": "2026-10-02T21:30:25Z",
+    "radar_published_at": "2026-10-02T21:34:00Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-26",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.32574v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-10-03",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.32574v1",
+      "checked_at": "2026-10-03",
+      "protocol_source": "https://arxiv.org/html/2609.32574v1",
+      "result_source": "https://arxiv.org/html/2609.32574v1",
+      "score_ceiling": "Controlled synthetic four-choice memory performance; neither paired implicitness effects nor real-user reliability.",
+      "next_control": "Match evidence difficulty, input budget, option representation and realistic mixed-audio access.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-10-03",
+      "status": "unmatched"
+    }
   }
 ]

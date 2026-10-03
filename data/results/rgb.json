@@ -1,0 +1,89 @@
+{
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-10-03",
+  "verification_timezone": "Asia/Shanghai",
+  "benchmark_id": "rgb",
+  "comparability_notes": {
+    "zh": "表1英文噪声鲁棒性诊断。不同噪声条件分别记录；API具体日期版本、随机性设置和重复次数未确定，不作为当前模型排名。文档不足时数量会调整，噪声比例为名义设置。代码跳过异常，实际计分分母未提供日志。",
+    "en": "Table 1 English noise diagnostic. Snapshot, decoding and repetitions unresolved; no current-model ranking. Passage availability can alter nominal ratios. Exceptions are skipped; scored denominators lack logs."
+  },
+  "tracks": [
+    {
+      "track_id": "v1-english-noise0-chatgpt-accuracy",
+      "primary": true,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · 英文 · 名义噪声比例 0",
+        "en": "Paper v1 · English · nominal noise 0"
+      },
+      "task": "Noise robustness",
+      "split": "v1 original 300-question English testbed; up to five supplied documents; excludes 2024 refined release",
+      "protocol_version": "2309.01431v1-table1-noise0",
+      "metric": {
+        "id": "accuracy",
+        "family": "accuracy",
+        "label": "Accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "conditions": {
+        "zh": "原始数据；统一英文指令含噪声/错误警告及拒答/纠错要求；答案子串匹配。",
+        "en": "Original data; shared English noise/error warning and refusal/correction instruction; substring matching."
+      },
+      "entries": [
+        {
+          "id": "chatgpt",
+          "method": "ChatGPT",
+          "model": "gpt-3.5-turbo (dated snapshot unspecified)",
+          "score": 96.33,
+          "date": "2023-09-04",
+          "date_basis": "paper-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2309.01431v1"
+        }
+      ]
+    },
+    {
+      "track_id": "v1-english-noise08-chatgpt-accuracy",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · 英文 · 名义噪声比例 0.8",
+        "en": "Paper v1 · English · nominal noise 0.8"
+      },
+      "task": "Noise robustness",
+      "split": "v1 original 300-question English testbed; up to five supplied documents; excludes 2024 refined release",
+      "protocol_version": "2309.01431v1-table1-noise08",
+      "metric": {
+        "id": "accuracy",
+        "family": "accuracy",
+        "label": "Accuracy",
+        "unit": "%",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "conditions": {
+        "zh": "原始数据；统一英文指令含噪声/错误警告及拒答/纠错要求；答案子串匹配。",
+        "en": "Original data; shared English noise/error warning and refusal/correction instruction; substring matching."
+      },
+      "entries": [
+        {
+          "id": "chatgpt",
+          "method": "ChatGPT",
+          "model": "gpt-3.5-turbo (dated snapshot unspecified)",
+          "score": 76.0,
+          "date": "2023-09-04",
+          "date_basis": "paper-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2309.01431v1"
+        }
+      ]
+    }
+  ],
+  "implementation_evidence": "https://github.com/chen700564/RGB/blob/d2293eec8c76467c1572b3ebedcaca4e9b4e82f4/evalue.py"
+}

@@ -16,6 +16,8 @@
 全文第1–6节、局限及附录A–B的生成提示与例子；表5–6和图3经图像核对。
 
 [v1,2024-01-27](https://arxiv.org/pdf/2401.15391v1)
+
+补充核验官方评估代码: [2d0ecc32da99dc32bc60d76ba991a72af5a09d4b](https://github.com/yixuantt/MultiHop-RAG/blob/2d0ecc32da99dc32bc60d76ba991a72af5a09d4b/evaluate.py#L7-L56)
 <!-- EVIDENCE:reading:END -->
 
 <!-- EVIDENCE:placement:START -->
@@ -35,13 +37,13 @@
 <!-- EVIDENCE:setup:START -->
 ## 复现时必须保留的条件
 
-609 篇新闻发表于 2023-09-26 至 2023-12-26。2556 题中有 301 道无答案题；检索评价使用 2255 道非空题。LlamaIndex 将材料切成 256-token 块，余弦检索先取 20 块，再用 bge-reranker-large 重排；生成器看到 voyage-02 检索并重排的前六块，最多 2048 token。GPT-4 版本引用为 gpt-4-1106-preview；Mixtral 为 8x7B-Instruct。Hits@k 表示标准证据找回比例，不是“至少找到一条”的概率。
+609 篇新闻发表于 2023-09-26 至 2023-12-26。2556 题中有 301 道无答案题；检索评价使用 2255 道非空题。LlamaIndex 将材料切成 256词元块；普通检索取前K块，重排流程先取20块，再用 bge-reranker-large 重排；生成器看到 voyage-02 检索并重排的前六块，最多2048词元。GPT-4 版本引用为 gpt-4-1106-preview；Mixtral 为 8x7B-Instruct。论文将 Hits@k 定义为标准证据找回比例；官方最早公开评估代码却按查询统计“至少命中一条”。表5具体采用哪种实现尚未核实。
 <!-- EVIDENCE:setup:END -->
 
 <!-- EVIDENCE:result-1:START -->
 ## 同一检索器重排前后
 
-2255 道非空题；Hits@k 是已找回标准证据的比例，单位 0–1；重排从前 20 个候选中选择。
+2255 道非空题；表5原报 Hits@k，单位 0–1。论文与代码的指标定义存在未解决差异；重排使用前20候选。
 
 | 检索流程 | Hits@10 | Hits@4 |
 |---|---|---|
@@ -67,7 +69,7 @@
 <!-- EVIDENCE:interpretation:START -->
 ## 这些比较支持什么结论
 
-检索与给定证据推理均有缺口，但0.56→0.89包含题目分布变化，不能全归因检索。Hits也不代表整条证据链找齐。
+检索与给定证据推理均有缺口，但0.56→0.89包含题目分布变化，不能全归因检索。表5数字仅保留为论文报告指标，不能直接解释为证据覆盖率或完整证据链成功率。
 <!-- EVIDENCE:interpretation:END -->
 
 <!-- EVIDENCE:limitations:START -->
@@ -76,6 +78,8 @@
 最多四条证据、短答案、生成器参与验题；新闻新鲜度只相对当时模型成立。下一步在同一非空题集与同一预算上重做检索/金标对照。
 
 检索回答与标准证据回答的分母分别为2556与2255；这是明确的协议不对称，不能隐去。表6称ChatGPT但未给出明确日期版本。
+
+最早公开的[评估代码](https://github.com/yixuantt/MultiHop-RAG/blob/2d0ecc32da99dc32bc60d76ba991a72af5a09d4b/evaluate.py#L7-L56)（2024-03-15，2d0ecc3）将任一金标事实在检索块中的子串匹配记为查询命中。首发仓库未包含该评估器，不能据此反推表5的计算。生成答案判分规则、解码参数及完整回答提示也未充分说明。
 <!-- EVIDENCE:limitations:END -->
 
 相关基准：[hotpotqa](hotpotqa.md) · [agenticragtracer](agenticragtracer.md)

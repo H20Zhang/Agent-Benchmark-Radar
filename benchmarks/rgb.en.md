@@ -16,6 +16,8 @@ Reviewed the stated primary paper in full for methods, experimental setup, resul
 all main sections, construction, evaluation, error analyses, conclusion; no separate appendix in this PDF; Tables 1–7; Tables 5,7 visually verified
 
 [v1,2023-09-04](https://arxiv.org/pdf/2309.01431v1)
+
+Additional release-evaluator inspection: [d2293eec8c76467c1572b3ebedcaca4e9b4e82f4](https://github.com/chen700564/RGB/blob/d2293eec8c76467c1572b3ebedcaca4e9b4e82f4/evalue.py)
 <!-- EVIDENCE:reading:END -->
 
 <!-- EVIDENCE:placement:START -->
@@ -29,7 +31,7 @@ Unlike primarily ranking-focused retrieval benchmarks, RGB manipulates supplied 
 <!-- EVIDENCE:method:START -->
 ## Task and evidence construction
 
-Human-checked news questions retrieve ten Google pages, split into≤300-token passages and reranked. Five supplied documents control noise, answer absence, integration and counterfactuals; the target is generator evidence use.
+Human-checked news questions retrieve ten Google pages, split into≤300-token passages and reranked. A nominal five-document setting controls noise, answer absence, integration and counterfactuals; the target is generator evidence use.
 <!-- EVIDENCE:method:END -->
 
 <!-- EVIDENCE:setup:START -->
@@ -41,7 +43,7 @@ Base questions number 300 per language; integration and counterfactual tests eac
 <!-- EVIDENCE:result-1:START -->
 ## ChatGPT evidence-use diagnostics
 
-ChatGPT percentages; noise and rejection use 300 questions per language, integration and counterfactual tests 100 per language; answers use substring matching, Rej uses a specified string, and Rej* uses semantic judgment.
+ChatGPT percentages; declared testbeds: noise/rejection 300 per language, integration/counterfactual 100 per language; scored-denominator logs unavailable. Noise ratios are nominal; accuracy uses substring matching, Rej a specified string, Rej* semantic judgment.
 
 | Measure/condition | English | Chinese |
 |---|---|---|
@@ -69,6 +71,8 @@ Low exact rejection mixes evidence failure with formatting; retain Rej/Rej*. Cou
 Prompts explicitly warn about errors; substring hits can coexist with contradictions. Next: independently audit answers, abstention and repair in real retrieval trajectories.
 
 No material selected-cell conflict. Counterfactual correction-rate denominator is insufficiently explicit; omitted from table rather than guessed.
+
+The [release evaluator](https://github.com/chen700564/RGB/blob/d2293eec8c76467c1572b3ebedcaca4e9b4e82f4/evalue.py) adjusts passage composition when candidates are insufficient and skips exceptions: 300 is the declared testbed size, with no published exclusion log. Noise ratios are nominal. Decoding settings remain unknown; code defaults and example commands differ.
 <!-- EVIDENCE:limitations:END -->
 
 Related benchmarks: [ragtruth](ragtruth.en.md) · [lit-ragbench](lit-ragbench.en.md)

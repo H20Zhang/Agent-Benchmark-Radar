@@ -162,12 +162,260 @@
     "beir": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。","en":"Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction."},"evidence_mode":"quantitative","sources":[{"url":"https://arxiv.org/pdf/2104.08663v4","version":"arXiv:2104.08663v4","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2104.08663v4","source_locator":"Table2, section5","row_ids":["MS MARCO dev","BioASQ test","Touché-2020 test"],"row_labels":{"zh":{"MS MARCO dev":"MS MARCO 开发集","BioASQ test":"BioASQ 测试集","Touché-2020 test":"Touché-2020 测试集"},"en":{"MS MARCO dev":"MS MARCO dev","BioASQ test":"BioASQ test","Touché-2020 test":"Touché-2020 test"}},"conditions":{"zh":"原论文表2的选定数据集，nDCG@10范围0—1；只在同一行内比较，不把不同数据集绝对分数当统一难度。 三个切分的查询数依次为6,980、500、49；nDCG@10按查询求平均。","en":"Selected datasets from Table 2, nDCG@10 on 0–1; compare within rows rather than treating absolute scores across datasets as a common difficulty scale. Query counts for the three splits are 6,980, 500 and 49 respectively; nDCG@10 is averaged over queries."},"metric_labels":{"zh":["BM25 nDCG@10","TAS-B nDCG@10","BM25+CE nDCG@10"],"en":["BM25 nDCG@10","TAS-B nDCG@10","BM25+CE nDCG@10"]}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/pdf/2104.08663v4","source_locator":"Table3, section5.1","row_ids":["BM25","TAS-B","BM25+CE"],"row_labels":{"zh":{"BM25":"BM25","TAS-B":"TAS-B","BM25+CE":"BM25+CE"},"en":{"BM25":"BM25","TAS-B":"TAS-B","BM25+CE":"BM25+CE"}},"conditions":{"zh":"100万篇DBpedia文档，Xeon8168／8核CPU与V100 GPU；稠密检索使用精确搜索，横线为未报告。","en":"One million DBpedia documents, Xeon 8168 / 8 CPU cores and V100 GPU; dense retrieval uses exact search and a dash means unreported."},"metric_labels":{"zh":["CPU延迟（ms）","GPU延迟（ms）","索引（GB）"],"en":["CPU latency (ms)","GPU latency (ms)","Index (GB)"]}},{"id":"result-3","kind":"quantitative","source_url":"https://arxiv.org/pdf/2104.08663v4","source_locator":"Table4, section6","row_ids":["BM25","ANCE"],"row_labels":{"zh":{"BM25":"BM25","ANCE":"ANCE"},"en":{"BM25":"BM25","ANCE":"ANCE"}},"conditions":{"zh":"TREC-COVID，另加980条人工查询—文档标注；同一数据集下换标注集合，指标仍为nDCG@10。","en":"TREC-COVID with 980 added human query-document judgments; judgment sets change on the same dataset, still using nDCG@10."},"metric_labels":{"zh":["原标注nDCG@10","扩充标注nDCG@10"],"en":["Original-judgment nDCG@10","Expanded-judgment nDCG@10"]}},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"785b3f7e3920442122abd3da74903c3003effe215d11baace1b14c1127496f1b","en":"9dbe29a355530b7ae91001dac480c197242f629c277491a468f2a812df8c6faa"}},
     "memprobe": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已核对所述主论文版本的方法、设置、关键结果与局限；未独立复现实验。","en":"Reviewed the stated primary-paper version, method, setup, key results and limitations; no independent experiment reproduction."},"evidence_mode":"quantitative","sources":[{"url":"https://arxiv.org/html/2606.24595v2","version":"arXiv:2606.24595v2","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]},{"url":"https://github.com/sora1998/MEMAUDIT-bench/blob/main/docs/reproduction.md","version":"main@2026-09-30","kind":"official-documentation","coverage":["experimental_setup","limitations"]},{"url":"https://github.com/sora1998/MEMAUDIT-bench","version":"main@2026-09-30","kind":"official-documentation","coverage":["experimental_setup","limitations"]}],"blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/html/2606.24595v2","source_locator":"v2 Table 2","row_ids":["amem","longctx_full","mem0"],"row_labels":{"zh":{"amem":"amem","longctx_full":"longctx_full","mem0":"mem0"},"en":{"amem":"amem","longctx_full":"longctx_full","mem0":"mem0"}},"conditions":{"zh":"论文v2表2，50用户×31目标；五类等权恢复分数，同一轨迹结束后的同一存储分别完整读取与前5条读取。","en":"Paper v2 Table 2, 50 users × 31 targets; five-category-balanced recovery, probing the same final store from one trajectory through full-store or top-5 access."},"metric_labels":{"zh":["完整存储B（0–1）","完整存储SD","前5条B（0–1）","前5条SD"],"en":["Full-store B (0–1)","Full-store SD","Top-5 B (0–1)","Top-5 SD"]}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/html/2606.24595v2","source_locator":"v2 Table 2","row_ids":["nomem"],"row_labels":{"zh":{"nomem":"nomem"},"en":{"nomem":"nomem"}},"conditions":{"zh":"v2表2的无记忆对照；完成率和类别平衡恢复分数有不同测量对象与汇总，不能互换。","en":"No-memory control from v2 Table 2; completion and category-balanced recovery have different targets/aggregation and are not interchangeable."},"metric_labels":{"zh":["任务完成率（%）","完整存储B（0–1）"],"en":["Task completion (%)","Full-store B (0–1)"]}},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"eb9099731296f073062a97191c6f25e5ed9f915d496f06f83c120fef51d0f109","en":"269ac5e59650f71025d0fe251c95b1a6c9472d908b0c6d10333de5bc96edfc05"}},
     "hotpotqa": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://aclanthology.org/D18-1259.pdf","version":"EMNLP 2018","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://aclanthology.org/D18-1259.pdf","source_locator":"Table 4, section 5.2","source_locator_zh":"表 4, 节 5.2","source_locator_en":"Table 4, section 5.2","conditions":{"zh":"相同的 7405 题开发集，均为百分数；答案、支持事实与联合指标逐题计算后平均。Distractor 提供 2 个标准段落及 8 个干扰段落，Fullwiki 先从全库检索。","en":"The same 7,405 development questions, in percent; answer, supporting-fact and joint metrics are computed per example and averaged. Distractor supplies two gold and eight distractor paragraphs; Fullwiki retrieves from the corpus."},"metric_labels":{"zh":["答案 EM","答案 F1","支持事实 F1","联合 F1"],"en":["Answer_EM","Answer_F1","Support_F1","Joint_F1"]},"row_ids":["Distractor dev","Fullwiki dev"],"row_labels":{"zh":{"Distractor dev":"干扰段落开发集","Fullwiki dev":"全维基开发集"},"en":{"Distractor dev":"Distractor dev","Fullwiki dev":"Fullwiki dev"}}},{"id":"result-2","kind":"quantitative","source_url":"https://aclanthology.org/D18-1259.pdf","source_locator":"Table 7","source_locator_zh":"表 7","source_locator_en":"Table 7","conditions":{"zh":"7405 题 distractor 开发集的平均答案 F1，单位百分数；区分去掉支持监督与直接提供标准证据。","en":"Mean answer F1 in percent on 7,405 distractor development questions; removing support supervision differs from supplying gold evidence."},"metric_labels":{"zh":["答案 F1"],"en":["Answer_F1"]},"row_ids":["Baseline","No support supervision","Gold paragraphs only","Gold supporting sentences only"],"row_labels":{"zh":{"Baseline":"基线","No support supervision":"无支持事实监督","Gold paragraphs only":"仅标准段落","Gold supporting sentences only":"仅标准支持句"},"en":{"Baseline":"Baseline","No support supervision":"No support supervision","Gold paragraphs only":"Gold paragraphs only","Gold supporting sentences only":"Gold supporting sentences only"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"26dfbaf5c2bf5f1d028f5bdd87b116e99235e3548020a77dc7c9e9d82b42f711","en":"17abfb318595ac7a4450e06979923fed00b036fe9a2be4009859d63f008fbe31"}},
-    "multihop-rag": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://arxiv.org/pdf/2401.15391v1","version":"v1,2024-01-27","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2401.15391v1","source_locator":"Table 5","source_locator_zh":"表 5","source_locator_en":"Table 5","conditions":{"zh":"2255 道非空题；Hits@k 是已找回标准证据的比例，单位 0–1；重排从前 20 个候选中选择。","en":"Across 2,255 non-null questions, Hits@k is the fraction of gold evidence recovered, on a 0–1 scale; reranking starts from the top 20 candidates."},"metric_labels":{"zh":["Hits@10","Hits@4"],"en":["Hits@10","Hits@4"]},"row_ids":["voyage-02","voyage-02+bge-reranker-large"],"row_labels":{"zh":{"voyage-02":"voyage-02","voyage-02+bge-reranker-large":"voyage-02+bge-reranker-large"},"en":{"voyage-02":"voyage-02","voyage-02+bge-reranker-large":"voyage-02+bge-reranker-large"}}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/pdf/2401.15391v1","source_locator":"Table 6, section 4.2","source_locator_zh":"表 6, 节 4.2","source_locator_en":"Table 6, section 4.2","conditions":{"zh":"答案准确率（0–1）；检索条件分母为全部 2556 题，标准证据条件为 2255 道非空题，因此两列不是严格配对的检索损失。","en":"Answer accuracy on a 0–1 scale; retrieved evidence uses all 2,556 questions while gold evidence uses 2,255 non-null questions, so the difference is not a matched retrieval-loss estimate."},"metric_labels":{"zh":["检索证据（全部 2556 题）","标准证据（2255 道非空题）"],"en":["Retrieved(all 2556)","Gold(non-null 2255)"]},"row_ids":["GPT-4","Mixtral-8x7B-Instruct"],"row_labels":{"zh":{"GPT-4":"GPT-4","Mixtral-8x7B-Instruct":"Mixtral-8x7B-Instruct"},"en":{"GPT-4":"GPT-4","Mixtral-8x7B-Instruct":"Mixtral-8x7B-Instruct"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"2e7048d5063c3ca9b979dbcdd9f318a4fb80618f022e4ee95f2aec38ebd7184f","en":"d59d29f8a8d5e5df6b470b7e502ed2f43b2efe57f876f5c7ff3937b20c1a2cb7"}},
+    "multihop-rag": {
+  "status": "full-text-reviewed",
+  "reviewed_at": "2026-10-03",
+  "status_text": {
+    "zh": "已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。",
+    "en": "Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."
+  },
+  "sources": [
+    {
+      "url": "https://arxiv.org/pdf/2401.15391v1",
+      "version": "v1,2024-01-27",
+      "kind": "paper-full-text",
+      "coverage": [
+        "method",
+        "experimental_setup",
+        "results",
+        "limitations"
+      ]
+    },
+    {
+      "url": "https://github.com/yixuantt/MultiHop-RAG/blob/2d0ecc32da99dc32bc60d76ba991a72af5a09d4b/evaluate.py#L7-L56",
+      "version": "2d0ecc32da99dc32bc60d76ba991a72af5a09d4b",
+      "kind": "official-protocol",
+      "coverage": [
+        "experimental_setup",
+        "results",
+        "limitations"
+      ]
+    }
+  ],
+  "evidence_mode": "quantitative",
+  "blocks": [
+    {
+      "id": "reading",
+      "kind": "reading"
+    },
+    {
+      "id": "method",
+      "kind": "method"
+    },
+    {
+      "id": "setup",
+      "kind": "setup"
+    },
+    {
+      "id": "result-1",
+      "kind": "quantitative",
+      "source_url": "https://arxiv.org/pdf/2401.15391v1",
+      "source_locator": "Table 5",
+      "source_locator_zh": "表 5",
+      "source_locator_en": "Table 5",
+      "conditions": {
+        "zh": "2255 道非空题；表5原报 Hits@k，单位 0–1。论文与代码的指标定义存在未解决差异；重排使用前20候选。",
+        "en": "2,255 non-null questions; Table 5 reported Hits@k, scale 0–1. Paper/code metric semantics remain unresolved; reranking uses top-20 candidates."
+      },
+      "metric_labels": {
+        "zh": [
+          "Hits@10",
+          "Hits@4"
+        ],
+        "en": [
+          "Hits@10",
+          "Hits@4"
+        ]
+      },
+      "row_ids": [
+        "voyage-02",
+        "voyage-02+bge-reranker-large"
+      ],
+      "row_labels": {
+        "zh": {
+          "voyage-02": "voyage-02",
+          "voyage-02+bge-reranker-large": "voyage-02+bge-reranker-large"
+        },
+        "en": {
+          "voyage-02": "voyage-02",
+          "voyage-02+bge-reranker-large": "voyage-02+bge-reranker-large"
+        }
+      }
+    },
+    {
+      "id": "result-2",
+      "kind": "quantitative",
+      "source_url": "https://arxiv.org/pdf/2401.15391v1",
+      "source_locator": "Table 6, section 4.2",
+      "source_locator_zh": "表 6, 节 4.2",
+      "source_locator_en": "Table 6, section 4.2",
+      "conditions": {
+        "zh": "答案准确率（0–1）；检索条件分母为全部 2556 题，标准证据条件为 2255 道非空题，因此两列不是严格配对的检索损失。",
+        "en": "Answer accuracy on a 0–1 scale; retrieved evidence uses all 2,556 questions while gold evidence uses 2,255 non-null questions, so the difference is not a matched retrieval-loss estimate."
+      },
+      "metric_labels": {
+        "zh": [
+          "检索证据（全部 2556 题）",
+          "标准证据（2255 道非空题）"
+        ],
+        "en": [
+          "Retrieved(all 2556)",
+          "Gold(non-null 2255)"
+        ]
+      },
+      "row_ids": [
+        "GPT-4",
+        "Mixtral-8x7B-Instruct"
+      ],
+      "row_labels": {
+        "zh": {
+          "GPT-4": "GPT-4",
+          "Mixtral-8x7B-Instruct": "Mixtral-8x7B-Instruct"
+        },
+        "en": {
+          "GPT-4": "GPT-4",
+          "Mixtral-8x7B-Instruct": "Mixtral-8x7B-Instruct"
+        }
+      }
+    },
+    {
+      "id": "placement",
+      "kind": "context"
+    },
+    {
+      "id": "interpretation",
+      "kind": "context"
+    },
+    {
+      "id": "limitations",
+      "kind": "limitations"
+    }
+  ],
+  "note_sha256": {
+    "zh": "e3d9fef6990e52622ad7a94600fb6aa89c9219a624c8b76dbbaaceb5e7da8a0e",
+    "en": "c4fd7cf74dc9b39e4c65f6e07934cd02a3d7aa5f34369e6f42db981a075601f2"
+  }
+},
     "crag": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://arxiv.org/pdf/2406.04744v1","version":"v1,2024-06-07","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2406.04744v1","source_locator":"Table 5, section 5.1","source_locator_zh":"表 5, 节 5.1","source_locator_en":"Table 5, section 5.1","conditions":{"zh":"1335 道公开测试题，GPT-4 Turbo；前三项为回答比例百分数，Scorea 为准确率减幻觉率的百分点分数；网页上下文 4000 token，KG 2000 token。","en":"GPT-4 Turbo on 1,335 public test questions; the first three metrics are percentages and Scorea is accuracy minus hallucination in percentage points; web context is 4,000 tokens and KG context 2,000 tokens."},"metric_labels":{"zh":["准确率","幻觉率","未作答率","自动风险分数"],"en":["Accuracy","Hallucination","Missing","Scorea"]},"row_ids":["LLM-only","Task1","Task2","Task3"],"row_labels":{"zh":{"LLM-only":"仅语言模型","Task1":"Task1","Task2":"Task2","Task3":"Task3"},"en":{"LLM-only":"LLM-only","Task1":"Task 1","Task2":"Task 2","Task3":"Task 3"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"db43fc150bcd4093e4682a7b59e8a8316076b795682d0ea4dcc4672c94e8184d","en":"885053e9af418a6ed665d385e45137e4ef6a17fd4fd35564f9c18daf81a9e05c"}},
     "kilt": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://arxiv.org/pdf/2009.02252v1","version":"v1,2020-09-04","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2009.02252v1","source_locator":"Tables 2–4, Appendix Tables 13–14","source_locator_zh":"表 2–4, 附录表 13–14","source_locator_en":"Tables 2–4, Appendix Tables 13–14","conditions":{"zh":"测试集 NQ 1444 题、HotpotQA 5569 题；指标为百分数，KILT-EM 要求答案正确且至少一个完整来源集合的 R-precision=1。","en":"Test denominators are 1,444 NQ and 5,569 HotpotQA questions; all metrics are percentages, and KILT-EM requires a correct answer plus R-precision=1 for at least one complete provenance set."},"metric_labels":{"zh":["答案 EM","R-precision","KILT-EM"],"en":["Answer_EM","R_precision","KILT_EM"]},"row_ids":["NQ / BART+DPR","NQ / RAG","HotpotQA / BART+DPR","HotpotQA / RAG"],"row_labels":{"zh":{"NQ / BART+DPR":"NQ / BART+DPR","NQ / RAG":"NQ / RAG","HotpotQA / BART+DPR":"HotpotQA / BART+DPR","HotpotQA / RAG":"HotpotQA / RAG"},"en":{"NQ / BART+DPR":"NQ / BART+DPR","NQ / RAG":"NQ / RAG","HotpotQA / BART+DPR":"HotpotQA / BART+DPR","HotpotQA / RAG":"HotpotQA / RAG"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"7171b5e4b223a6d17146f61e9d4da9eb4cbc467d34bc4c708356059253bbe067","en":"1637318ad8a26d91c8089cca0a758e8ff0358b9eeca9d39098a5ac1267c90616"}},
     "ragbench": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://arxiv.org/pdf/2407.11005v1","version":"arXiv v1","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2407.11005v1","source_locator":"Table 3, section 5","source_locator_zh":"表 3, 节 5","source_locator_en":"Table 3, section 5","conditions":{"zh":"各来源测试集；幻觉 AUROC 越高越好，相关性 RMSE 越低越好，均为 0–1；标签来自 GPT-4，未逐行给出测试样本分母。","en":"Source-specific test sets; higher hallucination AUROC and lower relevance RMSE are better, both on a 0–1 scale; labels come from GPT-4 and row-specific test denominators are not given here."},"metric_labels":{"zh":["GPT3.5","RAGAS","DeBERTa"],"en":["GPT3.5","RAGAS","DeBERTa"]},"row_ids":["HotpotQA/Hall_AUROC","DelucionQA/Hall_AUROC","PubMedQA/Rel_RMSE"],"row_labels":{"zh":{"HotpotQA/Hall_AUROC":"HotpotQA/Hall_AUROC","DelucionQA/Hall_AUROC":"DelucionQA/Hall_AUROC","PubMedQA/Rel_RMSE":"PubMedQA/Rel_RMSE"},"en":{"HotpotQA/Hall_AUROC":"HotpotQA/Hall_AUROC","DelucionQA/Hall_AUROC":"DelucionQA/Hall_AUROC","PubMedQA/Rel_RMSE":"PubMedQA/Rel_RMSE"}}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/pdf/2407.11005v1","source_locator":"Table 4, Appendix 9.7","source_locator_zh":"表 4, 附录 9.7","source_locator_en":"Table 4, Appendix 9.7","conditions":{"zh":"同一来源测试集的幻觉 AUROC（0–1）；比较全部领域与仅通用知识的训练数据，逐来源测试分母未明确列出。","en":"Hallucination AUROC on a 0–1 scale for the same source test sets; all-domain versus general-knowledge-only training, with per-source test denominators unspecified here."},"metric_labels":{"zh":["全领域训练","仅通用知识训练"],"en":["All-domain train","General-knowledge-only train"]},"row_ids":["FinQA","TechQA"],"row_labels":{"zh":{"FinQA":"FinQA","TechQA":"TechQA"},"en":{"FinQA":"FinQA","TechQA":"TechQA"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"8558c432e4112b95e95f95943d2711de678041731c280bfe5af785c38389590a","en":"495e44290e187eba10fe6ee1f9b8283ff07af0ad47be5fe611f546841e6231c1"}},
     "bright": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://arxiv.org/pdf/2407.12883v4","version":"arXiv v4 (2025-03-26)","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2407.12883v4","source_locator":"Table 2","source_locator_zh":"表 2","source_locator_en":"Table 2","conditions":{"zh":"12 个数据集的宏平均 nDCG@10（0–100）；v4 共 1384 个查询，各数据集权重相同。","en":"Macro nDCG@10 on a 0–100 scale across 12 datasets; v4 contains 1,384 queries and weights datasets equally."},"metric_labels":{"zh":["分数"],"en":["Score"]},"row_ids":["BM25","SFR","Qwen"],"row_labels":{"zh":{"BM25":"BM25","SFR":"SFR","Qwen":"Qwen"},"en":{"BM25":"BM25","SFR":"SFR","Qwen":"Qwen"}}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/pdf/2407.12883v4","source_locator":"Table 3/Table 41","source_locator_zh":"表 3/表 41","source_locator_en":"Table 3/Table 41","conditions":{"zh":"12 个数据集宏平均 nDCG@10（0–100）；该独立实验块 BM25 基线为 14.3，不应与表 2 的 14.5 混用。","en":"Macro nDCG@10 on a 0–100 scale across 12 datasets; this separate experiment block uses a BM25 baseline of 14.3, which must not be mixed with Table 2’s 14.5."},"metric_labels":{"zh":["候选文档数 k","分数"],"en":["Candidate_k","Score"]},"row_ids":["None","MiniLM-L12","GPT-4"],"row_labels":{"zh":{"None":"无","MiniLM-L12":"MiniLM-L12","GPT-4":"GPT-4"},"en":{"None":"None","MiniLM-L12":"MiniLM-L12","GPT-4":"GPT-4"}}},{"id":"result-3","kind":"quantitative","source_url":"https://arxiv.org/pdf/2407.12883v4","source_locator":"Table 4, Table 46","source_locator_zh":"表 4, 表 46","source_locator_en":"Table 4, Table 46","conditions":{"zh":"7 个 StackExchange 领域的平均参考内容覆盖评分（0–100）；Claude 3.5 Sonnet 同时生成与评分，逐领域查询数见数据表，不能解释为二元正确率。","en":"Mean reference-content coverage score on a 0–100 scale over seven StackExchange domains; Claude 3.5 Sonnet generates and judges, with domain query counts in the dataset table; this is not binary accuracy."},"metric_labels":{"zh":["平均分"],"en":["Average"]},"row_ids":["None","Qwen","Oracle"],"row_labels":{"zh":{"None":"无","Qwen":"Qwen","Oracle":"标准证据"},"en":{"None":"None","Qwen":"Qwen","Oracle":"Oracle"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"eee58771c2d8bfdc89e86a1436203bc097533ad93d164ebb910638e97b188d71","en":"c4bd57e09b6d8954a3440307acda55efa00209c817de99acdf9a2496521a6a98"}},
-    "rgb": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://arxiv.org/pdf/2309.01431v1","version":"v1,2023-09-04","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2309.01431v1","source_locator":"Tables 1,3,5,7","source_locator_zh":"表 1,3,5,7","source_locator_en":"Tables 1,3,5,7","conditions":{"zh":"ChatGPT，百分数；噪声与拒答每种语言 300 题，整合与反事实每种语言 100 题；答案按子串匹配，Rej 按指定字符串、Rej* 按语义判定。","en":"ChatGPT percentages; noise and rejection use 300 questions per language, integration and counterfactual tests 100 per language; answers use substring matching, Rej uses a specified string, and Rej* uses semantic judgment."},"metric_labels":{"zh":["英语","中文"],"en":["English","Chinese"]},"row_ids":["Noise0 accuracy","Noise.8 accuracy","Integration noise0 accuracy","Integration noise.4 accuracy","Only-noise Rej","Only-noise Rej*","Counterfactual closed-book accuracy","Counterfactual documents accuracy"],"row_labels":{"zh":{"Noise0 accuracy":"噪声比例 0 的准确率","Noise.8 accuracy":"噪声比例 0.8 的准确率","Integration noise0 accuracy":"信息整合，噪声比例 0 的准确率","Integration noise.4 accuracy":"信息整合，噪声比例 0.4 的准确率","Only-noise Rej":"纯噪声拒答率 Rej","Only-noise Rej*":"纯噪声语义拒答率 Rej*","Counterfactual closed-book accuracy":"反事实测试的闭卷准确率","Counterfactual documents accuracy":"提供反事实文档时的准确率"},"en":{"Noise0 accuracy":"Noise 0 accuracy","Noise.8 accuracy":"Noise.8 accuracy","Integration noise0 accuracy":"Integration noise 0 accuracy","Integration noise.4 accuracy":"Integration noise.4 accuracy","Only-noise Rej":"Only-noise Rej","Only-noise Rej*":"Only-noise Rej*","Counterfactual closed-book accuracy":"Counterfactual closed-book accuracy","Counterfactual documents accuracy":"Counterfactual documents accuracy"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"48f813f5660ce364bf953454419e09c4f520e0187afa0f57d267eba1ae8d2f38","en":"ad6c80be99a8de1df858f542c56b3d69793a250160aca9e8961d519473e0e8d8"}},
+    "rgb": {
+  "status": "full-text-reviewed",
+  "reviewed_at": "2026-10-03",
+  "status_text": {
+    "zh": "已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。",
+    "en": "Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."
+  },
+  "sources": [
+    {
+      "url": "https://arxiv.org/pdf/2309.01431v1",
+      "version": "v1,2023-09-04",
+      "kind": "paper-full-text",
+      "coverage": [
+        "method",
+        "experimental_setup",
+        "results",
+        "limitations"
+      ]
+    },
+    {
+      "url": "https://github.com/chen700564/RGB/blob/d2293eec8c76467c1572b3ebedcaca4e9b4e82f4/evalue.py",
+      "version": "d2293eec8c76467c1572b3ebedcaca4e9b4e82f4",
+      "kind": "official-protocol",
+      "coverage": [
+        "experimental_setup",
+        "results",
+        "limitations"
+      ]
+    }
+  ],
+  "evidence_mode": "quantitative",
+  "blocks": [
+    {
+      "id": "reading",
+      "kind": "reading"
+    },
+    {
+      "id": "method",
+      "kind": "method"
+    },
+    {
+      "id": "setup",
+      "kind": "setup"
+    },
+    {
+      "id": "result-1",
+      "kind": "quantitative",
+      "source_url": "https://arxiv.org/pdf/2309.01431v1",
+      "source_locator": "Tables 1,3,5,7",
+      "source_locator_zh": "表 1,3,5,7",
+      "source_locator_en": "Tables 1,3,5,7",
+      "conditions": {
+        "zh": "ChatGPT百分比；声明题集规模为噪声/拒答每语言300题，整合/反事实每语言100题；实际计分分母未提供日志。噪声比例为名义设置；准确率为子串匹配，Rej为指定字符串，Rej*为语义判断。",
+        "en": "ChatGPT percentages; declared testbeds: noise/rejection 300 per language, integration/counterfactual 100 per language; scored-denominator logs unavailable. Noise ratios are nominal; accuracy uses substring matching, Rej a specified string, Rej* semantic judgment."
+      },
+      "metric_labels": {
+        "zh": [
+          "英语",
+          "中文"
+        ],
+        "en": [
+          "English",
+          "Chinese"
+        ]
+      },
+      "row_ids": [
+        "Noise0 accuracy",
+        "Noise.8 accuracy",
+        "Integration noise0 accuracy",
+        "Integration noise.4 accuracy",
+        "Only-noise Rej",
+        "Only-noise Rej*",
+        "Counterfactual closed-book accuracy",
+        "Counterfactual documents accuracy"
+      ],
+      "row_labels": {
+        "zh": {
+          "Noise0 accuracy": "噪声比例 0 的准确率",
+          "Noise.8 accuracy": "噪声比例 0.8 的准确率",
+          "Integration noise0 accuracy": "信息整合，噪声比例 0 的准确率",
+          "Integration noise.4 accuracy": "信息整合，噪声比例 0.4 的准确率",
+          "Only-noise Rej": "纯噪声拒答率 Rej",
+          "Only-noise Rej*": "纯噪声语义拒答率 Rej*",
+          "Counterfactual closed-book accuracy": "反事实测试的闭卷准确率",
+          "Counterfactual documents accuracy": "提供反事实文档时的准确率"
+        },
+        "en": {
+          "Noise0 accuracy": "Noise 0 accuracy",
+          "Noise.8 accuracy": "Noise.8 accuracy",
+          "Integration noise0 accuracy": "Integration noise 0 accuracy",
+          "Integration noise.4 accuracy": "Integration noise.4 accuracy",
+          "Only-noise Rej": "Only-noise Rej",
+          "Only-noise Rej*": "Only-noise Rej*",
+          "Counterfactual closed-book accuracy": "Counterfactual closed-book accuracy",
+          "Counterfactual documents accuracy": "Counterfactual documents accuracy"
+        }
+      }
+    },
+    {
+      "id": "placement",
+      "kind": "context"
+    },
+    {
+      "id": "interpretation",
+      "kind": "context"
+    },
+    {
+      "id": "limitations",
+      "kind": "limitations"
+    }
+  ],
+  "note_sha256": {
+    "zh": "38444eaaaf5d52d2abf3e963a72191ed22de56336afb391acffa5e7887ad0a29",
+    "en": "c5bf36fb4f4f615c720bff094eacfa2cb37ac61aba731b4ac77c1d22adda1615"
+  }
+},
     "ragtruth": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://arxiv.org/pdf/2401.00396v1","version":"arXiv v1","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2401.00396v1","source_locator":"Tables 5–6","source_locator_zh":"表 5–6","source_locator_en":"Tables 5–6","conditions":{"zh":"450 个测试来源实例，每任务 150 个、每实例有多个模型回答；F1 单位百分数，回答级按是否有幻觉，跨度级按字符重叠计算。","en":"The test has 450 source instances, 150 per task, with multiple model responses per instance; F1 is in percent, at response level for hallucination presence and span level for character overlap."},"metric_labels":{"zh":["回答级 F1","字符跨度 F1"],"en":["Response_F1","Char_span_F1"]},"row_ids":["GPT-4-turbo prompt","Finetuned Llama2-13B"],"row_labels":{"zh":{"GPT-4-turbo prompt":"GPT-4-turbo prompt","Finetuned Llama2-13B":"Finetuned Llama2-13B"},"en":{"GPT-4-turbo prompt":"GPT-4-turbo prompt","Finetuned Llama2-13B":"Finetuned Llama2-13B"}}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/pdf/2401.00396v1","source_locator":"Table 7, section 6.3","source_locator_zh":"表 7, 节 6.3","source_locator_en":"Table 7, section 6.3","conditions":{"zh":"Llama 2-7B／Mistral 7B 的成对候选，450 个来源实例；返回数单位为条，幻觉率分母为该行实际返回回答数。","en":"Paired Llama 2-7B and Mistral 7B candidates for 450 source instances; returned count is in responses, and hallucination rate is a percentage of responses actually returned in each row."},"metric_labels":{"zh":["返回回答数","返回回答中的幻觉率"],"en":["Returned_count","Hallucination_rate"]},"row_ids":["Random","Fewest detected spans","No detected spans"],"row_labels":{"zh":{"Random":"随机选择","Fewest detected spans":"选择检测到的幻觉跨度最少者","No detected spans":"仅保留未检出幻觉者"},"en":{"Random":"Random","Fewest detected spans":"Fewest detected spans","No detected spans":"No detected spans"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"62b10329d2a0d2e560fdf3a930a2acbceb45280e4584c5f9777f2ed4340c3121","en":"ede8622339cef2ae037a4aa8723e9aa6195018a6a03b3bd089d02e77a4636a96"}},
     "browsecomp": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://arxiv.org/pdf/2504.12516v1","version":"arXiv v1 (2025-04-16)","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2504.12516v1","source_locator":"Table 3","source_locator_zh":"表 3","source_locator_en":"Table 3","conditions":{"zh":"1266 道题的参考答案等价准确率，单位百分数；模型版本见条件表，Deep Research 的绝对工具／token 预算未公开。","en":"Reference-answer equivalence accuracy in percent on 1,266 questions; dated model versions appear in the conditions, while the absolute tool and token budget for Deep Research is undisclosed."},"metric_labels":{"zh":["准确率"],"en":["Accuracy"]},"row_ids":["GPT-4o","GPT-4o browsing","o1 medium","Deep Research"],"row_labels":{"zh":{"GPT-4o":"GPT-4o","GPT-4o browsing":"GPT-4o browsing","o1 medium":"o1 medium","Deep Research":"Deep Research"},"en":{"GPT-4o":"GPT-4o","GPT-4o browsing":"GPT-4o browsing","o1 medium":"o1 medium","Deep Research":"Deep Research"}}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/pdf/2504.12516v1","source_locator":"Table 2","source_locator_zh":"表 2","source_locator_en":"Table 2","conditions":{"zh":"计数表；367/1255 为自报解出，317/367 为已解出子集的参考答案一致，不能把 29.2% 当作参考答案准确率。","en":"Counts; 367/1,255 is self-reported completion, whereas 317/367 is reference agreement among completed attempts; 29.2% is not reference-answer accuracy."},"metric_labels":{"zh":["分子","分母"],"en":["Numerator","Denominator"]},"row_ids":["Reported solved","Reference agreement among solved","Gave up after≥2h"],"row_labels":{"zh":{"Reported solved":"自报解出","Reference agreement among solved":"已解出子集内参考答案一致","Gave up after≥2h":"尝试至少 2 小时后放弃"},"en":{"Reported solved":"Reported solved","Reference agreement among solved":"Reference agreement among solved","Gave up after≥2h":"Gave up after≥2h"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"4e2d835eaca51aae22895f26122811b88f1c8ccb85f946fedbe8bead37b2adc1","en":"bcf51519bbd5019b3fb47c8f5a32cc179834eae7f028ef8cb5c1dbb862ee8dc8"}},
     "deepresearch-bench": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已阅读下述主论文全文的方法、实验设置、结果与局限；未独立复现实验。","en":"Reviewed the stated primary paper in full for methods, experimental setup, results and limitations; no independent reproduction."},"sources":[{"url":"https://arxiv.org/pdf/2506.11763v1","version":"arXiv v1","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"evidence_mode":"quantitative","blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2506.11763v1","source_locator":"Table 1; Sections 3–4; Appendix E","source_locator_zh":"表 1; 节 3–4; 附录 E","source_locator_en":"Table 1; Sections 3–4; Appendix E","conditions":{"zh":"100 题；RACE 为相对质量分 ×100；引用准确率为逐任务百分比的宏平均；有效引用数为受支持断言—URL 对／任务。","en":"Across 100 tasks; RACE is relative quality ×100, citation accuracy is the macro-average of per-task percentages, and effective citations are supported statement–URL pairs per task."},"metric_labels":{"zh":["RACE 综合分","引用准确率","每任务有效引用数"],"en":["RACE overall","Citation accuracy","Effective citations/task"]},"row_ids":["Gemini-2.5-Pro Deep Research","OpenAI Deep Research","Perplexity Deep Research"],"row_labels":{"zh":{"Gemini-2.5-Pro Deep Research":"Gemini-2.5-Pro Deep Research","OpenAI Deep Research":"OpenAI Deep Research","Perplexity Deep Research":"Perplexity Deep Research"},"en":{"Gemini-2.5-Pro Deep Research":"Gemini-2.5-Pro Deep Research","OpenAI Deep Research":"OpenAI Deep Research","Perplexity Deep Research":"Perplexity Deep Research"}}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/pdf/2506.11763v1","source_locator":"Table 2; Section 4.3; Appendix F","source_locator_zh":"表 2; 节 4.3; 附录 F","source_locator_en":"Table 2; Section 4.3; Appendix F","conditions":{"zh":"均以百分数表示；人工样本为 50 道中文题、4 个系统、每题 3 名专家。整体相关性跨 4 个系统均值计算，过滤后相关性只用 ICC≥0 的 37 题；配对分母存在下述报告疑点。","en":"All values are expressed as percentages; human evaluation covers 50 Chinese tasks, four systems and three experts per task. Overall correlation uses four system means, filtered correlation uses the 37 tasks with ICC≥0, and pairwise aggregation has the reporting ambiguity noted below."},"metric_labels":{"zh":["配对偏好一致率","系统均值 Pearson","过滤后任务平均 Pearson"],"en":["Pairwise agreement","Overall Pearson","Filtered mean Pearson"]},"row_ids":["Vanilla Prompt","RACE Full","No Reference"],"row_labels":{"zh":{"Vanilla Prompt":"直接评分提示","RACE Full":"完整 RACE","No Reference":"去掉参考报告"},"en":{"Vanilla Prompt":"Vanilla Prompt","RACE Full":"RACE Full","No Reference":"No Reference"}}},{"id":"placement","kind":"context"},{"id":"interpretation","kind":"context"},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"853e3d3bf288e8e408804128bb11122598388b919fb3cc46a551065b5e5d1b1e","en":"effe7ea17a1440b98c3f188fb6598753bcf71a61dbac0340532968981870e76a"}},
@@ -300,6 +548,74 @@
     "das-bench": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已完整阅读所述版本的正文与可用附录，并核对所用结果；未独立复现实验。","en":"Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction."},"evidence_mode":"quantitative","sources":[{"url":"https://arxiv.org/pdf/2608.18034v1","version":"arXiv 2608.18034v1 · 2026-08-18","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2608.18034v1","source_locator":"Table A16, Appendix F.1, PDF p. 31","row_ids":["row-1","row-2","row-3"],"row_labels":{"zh":{"row-1":"DAS","row-2":"Naive RAG","row-3":"AutoSurvey"},"en":{"row-1":"DAS","row-2":"Naive RAG","row-3":"AutoSurvey"}},"conditions":{"zh":"主 judge Qwen3.5，21 主题逐项平均后等权合并 16 项。DAS 与 Naive RAG 使用同 300 候选表示；AutoSurvey 保留其 530K 文献库。因此主题与主干匹配，检索资源、流程及成本未全匹配。","en":"Main Qwen3.5 judge, per-criterion means over twenty-one topics and equal aggregation of sixteen criteria. DAS/Naive RAG share three hundred candidate representations; AutoSurvey retains its 530K corpus. Topics/backbone match, but retrieval resources, workflow and costs do not all match."},"metric_labels":{"zh":["BSC（1–5）","TSQ（1–5）","HDQ（1–5）","MAR（1–5）","总分（1–5）"],"en":["BSC (1–5)","TSQ (1–5)","HDQ (1–5)","MAR (1–5)","Total (1–5)"]}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/pdf/2608.18034v1","source_locator":"Table 4 and Appendix F.3, PDF pp. 9,31–32","row_ids":["row-1","row-2","row-3"],"row_labels":{"zh":{"row-1":"仅直接改段","row-2":"仅重规划段落","row-3":"完整 DAS"},"en":{"row-1":"Direct Edit Only","row-2":"Paragraph Replan Only","row-3":"Full DAS"}},"conditions":{"zh":"30 个主题，从相同审核前状态开始，模型、提示、最多三轮预算和确定性检查一致。通过率分母是受审小节，表示在预算内获得 Reviewer PASS；不是事实正确的主张比例，也不是全部成本。","en":"Thirty topics, identical pre-review checkpoints, model, prompts, three-round limit and deterministic checker. Pass rate divides reviewed subsections that obtain Reviewer PASS within budget by reviewed subsections; it is neither factual-claim accuracy nor total pipeline cost."},"metric_labels":{"zh":["审核通过率（%）","每综述审核修复 token（百万）","HDQ（1–5）"],"en":["Review pass rate (%)","Review/repair tokens per survey (millions)","HDQ (1–5)"]}},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"d14ac7175cad5bf9d2a0d29a51cc9f0a655849fd45d25e33aeab4873ab0940b1","en":"93cb113b628f5e86f5bba59dcf490a713f19b150e1b198f7c17c8455d5716406"}},
     "wandr": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"zh":"已完整阅读所述版本的正文与可用附录，并核对所用结果；未独立复现实验。","en":"Read the stated version’s complete main text and available appendices and checked selected results; no independent experiment reproduction."},"evidence_mode":"quantitative","sources":[{"url":"https://arxiv.org/pdf/2608.14747v1","version":"arXiv 2608.14747v1 · 2026-08-14","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/pdf/2608.14747v1","source_locator":"Tables 3–5, PDF pp. 15–16","row_ids":["row-1","row-2","row-3"],"row_labels":{"zh":{"row-1":"Perplexity / GPT-5.5 high / Search as Code","row-2":"Anthropic / Opus 4.8 high / Managed Agents","row-3":"OpenAI / GPT-5.5 high / Responses API"},"en":{"row-1":"Perplexity / GPT-5.5 high / Search as Code","row-2":"Anthropic / Opus 4.8 high / Managed Agents","row-3":"OpenAI / GPT-5.5 high / Responses API"}},"conditions":{"zh":"500 题各一轮，完整 verdict，错误运行补零后逐题等权平均；同模型名也不代表相同系统配置。成本为论文运行时 solver 账单，延迟不含核验，不是当前报价或等预算比较。Perplexity 用文件分享，另外两者从沙盒取文件。","en":"One run per five hundred tasks, full verdict, zero-filled terminal errors and equal task weighting. Matching model names do not match system stacks. Costs are historical solver charges, latency excludes verification, and neither is current pricing or budget matching. Perplexity uses file sharing; the other two use sandbox files."},"metric_labels":{"zh":["完成运行／500","Soft F1（0–1）","Hard F1（0–1）","求解成本（美元／题）","求解中位延迟（分钟）"],"en":["Completed / 500","Soft F1 (0–1)","Hard F1 (0–1)","Solve cost (USD/task)","Median solve latency (min)"]}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/pdf/2608.14747v1","source_locator":"Tables 6–7, PDF p. 18","row_ids":["row-1","row-2","row-3","row-4"],"row_labels":{"zh":{"row-1":"Perplexity / high","row-2":"Perplexity / xhigh","row-3":"OpenAI / high","row-4":"OpenAI / xhigh"},"en":{"row-1":"Perplexity / high","row-2":"Perplexity / xhigh","row-3":"OpenAI / high","row-4":"OpenAI / xhigh"}},"conditions":{"zh":"相同 45 个排程任务，各系统保留其最佳交付渠道；Perplexity xhigh 完成 44/45，其余 45/45，所有分数／成本仍除以 45。无重复方差；不同系统的同名 effort 不是统一计算预算。","en":"Same forty-five scheduled tasks with each system’s selected delivery route. Perplexity xhigh completes 44/45; others 45/45, while scores/costs retain denominator forty-five. No repeat-run variance; identically named effort is not a common compute budget."},"metric_labels":{"zh":["Soft F1（0–1）","Hard F1（0–1）","求解成本（美元／题）"],"en":["Soft F1 (0–1)","Hard F1 (0–1)","Solve cost (USD/task)"]}},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"c9e8b252d872132f23f9aeb8fca981b43b9d227605507822a9c7f9df3e8237c1","en":"780f1d39ef31169fd73932295a20663c7dd7777f28bdee44da0f8a78f3b95796"}},
     "maple": {"status":"full-text-reviewed","reviewed_at":"2026-09-30","status_text":{"en":"Full substantive paper and appendix reading completed for the stated version; experiments were not independently reproduced.","zh":"已完整阅读所列版本的实质正文与附录；未独立复现实验。"},"evidence_mode":"quantitative","sources":[{"url":"https://arxiv.org/pdf/2608.15624v1","version":"arXiv v1, 2026-08-16","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"results","kind":"quantitative","source_url":"https://arxiv.org/pdf/2608.15624v1","source_locator":"Table 5, p.6; Table 6a, p.7","row_ids":["grit-all","grit-any","grit-coverage","grit-one"],"row_labels":{"en":{"grit-all":"GritLM-7B / AllAspect","grit-any":"GritLM-7B / AnyAspect","grit-coverage":"GritLM-7B / AspectCoverage","grit-one":"GritLM-7B / MAPLE-1Q"},"zh":{"grit-all":"GritLM-7B／全部查询命中","grit-any":"GritLM-7B／任意查询命中","grit-coverage":"GritLM-7B／查询覆盖","grit-one":"GritLM-7B／MAPLE-1Q"}},"conditions":{"en":"Selected factual cells; scores are percentages. MAPLE-1Q retains the same corpus, representations and ranking procedure while sampling one query per target paper. Main evaluation uses target-paper IDs, not an answer-generation judge.","zh":"以下为精选事实单元格，成绩单位均为百分比。MAPLE-1Q 沿用相同语料、表征和排序流程，只为每篇目标论文抽取一条查询。主评测以目标论文标识判定命中，不使用答案生成评判器。"},"metric_labels":{"en":["Metric / unit","Result"],"zh":["指标／单位","结果"]}},{"id":"limitations","kind":"limitations"},{"id":"next","kind":"context"}],"note_sha256":{"en":"4b82f35f167df49884808060ee1d6c7ddc16f4af36a5a74a6e0c22314952f116","zh":"76a380d694229c0f79d3200f74b51c2aa10bcaf3ffa4b97e8ae134c0690d8c72"}},
-    "cess-evidence-selection": {"status":"full-text-reviewed","reviewed_at":"2026-10-02","status_text":{"zh":"已阅读全文并核对关键结果；未独立复现实验。","en":"Full text and key results reviewed; no independent experimental reproduction."},"evidence_mode":"quantitative","sources":[{"url":"https://arxiv.org/html/2609.39026v1","version":"arXiv:2609.39026v1","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/html/2609.39026v1","source_locator":"Table 3; Appendix D","row_ids":["opened","cess"],"row_labels":{"zh":{"opened":"已读文献均值","cess":"CESS"},"en":{"opened":"Opened Mean","cess":"CESS"}},"conditions":{"zh":"36个PERSPECTRUM任务、两种排序、三个配对种子，共216条四次搜索轨迹；本表评价前两次选择。MAE与排序敏感度无量纲，方向错误为比例；均越低越好。","en":"36 PERSPECTRUM tasks, two rankings and three paired seeds yield 216 four-search trajectories; this table evaluates their first two selections. MAE and sensitivity are dimensionless; direction error is a fraction. Lower is better for all columns."},"metric_labels":{"zh":["MAE","排序敏感度","方向错误比例"],"en":["MAE","Ranking sensitivity","Direction error"]}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/html/2609.39026v1","source_locator":"Appendix F, Table 8 and Equation 16; Appendix G, Table 11","row_ids":["shrinkage","cess"],"row_labels":{"zh":{"shrinkage":"已读均值向调参集均值收缩","cess":"CESS"},"en":{"shrinkage":"Opened Mean shrunk to Tuning Mean","cess":"CESS"}},"conditions":{"zh":"另一组最长十轮的PERSPECTRUM实验：267个调参问题、36个评估问题，汇总论文指定模型、控制器和停止条件。排序敏感度S先平均重复运行再比较排序，不能与上一表直接比较；各列均越低越好。","en":"A separate PERSPECTRUM experiment allows up to ten rounds: 267 tuning questions and 36 evaluation questions, aggregated across the paper's models, controllers and stopping conditions. Sensitivity S averages repetitions before contrasting rankings and cannot be compared directly with the preceding table. Lower is better for every column."},"metric_labels":{"zh":["MAE","排序敏感度S","方向不一致比例"],"en":["MAE","Ranking sensitivity S","Direction disagreement"]}},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"578884e9dc35f771f346ee5f4ea4a267f4732e514dd6098c6f3507897ec7ec10","en":"3d66203dd85cc66007156d8f7fbda8b5e260ac1bdc61e572735cdda398b48db7"}}
+    "cess-evidence-selection": {"status":"full-text-reviewed","reviewed_at":"2026-10-02","status_text":{"zh":"已阅读全文并核对关键结果；未独立复现实验。","en":"Full text and key results reviewed; no independent experimental reproduction."},"evidence_mode":"quantitative","sources":[{"url":"https://arxiv.org/html/2609.39026v1","version":"arXiv:2609.39026v1","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/html/2609.39026v1","source_locator":"Table 3; Appendix D","row_ids":["opened","cess"],"row_labels":{"zh":{"opened":"已读文献均值","cess":"CESS"},"en":{"opened":"Opened Mean","cess":"CESS"}},"conditions":{"zh":"36个PERSPECTRUM任务、两种排序、三个配对种子，共216条四次搜索轨迹；本表评价前两次选择。MAE与排序敏感度无量纲，方向错误为比例；均越低越好。","en":"36 PERSPECTRUM tasks, two rankings and three paired seeds yield 216 four-search trajectories; this table evaluates their first two selections. MAE and sensitivity are dimensionless; direction error is a fraction. Lower is better for all columns."},"metric_labels":{"zh":["MAE","排序敏感度","方向错误比例"],"en":["MAE","Ranking sensitivity","Direction error"]}},{"id":"result-2","kind":"quantitative","source_url":"https://arxiv.org/html/2609.39026v1","source_locator":"Appendix F, Table 8 and Equation 16; Appendix G, Table 11","row_ids":["shrinkage","cess"],"row_labels":{"zh":{"shrinkage":"已读均值向调参集均值收缩","cess":"CESS"},"en":{"shrinkage":"Opened Mean shrunk to Tuning Mean","cess":"CESS"}},"conditions":{"zh":"另一组最长十轮的PERSPECTRUM实验：267个调参问题、36个评估问题，汇总论文指定模型、控制器和停止条件。排序敏感度S先平均重复运行再比较排序，不能与上一表直接比较；各列均越低越好。","en":"A separate PERSPECTRUM experiment allows up to ten rounds: 267 tuning questions and 36 evaluation questions, aggregated across the paper's models, controllers and stopping conditions. Sensitivity S averages repetitions before contrasting rankings and cannot be compared directly with the preceding table. Lower is better for every column."},"metric_labels":{"zh":["MAE","排序敏感度S","方向不一致比例"],"en":["MAE","Ranking sensitivity S","Direction disagreement"]}},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"578884e9dc35f771f346ee5f4ea4a267f4732e514dd6098c6f3507897ec7ec10","en":"3d66203dd85cc66007156d8f7fbda8b5e260ac1bdc61e572735cdda398b48db7"}},
+    "cue-mem": {
+  "status": "full-text-reviewed",
+  "reviewed_at": "2026-10-03",
+  "status_text": {
+    "zh": "已阅读全文第1–6节与附录A–G，核对方法、设置、关键结果及局限；未独立复现实验。",
+    "en": "Read sections 1–6 and Appendices A–G for methods, settings, key results and limitations; no independent reproduction."
+  },
+  "evidence_mode": "quantitative",
+  "sources": [
+    {
+      "url": "https://arxiv.org/html/2609.32574v1",
+      "version": "arXiv:2609.32574v1",
+      "kind": "paper-full-text",
+      "coverage": [
+        "method",
+        "experimental_setup",
+        "results",
+        "limitations"
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "id": "reading",
+      "kind": "reading"
+    },
+    {
+      "id": "method",
+      "kind": "method"
+    },
+    {
+      "id": "setup",
+      "kind": "setup"
+    },
+    {
+      "id": "result-1",
+      "kind": "quantitative",
+      "source_url": "https://arxiv.org/html/2609.32574v1",
+      "source_locator": "Table 2; Appendices C.1-C.3, D.1",
+      "row_ids": [
+        "Qwen3.6-35B-A3B",
+        "GPT-5.4-mini"
+      ],
+      "conditions": {
+        "zh": "表2；隐式 Memory Avg.，准确率百分比，三个非拒答任务的宏平均；同一骨干内比较。Oracle 直接提供合成线索的源文本。",
+        "en": "Table 2; implicit Memory Avg., percentage accuracy, macro-average across three non-refusal tasks; compare within backbone. Oracle supplies synthesis-source text."
+      },
+      "metric_labels": {
+        "zh": [
+          "非Oracle（%）",
+          "Oracle（%）"
+        ],
+        "en": [
+          "Non-oracle (%)",
+          "Oracle (%)"
+        ]
+      }
+    },
+    {
+      "id": "limitations",
+      "kind": "limitations"
+    }
+  ],
+  "note_sha256": {
+    "zh": "71a04339716721ca59e4317f362c473d5bb90f74c4c679d316c64a6555e2eacc",
+    "en": "d93abac838761e4cb52da79662e6a8947ae2bfd583264accd5080290c9f01df1"
+  }
+}
   }
 }

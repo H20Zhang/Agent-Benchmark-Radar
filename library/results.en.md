@@ -2,7 +2,7 @@
 
 [Back to the main README](../README.en.md#result-snapshots) · [中文](results.md)
 
-47 benchmarks have structured results. Open each note for scores, conditions, and limitations; JSON preserves the source and recorded conditions for each track. Verification dates are not live refresh times, and one recorded result is not a current best.
+49 benchmarks have structured results. Open each note for scores, conditions, and limitations; JSON preserves the source and recorded conditions for each track. Verification dates are not live refresh times, and one recorded result is not a current best.
 
 | Benchmark | Source type | Tracks | Result verified | Raw record |
 |---|---|---:|---|---|
@@ -45,7 +45,9 @@
 | [RAGBench](../benchmarks/ragbench.en.md) <!-- benchmark-id:ragbench --> | Paper snapshot | 3 | 2026-09-03 | [JSON](../data/results/ragbench.json) |
 | [CRAG](../benchmarks/crag.en.md) <!-- benchmark-id:crag --> | Source snapshot | 2 | 2026-09-02 | [JSON](../data/results/crag.json) |
 | [LoCoMo](../benchmarks/locomo.en.md) <!-- benchmark-id:locomo --> | Source snapshot | 1 | 2026-09-02 | [JSON](../data/results/locomo.json) |
+| [MultiHop-RAG](../benchmarks/multihop-rag.en.md) <!-- benchmark-id:multihop-rag --> | Paper snapshot | 2 | 2026-10-03 | [JSON](../data/results/multihop-rag.json) |
 | [RAGTruth](../benchmarks/ragtruth.en.md) <!-- benchmark-id:ragtruth --> | Paper snapshot | 2 | 2026-09-03 | [JSON](../data/results/ragtruth.json) |
+| [RGB](../benchmarks/rgb.en.md) <!-- benchmark-id:rgb --> | Paper snapshot | 2 | 2026-10-03 | [JSON](../data/results/rgb.json) |
 | [BIRD](../benchmarks/bird.en.md) <!-- benchmark-id:bird --> | Leaderboard snapshot | 2 | 2026-09-02 | [JSON](../data/results/bird.json) |
 | [DS-1000](../benchmarks/ds-1000.en.md) <!-- benchmark-id:ds-1000 --> | Source snapshot | 1 | 2026-09-02 | [JSON](../data/results/ds-1000.json) |
 | [BEIR](../benchmarks/beir.en.md) <!-- benchmark-id:beir --> | Paper snapshot | 4 | 2026-10-02 | [JSON](../data/results/beir.json) |

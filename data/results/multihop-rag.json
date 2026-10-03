@@ -1,0 +1,89 @@
+{
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-10-03",
+  "verification_timezone": "Asia/Shanghai",
+  "benchmark_id": "multihop-rag",
+  "comparability_notes": {
+    "zh": "论文表5报告值。论文定义为证据覆盖比例，但官方代码按查询统计任一命中；对应表5的实现尚未确认。重排额外计算单列。",
+    "en": "Paper Table 5 values. Paper defines evidence coverage; official code uses query-level any-hit. Table provenance unresolved. Reranking compute differs."
+  },
+  "tracks": [
+    {
+      "track_id": "v1-non-null-cosine-hits10",
+      "primary": true,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · 余弦检索 · Hits@10",
+        "en": "Paper v1 · cosine retrieval · Hits@10"
+      },
+      "task": "Multi-hop evidence retrieval",
+      "split": "2255 non-null queries; 609 news articles",
+      "protocol_version": "2401.15391v1-table5-cosine",
+      "metric": {
+        "id": "hits10",
+        "family": "retrieval",
+        "label": "Paper-reported Hits@10",
+        "unit": "",
+        "direction": "higher",
+        "range": [
+          0,
+          1
+        ]
+      },
+      "conditions": {
+        "zh": "LlamaIndex；256词元分块；余弦相似度前10块；不重排。",
+        "en": "LlamaIndex; 256-token chunks; cosine top-10; no reranker."
+      },
+      "entries": [
+        {
+          "id": "cosine",
+          "method": "voyage-02",
+          "model": "voyage-02",
+          "score": 0.6506,
+          "date": "2024-01-27",
+          "date_basis": "paper-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2401.15391v1"
+        }
+      ]
+    },
+    {
+      "track_id": "v1-non-null-reranked-hits10",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "论文 v1 · 余弦检索后重排 · Hits@10",
+        "en": "Paper v1 · reranked retrieval · Hits@10"
+      },
+      "task": "Multi-hop evidence retrieval",
+      "split": "2255 non-null queries; 609 news articles",
+      "protocol_version": "2401.15391v1-table5-reranked",
+      "metric": {
+        "id": "hits10",
+        "family": "retrieval",
+        "label": "Paper-reported Hits@10",
+        "unit": "",
+        "direction": "higher",
+        "range": [
+          0,
+          1
+        ]
+      },
+      "conditions": {
+        "zh": "LlamaIndex；256词元分块；余弦检索前20块经 bge-reranker-large 重排取前10；总计算量未报告。",
+        "en": "LlamaIndex; 256-token chunks; cosine top-20 reranked to top-10; compute unreported."
+      },
+      "entries": [
+        {
+          "id": "reranked",
+          "method": "voyage-02 + bge-reranker-large",
+          "model": "voyage-02 + bge-reranker-large",
+          "score": 0.7467,
+          "date": "2024-01-27",
+          "date_basis": "paper-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2401.15391v1"
+        }
+      ]
+    }
+  ],
+  "implementation_evidence": "https://github.com/yixuantt/MultiHop-RAG/blob/2d0ecc32da99dc32bc60d76ba991a72af5a09d4b/evaluate.py#L7-L56"
+}
