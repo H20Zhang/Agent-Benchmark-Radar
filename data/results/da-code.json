@@ -1,0 +1,111 @@
+{
+  "benchmark_id": "da-code",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-10-04",
+  "verification_timezone": "Asia/Shanghai",
+  "tracks": [
+    {
+      "track_id": "v1-full500-da-agent-total",
+      "primary": true,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "首版 · 完整500题 · DA-Agent混合总分",
+        "en": "v1 · full 500 · DA-Agent mixed Total"
+      },
+      "task": "Data wrangling, exploratory data analysis and machine learning",
+      "split": "DA-Code v1 full 500 tasks: 100 DW, 300 EDA, 100 ML",
+      "protocol_version": "2410.07331v1-table3-da-agent-greedy-20steps-history15",
+      "metric": {
+        "id": "mixed-total",
+        "family": "composite",
+        "label": "Mixed Total score",
+        "unit": "points",
+        "direction": "higher",
+        "range": [
+          0,
+          100
+        ]
+      },
+      "conditions": {
+        "zh": "贪心生成；最多20步、15步历史、每动作300秒；Docker内Bash/Python/SQL；表格/图表匹配与归一化机器学习分数混合。具体模型快照未给齐；此处保留论文模型标识。",
+        "en": "Greedy decoding; 20 steps, 15-step history, 300 seconds/action; Docker Bash/Python/SQL. Mixes table/chart matching and normalized ML scores. Dated snapshots incompletely specified; model labels follow paper."
+      },
+      "entries": [
+        {
+          "id": "gpt-4",
+          "method": "DA-Agent",
+          "model": "GPT-4",
+          "score": 30.5,
+          "date": "2024-10-09",
+          "date_basis": "arxiv-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/html/2410.07331v1",
+          "source_locator": "Table 3; Sections 3.4 and 5.1; Appendices B-C"
+        },
+        {
+          "id": "gpt-4o",
+          "method": "DA-Agent",
+          "model": "GPT-4o",
+          "score": 29.1,
+          "date": "2024-10-09",
+          "date_basis": "arxiv-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/html/2410.07331v1",
+          "source_locator": "Table 3; Sections 3.4 and 5.1; Appendices B-C"
+        },
+        {
+          "id": "claude-3-opus",
+          "method": "DA-Agent",
+          "model": "Claude-3-Opus",
+          "score": 27.6,
+          "date": "2024-10-09",
+          "date_basis": "arxiv-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/html/2410.07331v1",
+          "source_locator": "Table 3; Sections 3.4 and 5.1; Appendices B-C"
+        },
+        {
+          "id": "qwen25-72b",
+          "method": "DA-Agent",
+          "model": "Qwen2.5-72B-Instruct (Table 3: Qwen2.5-72B)",
+          "score": 22.6,
+          "date": "2024-10-09",
+          "date_basis": "arxiv-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/html/2410.07331v1",
+          "source_locator": "Table 3; Sections 3.4 and 5.1; Appendices B-C"
+        },
+        {
+          "id": "deepseek-coder-v25",
+          "method": "DA-Agent",
+          "model": "Deepseek-Coder-V2.5",
+          "score": 20.7,
+          "date": "2024-10-09",
+          "date_basis": "arxiv-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/html/2410.07331v1",
+          "source_locator": "Table 3; Sections 3.4 and 5.1; Appendices B-C"
+        },
+        {
+          "id": "mixtral-8x22b",
+          "method": "DA-Agent",
+          "model": "Mixtral-8x22B",
+          "score": 15.4,
+          "date": "2024-10-09",
+          "date_basis": "arxiv-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/html/2410.07331v1",
+          "source_locator": "Table 3; Sections 3.4 and 5.1; Appendices B-C"
+        },
+        {
+          "id": "deepseek-coder-33b",
+          "method": "DA-Agent",
+          "model": "Deepseek-Coder-33B",
+          "score": 10.8,
+          "date": "2024-10-09",
+          "date_basis": "arxiv-v1-publication; execution date unknown",
+          "source": "https://arxiv.org/html/2410.07331v1",
+          "source_locator": "Table 3; Sections 3.4 and 5.1; Appendices B-C"
+        }
+      ]
+    }
+  ],
+  "comparability_notes": {
+    "zh": "仅记录首版表3的同一DA-Agent框架总分；不是二元成功率。模型日期快照、重复次数与部分完成率汇总方式未完全披露。不混入额外参考计划、其他历史长度或100题子集。",
+    "en": "v1 Table 3 under DA-Agent only; mixed Total score is not binary success. Dated model snapshots, repetitions and some completion-rate aggregation are incompletely reported. Excludes reference plans, changed history lengths and the 100-task subset."
+  }
+}

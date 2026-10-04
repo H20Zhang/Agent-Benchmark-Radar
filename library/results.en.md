@@ -2,7 +2,7 @@
 
 [Back to the main README](../README.en.md#result-snapshots) · [中文](results.md)
 
-49 benchmarks have structured results. Open each note for scores, conditions, and limitations; JSON preserves the source and recorded conditions for each track. Verification dates are not live refresh times, and one recorded result is not a current best.
+51 benchmarks have structured results. Open each note for scores, conditions, and limitations; JSON preserves the source and recorded conditions for each track. Verification dates are not live refresh times, and one recorded result is not a current best.
 
 | Benchmark | Source type | Tracks | Result verified | Raw record |
 |---|---|---:|---|---|
@@ -40,8 +40,10 @@
 | [DataSciBench](../benchmarks/datascibench.en.md) <!-- benchmark-id:datascibench --> | Source snapshot | 2 | 2026-09-02 | [JSON](../data/results/datascibench.json) |
 | [Spider 2.0](../benchmarks/spider-2.en.md) <!-- benchmark-id:spider-2 --> | Leaderboard snapshot | 1 | 2026-09-02 | [JSON](../data/results/spider-2.json) |
 | [MLE-bench](../benchmarks/mle-bench.en.md) <!-- benchmark-id:mle-bench --> | Source snapshot | 1 | 2026-09-02 | [JSON](../data/results/mle-bench.json) |
+| [DA-Code](../benchmarks/da-code.en.md) <!-- benchmark-id:da-code --> | Paper snapshot | 1 | 2026-10-04 | [JSON](../data/results/da-code.json) |
 | [LongMemEval](../benchmarks/longmemeval.en.md) <!-- benchmark-id:longmemeval --> | Source snapshot | 1 | 2026-09-02 | [JSON](../data/results/longmemeval.json) |
 | [BRIGHT](../benchmarks/bright.en.md) <!-- benchmark-id:bright --> | Leaderboard snapshot | 1 | 2026-09-02 | [JSON](../data/results/bright.json) |
+| [InsightBench](../benchmarks/insightbench.en.md) <!-- benchmark-id:insightbench --> | Paper snapshot | 2 | 2026-10-04 | [JSON](../data/results/insightbench.json) |
 | [RAGBench](../benchmarks/ragbench.en.md) <!-- benchmark-id:ragbench --> | Paper snapshot | 3 | 2026-09-03 | [JSON](../data/results/ragbench.json) |
 | [CRAG](../benchmarks/crag.en.md) <!-- benchmark-id:crag --> | Source snapshot | 2 | 2026-09-02 | [JSON](../data/results/crag.json) |
 | [LoCoMo](../benchmarks/locomo.en.md) <!-- benchmark-id:locomo --> | Source snapshot | 1 | 2026-09-02 | [JSON](../data/results/locomo.json) |

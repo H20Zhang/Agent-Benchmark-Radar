@@ -11,6 +11,7 @@
 | 时间 | Benchmark | 领域 | 角色 | 这次改变了什么 |
 |---:|---|---|---|---|
 | 2026-09-30 | [CESS / Evidence-selection audit](https://arxiv.org/abs/2609.39026v1) <!-- benchmark-id:cess-evidence-selection --> | RAG / Agentic Retrieval | 🔭 前沿 | 把报告与引用评价延伸到固定候选池的证据代表性；公式协议可复用，可执行发布未核实。 |
+| 2026-09-29 | [LongHarness Bench](https://arxiv.org/abs/2609.38137v1) <!-- benchmark-id:longharness --> | RAG / Agentic Retrieval | 🔭 前沿 | 增加核验驱动的后续检索与计算复用；预算统计冲突限制等预算效率结论。 |
 | 2026-09-26 | [CUE-Mem](https://arxiv.org/abs/2609.32574v1) <!-- benchmark-id:cue-mem --> | Agent Memory | 🔭 前沿 | 增加跨会话背景图像与环境声音线索；显隐条件未配对，不能把差距解释为单一因果效应。 |
 | 2026-09-24 | [MemProbe (stability–plasticity)](https://arxiv.org/abs/2609.30558v1) <!-- benchmark-id:memprobe-stability-plasticity --> | Agent Memory | 🔭 前沿 | 把有效更新、抗干扰保留与来源追溯拆成可复用受控探针；共同阅读器不等于匹配的上游预算。 |
 | 2026-09-21 | [DolphinBench](https://arxiv.org/abs/2609.24971) <!-- benchmark-id:dolphinbench --> | Agent Memory | 🔭 前沿 | 相较显式历史问答，把记忆效用落到应用中的实际动作，并要求联合报告生命周期成本与延迟。 |
@@ -290,6 +291,7 @@
 | 🔭 前沿 | [Q2D-Web](https://arxiv.org/abs/2609.08887) <!-- benchmark-id:q2d-web --> | 2026-09-08 | 在生产来源的大规模语料上，测智能体改写查询的文档检索，并区分引用、生产排序与联合标注。 | 相较 BEIR 与 BrowseComp-Plus，把智能体实际发出的查询作为检索对象，而不是把最终回答成绩归因给检索器。 |
 | 🔭 前沿 | [Mr.LHDR](https://arxiv.org/abs/2609.11318) <!-- benchmark-id:mr-lhdr --> | 2026-09-10 | 测长程多模态研究的最终答案，以及受前置依赖约束的中间结论覆盖。 | 相较只判最终答案的深度研究评测，将满足前置依赖的部分进展变成直接评分对象。 |
 | 🔭 前沿 | [ChemCLIR-Bench](https://arxiv.org/abs/2609.23231) <!-- benchmark-id:chemclir-bench --> | 2026-09-19 | 在化学专利中，按查询与目标语言、原生或翻译查询及排名深度，诊断跨语言检索。 | 在异构领域检索之外，把技术文献的语言对差异、翻译来源和相关文档排名深度显式化。 |
+| 🔭 前沿 | [LongHarness Bench](https://arxiv.org/abs/2609.38137v1) <!-- benchmark-id:longharness --> | 2026-09-29 | 四类长上下文精确答案及资源消耗。 | 增加核验驱动的后续检索与计算复用；预算统计冲突限制等预算效率结论。 |
 | 🔭 前沿 | [CESS / Evidence-selection audit](https://arxiv.org/abs/2609.39026v1) <!-- benchmark-id:cess-evidence-selection --> | 2026-09-30 | 审计自适应选择的证据能否代表固定文献池，区分候选池证据方向估计与搜索策略配对干预的效应。 | 把报告与引用评价延伸到固定候选池的证据代表性；公式协议可复用，可执行发布未核实。 |
 
 <!-- COMPLETE-MAP:rag:END -->

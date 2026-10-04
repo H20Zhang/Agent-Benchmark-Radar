@@ -5,9 +5,9 @@
 
 按时间与领域查找 Agent 评测基准，直接进入论文、代码与评测解读。
 
-**中文** · [English](README.en.md) · **149 个基准** · 发现扫描 **2026-10-03**
+**中文** · [English](README.en.md) · **150 个基准** · 发现扫描 **2026-10-04**
 
-[近期时间轴](#release-timeline) · [Agent Memory (56)](#registry-memory) · [RAG / Agentic Retrieval (54)](#registry-rag) · [Data Agents (39)](#registry-data)
+[近期时间轴](#release-timeline) · [Agent Memory (56)](#registry-memory) · [RAG / Agentic Retrieval (55)](#registry-rag) · [Data Agents (39)](#registry-data)
 
 名称链接到解读；论文、代码和数据可直接访问。
 
@@ -17,7 +17,7 @@
 <a id="timeline"></a><a id="latest"></a><a id="periods"></a>
 ## 最近六个月
 
-**2026-04-03 — 2026-10-03** · 88 项；月份精度的边界记录按区间重叠纳入。
+**2026-04-04 — 2026-10-04** · 89 项；月份精度的边界记录按区间重叠纳入。
 
 [2026-09](#month-2026-09) · [2026-08](#month-2026-08) · [2026-07](#month-2026-07) · [2026-06](#month-2026-06) · [2026-05](#month-2026-05) · [2026-04](#month-2026-04)
 
@@ -26,11 +26,12 @@
 <!-- TABLE-FIRST:RECENT:START -->
 
 <a id="month-2026-09"></a>
-### 2026-09 · 15 项
+### 2026-09 · 16 项
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 |
 |---|---|---|---|
 | [2026-09-30](https://arxiv.org/abs/2609.39026v1) | [CESS / Evidence-selection audit](benchmarks/cess-evidence-selection.md) <!-- benchmark-id:cess-evidence-selection --><br><sub>检索</sub> | 审计自适应选择的证据能否代表固定文献池，区分候选池证据方向估计与搜索策略配对干预的效应。 | [论&#8288;文](https://arxiv.org/abs/2609.39026v1) |
+| [2026-09-29](https://arxiv.org/abs/2609.38137v1) | [LongHarness Bench](benchmarks/longharness.md) <!-- benchmark-id:longharness --><br><sub>检索</sub> | 在四类长上下文任务中，检验随证据变化的检索、候选核验和已有计算复用，同时记录精确答案与控制框架资源消耗。 | [论&#8288;文](https://arxiv.org/abs/2609.38137v1) · [代&#8288;码](https://github.com/StringNLPLAB/longharness) · [数&#8288;据](https://huggingface.co/datasets/StringNLP/longharness) |
 | [2026-09-26](https://arxiv.org/abs/2609.32574v1) | [CUE-Mem](benchmarks/cue-mem.md) <!-- benchmark-id:cue-mem --><br><sub>记忆</sub> | 在合成多会话历史中，根据反复出现的背景图像与环境声音线索回忆、归纳、个性化推荐，并在证据不足时拒答。 | [论&#8288;文](https://arxiv.org/abs/2609.32574v1) · [代&#8288;码](https://github.com/yulinlp/CUE-MEM) · [数&#8288;据](https://huggingface.co/datasets/Kkryptonite/CUE-Mem) |
 | [2026-09-24](https://arxiv.org/abs/2609.30558v1) | [MemProbe (stability–plasticity)](benchmarks/memprobe-stability-plasticity.md) <!-- benchmark-id:memprobe-stability-plasticity --><br><sub>记忆</sub> | 诊断记忆能否接受有效更新、抵抗不可靠证据的覆盖，并分别保留历史、来源与时间信息。 | [论&#8288;文](https://arxiv.org/abs/2609.30558v1) · [代&#8288;码](https://github.com/jq-ding/MemProbe) · [数&#8288;据](https://github.com/jq-ding/MemProbe/tree/9068d8d9a2a47268fe6f7601b99a56a283c37be5/data/suite56) |
 | [2026-09-21](https://arxiv.org/abs/2609.24971) | [DolphinBench](benchmarks/dolphinbench.md) <!-- benchmark-id:dolphinbench --><br><sub>记忆</sub> | 在模拟工作应用中，以冻结记忆、历史依赖对照和逐题状态重置，测任务行动、总成本与延迟。 | [论&#8288;文](https://arxiv.org/abs/2609.24971) · [代&#8288;码](https://github.com/mem0ai/dolphinbench) · [项&#8288;目](https://dolphinbench.ai) |
@@ -156,7 +157,7 @@
 <a id="field-map"></a><a id="all-benchmarks"></a>
 ## 按领域浏览全部基准
 
-全部 149 个基准均在本页，按日期倒序；旧基准不会因时间较早而被移除。
+全部 150 个基准均在本页，按日期倒序；旧基准不会因时间较早而被移除。
 
 <!-- CITATION-META:START -->
 
@@ -233,13 +234,14 @@
 [回到顶部](#top)
 
 <a id="benchmark-rag"></a><a id="registry-rag"></a>
-### RAG / Agentic Retrieval · 54
+### RAG / Agentic Retrieval · 55
 
 <!-- TABLE-FIRST:AREA:rag:START -->
 
 | 时间 | Benchmark | 考察内容 | 资&#8288;料 | 引用数 (S2) |
 |---|---|---|---|---:|
 | [2026-09-30](https://arxiv.org/abs/2609.39026v1) | [CESS / Evidence-selection audit](benchmarks/cess-evidence-selection.md) <!-- benchmark-id:cess-evidence-selection --> | 审计自适应选择的证据能否代表固定文献池，区分候选池证据方向估计与搜索策略配对干预的效应。 | [论&#8288;文](https://arxiv.org/abs/2609.39026v1) | — |
+| [2026-09-29](https://arxiv.org/abs/2609.38137v1) | [LongHarness Bench](benchmarks/longharness.md) <!-- benchmark-id:longharness --> | 在四类长上下文任务中，检验随证据变化的检索、候选核验和已有计算复用，同时记录精确答案与控制框架资源消耗。 | [论&#8288;文](https://arxiv.org/abs/2609.38137v1) · [代&#8288;码](https://github.com/StringNLPLAB/longharness) · [数&#8288;据](https://huggingface.co/datasets/StringNLP/longharness) | — |
 | [2026-09-19](https://arxiv.org/abs/2609.23231) | [ChemCLIR-Bench](benchmarks/chemclir-bench.md) <!-- benchmark-id:chemclir-bench --> | 在化学专利中，按查询与目标语言、原生或翻译查询及排名深度，诊断跨语言检索。 | [论&#8288;文](https://arxiv.org/abs/2609.23231) · [代&#8288;码](https://github.com/MohammadKhodadad/Multi-Lingual-QAC) · [数&#8288;据](https://huggingface.co/datasets/MehdiAstaraki/multilingual_GP) | — |
 | [2026-09-10](https://arxiv.org/abs/2609.11318v1) | [Mr.LHDR](benchmarks/mr-lhdr.md) <!-- benchmark-id:mr-lhdr --> | 测长程多模态研究的最终答案，以及受前置依赖约束的中间结论覆盖。 | [论&#8288;文](https://arxiv.org/abs/2609.11318) · [代&#8288;码](https://github.com/minghaoguo20/Mr-LHDR) · [数&#8288;据](https://huggingface.co/datasets/Henryeahhh/Mr-LHDR) | — |
 | [2026-09-08](https://arxiv.org/abs/2609.08174v1) | [OntologyBench](benchmarks/ontologybench.md) <!-- benchmark-id:ontologybench --> | 测稠密检索能否满足本体定义的概念、关系及表型合取约束，而不只是找到语义相似文本。 | [论&#8288;文](https://arxiv.org/abs/2609.08174) · [代&#8288;码](https://github.com/cindyzhangxy/OntologyBench) · [数&#8288;据](https://huggingface.co/datasets/cxyzhang/OntologyBench) | — |
@@ -362,7 +364,7 @@
 **研究观察与能力地图：** [编辑解读，单独阅读](docs/reading-guide.md)
 
 <a id="result-snapshots"></a>
-**结果资料：** [49 个基准的来源索引](library/results.md)。成绩与实验条件在各基准解读和原始来源中查看，不在首页混排。
+**结果资料：** [51 个基准的来源索引](library/results.md)。成绩与实验条件在各基准解读和原始来源中查看，不在首页混排。
 
 <a id="library"></a>
 **历史演进与专题方法：** [完整 Library](library/README.md) · [Memory](https://github.com/H20Zhang/Agent-Memory-Radar#field-map) · [Retrieval](https://github.com/H20Zhang/Agentic-RAG-Radar#field-map) · [Data](https://github.com/H20Zhang/Data-Agent-Radar#field-map)

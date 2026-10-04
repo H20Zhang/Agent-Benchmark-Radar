@@ -12284,5 +12284,82 @@
       "updated_at": "2026-10-03",
       "status": "unmatched"
     }
+  },
+  {
+    "id": "longharness",
+    "name": "LongHarness Bench",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-09-29",
+    "importance": 3,
+    "status": "active",
+    "summary": "Tests adaptive evidence search, verification and computation reuse across four long-context tasks, reporting exact answers alongside harness resource use.",
+    "capabilities": [
+      "adaptive-retrieval",
+      "evidence-verification",
+      "computation-reuse",
+      "accuracy-cost-evaluation"
+    ],
+    "environment": [
+      "closed-synthetic-corpora",
+      "python-program-collections",
+      "structured-fact-worlds"
+    ],
+    "protocol": [
+      "four-fifty-instance-suites",
+      "task-specific-exact-set-scoring",
+      "format-tolerant-tracing-rescore",
+      "nominal-token-budget-with-unresolved-enforcement"
+    ],
+    "scale": "200 instances, 50 per suite; 160-person constraint worlds, 700-memo packets, 320-cell traces and 200-program pair search.",
+    "measurement_strength": "Separates selective, state-dependent retrieval and reusable evidence organization from exhaustive processing while observing system-level accuracy and cost.",
+    "coverage_gap": "Synthetic tasks and unresolved token-cap accounting do not establish equal-budget efficiency, live-world robustness or causal component benefits.",
+    "confounders": [
+      "nominal-three-million-token-budget-discrepancy",
+      "tracing-format-tolerant-rescore",
+      "public-answer-key-leakage",
+      "unknown-repetition-and-model-snapshot-details",
+      "cached-token-rate-estimates",
+      "unequal-tool-interfaces",
+      "hard-heavy-comparator-subset"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2609.38137v1",
+      "code": "https://github.com/StringNLPLAB/longharness",
+      "data": "https://huggingface.co/datasets/StringNLP/longharness"
+    },
+    "last_verified": "2026-10-04",
+    "published_at": "2026-09-29T17:55:07Z",
+    "first_seen_at": "2026-10-03T21:17:31Z",
+    "radar_published_at": "2026-10-03T21:23:30Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-09-29",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2609.38137v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-10-04",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2609.38137v1",
+      "checked_at": "2026-10-04",
+      "protocol_source": "https://github.com/StringNLPLAB/longharness/blob/6e3da81caa79a0fa53c150aa458b7e4e0c074e87/score.py",
+      "result_source": "https://arxiv.org/html/2609.38137v1",
+      "score_ceiling": "System-level exact success on fixed synthetic suites; budget enforcement and causal mechanism attribution remain unresolved.",
+      "next_control": "Resolve token accounting, pin runners and raw traces, then match tools and budgets across strategies.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-10-04",
+      "status": "unmatched"
+    }
   }
 ]

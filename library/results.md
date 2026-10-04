@@ -2,7 +2,7 @@
 
 [返回主入口](../README.md#result-snapshots) · [English](results.en.md)
 
-49 个基准已有结构化结果。点击基准名称阅读分数、适用条件及局限；JSON 保留各轨道的原始来源与已记录条件。核验日期不等于榜单实时更新，单条结果不代表当前最佳。
+51 个基准已有结构化结果。点击基准名称阅读分数、适用条件及局限；JSON 保留各轨道的原始来源与已记录条件。核验日期不等于榜单实时更新，单条结果不代表当前最佳。
 
 | Benchmark | 来源类型 | 轨道数 | 结果核验 | 原始记录 |
 |---|---|---:|---|---|
@@ -40,8 +40,10 @@
 | [DataSciBench](../benchmarks/datascibench.md) <!-- benchmark-id:datascibench --> | 来源快照 | 2 | 2026-09-02 | [JSON](../data/results/datascibench.json) |
 | [Spider 2.0](../benchmarks/spider-2.md) <!-- benchmark-id:spider-2 --> | 榜单快照 | 1 | 2026-09-02 | [JSON](../data/results/spider-2.json) |
 | [MLE-bench](../benchmarks/mle-bench.md) <!-- benchmark-id:mle-bench --> | 来源快照 | 1 | 2026-09-02 | [JSON](../data/results/mle-bench.json) |
+| [DA-Code](../benchmarks/da-code.md) <!-- benchmark-id:da-code --> | 论文快照 | 1 | 2026-10-04 | [JSON](../data/results/da-code.json) |
 | [LongMemEval](../benchmarks/longmemeval.md) <!-- benchmark-id:longmemeval --> | 来源快照 | 1 | 2026-09-02 | [JSON](../data/results/longmemeval.json) |
 | [BRIGHT](../benchmarks/bright.md) <!-- benchmark-id:bright --> | 榜单快照 | 1 | 2026-09-02 | [JSON](../data/results/bright.json) |
+| [InsightBench](../benchmarks/insightbench.md) <!-- benchmark-id:insightbench --> | 论文快照 | 2 | 2026-10-04 | [JSON](../data/results/insightbench.json) |
 | [RAGBench](../benchmarks/ragbench.md) <!-- benchmark-id:ragbench --> | 论文快照 | 3 | 2026-09-03 | [JSON](../data/results/ragbench.json) |
 | [CRAG](../benchmarks/crag.md) <!-- benchmark-id:crag --> | 来源快照 | 2 | 2026-09-02 | [JSON](../data/results/crag.json) |
 | [LoCoMo](../benchmarks/locomo.md) <!-- benchmark-id:locomo --> | 来源快照 | 1 | 2026-09-02 | [JSON](../data/results/locomo.json) |

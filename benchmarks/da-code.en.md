@@ -37,6 +37,9 @@ The 500 tasks comprise 100 wrangling, 100 ML and 300 exploratory-analysis tasks.
 [Setup source](https://arxiv.org/html/2410.07331v1)
 Completion uses tasks as its denominator; executable-code rate uses generated code. Table checks target specified columns; chart checks extract values/parameters from plotting scripts rather than judge complete visual quality. Table 4 prints 99.5% completion on a 100-task subset without explicit rerun/aggregation details, so no successful-task count is inferred.
 
+Additional scoring limits: Appendix C normalizes ML metrics using task-specific baseline and best-reference bounds; chart matching permits sorting/scaling transformations and does not establish complete visual quality. Appendix A excludes deep-learning tasks. Table 3 also contains completion rates such as 97.7% that cannot directly imply an integer count out of 500; repetition/aggregation remains unspecified. New tracks record Table 3 mixed Total only, excluding these ambiguous completion rates.
+
+[Table 3 / Appendix C](https://arxiv.org/html/2410.07331v1) · [JSON](../data/results/da-code.json)
 <!-- EVIDENCE:setup:END -->
 
 <!-- EVIDENCE:result-1:START -->

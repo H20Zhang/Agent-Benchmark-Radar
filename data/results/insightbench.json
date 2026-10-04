@@ -1,0 +1,166 @@
+{
+  "benchmark_id": "insightbench",
+  "tracking_status": "paper-snapshot",
+  "verified_at": "2026-10-04",
+  "verification_timezone": "Asia/Shanghai",
+  "tracks": [
+    {
+      "track_id": "v4-smart-diverse-insight-llama3eval",
+      "primary": true,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "v4 · 明确业务目标 · 洞察软评分",
+        "en": "v4 · SMART goal · insight soft score"
+      },
+      "task": "insight generation",
+      "split": "InsightBench v4 full 100 synthetic datasets / 475 reference insights",
+      "protocol_version": "2407.06423v4-table1-agentpoirot-smart-diverse-llama3eval",
+      "metric": {
+        "id": "insight-llama3eval",
+        "family": "judge-score",
+        "label": "insight LLaMA-3-Eval",
+        "unit": "normalized score",
+        "direction": "higher",
+        "range": [
+          0,
+          1
+        ]
+      },
+      "conditions": {
+        "zh": "AgentPoirot；明确业务目标；多样化后续问题；三个起始问题、每个四个后续问题；最多15项洞察；生成与LLaMA-3-70B裁判温度0；五个种子的均值与标准差。未给出匹配的计算预算。",
+        "en": "AgentPoirot, SMART goal, diverse follow-ups; three root questions and four follow-ups each, up to 15 insights; generation and LLaMA-3-70B judge temperature 0; five-seed mean and SD. Matched compute budget unspecified."
+      },
+      "entries": [
+        {
+          "id": "gpt-4o",
+          "method": "AgentPoirot",
+          "model": "gpt-4o (dated snapshot unspecified)",
+          "score": 0.6,
+          "standard_deviation": 0.03,
+          "repetitions": 5,
+          "date": "2025-02-27",
+          "date_basis": "arxiv-v4-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2407.06423v4",
+          "source_locator": "Table 1; Sections 2.2, 3.1-3.2; Appendix D"
+        },
+        {
+          "id": "gpt-4-turbo",
+          "method": "AgentPoirot",
+          "model": "gpt-4-turbo-2024-04-09",
+          "score": 0.56,
+          "standard_deviation": 0.02,
+          "repetitions": 5,
+          "date": "2025-02-27",
+          "date_basis": "arxiv-v4-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2407.06423v4",
+          "source_locator": "Table 1; Sections 2.2, 3.1-3.2; Appendix D"
+        },
+        {
+          "id": "gpt-35-turbo",
+          "method": "AgentPoirot",
+          "model": "gpt-3.5-turbo-0125",
+          "score": 0.5,
+          "standard_deviation": 0.02,
+          "repetitions": 5,
+          "date": "2025-02-27",
+          "date_basis": "arxiv-v4-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2407.06423v4",
+          "source_locator": "Table 1; Sections 2.2, 3.1-3.2; Appendix D"
+        },
+        {
+          "id": "llama3-70b",
+          "method": "AgentPoirot",
+          "model": "llama-3-70b",
+          "score": 0.52,
+          "standard_deviation": 0.04,
+          "repetitions": 5,
+          "date": "2025-02-27",
+          "date_basis": "arxiv-v4-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2407.06423v4",
+          "source_locator": "Table 1; Sections 2.2, 3.1-3.2; Appendix D"
+        }
+      ]
+    },
+    {
+      "track_id": "v4-smart-diverse-summary-llama3eval",
+      "primary": false,
+      "evidence_type": "baseline",
+      "label": {
+        "zh": "v4 · 明确业务目标 · 摘要软评分",
+        "en": "v4 · SMART goal · summary soft score"
+      },
+      "task": "summary generation",
+      "split": "InsightBench v4 full 100 synthetic datasets / 475 reference insights",
+      "protocol_version": "2407.06423v4-table1-agentpoirot-smart-diverse-llama3eval",
+      "metric": {
+        "id": "summary-llama3eval",
+        "family": "judge-score",
+        "label": "summary LLaMA-3-Eval",
+        "unit": "normalized score",
+        "direction": "higher",
+        "range": [
+          0,
+          1
+        ]
+      },
+      "conditions": {
+        "zh": "AgentPoirot；明确业务目标；多样化后续问题；三个起始问题、每个四个后续问题；最多15项洞察；生成与LLaMA-3-70B裁判温度0；五个种子的均值与标准差。未给出匹配的计算预算。",
+        "en": "AgentPoirot, SMART goal, diverse follow-ups; three root questions and four follow-ups each, up to 15 insights; generation and LLaMA-3-70B judge temperature 0; five-seed mean and SD. Matched compute budget unspecified."
+      },
+      "entries": [
+        {
+          "id": "gpt-4o",
+          "method": "AgentPoirot",
+          "model": "gpt-4o (dated snapshot unspecified)",
+          "score": 0.44,
+          "standard_deviation": 0.03,
+          "repetitions": 5,
+          "date": "2025-02-27",
+          "date_basis": "arxiv-v4-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2407.06423v4",
+          "source_locator": "Table 1; Sections 2.2, 3.1-3.2; Appendix D"
+        },
+        {
+          "id": "gpt-4-turbo",
+          "method": "AgentPoirot",
+          "model": "gpt-4-turbo-2024-04-09",
+          "score": 0.35,
+          "standard_deviation": 0.04,
+          "repetitions": 5,
+          "date": "2025-02-27",
+          "date_basis": "arxiv-v4-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2407.06423v4",
+          "source_locator": "Table 1; Sections 2.2, 3.1-3.2; Appendix D"
+        },
+        {
+          "id": "gpt-35-turbo",
+          "method": "AgentPoirot",
+          "model": "gpt-3.5-turbo-0125",
+          "score": 0.31,
+          "standard_deviation": 0.06,
+          "repetitions": 5,
+          "date": "2025-02-27",
+          "date_basis": "arxiv-v4-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2407.06423v4",
+          "source_locator": "Table 1; Sections 2.2, 3.1-3.2; Appendix D"
+        },
+        {
+          "id": "llama3-70b",
+          "method": "AgentPoirot",
+          "model": "llama-3-70b",
+          "score": 0.33,
+          "standard_deviation": 0.01,
+          "repetitions": 5,
+          "date": "2025-02-27",
+          "date_basis": "arxiv-v4-publication; execution date unknown",
+          "source": "https://arxiv.org/pdf/2407.06423v4",
+          "source_locator": "Table 1; Sections 2.2, 3.1-3.2; Appendix D"
+        }
+      ]
+    }
+  ],
+  "comparability_notes": {
+    "zh": "仅采用v4的100组数据与475项参考洞察；洞察指标先对每组数据中的参考洞察评分求均值，再对数据组取均值。475不是微平均分母。不同目标、框架、提问模板与初版31组数据分别处理。标准差来自五个种子，不是置信区间；没有来源支持的共同上限。",
+    "en": "v4: 100 datasets, 475 reference insights. For the insight metric, average reference-insight matches within a dataset, then datasets; 475 is not a micro-average denominator. Goal/framework/template variants and the initial 31-dataset version are separate. Five-seed SD is not a confidence interval; no sourced shared ceiling."
+  }
+}

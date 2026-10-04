@@ -1,5 +1,5 @@
 {
-  "discovery_scan_at": "2026-10-03",
+  "discovery_scan_at": "2026-10-04",
   "window_days": 30,
   "scope": [
     "agent-memory",
@@ -13,5 +13,5 @@
     "official leaderboard methodology and validator corrections"
   ],
   "inclusion_rule": "Reusable benchmark or evaluation contribution with a public primary source and a measurement object inside the Radar scope. Methods without a distinct evaluation contribution are excluded.",
-  "note": "Bounded primary-source discovery covered Agent Memory, RAG / Agentic Retrieval, and Data Agents through 2026-10-03 (UTC+8); this is not an exhaustive census. Only identities with sufficient primary evidence and completed scope/protocol review enter the registry. Citation refresh, source-result verification and discovery dates remain separate. Existing citation counts were retained; new result tracks have separately dated source snapshots."
+  "note": "Bounded primary-source discovery covered Agent Memory, RAG / Agentic Retrieval, and Data Agents through 2026-10-04 (UTC+8); this is not an exhaustive census. Only identities with sufficient primary evidence and completed scope/protocol review enter the registry. Citation refresh, source-result verification and discovery dates remain separate. Existing citation counts were retained; new result tracks have separately dated source snapshots."
 }
