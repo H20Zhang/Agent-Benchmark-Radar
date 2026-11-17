@@ -617,6 +617,217 @@
     "en": "d93abac838761e4cb52da79662e6a8947ae2bfd583264accd5080290c9f01df1"
   }
 },
-    "longharness": {"status":"full-text-reviewed","reviewed_at":"2026-10-04","status_text":{"zh":"已阅读全部正文与附录A–C，并核对官方数据卡、发布元数据与评分代码；未复现实验，也未独立检查图表像素。","en":"Read the full main text and Appendices A–C; checked the official dataset card, release metadata and scorer. No benchmark reproduction or independent figure-pixel inspection."},"evidence_mode":"quantitative","sources":[{"url":"https://arxiv.org/html/2609.38137v1","version":"arXiv:2609.38137v1","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/html/2609.38137v1","source_locator":"Table 2; Appendix A Table 4","row_ids":["Direct","mini-swe-agent","RLM"],"conditions":{"zh":"表2与附录A；GPT-5.6-sol，高推理强度，四类各50题；报告精确准确率（%）与每题平均估算美元成本，名义预算执行仍有疑点。","en":"Table 2 and Appendix A; GPT-5.6-sol, high reasoning, four 50-instance suites; reported exact accuracy (%) and mean estimated USD per instance. Nominal budget enforcement unresolved."},"metric_labels":{"zh":["条件筛选准确率（%）","备忘矛盾准确率（%）","宏平均准确率（%）","宏平均美元/题"],"en":["Constraint accuracy (%)","Memo accuracy (%)","Macro accuracy (%)","Macro USD/instance"]}},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"9cb461babbb4a62d40713b2d43a01e6b52658d424319d7b9993536586f234565","en":"10de96ac0d14080ea2338fe29117edd4f8310abeb6033c17c20adecddfeb561c"}}
+    "longharness": {"status":"full-text-reviewed","reviewed_at":"2026-10-04","status_text":{"zh":"已阅读全部正文与附录A–C，并核对官方数据卡、发布元数据与评分代码；未复现实验，也未独立检查图表像素。","en":"Read the full main text and Appendices A–C; checked the official dataset card, release metadata and scorer. No benchmark reproduction or independent figure-pixel inspection."},"evidence_mode":"quantitative","sources":[{"url":"https://arxiv.org/html/2609.38137v1","version":"arXiv:2609.38137v1","kind":"paper-full-text","coverage":["method","experimental_setup","results","limitations"]}],"blocks":[{"id":"reading","kind":"reading"},{"id":"method","kind":"method"},{"id":"setup","kind":"setup"},{"id":"result-1","kind":"quantitative","source_url":"https://arxiv.org/html/2609.38137v1","source_locator":"Table 2; Appendix A Table 4","row_ids":["Direct","mini-swe-agent","RLM"],"conditions":{"zh":"表2与附录A；GPT-5.6-sol，高推理强度，四类各50题；报告精确准确率（%）与每题平均估算美元成本，名义预算执行仍有疑点。","en":"Table 2 and Appendix A; GPT-5.6-sol, high reasoning, four 50-instance suites; reported exact accuracy (%) and mean estimated USD per instance. Nominal budget enforcement unresolved."},"metric_labels":{"zh":["条件筛选准确率（%）","备忘矛盾准确率（%）","宏平均准确率（%）","宏平均美元/题"],"en":["Constraint accuracy (%)","Memo accuracy (%)","Macro accuracy (%)","Macro USD/instance"]}},{"id":"limitations","kind":"limitations"}],"note_sha256":{"zh":"9cb461babbb4a62d40713b2d43a01e6b52658d424319d7b9993536586f234565","en":"10de96ac0d14080ea2338fe29117edd4f8310abeb6033c17c20adecddfeb561c"}},
+    "scivaliditybench": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-11-17",
+      "status_text": {
+        "en": "Read the main paper and protocol, controls, results and limitations in Appendices A–I; checked the official repository file inventory. No experiment reproduction or independent figure-pixel inspection.",
+        "zh": "已阅读正文及附录A–I中的协议、控制、结果与限制，并核对官方仓库文件清单；未复现实验，也未独立检查图表像素。"
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/html/2610.34767v1",
+          "version": "arXiv:2610.34767v1",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2610.34767v1",
+          "source_locator": "Table 3; Appendices D/G/I",
+          "row_ids": [
+            "Qwen3-14B",
+            "Gemma-3-12B-IT",
+            "Mistral-7B-Instruct-v0.3",
+            "Phi-3.5-mini-instruct"
+          ],
+          "conditions": {
+            "en": "Table 3: four frozen readers, temperature 0, identical requests and finite legal actions within each comparison; scientific-use-valid decision rates on 64 TaskSpecs × 10 seeds, equally weighted by TaskSpec.",
+            "zh": "表3：四个固定reader，温度0，各比较内请求及有限合法动作相同；64个TaskSpec各10个seed，按TaskSpec等权汇总科学有效决策率。"
+          },
+          "metric_labels": {
+            "en": [
+              "Raw scientific-use-valid decision rate",
+              "Event Graph scientific-use-valid decision rate",
+              "Flat SSG scientific-use-valid decision rate",
+              "SVL scientific-use-valid decision rate"
+            ],
+            "zh": [
+              "Raw科学有效决策率",
+              "Event Graph科学有效决策率",
+              "Flat SSG科学有效决策率",
+              "SVL科学有效决策率"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "c9ca6eb1988dfbb2741a2c47af3aaa60498c2e27fe1a4be1daee65a68136111d",
+        "en": "fb3d974734444712b8b1f5c83d52f81709948c08560f743d2a9a1290f283efef"
+      }
+    },
+    "retailbridge": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-11-17",
+      "status_text": {
+        "en": "Read the primary construction method, evaluation, baseline setup and judge-audit sections; checked the official repository README and artifact inventory. No benchmark reproduction or independent figure-pixel inspection.",
+        "zh": "已阅读原文构造方法、评测、基线设置及评审审计部分，并核对官方仓库说明与文件清单；未复现实验，也未独立检查图表像素。"
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/html/2610.25096v1",
+          "version": "arXiv:2610.25096v1",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2610.25096v1",
+          "source_locator": "Table 2; Appendix D.2–D.3",
+          "row_ids": [
+            "RetailRAG",
+            "HetaRAG"
+          ],
+          "conditions": {
+            "en": "Table 2: shared GPT-oss-120B backbone, all 1,680 questions; average string-containment accuracy, semantic-judge accuracy and API calls per query.",
+            "zh": "表2：共享GPT-oss-120B基础模型，全部1,680题；平均字符串包含准确率、语义评审准确率与每题API调用次数。"
+          },
+          "metric_labels": {
+            "en": [
+              "Containment accuracy",
+              "Judge accuracy",
+              "API calls/query"
+            ],
+            "zh": [
+              "包含准确率",
+              "评审准确率",
+              "API调用/题"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "42a4a7215666d2e99ce11a03d76d42daf7576e9871418e90e503424106b7fcf3",
+        "en": "a5ce36e7cbe361d15085f878fd2d33efc056515d1c6afceb092437dc19906e81"
+      }
+    },
+    "synthcorp": {
+      "status": "full-text-reviewed",
+      "reviewed_at": "2026-11-17",
+      "status_text": {
+        "en": "Read the primary generation pipeline, data-context evaluation, result table and simulation-boundary discussion. Checked the arXiv release statement; no public official artifact was verified. No experiment reproduction or independent figure-pixel inspection.",
+        "zh": "已阅读原文生成流程、数据上下文评测、结果表与模拟边界讨论，并核对arXiv发布声明；未核实到公开官方工件，未复现实验，也未独立检查图表像素。"
+      },
+      "evidence_mode": "quantitative",
+      "sources": [
+        {
+          "url": "https://arxiv.org/html/2611.14765v1",
+          "version": "arXiv:2611.14765v1",
+          "kind": "paper-full-text",
+          "coverage": [
+            "method",
+            "experimental_setup",
+            "results",
+            "limitations"
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "reading",
+          "kind": "reading"
+        },
+        {
+          "id": "method",
+          "kind": "method"
+        },
+        {
+          "id": "setup",
+          "kind": "setup"
+        },
+        {
+          "id": "result-1",
+          "kind": "quantitative",
+          "source_url": "https://arxiv.org/html/2611.14765v1",
+          "source_locator": "Table 7; Section 5 audit and Section 6",
+          "row_ids": [
+            "S1",
+            "S3",
+            "S4"
+          ],
+          "conditions": {
+            "en": "Table 7: Claude Opus 5.5, reasoning enabled, 256 tasks, three runs per task; reported execution accuracy (%) as mean ± standard error.",
+            "zh": "表7：Claude Opus 5.5启用推理，256项任务，每题三次；报告执行准确率（%），均值 ± 标准误。"
+          },
+          "metric_labels": {
+            "en": [
+              "Execution accuracy (%)"
+            ],
+            "zh": [
+              "执行准确率（%）"
+            ]
+          }
+        },
+        {
+          "id": "limitations",
+          "kind": "limitations"
+        }
+      ],
+      "note_sha256": {
+        "zh": "6c31f3cfa40de8998333eae491c1cecb458af8122d325837ae9d694518320bf7",
+        "en": "81d159bb699b8e5ae45ec7c61b13c5985822976bcd0b273473acf4f5f9590775"
+      }
+    }
   }
 }

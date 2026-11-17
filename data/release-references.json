@@ -3261,6 +3261,36 @@
         "en": "Retrieval budgets, ingestion failures and metadata access differ across adapters; this result establishes neither a causal architecture advantage nor a current leaderboard."
       },
       "initial_release": true
+    },
+    "scivaliditybench": {
+      "status": "diagnostic",
+      "period": {
+        "zh": "首版：2026-10-26",
+        "en": "Initial release: 2026-10-26"
+      },
+      "scope": {
+        "zh": "表3，Qwen3-14B，温度0；64个TaskSpec各10个seed的科学有效决策率，按TaskSpec等权。非跨系统最佳声明。",
+        "en": "Table 3, Qwen3-14B, temperature 0; scientific-use-valid decision rate on 64 TaskSpecs × 10 seeds, TaskSpec-weighted. Not a cross-system best claim."
+      },
+      "results": [
+        {
+          "system": "Qwen3-14B / Flat SSG",
+          "metric": "Scientific-use-valid decision rate",
+          "score": "0.991"
+        },
+        {
+          "system": "Qwen3-14B / SVL",
+          "metric": "Scientific-use-valid decision rate",
+          "score": "0.981"
+        }
+      ],
+      "source": "https://arxiv.org/html/2610.34767v1",
+      "locator": "Table 3",
+      "caveat": {
+        "zh": "短合成历史与确定性编译状态；不能推导图序列化普遍更优或真实科学长程记忆能力。",
+        "en": "Short synthetic histories and deterministically compiled state; no universal graph-serialization or real-world long-term scientific-memory claim."
+      },
+      "initial_release": true
     }
   }
 }

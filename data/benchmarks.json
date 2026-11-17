@@ -12361,5 +12361,216 @@
       "updated_at": "2026-10-04",
       "status": "unmatched"
     }
+  },
+  {
+    "id": "scivaliditybench",
+    "name": "SciValidityBench",
+    "area": "agent-memory",
+    "evolution_role": "frontier",
+    "released": "2026-10-26",
+    "importance": 3,
+    "status": "active",
+    "summary": "Tests whether remembered scientific facts remain admissible for decisions under selection, stopping, definition, absence and sunk-cost constraints.",
+    "capabilities": [
+      "scientific-memory-use",
+      "state-validity",
+      "counterfactual-consistency"
+    ],
+    "environment": [
+      "synthetic-scientific-worlds",
+      "finite-legal-actions"
+    ],
+    "protocol": [
+      "deterministic-action-scoring",
+      "paired-counterfactuals",
+      "state-corruption-and-repair"
+    ],
+    "scale": "64 TaskSpecs × 10 seeds = 640 worlds; 1,920 public events; 17,920 main decisions.",
+    "measurement_strength": "Makes scientific-use validity and counterfactual state dependence directly executable, separate from factual recall.",
+    "coverage_gap": "Short synthetic histories and a hand-designed compiler do not test learned long-term scientific memory or universal graph superiority.",
+    "confounders": [
+      "precomputed-decision-relevant-state",
+      "shared-compiler-oracle-ontology",
+      "reader-serialization-interaction",
+      "finite-action-template-shortcuts"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2610.34767v1",
+      "code": "https://github.com/SciValidityBench/SciValidityBench"
+    },
+    "last_verified": "2026-11-17",
+    "published_at": "2026-10-26T03:12:57Z",
+    "first_seen_at": "2026-11-17T00:39:43Z",
+    "radar_published_at": "2026-11-17T00:49:23Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-10-26",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2610.34767v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-11-17",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2610.34767v1",
+      "checked_at": "2026-11-17",
+      "protocol_source": "https://github.com/SciValidityBench/SciValidityBench",
+      "result_source": "https://arxiv.org/html/2610.34767v1",
+      "score_ceiling": "Controlled validity of finite decisions after deterministic state compilation, not general scientific-memory competence.",
+      "next_control": "Match source facts/tokens and test learned compilers on independently generated long histories.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-11-17",
+      "status": "unmatched"
+    }
+  },
+  {
+    "id": "retailbridge",
+    "name": "RetailBridge",
+    "area": "rag",
+    "evolution_role": "frontier",
+    "released": "2026-10-18",
+    "importance": 3,
+    "status": "active",
+    "summary": "Tests source routing and evidence chaining across simulated retail tables and text, separating reasoning depth, source multiplicity and evidence modality.",
+    "capabilities": [
+      "multi-source-retrieval",
+      "sql-text-chaining",
+      "source-routing"
+    ],
+    "environment": [
+      "simulated-retail-database",
+      "sqlite-and-text-index"
+    ],
+    "protocol": [
+      "compositional-qa",
+      "string-containment-and-semantic-grading",
+      "shared-backbone-harness-comparison"
+    ],
+    "scale": "1,680 questions; five tabular sources and three text collections; three generation models contribute 560 questions each.",
+    "measurement_strength": "Makes cross-source evidence dependencies explicit through executable construction chains and stratified questions.",
+    "coverage_gap": "Simulated workflows and a benchmark-specific harness do not establish general enterprise reliability or matched-cost component effects.",
+    "confounders": [
+      "synthetic-persona-distribution",
+      "method-benchmark-coupling",
+      "unequal-interface-and-call-budgets",
+      "semantic-judge-versus-containment"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2610.25096v1",
+      "code": "https://github.com/DISL-Lab/RetailBridge",
+      "data": "https://github.com/DISL-Lab/RetailBridge/tree/main/data/benchmark"
+    },
+    "last_verified": "2026-11-17",
+    "published_at": "2026-10-18T08:15:12Z",
+    "first_seen_at": "2026-11-17T00:39:43Z",
+    "radar_published_at": "2026-11-17T00:49:23Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-10-18",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2610.25096v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-11-17",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2610.25096v1",
+      "checked_at": "2026-11-17",
+      "protocol_source": "https://github.com/DISL-Lab/RetailBridge",
+      "result_source": "https://arxiv.org/html/2610.25096v1",
+      "score_ceiling": "Simulated workflows and a benchmark-specific harness do not establish general enterprise reliability or matched-cost component effects.",
+      "next_control": "Match interfaces and total token/latency budgets, then evaluate independently authored queries on unseen retail schemas.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-11-17",
+      "status": "unmatched"
+    }
+  },
+  {
+    "id": "synthcorp",
+    "name": "SynthCorp",
+    "area": "data-agent",
+    "evolution_role": "frontier",
+    "released": "2026-11-10",
+    "importance": 3,
+    "status": "active",
+    "summary": "Generates data-agent benchmarks by simulating business events, materializing databases and documents, and checking executable gold programs against provenance logs.",
+    "capabilities": [
+      "cross-asset-reasoning",
+      "data-discovery",
+      "business-rule-retrieval"
+    ],
+    "environment": [
+      "synthetic-data-estates",
+      "relational-databases",
+      "document-store-and-catalog"
+    ],
+    "protocol": [
+      "event-calendar-simulation",
+      "provenance-audited-gold-programs",
+      "four-data-context-settings"
+    ],
+    "scale": "Seven data estates, 256 tasks across five domains; up to 1,000 operational tables.",
+    "measurement_strength": "Controls data-estate complexity while retaining provenance for auditing multi-event reference computations.",
+    "coverage_gap": "Synthetic business realism, automated gold construction and format-sensitive scoring limit claims about production analytical reliability.",
+    "confounders": [
+      "synthetic-value-distributions",
+      "gold-program-generation",
+      "output-format-sensitivity",
+      "unequal-context-and-tool-exposure"
+    ],
+    "artifacts": {
+      "paper": "https://arxiv.org/abs/2611.14765v1"
+    },
+    "last_verified": "2026-11-17",
+    "published_at": "2026-11-10T21:43:12Z",
+    "first_seen_at": "2026-11-17T00:39:43Z",
+    "radar_published_at": "2026-11-17T00:49:23Z",
+    "time_provenance": "native_v2",
+    "map_delta": "early_signal",
+    "first_public_at": "2026-11-10",
+    "publication_at": null,
+    "data_release_at": null,
+    "release_date_evidence": {
+      "first_public_at": {
+        "source": "https://arxiv.org/abs/2611.14765v1",
+        "precision": "day",
+        "kind": "preprint-v1",
+        "verified_at": "2026-11-17",
+        "status": "checked"
+      }
+    },
+    "review_evidence": {
+      "full_text": "https://arxiv.org/html/2611.14765v1",
+      "checked_at": "2026-11-17",
+      "protocol_source": "https://arxiv.org/html/2611.14765v1",
+      "result_source": "https://arxiv.org/html/2611.14765v1",
+      "score_ceiling": "Synthetic business realism, automated gold construction and format-sensitive scoring limit claims about production analytical reliability.",
+      "next_control": "Release pinned estates, generators and graders; separate semantic answer equivalence from formatting and match resource budgets.",
+      "publication_type": "recent-discovery"
+    },
+    "citations": {
+      "count": null,
+      "source": "semantic-scholar",
+      "updated_at": "2026-11-17",
+      "status": "unmatched"
+    }
   }
 ]

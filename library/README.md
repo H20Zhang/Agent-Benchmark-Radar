@@ -10,6 +10,9 @@
 
 | 时间 | Benchmark | 领域 | 角色 | 这次改变了什么 |
 |---:|---|---|---|---|
+| 2026-11-10 | [SynthCorp](https://arxiv.org/abs/2611.14765v1) <!-- benchmark-id:synthcorp --> | Data Agents | 🔭 前沿 | 通过模拟业务事件生成数据库与文档，并借助来源日志核验可执行参考程序，构造可控的数据代理基准。 |
+| 2026-10-26 | [SciValidityBench](https://arxiv.org/abs/2610.34767v1) <!-- benchmark-id:scivaliditybench --> | Agent Memory | 🔭 前沿 | 将正确记忆是否适合当前科学决策变成可执行测试；编译状态的收益不等于图结构或长程记忆普遍更优。 |
+| 2026-10-18 | [RetailBridge](https://arxiv.org/abs/2610.25096v1) <!-- benchmark-id:retailbridge --> | RAG / Agentic Retrieval | 🔭 前沿 | 测试模拟零售数据库与文本之间的来源路由和证据串联，分开观察推理深度、多源性与证据模态。 |
 | 2026-09-30 | [CESS / Evidence-selection audit](https://arxiv.org/abs/2609.39026v1) <!-- benchmark-id:cess-evidence-selection --> | RAG / Agentic Retrieval | 🔭 前沿 | 把报告与引用评价延伸到固定候选池的证据代表性；公式协议可复用，可执行发布未核实。 |
 | 2026-09-29 | [LongHarness Bench](https://arxiv.org/abs/2609.38137v1) <!-- benchmark-id:longharness --> | RAG / Agentic Retrieval | 🔭 前沿 | 增加核验驱动的后续检索与计算复用；预算统计冲突限制等预算效率结论。 |
 | 2026-09-26 | [CUE-Mem](https://arxiv.org/abs/2609.32574v1) <!-- benchmark-id:cue-mem --> | Agent Memory | 🔭 前沿 | 增加跨会话背景图像与环境声音线索；显隐条件未配对，不能把差距解释为单一因果效应。 |
@@ -227,6 +230,7 @@
 | 🔭 前沿 | [MemCalib](https://arxiv.org/abs/2609.24259) <!-- benchmark-id:memcalib --> | 2026-09-21 | 对上下文中每条记忆命题，测它是否按当前问题所需被忽略、局部使用或作为决定性约束。 | 把记忆影响不足与过度影响分开，形成命题级、依赖当前问题的记忆使用校准诊断。 |
 | 🔭 前沿 | [MemProbe (stability–plasticity)](https://arxiv.org/abs/2609.30558v1) <!-- benchmark-id:memprobe-stability-plasticity --> | 2026-09-24 | 诊断记忆能否接受有效更新、抵抗不可靠证据的覆盖，并分别保留历史、来源与时间信息。 | 把有效更新、抗干扰保留与来源追溯拆成可复用受控探针；共同阅读器不等于匹配的上游预算。 |
 | 🔭 前沿 | [CUE-Mem](https://arxiv.org/abs/2609.32574v1) <!-- benchmark-id:cue-mem --> | 2026-09-26 | 四选一回忆、规律、个性化与拒答。 | 增加跨会话背景图像与环境声音线索；显隐条件未配对，不能把差距解释为单一因果效应。 |
+| 🔭 前沿 | [SciValidityBench](https://arxiv.org/abs/2610.34767v1) <!-- benchmark-id:scivaliditybench --> | 2026-10-26 | 将正确记忆是否适合当前科学决策变成可执行测试；编译状态的收益不等于图结构或长程记忆普遍更优。 | 将科学使用约束与事实召回分开；编译器与reader贡献仍需隔离。 |
 
 <!-- COMPLETE-MAP:agent-memory:END -->
 
@@ -293,6 +297,7 @@
 | 🔭 前沿 | [ChemCLIR-Bench](https://arxiv.org/abs/2609.23231) <!-- benchmark-id:chemclir-bench --> | 2026-09-19 | 在化学专利中，按查询与目标语言、原生或翻译查询及排名深度，诊断跨语言检索。 | 在异构领域检索之外，把技术文献的语言对差异、翻译来源和相关文档排名深度显式化。 |
 | 🔭 前沿 | [LongHarness Bench](https://arxiv.org/abs/2609.38137v1) <!-- benchmark-id:longharness --> | 2026-09-29 | 四类长上下文精确答案及资源消耗。 | 增加核验驱动的后续检索与计算复用；预算统计冲突限制等预算效率结论。 |
 | 🔭 前沿 | [CESS / Evidence-selection audit](https://arxiv.org/abs/2609.39026v1) <!-- benchmark-id:cess-evidence-selection --> | 2026-09-30 | 审计自适应选择的证据能否代表固定文献池，区分候选池证据方向估计与搜索策略配对干预的效应。 | 把报告与引用评价延伸到固定候选池的证据代表性；公式协议可复用，可执行发布未核实。 |
+| 🔭 前沿 | [RetailBridge](https://arxiv.org/abs/2610.25096v1) <!-- benchmark-id:retailbridge --> | 2026-10-18 | 测试模拟零售数据库与文本之间的来源路由和证据串联，分开观察推理深度、多源性与证据模态。 | 显式组合SQL与文本证据链；harness差异限制纯模型及等预算归因。 |
 
 <!-- COMPLETE-MAP:rag:END -->
 
@@ -343,6 +348,7 @@
 | 🔭 前沿 | [DeltaML-Bench](https://arxiv.org/abs/2608.19653) <!-- benchmark-id:deltaml-bench --> | 2026-08-20 | 在真实研究仓库中修复训练管线、迭代机器学习实验、提高论文基线并抵抗 specification gaming。 | 把“改进已发表 ML 基线”与 repository realism、长算力预算和提交完整性放入同一执行对象。 |
 | 🔭 前沿 | [StatFormBench](https://arxiv.org/abs/2609.01982) <!-- benchmark-id:statformbench --> | 2026-09-02 | 在执行分析之前，测统计问题的粗细类别选择、相关变量识别及变量角色分配。 | 把通常默认正确的分析目标与变量选择，提前拆成独立于代码执行的诊断对象。 |
 | 🔭 前沿 | [DI-Bench (Data Intelligence)](https://arxiv.org/abs/2609.05776) <!-- benchmark-id:di-bench-data-intelligence --> | 2026-09-04 | 以可执行标准答案和关联图生成协议，测数据智能体能否把检索到的业务规则正确用于分析计算。 | 相较只检查 SQL 正确性，将业务规则的实际应用与领域内评测任务生成变成独立测量对象。 |
+| 🔭 前沿 | [SynthCorp](https://arxiv.org/abs/2611.14765v1) <!-- benchmark-id:synthcorp --> | 2026-11-10 | 通过模拟业务事件生成数据库与文档，并借助来源日志核验可执行参考程序，构造可控的数据代理基准。 | 将业务元数据与数据访问接口做成可控变量；公开可执行发布仍待核验。 |
 
 <!-- COMPLETE-MAP:data-agent:END -->
 
